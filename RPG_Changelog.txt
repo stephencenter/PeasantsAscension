@@ -1,90 +1,108 @@
-ï»¿RPG Progress Log:
->>>The magic system has been completely rewritten to take advantage of classes, dictionaries, and JSON. The player 
-    now gains access to new spells as they level up. Usable spells are kept in the "spellbook" dictionary, which is saved 
-    to a JSON file when you save the game. (v0.0.40)
+RPG Progress Log:
+•Weapons now have elements assigned to them. Different elements are weak/resistant/neutral to certain other ones. The order of weaknesses are: Fire<Water<Electric<Earth<Grass<Wind<Ice<Fire, while “None” is neutral to everything. At the moment, this mainly just affects player attacks, but is planned to affect enemy ones too in the future. (v0.0.50)
+
+•Monsters are now assigned different elements based on where they are, and therefore now actually drop the correct items. (v0.0.49)
+
+•Monsters can now drop rare items depending on which area they are in. For example, Yetis and Arctic Wolves can drop Ice Swords, while Minor Ents can drop an Enchanted Wood Wand. (v0.0.48)
+
+•Numerous flaws with the battle system have been fixed. For instance, you now always deal at least 1 damage, to avoid triggering an error message trying to find the square-root of a negative number. (v0.0.47)
+
+•The inventory system has been cleaned up to look better when using it, and equipping items is now easier to do. Monsters can now drop certain items after battle. (v0.0.46)
+
+•The player can now sell items! When entering the general store, they are given the option to buy or sell items. The player cannot sell Coordinates for obvious reasons, nor can they sell Quest items. A major glitch involving equipping items has been fixed. (v0.0.45)
 	
->>>You can now run from battles. Numerous bug-fixes/rebalancing. The enemy will now defend less often. (v0.0.39)
+•There are now three more Damaging Spells, and 6 more Buff spells. The yes/no detecting now works slightly better. Consumable items can no longer have multiple uses. No items actually took advantage of the multiple uses, so it doesn't really change anything. (v0.0.44)
+	
+•Doc-strings have been removed and have been replaced by comments. There are now comments on a large portion of the code. Monsters have been made more powerful. (v0.0.43)
 
->>>The save/load functions are now complete. You can save/load your game on both Unix and Windows devices. (v0.0.38)
+•Several new Buff spells have been added. A bug has been fixed related to de-serializing the spellbook dictionary. Contact information and reader notes have been added to the top of main.py. (v0.0.42)
+	
+•There are now Buff spells, which raise your stats temporarily during battle. The "new_spells()" function has been altered to give you spells you missed if new spells are added to the game. (v0.0.41)
+	
+•The magic system has been completely rewritten to take advantage of classes, dictionaries, and JSON. The player now gains access to new spells as they level up. Usable spells are kept in the "spellbook" dictionary, which is saved to a JSON file when you save the game. (v0.0.40)
 
->>>The 5 skills have been rebalanced to make the LUC skill less OP. LUC can now let you get extra GP from battle. (v0.0.37)
+•You can now run from battles. Numerous bug-fixes/re-balancing. The enemy will now defend less often. (v0.0.39)
 
->>>The WIS skill has been renamed to INT, while INT's previous purpose has been re-branded as LUC. (v0.0.36)
+•The save/load functions are now complete. You can save/load your game on both Unix and Windows devices. (v0.0.38)
 
->>>Fixed numerous glitches involving the battle module. Balancing has been tweaked slightly. (v0.0.35)
+•The 5 skills have been rebalanced to make the LUC skill less OP. LUC can now let you get extra GP from battle. (v0.0.37)
 
->>>All items and item classes are now in a new module, items.py. More bug-fixes and clean-ups. (v0.0.34)
+•The WIS skill has been renamed to INT, while INT's previous purpose has been re-branded as LUC. (v0.0.36)
 
->>>There is now an Armor class, which is a subclass of Item. Armor sets come in three pieces and can be equipped. (v0.0.33)
+•Fixed numerous glitches involving the battle module. Balancing has been tweaked slightly. (v0.0.35)
 
->>>There are now magic weapons that you can buy from the general store in addition to the normal weapons. (v0.0.32)
+•All items and item classes are now in a new module, items.py. More bug-fixes and clean-ups. (v0.0.34)
 
->>>The weapon you start out with (wooden sword) now increases your attack power slightly. (v0.0.31)
+•There is now an Armor class, which is a subclass of Item. Armor sets come in three pieces and can be equipped. (v0.0.33)
 
->>>Saving your game now actually works! There are now separate functions to turn objects into JSON format. (v0.0.30)
+•There are now magic weapons that you can buy from the general store in addition to the normal weapons. (v0.0.32)
 
->>>The general store function has been cleaned up to fix important bugs. You can now exit the general store. (v0.0.29)
+•The weapon you start out with (wooden sword) now increases your attack power slightly. (v0.0.31)
 
->>>Weapon, a new subclass of Item, is now in the game and can be equipped to increase attack power. (v0.0.28)
+•Saving your game now actually works! There are now separate functions to turn objects into JSON format. (v0.0.30)
 
->>>The inventory functions have been cleaned up to fix certain bugs and improve the readability of the game. (v0.0.27)
+•The general store function has been cleaned up to fix important bugs. You can now exit the general store. (v0.0.29)
 
->>>Consumable items are now a subclass of the Item class instead of extra variables in the Item Class. (v0.0.26)
+•Weapon, a new subclass of Item, is now in the game and can be equipped to increase attack power. (v0.0.28)
 
->>>Consumable items can now be used. Certain ones can have multiple uses, both functionally and physically. (v0.0.25)
+•The inventory functions have been cleaned up to fix certain bugs and improve the readability of the game. (v0.0.27)
 
->>>There is now an Item class. Instances of this class can be added to you inventory. They don't currently have a use. (v0.0.24)
+•Consumable items are now a subclass of the Item class instead of extra variables in the Item Class. (v0.0.26)
 
->>>The general store now works, and the player can buy certain items from them depending on their level using GP. (v0.0.23)
+•Consumable items can now be used. Certain ones can have multiple uses, both functionally and physically. (v0.0.25)
 
->>>Different monsters will now spawn in different regions. Many new enemy types have been introduced/removed. (v0.0.22)
+•There is now an Item class. Instances of this class can be added to you inventory. They don't currently have a use. (v0.0.24)
 
->>>The inventory function is now split into three separate functions, and has been rewritten to look neater. (v0.0.21)
+•The general store now works, and the player can buy certain items from them depending on their level using GP. (v0.0.23)
 
->>>All functions related to the player's inventory have been moved to a new module, inv_system.py. (v0.0.20)
+•Different monsters will now spawn in different regions. Many new enemy types have been introduced/removed. (v0.0.22)
 
->>>There are now separate regions/biomes located in different areas of the map. They don't do anything yet. (v0.0.19)
+•The inventory function is now split into three separate functions, and has been rewritten to look neater. (v0.0.21)
 
->>>The world now has boundaries 125 spaces away in all directions. The player cannot go past these boundaries. (v0.0.18)
+•All functions related to the player's inventory have been moved to a new module, inv_system.py. (v0.0.20)
 
->>>All functions related to movement have been moved (no pun intended) to a new module, world.py. (v0.0.17)
+•There are now separate regions/biomes located in different areas of the map. They don't do anything yet. (v0.0.19)
 
->>>A third module, battle.py, has been added. Functions in main.py related to battle have been moved there. (v0.0.16)
+•The world now has boundaries 125 spaces away in all directions. The player cannot go past these boundaries. (v0.0.18)
 
->>>The player can view their stats if they visit a town, and can now spend GP to sleep at an inn. (v0.0.15)
+•All functions related to movement have been moved (no pun intended) to a new module, world.py. (v0.0.17)
 
->>>The player can no longer save  unless they visit an inn or advance to a new level. (v0.0.14)
+•A third module, battle.py, has been added. Functions in main.py related to battle have been moved there. (v0.0.16)
 
->>>There are now inns in some towns. The player will now receive (GP) after battles. (v0.0.13)
+•The player can view their stats if they visit a town, and can now spend GP to sleep at an inn. (v0.0.15)
 
->>>General bug-fix/clean-up. The player can now save in towns. Gold Pieces (GP) have been added. (v0.0.12)
+•The player can no longer save  unless they visit an inn or advance to a new level. (v0.0.14)
 
->>>The Coordinate section of the inventory is now fully functional. The town-detection has had a major bug-fix. (v0.0.11)
+•There are now inns in some towns. The player will now receive (GP) after battles. (v0.0.13)
 
->>>Towns have been added to the game. The game is now two separate modules: main.py and towns.py. (v0.0.10)
+•General bug-fix/clean-up. The player can now save in towns. Gold Pieces (GP) have been added. (v0.0.12)
 
->>>Numerous bug-fixes, balancing has been tweaked. The time module is being introduced. (v0.0.09)
+•The Coordinate section of the inventory is now fully functional. The town-detection has had a major bug-fix. (v0.0.11)
 
->>>The Enemy's AI is being rewritten to respond based on player/monster stat differences. (v0.0.08)
+•Towns have been added to the game. The game is now two separate modules: main.py and towns.py. (v0.0.10)
 
->>>The battle sequence has been completely rewritten. A non-functioning inventory dictionary has been added. (v0.0.07)
+•Numerous bug-fixes, balancing has been tweaked. The time module is being introduced. (v0.0.09)
 
->>>Both the Player and the Enemy battle turns are nearly finished. Doc-strings are being written. (v0.0.06)
+•The Enemy's AI is being rewritten to respond based on player/monster stat differences. (v0.0.08)
 
->>>The player can now save and load games using JSON. The Player can now level-up and gain skill points. (v0.0.05)
+•The battle sequence has been completely rewritten. A non-functioning inventory dictionary has been added. (v0.0.07)
 
->>>The player can move in between battles. The player and monster's levels are now visible during battles. (v0.0.04) 
+•Both the Player and the Enemy battle turns are nearly finished. Doc-strings are being written. (v0.0.06)
 
->>>The Player's half of the battle sequence is now mostly completed. There are now monsters you can fight. (v0.0.03)
+•The player can now save and load games using JSON. The Player can now level-up and gain skill points. (v0.0.05)
 
->>>Dictionaries are now being used to improve organization. Basic functions have been written. (v0.0.02)
+•The player can move in between battles. The player and monster's levels are now visible during battles. (v0.0.04) 
 
->>>Basic Classes have been written, and the player can choose their name. (v0.0.01)
+•The Player's half of the battle sequence is now mostly completed. There are now monsters you can fight. (v0.0.03)
+
+•Dictionaries are now being used to improve organization. Basic functions have been written. (v0.0.02)
+
+•Basic Classes have been written, and the player can choose their name. (v0.0.01)
 
 Things to add:
 
->>>Bosses:
+•Bosses:
     -Whispering Goblin
->>>Sell items at General Stores.
+•Sell items at General Stores. (Added!)
 
->>>Advanced magic system, with new spells as you level up. (Added!)
+•Advanced magic system with new spells as you level up. (Added!)
