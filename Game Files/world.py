@@ -3,6 +3,7 @@ import battle
 import monsters
 import towns
 import random
+import winsound
 
 if __name__ == "__main__":
     sys.exit()
@@ -22,6 +23,9 @@ def setup_vars():
 
 def movement_system():
     """Adjust the player's x/y coordinates based on inputed direction."""
+
+    winsound.PlaySound(None, winsound.SND_ASYNC) # Stop all currently playing music
+    winsound.PlaySound("Music\\Through the Forest.wav", winsound.SND_ASYNC) # Play overworld music (Thanks, Ben Landis!)
     setup_vars()
     while True:
         global position

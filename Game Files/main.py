@@ -1,5 +1,7 @@
-# Pythonius; v0.0.47 Alpha
+# Pythonius; v0.0.50 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
+# Music by Ben Landis: http://www.benlandis.com/ (used with permission)
+# And Eric Skiff: http://ericskiff.com/music/ (Also used with permission)
 #------------------------------------------------------------------------------#
 # Changelog for current version below:
 # https://www.dropbox.com/s/u02o4k4h4jwsccy/RPG_Changelog.txt
@@ -25,7 +27,7 @@ import random
 import math
 import time
 import json
-import pygame
+import winsound
 
 import towns
 import battle
@@ -33,9 +35,6 @@ import world
 import inv_system
 import monsters
 import magic
-
-pygame.init()
-pygame.mixer.init()
 
 # Establish "player" as a global variable
 player = ''
@@ -217,8 +216,7 @@ def check_save(): # Check for save files and load the game if they're found
     global static
     global position
     print('Loading...')
-    pygame.mixer.music.load("Music\\Prologue.mp3")
-    pygame.mixer.music.play(-1)
+    winsound.PlaySound("Music\\Prologue.wav", winsound.SND_ASYNC)
     print('-'*25)
     # Check each part of the save file
     for file in [sav1, sav2, sav3, sav4, sav5, sav6]:
