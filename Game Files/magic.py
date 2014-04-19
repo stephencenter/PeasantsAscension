@@ -36,7 +36,7 @@ class Healing(Spell): # Healing spells are spells that restore your HP during ba
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            main.player.hp += self.heal + int(main.static['int']/4) + random.randint(-2, 2)
+            main.player.hp += self.health + int(main.static['int']/4) + random.randint(-2, 2)
             if main.player.hp > main.static['hp_p']:
                 main.player.hp -= (main.player.hp - main.static['hp_p'])
             print('-Player Turn-')

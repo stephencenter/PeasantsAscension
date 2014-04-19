@@ -30,8 +30,8 @@ def movement_system():
     while True:
         global position
         if check_region():
-            winsound.PlaySound(None, winsound.SND_ASYNC) # Stop all currently playing music
-            winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC) # Play overworld music (Thanks, Ben Landis!)
+            winsound.PlaySound(None, winsound.SND_ASYNC)
+            winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
             position['h'] = "'E"

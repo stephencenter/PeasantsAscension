@@ -45,7 +45,7 @@ static = {'hp_p':'', 'hp_m':'', 'mp_p':'', 'mp_m':'', 'r_xp':3,
           'int':1, 'str':1, 'con':1, 'dex':1, 'luc':1, 'gp':0}
 
 # A dictionary containing all information related to the player's position
-position = {'x':0, 'y':-60, 'avg':'', 'reg':'Forest', 'reg_music':'Music\\Through the Forest.wav', 'h':'', 'v':'', 'prev_town':[0, 0]}
+position = {'x':0, 'y':0, 'avg':'', 'reg':'Forest', 'reg_music':'Music\\Through the Forest.wav', 'h':'', 'v':'', 'prev_town':[0, 0]}
 
 # Identify the player's OS and set their save destination
 if os.name == 'posix': # Unix-based
