@@ -148,7 +148,7 @@ spells = [
          g_infer,            # Level 17
          sp_storm,           # Level 18
          dv_heal             # Level 20
-         ]
+    ]
 
 def eval_element(p_elem='None', m_elem='None', m_dmg=0, p_dmg=0):
     element_list = ['Fire', 'Water', 'Electric', 'Earth', 'Grass', 'Wind', 'Ice']

@@ -62,8 +62,8 @@ def battle_system():
             run = run_away() # Attempt to run...
             if run: # If it succeeds, end the battle without giving the player a reward
                 print('-'*25)
-                winsound.PlaySound(None, winsound.SND_ASYNC) # Stop all currently playing music
-                winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC) # Play overworld music (Thanks, Ben Landis!)
+                winsound.PlaySound(None, winsound.SND_ASYNC)
+                winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
                 return
 
             enemy_turn(var, dodge) # If it fails, the enemy will attack you and skip your turn
@@ -162,10 +162,11 @@ def after_battle(): # Assess the results of the battle
 
     update_stats()
     winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound('Music\\Power-Up.wav', winsound.SND_ASYNC)
-
+    winsound.PlaySound('Music\\Adventures in Pixels', winsound.SND_ASYNC)
     while True:
         if monster.hp > 0 and player.hp <= 0:
+            winsound.PlaySound(None, winsound.SND_ASYNC)
+            winsound.PlaySound('Music\\Power-Up.wav', winsound.SND_ASYNC)
             print('Despite your best efforts, the %s has bested you. You are dead.' % (monster.name))
             print('-'*25)
             while True:

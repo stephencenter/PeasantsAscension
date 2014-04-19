@@ -23,12 +23,12 @@ def setup_vars():
 
 def movement_system():
     """Adjust the player's x/y coordinates based on inputed direction."""
+    global position
 
     setup_vars()
     winsound.PlaySound(None, winsound.SND_ASYNC)
     winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
     while True:
-        global position
         if check_region():
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)

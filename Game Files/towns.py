@@ -68,10 +68,14 @@ class Town:
     def inside_town(self):
         if self.inn:
             self.town_inn()
+            winsound.PlaySound(None, winsound.SND_ASYNC)
+            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC)
             if self.gen_store:
                 print('-'*25)
         if self.gen_store:
             self.town_gen()
+            winsound.PlaySound(None, winsound.SND_ASYNC)
+            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC)
 
     def town_inn(self):
         print('There is an Inn in this town.')
@@ -82,9 +86,10 @@ class Town:
             except AttributeError:
                 continue
             if y_n in ['yes', 'y']:
+                winsound.PlaySound(None, winsound.SND_ASYNC)
+                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC)
                 print('-'*25)
                 print('Inn Keeper: "Greetings, Traveler!"')
-                print()
                 while True:
                     choice = input('"Would you like to stay at our inn? %s" | Yes or No: ' % (
                     "It's free, y'know." if not self.inn_cost else ' '.join(["One Night is", str(self.inn_cost), "GP."])))
@@ -113,16 +118,6 @@ class Town:
                 return
 
     def town_gen(self): # Let the player purchase items from the General Store
-        stock = []      # A list containing actual instances of "Item"
-        str_stock = []  # A readable, non-functioning version of "stock"
-        for type in inv_system.gs_stock:
-            item = type[self.gs_level - 1]
-            if isinstance(item, inv_system.Item):
-                stock.append(item)
-                str_stock.append(str(item) + ', ')
-            else:
-                str_stock.append(item)
-        str_stock = ''.join(str_stock)
         print('There is a General Store in this town.')
         while True:
             y_n = input('Do you want to shop at the General Store? | Yes or No: ')
@@ -131,9 +126,22 @@ class Town:
             except AttributeError:
                 continue
             if y_n in ['yes', 'y']:
+                winsound.PlaySound(None, winsound.SND_ASYNC)
+                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC)
+
+                stock = []      # A list containing actual instances of "Item"
+                str_stock = []  # A readable, non-functioning version of "stock"
+                for type in inv_system.gs_stock:
+                    item = type[self.gs_level - 1]
+                    if isinstance(item, inv_system.Item):
+                        stock.append(item)
+                        str_stock.append(str(item) + ', ')
+                    else:
+                        str_stock.append(item)
+                str_stock = ''.join(str_stock)
+
                 print('-'*25)
                 print('Owner: "Welcome, Traveler!"')
-                print()
                 while True:
                     b_s = input('"Are ya buying, or are ya selling?" | Input "Buy" or "Sell" (or type "exit"): ')
                     try:

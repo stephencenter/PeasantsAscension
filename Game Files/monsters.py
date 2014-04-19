@@ -62,8 +62,8 @@ class Monster: # All monsters use this class. In the future, boss-monsters will 
     def monst_level(self):
         global static
         self.lvl = 1
-        for x in range(1, 45):
-            if position['avg'] in range(4*x, (4*x + 4)):
+        for x in range(1, 65):
+            if position['avg'] in range(3*x, (3*x + 3)):
                 self.lvl = x + 1
                 break
         if self.lvl > 1:

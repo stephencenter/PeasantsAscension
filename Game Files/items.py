@@ -90,11 +90,9 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
             inventory[self.cat][key] = fizz
             print('-'*25)
             print('You equip the %s.' % (str(self)))
-            print('-'*25)
         else:
             print('-'*25)
             print("You aren't a high enough to equip this yet. (Must be level %s to equip)" % (self.req_lvl))
-            print('-'*25)
 
 class Armor(Item):
     def __init__(self, name, desc, buy, sell, defense, type, part, req_lvl=1, equip=False,  cat='armor', imp=False, element='None'):
@@ -133,11 +131,9 @@ class Armor(Item):
             inventory[self.cat][key] = fizz
             print('-'*25)
             print('You equip the %s.' % (str(self)))
-            print('-'*25)
         else:
             print('-'*25)
             print("You aren't a high enough to equip this yet. (Must be level %s to equip)" % (self.req_lvl))
-            print('-'*25)
 
 def sell_item():
     global inventory
