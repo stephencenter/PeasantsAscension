@@ -24,12 +24,14 @@ def setup_vars():
 def movement_system():
     """Adjust the player's x/y coordinates based on inputed direction."""
 
-    winsound.PlaySound(None, winsound.SND_ASYNC) # Stop all currently playing music
-    winsound.PlaySound("Music\\Through the Forest.wav", winsound.SND_ASYNC) # Play overworld music (Thanks, Ben Landis!)
     setup_vars()
+    winsound.PlaySound(None, winsound.SND_ASYNC)
+    winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
     while True:
         global position
-        check_region()
+        if check_region():
+            winsound.PlaySound(None, winsound.SND_ASYNC) # Stop all currently playing music
+            winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC) # Play overworld music (Thanks, Ben Landis!)
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
             position['h'] = "'E"
@@ -88,22 +90,32 @@ def check_region():
     global position
     x, y = position['x'], position['y']
     if x in range(-50, 51) and y in range(-50, 51):
-        region = 'Plains'
-    elif x in range(-115, 0) and y in range(1, 116):
-        region = 'Tundra'
-    elif x in range(-115, 1) and y in range(-115, 0):
         region = 'Forest'
-    elif x in range(1, 116) and y in range(0, 116):
+        reg_music = 'Music\\Through the Forest.wav'
+    elif x in range(-115, 1) and y in range(0, 116):
+        region = 'Tundra'
+        reg_music = 'Music\\Arpanauts.wav'
+    elif x in range(-115, 0) and y in range(-115, 1):
+        region = 'Mountain'
+        reg_music = 'Music\\Mountain.wav'
+    elif x in range(0, 116) and y in range(0, 116):
         region = 'Desert'
+        reg_music = 'Music\\Come and Find Me.wav'
     elif x in range(0, 116) and y in range(-115, 1):
         region = 'Swamp'
+        reg_music = 'Music\\Digital Native.wav'
     elif abs(x) in range(116, 126) or abs(y) in range(116, 126):
         region = 'Beach'
+        reg_music = "Music\\We're all under the stars.wav"
     if position['reg'] != region:
         print('-'*25)
         print('You have left the %s region and are now entering the %s region.' % (position['reg'], region))
         print('-'*25)
         position['reg'] = region
+        position['reg_music'] = reg_music
+        return True
+    else:
+        return False
 
 def save_coords(x, y):
     global position

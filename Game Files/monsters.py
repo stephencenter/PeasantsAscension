@@ -89,8 +89,8 @@ class Monster: # All monsters use this class. In the future, boss-monsters will 
             print("You narrowly avoid the %s's attack!" % (self.name))
 
     def monst_name(self):
-        monster_type = {'Plains':['Imp', 'Skeleton', 'Goblin'], 'Desert':['Sand Golem', 'Desert Python', 'Giant Ant'],
-                        'Forest':['Tree Mite', 'Minor Ent', 'Wood Troll'], 'Tundra':['Frost Bat', 'Arctic Wolf', 'Minor Yeti'],
+        monster_type = {'Forest':['Imp', 'Skeleton', 'Goblin'], 'Desert':['Sand Golem', 'Desert Python', 'Fire Ant'],
+                        'Mountain':['Rock Giant', 'Giant Worm', 'Troll'], 'Tundra':['Frost Bat', 'Arctic Wolf', 'Minor Yeti'],
                         'Swamp':['Moss Ogre', 'Bog Slime', 'Sludge Rat'], 'Beach':['Minor Kraken', 'Mutant Crab', 'Land Shark']}
 
         self.name = random.choice(monster_type[position['reg']])
@@ -131,15 +131,15 @@ class Monster: # All monsters use this class. In the future, boss-monsters will 
         if position['reg'] == 'Tundra':
             self.element = 'Ice'
         elif position['reg'] == 'Desert':
+            self.element = 'Fire'
+        elif position['reg'] == 'Mountain':
             self.element = 'Earth'
-        elif position['reg'] == 'Plains':
-            self.element = 'Wind'
         elif position['reg'] == 'Beach':
-            self.element = 'Water'
+            self.element = 'Electric'
         elif position['reg'] == 'Forest':
             self.element = 'Grass'
         elif position['reg'] == 'Swamp':
-            self.element = 'Electric'
+            self.element = 'Water'
 
         self.name = ' '.join([modifier, self.name])
 

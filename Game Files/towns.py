@@ -4,6 +4,7 @@ import copy
 import inv_system
 import world
 import items
+import winsound
 
 if __name__ == "__main__":
     sys.exit()
@@ -44,6 +45,8 @@ class Town:
                 inv_system.pick_catagory()
                 print('-'*25)
             elif choice == '5':
+                winsound.PlaySound(None, winsound.SND_ASYNC)
+                winsound.PlaySound(world.position['reg_music'], winsound.SND_ASYNC)
                 print('-'*25)
                 return
 
@@ -233,6 +236,8 @@ def search_towns(pos_x, pos_y): # Check to see if there is a town where the play
                 except AttributeError:
                     continue
                 if y_n in ['yes', 'y']:
+                    winsound.PlaySound(None, winsound.SND_ASYNC)
+                    winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC)
                     world.save_coords(town.x, town.y)
                     town.new_location()
                     town.town_choice()

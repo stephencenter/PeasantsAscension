@@ -4,6 +4,8 @@ import random
 import monsters
 import inv_system
 import magic
+import world
+import winsound
 from copy import copy as _c
 
 monster = ''
@@ -36,6 +38,8 @@ def update_stats(): # Forces stats to be returned to normal when battle is finis
                   'evad':_c(player.evad), 'm_dfns':_c(player.m_dfns), 'spd':_c(player.spd)}
 
 def battle_system():
+    winsound.PlaySound(None, winsound.SND_ASYNC)
+    winsound.PlaySound('Music\\Jumpshot.wav', winsound.SND_ASYNC)
     if monster.name[0] in vowels: # Remember to use proper grammar!
         a_an = 'An '
     else:
@@ -58,6 +62,8 @@ def battle_system():
             run = run_away() # Attempt to run...
             if run: # If it succeeds, end the battle without giving the player a reward
                 print('-'*25)
+                winsound.PlaySound(None, winsound.SND_ASYNC) # Stop all currently playing music
+                winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC) # Play overworld music (Thanks, Ben Landis!)
                 return
 
             enemy_turn(var, dodge) # If it fails, the enemy will attack you and skip your turn
@@ -153,7 +159,11 @@ def enemy_turn(var, dodge): # This is the Enemy's AI.
 def after_battle(): # Assess the results of the battle
     global player
     global position
+
     update_stats()
+    winsound.PlaySound(None, winsound.SND_ASYNC)
+    winsound.PlaySound('Music\\Power-Up.wav', winsound.SND_ASYNC)
+
     while True:
         if monster.hp > 0 and player.hp <= 0:
             print('Despite your best efforts, the %s has bested you. You are dead.' % (monster.name))
@@ -168,6 +178,8 @@ def after_battle(): # Assess the results of the battle
                     world.back_to_coords()
                     player.hp = int(static['hp_p']/2)
                     player.mp = int(static['mp_p']/2)
+                    winsound.PlaySound(None, winsound.SND_ASYNC)
+                    winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
                     return
                 elif y_n in 'no':
                     sys.exit()
@@ -191,6 +203,8 @@ def after_battle(): # Assess the results of the battle
             player.exp += reward
             print("You've gained %s experience point%s!" % (reward, 's' if reward > 1 else ''))
             player.level_up()
+            winsound.PlaySound(None, winsound.SND_ASYNC)
+            winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
             return
 
         elif player.hp <= 0 and monster.hp <= 0:
