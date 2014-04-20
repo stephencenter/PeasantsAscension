@@ -2,6 +2,7 @@ import sys
 import json
 import monsters
 import battle
+import random
 import inv_system
 
 if __name__ == "__main__":
