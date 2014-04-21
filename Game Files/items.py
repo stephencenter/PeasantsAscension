@@ -95,7 +95,7 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
             print("You aren't a high enough to equip this yet. (Must be level %s to equip)" % (self.req_lvl))
 
 class Armor(Item):
-    def __init__(self, name, desc, buy, sell, defense, type, part, req_lvl=1, equip=False,  cat='armor', imp=False, element='None'):
+    def __init__(self, name, desc, buy, sell, defense, type, part, req_lvl=1, equip=False,  cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.defense = defense
         self.type = type

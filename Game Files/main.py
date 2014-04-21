@@ -64,7 +64,8 @@ elif os.name == 'nt': # Windows
 
 class PlayerCharacter: # The Player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns,
-                 spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,):
+                 spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,
+                 _class=''):
         self.name = name        # Name
         self.hp = hp            # Health
         self.mp = mp            # Mana Points
@@ -79,6 +80,7 @@ class PlayerCharacter: # The Player
         self.ext_ski = ext_ski  # Skill Points
         self.ext_gol = ext_gol  # Extra Gold Pieces
         self.ext_exp = ext_exp  # Extra Experience
+        self._class = _class     # Player Class
 
     def player_damage(self, var): # The formula for the player dealing damage
         try:
@@ -87,7 +89,6 @@ class PlayerCharacter: # The Player
             phys_dealt = 1
         phys_dealt = magic.eval_element(p_elem=inv_system.equipped['weapon'].element, m_elem=monsters.monster.element, p_dmg=phys_dealt)[0]
         return phys_dealt
-
 
     def choose_name(self):
         while True:
@@ -102,6 +103,25 @@ class PlayerCharacter: # The Player
                     return self.name
                 elif y_n in 'no':
                     break
+
+    def choose_class(self):
+        while True:
+            _class = input('Well then, %s, which class would you like to begin training in? | Warrior or Mage: ' % (self.name))
+            try:
+                _class = _class.lower()
+            except AttributeError:
+                continue
+            if _class in ['warrior', 'mage']:
+                while True:
+                    y_n = input('You wish to be of the %s class? | Yes or No: ' % (_class.title()))
+                    try:
+                       y_n = y_n.lower()
+                    except AttributeError:
+                        continue
+                    if y_n in 'yes':
+                        return _class
+                    elif y_n in 'no':
+                        break
 
     def give_gold(self): # Give the player GP for winning battles
         gold = int(battle.monster.lvl*random.randint(1, 3) + random.randint(-1, 1) - int((self.lvl)/2))
@@ -210,13 +230,14 @@ def create_player():
     static['hp_p'] = player.hp
     static['mp_p'] = player.mp
     player.name = player.choose_name()
+    player._class = player.choose_class()
     print('-'*25)
 
 def check_save(): # Check for save files and load the game if they're found
     global static
     global position
     print('Loading...')
-    winsound.PlaySound("Music\\Prologue.wav", winsound.SND_ASYNC)
+    winsound.PlaySound("Music\\Prologue.wav", winsound.SND_ASYNC | winsound.SND_LOOP)
     print('-'*25)
     # Check each part of the save file
     for file in [sav1, sav2, sav3, sav4, sav5, sav6]:

@@ -26,12 +26,12 @@ def movement_system():
     global position
 
     setup_vars()
-    winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
+    winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+    winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP)
     while True:
         if check_region():
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC)
+            winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+            winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP)
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
             position['h'] = "'E"

@@ -45,8 +45,8 @@ class Town:
                 inv_system.pick_catagory()
                 print('-'*25)
             elif choice == '5':
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound(world.position['reg_music'], winsound.SND_ASYNC)
+                winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+                winsound.PlaySound(world.position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP)
                 print('-'*25)
                 return
 
@@ -68,14 +68,14 @@ class Town:
     def inside_town(self):
         if self.inn:
             self.town_inn()
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC)
+            winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP)
             if self.gen_store:
                 print('-'*25)
         if self.gen_store:
             self.town_gen()
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC)
+            winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP)
 
     def town_inn(self):
         print('There is an Inn in this town.')
@@ -86,8 +86,8 @@ class Town:
             except AttributeError:
                 continue
             if y_n in ['yes', 'y']:
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC)
+                winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC | winsound.SND_LOOP)
                 print('-'*25)
                 print('Inn Keeper: "Greetings, Traveler!"')
                 while True:
@@ -126,8 +126,8 @@ class Town:
             except AttributeError:
                 continue
             if y_n in ['yes', 'y']:
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC)
+                winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC | winsound.SND_LOOP)
 
                 stock = []      # A list containing actual instances of "Item"
                 str_stock = []  # A readable, non-functioning version of "stock"
@@ -244,8 +244,8 @@ def search_towns(pos_x, pos_y): # Check to see if there is a town where the play
                 except AttributeError:
                     continue
                 if y_n in ['yes', 'y']:
-                    winsound.PlaySound(None, winsound.SND_ASYNC)
-                    winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC)
+                    winsound.PlaySound(None, winsound.SND_ASYNC | winsound.SND_LOOP)
+                    winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP)
                     world.save_coords(town.x, town.y)
                     town.new_location()
                     town.town_choice()
