@@ -5,6 +5,7 @@ import monsters
 import inv_system
 import magic
 import world
+import bosses
 import winsound
 from copy import copy as _c
 
@@ -27,29 +28,34 @@ def setup_vars():
     global player
     global monster
 
+    monster = monsters.monster
     player = main.player
     static = main.static
     position = main.position
-    monster = monsters.monster
 
 def update_stats(): # Forces stats to be returned to normal when battle is finished
     global temp_stats
     temp_stats = {'attk':_c(player.attk), 'm_attk':_c(player.m_attk), 'dfns':_c(player.dfns),
                   'evad':_c(player.evad), 'm_dfns':_c(player.m_dfns), 'spd':_c(player.spd)}
 
-def battle_system():
+def battle_system(boss=False):
     winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound('Music\\Jumpshot.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
 
-    if monster.name[0] in vowels: # Remember to use proper grammar!
-        a_an = 'An '
+    if boss:
+        winsound.PlaySound('Music\\Terrible Tarantuloid.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+        print('-'*25)
+        print('The legendary %s has awoken!' % (monster.name))
+
     else:
-        a_an = 'A '
+        winsound.PlaySound('Music\\Jumpshot.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+        if monster.name[0] in vowels: # Remember to use proper grammar!
+            a_an = 'An '
+        else:
+            a_an = 'A '
+        print('-'*25)
+        print('%s%s suddenly appeared out of nowhere!' % (a_an, monster.name))
 
-    print('-'*25)
-    print('%s%s suddenly appeared out of nowhere!' % (a_an, monster.name))
     update_stats()
-
     while player.hp > 0 and monster.hp > 0: # Continue the battle until someone dies
         bat_stats() # First, display the Player and Monster's stats
         move = player_choice() # Second, get the player's decision on moves
@@ -80,7 +86,7 @@ def battle_system():
             if monster.hp > 0:
                 enemy_turn(var, dodge)
     else:
-        after_battle()
+        after_battle(boss)
         print('-'*25)
 
 def player_choice():
@@ -92,6 +98,7 @@ def player_choice():
 def player_turn(var, dodge, move):
     global player
     global monster
+
     while True:
         if move != '2': # "2" refers to magic, which will print this later
             print()
@@ -157,19 +164,21 @@ def enemy_turn(var, dodge): # This is the Enemy's AI.
     else:
         monster.monst_attk(var, dodge)
 
-def after_battle(): # Assess the results of the battle
+def after_battle(boss): # Assess the results of the battle
     global player
-    global position
-
     update_stats()
+
     winsound.PlaySound(None, winsound.SND_ASYNC)
     winsound.PlaySound('Music\\Adventures in Pixels', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+
     while True:
         if monster.hp > 0 and player.hp <= 0:
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound('Music\\Power-Up.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+
             print('Despite your best efforts, the %s has bested you. You are dead.' % (monster.name))
             print('-'*25)
+
             while True:
                 y_n = input('Do you wish to continue playing? | Yes or No: ')
                 try:
@@ -187,7 +196,11 @@ def after_battle(): # Assess the results of the battle
                     sys.exit()
 
         elif monster.hp <= 0 and player.hp > 0:
-            print('The %s falls to the ground, dead as a stone.' % (monster.name))
+            if not boss:
+                print('The %s falls to the ground, dead as a stone.' % (monster.name))
+            else:
+                print('The almighty %s has been slain!' % (monster.name))
+                bosses.defeated_bosses.append(monster)
             print('-'*25)
             if monster.items:
                 cat = monster.items.cat

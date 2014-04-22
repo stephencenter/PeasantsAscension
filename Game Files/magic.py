@@ -200,7 +200,7 @@ spellbook = {'Healing':[], 'Damaging':[w_flame], 'Buffs':[]}
 
 def pick_cat(var, dodge):
     while True:
-        cat = input('Spellbook: ' + ', '.join(['"' + x + '"' for x in spellbook]) + ' | Input catagory (or type "exit"): ')
+        cat = input('Spellbook: ' + ', '.join(['"' + x + '"' for x in spellbook]) + ' | Input category (or type "exit"): ')
         try:
             cat = cat.title()
         except AttributeError:
@@ -214,7 +214,7 @@ def pick_cat(var, dodge):
             continue
         if not spellbook[cat]:
             print('-'*25)
-            print('You do not yet have any spells in the %s catagory.' % (cat))
+            print('You do not yet have any spells in the %s category.' % (cat))
             print('-'*25)
             continue
         if pick_spell(cat, var, dodge):
@@ -296,15 +296,15 @@ def deserialize_sb(path):
     norm_sb = {}
     with open(path, mode='r', encoding='utf-8') as f:
         j_spellbook = json.load(f)
-    for catagory in j_spellbook:
-        norm_sb[catagory] = []
-        for spell in j_spellbook[catagory]:
-            if catagory == 'Damaging':
+    for category in j_spellbook:
+        norm_sb[category] = []
+        for spell in j_spellbook[category]:
+            if category == 'Damaging':
                 x = Damaging('', '', '', '', '', '')
-            elif catagory == 'Healing':
+            elif category == 'Healing':
                 x = Healing('', '', '', '', '')
-            elif catagory == 'Buffs':
+            elif category == 'Buffs':
                 x = Buff('', '', '', '', '', '')
             x.__dict__ = spell
-            norm_sb[catagory].append(x)
+            norm_sb[category].append(x)
     spellbook = norm_sb

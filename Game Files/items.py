@@ -140,7 +140,7 @@ def sell_item():
     item_setup_vars()
     print('-'*25)
     while True:
-        cat = input('Sell: Armor, Weapons, Consum, Misc | Input Catagory Name (or type "exit"): ')
+        cat = input('Sell: Armor, Consum, Misc, Weapons | Input Category Name (or type "exit"): ')
         try:
             cat = cat.lower()
         except AttributeError:
@@ -150,30 +150,30 @@ def sell_item():
         elif cat in ['coord', 'quest'] or cat not in ['armor', 'weapons', 'consum', 'misc']:
             continue
         elif cat in ['weapons', 'armor']:
-            catagory = [item for item in inventory[cat] if not item.equip]
-            if not catagory:
+            category = [item for item in inventory[cat] if not item.equip]
+            if not category:
                 print('-'*25)
-                print('The "%s" catagory is empty...' % (cat))
+                print('The "%s" category is empty...' % (cat))
                 print('-'*25)
                 continue
         else:
             if not inventory[cat]:
                 print('-'*25)
-                print('The "%s" catagory is empty...' % (cat))
+                print('The "%s" category is empty...' % (cat))
                 print('-'*25)
                 continue
-            catagory = copy.copy(inventory[cat])
+            category = copy.copy(inventory[cat])
         while True:
-            if not catagory:
+            if not category:
                 break
-            item = input(cat.title() + ': ' + str([str(x) for x in catagory]) + ' | Input Item Name (or type "back"): ')
+            item = input(cat.title() + ': ' + str([str(x) for x in category]) + ' | Input Item Name (or type "back"): ')
             try:
                 item = item.title()
             except AttributeError:
                 continue
             if item == 'Back':
                 break
-            for i in catagory:
+            for i in category:
                 if str(i) == item:
                     item = i
                     break
@@ -183,7 +183,7 @@ def sell_item():
                 print('-'*25)
             else:
                 continue
-            while item in catagory:
+            while item in category:
                 choice = input('"Ya want to sell this %s for %s GP?" | Yes or No: ' % (str(item), item.sell))
                 try:
                     choice = choice.lower()
@@ -195,7 +195,7 @@ def sell_item():
                     print('-'*25)
                     main.static['gp'] += item.sell
                     inventory[cat].remove(item)
-                    catagory.remove(item)
+                    category.remove(item)
                 elif choice in ['no', 'n']:
                     break
 

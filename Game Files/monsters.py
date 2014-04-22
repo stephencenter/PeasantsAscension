@@ -26,8 +26,8 @@ def setup_vars():
     position = main.position
     inventory = inv_system.inventory
 
-class Monster: # All monsters use this class. In the future, boss-monsters will use a
-               # subclass that inherits from this one
+class Monster: # All monsters use this class. Bosses use a sub-class called
+               # "Boss" (located in bosses.py) which inherits from this.
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, spd, evad, lvl, element='None'):
         self.name = name        # Name
         self.hp = hp            # Health

@@ -28,12 +28,12 @@ gs_stock = [[s_potion, m_potion, l_potion],
 
 item_setup_vars()
 
-def pick_catagory():
+def pick_category():
     global inventory
     while True:
-        print('Catagories: ' + ', '.join([x.title() for x in inventory]))
+        print('Categories: ' + ', '.join(sorted([x.title() for x in inventory], key=str.lower)))
         while True:
-            cat = input('Input the name of the catagory you want to view (or type "exit"): ')
+            cat = input('Input the name of the category you want to view (or type "exit"): ')
             try:
                 cat = cat.lower()
             except AttributeError:
@@ -56,12 +56,12 @@ def pick_catagory():
                             print('-'*25)
                         else:
                             print('-'*25)
-                            print('The "%s" catagory is empty...' % (cat))
+                            print('The "%s" category is empty...' % (cat))
                             print('-'*25)
                     break
                 else:
                     print('-'*25)
-                    print('The "%s" catagory is empty...' % (cat))
+                    print('The "%s" category is empty...' % (cat))
                     print('-'*25)
                     break
             elif cat == 'exit':
@@ -71,11 +71,11 @@ def pick_item(cat):
     while inventory[cat]:
         if cat == 'armor' or cat == 'weapons':
             if [x for x in inventory[cat] if not x.equip]:
-                print(cat.title() + ': ' + ', '.join([str(x) for x in inventory[cat] if not x.equip]))
+                print(cat.title() + ': ' + ', '.join(sorted([str(x) for x in inventory[cat] if not x.equip], key=str.lower)))
             else:
                 return
         else:
-            print(cat.title() + ': ' + ', '.join([str(x) + ' x' + str(inventory[cat].count(x)) for x in set(inventory[cat])]))
+            print(cat.title() + ': ' + ', '.join(sorted([str(x) + ' x' + str(inventory[cat].count(x)) for x in set(inventory[cat])], key=str.lower)))
         while True:
             item = input('Input the name of the item you want to interact with (or type "back"): ')
             try:
@@ -97,7 +97,6 @@ def pick_item(cat):
                         item = i
                         break
                     elif item == 'Back':
-                        print()
                         return
                 else:
                     continue
@@ -150,6 +149,7 @@ def pick_action(cat, item):
                          print('You wisely decide to keep the %s with you.' % (str(item)))
                          break
         elif action == 4:
+            print('-'*25)
             return
 
 def add_item(item):
@@ -158,13 +158,13 @@ def add_item(item):
 
 def serialize_inv(path):
     j_inventory = {}
-    for catagory in inventory:
-        j_inventory[catagory] = []
-        for item in inventory[catagory]:
-            if catagory != 'coord':
-                j_inventory[catagory].append(item.__dict__)
+    for category in inventory:
+        j_inventory[category] = []
+        for item in inventory[category]:
+            if category != 'coord':
+                j_inventory[category].append(item.__dict__)
             else:
-                j_inventory[catagory].append(item)
+                j_inventory[category].append(item)
     with open(path, mode='w', encoding='utf-8') as c:
         json.dump(j_inventory, c, indent=4, separators=(', ', ': '))
 
@@ -173,31 +173,31 @@ def deserialize_inv(path):
     norm_inv = {}
     with open(path, mode='r', encoding='utf-8') as c:
        j_inventory = json.load(c)
-    for catagory in j_inventory:
-        norm_inv[catagory] = []
-        for item in j_inventory[catagory]:
-            if catagory == 'consum':
+    for category in j_inventory:
+        norm_inv[category] = []
+        for item in j_inventory[category]:
+            if category == 'consum':
                 x = Consumable('', '', '', '')
-            elif catagory == 'weapon':
+            elif category == 'weapon':
                 x = Weapon('', '', '', '', '', '')
-            elif catagory == 'armor':
+            elif category == 'armor':
                 x = Armor('', '', '', '', '', '', '')
-            elif catagory == 'coord':
-                norm_inv[catagory].append(item)
+            elif category == 'coord':
+                norm_inv[category].append(item)
                 continue
             else:
                 continue
             x.__dict__ = item
-            norm_inv[catagory].append(x)
+            norm_inv[category].append(x)
     inventory = norm_inv
 
 def serialize_equip(path):
     j_equipped = {}
-    for catagory in equipped:
-        if equipped[catagory] != '(None)':
-            j_equipped[catagory] = equipped[catagory].__dict__
+    for category in equipped:
+        if equipped[category] != '(None)':
+            j_equipped[category] = equipped[category].__dict__
         else:
-            j_equipped[catagory] = '(None)'
+            j_equipped[category] = '(None)'
     with open(path, mode='w', encoding='utf-8') as d:
         json.dump(j_equipped, d, indent=4, separators=(', ', ': '))
 
@@ -206,14 +206,14 @@ def deserialize_equip(path):
     norm_equip = {}
     with open(path, mode='r', encoding='utf-8') as d:
         j_equipped = json.load(d)
-    for catagory in j_equipped:
-        if j_equipped[catagory] == '(None)':
-            norm_equip[catagory] = '(None)'
+    for category in j_equipped:
+        if j_equipped[category] == '(None)':
+            norm_equip[category] = '(None)'
             continue
-        elif catagory == 'weapon':
+        elif category == 'weapon':
             x = Weapon('', '', '', '', '', '')
         else:
             x = Armor('', '', '', '', '', '', '')
-        x.__dict__ = j_equipped[catagory]
-        norm_equip[catagory] = x
+        x.__dict__ = j_equipped[category]
+        norm_equip[category] = x
     equipped = norm_equip

@@ -1,10 +1,7 @@
-# Pythonius; v0.0.50 Alpha
+# Pythonius; v0.0.60 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
-#------------------------------------------------------------------------------#
-# Changelog for current version below:
-# https://www.dropbox.com/s/u02o4k4h4jwsccy/RPG_Changelog.txt
 #------------------------------------------------------------------------------#
 # Contact me via Twitter (@RbwNjaFurret) or email (ninjafurret@gmail.com)
 # for questions/feedback.
@@ -35,6 +32,7 @@ import world
 import inv_system
 import monsters
 import magic
+import bosses
 
 # Establish "player" as a global variable
 player = ''
@@ -54,6 +52,7 @@ if os.name == 'posix': # Unix-based
     sav4 = '/usr/bin/Pythonius/Save Files/sav_d.json'
     sav5 = '/usr/bin/Pythonius/Save Files/sav_e.json'
     sav6 = '/usr/bin/Pythonius/Save Files/sav_f.json'
+
 elif os.name == 'nt': # Windows
     sav1 = 'C:\\Pythonius\\Save Files\\sav_a.json'
     sav2 = 'C:\\Pythonius\\Save Files\\sav_b.json'
@@ -87,7 +86,7 @@ class PlayerCharacter: # The Player
             phys_dealt = int(math.sqrt(self.attk + self.lvl - battle.monster.dfns) + 3) + var
         except ValueError: # Just incase "math.sqrt" recieves a negative number
             phys_dealt = 1
-        phys_dealt = magic.eval_element(p_elem=inv_system.equipped['weapon'].element, m_elem=monsters.monster.element, p_dmg=phys_dealt)[0]
+        phys_dealt = magic.eval_element(p_elem=inv_system.equipped['weapon'].element, m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
         return phys_dealt
 
     def choose_name(self):

@@ -2,6 +2,7 @@ import sys
 import battle
 import monsters
 import towns
+import bosses
 import random
 import winsound
 
@@ -33,6 +34,7 @@ def movement_system():
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
         towns.search_towns(position['x'], position['y'])
+
         if position['x'] >= 0:
             position['h'] = "'E"
         else:
@@ -73,12 +75,13 @@ def movement_system():
                         out_of_bounds()
                         continue
                 position['avg'] = int((abs(position['x']) + abs(position['y']))/2)
-                spam = random.randint(0, 2)
-                eggs = random.randint(0, 2)
-                if spam == eggs:
-                    monsters.spawn_monster()
-                    battle.setup_vars()
-                    battle.battle_system()
+                if not bosses.check_bosses(position['x'], position['y']):
+                    spam = random.randint(0, 2)
+                    eggs = random.randint(0, 2)
+                    if spam == eggs:
+                        monsters.spawn_monster()
+                        battle.setup_vars()
+                        battle.battle_system()
                 break
 
 def out_of_bounds():

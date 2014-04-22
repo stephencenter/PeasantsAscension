@@ -42,7 +42,7 @@ class Town:
                 print('-'*25)
             elif choice == '4':
                 print('-'*25)
-                inv_system.pick_catagory()
+                inv_system.pick_category()
                 print('-'*25)
             elif choice == '5':
                 winsound.PlaySound(None, winsound.SND_ASYNC)
@@ -237,6 +237,7 @@ town_list = [town1, town2, town3]
 def search_towns(pos_x, pos_y): # Check to see if there is a town where the player is located
     for town in town_list:
         if town.x == pos_x and town.y == pos_y:
+            print('-'*25)
             while True:
                 y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
                 try:
