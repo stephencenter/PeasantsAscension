@@ -237,7 +237,8 @@ def check_save(): # Check for save files and load the game if they're found
     global static
     global position
     print('Loading...')
-    winsound.PlaySound("Music\\Prologue.wav", winsound.SND_ASYNC | winsound.SND_LOOP)
+    winsound.PlaySound(None, winsound.SND_ASYNC)
+    winsound.PlaySound("Music\\Prologue.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
     print('-'*25)
     # Check each part of the save file
     for file in [sav1, sav2, sav3, sav4, sav5, sav6]:
