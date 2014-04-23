@@ -45,21 +45,19 @@ static = {'hp_p':'', 'hp_m':'', 'mp_p':'', 'mp_m':'', 'r_xp':3,
 position = {'x':0, 'y':0, 'avg':'', 'reg':'Forest', 'reg_music':'Music\\Through the Forest.wav', 'h':'', 'v':'', 'prev_town':[0, 0]}
 
 # Identify the player's OS and set their save destination
-if os.name == 'posix': # Unix-based
-    sav1 = '/usr/bin/Pythonius/Save Files/sav_a.json'
-    sav2 = '/usr/bin/Pythonius/Save Files/sav_b.json'
-    sav3 = '/usr/bin/Pythonius/Save Files/sav_c.json'
-    sav4 = '/usr/bin/Pythonius/Save Files/sav_d.json'
-    sav5 = '/usr/bin/Pythonius/Save Files/sav_e.json'
-    sav6 = '/usr/bin/Pythonius/Save Files/sav_f.json'
+if os.name == 'nt': # Windows
+    sav1 = 'C:\\Pythonius\\Save Files\\sav_a.json' # Misc Variables
+    sav2 = 'C:\\Pythonius\\Save Files\\sav_b.json' # Position
+    sav3 = 'C:\\Pythonius\\Save Files\\sav_c.json' # Inventory
+    sav4 = 'C:\\Pythonius\\Save Files\\sav_d.json' # Equipped Items
+    sav5 = 'C:\\Pythonius\\Save Files\\sav_e.json' # Player Stats
+    sav6 = 'C:\\Pythonius\\Save Files\\sav_f.json' # Spellbook
+    sav7 = 'C;\\Pythonius\\Save Files\\sav_g.json' # Defeated Bosses
 
-elif os.name == 'nt': # Windows
-    sav1 = 'C:\\Pythonius\\Save Files\\sav_a.json'
-    sav2 = 'C:\\Pythonius\\Save Files\\sav_b.json'
-    sav3 = 'C:\\Pythonius\\Save Files\\sav_c.json'
-    sav4 = 'C:\\Pythonius\\Save Files\\sav_d.json'
-    sav5 = 'C:\\Pythonius\\Save Files\\sav_e.json'
-    sav6 = 'C:\\Pythonius\\Save Files\\sav_f.json'
+else:
+    raise OSError('This game is not supported by your operating system.')
+    input('Press enter to exit')
+    sys.exit()
 
 class PlayerCharacter: # The Player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns,
@@ -240,7 +238,7 @@ def check_save(): # Check for save files and load the game if they're found
     winsound.PlaySound("Music\\Prologue.wav", winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
     print('-'*25)
     # Check each part of the save file
-    for file in [sav1, sav2, sav3, sav4, sav5, sav6]:
+    for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7]:
         if os.path.isfile(file):
             pass
         else:
@@ -265,8 +263,9 @@ def check_save(): # Check for save files and load the game if they're found
                 inv_system.deserialize_equip(sav4)
                 deserialize_player(sav5)
                 magic.deserialize_sb(sav6)
+                with open(sav7, mode='r', encoding='utf-8') as g:
+                    bosses.defeated_bosses = list(json.load(g))
                 print('Load successful.')
-                print('-'*25)
                 return
             except (IOError or OSError):
                 print('There was an error loading your game.')
@@ -289,12 +288,8 @@ def save_game():
             print('Saving...')
             time.sleep(0.25)
             # Check if the save directory already exists, and create it if it doesn't
-            if os.name == 'nt':
-                if not os.path.exists("c:\\Pythonius\\Save Files"):
-                    os.makedirs("c:\\Pythonius\\Save Files")
-            elif os.name == 'posix':
-                if not os.path.exists("usr/bin/Pythonius/Save Files"):
-                    os.makedirs("usr/bin/Pythonius/Save Files")
+            if not os.path.exists("c:\\Pythonius\\Save Files"):
+                os.makedirs("c:\\Pythonius\\Save Files")
             try:
                 with open(sav1, mode='w', encoding='utf-8') as a:
                     json.dump(static, a, indent=4, separators=(', ', ': '))
@@ -304,6 +299,8 @@ def save_game():
                 inv_system.serialize_equip(sav4)
                 serialize_player(sav5)
                 magic.serialize_sb(sav6)
+                with open(sav7, mode='w', encoding='utf-8') as g:
+                    json.dump(dict(bosses.defeated_bosses))
                 print('Save successful.')
                 return
             except (IOError or OSError):

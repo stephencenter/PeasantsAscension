@@ -200,7 +200,8 @@ def after_battle(boss): # Assess the results of the battle
                 print('The %s falls to the ground, dead as a stone.' % (monster.name))
             else:
                 print('The almighty %s has been slain!' % (monster.name))
-                bosses.defeated_bosses.append(monster)
+                bosses.defeated_bosses.append(monster.name)
+                input('Press enter/return to continue.')
             print('-'*25)
             if monster.items:
                 cat = monster.items.cat
