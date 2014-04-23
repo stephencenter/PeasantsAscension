@@ -1,12 +1,12 @@
 import sys
 import math
 import random
+import winsound
 import monsters
 import inv_system
 import magic
 import world
 import bosses
-import winsound
 from copy import copy as _c
 
 monster = ''
