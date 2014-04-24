@@ -52,7 +52,7 @@ if os.name == 'nt': # Windows
     sav4 = 'C:\\Pythonius\\Save Files\\sav_d.json' # Equipped Items
     sav5 = 'C:\\Pythonius\\Save Files\\sav_e.json' # Player Stats
     sav6 = 'C:\\Pythonius\\Save Files\\sav_f.json' # Spellbook
-    sav7 = 'C;\\Pythonius\\Save Files\\sav_g.json' # Defeated Bosses
+    sav7 = 'C:\\Pythonius\\Save Files\\sav_g.json' # Defeated Bosses
 
 else:
     raise OSError('This game is not supported by your operating system.')
@@ -300,10 +300,11 @@ def save_game():
                 serialize_player(sav5)
                 magic.serialize_sb(sav6)
                 with open(sav7, mode='w', encoding='utf-8') as g:
-                    json.dump(dict(bosses.defeated_bosses))
+                    json.dump(dict(bosses.defeated_bosses), g, indent=4, separators=(', ', ': '))
                 print('Save successful.')
                 return
             except (IOError or OSError):
+                raise
                 print('There was an error saving your game.')
         elif y_n in 'no':
             return
