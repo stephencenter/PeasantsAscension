@@ -1,4 +1,4 @@
-# Pythonius; v0.0.60 Alpha
+# Pythonius; v0.0.7 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -234,11 +234,11 @@ def create_player():
         static['mp_p'] -= 2
         player.dfns += 2
         player.attk += 2
-        player.speed -= 1
+        player.spd -= 1
         player.evad -= 1
         player.m_dfns -= 1
         player.m_attk -= 1
-        inv_system.equipped['weapon'] = copy.copy(inv_system.wdn_dag)
+        inv_system.equipped['weapon'] = copy.copy(inv_system.wdn_sht)
     elif player._class == "mage":
         static['mp_p'] += 5
         player.attk -= 1

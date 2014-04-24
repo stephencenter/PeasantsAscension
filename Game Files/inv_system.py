@@ -18,9 +18,9 @@ gs_stock = [[s_potion, m_potion, l_potion],
             [cpr_swd, bnz_spr, irn_axe],
             [oak_stf, arc_spb, rnc_stf],
             ['\n       ', '\n       ', '\n       '],
-            [lthr_hlm, chn_hlm, stl_hlm],
-            [lthr_cst, chn_cst, stl_cst],
-            [lthr_leg, chn_leg, stl_leg],
+            [bnz_hlm, irn_hlm, stl_hlm],
+            [bnz_cst, irn_cst, stl_cst],
+            [bnz_leg, irn_leg, stl_leg],
             ['\n       ', '\n       ', '\n       '],
             [wiz_hat, myst_hat, elem_hat],
             [wiz_rob, myst_rob, elem_rob],
@@ -51,7 +51,6 @@ def pick_category():
                         print('-'*25)
                     else:
                         if [x for x in inventory[cat] if not x.equip]:
-                            print('-'*25)
                             pick_item(cat)
                             print('-'*25)
                         else:
@@ -71,10 +70,12 @@ def pick_item(cat):
     while inventory[cat]:
         if cat == 'armor' or cat == 'weapons':
             if [x for x in inventory[cat] if not x.equip]:
+                print('-'*25)
                 print(cat.title() + ': ' + ', '.join(sorted([str(x) for x in inventory[cat] if not x.equip], key=str.lower)))
             else:
                 return
         else:
+            print('-'*25)
             print(cat.title() + ': ' + ', '.join(sorted([str(x) + ' x' + str(inventory[cat].count(x)) for x in set(inventory[cat])], key=str.lower)))
         while True:
             item = input('Input the name of the item you want to interact with (or type "back"): ')
@@ -179,9 +180,9 @@ def deserialize_inv(path):
             if category == 'consum':
                 x = Consumable('', '', '', '')
             elif category == 'weapon':
-                x = Weapon('', '', '', '', '', '')
+                x = Weapon('', '', '', '', '', '', '')
             elif category == 'armor':
-                x = Armor('', '', '', '', '', '', '')
+                x = Armor('', '', '', '', '', '', '', '')
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue
@@ -211,9 +212,9 @@ def deserialize_equip(path):
             norm_equip[category] = '(None)'
             continue
         elif category == 'weapon':
-            x = Weapon('', '', '', '', '', '')
+            x = Weapon('', '', '', '', '', '', '')
         else:
-            x = Armor('', '', '', '', '', '', '')
+            x = Armor('', '', '', '', '', '', '', '')
         x.__dict__ = j_equipped[category]
         norm_equip[category] = x
     equipped = norm_equip

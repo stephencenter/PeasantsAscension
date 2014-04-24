@@ -68,10 +68,10 @@ class Town:
     def inside_town(self):
         if self.inn:
             self.town_inn()
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
             if self.gen_store:
                 print('-'*25)
+                winsound.PlaySound(None, winsound.SND_ASYNC)
+                winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
         if self.gen_store:
             self.town_gen()
             winsound.PlaySound(None, winsound.SND_ASYNC)
