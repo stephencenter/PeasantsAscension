@@ -10,7 +10,7 @@ else:
 
 inventory = {'quest': [], 'consum': [s_potion, s_elixr], 'coord': [],
              'weapons': [], 'armor': [], 'misc': []}
-equipped = {'weapon': wdn_dag, 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
+equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
 
 gs_stock = [[s_potion, m_potion, l_potion],
             [s_elixr, m_elixr, l_elixr],
@@ -146,7 +146,7 @@ def pick_action(cat, item):
                          inventory[cat].remove(item)
                          break
                      elif y_n in ['no', 'n']:
-                         print('You wisely decide to keep the %s with you.' % (str(item)))
+                         print('You decide to keep the %s with you.' % (str(item)))
                          break
         elif action == 4:
             print('-'*25)

@@ -216,38 +216,39 @@ l_elixr = Consumable('Grand Elixr', 'A powerful elixr that restores 100 MP when 
 
 # Weapons
 wdn_dag = Weapon('Wooden Dagger', 'A small dagger carved from an oak branch (+2 Attack).', 10, 5, 2, 'melee')
-cpr_swd = Weapon('Copper Sword', 'A light yet sturdy sword smelted from copper ore (+5 Attack).', 45, 15, 5, 'melee', req_lvl=3)
-bnz_spr = Weapon('Bronze Spear', 'A fair-sized spear smelted from a bronze alloy (+10 Attack).', 175, 60, 10, 'melee', req_lvl=10)
-irn_axe = Weapon('Iron Battleaxe', 'A powerful battleaxe smelted from iron ore (+19 Attack).', 325, 110, 19, 'melee', req_lvl=23)
+cpr_swd = Weapon('Copper Sword', 'A light yet sturdy sword smelted from copper ore (+5 Attack).', 45, 15, 5, 'melee', req_lvl=2)
+bnz_spr = Weapon('Bronze Spear', 'A fair-sized spear smelted from a bronze alloy (+10 Attack).', 175, 60, 10, 'melee', req_lvl=9)
+irn_axe = Weapon('Iron Battleaxe', 'A powerful battleaxe smelted from iron ore (+19 Attack).', 325, 110, 19, 'melee', req_lvl=20)
 
-oak_stf = Weapon('Oak Staff', 'A wooden staff imbued with weak magical abilities (+5 Magic Attack).', 45, 15, 5, 'magic', req_lvl=3)
-arc_spb = Weapon('Arcane Spellbook', 'An intermediate spellbook for combat purposes. (+10 Magic Attack).', 175, 60, 10, 'magic', req_lvl=10)
-rnc_stf = Weapon('Runic Staff', 'A powerful staff enchanted with ancient magic. (+19 Magic Attack).', 325, 115, 19, 'magic', req_lvl=23)
+mag_twg = Weapon('Magical Twig', 'A small stick with basic magical properties. (+2 Magic Attack).', 10, 5, 2, 'magic')
+oak_stf = Weapon('Oak Staff', 'A wooden staff imbued with weak magical abilities (+5 Magic Attack).', 45, 15, 5, 'magic', req_lvl=2)
+arc_spb = Weapon('Arcane Spellbook', 'An intermediate spellbook for combat purposes. (+10 Magic Attack).', 175, 60, 10, 'magic', req_lvl=9)
+rnc_stf = Weapon('Runic Staff', 'A powerful staff enchanted with ancient magic. (+19 Magic Attack).', 325, 115, 19, 'magic', req_lvl=20)
 
 # Armor
-lthr_hlm = Armor('Leather Helmet', 'A simple helmet crafted from leather (+1 Defense).', 25, 8, 1, 'melee', 'head', req_lvl=3)
-lthr_cst = Armor('Leather Chestpiece', 'Simple chest armor crafted from leather (+1 Defense).', 35, 12, 1, 'melee', 'body', req_lvl=3)
-lthr_leg = Armor('Leather Leggings', 'Simple leg armor crafted from leather (+1 Defense).', 30, 10, 1, 'melee', 'legs', req_lvl=3)
+lthr_hlm = Armor('Leather Helmet', 'A simple helmet crafted from leather (+1 Defense).', 25, 8, 1, 'melee', 'head', req_lvl=2)
+lthr_cst = Armor('Leather Chestpiece', 'Simple chest armor crafted from leather (+1 Defense).', 35, 12, 1, 'melee', 'body', req_lvl=2)
+lthr_leg = Armor('Leather Leggings', 'Simple leg armor crafted from leather (+1 Defense).', 30, 10, 1, 'melee', 'legs', req_lvl=2)
 
-wiz_hat = Armor('Wizard Hat', 'A silk hat woven with magic thread (+1 Magic Defense).', 25, 8, 1, 'magic', 'head', req_lvl=3)
-wiz_rob = Armor('Wizard Robe', 'A silk robe woven with magic thread (+1 Magic Defense).', 35, 12, 1, 'magic', 'body', req_lvl=3)
-wiz_gar = Armor('Wizard Garments', 'Silk garments woven with magic thread (+1 Magic Defense).', 30, 10, 1, 'magic', 'legs', req_lvl=3)
+wiz_hat = Armor('Wizard Hat', 'A silk hat woven with magic thread (+1 Magic Defense).', 25, 8, 1, 'magic', 'head', req_lvl=2)
+wiz_rob = Armor('Wizard Robe', 'A silk robe woven with magic thread (+1 Magic Defense).', 35, 12, 1, 'magic', 'body', req_lvl=2)
+wiz_gar = Armor('Wizard Garments', 'Silk garments woven with magic thread (+1 Magic Defense).', 30, 10, 1, 'magic', 'legs', req_lvl=2)
 
-chn_hlm = Armor('Chainmail Helmet', 'A chain helmet created from a weak metal (+2 Defense).', 150, 50, 2, 'melee', 'head', req_lvl=10)
-chn_cst = Armor('Chainmail Chestpiece', 'Chain body armor made from a weak metal (+3 Defense).', 175, 60, 3, 'melee', 'body', req_lvl=10)
-chn_leg = Armor('Chainmail Leggings', 'Chain leggings made from a weak metal (+2 Defense).', 160, 55, 2, 'melee', 'legs', req_lvl=10)
+chn_hlm = Armor('Chainmail Helmet', 'A chain helmet created from a weak metal (+2 Defense).', 150, 50, 2, 'melee', 'head', req_lvl=19)
+chn_cst = Armor('Chainmail Chestpiece', 'Chain body armor made from a weak metal (+3 Defense).', 175, 60, 3, 'melee', 'body', req_lvl=9)
+chn_leg = Armor('Chainmail Leggings', 'Chain leggings made from a weak metal (+2 Defense).', 160, 55, 2, 'melee', 'legs', req_lvl=9)
 
-myst_hat = Armor('Mystical Hood', 'A mysterious hood with strange symbols sewn into it (+2 Magic Defense).', 150, 50, 2, 'magic', 'head', req_lvl=10)
-myst_rob = Armor('Mystical Robe', 'A mysterious robe with strange symbols sewn into it (+3 Magic Defense)', 175, 60, 3, 'magic', 'body', req_lvl=10)
-myst_gar = Armor('Mystical Garmnets', 'Mysterious garments with strange symbols sewn into it (+2 Magic Defense).', 160, 55, 2, 'magic', 'legs', req_lvl=10)
+myst_hat = Armor('Mystical Hood', 'A mysterious hood with strange symbols sewn into it (+2 Magic Defense).', 150, 50, 2, 'magic', 'head', req_lvl=9)
+myst_rob = Armor('Mystical Robe', 'A mysterious robe with strange symbols sewn into it (+3 Magic Defense)', 175, 60, 3, 'magic', 'body', req_lvl=9)
+myst_gar = Armor('Mystical Garmnets', 'Mysterious garments with strange symbols sewn into it (+2 Magic Defense).', 160, 55, 2, 'magic', 'legs', req_lvl=9)
 
-stl_hlm = Armor('Steel Helmet', 'A strong helmet smelted from refined iron (+4 Defense).', 325, 110, 4, 'melee', 'head', req_lvl=23)
-stl_cst = Armor('Steel Chestplate', 'Strong chest armor smelted from refined iron (+5 Defense).', 350, 120, 5, 'melee', 'body', req_lvl=23)
-stl_leg = Armor('Steel Leggings', 'Strong leg armor smelted from refined iron (+4 Defense).', 335, 115, 4, 'melee', 'legs', req_lvl=23)
+stl_hlm = Armor('Steel Helmet', 'A strong helmet smelted from refined iron (+4 Defense).', 325, 110, 4, 'melee', 'head', req_lvl=20)
+stl_cst = Armor('Steel Chestplate', 'Strong chest armor smelted from refined iron (+5 Defense).', 350, 120, 5, 'melee', 'body', req_lvl=20)
+stl_leg = Armor('Steel Leggings', 'Strong leg armor smelted from refined iron (+4 Defense).', 335, 115, 4, 'melee', 'legs', req_lvl=20)
 
-elem_hat = Armor('Elemental Hat', 'A leather hat enchanted with elemental power (+4 Magic Defense).', 325, 110, 4, 'magic', 'head', req_lvl=23)
-elem_rob = Armor('Elemental Robe', 'A leather robe enchanted with elemental power (+5 Magic Defense).', 350, 120, 5, 'magic', 'body', req_lvl=23)
-elem_gar = Armor('Elemental Garments', 'Leather garments enchanted with elemental power (+4 Magic Defense).', 335, 115, 4, 'magic', 'legs', req_lvl=23)
+elem_hat = Armor('Elemental Hat', 'A leather hat enchanted with elemental power (+4 Magic Defense).', 325, 110, 4, 'magic', 'head', req_lvl=20)
+elem_rob = Armor('Elemental Robe', 'A leather robe enchanted with elemental power (+5 Magic Defense).', 350, 120, 5, 'magic', 'body', req_lvl=20)
+elem_gar = Armor('Elemental Garments', 'Leather garments enchanted with elemental power (+4 Magic Defense).', 335, 115, 4, 'magic', 'legs', req_lvl=20)
 
 # Unique Drops
 ice_blade = Weapon('Blade of Frost', 'A stunning blade enchanted with the power of ice (+16 Attack, ICE).', 0, 225, 16, 'melee', req_lvl=14, element='Ice')

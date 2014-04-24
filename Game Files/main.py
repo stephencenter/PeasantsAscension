@@ -25,6 +25,7 @@ import math
 import time
 import json
 import winsound
+import copy
 
 import towns
 import battle
@@ -203,7 +204,7 @@ class PlayerCharacter: # The Player
 
     def player_info(self):
         print("-%s's Stats-" % (self.name))
-        print('Level: %s' % (self.lvl))
+        print('Level: %s | Class: %s' % (self.lvl, self._class.title()))
         print('HP: %s/%s | MP: %s/%s' % (self.hp, static['hp_p'], self.mp, static['mp_p']))
         print('Attack: %s | M. Attack: %s' % (self.attk, self.m_attk))
         print('Defense: %s | M. Defense: %s' % (self.dfns, self.m_dfns))
@@ -224,10 +225,29 @@ def create_player():
     global player
     global static
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
-    static['hp_p'] = player.hp
-    static['mp_p'] = player.mp
+    static['hp_p'] = copy.copy(player.hp)
+    static['mp_p'] = copy.copy(player.mp)
     player.name = player.choose_name()
     player._class = player.choose_class()
+    if player._class == "warrior":
+        static['hp_p'] += 5
+        static['mp_p'] -= 2
+        player.dfns += 2
+        player.attk += 2
+        player.speed -= 1
+        player.evad -= 1
+        player.m_dfns -= 1
+        player.m_attk -= 1
+        inv_system.equipped['weapon'] = copy.copy(inv_system.wdn_dag)
+    elif player._class == "mage":
+        static['mp_p'] += 5
+        player.attk -= 1
+        player.m_attk += 2
+        player.dfns -= 1
+        player.m_dfns += 2
+        inv_system.equipped['weapon'] = copy.copy(inv_system.mag_twg)
+    player.hp = copy.copy(static['hp_p'])
+    player.mp = copy.copy(static['mp_p'])
     print('-'*25)
 
 def check_save(): # Check for save files and load the game if they're found
