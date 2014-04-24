@@ -304,7 +304,6 @@ def save_game():
                 print('Save successful.')
                 return
             except (IOError or OSError):
-                raise
                 print('There was an error saving your game.')
         elif y_n in 'no':
             return
