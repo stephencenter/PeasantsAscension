@@ -213,20 +213,20 @@ class Town:
                 return
 
 # List of Towns:
-town1 = Town('Nearton', """Nearton: a small village in the central region of the Plains.
+town1 = Town('Nearton', """Nearton: a small village in the central region of the Forest.
 It is in this very town where numerous brave adventurers have begun
 their journey. Nearton has a general store, an inn, and a few small houses.
 An old man is standing near one of the houses, and appears to be talking
 to a small group of strangers.""", 0, 1)
 
-town2 = Town('Southford', """Southford: A fair-size town in the central-southern region of the Plains.
+town2 = Town('Southford', """Southford: A fair-size town in the central-southern region of the Forest.
 This town is well-known for its wise inhabitants. Some of the elders here
 are rumored to be masters of the arcane arts, and may be willing to train
 your magical abilities for a reasonable price. There is a general store and
 several houses in this town.""", -2, -6, inn=False)
 
-town3 = Town('Overshire', """Overshire: A city in the nortwestern region of the Plains.
-Overshire is the capitol of the Plains, and as such is very densely populated.
+town3 = Town('Overshire', """Overshire: A city in the nortwestern region of the Forest.
+Overshire is the capitol of the Forest, and as such is very densely populated.
 The city is separated into three sectors: the upper-class inner portion, the
 lower-class outer portion, with the middle-class section situated in between.
 As an outsider, you are forbidden to enter the upper two, but are welcome to

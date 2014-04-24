@@ -215,7 +215,7 @@ m_elixr = Consumable('Enhanced Elixr', 'A more potent elixr that restores 45 MP 
 l_elixr = Consumable('Grand Elixr', 'A powerful elixr that restores 100 MP when consumed.', 100, 35, mana=100)
 
 # Weapons
-wdn_sht = Weapon('Wooden Shortsword', 'A small dagger carved from an oak branch (+2 Attack).', 10, 5, 2, 'melee', 'warrior')
+wdn_sht = Weapon('Wooden Shortsword', 'A small sword carved from an oak branch (+2 Attack).', 10, 5, 2, 'melee', 'warrior')
 cpr_swd = Weapon('Copper Sword', 'A light yet sturdy sword smelted from copper ore (+5 Attack).', 45, 15, 5, 'melee', 'warrior')
 bnz_spr = Weapon('Bronze Spear', 'A fair-sized spear smelted from a bronze alloy (+10 Attack).', 175, 60, 10, 'melee', 'warrior')
 irn_axe = Weapon('Iron Battleaxe', 'A powerful battleaxe smelted from iron ore (+19 Attack).', 325, 110, 19, 'melee', 'warrior')
@@ -226,17 +226,17 @@ arc_spb = Weapon('Arcane Spellbook', 'An intermediate spellbook for combat purpo
 rnc_stf = Weapon('Runic Staff', 'A powerful staff enchanted with ancient magic. (+19 Magic Attack).', 325, 115, 19, 'magic', 'mage')
 
 # Armor
-bnz_hlm = Armor('Bronze Helmet', 'A simple helmet crafted from leather (+1 Defense).', 25, 8, 1, 'melee', 'head', 'warrior')
-bnz_cst = Armor('Bronze Chestpiece', 'Simple chest armor crafted from leather (+1 Defense).', 35, 12, 1, 'melee', 'body', 'warrior')
-bnz_leg = Armor('Bronze Leggings', 'Simple leg armor crafted from leather (+1 Defense).', 30, 10, 1, 'melee', 'legs', 'warrior')
+bnz_hlm = Armor('Bronze Helmet', 'A simple helmet crafted from bronze (+1 Defense).', 25, 8, 1, 'melee', 'head', 'warrior')
+bnz_cst = Armor('Bronze Chestpiece', 'Simple chest armor crafted from bronze (+1 Defense).', 35, 12, 1, 'melee', 'body', 'warrior')
+bnz_leg = Armor('Bronze Leggings', 'Simple leg armor crafted from bronze (+1 Defense).', 30, 10, 1, 'melee', 'legs', 'warrior')
 
 wiz_hat = Armor('Wizard Hat', 'A silk hat woven with magic thread (+1 Magic Defense).', 25, 8, 1, 'magic', 'head', 'mage')
 wiz_rob = Armor('Wizard Robe', 'A silk robe woven with magic thread (+1 Magic Defense).', 35, 12, 1, 'magic', 'body', 'mage')
 wiz_gar = Armor('Wizard Garments', 'Silk garments woven with magic thread (+1 Magic Defense).', 30, 10, 1, 'magic', 'legs', 'mage')
 
-irn_hlm = Armor('Iron Helmet', 'A chain helmet created from a weak metal (+2 Defense).', 150, 50, 2, 'melee', 'head', 'warrior')
-irn_cst = Armor('Iron Chestpiece', 'Chain body armor made from a weak metal (+3 Defense).', 175, 60, 3, 'melee', 'body', 'warrior')
-irn_leg = Armor('Iron Leggings', 'Chain leggings made from a weak metal (+2 Defense).', 160, 55, 2, 'melee', 'legs', 'warrior')
+irn_hlm = Armor('Iron Helmet', 'A decent helmet created from a solid metal (+2 Defense).', 150, 50, 2, 'melee', 'head', 'warrior')
+irn_cst = Armor('Iron Chestpiece', 'Decent body armor made from a solid metal (+3 Defense).', 175, 60, 3, 'melee', 'body', 'warrior')
+irn_leg = Armor('Iron Leggings', 'Decent leggings made from a solid metal (+2 Defense).', 160, 55, 2, 'melee', 'legs', 'warrior')
 
 myst_hat = Armor('Mystical Hood', 'A mysterious hood with strange symbols sewn into it (+2 Magic Defense).', 150, 50, 2, 'magic', 'head', 'mage')
 myst_rob = Armor('Mystical Robe', 'A mysterious robe with strange symbols sewn into it (+3 Magic Defense)', 175, 60, 3, 'magic', 'body', 'mage')

@@ -1,4 +1,4 @@
-# Pythonius; v0.0.7 Alpha
+# Pythonius; v0.0.8 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
