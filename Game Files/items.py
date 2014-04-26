@@ -252,8 +252,9 @@ elem_gar = Armor('Elemental Garments', 'Leather garments enchanted with elementa
 
 # Unique Drops
 ice_blade = Weapon('Blade of Frost', 'A stunning blade enchanted with the power of ice (+16 Attack, ICE).', 0, 225, 16, 'melee', 'warrior', element='Ice')
+enc_yw = Weapon('Enchanted Yew Wand', 'A yewen wand of remarkable craftsmanship (+16 Magic Attack, GRASS).', 0, 225, 16, 'magic', 'mage', element='Grass')
 
-unique_drops = {'Ice': [ice_blade], 'None':[bnz_leg]}
+unique_drops = {'Ice': [ice_blade], 'Grass': [enc_yw], 'None': [bnz_leg]}
 
 def monster_drop(level, element):
     if level in range(1, 13):

@@ -27,7 +27,8 @@ class Spell:
         if main.player.mp < 0:
             main.player.mp = 0
 
-class Healing(Spell): # Healing spells are spells that restore your HP during battle
+class Healing(Spell):
+    # Healing spells are spells that restore your HP during battle
     def __init__(self, name, desc, mana, req_lvl, health):
         Spell.__init__(self, name, desc, mana, req_lvl)
         self.health = health
@@ -47,27 +48,31 @@ class Healing(Spell): # Healing spells are spells that restore your HP during ba
             print(out_of_mana)
             return False
 
-class Damaging(Spell): # Damaging spells are spells that deal damage to the ene-
-                       # -my during battle. Just like normal attacks, they have
-                       # a chance to miss based on the enemy's evade stat.
+class Damaging(Spell):
+    # Damaging spells are spells that deal damage to the enemy during battle.
+    # Just like normal attacks, they have a chance to miss based on
+    # the enemy's evade stat.
     def __init__(self, name, desc, mana, req_lvl, damage, element):
         Spell.__init__(self, name, desc, mana, req_lvl)
         self.damage = damage
-        self.element = element # Element currently doesn't do anything, but is
-                               # planned to be used as a weakness-strength syst-
-                               # -em later. e.g. fire enemies are weak to ice
+        self.element = element
     def __str__(self):
         return self.name
     def use_magic(self, var, dodge):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            attk_pwr = int(self.damage + (main.player.m_attk/3) - (monsters.monster.m_dfns/2) + var)
-            attk_pwr = eval_element(p_elem=self.element, m_elem=monsters.monster.element, p_dmg=attk_pwr)[0]
+            attk_pwr = int(self.damage + (main.player.m_attk/3) -
+                           (monsters.monster.m_dfns/2) + var)
+            attk_pwr = eval_element(p_elem=self.element,
+                                    m_elem=monsters.monster.element,
+                                    p_dmg=attk_pwr)[0]
             print('-Player Turn-')
-            print('You begin to use your %s to summon a powerful spell.' % (inv_system.equipped['weapon']))
+            print('You begin to use your %s to summon a powerful spell.'
+                  % (inv_system.equipped['weapon']))
             if dodge in range(monsters.monster.evad, 250):
-                print('Using the power of "%s", you deal %s damage to the %s!' % (self.name, attk_pwr, monsters.monster.name))
+                print('Using the power of "%s", you deal %s damage to the %s!'
+                      % (self.name, attk_pwr, monsters.monster.name))
                 monsters.monster.hp -= attk_pwr
             else:
                 print('The %s dodges your attack!' % (monsters.monster.name))
@@ -90,7 +95,8 @@ class Buff(Spell): # Buffs are spells that temporarily raise the player's stats
             print()
             Spell.use_mana(self)
             print('-Player Turn-')
-            print('Using the power of %s, your %s increases temporarily by %s!' % (self.name, self.stat, self.incre))
+            print('Using the power of %s, your %s increases temporarily by %s!'
+                  % (self.name, self.stat, self.incre))
             if self.stat == 'Defense':
                 battle.temp_stats['dfns'] += self.incre
             elif self.stat == 'Magic Defense':
@@ -152,7 +158,8 @@ spells = [
     ]
 
 def eval_element(p_elem='None', m_elem='None', m_dmg=0, p_dmg=0):
-    element_list = ['Fire', 'Water', 'Electric', 'Earth', 'Grass', 'Wind', 'Ice']
+    element_list = ['Fire', 'Water', 'Electric', 'Earth',
+                    'Grass', 'Wind', 'Ice']
     for x, y in enumerate(element_list):
         if p_elem == y:
             player = x
@@ -200,13 +207,13 @@ spellbook = {'Healing':[], 'Damaging':[w_flame], 'Buffs':[]}
 
 def pick_cat(var, dodge):
     while True:
-        cat = input('Spellbook: ' + ', '.join(['"' + x + '"' for x in spellbook]) + ' | Input category (or type "exit"): ')
+        cat = input('Spellbook: ' +
+                    ', '.join(['"' + x + '"' for x in spellbook]) +
+                     ' | Input category: ')
         try:
             cat = cat.title()
         except AttributeError:
             continue
-        if cat == 'Exit':
-            return False
         for i in spellbook:
             if cat == i:
                 break

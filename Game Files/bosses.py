@@ -24,6 +24,7 @@ class Boss(monsters.Monster):
         self.gold = gold
         self.experience = experience
 
+
     def max_stats(self):
         global static
         setup_vars()
