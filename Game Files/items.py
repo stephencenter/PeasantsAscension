@@ -10,6 +10,7 @@ else:
 inventory = ''
 equipped = ''
 
+
 class Item: # The basic item class. Items are stored in the "inventory" diction-
             # -ary. All item-subclasses inherit from this class.
     def __init__(self, name, desc, buy, sell, cat='', imp=False):
@@ -21,6 +22,7 @@ class Item: # The basic item class. Items are stored in the "inventory" diction-
         self.imp = imp
     def __str__(self):
         return self.name
+
 
 class Consumable(Item): # Items that restore you HP, MP, or both. All items of
                         # this class stacks in the players inventory to increas-
@@ -42,6 +44,7 @@ class Consumable(Item): # Items that restore you HP, MP, or both. All items of
         print('You consume the %s' % (self.name))
         inventory[self.cat].remove(self)
         print('-'*25)
+
 
 class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
                     # -en equipped. Certain weapons are planned to be infused w-
@@ -94,6 +97,7 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
             print('-'*25)
             print("You must be a %s to equip this." % (self._class.title()))
 
+
 class Armor(Item):
     def __init__(self, name, desc, buy, sell, defense, type, part, _class, equip=False,  cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
@@ -135,75 +139,13 @@ class Armor(Item):
             print('-'*25)
             print("You must be a %s to equip this." % (self._class.title()))
 
-def sell_item():
-    global inventory
-    item_setup_vars()
-    print('-'*25)
-    while True:
-        cat = input('Sell: Armor, Consum, Misc, Weapons | Input Category Name (or type "exit"): ')
-        try:
-            cat = cat.lower()
-        except AttributeError:
-            continue
-        if cat == 'exit':
-            return
-        elif cat in ['coord', 'quest'] or cat not in ['armor', 'weapons', 'consum', 'misc']:
-            continue
-        elif cat in ['weapons', 'armor']:
-            category = [item for item in inventory[cat] if not item.equip]
-            if not category:
-                print('-'*25)
-                print('The "%s" category is empty...' % (cat))
-                print('-'*25)
-                continue
-        else:
-            if not inventory[cat]:
-                print('-'*25)
-                print('The "%s" category is empty...' % (cat))
-                print('-'*25)
-                continue
-            category = copy.copy(inventory[cat])
-        while True:
-            if not category:
-                break
-            item = input(cat.title() + ': ' + str([str(x) for x in category]) + ' | Input Item Name (or type "back"): ')
-            try:
-                item = item.title()
-            except AttributeError:
-                continue
-            if item == 'Back':
-                break
-            for i in category:
-                if str(i) == item:
-                    item = i
-                    break
-            if item.imp:
-                print('-'*25)
-                print('You cannot sell important items.')
-                print('-'*25)
-            else:
-                continue
-            while item in category:
-                choice = input('"Ya want to sell this %s for %s GP?" | Yes or No: ' % (str(item), item.sell))
-                try:
-                    choice = choice.lower()
-                except AttributeError:
-                    continue
-                if choice in ['yes', 'y']:
-                    print('-'*25)
-                    print('You hand the shopkeeper your %s and take %s GP in return.' % (str(item), item.sell))
-                    print('-'*25)
-                    main.static['gp'] += item.sell
-                    inventory[cat].remove(item)
-                    category.remove(item)
-                elif choice in ['no', 'n']:
-                    break
 
 def item_setup_vars():
     global inventory
     global equipped
     inventory = inv_system.inventory
     equipped = inv_system.equipped
+
 
 # Potions
 s_potion = Consumable('Weak Potion', 'A small potion that restores 15 HP when consumed.', 15, 5, heal=15)
@@ -255,6 +197,7 @@ ice_blade = Weapon('Blade of Frost', 'A stunning blade enchanted with the power 
 enc_yw = Weapon('Enchanted Yew Wand', 'A yewen wand of remarkable craftsmanship (+16 Magic Attack, GRASS).', 0, 225, 16, 'magic', 'mage', element='Grass')
 
 unique_drops = {'Ice': [ice_blade], 'Grass': [enc_yw], 'None': [bnz_leg]}
+
 
 def monster_drop(level, element):
     if level in range(1, 13):

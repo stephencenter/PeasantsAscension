@@ -70,153 +70,138 @@ class Town:
 
 
     def inside_town(self):
-        if self.inn:
-            self.town_inn()
-            if self.gen_store:
-                print('-'*25)
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
-        if self.gen_store:
-            self.town_gen()
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+        gen_words = ['general store', 'gen', 'gen store', 'shop', 'store']
+        inn_words = ['inn', 'hotel', 'save']
+        buildings = []
+        while True:
+            spam = False
+            if self.inn and not self.gen_store:
+                print('There is an Inn in this town.')
+                buildings = gen_words
+            elif self.gen_store and not self.inn:
+                print('There is a General Store in this town.')
+                buildings = inn_words
+            elif self.gen_store and self.inn:
+                print('There is both an Inn and a General Store in this town.')
+                buildings = inn_words[:]
+                buildings.extend(gen_words)
+            if buildings:
+                while spam == False:
+                    selected = input('What building would you like to enter? | Input Building Name (or type "back"): ')
+                    try:
+                        selected = selected.lower()
+                    except AttributeError:
+                        continue
+                    if selected in buildings:
+                        winsound.PlaySound(None, winsound.SND_ASYNC)
+                        winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+                        if selected in gen_words:
+                            self.town_gen()
+                            spam = True
+                        elif selected in inn_words:
+                            if self.town_inn():
+                                spam = True
+                        print('-'*25)
+                        winsound.PlaySound(None, winsound.SND_ASYNC)
+                        winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+                    elif selected == 'back':
+                        return
 
 
     def town_inn(self):
-        print('There is an Inn in this town.')
+        print('-'*25)
+        print('Inn Keeper: "Greetings, Traveler!"')
         while True:
-            y_n = input('Do you want to visit the inn? | Yes or No: ')
+            choice = input('"Would you like to stay at our inn? %s" | Yes or No: ' % (
+            "It's free, y'know." if not self.inn_cost else ' '.join(["One Night is", str(self.inn_cost), "GP."])))
             try:
-                y_n = y_n.lower()
+                choice = choice.lower()
             except AttributeError:
                 continue
-            if y_n in ['yes', 'y']:
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
-                print('-'*25)
-                print('Inn Keeper: "Greetings, Traveler!"')
-                while True:
-                    choice = input('"Would you like to stay at our inn? %s" | Yes or No: ' % (
-                    "It's free, y'know." if not self.inn_cost else ' '.join(["One Night is", str(self.inn_cost), "GP."])))
-                    try:
-                        choice = choice.lower()
-                    except AttributeError:
-                        continue
-                    if choice in ['yes', 'y']:
-                        print()
-                        if main.static['gp'] >= self.inn_cost:
-                            print('"Good night, Traveler."')
-                            print('Sleeping...')
-                            time.sleep(2)
-                            main.static['gp'] -= self.inn_cost
-                            main.player.hp = copy.copy(main.static['hp_p'])
-                            main.player.mp = copy.copy(main.static['mp_p'])
-                            print('Your HP and MP have been fully restored. ')
-                            print('-'*25)
-                            main.save_game()
-                        else:
-                            print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
-                        return
-                    elif choice in ['no', 'n']:
-                        return
-            elif y_n in ['no', 'n']:
-                return
-
+            if choice in ['yes', 'y']:
+                print()
+                if main.static['gp'] >= self.inn_cost:
+                    print('"Good night, Traveler."')
+                    print('Sleeping...')
+                    time.sleep(2)
+                    main.static['gp'] -= self.inn_cost
+                    main.player.hp = copy.copy(main.static['hp_p'])
+                    main.player.mp = copy.copy(main.static['mp_p'])
+                    print('Your HP and MP have been fully restored. ')
+                    print('-'*25)
+                    main.save_game()
+                    return True
+                else:
+                    print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
+                return True
+            elif choice in ['no', 'n']:
+                return False
 
     def town_gen(self):  # Let the player purchase items from the General Store
-        print('There is a General Store in this town.')
+        stock = []       # A list containing actual instances of "Item"
+        str_stock = []   # A readable, non-functioning version of "stock"
+        for type in inv_system.gs_stock:
+            item = type[self.gs_level - 1]
+            if isinstance(item, inv_system.Item):
+                stock.append(item)
+                str_stock.append(str(item) + ', ')
+            else:
+                str_stock.append(item)
+        str_stock = ''.join(str_stock)
+        print('-'*25)
+        print('Owner: "Welcome, Traveler!"')
+        print('-'*25)
+        spam = True
         while True:
-            y_n = input('Do you want to shop at the General Store? | Yes or No: ')
-            try:
-                y_n = y_n.lower()
-            except AttributeError:
-                continue
-            if y_n in ['yes', 'y']:
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
-
-                stock = []      # A list containing actual instances of "Item"
-                str_stock = []  # A readable, non-functioning version of "stock"
-                for type in inv_system.gs_stock:
-                    item = type[self.gs_level - 1]
-                    if isinstance(item, inv_system.Item):
-                        stock.append(item)
-                        str_stock.append(str(item) + ', ')
-                    else:
-                        str_stock.append(item)
-                str_stock = ''.join(str_stock)
-
+            if spam:
+                print('Stock: ' + str_stock)
+                print()
+            else:
                 print('-'*25)
-                print('Owner: "Welcome, Traveler!"')
+                break
+            while True:
+                purchase = input('"What item would ya like to buy?" | %s GP | Input Item Name (or type "back"): '
+                                 % (main.static['gp']))
+                if purchase == '':
+                    continue
+                try:
+                    purchase = purchase.title()
+                except AttributeError:
+                    continue
+                if purchase == 'Back':
+                    spam = False
+                    break
+                elif purchase in str_stock:
+                    for i in stock:
+                        if str(i) == purchase:
+                            break
+                else:
+                    continue
+                print('-'*25)
+                print(i.desc)
+                print('-'*25)
                 while True:
-                    b_s = input('"Are ya buying, or are ya selling?" | Input "Buy" or "Sell" (or type "exit"): ')
+                    confirm = input("\"Ya want %s %s? It'll cost ya %s GP.\" | Yes or No: " % (
+                    'these' if str(i).endswith('s') else 'this', str(i), i.buy))
                     try:
-                        b_s = b_s.lower()
+                        confirm = confirm.lower()
                     except AttributeError:
                         continue
-                    if b_s in ['sell', 's']:
-                        items.sell_item()
-                        print('-'*25)
-                        continue
-                    elif b_s in ['buy', 'b']:
-                        pass
-                    elif b_s == 'exit':
-                        return
-                    else:
-                        continue
-                    print('-'*25)
-                    spam = True
-                    while True:
-                        if spam:
-                            print('Stock: ' + str_stock)
-                            print()
+                    if confirm in ['yes', 'y']:
+                        if main.static['gp'] >= i.buy:
+                            inv_system.add_item(i)
+                            main.static['gp'] -= i.buy
+                            print('-'*25)
+                            input('You purchase the %s (-%s GP). (Press enter/return to continue).' % (str(i), i.buy))
+                            print('-'*25)
                         else:
-                            print('-'*25)
-                            break
-                        while True:
-                            purchase = input('"What item would ya like to buy?" | %s GP | Input Item Name (or type "back"): ' % (main.static['gp']))
-                            if purchase == '':
-                                continue
-                            try:
-                                purchase = purchase.title()
-                            except AttributeError:
-                                continue
-                            if purchase == 'Back':
-                                spam = False
-                                break
-                            elif purchase in str_stock:
-                                for i in stock:
-                                    if str(i) == purchase:
-                                        break
-                            else:
-                                continue
-                            print('-'*25)
-                            print(i.desc)
-                            print('-'*25)
-                            while True:
-                                confirm = input("\"Ya want %s %s? It'll cost ya %s GP.\" | Yes or No: " % (
-                                'these' if str(i).endswith('s') else 'this', str(i), i.buy))
-                                try:
-                                    confirm = confirm.lower()
-                                except AttributeError:
-                                    continue
-                                if confirm in ['yes', 'y']:
-                                    if main.static['gp'] >= i.buy:
-                                        inv_system.add_item(i)
-                                        main.static['gp'] -= i.buy
-                                        print('-'*25)
-                                        input('You purchase the %s (-%s GP). (Press enter/return to continue).' % (str(i), i.buy))
-                                        print('-'*25)
-                                    else:
-                                        input('"Hey, you don\'t even have enough GP for this %s! (Press enter/return)"' % (str(i)))
-                                        print()
-                                    break
-                                elif confirm in ['no', 'n']:
-                                    print()
-                                    break
-                            break
-            elif y_n in ['no', 'n']:
-                return
+                            input('"Hey, you don\'t even have enough GP for this %s! (Press enter/return)"' % (str(i)))
+                            print()
+                        break
+                    elif confirm in ['no', 'n']:
+                        print()
+                        break
+                break
 
 
 # List of Towns:
@@ -245,8 +230,9 @@ do as you wish in the lower.""", -11, 13, inn_cost=5, gs_level=2)
 town_list = [town1, town2, town3]
 
 
-def search_towns(pos_x, pos_y, enter=True):  # Check to see if there is a
-                                             # town where the player is located
+def search_towns(pos_x, pos_y, enter=True):
+        # Check to see if there is a
+    # town where the player is located
     for town in town_list:
         if town.x == pos_x and town.y == pos_y:
             if enter:

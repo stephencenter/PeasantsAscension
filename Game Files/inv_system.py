@@ -1,6 +1,7 @@
 import sys
 import towns
 import json
+from copy import copy as _c
 from items import *
 
 if __name__ == "__main__":
@@ -8,7 +9,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-inventory = {'quest': [], 'consum': [s_potion, s_elixr], 'coord': [],
+inventory = {'quest': [], 'consum': [_c(s_potion), _c(s_elixr)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': []}
 equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
 
@@ -28,6 +29,7 @@ gs_stock = [[s_potion, m_potion, l_potion],
 
 item_setup_vars()
 
+
 def pick_category():
     global inventory
     while True:
@@ -41,7 +43,6 @@ def pick_category():
             if cat in inventory:
                 if inventory[cat]:
                     if cat not in ['coord', 'weapons', 'armor']:
-                        print('-'*25)
                         pick_item(cat)
                         print('-'*25)
                     elif cat == 'coord':
@@ -65,6 +66,7 @@ def pick_category():
                     break
             elif cat == 'exit':
                 return
+
 
 def pick_item(cat):
     while inventory[cat]:
@@ -106,6 +108,7 @@ def pick_item(cat):
                     continue
             pick_action(cat, item)
             break
+
 
 def pick_action(cat, item):
     global inventory
@@ -153,9 +156,6 @@ def pick_action(cat, item):
             print('-'*25)
             return
 
-def add_item(item):
-    global inventory
-    inventory[item.cat].append(item)
 
 def serialize_inv(path):
     j_inventory = {}
@@ -168,6 +168,7 @@ def serialize_inv(path):
                 j_inventory[category].append(item)
     with open(path, mode='w', encoding='utf-8') as c:
         json.dump(j_inventory, c, indent=4, separators=(', ', ': '))
+
 
 def deserialize_inv(path):
     global inventory
@@ -192,6 +193,7 @@ def deserialize_inv(path):
             norm_inv[category].append(x)
     inventory = norm_inv
 
+
 def serialize_equip(path):
     j_equipped = {}
     for category in equipped:
@@ -201,6 +203,7 @@ def serialize_equip(path):
             j_equipped[category] = '(None)'
     with open(path, mode='w', encoding='utf-8') as d:
         json.dump(j_equipped, d, indent=4, separators=(', ', ': '))
+
 
 def deserialize_equip(path):
     global equipped

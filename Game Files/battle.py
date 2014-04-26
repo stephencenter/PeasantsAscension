@@ -281,6 +281,13 @@ def battle_inventory():
             continue
         if item == 'Back':
             return False
+        for i in inv_system.inventory['consum']:
+            if i.name == item:
+                break
+        else:
+            continue
+        i.consume_item()
+        return
 
 
 def bat_stats():
