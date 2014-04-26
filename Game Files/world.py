@@ -18,9 +18,11 @@ south = ['s', 'sou', 'south']
 east = ['e', 'eas', 'east']
 west = ['w', 'wes', 'west']
 
+
 def setup_vars():
     global position
     position = main.position
+
 
 def movement_system():
     """Adjust the player's x/y coordinates based on inputed direction."""
@@ -28,13 +30,14 @@ def movement_system():
 
     setup_vars()
     winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+    winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC |
+                                              winsound.SND_LOOP |
+                                              winsound.SND_NODEFAULT)
     while True:
         if check_region():
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
         towns.search_towns(position['x'], position['y'])
-
         if position['x'] >= 0:
             position['h'] = "'E"
         else:
@@ -44,12 +47,13 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('Position: %s%s, %s%s | %s | Which direction do you want to travel in? | N, S, E, W: ' % (position['y'], position['v'], position['x'], position['h'], position['reg']))
+            direction = input('Position: %s%s, %s%s | %s | Which direction do you want to travel in? | N, S, E, W: '
+                              % (position['y'], position['v'], position['x'], position['h'], position['reg']))
             try:
                 direction = direction.lower()
             except AttributeError:
                 continue
-            if direction in north or direction in south or direction in east or direction in west:
+            if [x for x in [north, south, east, west] if direction in x]:
                 if direction in north:
                     if position['y'] < 125:
                         position['y'] += 1
@@ -74,20 +78,24 @@ def movement_system():
                     else:
                         out_of_bounds()
                         continue
-                position['avg'] = int((abs(position['x']) + abs(position['y']))/2)
+                position['avg'] = int(((abs(position['x']) - 1) +
+                                       (abs(position['y']) - 1))/2)
                 if not bosses.check_bosses(position['x'], position['y']):
-                    spam = random.randint(0, 2)
-                    eggs = random.randint(0, 2)
-                    if spam == eggs:
-                        monsters.spawn_monster()
-                        battle.setup_vars()
-                        battle.battle_system()
+                    if not towns.search_towns(position['x'], position['y'], enter=False):
+                        spam = random.randint(0, 2)
+                        eggs = random.randint(0, 2)
+                        if spam == eggs:
+                            monsters.spawn_monster()
+                            battle.setup_vars()
+                            battle.battle_system()
                 break
+
 
 def out_of_bounds():
     print('-'*25)
     print('Ahead of you is a seemingly endless ocean. You cannot continue in this direction.')
     print('-'*25)
+
 
 def check_region():
     global position
@@ -112,7 +120,8 @@ def check_region():
         reg_music = "Music\\We're all under the stars.wav"
     if position['reg'] != region:
         print('-'*25)
-        print('You have left the %s region and are now entering the %s region.' % (position['reg'], region))
+        print('You have left the %s region and are now entering the %s region.'
+              % (position['reg'], region))
         print('-'*25)
         position['reg'] = region
         position['reg_music'] = reg_music
@@ -120,9 +129,11 @@ def check_region():
     else:
         return False
 
+
 def save_coords(x, y):
     global position
     position['prev_town'][0], position['prev_town'][1] = x, y
+
 
 def back_to_coords():
     global position

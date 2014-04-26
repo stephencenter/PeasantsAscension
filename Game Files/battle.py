@@ -175,17 +175,17 @@ def after_battle(boss): # Assess the results of the battle
         if monster.hp > 0 and player.hp <= 0:
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound('Music\\Power-Up.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
-
             print('Despite your best efforts, the %s has bested you. You are dead.' % (monster.name))
             print('-'*25)
-
             while True:
                 y_n = input('Do you wish to continue playing? | Yes or No: ')
                 try:
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in 'yes': # If you die, you return to the X, Y coordinates of O, O at half health/mana
+                if y_n in 'yes':
+                    # If you die, you return to the last town visited or 0, 0
+                    # if you haven't been to a town yet.
                     world.back_to_coords()
                     player.hp = int(static['hp_p']/2)
                     player.mp = int(static['mp_p']/2)
@@ -198,31 +198,33 @@ def after_battle(boss): # Assess the results of the battle
         elif monster.hp <= 0 and player.hp > 0:
             if not boss:
                 print('The %s falls to the ground, dead as a stone.' % (monster.name))
+                gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
+                try:
+                    experience = int(math.sqrt(monster.lvl - (player.lvl/2) + 1.5) + player.ext_exp)*2
+                except ValueError:
+                    experience = random.randint(1, 2)
+                if experience <= 0:
+                    experience = random.randint(1, 2)
             else:
-                print('The almighty %s has been slain!' % (monster.name))
                 bosses.defeated_bosses.append(monster.name)
+                print('The almighty %s has been slain!' % (monster.name))
                 input('Press enter/return to continue.')
+                gold = boss.gold
+                experience = boss.experience
             print('-'*25)
+            if gold > 0:
+                static['gp'] += gold
+                print("You've gained %s GP!" % (gold))
+            player.exp += experience
+            print("You've gained %s experience point%s!" % (experience, 's' if experience > 1 else ''))
+            player.level_up()
             if monster.items:
                 cat = monster.items.cat
                 inv_system.inventory[cat].append(_c(monster.items))
                 print('The %s drops a %s! You put it in your inventory for safe keeping.' % (monster.name, str(monster.items)))
-            gold = player.give_gold()
-            if gold > 0:
-                print('You received %s GP!' % (gold))
-            try:
-                reward = int(math.sqrt(monster.lvl - (player.lvl/2) + 1.5) + player.ext_exp)*2
-            except ValueError:
-                reward = random.randint(1, 2)
-            if reward <= 0:
-                reward = random.randint(1, 2)
-            player.exp += reward
-            print("You've gained %s experience point%s!" % (reward, 's' if reward > 1 else ''))
-            player.level_up()
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
             return
-
         elif player.hp <= 0 and monster.hp <= 0:
             player.hp = 1
 

@@ -11,17 +11,19 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
+
 class Town:
     def __init__(self, name, desc, x, y, inn=True, inn_cost=0, gen_store=True, gs_level=1):
         self.name = name
         self.desc = desc
-        self.x = x # X-coordinate on map
-        self.y = y # Y-coordinate on map
-        self.inn = inn # If true, the town contains an inn
+        self.x = x      # X-coordinate on map
+        self.y = y      # Y-coordinate on map
+        self.inn = inn  # If true, the town contains an inn
         self.inn_cost = inn_cost
-        self.gen_store = gen_store # If true, the town contains a General Store
-        self.gs_level = gs_level # The higher this value is, the better the
-                                 # items the store will sell.
+        self.gen_store = gen_store  # If true, the town contains a General Store
+        self.gs_level = gs_level    # The higher this value is, the better the
+                                    # items the store will sell.
+
 
     def town_choice(self):
         print('-'*25)
@@ -50,8 +52,9 @@ class Town:
                 print('-'*25)
                 return
 
-    def new_location(self): # Tranlate the location of newly-found towns
-        if self.y >= 0:     # into a string, then add to inventory.
+
+    def new_location(self):  # Tranlate the location of newly-found towns
+        if self.y >= 0:      # into a string, then add to inventory.
             foo = "'N"
         else:
             foo = "'S"
@@ -65,6 +68,7 @@ class Town:
             print('-'*25)
             print('%s\'s location has been added to the coordinates page of your inventory.' % (self.name))
 
+
     def inside_town(self):
         if self.inn:
             self.town_inn()
@@ -76,6 +80,7 @@ class Town:
             self.town_gen()
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+
 
     def town_inn(self):
         print('There is an Inn in this town.')
@@ -117,7 +122,8 @@ class Town:
             elif y_n in ['no', 'n']:
                 return
 
-    def town_gen(self): # Let the player purchase items from the General Store
+
+    def town_gen(self):  # Let the player purchase items from the General Store
         print('There is a General Store in this town.')
         while True:
             y_n = input('Do you want to shop at the General Store? | Yes or No: ')
@@ -212,45 +218,59 @@ class Town:
             elif y_n in ['no', 'n']:
                 return
 
+
 # List of Towns:
-town1 = Town('Nearton', """Nearton: a small village in the central region of the Forest.
+town1 = Town('Nearton', """Nearton: a small village in the central region of t\
+he Forest.
 It is in this very town where numerous brave adventurers have begun
 their journey. Nearton has a general store, an inn, and a few small houses.
 An old man is standing near one of the houses, and appears to be talking
 to a small group of strangers.""", 0, 1)
 
-town2 = Town('Southford', """Southford: A fair-size town in the central-southern region of the Forest.
+town2 = Town('Southford', """Southford: A fair-size town in the central-southe\
+rn region of the Forest.
 This town is well-known for its wise inhabitants. Some of the elders here
 are rumored to be masters of the arcane arts, and may be willing to train
-your magical abilities for a reasonable price. There is a general store and
-several houses in this town.""", -2, -6, inn=False)
+your magical abilities for a reasonable price. There is a general store, an
+inn, and several houses in this town.""", -2, -6, inn_cost=2)
 
-town3 = Town('Overshire', """Overshire: A city in the nortwestern region of the Forest.
+town3 = Town('Overshire', """Overshire: A city in the nortwestern region of th\
+e Forest.
 Overshire is the capitol of the Forest, and as such is very densely populated.
 The city is separated into three sectors: the upper-class inner portion, the
 lower-class outer portion, with the middle-class section situated in between.
 As an outsider, you are forbidden to enter the upper two, but are welcome to
-do as you wish in the lower.""", -11, 13, inn_cost=6, gs_level=2)
+do as you wish in the lower.""", -11, 13, inn_cost=5, gs_level=2)
 
 town_list = [town1, town2, town3]
 
-def search_towns(pos_x, pos_y): # Check to see if there is a town where the player is located
+
+def search_towns(pos_x, pos_y, enter=True):  # Check to see if there is a
+                                             # town where the player is located
     for town in town_list:
         if town.x == pos_x and town.y == pos_y:
-            print('-'*25)
-            while True:
-                y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
-                if y_n in ['yes', 'y']:
-                    winsound.PlaySound(None, winsound.SND_ASYNC)
-                    winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
-                    world.save_coords(town.x, town.y)
-                    town.new_location()
-                    town.town_choice()
-                    return
-                elif y_n in ['no', 'n']:
-                    print('-'*25)
-                    return
+            if enter:
+                print('-'*25)
+                while True:
+                    y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
+                    try:
+                        y_n = y_n.lower()
+                    except AttributeError:
+                        continue
+                    if y_n in ['yes', 'y']:
+                        winsound.PlaySound(None, winsound.SND_ASYNC)
+                        winsound.PlaySound('Music\\Chickens (going peck peck peck).wav',
+                                           winsound.SND_ASYNC |
+                                           winsound.SND_LOOP |
+                                           winsound.SND_NODEFAULT)
+                        world.save_coords(town.x, town.y)
+                        town.new_location()
+                        town.town_choice()
+                        return
+                    elif y_n in ['no', 'n']:
+                        print('-'*25)
+                        return
+            else:
+                return True
+    else:
+        return False
