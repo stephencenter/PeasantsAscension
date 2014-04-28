@@ -35,8 +35,7 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
         self.items = ''
         num = random.randint(0, 4)
         if num == 4:
-            self.items = random.choice(items.monster_drop(self.lvl,
-                                                          self.element))
+            self.items = random.choice(items.monster_drop(self.lvl, self.element))
 
 
     def monst_damage(self, var):
@@ -75,13 +74,13 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
     def _pass(self):
         pass
     def monst_attk(self, var, dodge):
-        print('The %s angrily begins to charge at you!' % (self.name))
+        print('The {0} angrily begins to charge at you!'.format(self.name))
         if dodge in range(player.evad, 250):
             dealt = self.monst_damage(var)
             player.hp -= dealt
-            print('The %s hits you, dealing %s damage!' % (self.name, dealt))
+            print('The {0} hits you, dealing {1} damage!'.format(self.name, dealt))
         else:
-            print("You narrowly avoid the %s's attack!" % (self.name))
+            print("You narrowly avoid the {0}'s attack!".format(self.name))
 
     def monst_name(self):
         monster_type = {

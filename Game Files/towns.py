@@ -27,7 +27,7 @@ class Town:
 
     def town_choice(self):
         print('-'*25)
-        print('Welcome to %s!' % (self.name))
+        print('Welcome to {0}!'.format(self.name))
         while True:
             choice = input('1. Town Desc; 2. Enter Town; 3. Player Info; 4. View Inv; 5. Exit | Input #(1-5): ')
             if choice == '1':
@@ -48,7 +48,10 @@ class Town:
                 print('-'*25)
             elif choice == '5':
                 winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound(world.position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+                winsound.PlaySound(world.position['reg_music'],
+                                   winsound.SND_ASYNC |
+                                   winsound.SND_LOOP |
+                                   winsound.SND_NODEFAULT)
                 print('-'*25)
                 return
 
@@ -62,11 +65,11 @@ class Town:
             bar = "'E"
         else:
             bar = "'W"
-        spam = self.name + ': ' + str(self.y) + foo + ', ' + str(self.x) + bar
+        spam = ''.join([str(x) for x in [self.name, ': ', str(self.y), foo, ', ', str(self.x), bar]])
         if spam not in inv_system.inventory['coord']:
             inv_system.inventory['coord'].append(spam)
             print('-'*25)
-            print('%s\'s location has been added to the coordinates page of your inventory.' % (self.name))
+            print("{0}'s location has been added to the coordinates page of your inventory.".format(self.name))
 
 
     def inside_town(self):
@@ -94,7 +97,10 @@ class Town:
                         continue
                     if selected in buildings:
                         winsound.PlaySound(None, winsound.SND_ASYNC)
-                        winsound.PlaySound('Music\\Mayhem in the Village.wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+                        winsound.PlaySound('Music\\Mayhem in the Village.wav',
+                                            winsound.SND_ASYNC |
+                                            winsound.SND_LOOP |
+                                            winsound.SND_NODEFAULT)
                         if selected in gen_words:
                             self.town_gen()
                             spam = True
@@ -103,7 +109,10 @@ class Town:
                                 spam = True
                         print('-'*25)
                         winsound.PlaySound(None, winsound.SND_ASYNC)
-                        winsound.PlaySound('Music\\Chickens (going peck peck peck).wav', winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+                        winsound.PlaySound('Music\\Chickens (going peck peck peck).wav',
+                                            winsound.SND_ASYNC |
+                                            winsound.SND_LOOP |
+                                            winsound.SND_NODEFAULT)
                     elif selected == 'back':
                         return
 
@@ -112,7 +121,7 @@ class Town:
         print('-'*25)
         print('Inn Keeper: "Greetings, Traveler!"')
         while True:
-            choice = input('"Would you like to stay at our inn? %s" | Yes or No: ' % (
+            choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
             "It's free, y'know." if not self.inn_cost else ' '.join(["One Night is", str(self.inn_cost), "GP."])))
             try:
                 choice = choice.lower()
@@ -153,24 +162,18 @@ class Town:
         print('-'*25)
         spam = True
         while True:
-            if spam:
-                print('Stock: ' + str_stock)
-                print()
-            else:
-                print('-'*25)
-                break
+            print('Stock: ' + str_stock)
+            print()
             while True:
-                purchase = input('"What item would ya like to buy?" | %s GP | Input Item Name (or type "back"): '
-                                 % (main.static['gp']))
+                purchase = input('"What item would ya like to buy?" | {0} GP | Input Item Name (or type "exit"): '.format(main.static['gp']))
                 if purchase == '':
                     continue
                 try:
                     purchase = purchase.title()
                 except AttributeError:
                     continue
-                if purchase == 'Back':
-                    spam = False
-                    break
+                if purchase == 'Exit':
+                    return
                 elif purchase in str_stock:
                     for i in stock:
                         if str(i) == purchase:
@@ -181,7 +184,7 @@ class Town:
                 print(i.desc)
                 print('-'*25)
                 while True:
-                    confirm = input("\"Ya want %s %s? It'll cost ya %s GP.\" | Yes or No: " % (
+                    confirm = input("\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
                     'these' if str(i).endswith('s') else 'this', str(i), i.buy))
                     try:
                         confirm = confirm.lower()
@@ -189,13 +192,13 @@ class Town:
                         continue
                     if confirm in ['yes', 'y']:
                         if main.static['gp'] >= i.buy:
-                            inv_system.add_item(i)
+                            inv_system.inventory[i.cat].append(i)
                             main.static['gp'] -= i.buy
                             print('-'*25)
-                            input('You purchase the %s (-%s GP). (Press enter/return to continue).' % (str(i), i.buy))
+                            input('You purchase the {0} (-{1} GP). (Press enter/return to continue).'.format(str(i), i.buy))
                             print('-'*25)
                         else:
-                            input('"Hey, you don\'t even have enough GP for this %s! (Press enter/return)"' % (str(i)))
+                            input('"Hey, you don\'t even have enough GP for this {0}! (Press enter/return)"'.format(str(i)))
                             print()
                         break
                     elif confirm in ['no', 'n']:

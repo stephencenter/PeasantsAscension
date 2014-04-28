@@ -58,7 +58,7 @@ def battle_system(boss=False):
                            winsound.SND_LOOP |
                            winsound.SND_NODEFAULT)
         print('-'*25)
-        print('The legendary %s has awoken!' % (monster.name))
+        print('The legendary {0} has awoken!'.format(monster.name))
     else:
         winsound.PlaySound('Music\\Jumpshot.wav',
                            winsound.SND_ASYNC |
@@ -69,7 +69,7 @@ def battle_system(boss=False):
         else:
             a_an = 'A '
         print('-'*25)
-        print('%s%s suddenly appeared out of nowhere!' % (a_an, monster.name))
+        print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monster.name))
     update_stats()
     while player.hp > 0 and monster.hp > 0: # Continue the battle until someone dies
         bat_stats()  # First, display the Player and Monster's stats
@@ -122,15 +122,13 @@ def player_turn(var, dodge, move):
             print()
             print('-Player Turn-')
         if move == '1':  # Attack
-            print('You begin to fiercly attack the %s using your %s!'
-                  % (monster.name, str(inv_system.equipped['weapon'])))
+            print('You begin to fiercly attack the {0} using your {1}!'.format(monster.name, str(inv_system.equipped['weapon'])))
             if dodge in range(monster.evad, 250):
                 dealt = player.player_damage(var)
                 monster.hp -= dealt
-                print('Your attack connects with the %s, dealing %s damage!'
-                      % (monster.name, dealt))
+                print('Your attack connects with the {0}, dealing {1} damage!'.format(monster.name, dealt))
             else:
-                print('The %s dodges your attack with ease!' % (monster.name))
+                print('The {0} dodges your attack with ease!'.format(monster.name))
             return
         elif move == '2':  # Magic
             magic.pick_cat(var, dodge)
@@ -156,22 +154,19 @@ def enemy_turn(var, dodge):
             heal = 5
         monster.hp += heal
         monster.mp -= 5
-        print('The %s casts a healing spell!' % (monster.name))
+        print('The {0} casts a healing spell!'.format(monster.name))
     elif monster.attk >= monster.m_attk:  # Physical Attack
         monster.monst_attk(var, dodge)
     elif int((monster.dfns + monster.m_dfns)/2) <= int(player.lvl/3):  # Defend
         monster.dfns += random.randint(1, 2)
         monster.m_dfns += random.randint(1, 2)
-        print("The %s assumes a more defensive stance! (+DEF, +M'DEF)"
-              % (monster.name))
+        print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(monster.name))
     elif monster.m_attk >= monster.attk and monster.mp >= 2:  # Magic Attack
-        print('The %s is attempting to cast a strange spell!'
-              % (monster.name))
+        print('The {0} is attempting to cast a strange spell!'.format(monster.name))
         if dodge in range(temp_stats['evad'], 250):
             dealt = monster.monst_magic(var)
             player.hp -= dealt
-            print("The %s's spell succeeds, and deals %s damage to you!"
-                  % (monster.name, dealt))
+            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(monster.name, dealt))
         else:
             print("The spell doesn't appear to have had any effect...")
         monster.mp -= 2
@@ -193,8 +188,7 @@ def after_battle(boss):  # Assess the results of the battle
                                winsound.SND_ASYNC |
                                winsound.SND_LOOP |
                                winsound.SND_NODEFAULT)
-            print('Despite your best efforts, the %s has bested you. You are dead.'
-                  % (monster.name))
+            print('Despite your best efforts, the {0} has bested you. You are dead.'.format(monster.name))
             print('-'*25)
             while True:
                 y_n = input('Do you wish to continue playing? | Yes or No: ')
@@ -218,8 +212,7 @@ def after_battle(boss):  # Assess the results of the battle
                     sys.exit()
         elif monster.hp <= 0 and player.hp > 0:
             if not boss:
-                print('The %s falls to the ground, dead as a stone.'
-                      % (monster.name))
+                print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
                 try:
                     experience = int(math.sqrt(monster.lvl -
@@ -230,23 +223,23 @@ def after_battle(boss):  # Assess the results of the battle
                     experience = random.randint(1, 2)
             else:
                 bosses.defeated_bosses.append(monster.name)
-                print('The almighty %s has been slain!' % (monster.name))
+                print('The almighty {0} has been slain!'.format(monster.name))
                 input('Press enter/return to continue.')
                 gold = boss.gold
                 experience = boss.experience
             print('-'*25)
             if gold > 0:
                 static['gp'] += gold
-                print("You've gained %s GP!" % (gold))
+                print("You've gained {0} GP!".format(gold))
             player.exp += experience
-            print("You've gained %s experience point%s!"
-                  % (experience, 's' if experience > 1 else ''))
-            player.level_up()
+            print("You've gained {0} experience point{1}!".format(
+                  experience, 's' if experience > 1 else ''))
             if monster.items:
                 cat = monster.items.cat
                 inv_system.inventory[cat].append(_c(monster.items))
-                print('The %s drops a %s! You put it in your inventory for safe keeping.'
-                      % (monster.name, str(monster.items)))
+                print('The {0} drops a {1}! You put it in your inventory for safe keeping.'.format(
+                      monster.name, str(monster.items)))
+            player.level_up()
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound(position['reg_music'],
                                winsound.SND_ASYNC |
@@ -264,14 +257,14 @@ def run_away():
         print('Your attempt to escape failed!')
         return False
     else:
-        print('You manage to escape from the %s!' % (monster.name))
+        print('You manage to escape from the {0}!'.format(monster.name))
         return True
 
 
 def battle_inventory():
     print('-'*25)
-    print('Battle Inventory: ' + ', '.join(sorted([str(x) + ' x' +
-          str(inv_system.inventory['consum'].count(x))
+    print('Battle Inventory: ' + ', '.join(sorted(
+          [str(x) + ' x' + str(inv_system.inventory['consum'].count(x))
           for x in set(inv_system.inventory['consum'])], key=str.lower)))
     while True:
         item = input('Input Item Name (or type "back"): ')
@@ -312,10 +305,12 @@ def bat_stats():
     if monster.mp > static['mp_m']:
         monster.mp -= (monster.mp - static['mp_m'])
     print('-'*25)
-    print('%s: %s/%s HP | %s/%s MP  LVL: %s' % (player.name, player.hp,
+    print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
+                                                player.name, player.hp,
                                                 static['hp_p'], player.mp,
                                                 static['mp_p'], player.lvl))
-    print('%s: %s/%s HP | %s/%s MP  LVL: %s' % (monster.name, monster.hp,
+    print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
+                                                monster.name, monster.hp,
                                                 static['hp_m'], monster.mp,
                                                 static['mp_m'], monster.lvl))
     print('-'*25)

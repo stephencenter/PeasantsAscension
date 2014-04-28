@@ -15,14 +15,14 @@ equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
 
 gs_stock = [[s_potion, m_potion, l_potion],
             [s_elixr, m_elixr, l_elixr],
-            ['\n       ', '\n       ', '\n       '],
+            ['\n       ' for x in range(3)],
             [cpr_swd, bnz_spr, irn_axe],
             [oak_stf, arc_spb, rnc_stf],
-            ['\n       ', '\n       ', '\n       '],
+            ['\n       ' for x in range(3)],
             [bnz_hlm, irn_hlm, stl_hlm],
             [bnz_cst, irn_cst, stl_cst],
             [bnz_leg, irn_leg, stl_leg],
-            ['\n       ', '\n       ', '\n       '],
+            ['\n       ' for x in range(3)],
             [wiz_hat, myst_hat, elem_hat],
             [wiz_rob, myst_rob, elem_rob],
             [wiz_gar, myst_gar, elem_gar]]
@@ -56,12 +56,12 @@ def pick_category():
                             print('-'*25)
                         else:
                             print('-'*25)
-                            print('The "%s" category is empty...' % (cat))
+                            print('The "{0}" category is empty...'.format(cat))
                             print('-'*25)
                     break
                 else:
                     print('-'*25)
-                    print('The "%s" category is empty...' % (cat))
+                    print('The "{0}" category is empty...'.format(cat))
                     print('-'*25)
                     break
             elif cat == 'exit':
@@ -117,7 +117,7 @@ def pick_action(cat, item):
         if isinstance(item, Weapon) or isinstance(item, Armor):
             if item.equip:
                break
-        action = input('%s | 1: %s, 2: Read Desc, 3: Drop, 4: Cancel | Input #(1-4): ' % (
+        action = input('{0} | 1: {1}, 2: Read Desc, 3: Drop, 4: Cancel | Input #(1-4): '.format(
         str(item), 'Equip' if isinstance(item, (Armor or Weapon)) else 'Use'))
         try:
             action = int(action)
@@ -140,17 +140,17 @@ def pick_action(cat, item):
                  print('You cannot dispose of quest-related items.')
             else:
                  while True:
-                     y_n = input('Are you sure you want to get rid of this %s? | Yes or No: ' % (str(item)))
+                     y_n = input('Are you sure you want to get rid of this {0}? | Yes or No: '.format(str(item)))
                      try:
                          y_n = y_n.lower()
                      except AttributeError:
                          continue
                      if y_n in ['yes', 'y']:
-                         print('You toss the %s aside and continue on your journey.' % (str(item)))
+                         print('You toss the {0} aside and continue on your journey.'.format(str(item)))
                          inventory[cat].remove(item)
                          break
                      elif y_n in ['no', 'n']:
-                         print('You decide to keep the %s with you.' % (str(item)))
+                         print('You decide to keep the {0} with you.'.format(str(item)))
                          break
         elif action == 4:
             print('-'*25)

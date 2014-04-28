@@ -30,13 +30,17 @@ def movement_system():
 
     setup_vars()
     winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC |
-                                              winsound.SND_LOOP |
-                                              winsound.SND_NODEFAULT)
+    winsound.PlaySound(position['reg_music'],
+                       winsound.SND_ASYNC |
+                       winsound.SND_LOOP |
+                       winsound.SND_NODEFAULT)
     while True:
         if check_region():
             winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound(position['reg_music'], winsound.SND_ASYNC | winsound.SND_LOOP | winsound.SND_NODEFAULT)
+            winsound.PlaySound(position['reg_music'],
+                               winsound.SND_ASYNC |
+                               winsound.SND_LOOP |
+                               winsound.SND_NODEFAULT)
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
             position['h'] = "'E"
@@ -47,8 +51,10 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('Position: %s%s, %s%s | %s | Which direction do you want to travel in? | N, S, E, W: '
-                              % (position['y'], position['v'], position['x'], position['h'], position['reg']))
+            direction = input('Position: {0}{1}, {2}{3} | {4} | Which direction do you want to travel in? | N, S, E, W: '.format(
+                              position['y'], position['v'],
+                              position['x'], position['h'],
+                              position['reg']))
             try:
                 direction = direction.lower()
             except AttributeError:
@@ -120,8 +126,7 @@ def check_region():
         reg_music = "Music\\We're all under the stars.wav"
     if position['reg'] != region:
         print('-'*25)
-        print('You have left the %s region and are now entering the %s region.'
-              % (position['reg'], region))
+        print('You have left the {0} region and are now entering the {1} region.'.format(position['reg'], region))
         print('-'*25)
         position['reg'] = region
         position['reg_music'] = reg_music

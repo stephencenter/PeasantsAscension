@@ -101,7 +101,7 @@ class PlayerCharacter:  # The Player
         while True:
             self.name = input('What is your name, young adventurer? | Input Name: ')
             while True:
-                y_n = input('So, your name is %s? | Yes or No: ' % (self.name))
+                y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
                 try:
                    y_n = y_n.lower()
                 except AttributeError:
@@ -114,16 +114,14 @@ class PlayerCharacter:  # The Player
 
     def choose_class(self):
         while True:
-            _class = input('Well then, %s, which class would you like to begin training in? | Warrior or Mage: '
-                           % (self.name))
+            _class = input('Well then, {0}, which class would you like to begin training in? | Warrior or Mage: '.format(self.name))
             try:
                 _class = _class.lower()
             except AttributeError:
                 continue
             if _class in ['warrior', 'mage']:
                 while True:
-                    y_n = input('You wish to be of the %s class? | Yes or No: '
-                                % (_class.title()))
+                    y_n = input('You wish to be of the {0} class? | Yes or No: '.format(_class.title()))
                     try:
                        y_n = y_n.lower()
                     except AttributeError:
@@ -152,7 +150,7 @@ class PlayerCharacter:  # The Player
                 self.hp += random.randint(0, 1)
                 self.mp += random.randint(1, 2)
                 temp_ski += self.ext_ski
-                print("You've advanced to level %s!" % (self.lvl))
+                print("You've advanced to level {0}!".format(self.lvl))
                 magic.new_spells()
             print('-'*25)
             self.skill_points(temp_ski)
@@ -172,7 +170,7 @@ class PlayerCharacter:  # The Player
         luck = ['luc', 'luck', 'lucky']
         while temp_ski > 0:
             print()
-            print('You have %s skill points left to spend.' % (temp_ski))
+            print('You have {0} skill points left to spend.'.format(temp_ski))
             while temp_ski > 0:
                 skill = input('INT, STR, CON, DEX, LUC | Choose one skill to advance: ')
                 try:
@@ -204,7 +202,7 @@ class PlayerCharacter:  # The Player
                     static['luc'] += 1
                 else:
                     continue
-                print('Your experience in %s has increased.' % (skill.upper()))
+                print('Your experience in {0} has increased.'.format(skill.upper()))
                 temp_ski -= 1
                 break
         print()
@@ -212,27 +210,27 @@ class PlayerCharacter:  # The Player
 
 
     def player_info(self):
-        print("-%s's Stats-" % (self.name))
-        print('Level: %s | Class: %s' % (self.lvl, self._class.title()))
-        print('HP: %s/%s | MP: %s/%s' % (self.hp, static['hp_p'],
+        print("-{0}'s Stats-".format(self.name))
+        print('Level: {0} | Class: {1}'.format(self.lvl, self._class.title()))
+        print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
                                          self.mp, static['mp_p']))
-        print('Attack: %s | M. Attack: %s' % (self.attk, self.m_attk))
-        print('Defense: %s | M. Defense: %s' % (self.dfns, self.m_dfns))
-        print('Speed: %s | Evasion: %s' % (self.spd, self.evad))
-        print('INT: %s | STR: %s | CON: %s | DEX: %s | LUC: %s'
-              % (static['int'], static['str'],
-                 static['con'], static['dex'],
-                 static['luc']))
-        print('Experience Pts: %s/%s | Gold Pieces: %s' % (self.exp,
-                                                           static['r_xp'],
-                                                           static['gp']))
+        print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
+        print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
+        print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
+        print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
+              static['int'], static['str'],
+              static['con'], static['dex'],
+              static['luc']))
+        print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
+                                                                  static['r_xp'],
+                                                                  static['gp']))
         print()
         print('-Equipped Items-')
-        print('Weapon: %s' % (str(inv_system.equipped['weapon'])))
+        print('Weapon: {0}'.format(str(inv_system.equipped['weapon'])))
         print('Armor:')
-        print('  Head: %s' % (str(inv_system.equipped['head'])))
-        print('  Body: %s' % (str(inv_system.equipped['body'])))
-        print('  Legs: %s' % (str(inv_system.equipped['legs'])))
+        print('  Head: {0}'.format(str(inv_system.equipped['head'])))
+        print('  Body: {0}'.format(str(inv_system.equipped['body'])))
+        print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
 
 
 def create_player():

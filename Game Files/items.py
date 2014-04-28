@@ -41,7 +41,7 @@ class Consumable(Item): # Items that restore you HP, MP, or both. All items of
         main.player.mp += self.mana
         if main.player.mp > main.static['mp_p']:
             main.player.mp -= (main.player.mp - main.static['mp_p'])
-        print('You consume the %s' % (self.name))
+        print('You consume the {0}'.format(self.name))
         inventory[self.cat].remove(self)
         print('-'*25)
 
@@ -92,10 +92,10 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
                     break
             inventory[self.cat][key] = fizz
             print('-'*25)
-            print('You equip the %s.' % (str(self)))
+            print('You equip the {0}.'.format(str(self)))
         else:
             print('-'*25)
-            print("You must be a %s to equip this." % (self._class.title()))
+            print("You must be a {0} to equip this.".format(self._class.title()))
 
 
 class Armor(Item):
@@ -134,10 +134,10 @@ class Armor(Item):
                     break
             inventory[self.cat][key] = fizz
             print('-'*25)
-            print('You equip the %s.' % (str(self)))
+            print('You equip the {0}.'.format(str(self)))
         else:
             print('-'*25)
-            print("You must be a %s to equip this." % (self._class.title()))
+            print("You must be a {0} to equip this.".format(self._class.title()))
 
 
 def item_setup_vars():
