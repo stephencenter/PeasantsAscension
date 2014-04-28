@@ -115,10 +115,13 @@ def pick_action(cat, item):
     print('-'*25)
     while item in inventory[cat]:
         if isinstance(item, Weapon) or isinstance(item, Armor):
+            use_equip = 'Equip'
             if item.equip:
                break
+        else:
+            use_equip = 'Use'
         action = input('{0} | 1: {1}, 2: Read Desc, 3: Drop, 4: Cancel | Input #(1-4): '.format(
-        str(item), 'Equip' if isinstance(item, (Armor or Weapon)) else 'Use'))
+        str(item), use_equip))
         try:
             action = int(action)
         except TypeError:

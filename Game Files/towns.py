@@ -90,7 +90,7 @@ class Town:
                 buildings.extend(gen_words)
             if buildings:
                 while spam == False:
-                    selected = input('What building would you like to enter? | Input Building Name (or type "back"): ')
+                    selected = input('What building would you like to enter? | Input Building Name (or type "exit"): ')
                     try:
                         selected = selected.lower()
                     except AttributeError:
@@ -113,7 +113,7 @@ class Town:
                                             winsound.SND_ASYNC |
                                             winsound.SND_LOOP |
                                             winsound.SND_NODEFAULT)
-                    elif selected == 'back':
+                    elif selected == ('back' or 'exit'):
                         return
 
 
@@ -132,7 +132,7 @@ class Town:
                 if main.static['gp'] >= self.inn_cost:
                     print('"Good night, Traveler."')
                     print('Sleeping...')
-                    time.sleep(2)
+                    time.sleep(1.5)
                     main.static['gp'] -= self.inn_cost
                     main.player.hp = copy.copy(main.static['hp_p'])
                     main.player.mp = copy.copy(main.static['mp_p'])

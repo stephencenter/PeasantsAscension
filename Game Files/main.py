@@ -1,4 +1,4 @@
-# Pythonius; v0.1 Alpha
+# Pythonius; v0.1.2 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -41,7 +41,7 @@ player = ''
 # A dictionary containing player variables that don't change until
 # level-up, as well as GP
 static = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
-          'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'luc': 1, 'gp': 0}
+          'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'luc': 1, 'gp': 20}
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
@@ -86,14 +86,13 @@ class PlayerCharacter:  # The Player
 
     def player_damage(self, var):  # The formula for the player dealing damage
         try:
-            phys_dealt = int(math.sqrt(self.attk +
-                                       self.lvl -
-                                       battle.monster.dfns) + 3) + var
-        except ValueError:  # Just incase math.sqrt recieves a negative number
+            phys_dealt = int((self.attk/2) - (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
+        except ValueError or phys_dealt == 0:  # Just incase math.sqrt recieves a negative number
             phys_dealt = 1
-        phys_dealt = magic.eval_element(p_elem=inv_system.equipped['weapon'].element,
-                                        m_elem=battle.monster.element,
-                                        p_dmg=phys_dealt)[0]
+        phys_dealt = magic.eval_element(
+                     p_elem=inv_system.equipped['weapon'].element,
+                     m_elem=battle.monster.element,
+                     p_dmg=phys_dealt)[0]
         return phys_dealt
 
 

@@ -61,18 +61,16 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
         global static
         self.lvl = int(1/2*abs(1.5*position['avg'] - 1)) + 1
         for x in range(1, self.lvl):
-            self.hp += random.randint(3, 5)
+            self.hp += random.randint(4, 6)
             self.mp += random.randint(1, 2)
-            self.attk = random.randint(1, 2)
+            self.attk = random.randint(2, 3)
             self.dfns += random.randint(1, 2)
-            self.m_attk += random.randint(1, 2)
+            self.m_attk += random.randint(2, 3)
             self.m_dfns += random.randint(1, 2)
-            self.spd += random.randint(0, 2)
+            self.spd += random.randint(1, 2)
             self.evad += random.randint(0, 2)
         static['hp_m'] = self.hp
         static['mp_m'] = self.mp
-    def _pass(self):
-        pass
     def monst_attk(self, var, dodge):
         print('The {0} angrily begins to charge at you!'.format(self.name))
         if dodge in range(player.evad, 250):

@@ -42,7 +42,7 @@ class Healing(Spell):
             if main.player.hp > main.static['hp_p']:
                 main.player.hp -= (main.player.hp - main.static['hp_p'])
             print('-Player Turn-')
-            print('Using "%s", you are healed by %s HP!' % (self.name, self.health))
+            print('Using "{0}", you are healed by {1} HP!'.format(self.name, self.health))
             return True
         else:
             print(out_of_mana)
@@ -63,19 +63,20 @@ class Damaging(Spell):
             print()
             Spell.use_mana(self)
             attk_pwr = int(self.damage + (main.player.m_attk/3) -
-                           (monsters.monster.m_dfns/2) + var)
-            attk_pwr = eval_element(p_elem=self.element,
-                                    m_elem=monsters.monster.element,
-                                    p_dmg=attk_pwr)[0]
+                          (battle.monster.m_dfns/2) + var)
+            attk_pwr = eval_element(
+                       p_elem=self.element,
+                       m_elem=monsters.monster.element,
+                       p_dmg=attk_pwr)[0]
             print('-Player Turn-')
-            print('You begin to use your %s to summon a powerful spell.'
-                  % (inv_system.equipped['weapon']))
+            print('You begin to use your {0} to summon a powerful spell.'.format(
+                  inv_system.equipped['weapon']))
             if dodge in range(monsters.monster.evad, 250):
-                print('Using the power of "%s", you deal %s damage to the %s!'
-                      % (self.name, attk_pwr, monsters.monster.name))
+                print('Using the power of "{0}", you deal {1} damage to the {2}!'.format(
+                      self.name, attk_pwr, monsters.monster.name))
                 monsters.monster.hp -= attk_pwr
             else:
-                print('The %s dodges your attack!' % (monsters.monster.name))
+                print('The {0} dodges your attack!'.format(monsters.monster.name))
             return True
         else:
             print(out_of_mana)
@@ -95,8 +96,8 @@ class Buff(Spell): # Buffs are spells that temporarily raise the player's stats
             print()
             Spell.use_mana(self)
             print('-Player Turn-')
-            print('Using the power of %s, your %s increases temporarily by %s!'
-                  % (self.name, self.stat, self.incre))
+            print('Using the power of {0}, your {1} increases temporarily by {2}!'.format(
+                  self.name, self.stat, self.incre))
             if self.stat == 'Defense':
                 battle.temp_stats['dfns'] += self.incre
             elif self.stat == 'Magic Defense':
@@ -114,17 +115,17 @@ class Buff(Spell): # Buffs are spells that temporarily raise the player's stats
             print(out_of_mana)
             return False
 
-w_flame = Damaging('Weak Flame', "Summon a weak fireball to destroy your foes.", 3, 1, 3, "fire")
-f_blaze = Damaging('Fierce Blaze', "Summon a powerful flame to destroy your foes.", 9, 7, 11, "fire")
-g_infer = Damaging('Grand Inferno', "Summon a monsterous blaze destroy your foes.", 18, 17, 22, "fire")
+w_flame = Damaging('Weak Flame', "Summon a weak fireball to destroy your foes.", 3, 2, 4, "fire")
+f_blaze = Damaging('Fierce Blaze', "Summon a powerful flame to destroy your foes.", 9, 8, 12, "fire")
+g_infer = Damaging('Grand Inferno', "Summon a monsterous blaze destroy your foes.", 18, 18, 23, "fire")
 
 in_spark = Damaging('Inferior Spark', "Summon a weak spark to destroy your foes.", 3, 2, 4, "electric")
 pwr_jolt = Damaging('Powerful Jolt', "Summon a powerful jolt of energy to destroy your foes.", 10, 8, 12, "electric")
 sp_storm = Damaging('Superior Storm', "Summon a devastating lightning storm to destroy your foes.", 19, 18, 23, "electric")
 
-mi_heal = Healing('Minor Healing', "Restore a small amount of HP by using magic.", 3, 2, 15)
-ad_heal = Healing('Advanced Healing', "Restore a large amount of HP by using magic.", 10, 9, 45)
-dv_heal = Healing('Divine Healing', "Call upon the arcane arts to greatly restore your HP.", 25, 20, 115)
+mi_heal = Healing('Minor Healing', "Restore a small amount of HP by using magic.", 3, 2, 20)
+ad_heal = Healing('Advanced Healing', "Restore a large amount of HP by using magic.", 10, 9, 60)
+dv_heal = Healing('Divine Healing', "Call upon the arcane arts to greatly restore your HP.", 25, 20, 125)
 
 m_quick = Buff('Minor Quickness', "Temporarily raise your speed by a small amount.", 2, 4, 3, "Speed")
 m_evade = Buff('Minor Evade', "Temporarily raise your evasion by a small amount.", 2, 4, 3, "Evasion")
@@ -221,7 +222,7 @@ def pick_cat(var, dodge):
             continue
         if not spellbook[cat]:
             print('-'*25)
-            print('You do not yet have any spells in the %s category.' % (cat))
+            print('You do not yet have any spells in the {0} category.'.format(cat))
             print('-'*25)
             continue
         if pick_spell(cat, var, dodge):
@@ -251,7 +252,7 @@ def pick_spell(cat, var, dodge):
         print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
         print('-'*25)
         while True:
-            y_n = input('Use %s? | Yes or No: ' % (str(spell)))
+            y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
             if y_n == '':
                 continue
             try:
@@ -287,7 +288,9 @@ def new_spells():
                     break
             else:
                 spellbook[cat].append(spell)
-                print('You have learned "%s", a new %s spell!' % (str(spell), cat if not cat.endswith('s') else cat[0:len(cat) - 1]))
+                print('You have learned "{0}", a new {1} spell!'.format(
+                      str(spell), cat if not cat.endswith('s'
+                      ) else cat[0:len(cat) - 1]))
 
 def serialize_sb(path):
     j_spellbook = {}

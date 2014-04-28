@@ -50,7 +50,8 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
                     # -en equipped. Certain weapons are planned to be infused w-
                     # -ith elements later on, which will deal more/less damage
                     # to certain enemies.
-    def __init__(self, name, desc, buy, sell, power, type, _class, element='None', equip=False,  cat='weapons', imp=False):
+    def __init__(self, name, desc, buy, sell, power, type, _class,
+                 element='None', equip=False,  cat='weapons', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.power = power
         self.type = type
@@ -67,6 +68,7 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
     def equip_weapon(self):
         global equipped
         global inventory
+        item_setup_vars()
         if main.player._class == self._class:
             spam = copy.copy(self) # Creating a copy of the weapon ensures that
                                    # only one weapon can be equipped at a time.
@@ -90,7 +92,10 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
                 if self.name == y.name:
                     key = x
                     break
-            inventory[self.cat][key] = fizz
+            try:
+                inventory[self.cat][key] = old
+            except NameError:
+                pass
             print('-'*25)
             print('You equip the {0}.'.format(str(self)))
         else:
@@ -99,7 +104,8 @@ class Weapon(Item): # Items that increase your attack, magic attack, or both wh-
 
 
 class Armor(Item):
-    def __init__(self, name, desc, buy, sell, defense, type, part, _class, equip=False,  cat='armor', imp=False):
+    def __init__(self, name, desc, buy, sell, defense, type, part,
+                 _class, equip=False,  cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.defense = defense
         self.type = type
@@ -132,7 +138,10 @@ class Armor(Item):
                 if self.name == y.name:
                     key = x
                     break
-            inventory[self.cat][key] = fizz
+            try:
+                inventory[self.cat][key] = old
+            except NameError:
+                pass
             print('-'*25)
             print('You equip the {0}.'.format(str(self)))
         else:
