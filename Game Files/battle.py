@@ -39,7 +39,7 @@ def update_stats(): # Forces stats to return to normal when battle is finished
     global temp_stats
     temp_stats = {'attk':_c(player.attk), 'm_attk':_c(player.m_attk),
                   'dfns':_c(player.dfns), 'm_dfns':_c(player.m_dfns),
-                  'spd':_c(player.spd),'evad':_c(player.evad)}
+                  'spd':_c(player.spd), 'evad':_c(player.evad)}
 
 
 def player_choice():
@@ -50,9 +50,9 @@ def player_choice():
             return move
 
 
-def battle_system(boss=False):
+def battle_system(is_boss=False):
     winsound.PlaySound(None, winsound.SND_ASYNC)
-    if boss:
+    if is_boss:
         winsound.PlaySound('Music\\Terrible Tarantuloid.wav',
                            winsound.SND_ASYNC |
                            winsound.SND_LOOP |
@@ -110,7 +110,7 @@ def battle_system(boss=False):
             if player.hp > 0:
                 player_turn(var, dodge, move)
     else:
-        if after_battle(boss) != 'dead':
+        if after_battle(is_boss) != 'dead':
             print('-'*25)
 
 
@@ -173,7 +173,7 @@ def enemy_turn(var, dodge):
     else:
         monster.monst_attk(var, dodge)
 
-def after_battle(boss):  # Assess the results of the battle
+def after_battle(is_boss):  # Assess the results of the battle
     global player
     update_stats()
     winsound.PlaySound(None, winsound.SND_ASYNC)
@@ -211,7 +211,7 @@ def after_battle(boss):  # Assess the results of the battle
                 elif y_n in 'no':
                     sys.exit()
         elif monster.hp <= 0 and player.hp > 0:
-            if not boss:
+            if not is_boss:
                 print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
                 try:
@@ -223,9 +223,10 @@ def after_battle(boss):  # Assess the results of the battle
             else:
                 bosses.defeated_bosses.append(monster.name)
                 print('The almighty {0} has been slain!'.format(monster.name))
-                input('Press enter/return to continue.')
-                gold = boss.gold
-                experience = boss.experience
+                gold = monster.gold
+                experience = monster.experience
+            print('-'*25)
+            input('Press enter/return to continue.')
             print('-'*25)
             if gold > 0:
                 static['gp'] += gold

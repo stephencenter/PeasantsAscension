@@ -98,9 +98,9 @@ class Town:
                     if selected in buildings:
                         winsound.PlaySound(None, winsound.SND_ASYNC)
                         winsound.PlaySound('Music\\Mayhem in the Village.wav',
-                                            winsound.SND_ASYNC |
-                                            winsound.SND_LOOP |
-                                            winsound.SND_NODEFAULT)
+                                           winsound.SND_ASYNC |
+                                           winsound.SND_LOOP |
+                                           winsound.SND_NODEFAULT)
                         if selected in gen_words:
                             self.town_gen()
                             spam = True
@@ -110,9 +110,9 @@ class Town:
                         print('-'*25)
                         winsound.PlaySound(None, winsound.SND_ASYNC)
                         winsound.PlaySound('Music\\Chickens (going peck peck peck).wav',
-                                            winsound.SND_ASYNC |
-                                            winsound.SND_LOOP |
-                                            winsound.SND_NODEFAULT)
+                                           winsound.SND_ASYNC |
+                                           winsound.SND_LOOP |
+                                           winsound.SND_NODEFAULT)
                     elif selected == 'back' or selected == 'exit':
                         return
 
