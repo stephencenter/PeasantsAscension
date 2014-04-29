@@ -110,8 +110,8 @@ def battle_system(boss=False):
             if player.hp > 0:
                 player_turn(var, dodge, move)
     else:
-        after_battle(boss)
-        print('-'*25)
+        if after_battle(boss) != 'dead':
+            print('-'*25)
 
 
 def player_turn(var, dodge, move):
@@ -207,7 +207,7 @@ def after_battle(boss):  # Assess the results of the battle
                                        winsound.SND_ASYNC |
                                        winsound.SND_LOOP |
                                        winsound.SND_NODEFAULT)
-                    return
+                    return 'dead'
                 elif y_n in 'no':
                     sys.exit()
         elif monster.hp <= 0 and player.hp > 0:
@@ -215,8 +215,7 @@ def after_battle(boss):  # Assess the results of the battle
                 print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
                 try:
-                    experience = int(math.sqrt(monster.lvl -
-                                    (player.lvl/2) + 1.5) + player.ext_exp)*2
+                    experience = int((monster.lvl - player.lvl/3 + 1.5 + player.ext_exp)/2)
                 except ValueError:
                     experience = random.randint(1, 2)
                 if experience <= 0:

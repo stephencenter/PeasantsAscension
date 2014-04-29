@@ -84,11 +84,9 @@ class PlayerCharacter:  # The Player
         self.ext_exp = ext_exp   # Extra Experience
         self._class = _class     # Player Class
 
+
     def player_damage(self, var):  # The formula for the player dealing damage
-        try:
-            phys_dealt = int((self.attk/2) - (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
-        except ValueError or phys_dealt == 0:  # Just incase math.sqrt recieves a negative number
-            phys_dealt = 1
+        phys_dealt = int((self.attk/2) - (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
         phys_dealt = magic.eval_element(
                      p_elem=inv_system.equipped['weapon'].element,
                      m_elem=battle.monster.element,
@@ -139,18 +137,19 @@ class PlayerCharacter:  # The Player
             temp_ski = 0  # Temporary Skill Points
             while self.exp >= static['r_xp']:
                 self.lvl += 1
-                static['r_xp'] = int((math.pow(self.lvl*2, 1.8) - (self.lvl)))
+                print("You've advanced to level {0}!".format(self.lvl))
                 self.attk += random.randint(1, 2)
-                self.dfns += random.randint(0, 2)
+                self.dfns += random.randint(1, 2)
                 self.m_attk += random.randint(1, 2)
-                self.m_dfns += random.randint(0, 2)
+                self.m_dfns += random.randint(1, 2)
                 self.spd += random.randint(1, 2)
                 self.evad += random.randint(0, 1)
                 self.hp += random.randint(0, 1)
                 self.mp += random.randint(1, 2)
                 temp_ski += self.ext_ski
-                print("You've advanced to level {0}!".format(self.lvl))
                 magic.new_spells()
+                self.exp -= static['r_xp']
+                static['r_xp'] = int((math.pow(self.lvl*2, 1.8) - (self.lvl)))
             print('-'*25)
             self.skill_points(temp_ski)
             static['hp_p'] = self.hp
@@ -212,7 +211,7 @@ class PlayerCharacter:  # The Player
         print("-{0}'s Stats-".format(self.name))
         print('Level: {0} | Class: {1}'.format(self.lvl, self._class.title()))
         print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
-                                         self.mp, static['mp_p']))
+                                                 self.mp, static['mp_p']))
         print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
         print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
         print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
@@ -247,14 +246,11 @@ def create_player():
         player.attk += 2
         player.spd -= 1
         player.evad -= 1
-        player.m_dfns -= 1
-        player.m_attk -= 1
         inv_system.equipped['weapon'] = copy.copy(inv_system.wdn_sht)
     elif player._class == "mage":
+        static['hp_p'] += 1
         static['mp_p'] += 5
-        player.attk -= 1
         player.m_attk += 2
-        player.dfns -= 1
         player.m_dfns += 2
         inv_system.equipped['weapon'] = copy.copy(inv_system.mag_twg)
     player.hp = copy.copy(static['hp_p'])

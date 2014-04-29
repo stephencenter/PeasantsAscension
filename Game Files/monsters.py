@@ -63,10 +63,10 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 6)
             self.mp += random.randint(1, 2)
-            self.attk = random.randint(2, 3)
-            self.dfns += random.randint(1, 2)
-            self.m_attk += random.randint(2, 3)
-            self.m_dfns += random.randint(1, 2)
+            self.attk = random.randint(1, 2)
+            self.dfns += random.randint(0, 2)
+            self.m_attk += random.randint(1, 2)
+            self.m_dfns += random.randint(0, 2)
             self.spd += random.randint(1, 2)
             self.evad += random.randint(0, 2)
         static['hp_m'] = self.hp

@@ -113,7 +113,7 @@ class Town:
                                             winsound.SND_ASYNC |
                                             winsound.SND_LOOP |
                                             winsound.SND_NODEFAULT)
-                    elif selected == ('back' or 'exit'):
+                    elif selected == 'back' or selected == 'exit':
                         return
 
 
