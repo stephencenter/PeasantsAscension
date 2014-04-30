@@ -1,0 +1,25 @@
+The music in Pythonius was made by two individuals, namely:
+	
+  Ben Landis, who composed:
+    Through the Forest--------------[Forest Overworld Theme]
+    Terrible Tarantuloid------------[Boss-battle Theme]
+    Power-up------------------------[Game-over Theme]
+    Adventure In Pixels-------------[Level-up Theme]
+    Mountain------------------------[Mountain Region Theme]
+    Chickens (going peck peck peck)-[Town Theme]
+    Mayhem in the Village-----------[NPC Theme]
+		
+    His website: http://www.benlandis.com/
+		
+And,
+	
+  Eric Skiff, who composed:
+    Jumpshot------------------------[Battle Theme]
+    Prologue------------------------[Title screen & Character Creation Themes]
+    Arpanauts-----------------------[Tundra Region Theme]
+    We're All Under the Stars-------[Beach Region Theme]
+    Digital Native------------------[Swamp Region Theme]
+		
+    His website: http://www.ericskiff.com/music/
+	
+Kudos to them for creating such awesome music!

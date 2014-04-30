@@ -128,36 +128,80 @@ class Buff(Spell):
             return False
 
 
-w_flame = Damaging('Weak Flame', "Summon a weak fireball to destroy your foes.", 3, 1, 4, "fire")
-f_blaze = Damaging('Fierce Blaze', "Summon a powerful flame to destroy your foes.", 10, 8, 12, "fire")
-g_infer = Damaging('Grand Inferno', "Unleash a monsterous blaze destroy your foes.", 18, 18, 23, "fire")
+w_flame = Damaging('Weak Flame',
+    "Summon a weak fireball to destroy your foes.",
+    3, 1, 4, "fire")
+f_blaze = Damaging('Fierce Blaze',
+    "Summon a powerful flame to destroy your foes.",
+    10, 8, 12, "fire")
+g_infer = Damaging('Grand Inferno',
+    "Unleash a monsterous blaze destroy your foes.",
+    18, 18, 23, "fire")
 
-in_spark = Damaging('Inferior Spark', "Summon a weak spark to destroy your foes.", 3, 2, 4, "electric")
-pwr_jolt = Damaging('Powerful Jolt', "Summon a powerful jolt of energy to destroy your foes.", 10, 8, 12, "electric")
-sp_storm = Damaging('Superior Storm', "Unleash a devastating lightning storm to destroy your foes.", 19, 18, 23, "electric")
+in_spark = Damaging('Inferior Spark',
+    "Summon a weak spark to destroy your foes.",
+    3, 2, 4, "electric")
+pwr_jolt = Damaging('Powerful Jolt',
+    "Summon a powerful jolt of energy to destroy your foes.",
+    10, 8, 12, "electric")
+sp_storm = Damaging('Superior Storm',
+    "Unleash a devastating lightning storm to destroy your foes.",
+    19, 18, 23, "electric")
 
-lef_blad = Damaging('Leaf Blade', "Summon a weak blade of grass to destroy your foes.", 3, 1, 4, "grass")
-gra_gren = Damaging('Grass Grenade', "Summon a small explosion to destroy your foes.", 10, 8, 12, "grass")
-vin_strm = Damaging('Vine Storm', "Unleash a frenzy of powerful vines to destroy your foes.", 19, 18, 23, "grass")
+lef_blad = Damaging('Leaf Blade',
+    "Summon a weak blade of grass to destroy your foes.",
+    3, 1, 4, "grass")
+gra_gren = Damaging('Grass Grenade',
+    "Summon a small explosion to destroy your foes.",
+    10, 8, 12, "grass")
+vin_strm = Damaging('Vine Storm',
+    "Unleash a frenzy of powerful vines to destroy your foes.",
+    19, 18, 23, "grass")
 
-min_heal = Healing('Minor Healing', "Restore a small amount of HP by using magic.", 3, 1, 20)
-adv_heal = Healing('Advanced Healing', "Restore a large amount of HP by using magic.", 10, 9, 60)
-div_heal = Healing('Divine Healing', "Call upon the arcane arts to greatly restore your HP.", 25, 20, 125)
+min_heal = Healing('Minor Healing',
+    "Restore a small amount of HP by using magic.",
+    3, 1, 20)
+adv_heal = Healing('Advanced Healing',
+    "Restore a large amount of HP by using magic.",
+    10, 9, 60)
+div_heal = Healing('Divine Healing',
+    "Call upon the arcane arts to greatly restore your HP.",
+    25, 20, 125)
 
-m_quick = Buff('Minor Quickness', "Temporarily raise your speed by a small amount.", 2, 4, 3, "Speed")
-m_evade = Buff('Minor Evade', "Temporarily raise your evasion by a small amount.", 2, 4, 3, "Evasion")
+m_quick = Buff('Minor Quickness',
+    "Temporarily raise your speed by a small amount.",
+    2, 4, 3, "Speed")
+m_evade = Buff('Minor Evade',
+    "Temporarily raise your evasion by a small amount.",
+    2, 4, 3, "Evasion")
 
-m_defend = Buff('Minor Defend', "Temporarily raise your defense by a small amount.", 2, 5, 2, "Defense")
-m_shield = Buff('Minor Shield', "Temporarily raise your magic defense by a small amount.", 2, 5, 2, "Magic Defense")
+m_defend = Buff('Minor Defend',
+    "Temporarily raise your defense by a small amount.",
+    2, 5, 2, "Defense")
+m_shield = Buff('Minor Shield',
+    "Temporarily raise your magic defense by a small amount.",
+    2, 5, 2, "Magic Defense")
 
-m_stren = Buff('Minor Strengthen', "Temporarily raise your attack by a small amount.", 2, 6, 2, "Attack")
-m_power = Buff('Minor Empower', "Temporarily raise your magic attack by a small amount.", 2, 6, 2, "Magic Attack")
+m_stren = Buff('Minor Strengthen',
+    "Temporarily raise your attack by a small amount.",
+    2, 6, 2, "Attack")
+m_power = Buff('Minor Empower',
+    "Temporarily raise your magic attack by a small amount.",
+    2, 6, 2, "Magic Attack")
 
-a_defend = Buff('Adept Defend', "Temporarily raise your defense by a large amount.", 7, 12, 5, "Defense")
-a_shield = Buff('Adept Shield', "Temporarily raise your magic defense by a small amount.", 7, 12, 5, "Magic Defense")
+a_defend = Buff('Adept Defend',
+    "Temporarily raise your defense by a large amount.",
+    7, 12, 5, "Defense")
+a_shield = Buff('Adept Shield',
+    "Temporarily raise your magic defense by a small amount.",
+    7, 12, 5, "Magic Defense")
 
-a_stren = Buff('Adept Strengthen', "Temporarily raise your attack by a large amount.", 7, 10, 5, "Attack")
-a_power = Buff('Adept Empower', "Temporarily raise your magic attack by a large amount.", 7, 10, 5, "Magic Attack")
+a_stren = Buff('Adept Strengthen',
+    "Temporarily raise your attack by a large amount.",
+    7, 10, 5, "Attack")
+a_power = Buff('Adept Empower',
+    "Temporarily raise your magic attack by a large amount.",
+    7, 10, 5, "Magic Attack")
 
 spells = [
     w_flame, lef_blad, min_heal,     # Level 1

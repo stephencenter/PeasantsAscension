@@ -86,7 +86,8 @@ class PlayerCharacter:  # The Player
 
 
     def player_damage(self, var):  # The formula for the player dealing damage
-        phys_dealt = int((self.attk/2) - (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
+        phys_dealt = int((self.attk/2) - (battle.monster.dfns/3) +
+                                         (self.lvl/3) + var + 1)
         phys_dealt = magic.eval_element(
                      p_elem=inv_system.equipped['weapon'].element,
                      m_elem=battle.monster.element,
@@ -261,11 +262,6 @@ def create_player():
 def check_save():  # Check for save files and load the game if they're found
     global static
     global position
-    print('Loading...')
-    winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound("Music\\Prologue.wav", winsound.SND_ASYNC |
-                                              winsound.SND_LOOP |
-                                              winsound.SND_NODEFAULT)
     print('-'*25)
     # Check each part of the save file
     for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7]:
@@ -357,6 +353,38 @@ def deserialize_player(path):  # Load the JSON file and translate
         player.__dict__ = json.load(e)
 
 
+def title_screen():
+    winsound.PlaySound('Music\\Prologue.wav',
+                       winsound.SND_ASYNC |
+                       winsound.SND_LOOP |
+                       winsound.SND_NODEFAULT)
+    print("""
+  ____        _   _                 _
+ |  _ \\ _   _| |_| |__   ___  _ __ (_)_   _ ___
+ | |_) | | | | __| '_ \\ / _ \\| '_ \\| | | | / __|
+ |  __/| |_| | |_| | | | (_) | | | | | |_| \\__ \\
+ |_|    \\__, |\\__|_| |_|\\___/|_| |_|_|\\__,_|___/
+        |___/
+
+------------------------------------------------""")
+    while True:
+        choice = input('[P]Lay Game  |  [C]redits  |  [E]xit  |  Input letter: ')
+        try:
+            choice = choice.lower()
+        except AttributeError:
+            continue
+        if choice.startswith('p'):
+            return
+        elif choice.startswith('c'):
+            print('-'*25)
+            with open('Music Credits.txt', 'r') as f:
+                print(f.read())
+            print('-'*25)
+        elif choice.startswith('e'):
+            sys.exit()
+
+
 if __name__ == "__main__":
+    title_screen()
     check_save()  # Check for save files...
     world.movement_system()  # ...and then start the game

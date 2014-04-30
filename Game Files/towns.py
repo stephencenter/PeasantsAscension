@@ -29,7 +29,7 @@ class Town:
         print('-'*25)
         print('Welcome to {0}!'.format(self.name))
         while True:
-            choice = input('1. Town Desc; 2. Enter Town; 3. Player Info; 4. View Inv; 5. Exit | Input #(1-5): ')
+            choice = input('1. Town Desc; 2. Buildings; 3. People; 4. Player Info; 5. View Inv; 6. Exit | Input #(1-6): ')
             if choice == '1':
                 print('-'*25)
                 print(self.desc)
@@ -40,13 +40,17 @@ class Town:
                 print('-'*25)
             elif choice == '3':
                 print('-'*25)
-                main.player.player_info()
+                print('This feature has not been implemented. -RbwNjaFurret')
                 print('-'*25)
             elif choice == '4':
                 print('-'*25)
-                inv_system.pick_category()
+                main.player.player_info()
                 print('-'*25)
             elif choice == '5':
+                print('-'*25)
+                inv_system.pick_category()
+                print('-'*25)
+            elif choice == '6':
                 winsound.PlaySound(None, winsound.SND_ASYNC)
                 winsound.PlaySound(world.position['reg_music'],
                                    winsound.SND_ASYNC |
@@ -198,7 +202,7 @@ class Town:
                             input('You purchase the {0} (-{1} GP). (Press enter/return to continue).'.format(str(i), i.buy))
                             print('-'*25)
                         else:
-                            input('"Hey, you don\'t even have enough GP for this {0}! (Press enter/return)"'.format(str(i)))
+                            input('"Hey, you don\'t even have enough GP for this {0}!" (Press enter/return)'.format(str(i)))
                             print()
                         break
                     elif confirm in ['no', 'n']:
