@@ -225,9 +225,6 @@ def after_battle(is_boss):  # Assess the results of the battle
                 print('The almighty {0} has been slain!'.format(monster.name))
                 gold = monster.gold
                 experience = monster.experience
-            print('-'*25)
-            input('Press enter/return to continue.')
-            print('-'*25)
             if gold > 0:
                 static['gp'] += gold
                 print("You've gained {0} GP!".format(gold))

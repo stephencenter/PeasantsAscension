@@ -20,7 +20,7 @@ inventory = ''
 class Monster:  # All monsters use this class. Bosses use a sub-class called
                 # "Boss" (located in bosses.py) which inherits from this.
     def __init__(self, name, hp, mp, attk, dfns, m_attk,
-                 m_dfns, spd, evad, lvl, element='None'):
+                 m_dfns, spd, evad, lvl, element='none'):
         self.name = name        # Name
         self.hp = hp            # Health
         self.mp = mp            # Mana
@@ -89,7 +89,6 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
                        'Tundra': ['Frost Bat', 'Arctic Wolf', 'Minor Yeti'],
                        'Mountain': ['Rock Giant', 'Giant Worm', 'Troll']
                        }
-
         self.name = random.choice(monster_type[position['reg']])
         modifiers = [
                     'Slow', 'Fast',
@@ -132,19 +131,19 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
             self.m_dfns -= 2
 
         if position['reg'] == 'Tundra':
-            self.element = 'Ice'
+            self.element = 'ice'
         elif position['reg'] == 'Desert':
-            self.element = 'Fire'
+            self.element = 'fire'
         elif position['reg'] == 'Mountain':
-            self.element = 'Earth'
+            self.element = 'earth'
         elif position['reg'] == 'Beach':
-            self.element = 'Electric'
+            self.element = 'electric'
         elif position['reg'] == 'Forest':
-            self.element = 'Grass'
+            self.element = 'grass'
         elif position['reg'] == 'Swamp':
-            self.element = 'Water'
-
+            self.element = 'water'
         self.name = ' '.join([modifier, self.name])
+
 
 def spawn_monster():
     global monster
@@ -152,6 +151,7 @@ def spawn_monster():
     monster = Monster('', random.randint(6, 8), random.randint(3, 4), 2, 1, 2, 1, 2, 1, 1)
     monster.monst_level()
     monster.monst_name()
+
 
 def setup_vars():
     global player

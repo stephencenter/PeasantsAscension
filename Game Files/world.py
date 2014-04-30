@@ -84,8 +84,8 @@ def movement_system():
                     else:
                         out_of_bounds()
                         continue
-                position['avg'] = int(((abs(position['x']) - 1) +
-                                       (abs(position['y']) - 1))/2)
+                position['avg'] = int(((abs(position['x'])) +
+                                       (abs(position['y'])))/2)
                 if not bosses.check_bosses(position['x'], position['y']):
                     if not towns.search_towns(position['x'], position['y'], enter=False):
                         spam = random.randint(0, 2)

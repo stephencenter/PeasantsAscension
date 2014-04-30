@@ -13,7 +13,7 @@ position = ''
 
 class Boss(monsters.Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, spd, evad,
-                 lvl, pos_x, pos_y, item, gold, experience, element='None'):
+                 lvl, pos_x, pos_y, item, gold, experience, element='none'):
         monsters.Monster.__init__(self, name, hp, mp, attk, dfns, m_attk,
                                   m_dfns, spd, evad, lvl, element)
         self.pos_x = pos_x

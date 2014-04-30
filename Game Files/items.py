@@ -202,10 +202,10 @@ elem_rob = Armor('Elemental Robe', 'A leather robe enchanted with elemental powe
 elem_gar = Armor('Elemental Garments', 'Leather garments enchanted with elemental power (+4 Magic Defense).', 335, 115, 4, 'magic', 'legs', 'mage')
 
 # Unique Drops
-ice_blade = Weapon('Blade of Frost', 'A stunning blade enchanted with the power of ice (+16 Attack, ICE).', 0, 225, 16, 'melee', 'warrior', element='Ice')
-enc_yw = Weapon('Enchanted Yew Wand', 'A yewen wand of remarkable craftsmanship (+16 Magic Attack, GRASS).', 0, 225, 16, 'magic', 'mage', element='Grass')
+ice_blade = Weapon('Blade of Frost', 'A stunning blade enchanted with the power of ice (+16 Attack, ICE).', 0, 225, 16, 'melee', 'warrior', element='ice')
+enc_yw = Weapon('Enchanted Yew Wand', 'A yewen wand of remarkable craftsmanship (+16 Magic Attack, GRASS).', 0, 225, 16, 'magic', 'mage', element='grass')
 
-unique_drops = {'Ice': [ice_blade], 'Grass': [enc_yw], 'None': [bnz_leg]}
+unique_drops = {'ice': [ice_blade], 'grass': [enc_yw], 'none': [bnz_leg]}
 
 
 def monster_drop(level, element):

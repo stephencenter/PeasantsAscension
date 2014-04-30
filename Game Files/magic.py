@@ -16,24 +16,29 @@ out_of_mana = """-------------------------
 You don't have enough mana to cast that spell!
 -------------------------"""
 
+
 class Spell:
     def __init__(self, name, desc, mana, req_lvl):
         self.name = name
         self.desc = desc
         self.mana = mana
         self.req_lvl = req_lvl
+
     def use_mana(self):
         main.player.mp -= self.mana
         if main.player.mp < 0:
             main.player.mp = 0
+
 
 class Healing(Spell):
     # Healing spells are spells that restore your HP during battle
     def __init__(self, name, desc, mana, req_lvl, health):
         Spell.__init__(self, name, desc, mana, req_lvl)
         self.health = health
+
     def __str__(self):
         return self.name
+
     def use_magic(self):
         if main.player.mp >= self.mana:
             print()
@@ -48,6 +53,7 @@ class Healing(Spell):
             print(out_of_mana)
             return False
 
+
 class Damaging(Spell):
     # Damaging spells are spells that deal damage to the enemy during battle.
     # Just like normal attacks, they have a chance to miss based on
@@ -56,8 +62,10 @@ class Damaging(Spell):
         Spell.__init__(self, name, desc, mana, req_lvl)
         self.damage = damage
         self.element = element
+
     def __str__(self):
         return self.name
+
     def use_magic(self, var, dodge):
         if main.player.mp >= self.mana:
             print()
@@ -82,15 +90,19 @@ class Damaging(Spell):
             print(out_of_mana)
             return False
 
-class Buff(Spell): # Buffs are spells that temporarily raise the player's stats
-                   # during battle. They last until the battle is over, at which
-                   # point the player's stats will return to normal.
+
+class Buff(Spell):
+    # Buffs are spells that temporarily raise the player's stats
+    # during battle. They last until the battle is over, at which
+    # point the player's stats will return to normal.
     def __init__(self, name, desc, mana, req_lvl, incre, stat):
         Spell.__init__(self, name, desc, mana, req_lvl)
         self.incre = incre
         self.stat = stat
+
     def __str__(self):
         return self.name
+
     def use_magic(self):
         if main.player.mp >= self.mana:
             print()
@@ -115,17 +127,22 @@ class Buff(Spell): # Buffs are spells that temporarily raise the player's stats
             print(out_of_mana)
             return False
 
-w_flame = Damaging('Weak Flame', "Summon a weak fireball to destroy your foes.", 3, 2, 4, "fire")
-f_blaze = Damaging('Fierce Blaze', "Summon a powerful flame to destroy your foes.", 9, 8, 12, "fire")
-g_infer = Damaging('Grand Inferno', "Summon a monsterous blaze destroy your foes.", 18, 18, 23, "fire")
+
+w_flame = Damaging('Weak Flame', "Summon a weak fireball to destroy your foes.", 3, 1, 4, "fire")
+f_blaze = Damaging('Fierce Blaze', "Summon a powerful flame to destroy your foes.", 10, 8, 12, "fire")
+g_infer = Damaging('Grand Inferno', "Unleash a monsterous blaze destroy your foes.", 18, 18, 23, "fire")
 
 in_spark = Damaging('Inferior Spark', "Summon a weak spark to destroy your foes.", 3, 2, 4, "electric")
 pwr_jolt = Damaging('Powerful Jolt', "Summon a powerful jolt of energy to destroy your foes.", 10, 8, 12, "electric")
-sp_storm = Damaging('Superior Storm', "Summon a devastating lightning storm to destroy your foes.", 19, 18, 23, "electric")
+sp_storm = Damaging('Superior Storm', "Unleash a devastating lightning storm to destroy your foes.", 19, 18, 23, "electric")
 
-mi_heal = Healing('Minor Healing', "Restore a small amount of HP by using magic.", 3, 2, 20)
-ad_heal = Healing('Advanced Healing', "Restore a large amount of HP by using magic.", 10, 9, 60)
-dv_heal = Healing('Divine Healing', "Call upon the arcane arts to greatly restore your HP.", 25, 20, 125)
+lef_blad = Damaging('Leaf Blade', "Summon a weak blade of grass to destroy your foes.", 3, 1, 4, "grass")
+gra_gren = Damaging('Grass Grenade', "Summon a small explosion to destroy your foes.", 10, 8, 12, "grass")
+vin_strm = Damaging('Vine Storm', "Unleash a frenzy of powerful vines to destroy your foes.", 19, 18, 23, "grass")
+
+min_heal = Healing('Minor Healing', "Restore a small amount of HP by using magic.", 3, 1, 20)
+adv_heal = Healing('Advanced Healing', "Restore a large amount of HP by using magic.", 10, 9, 60)
+div_heal = Healing('Divine Healing', "Call upon the arcane arts to greatly restore your HP.", 25, 20, 125)
 
 m_quick = Buff('Minor Quickness', "Temporarily raise your speed by a small amount.", 2, 4, 3, "Speed")
 m_evade = Buff('Minor Evade', "Temporarily raise your evasion by a small amount.", 2, 4, 3, "Evasion")
@@ -143,27 +160,28 @@ a_stren = Buff('Adept Strengthen', "Temporarily raise your attack by a large amo
 a_power = Buff('Adept Empower', "Temporarily raise your magic attack by a large amount.", 7, 10, 5, "Magic Attack")
 
 spells = [
-         w_flame,            # Level 1
-         in_spark, mi_heal,  # Level 2
-         m_quick, m_evade,   # Level 4
-         m_defend, m_shield, # Level 5
-         m_stren, m_power,   # Level 6
-         f_blaze,            # Level 7
-         pwr_jolt,           # Level 8
-         ad_heal,            # Level 9
-         a_stren, a_power,   # Level 10
-         a_defend, a_shield, # Level 12
-         g_infer,            # Level 17
-         sp_storm,           # Level 18
-         dv_heal             # Level 20
+    w_flame, lef_blad, min_heal,     # Level 1
+    in_spark,                        # Level 2
+    m_quick, m_evade,                # Level 4
+    m_defend, m_shield,              # Level 5
+    m_stren, m_power,                # Level 6
+    f_blaze, gra_gren,               # Level 7
+    pwr_jolt,                        # Level 8
+    adv_heal,                        # Level 9
+    a_stren, a_power,                # Level 10
+    a_defend, a_shield,              # Level 12
+    g_infer, vin_strm,               # Level 17
+    sp_storm,                        # Level 18
+    div_heal                         # Level 20
     ]
 
-def eval_element(p_elem='None', m_elem='None', m_dmg=0, p_dmg=0):
-    element_list = ['Fire', 'Water', 'Electric', 'Earth',
-                    'Grass', 'Wind', 'Ice']
+
+def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
+    element_list = ['fire', 'water', 'electric', 'earth',
+                    'grass', 'wind', 'ice']
     for x, y in enumerate(element_list):
-        if p_elem == y:
-            player = x
+        if p_elem == x:
+            player = y
     else:
         return [p_dmg, m_dmg]
     for a, b in enumerate(element_list):
@@ -174,37 +192,30 @@ def eval_element(p_elem='None', m_elem='None', m_dmg=0, p_dmg=0):
     try:
         if m_elem == element_list[player + 1]:
             p_dmg /= 1.5
-            p_dmg = int(p_dmg)
         elif m_elem == element_list[player - 1]:
             p_dmg *= 1.5
-            p_dmg = int(p_dmg)
     except IndexError:
-        m_elem = 'Fire'
-        if p_elem == 'Ice':
+        m_elem = 'fire'
+        if p_elem == 'ice':
             p_dmg /= 1.5
-            p_dmg = int(p_dmg)
-        elif p_elem == 'Water':
+        elif p_elem == 'water':
             p_dmg *= 1.5
-            p_dmg = int(p_dmg)
     try:
         if p_elem == element_list[monster + 1]:
             m_dmg /= 1.5
-            m_dmg = int(m_dmg)
         elif p_elem == element_list[monster - 1]:
             m_dmg *= 1.5
-            m_dmg = int(m_dmg)
     except IndexError:
-        p_elem = 'Fire'
-        if m_elem == 'Ice':
+        p_elem = 'fire'
+        if m_elem == 'ice':
             m_dmg /= 1.5
-            m_dmg = int(m_dmg)
-        elif m_elem == 'Water':
+        elif m_elem == 'water':
             m_dmg *= 1.5
-            m_dmg = int(m_dmg)
-    return [p_dmg, m_dmg]
+    return [int(p_dmg), int(m_dmg)]
 
 
-spellbook = {'Healing':[], 'Damaging':[w_flame], 'Buffs':[]}
+spellbook = {'Healing':[], 'Damaging':[w_flame, min_heal, lef_blad], 'Buffs':[]}
+
 
 def pick_cat(var, dodge):
     while True:
@@ -227,6 +238,7 @@ def pick_cat(var, dodge):
             continue
         if pick_spell(cat, var, dodge):
             return True
+
 
 def pick_spell(cat, var, dodge):
     print('-'*25)
@@ -273,6 +285,7 @@ def pick_spell(cat, var, dodge):
             elif y_n in ['no', 'n']:
                 break
 
+
 def new_spells():
     global spellbook
     for spell in spells:
@@ -292,6 +305,7 @@ def new_spells():
                       str(spell), cat if not cat.endswith('s'
                       ) else cat[0:len(cat) - 1]))
 
+
 def serialize_sb(path):
     j_spellbook = {}
     for cat in spellbook:
@@ -300,6 +314,7 @@ def serialize_sb(path):
             j_spellbook[cat].append(spell.__dict__)
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_spellbook, f, indent=4, separators=(', ', ': '))
+
 
 def deserialize_sb(path):
     global spellbook
