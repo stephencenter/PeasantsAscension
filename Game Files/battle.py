@@ -176,6 +176,7 @@ def enemy_turn(var, dodge):
 def after_battle(is_boss):  # Assess the results of the battle
     global player
     update_stats()
+    print('-'*25)
     winsound.PlaySound(None, winsound.SND_ASYNC)
     winsound.PlaySound('Music\\Adventures in Pixels',
                        winsound.SND_ASYNC |

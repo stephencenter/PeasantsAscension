@@ -9,6 +9,7 @@
 # Notes for people reading this code:
 #  1. print('-'*25) <-- This line appears constantly in my code. It's purpose
 #     is to enhance readability and organization for people playing the game.
+
 #  2. I am completely open to any and all criticism! I'm still pretty new to
 #     programming, so I need all the advice I can get. Bug reports are great
 #     too! Contact information is near the top of this module.
@@ -32,6 +33,8 @@ import monsters
 import battle
 import world
 import inv_system
+
+
 import magic
 import bosses
 
@@ -139,14 +142,24 @@ class PlayerCharacter:  # The Player
             while self.exp >= static['r_xp']:
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
-                self.attk += random.randint(1, 2)
-                self.dfns += random.randint(1, 2)
-                self.m_attk += random.randint(1, 2)
-                self.m_dfns += random.randint(1, 2)
-                self.spd += random.randint(1, 2)
-                self.evad += random.randint(0, 1)
-                self.hp += random.randint(0, 1)
-                self.mp += random.randint(1, 2)
+                if self._class == 'warrior':
+                    self.attk += random.randint(2, 3)
+                    self.dfns += random.randint(2, 3)
+                    self.m_attk += random.randint(0, 2)
+                    self.m_dfns += random.randint(1, 2)
+                    self.spd += random.randint(1, 2)
+                    self.evad += random.randint(0, 1)
+                    self.hp += random.randint(1, 2)
+                    self.mp += random.randint(1, 2)
+                elif self._class == 'mage':
+                    self.attk += random.randint(0, 2)
+                    self.dfns += random.randint(1, 2)
+                    self.m_attk += random.randint(2, 3)
+                    self.m_dfns += random.randint(2, 3)
+                    self.spd += random.randint(1, 2)
+                    self.evad += random.randint(0, 1)
+                    self.hp += random.randint(1, 2)
+                    self.mp += random.randint(2, 3)
                 temp_ski += self.ext_ski
                 magic.new_spells()
                 self.exp -= static['r_xp']

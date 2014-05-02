@@ -263,16 +263,13 @@ spellbook = {'Healing':[], 'Damaging':[w_flame, min_heal, lef_blad], 'Buffs':[]}
 
 def pick_cat(var, dodge):
     while True:
-        cat = input('Spellbook: ' +
-                    ', '.join(['"' + x + '"' for x in spellbook]) +
-                     ' | Input category: ')
-        try:
-            cat = cat.title()
-        except AttributeError:
-            continue
-        for i in spellbook:
-            if cat == i:
-                break
+        cat = input('Spellbook: 1: Damaging;  2: Buffs;  3: Healing  |  Input #(1-3): ')
+        if cat == '1':
+            cat = 'Damaging'
+        elif cat == '2':
+            cat = 'Buffs'
+        elif cat == '3':
+            cat = 'Healing'
         else:
             continue
         if not spellbook[cat]:
@@ -287,23 +284,16 @@ def pick_cat(var, dodge):
 def pick_spell(cat, var, dodge):
     print('-'*25)
     while True:
-        spell = input(cat + ': ' + ', '.join(
-            ['"' + str(x) + '" (' + str(x.mana) + ' MP)' for x in spellbook[cat]]
-            ) + ' | Input spell (or type "back"): ')
-        if spell == '':
-            continue
+        spell = input(cat + ': ' + '\n          '.join(
+                     ['[' + str((num + 1)) + '] ' +  spell.name + ' -- ' + str(
+                     spell.mana) + ' MP' for num, spell in enumerate(
+                     spellbook[cat])]) + '\n    Input [#]: ')
         try:
-            spell = spell.title()
-        except AttributeError:
+            if int(spell) not in range(1, len(spellbook[cat]) + 1):
+                continue
+        except TypeError or ValueError:
             continue
-        if spell == 'Back':
-            return False
-        for i in spellbook[cat]:
-            if spell == str(i):
-                spell = i
-                break
-        else:
-            continue
+        spell = spellbook[cat][(int(spell) - 1)]
         print('-'*25)
         print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
         print('-'*25)
