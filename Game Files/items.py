@@ -27,7 +27,7 @@ class Item:
 
 class Consumable(Item):
     # Items that restore you HP, MP, or both. All items of this class stacks
-    #  in the players inventory to increase organization.
+    # in the players inventory to increase organization.
     def __init__(self, name, desc, buy, sell,
                  cat='consum', imp=False, heal=0, mana=0):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
@@ -39,6 +39,8 @@ class Consumable(Item):
 
     def consume_item(self):
         print('-'*25)
+        global inventory
+        item_setup_vars()
         main.player.hp += self.heal
         if main.player.hp > main.static['hp_p']:
             main.player.hp -= (main.player.hp - main.static['hp_p'])
@@ -46,8 +48,10 @@ class Consumable(Item):
         if main.player.mp > main.static['mp_p']:
             main.player.mp -= (main.player.mp - main.static['mp_p'])
         print('You consume the {0}'.format(self.name))
-        inventory[self.cat].remove(self)
-        print('-'*25)
+        for x, y in enumerate(inventory[self.cat]):
+            if y.name == self.name:
+                inventory[self.cat].remove(y)
+                break
 
 
 class Weapon(Item):
@@ -76,12 +80,9 @@ class Weapon(Item):
         global inventory
         item_setup_vars()
         if main.player._class == self._class or self._class == 'none':
-            spam = copy.copy(self) # Creating a copy of the weapon ensures that
-                                   # only one weapon can be equipped at a time.
-            spam.equip = True # If a copy of the weapon wasn't created, setting
-                              # equip to "true" would break the game by setting
-                              # every weapon with the same name as equipped, al-
-                              # -so. This would obviously not be ideal.
+            spam = copy.copy(self)
+            # Creating a copy of the weapon ensures that
+            # only one weapon can be equipped at a time.
             if isinstance(equipped['weapon'], Weapon):
                 old = copy.copy(equipped['weapon'])
                 old.equip = False
@@ -97,6 +98,7 @@ class Weapon(Item):
             for x, y in enumerate(inventory[self.cat]):
                 if self.name == y.name:
                     key = x
+                    y.equip = True
                     break
             try:
                 inventory[self.cat][key] = old
@@ -129,7 +131,6 @@ class Armor(Item):
         if main.player._class == self._class or self._class == 'none':
             fizz = copy.copy(self) # A copy of the armor is created for the same
                                    # reason as for weapons.
-            fizz.equip = True
             if isinstance(equipped[self.part], Armor):
                 old = copy.copy(equipped[self.part])
                 old.equip = False
@@ -145,6 +146,7 @@ class Armor(Item):
             for x, y in enumerate(inventory[self.cat]):
                 if self.name == y.name:
                     key = x
+                    y.equip = True
                     break
             try:
                 inventory[self.cat][key] = old
@@ -192,12 +194,21 @@ wdn_sht = Weapon('Wooden Shortsword',
 cpr_swd = Weapon('Copper Sword',
     'A light yet sturdy sword smelted from copper ore (+5 Attack).',
     45, 15, 5, 'melee', 'warrior')
+en_cpr_swd = Weapon('Enhanced Copper Sword',
+    'An enhanced version of your typical Copper Sword (+7 Attack).',
+    65, 25, 7, 'melee', 'warrior')
 bnz_spr = Weapon('Bronze Spear',
     'A fair-sized spear smelted from a bronze alloy (+10 Attack).',
     175, 60, 10, 'melee', 'warrior')
+en_bnz_spr = Weapon('Enhanced Bronze Spear',
+    'An enhanced version of your typical Bronze Spear (+15 Attack).',
+    250, 75, 15, 'melee', 'warrior')
 irn_axe = Weapon('Iron Battleaxe',
     'A powerful battleaxe smelted from iron ore (+19 Attack).',
     325, 110, 19, 'melee', 'warrior')
+en_irn_axe = Weapon('Enhanced Iron Battleaxe',
+    'An enhanced version of your typical Iron Battleaxe (+25 Attack).',
+    420, 135, 25, 'melee', 'warrior')
 
 mag_twg = Weapon('Magical Twig',
     'A small stick with basic magical properties. (+2 Magic Attack).',
@@ -205,13 +216,21 @@ mag_twg = Weapon('Magical Twig',
 oak_stf = Weapon('Oak Staff',
     'A wooden staff imbued with weak magical abilities (+5 Magic Attack).',
     45, 15, 5, 'magic', 'mage')
+en_oak_stf = Weapon('Enhanced Oak Staff',
+    'An enhanced version of your typical Oak Staff (+7 Magic Attack).',
+    65, 25, 7, 'magic', 'mage')
 arc_spb = Weapon('Arcane Spellbook',
-    'An intermediate spellbook for combat purposes. (+10 Magic Attack).',
+    'An intermediate spellbook for combat purposes (+10 Magic Attack).',
     175, 60, 10, 'magic', 'mage')
+en_arc_spb = Weapon('Enhanced Arcane Spellbook',
+    'An enhanced version of your typical Arcane Spellbook (+15 Magic Attack).',
+    250, 75, 15, 'magic', 'mage')
 rnc_stf = Weapon('Runic Staff',
     'A powerful staff enchanted with ancient magic. (+19 Magic Attack).',
     325, 115, 19, 'magic', 'mage')
-
+en_rnc_stf = Weapon('Enhanced Runic Staff',
+    'An enhanced version of your typical Runic Staff (+25 Magic Attack',
+    420, 135, 25, 'magic', 'mage')
 # Armor
 bnz_hlm = Armor('Bronze Helmet',
     'A simple helmet crafted from bronze (+1 Defense).',

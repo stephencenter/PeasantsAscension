@@ -284,14 +284,14 @@ def pick_cat(var, dodge):
 def pick_spell(cat, var, dodge):
     print('-'*25)
     while True:
-        spell = input(cat + ': ' + '\n          '.join(
+        spell = input(cat + ' Spells: \n      ' + '\n      '.join(
                      ['[' + str((num + 1)) + '] ' +  spell.name + ' -- ' + str(
                      spell.mana) + ' MP' for num, spell in enumerate(
-                     spellbook[cat])]) + '\n    Input [#]: ')
+                     spellbook[cat])]) + '\nInput [#]: ')
         try:
             if int(spell) not in range(1, len(spellbook[cat]) + 1):
                 continue
-        except TypeError or ValueError:
+        except (TypeError, ValueError):
             continue
         spell = spellbook[cat][(int(spell) - 1)]
         print('-'*25)

@@ -1,4 +1,4 @@
-# Pythonius; v0.1.3 Alpha
+# Pythonius; v0.1.4 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -33,8 +33,6 @@ import monsters
 import battle
 import world
 import inv_system
-
-
 import magic
 import bosses
 

@@ -122,7 +122,8 @@ def player_turn(var, dodge, move):
             print()
             print('-Player Turn-')
         if move == '1':  # Attack
-            print('You begin to fiercly attack the {0} using your {1}!'.format(monster.name, str(inv_system.equipped['weapon'])))
+            print('You begin to fiercly attack the {0} using your {1}!'.format(
+                  monster.name, str(inv_system.equipped['weapon'])))
             if dodge in range(monster.evad, 250):
                 dealt = player.player_damage(var)
                 monster.hp -= dealt

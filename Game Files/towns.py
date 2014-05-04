@@ -153,8 +153,8 @@ class Town:
     def town_gen(self):  # Let the player purchase items from the General Store
         stock = []       # A list containing actual instances of "Item"
         str_stock = []   # A readable, non-functioning version of "stock"
-        for type in inv_system.gs_stock:
-            item = type[self.gs_level - 1]
+        for _type in inv_system.gs_stock:
+            item = _type[self.gs_level - 1]
             if isinstance(item, inv_system.Item):
                 stock.append(item)
                 str_stock.append(str(item) + ', ')
