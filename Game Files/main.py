@@ -1,4 +1,4 @@
-# Pythonius; v0.1.4 Alpha
+# Pythonius; v0.1.5 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -9,7 +9,6 @@
 # Notes for people reading this code:
 #  1. print('-'*25) <-- This line appears constantly in my code. It's purpose
 #     is to enhance readability and organization for people playing the game.
-
 #  2. I am completely open to any and all criticism! I'm still pretty new to
 #     programming, so I need all the advice I can get. Bug reports are great
 #     too! Contact information is near the top of this module.

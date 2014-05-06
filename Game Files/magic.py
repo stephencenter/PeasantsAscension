@@ -285,7 +285,7 @@ def pick_spell(cat, var, dodge):
     print('-'*25)
     while True:
         spell = input(cat + ' Spells: \n      ' + '\n      '.join(
-                     ['[' + str((num + 1)) + '] ' +  spell.name + ' -- ' + str(
+                     ['[' + str((num + 1)) + '] ' +  spell.name + ' --> ' + str(
                      spell.mana) + ' MP' for num, spell in enumerate(
                      spellbook[cat])]) + '\nInput [#]: ')
         try:
