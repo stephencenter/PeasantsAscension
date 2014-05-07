@@ -263,13 +263,18 @@ spellbook = {'Healing':[], 'Damaging':[w_flame, min_heal, lef_blad], 'Buffs':[]}
 
 def pick_cat(var, dodge):
     while True:
-        cat = input('Spellbook: 1: Damaging;  2: Buffs;  3: Healing  |  Input #(1-3): ')
+        cat = input('Spellbook: 1: Damaging;  2: Buffs;  3: Healing  |  Input #1-3 (or type "exit"): ')
         if cat == '1':
             cat = 'Damaging'
         elif cat == '2':
             cat = 'Buffs'
         elif cat == '3':
             cat = 'Healing'
+        try:
+            if cat.lower() in ['cancel', 'back', 'exit', 'x']:
+                return False
+        except AttributeError:
+            continue
         else:
             continue
         if not spellbook[cat]:
@@ -284,40 +289,47 @@ def pick_cat(var, dodge):
 def pick_spell(cat, var, dodge):
     print('-'*25)
     while True:
-        spell = input(cat + ' Spells: \n      ' + '\n      '.join(
-                     ['[' + str((num + 1)) + '] ' +  spell.name + ' --> ' + str(
-                     spell.mana) + ' MP' for num, spell in enumerate(
-                     spellbook[cat])]) + '\nInput [#]: ')
-        try:
-            if int(spell) not in range(1, len(spellbook[cat]) + 1):
-                continue
-        except (TypeError, ValueError):
-            continue
-        spell = spellbook[cat][(int(spell) - 1)]
-        print('-'*25)
-        print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
-        print('-'*25)
+        print(cat + ' Spells: \n      ' + '\n      '.join(
+              ['[' + str((num + 1)) + '] ' +  spell.name + ' --> ' + str(
+              spell.mana) + ' MP' for num, spell in enumerate(
+              spellbook[cat])]))
         while True:
-            y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
-            if y_n == '':
-                continue
+            spell = input('Input [#] (or type "back"): ')
             try:
-                y_n = y_n.lower()
-            except AttributeError:
-                continue
-            if y_n in ['yes', 'y']:
-                if isinstance(spell, Damaging):
-                    if spell.use_magic(var, dodge):
-                        return True
+                if int(spell) not in range(1, len(spellbook[cat]) + 1):
+                    continue
+            except (TypeError, ValueError):
+                try:
+                    spell = spell.lower()
+                except AttributeError:
+                    continue
+                if spell == 'cancel' or spell == 'back' or spell == 'exit':
+                    return
+            spell = spellbook[cat][(int(spell) - 1)]
+            print('-'*25)
+            print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
+            print('-'*25)
+            while True:
+                y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
+                if y_n == '':
+                    continue
+                try:
+                    y_n = y_n.lower()
+                except AttributeError:
+                    continue
+                if y_n in ['yes', 'y']:
+                    if isinstance(spell, Damaging):
+                        if spell.use_magic(var, dodge):
+                            return True
+                        else:
+                            return False
                     else:
-                        return False
-                else:
-                    if spell.use_magic():
-                        return True
-                    else:
-                        return False
-            elif y_n in ['no', 'n']:
-                break
+                        if spell.use_magic():
+                            return True
+                        else:
+                            return False
+                elif y_n in ['no', 'n']:
+                    break
 
 
 def new_spells():

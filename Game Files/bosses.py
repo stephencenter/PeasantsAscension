@@ -36,7 +36,7 @@ class Boss(monsters.Monster):
 
 def check_bosses(x, y):
     for boss in boss_list:
-        if boss.pos_x == x and boss.pos_y == y and boss not in defeated_bosses:
+        if boss.pos_x == x and boss.pos_y == y and boss.name not in defeated_bosses:
             print('-'*25)
             print('You feel the presence of an unknown entity...')
             while True:
@@ -50,7 +50,7 @@ def check_bosses(x, y):
                     monsters.setup_vars()
                     battle.setup_vars()
                     boss.max_stats()
-                    battle.battle_system(boss=True)
+                    battle.battle_system(is_boss=True)
                     return True
                 elif y_n in ['no', 'n']:
                     return True

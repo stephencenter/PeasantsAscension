@@ -303,14 +303,16 @@ def check_save():  # Check for save files and load the game if they're found
                 with open(sav7, mode='r', encoding='utf-8') as g:
                     bosses.defeated_bosses = list(json.load(g))
                 print('Load successful.')
-                if not towns.search_towns(position['x'], position['y'], enter=False):
-                    print('-'*25)
                 return
-            except (IOError or OSError):
-                print('There was an error loading your game.')
-                print('-'*25)
-                create_player()
-                return
+            except IOError:
+                print('There was an error loading your game. Error code: IO')
+            except OSError:
+                print('There was an error loading your game. Error code: OS')
+            except ValueError:
+                print('There was an error loading your game. Error code: VE')
+            print('-'*25)
+            create_player()
+            return
         elif y_n in 'no':
                 print('-'*25)
                 create_player()
@@ -340,7 +342,7 @@ def save_game():
                 serialize_player(sav5)
                 magic.serialize_sb(sav6)
                 with open(sav7, mode='w', encoding='utf-8') as g:
-                    json.dump(dict(bosses.defeated_bosses), g,
+                    json.dump(bosses.defeated_bosses, g,
                               indent=4, separators=(', ', ': '))
                 print('Save successful.')
                 return

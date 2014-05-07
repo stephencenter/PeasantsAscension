@@ -101,7 +101,8 @@ def battle_system(is_boss=False):
             continue
         elif player.spd > monster.spd or move == '2':
             # The player goes first if it has higher speed
-            player_turn(var, dodge, move)
+            if not player_turn(var, dodge, move):
+                continue
             if monster.hp > 0:
                 enemy_turn(var, dodge)
         else:
