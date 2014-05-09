@@ -88,9 +88,8 @@ def movement_system():
                                        (abs(position['y'])))/2)
                 if not bosses.check_bosses(position['x'], position['y']):
                     if not towns.search_towns(position['x'], position['y'], enter=False):
-                        spam = random.randint(0, 2)
-                        eggs = random.randint(0, 2)
-                        if spam == eggs:
+                        is_battle = not random.randint(0, 9)
+                        if is_battle:
                             monsters.spawn_monster()
                             battle.setup_vars()
                             battle.battle_system()
@@ -106,22 +105,22 @@ def out_of_bounds():
 def check_region():
     global position
     x, y = position['x'], position['y']
-    if x in range(-50, 51) and y in range(-50, 51):
+    if x in range(-50, 51) and y in range(-50, 51):  # Center of World
         region = 'Forest'
         reg_music = 'Music\\Through the Forest.wav'
-    elif x in range(-115, 1) and y in range(0, 116):
+    elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
         region = 'Tundra'
         reg_music = 'Music\\Arpanauts.wav'
-    elif x in range(-115, 0) and y in range(-115, 1):
+    elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
         region = 'Mountain'
         reg_music = 'Music\\Mountain.wav'
-    elif x in range(0, 116) and y in range(0, 116):
+    elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
         region = 'Desert'
         reg_music = 'Music\\Come and Find Me.wav'
-    elif x in range(0, 116) and y in range(-115, 1):
+    elif x in range(0, 116) and y in range(-115, 1): # Southeast of World
         region = 'Swamp'
         reg_music = 'Music\\Digital Native.wav'
-    elif abs(x) in range(116, 126) or abs(y) in range(116, 126):
+    elif abs(x) in range(116, 126) or abs(y) in range(116, 126): # Edges of World
         region = 'Beach'
         reg_music = "Music\\We're all under the stars.wav"
     if position['reg'] != region:

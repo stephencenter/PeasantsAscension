@@ -76,8 +76,8 @@ class Town:
             print("{0}'s location has been added to the coordinates page of your inventory.".format(self.name))
 
     def inside_town(self):
-        gen_words = ['general store', 'gen', 'gen store', 'shop', 'store']
-        inn_words = ['inn', 'hotel', 'save']
+        gen_words = ['general store', 'gen', 'gen store', 'shop', 'store', 's']
+        inn_words = ['inn', 'hotel', 'motel', 'save', 'sleep', 'bed', 'i']
         buildings = []
         while True:
             spam = False
@@ -116,7 +116,7 @@ class Town:
                                            winsound.SND_ASYNC |
                                            winsound.SND_LOOP |
                                            winsound.SND_NODEFAULT)
-                    elif selected == 'back' or selected == 'exit':
+                    elif selected in ['back', 'exit', 'x', 'cancel']:
                         return
 
     def town_inn(self):
@@ -129,7 +129,7 @@ class Town:
                 choice = choice.lower()
             except AttributeError:
                 continue
-            if choice in ['yes', 'y']:
+            if choice in ['yes', 'y', 'yeah']:
                 print()
                 if main.static['gp'] >= self.inn_cost:
                     print('"Good night, Traveler."')
@@ -145,7 +145,7 @@ class Town:
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
                 return True
-            elif choice in ['no', 'n']:
+            elif choice in ['no', 'n', 'nope']:
                 return False
 
     def town_gen(self):  # Let the player purchase items from the General Store
@@ -174,7 +174,7 @@ class Town:
                     purchase = purchase.title()
                 except AttributeError:
                     continue
-                if purchase == 'Exit':
+                if purchase in ['Exit', 'Cancel', 'X', 'Back']:
                     return
                 elif purchase in str_stock:
                     for i in stock:
@@ -244,8 +244,6 @@ class Town:
                 break
 
 
-
-
 # List of Towns:
 town1 = Town('Nearton', """Nearton: a small village in the central region of t\
 he Forest.
@@ -267,7 +265,7 @@ Overshire is the capitol of the Forest, and as such is very densely populated.
 The city is separated into three sectors: the upper-class inner portion, the
 lower-class outer portion, with the middle-class section situated in between.
 As an outsider, you are forbidden to enter the upper two, but are welcome to
-do as you wish in the lower.""", [], -11, 13, inn_cost=5, gs_level=2)
+do as you wish in the lower.""", [npcs.stewson], -11, 13, inn_cost=5, gs_level=2)
 
 town_list = [town1, town2, town3]
 

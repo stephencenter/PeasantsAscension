@@ -1,4 +1,4 @@
-# Pythonius; v0.1.5 Alpha
+# Pythonius; v0.1.6 Alpha
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -104,9 +104,9 @@ class PlayerCharacter:  # The Player
                    y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in 'yes':
+                if y_n in ['yes', 'y', 'yeah']:
                     return self.name
-                elif y_n in 'no':
+                elif y_n in ['no', 'n', 'nope']:
                     break
 
 
@@ -124,9 +124,9 @@ class PlayerCharacter:  # The Player
                        y_n = y_n.lower()
                     except AttributeError:
                         continue
-                    if y_n in 'yes':
+                    if y_n in ['yes', 'y', 'yeah']:
                         return _class
-                    elif y_n in 'no':
+                    elif y_n in ['no', 'n', 'nope']:
                         break
 
 
@@ -287,7 +287,7 @@ def check_save():  # Check for save files and load the game if they're found
             y_n = y_n.lower()
         except AttributeError:
             continue
-        if y_n in 'yes':
+        if y_n in ['yes', 'y', 'yeah']:
             print('Loading...')
             time.sleep(0.25)
             try:  # Attempt to open the save files and translate
@@ -304,16 +304,16 @@ def check_save():  # Check for save files and load the game if they're found
                     bosses.defeated_bosses = list(json.load(g))
                 print('Load successful.')
                 return
-            except IOError:
+            except IOError as Err:
                 print('There was an error loading your game. Error code: IO')
-            except OSError:
+            except OSError as Err:
                 print('There was an error loading your game. Error code: OS')
-            except ValueError:
+            except ValueError as Err:
                 print('There was an error loading your game. Error code: VE')
             print('-'*25)
             create_player()
             return
-        elif y_n in 'no':
+        elif y_n in ['no', 'n', 'nope']:
                 print('-'*25)
                 create_player()
                 return
@@ -326,7 +326,7 @@ def save_game():
             y_n = y_n.lower()
         except AttributeError:
             continue
-        if y_n in 'yes':
+        if y_n in ['yes', 'y', 'yeah']:
             print('Saving...')
             time.sleep(0.25)
             # Check if the save directory already exists, and create it if it doesn't
@@ -346,9 +346,13 @@ def save_game():
                               indent=4, separators=(', ', ': '))
                 print('Save successful.')
                 return
-            except (IOError or OSError):
-                print('There was an error saving your game.')
-        elif y_n in 'no':
+            except IOError:
+                print('There was an error saving your game. Error code: IO')
+            except OSError:
+                print('There was an error saving your game. Error code: OS')
+            except ValueError:
+                print('There was an error saving your game. Error code: VE')
+        elif y_n in ['no', 'n', 'nope']:
             return
 
 

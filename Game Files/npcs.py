@@ -43,6 +43,13 @@ alfred = NPC('Alfred', [alfred_phrase_1])
 
 # Name: Wesley -- Town: Southford
 wesley_phrase_1 = Conversation(["""Adventurers around this area say that monsters tend
-to be stronger the farther from 0'N, 0'E that you travel."""], active=True)
+to be stronger the farther from 0'N, 0'E that you travel.""",
+                                "However, monsters there also give better loot. Be careful."], active=True)
 wesley = NPC('Wesley', [wesley_phrase_1])
 
+# Name: Stewson -- Town: Overshire
+stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
+                                "Tundra in the northwest, Swamp in the southeast,",
+                                "Mountains in the northeast, and Desert in the southwest.",
+                                "The Forest lies in the center, while the Beach surrounds them."])
+stewson = NPC('Stewson', [stewson_phrase_1])

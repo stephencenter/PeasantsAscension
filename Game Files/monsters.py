@@ -37,7 +37,6 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
         if num == 4:
             self.items = random.choice(items.monster_drop(self.lvl, self.element))
 
-
     def monst_damage(self, var):
         try:
             monst_dealt = int(
@@ -45,7 +44,6 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
         except ValueError:
             monst_dealt = 1
         return monst_dealt
-
 
     def monst_magic(self, var):
         try:
@@ -55,7 +53,6 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
         except ValueError:
             monst_dealt = 1
         return monst_dealt
-
 
     def monst_level(self):
         global static
@@ -71,6 +68,7 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
             self.evad += random.randint(0, 2)
         static['hp_m'] = self.hp
         static['mp_m'] = self.mp
+
     def monst_attk(self, var, dodge):
         print('The {0} angrily begins to charge at you!'.format(self.name))
         if dodge in range(player.evad, 250):

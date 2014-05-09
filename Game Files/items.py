@@ -7,6 +7,7 @@ if __name__ == "__main__":
     sys.exit()
 else:
     main = sys.modules["__main__"]
+
 inventory = ''
 equipped = ''
 
@@ -21,6 +22,7 @@ class Item:
         self.sell = sell  # How much money you will get from selling it
         self.cat = cat  # Ensures that items go into the correct inventory slot
         self.imp = imp
+
     def __str__(self):
         return self.name
 
@@ -166,7 +168,7 @@ def item_setup_vars():
     equipped = inv_system.equipped
 
 
-# Potions
+# Potions -- Health
 s_potion = Consumable('Weak Potion',
     'A small potion that restores 15 HP when consumed.',
     15, 5, heal=15)
@@ -177,6 +179,7 @@ l_potion = Consumable('Strong Potion',
     'A powerful potion that restores 100 HP when consumed.',
     100, 35, heal=100)
 
+# Potions -- Mana
 s_elixr = Consumable('Basic Elixr',
     'A generic elixr that restores 15 MP when consumed.',
     15, 5, mana=15)
@@ -187,7 +190,7 @@ l_elixr = Consumable('Grand Elixr',
     'A powerful elixr that restores 100 MP when consumed.',
     100, 35, mana=100)
 
-# Weapons
+# Weapons -- Melee
 wdn_sht = Weapon('Wooden Shortsword',
     'A small sword carved from an oak branch (+2 Attack).',
     10, 5, 2, 'melee', 'warrior')
@@ -210,6 +213,7 @@ en_irn_axe = Weapon('Enhanced Iron Battleaxe',
     'An enhanced version of your typical Iron Battleaxe (+25 Attack).',
     420, 135, 25, 'melee', 'warrior')
 
+# Weapons -- Magic
 mag_twg = Weapon('Magical Twig',
     'A small stick with basic magical properties. (+2 Magic Attack).',
     10, 5, 2, 'magic', 'mage')
@@ -231,7 +235,8 @@ rnc_stf = Weapon('Runic Staff',
 en_rnc_stf = Weapon('Enhanced Runic Staff',
     'An enhanced version of your typical Runic Staff (+25 Magic Attack',
     420, 135, 25, 'magic', 'mage')
-# Armor
+
+# Armor -- Melee -- Weak
 bnz_hlm = Armor('Bronze Helmet',
     'A simple helmet crafted from bronze (+1 Defense).',
     25, 8, 1, 'melee', 'head', 'warrior')
@@ -242,6 +247,7 @@ bnz_leg = Armor('Bronze Leggings',
     'Simple leg armor crafted from bronze (+1 Defense).',
     30, 10, 1, 'melee', 'legs', 'warrior')
 
+# Armor -- Magic -- Weak
 wiz_hat = Armor('Wizard Hat',
     'A silk hat woven with magic thread (+1 Magic Defense).',
     25, 8, 1, 'magic', 'head', 'mage')
@@ -252,6 +258,7 @@ wiz_gar = Armor('Wizard Garments',
     'Silk garments woven with magic thread (+1 Magic Defense).',
     30, 10, 1, 'magic', 'legs', 'mage')
 
+# Armor -- Melee -- Mid
 irn_hlm = Armor('Iron Helmet',
     'A decent helmet created from a solid metal (+2 Defense).',
     150, 50, 2, 'melee', 'head', 'warrior')
@@ -262,6 +269,7 @@ irn_leg = Armor('Iron Leggings',
     'Decent leggings made from a solid metal (+2 Defense).',
     160, 55, 2, 'melee', 'legs', 'warrior')
 
+# Armor -- Magic -- Mid
 myst_hat = Armor('Mystical Hood',
     'A mysterious hood with strange symbols sewn into it (+2 Magic Defense).',
     150, 50, 2, 'magic', 'head', 'mage')
@@ -272,6 +280,7 @@ myst_gar = Armor('Mystical Garmnets',
     'Mysterious garments with strange symbols sewn into it (+2 Magic Defense).',
     160, 55, 2, 'magic', 'legs', 'mage')
 
+# Armor -- Melee -- Pow
 stl_hlm = Armor('Steel Helmet',
     'A strong helmet smelted from refined iron (+4 Defense).',
     325, 110, 4, 'melee', 'head', 'warrior')
@@ -282,6 +291,7 @@ stl_leg = Armor('Steel Leggings',
     'Strong leg armor smelted from refined iron (+4 Defense).',
     335, 115, 4, 'melee', 'legs', 'warrior')
 
+# Armor -- Magic -- Pow
 elem_hat = Armor('Elemental Hat',
     'A leather hat enchanted with elemental power (+4 Magic Defense).',
     325, 110, 4, 'magic', 'head', 'mage')
@@ -292,7 +302,7 @@ elem_gar = Armor('Elemental Garments',
     'Leather garments enchanted with elemental power (+4 Magic Defense).',
     335, 115, 4, 'magic', 'legs', 'mage')
 
-# Unique Drops
+# Unique Drops -- Weapons
 ice_blade = Weapon('Blade of Frost',
     'A stunning blade enchanted with the power of ice (+16 Attack, ICE).',
     0, 225, 16, 'melee', 'warrior', element='ice')

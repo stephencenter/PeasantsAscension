@@ -37,14 +37,14 @@ def setup_vars():
 
 def update_stats(): # Forces stats to return to normal when battle is finished
     global temp_stats
-    temp_stats = {'attk':_c(player.attk), 'm_attk':_c(player.m_attk),
-                  'dfns':_c(player.dfns), 'm_dfns':_c(player.m_dfns),
-                  'spd':_c(player.spd), 'evad':_c(player.evad)}
+    temp_stats = {'attk': _c(player.attk), 'm_attk': _c(player.m_attk),
+                  'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
+                  'spd': _c(player.spd), 'evad': _c(player.evad)}
 
 
 def player_choice():
     while True:
-        move = input('1: Attack; 2: Use Magic; 3: Wait; 4: Run; 5. Use Items | Input #(1-5): ')
+        move = input('1: Attack; 2: Use Magic; 3: Wait; 4. Use Items; 5: Run | Input #(1-5): ')
         if move.isdigit() and int(move) in range(1, 6):
         # Only return if "move" refers to a valid move
             return move
@@ -75,12 +75,16 @@ def battle_system(is_boss=False):
         bat_stats()  # First, display the Player and Monster's stats
         move = player_choice()  # Second, get the player's decision on moves
         var = random.randint(-1, 1)
-        # Var is how much less/more the attacks
-        # will deal than normal this makes the
-        # battle less predictable.
+        # var is how much less/more the attacks
+        # will deal than normal. This makes the
+        # battle less predictable and more interesting.
         dodge = random.randint(0, 250)
         # If dodge is in a certain range, the attack will miss
         if move == '4':
+            if battle_inventory() and monster.hp > 0:
+                enemy_turn(var, dodge)
+            continue
+        elif move == '5':
             run = run_away()  # Attempt to run...
             if run:
                 # If it succeeds, end the battle without giving the player a reward
@@ -95,16 +99,11 @@ def battle_system(is_boss=False):
             # If it fails, the enemy will
             # attack you and skip your turn
             continue
-        elif move == '5':
-            if battle_inventory():
+        elif player.spd > monster.spd or move == '2':
+            # The player goes first if they have a higher speed
+            if player_turn(var, dodge, move) and monster.hp > 0:
                 enemy_turn(var, dodge)
             continue
-        elif player.spd > monster.spd or move == '2':
-            # The player goes first if it has higher speed
-            if not player_turn(var, dodge, move):
-                continue
-            if monster.hp > 0:
-                enemy_turn(var, dodge)
         else:
             # Otherwise, the monster will go first
             enemy_turn(var, dodge)
@@ -119,16 +118,16 @@ def player_turn(var, dodge, move):
     global player
     global monster
     while True:
-        if move != '2':  # "2" refers to magic, which will print this later
-            print()
-            print('-Player Turn-')
+        print('\n-Player Turn-') if move != '2' else ''
+        # "2" refers to magic, which will print this later
         if move == '1':  # Attack
             print('You begin to fiercly attack the {0} using your {1}!'.format(
                   monster.name, str(inv_system.equipped['weapon'])))
             if dodge in range(monster.evad, 250):
                 dealt = player.player_damage(var)
                 monster.hp -= dealt
-                print('Your attack connects with the {0}, dealing {1} damage!'.format(monster.name, dealt))
+                print('Your attack connects with the {0}, dealing {1} damage!'.format(
+                monster.name, dealt))
             else:
                 print('The {0} dodges your attack with ease!'.format(monster.name))
             return
@@ -148,8 +147,7 @@ def enemy_turn(var, dodge):
     # This is the Enemy's AI.
     global player
     global monster
-    print()
-    print('-Enemy Turn-')
+    print('\n-Enemy Turn-')
     if monster.hp <= int(static['hp_m']/4) and monster.mp >= 5:  # Magic heal
         heal = int(((monster.m_attk + monster.m_dfns)/2) + monster.lvl/2)
         if heal < 5:
@@ -199,7 +197,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in 'yes':
+                if y_n in ['yes', 'y', 'yeah']:
                     # If you die, you return to the last town visited or 0, 0
                     # if you haven't been to a town yet.
                     world.back_to_coords()
@@ -211,7 +209,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                                        winsound.SND_LOOP |
                                        winsound.SND_NODEFAULT)
                     return 'dead'
-                elif y_n in 'no':
+                elif y_n in ['no', 'n', 'nope']:
                     sys.exit()
         elif monster.hp <= 0 and player.hp > 0:
             if not is_boss:
@@ -262,25 +260,31 @@ def run_away():
 
 
 def battle_inventory():
-    print('-'*25)
-    print('Battle Inventory: ' + ', '.join(sorted(
-          [str(x) + ' x' + str(inv_system.inventory['consum'].count(x))
-          for x in set(inv_system.inventory['consum'])], key=str.lower)))
     while True:
-        item = input('Input Item Name (or type "back"): ')
-        try:
-            item = item.title()
-        except AttributeError:
-            continue
-        if item == 'Back':
-            return False
-        for i in inv_system.inventory['consum']:
-            if i.name == item:
-                break
-        else:
-            continue
-        i.consume_item()
-        return
+        print('-'*25)
+        print('Battle Inventory: \n      ' + '\n      '.join(
+              ['[' + str(x + 1) + '] ' + str(y)
+              for x, y in enumerate(inv_system.inventory['consum'])]))
+        while True:
+            item = input('Input [#] (or type "cancel"): ')
+            try:
+                item = int(item) - 1
+            except (TypeError, ValueError):
+                try:
+                    item = item.lower()
+                except AttributeError:
+                    continue
+                if item in ['cancel', 'c', 'back', 'exit', 'x']:
+                    return False
+            if item < 0:
+                continue
+            try:
+                item = inv_system.inventory['consum'][item]
+            except IndexError:
+                continue
+            print('\n-Player Turn-')
+            item.consume_item()
+            return True
 
 
 def bat_stats():
