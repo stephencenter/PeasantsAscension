@@ -76,7 +76,7 @@ class Town:
             print("{0}'s location has been added to the coordinates page of your inventory.".format(self.name))
 
     def inside_town(self):
-        gen_words = ['general store', 'gen', 'gen store', 'shop', 'store', 's']
+        gen_words = ['general store', 'gen', 'gen store', 'shop', 'store', 's', 'g']
         inn_words = ['inn', 'hotel', 'motel', 'save', 'sleep', 'bed', 'i']
         buildings = []
         while True:
@@ -149,38 +149,35 @@ class Town:
                 return False
 
     def town_gen(self):  # Let the player purchase items from the General Store
-        stock = []       # A list containing actual instances of "Item"
-        str_stock = []   # A readable, non-functioning version of "stock"
-        for _type in inv_system.gs_stock:
-            item = _type[self.gs_level - 1]
-            if isinstance(item, inv_system.Item):
-                stock.append(item)
-                str_stock.append(str(item) + ', ')
-            else:
-                str_stock.append(item)
-        str_stock = ''.join(str_stock)
+        stock = []       # A list containing objects the player can purchase
+        for item in inv_system.gs_stock:
+            stock.append(item[self.gs_level - 1])
         print('-'*25)
         print('Owner: "Welcome, Traveler!"')
         print('-'*25)
         spam = True
         while True:
-            print('Stock: ' + str_stock)
-            print()
+            print('"Well, here\'s what I have in my stock: " | {0} GP'.format(main.static['gp']))
+            for num, item in enumerate(stock):
+                print('      [' + str(num + 1) + '] ' + str(item))
             while True:
-                purchase = input('"What item would ya like to buy?" | {0} GP | Input Item Name (or type "exit"): '.format(main.static['gp']))
-                if purchase == '':
-                    continue
+                purchase = input('Input [#] (or type "exit"): ')
                 try:
-                    purchase = purchase.title()
-                except AttributeError:
-                    continue
-                if purchase in ['Exit', 'Cancel', 'X', 'Back']:
-                    return
-                elif purchase in str_stock:
-                    for i in stock:
-                        if str(i) == purchase:
-                            break
-                else:
+                    purchase = int(purchase) - 1
+                    if purchase < 0:
+                        continue
+                except (TypeError, ValueError):
+                    try:
+                        purchase = purchase.lower()
+                    except AttributeError:
+                        continue
+                    if purchase in ['exit', 'cancel', 'x', 'back']:
+                        return
+                    else:
+                        continue
+                try:
+                    i = stock[purchase]
+                except IndexError:
                     continue
                 print('-'*25)
                 print(i.desc)

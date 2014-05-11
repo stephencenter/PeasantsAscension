@@ -88,7 +88,7 @@ def movement_system():
                                        (abs(position['y'])))/2)
                 if not bosses.check_bosses(position['x'], position['y']):
                     if not towns.search_towns(position['x'], position['y'], enter=False):
-                        is_battle = not random.randint(0, 9)
+                        is_battle = not random.randint(0, 7)
                         if is_battle:
                             monsters.spawn_monster()
                             battle.setup_vars()
