@@ -13,19 +13,17 @@ inventory = {'quest': [], 'consum': [_c(s_potion), _c(s_elixr)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': []}
 equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
 
-gs_stock = [[s_potion, m_potion, l_potion, l_potion, l_potion, l_potion],
-            [s_elixr, m_elixr, l_elixr, l_elixr, l_elixr, l_elixr],
-            ['\n       ' for x in range(6)],
+gs_stock = [[s_potion, s_potion, m_potion, l_potion, l_potion, x_potion],
+            [s_elixr, s_elixr, m_elixr, l_elixr, l_elixr, x_elixr],
             [cpr_swd, en_cpr_swd, bnz_spr, en_bnz_spr, irn_axe, en_irn_axe],
             [oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf, en_irn_axe],
-            ['\n       ' for x in range(6)],
-            [bnz_hlm, irn_hlm, stl_hlm],
-            [bnz_cst, irn_cst, stl_cst],
-            [bnz_leg, irn_leg, stl_leg],
-            ['\n       ' for x in range(6)],
-            [wiz_hat, myst_hat, elem_hat],
-            [wiz_rob, myst_rob, elem_rob],
-            [wiz_gar, myst_gar, elem_gar]]
+            [bnz_hlm, en_bnz_hlm, irn_hlm, stl_hlm],
+            [bnz_cst, en_bnz_cst, irn_cst, stl_cst],
+            [bnz_leg, en_bnz_leg, irn_leg, stl_leg],
+            [wiz_hat, en_wiz_hat, myst_hat, elem_hat],
+            [wiz_rob, en_wiz_rob, myst_rob, elem_rob],
+            [wiz_gar, en_wiz_gar, myst_gar, elem_gar]]
+
 gs_stock = list(gs_stock)
 item_setup_vars()
 
@@ -40,7 +38,7 @@ def pick_category():
                 cat = cat.lower()
             except AttributeError:
                 pass
-            if cat == 'exit':
+            if cat in ['exit', 'cancel', 'x', 'back']:
                 return
             elif cat == '1':
                 cat = 'armor'
@@ -104,15 +102,17 @@ def pick_item(cat, vis_cat):
             item = input('Input [#] (or type "back"): ')
             try:
                 item = int(item) - 1
+                if item < 0:
+                    continue
             except (TypeError, ValueError):
                 try:
                     item = item.lower()
                 except AttributeError:
                     continue
-                if item == 'back':
+                if item in ['exit', 'cancel', 'x', 'back']:
                     return
-            if item < 0:
-                continue
+                else:
+                    continue
             try:
                 if cat in ['weapons', 'armor']:
                     item = [x for x in inventory[cat] if not x.equip][item]

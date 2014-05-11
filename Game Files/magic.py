@@ -270,13 +270,14 @@ def pick_cat(var, dodge):
             cat = 'Buffs'
         elif cat == '3':
             cat = 'Healing'
-        try:
-            if cat.lower() in ['cancel', 'back', 'exit', 'x']:
-                return False
-        except AttributeError:
-            continue
         else:
-            continue
+            try:
+                if cat.lower() in ['cancel', 'back', 'exit', 'x']:
+                    return False
+            except AttributeError:
+                    continue
+            else:
+                continue
         if not spellbook[cat]:
             print('-'*25)
             print('You do not yet have any spells in the {0} category.'.format(cat))
@@ -296,16 +297,20 @@ def pick_spell(cat, var, dodge):
         while True:
             spell = input('Input [#] (or type "back"): ')
             try:
-                if int(spell) not in range(1, len(spellbook[cat]) + 1):
-                    continue
+                spell = int(spell) - 1
             except (TypeError, ValueError):
                 try:
                     spell = spell.lower()
                 except AttributeError:
                     continue
-                if spell == 'cancel' or spell == 'back' or spell == 'exit':
+                if spell in ['exit', 'cancel', 'x', 'back']:
                     return
-            spell = spellbook[cat][(int(spell) - 1)]
+                else:
+                    continue
+            try:
+                spell = spellbook[cat][spell]
+            except IndexError:
+                continue
             print('-'*25)
             print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
             print('-'*25)

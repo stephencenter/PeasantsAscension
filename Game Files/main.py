@@ -1,4 +1,5 @@
-# Pythonius; v0.1.6 Alpha
+# Pythonius; v0.1.7 Alpha
+game_version = 'v0.1.7'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -17,7 +18,6 @@
 #     you did to cause the bug, that'd be great. Contact information is near
 #     the top of the module.
 #-----------------------------------------------------------------------------#
-
 import sys
 import os
 import random
@@ -252,7 +252,7 @@ def create_player():
     player._class = player.choose_class()
     if player._class == "warrior":
         static['hp_p'] += 5
-        static['mp_p'] -= 2
+        static['mp_p'] -= 1
         player.dfns += 2
         player.attk += 2
         player.spd -= 1
@@ -260,7 +260,7 @@ def create_player():
         inv_system.equipped['weapon'] = copy.copy(inv_system.wdn_sht)
     elif player._class == "mage":
         static['hp_p'] += 1
-        static['mp_p'] += 5
+        static['mp_p'] += 4
         player.m_attk += 2
         player.m_dfns += 2
         inv_system.equipped['weapon'] = copy.copy(inv_system.mag_twg)
@@ -304,11 +304,11 @@ def check_save():  # Check for save files and load the game if they're found
                     bosses.defeated_bosses = list(json.load(g))
                 print('Load successful.')
                 return
-            except IOError as Err:
+            except IOError:
                 print('There was an error loading your game. Error code: IO')
-            except OSError as Err:
+            except OSError:
                 print('There was an error loading your game. Error code: OS')
-            except ValueError as Err:
+            except ValueError:
                 print('There was an error loading your game. Error code: VE')
             print('-'*25)
             create_player()
@@ -382,7 +382,8 @@ def title_screen():
  |_|    \\__, |\\__|_| |_|\\___/|_| |_|_|\\__,_|___/
         |___/
 
-------------------------------------------------""")
+Pythonius {0}
+------------------------------------------------""".format(game_version))
     while True:
         choice = input('[P]Lay Game  |  [C]redits  |  [E]xit  |  Input letter: ')
         try:
@@ -395,6 +396,7 @@ def title_screen():
             print('-'*25)
             with open('Music Credits.txt', 'r') as f:
                 print(f.read())
+
             print('-'*25)
         elif choice.startswith('e'):
             sys.exit()
