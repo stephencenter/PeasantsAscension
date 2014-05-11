@@ -269,6 +269,8 @@ def battle_inventory():
             item = input('Input [#] (or type "cancel"): ')
             try:
                 item = int(item) - 1
+                if item < 0:
+                    continue
             except (TypeError, ValueError):
                 try:
                     item = item.lower()
@@ -276,8 +278,8 @@ def battle_inventory():
                     continue
                 if item in ['cancel', 'c', 'back', 'exit', 'x']:
                     return False
-            if item < 0:
-                continue
+                else:
+                    continue
             try:
                 item = inv_system.inventory['consum'][item]
             except IndexError:
