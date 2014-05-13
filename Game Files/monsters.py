@@ -38,19 +38,14 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
             self.items = random.choice(items.monster_drop(self.lvl, self.element))
 
     def monst_damage(self, var):
-        try:
-            monst_dealt = int(
-            math.sqrt(self.attk + self.lvl - player.dfns) + 3) + var
-        except ValueError:
+        monst_dealt = int((self.attk/2) - (player.dfns/3) + (self.lvl/3) + var + 1)
+        if monst_dealt < 1:
             monst_dealt = 1
         return monst_dealt
 
     def monst_magic(self, var):
-        try:
-            monst_dealt = int(math.sqrt(self.m_attk +
-                                        self.lvl -
-                                        player.m_dfns) + 4) + var
-        except ValueError:
+        monst_dealt = int((self.m_attk/2) - (player.m_dfns/3) + (self.lvl/3) + var + 1)
+        if monst_dealt < 1:
             monst_dealt = 1
         return monst_dealt
 

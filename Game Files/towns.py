@@ -212,15 +212,17 @@ class Town:
                 npc = input('Input [#] (or type "exit"): ')
                 try:
                     npc = int(npc) - 1
+                    if npc < 0:
+                        continue
                 except (ValueError, TypeError):
                     try:
                         npc = npc.lower()
                     except AttributeError:
                         continue
-                    if npc == 'back' or npc == 'exit' or npc == 'x':
+                    if npc in ['back', 'exit', 'x', 'cancel']:
                         return
-                if npc < 0:
-                    continue
+                    else:
+                        continue
                 try:
                     npc = self.people[npc]
                 except IndexError:

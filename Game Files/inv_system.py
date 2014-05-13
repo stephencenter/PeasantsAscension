@@ -120,7 +120,11 @@ def pick_item(cat, vis_cat):
                     item = inventory[cat][item]
             except IndexError:
                 continue
-            pick_action(cat, item)
+            if not isinstance(item, npcs.Quest):
+                pick_action(cat, item)
+            else:
+                print('This has not yet been implemented. Sorry! -RbwNjaFurret')
+                # Viewing quests in the inventory is planned for the next update.
             break
 
 

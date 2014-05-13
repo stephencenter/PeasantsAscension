@@ -75,9 +75,8 @@ def battle_system(is_boss=False):
         bat_stats()  # First, display the Player and Monster's stats
         move = player_choice()  # Second, get the player's decision on moves
         var = random.randint(-1, 1)
-        # var is how much less/more the attacks
-        # will deal than normal. This makes the
-        # battle less predictable and more interesting.
+        # var is how much less/more the attacks will deal than normal.
+        # This makes the battle less predictable and more interesting.
         dodge = random.randint(0, 250)
         # If dodge is in a certain range, the attack will miss
         if move == '4':

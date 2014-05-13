@@ -1,5 +1,5 @@
-# Pythonius; v0.1.7 Alpha
-game_version = 'v0.1.7'
+# Pythonius; v0.1.9 Alpha
+game_version = 'v0.1.9'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -92,6 +92,8 @@ class PlayerCharacter:  # The Player
                      p_elem=inv_system.equipped['weapon'].element,
                      m_elem=battle.monster.element,
                      p_dmg=phys_dealt)[0]
+        if phys_dealt < 1:
+            phys_dealt = 1
         return phys_dealt
 
 

@@ -13,7 +13,8 @@ position = ''
 
 class Boss(monsters.Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, spd, evad,
-                 lvl, pos_x, pos_y, item, gold, experience, element='none'):
+                 lvl, pos_x, pos_y, item, gold, experience,
+                 active=True, element='none'):
         monsters.Monster.__init__(self, name, hp, mp, attk, dfns, m_attk,
                                   m_dfns, spd, evad, lvl, element)
         self.pos_x = pos_x
@@ -23,6 +24,7 @@ class Boss(monsters.Monster):
         self.per_mp = copy.copy(self.mp)
         self.gold = gold
         self.experience = experience
+        self.active=True
 
 
     def max_stats(self):
@@ -65,7 +67,7 @@ def setup_vars():
     static = main.static
 
 
-master_slime = Boss('Master Slime', 35, 4, 8, 3, 5, 0, 3, 3, 5, 1, 0, [], 50, 50)
+master_slime = Boss('Master Slime', 35, 4, 8, 3, 5, 0, 3, 3, 5, 1, 0, [], 50, 50, active=False)
 whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 40, 30) # This is for you, Jacob!
 
 boss_list = [whisp_goblin, master_slime]
