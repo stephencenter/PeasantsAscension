@@ -193,7 +193,7 @@ a_defend = Buff('Adept Defend',
     "Temporarily raise your defense by a large amount.",
     7, 12, 5, "Defense")
 a_shield = Buff('Adept Shield',
-    "Temporarily raise your magic defense by a small amount.",
+    "Temporarily raise your magic defense by a large amount.",
     7, 12, 5, "Magic Defense")
 
 a_stren = Buff('Adept Strengthen',

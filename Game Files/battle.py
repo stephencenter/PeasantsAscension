@@ -52,37 +52,52 @@ def player_choice():
 
 def battle_system(is_boss=False):
     winsound.PlaySound(None, winsound.SND_ASYNC)
-    if is_boss:
+    if is_boss:  # Bosses have different battle music than normal enemies
         winsound.PlaySound('Music\\Terrible Tarantuloid.wav',
                            winsound.SND_ASYNC |
                            winsound.SND_LOOP |
                            winsound.SND_NODEFAULT)
         print('-'*25)
         print('The legendary {0} has awoken!'.format(monster.name))
+
     else:
         winsound.PlaySound('Music\\Jumpshot.wav',
                            winsound.SND_ASYNC |
                            winsound.SND_LOOP |
                            winsound.SND_NODEFAULT)
-        if monster.name[0] in vowels: # Remember to use proper grammar!
+
+        if monster.name[0] in vowels:
+        # Remember to use proper grammar!
             a_an = 'An '
         else:
             a_an = 'A '
+
         print('-'*25)
         print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monster.name))
+
     update_stats()
+    # Record the player's non-hp/mp stats (e.g. defense)
+    # So they can go back to normal after the battle
+
     while player.hp > 0 and monster.hp > 0: # Continue the battle until someone dies
-        bat_stats()  # First, display the Player and Monster's stats
-        move = player_choice()  # Second, get the player's decision on moves
+
+        bat_stats()
+        # First, display the Player and Monster's stats
+        move = player_choice()
+        # Second, get the player's decision on moves
+
         var = random.randint(-1, 1)
         # var is how much less/more the attacks will deal than normal.
         # This makes the battle less predictable and more interesting.
+
         dodge = random.randint(0, 250)
         # If dodge is in a certain range, the attack will miss
-        if move == '4':
+
+        if move == '4': # Use the Battle Inventory
             if battle_inventory() and monster.hp > 0:
                 enemy_turn(var, dodge)
             continue
+
         elif move == '5':
             run = run_away()  # Attempt to run...
             if run:
@@ -98,16 +113,19 @@ def battle_system(is_boss=False):
             # If it fails, the enemy will
             # attack you and skip your turn
             continue
+
         elif player.spd > monster.spd or move == '2':
             # The player goes first if they have a higher speed
             if player_turn(var, dodge, move) and monster.hp > 0:
                 enemy_turn(var, dodge)
             continue
+
         else:
             # Otherwise, the monster will go first
             enemy_turn(var, dodge)
             if player.hp > 0:
                 player_turn(var, dodge, move)
+
     else:
         if after_battle(is_boss) != 'dead':
             print('-'*25)
@@ -117,8 +135,10 @@ def player_turn(var, dodge, move):
     global player
     global monster
     while True:
+
         print('\n-Player Turn-') if move != '2' else ''
         # "2" refers to magic, which will print this later
+
         if move == '1':  # Attack
             print('You begin to fiercly attack the {0} using your {1}!'.format(
                   monster.name, str(inv_system.equipped['weapon'])))
@@ -130,14 +150,17 @@ def player_turn(var, dodge, move):
             else:
                 print('The {0} dodges your attack with ease!'.format(monster.name))
             return
+
         elif move == '2':  # Magic
             magic.pick_cat(var, dodge)
             return
+
         elif move == '3':  # Wait
             print('You wait for your turn to end while you gather your strength.')
             player.hp += 2
             player.mp += 2
             return
+
         else:
             return False
 
@@ -147,20 +170,27 @@ def enemy_turn(var, dodge):
     global player
     global monster
     print('\n-Enemy Turn-')
-    if monster.hp <= int(static['hp_m']/4) and monster.mp >= 5:  # Magic heal
+    if monster.hp <= int(static['hp_m']/4) and monster.mp >= 5:
+        # Magic heal
         heal = int(((monster.m_attk + monster.m_dfns)/2) + monster.lvl/2)
         if heal < 5:
             heal = 5
         monster.hp += heal
         monster.mp -= 5
         print('The {0} casts a healing spell!'.format(monster.name))
-    elif monster.attk >= monster.m_attk:  # Physical Attack
+
+    elif monster.attk >= monster.m_attk:
+        # Physical Attack
         monster.monst_attk(var, dodge)
-    elif int((monster.dfns + monster.m_dfns)/2) <= int(player.lvl/3):  # Defend
+
+    elif int((monster.dfns + monster.m_dfns)/2) <= int(player.lvl/3):
+        # Defend
         monster.dfns += random.randint(1, 2)
         monster.m_dfns += random.randint(1, 2)
         print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(monster.name))
-    elif monster.m_attk >= monster.attk and monster.mp >= 2:  # Magic Attack
+
+    elif monster.m_attk >= monster.attk and monster.mp >= 2:
+        # Magic Attack
         print('The {0} is attempting to cast a strange spell!'.format(monster.name))
         if dodge in range(temp_stats['evad'], 250):
             dealt = monster.monst_magic(var)
@@ -169,12 +199,13 @@ def enemy_turn(var, dodge):
         else:
             print("The spell doesn't appear to have had any effect...")
         monster.mp -= 2
+
     else:
         monster.monst_attk(var, dodge)
 
 def after_battle(is_boss):  # Assess the results of the battle
     global player
-    update_stats()
+    update_stats()  # Reset non-hp/mp stats to the way they were before battle
     print('-'*25)
     winsound.PlaySound(None, winsound.SND_ASYNC)
     winsound.PlaySound('Music\\Adventures in Pixels',
@@ -183,6 +214,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                        winsound.SND_NODEFAULT)
     while True:
         if monster.hp > 0 and player.hp <= 0:
+            # If the monster wins...
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound('Music\\Power-Up.wav',
                                winsound.SND_ASYNC |
@@ -210,33 +242,55 @@ def after_battle(is_boss):  # Assess the results of the battle
                     return 'dead'
                 elif y_n in ['no', 'n', 'nope']:
                     sys.exit()
+
         elif monster.hp <= 0 and player.hp > 0:
+            # If the player wins...
             if not is_boss:
+                # Only do the following if the player defeated a
+                # normal enemy, and not a boss
                 print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
+                # Enemies drop gold/exp based on the player's/monster's levels
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
-                try:
-                    experience = int((monster.lvl - player.lvl/3 + 1.5 + player.ext_exp)/2)
-                except ValueError:
-                    experience = random.randint(1, 2)
+                if gold <= 0:
+                    gold = random.randint(1, 2)
+                experience = int((monster.lvl - player.lvl/3 + 1.5 + player.ext_exp)/2)
                 if experience <= 0:
                     experience = random.randint(1, 2)
+
             else:
+                # Only do the following if the player defeated a boss
                 bosses.defeated_bosses.append(monster.name)
                 print('The almighty {0} has been slain!'.format(monster.name))
+
                 gold = monster.gold
+                # Bosses drop a set amount of gold...
                 experience = monster.experience
-            if gold > 0:
-                static['gp'] += gold
-                print("You've gained {0} GP!".format(gold))
+                # ...and exp
+
+                try:
+                    # Check to see if the boss does
+                    # anything special at death
+                    monster.upon_defeating()
+                except AttributeError:
+                    pass
+
+            static['gp'] += gold
             player.exp += experience
+            print("You've gained {0} GP!".format(gold))
             print("You've gained {0} experience point{1}!".format(
-                  experience, 's' if experience > 1 else ''))
+            experience, 's' if experience > 1 else ''))
+            # Correct grammar is important
+
             if monster.items:
+                # If the monster has items, give them to the player
                 cat = monster.items.cat
                 inv_system.inventory[cat].append(_c(monster.items))
                 print('The {0} drops a {1}! You put it in your inventory for safe keeping.'.format(
                       monster.name, str(monster.items)))
+
             player.level_up()
+            # Check to see if the player gained any levels
+
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound(position['reg_music'],
                                winsound.SND_ASYNC |
@@ -244,13 +298,14 @@ def after_battle(is_boss):  # Assess the results of the battle
                                winsound.SND_NODEFAULT)
             return
         elif player.hp <= 0 and monster.hp <= 0:
+            # If the battle is a tie, the player wins
             player.hp = 1
 
 
 def run_away():
     print('You begin to flee.')
-    if random.randint(1, 100) in range(50, (101 - int(player.evad/2))
-    ) and player.evad < 100:  # There's a 50% change that running will fail
+    if random.randint(1, 100) in range(50, (101 - int(player.evad/2))) and player.evad < 100:
+        # There's a 50% change that running will fail
         print('Your attempt to escape failed!')
         return False
     else:
@@ -259,6 +314,7 @@ def run_away():
 
 
 def battle_inventory():
+    # The player can use certain items during battle
     while True:
         print('-'*25)
         print('Battle Inventory: \n      ' + '\n      '.join(
@@ -289,8 +345,8 @@ def battle_inventory():
 
 
 def bat_stats():
-    # Makes sure that the player and monster never have negative stats
-    # Display their stats after they're fixed
+    # Makes sure that the player and monster never have negative stats,
+    # and then display their stats after they're fixed
     global player
     global monster
     if player.hp < 0:
@@ -310,12 +366,16 @@ def bat_stats():
     if monster.mp > static['mp_m']:
         monster.mp -= (monster.mp - static['mp_m'])
     print('-'*25)
+
+    # Player Stats
     print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
-                                                player.name, player.hp,
-                                                static['hp_p'], player.mp,
-                                                static['mp_p'], player.lvl))
+          player.name, player.hp,
+          static['hp_p'], player.mp,
+          static['mp_p'], player.lvl))
+
+    # Monster Stats
     print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
-                                                monster.name, monster.hp,
-                                                static['hp_m'], monster.mp,
-                                                static['mp_m'], monster.lvl))
+          monster.name, monster.hp,
+          static['hp_m'], monster.mp,
+          static['mp_m'], monster.lvl))
     print('-'*25)

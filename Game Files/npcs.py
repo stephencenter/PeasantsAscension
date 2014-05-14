@@ -1,4 +1,5 @@
 import sys
+import json
 import bosses
 import inv_system
 
@@ -20,6 +21,9 @@ class NPC:
                 try:
                     if not w.started:
                         dialogue.append(w.sentences)
+                    elif w.started and w.finished and w.active:
+                        dialogue = [w.end_dialogue]
+                        break
                 except AttributeError:
                     dialogue.append(w.sentences)
         else:
@@ -33,10 +37,14 @@ class NPC:
             dialogue.remove(y)
             print('-'*25) if dialogue else ''
             for obj in self.conversations:
-                if obj.sentences == y:
+                if isinstance(obj, Quest) and obj.end_dialogue == y:
+                    y = obj
+                elif obj.sentences == y:
                     y = obj
             if isinstance(y, Quest) and not y.started:
-                obj.give_quest()
+                y.give_quest()
+            elif isinstance(y, Quest) and y.finished:
+                y.completion()
 
 
 class Conversation:
@@ -45,17 +53,21 @@ class Conversation:
         self.repeat = repeat
         self.active = active
 
+    def __str__(self):
+        return ''.join([x[0:6] for x in self.sentences])
 
 class Quest(Conversation):
-    def __init__(self, sentences, name, desc, q_giver, reward, req_lvl=1,
-                 started=False, finished=False, repeat=False, active=False):
+    def __init__(self, sentences, name, desc, q_giver, reward, end_dialogue,
+                 req_lvl=1, started=False, finished=False, repeat=False, active=False):
         Conversation.__init__(self, sentences, repeat, active)
         self.name = name
         self.desc = desc
         self.q_giver = q_giver
+        self.reward = reward
         self.req_lvl = req_lvl
         self.started = started
         self.finished = finished
+        self.end_dialogue = end_dialogue
 
     def give_quest(self):
         print('-'*25)
@@ -79,6 +91,13 @@ class Quest(Conversation):
                 print('{0}: "...Oh. Come back later if you change your mind."'.format(self.q_giver))
                 return
 
+    def completion(self):
+        main.player.exp += self.reward[0]
+        main.static['gp'] += self.reward[1]
+        print("You've recieved {0} XP and {1} GP for completing this quest.".format(self.reward[0], self.reward[1]))
+        self.upon_completing()
+        self.active = False
+
 
 # Name: Philliard -- Town: Nearton
 philliard_phrase_1 = Conversation(["Hello, adventurer!",
@@ -90,14 +109,17 @@ alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives 
                                 "of this very town. I'd be careful around there if I were you."], active=True)
 alfred_phrase_2 = Conversation(["Come back here when you defeat the evil",
                                "Master Slime. Good luck!"])
+alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"], repeat=True)
+
 alfred_quest_1 = Quest(["...Actually, now that I think about it, do you think you could possibly",
                         "dispose of this vile creature? His location is 0'N, 1'E."], 'A Slimy Specimen',
                         ["Defeat the dreaded Master Slime at location 0'N, 1'E and then",
-                        "return to Alfred in Nearton."], 'Alfred', [30, 50], active=True)
-
+                        "return to Alfred in Nearton."], 'Alfred', [30, 50],
+                        ["You defeated the evil Master Slime?!",
+                        "Amazing! Take this, adventurer, you've earned it."], active=True)
 
 def alfqst_us1():
-    # Stands for "Alfred Quest 1 -- Upon start
+    # Stands for "Alfred Quest 1 -- Upon Starting
     # Changes one of his dialogue options to reflect a quest beginning.
     global alfred_phrase_1
     global alfred_phrase_2
@@ -105,9 +127,15 @@ def alfqst_us1():
     alfred_phrase_1.active = False
     alfred_phrase_2.active = True
 
+def alfqst_uc1():
+    # Stands for "Alfred Quest 1 -- Upon Completing
+    global alfred_phrase_3
+    alfred_phrase_3.active = True
 
 alfred_quest_1.upon_starting = alfqst_us1
-alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2, alfred_quest_1])
+alfred_quest_1.upon_completing = alfqst_uc1
+alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
+                        alfred_quest_1, alfred_phrase_3])
 
 # Name: Wesley -- Town: Southford
 wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
@@ -121,3 +149,41 @@ stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                 "Mountains in the northeast, and Desert in the southwest.",
                                 "The Forest lies in the center, while the Beach surrounds them."], active=True)
 stewson = NPC('Stewson', [stewson_phrase_1])
+
+all_dialogue = [
+    philliard_phrase_1,
+    alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
+    stewson_phrase_1
+    ]
+
+def serialize_dialogue(path):
+    json_dialogue = {}
+    for c in all_dialogue:
+        if isinstance(c, Quest):
+            json_dialogue[str(c)] = [c.active, c.repeat, c.started, c.finished]
+        else:
+            json_dialogue[str(c)] = [c.active, c.repeat]
+    with open(path, encoding='utf-8', mode='w') as h:
+        json.dump(json_dialogue, h, indent=4, separators=(', ', ': '))
+
+def deserialize_dialogue(path):
+    global all_dialogue
+    with open(path, encoding='utf-8', mode='r') as h:
+        j_log = json.load(h)
+    for key in j_log:
+        for c in all_dialogue[:]:
+            if key == str(c):
+                if isinstance(c, Quest):
+                    c.active, \
+                    c.repeat, \
+                    c.started, \
+                    c.finished = \
+                    j_log[key][0], \
+                    j_log[key][1], \
+                    j_log[key][2], \
+                    j_log[key][3]
+                else:
+                    c.active, \
+                    c.repeat = \
+                    j_log[key][0], \
+                    j_log[key][1]

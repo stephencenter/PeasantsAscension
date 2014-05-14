@@ -1,5 +1,5 @@
-# Pythonius; v0.1.9 Alpha
-game_version = 'v0.1.9'
+# Pythonius; v0.2.0 Alpha
+game_version = 'v0.2.0'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -10,9 +10,11 @@ game_version = 'v0.1.9'
 # Notes for people reading this code:
 #  1. print('-'*25) <-- This line appears constantly in my code. It's purpose
 #     is to enhance readability and organization for people playing the game.
+#
 #  2. I am completely open to any and all criticism! I'm still pretty new to
 #     programming, so I need all the advice I can get. Bug reports are great
 #     too! Contact information is near the top of this module.
+#
 #  3. If you encounter an error message at any point when playing this, please
 #     email the error code to me. If you could provide a description of what
 #     you did to cause the bug, that'd be great. Contact information is near
@@ -34,6 +36,7 @@ import world
 import inv_system
 import magic
 import bosses
+import npcs
 
 # Establish "player" as a global variable
 player = ''
@@ -49,7 +52,7 @@ position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
             'h': '', 'v': '', 'prev_town': [0, 0]}
 
 # Identify the player's OS and set their save destination
-if os.name == 'nt':  # Windows
+if os.name == 'nt':  # Windows devices
     sav1 = 'C:\\Pythonius\\Save Files\\sav_a.json'  # Misc Variables
     sav2 = 'C:\\Pythonius\\Save Files\\sav_b.json'  # Position
     sav3 = 'C:\\Pythonius\\Save Files\\sav_c.json'  # Inventory
@@ -57,9 +60,21 @@ if os.name == 'nt':  # Windows
     sav5 = 'C:\\Pythonius\\Save Files\\sav_e.json'  # Player Stats
     sav6 = 'C:\\Pythonius\\Save Files\\sav_f.json'  # Spellbook
     sav7 = 'C:\\Pythonius\\Save Files\\sav_g.json'  # Defeated Bosses
+    sav8 = 'C:\\Pythonius\\Save Files\\sav_h.json'  # Quests & Dialogue
+    sav9 = 'C:\\Pythonius\\Save Files\\sav_i.json'  # Misc Boss Info
+
+# NOTE: If one of these files is missing, the entire game won't work,
+# and as such will not be recognized as a save file anymore.
+
+# NOTE 2: It is entirely possible (and actually very easy) to modify these
+# save files to change your character's stats, items, etc. However, it CAN also
+# cause the file to become corrupted if it is done incorrectly, so backup your
+# files before doing so.
 
 else:
     raise OSError('This game is not supported by your operating system.')
+    # Due to module incompatibity, this game is unfortunately not playable
+    # on Unix-based devices, such as Androids, Macs, and Linux devices.
     input('Press enter to exit')
     sys.exit()
 
@@ -276,7 +291,7 @@ def check_save():  # Check for save files and load the game if they're found
     global position
     print('-'*25)
     # Check each part of the save file
-    for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7]:
+    for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7, sav8, sav9]:
         if os.path.isfile(file):
             pass
         else:
@@ -304,6 +319,8 @@ def check_save():  # Check for save files and load the game if they're found
                 magic.deserialize_sb(sav6)
                 with open(sav7, mode='r', encoding='utf-8') as g:
                     bosses.defeated_bosses = list(json.load(g))
+                npcs.deserialize_dialogue(sav8)
+                bosses.deserialize_bosses(sav9)
                 print('Load successful.')
                 return
             except IOError:
@@ -346,6 +363,8 @@ def save_game():
                 with open(sav7, mode='w', encoding='utf-8') as g:
                     json.dump(bosses.defeated_bosses, g,
                               indent=4, separators=(', ', ': '))
+                npcs.serialize_dialogue(sav8)
+                bosses.serialize_bosses(sav9)
                 print('Save successful.')
                 return
             except IOError:
