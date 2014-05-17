@@ -1,5 +1,7 @@
 import sys
 import json
+import monsters
+import npcs
 from copy import copy as _c
 from items import *
 
@@ -8,12 +10,12 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-inventory = {'quest': [], 'consum': [_c(s_potion), _c(s_elixr)], 'coord': [],
+inventory = {'quest': [], 'consum': [_c(s_potion), _c(s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': []}
 equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
 
 gs_stock = [[s_potion, s_potion, m_potion, l_potion, l_potion, x_potion],
-            [s_elixr, s_elixr, m_elixr, l_elixr, l_elixr, x_elixr],
+            [s_elixir, s_elixir, m_elixir, l_elixir, l_elixir, x_elixir],
             [cpr_swd, en_cpr_swd, bnz_spr, en_bnz_spr, irn_axe, en_irn_axe],
             [oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf, en_irn_axe],
             [bnz_hlm, en_bnz_hlm, irn_hlm, stl_hlm],

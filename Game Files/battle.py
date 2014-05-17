@@ -1,10 +1,9 @@
 import sys
-import math
 import random
 import winsound
 
-import monsters
 import inv_system
+import monsters
 import magic
 import world
 import bosses
@@ -37,7 +36,7 @@ def setup_vars():
     position = main.position
 
 
-def update_stats(): # Forces stats to return to normal when battle is finished
+def update_stats():  # Forces stats to return to normal when battle is finished
     global temp_stats
     temp_stats = {'attk': _c(player.attk), 'm_attk': _c(player.m_attk),
                   'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
@@ -81,7 +80,7 @@ def battle_system(is_boss=False):
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
 
-    while player.hp > 0 and monster.hp > 0: # Continue the battle until someone dies
+    while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
 
         bat_stats()
         # First, display the Player and Monster's stats
@@ -95,7 +94,7 @@ def battle_system(is_boss=False):
         dodge = random.randint(0, 250)
         # If dodge is in a certain range, the attack will miss
 
-        if move == '4': # Use the Battle Inventory
+        if move == '4':  # Use the Battle Inventory
             if battle_inventory() and monster.hp > 0:
                 enemy_turn(var, dodge)
             continue
@@ -141,13 +140,13 @@ def player_turn(var, dodge, move):
         # "2" refers to magic, which will print this later
 
         if move == '1':  # Attack
-            print('You begin to fiercly attack the {0} using your {1}!'.format(
-                  monster.name, str(inv_system.equipped['weapon'])))
+            print('You begin to fiercely attack the {0} using your {1}!'.format(
+                monster.name, str(inv_system.equipped['weapon'])))
             if dodge in range(monster.evad, 250):
                 dealt = player.player_damage(var)
                 monster.hp -= dealt
                 print('Your attack connects with the {0}, dealing {1} damage!'.format(
-                monster.name, dealt))
+                    monster.name, dealt))
             else:
                 print('The {0} dodges your attack with ease!'.format(monster.name))
             return
@@ -204,6 +203,7 @@ def enemy_turn(var, dodge):
     else:
         monster.monst_attk(var, dodge)
 
+
 def after_battle(is_boss):  # Assess the results of the battle
     global player
     update_stats()  # Reset non-hp/mp stats to the way they were before battle
@@ -214,7 +214,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                        winsound.SND_LOOP |
                        winsound.SND_NODEFAULT)
     while True:
-        if monster.hp > 0 and player.hp <= 0:
+        if monster.hp > 0 >= player.hp:
             # If the monster wins...
             winsound.PlaySound(None, winsound.SND_ASYNC)
             winsound.PlaySound('Music\\Power-Up.wav',
@@ -244,7 +244,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 elif y_n in ['no', 'n', 'nope']:
                     sys.exit()
 
-        elif monster.hp <= 0 and player.hp > 0:
+        elif monster.hp <= 0 < player.hp:
             # If the player wins...
             if not is_boss:
                 # Only do the following if the player defeated a
@@ -279,7 +279,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             player.exp += experience
             print("You've gained {0} GP!".format(gold))
             print("You've gained {0} experience point{1}!".format(
-            experience, 's' if experience > 1 else ''))
+                experience, 's' if experience > 1 else ''))
             # Correct grammar is important
 
             if monster.items:

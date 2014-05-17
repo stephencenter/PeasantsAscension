@@ -43,7 +43,7 @@ class Healing(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            main.player.hp += self.health + int(main.static['int']/4) + random.randint(-2, 2)
+            main.player.hp += self.health + int(main.static['int'] / 4) + random.randint(-2, 2)
             if main.player.hp > main.static['hp_p']:
                 main.player.hp -= (main.player.hp - main.static['hp_p'])
             print('-Player Turn-')
@@ -70,18 +70,18 @@ class Damaging(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            attk_pwr = int(self.damage + (battle.temp_stats['m_attk']/3) -
-                          (battle.monster.m_dfns/2) + var)
+            attk_pwr = int(self.damage + (battle.temp_stats['m_attk'] / 3) -
+                           (battle.monster.m_dfns / 2) + var)
             attk_pwr = eval_element(
                 p_elem=self.element,
                 m_elem=monsters.monster.element,
                 p_dmg=attk_pwr)[0]
             print('-Player Turn-')
             print('You begin to use your {0} to summon a powerful spell.'.format(
-                  inv_system.equipped['weapon']))
+                inv_system.equipped['weapon']))
             if dodge in range(monsters.monster.evad, 250):
                 print('Using the power of "{0}", you deal {1} damage to the {2}!'.format(
-                      self.name, attk_pwr, monsters.monster.name))
+                    self.name, attk_pwr, monsters.monster.name))
                 monsters.monster.hp -= attk_pwr
             else:
                 print('The {0} dodges your attack!'.format(monsters.monster.name))
@@ -109,7 +109,7 @@ class Buff(Spell):
             Spell.use_mana(self)
             print('-Player Turn-')
             print('Using the power of {0}, your {1} increases temporarily by {2}!'.format(
-                  self.name, self.stat, self.incre))
+                self.name, self.stat, self.incre))
             if self.stat == 'Defense':
                 battle.temp_stats['dfns'] += self.incre
             elif self.stat == 'Magic Defense':
@@ -129,95 +129,95 @@ class Buff(Spell):
 
 
 w_flame = Damaging('Weak Flame',
-    "Summon a weak fireball to destroy your foes.",
-    3, 1, 4, "fire")
+                   "Summon a weak fireball to destroy your foes.",
+                   3, 1, 4, "fire")
 f_blaze = Damaging('Fierce Blaze',
-    "Summon a powerful flame to destroy your foes.",
-    10, 8, 12, "fire")
+                   "Summon a powerful flame to destroy your foes.",
+                   10, 8, 12, "fire")
 g_infer = Damaging('Grand Inferno',
-    "Unleash a monstrous blaze destroy your foes.",
-    18, 18, 23, "fire")
+                   "Unleash a monstrous blaze destroy your foes.",
+                   18, 18, 23, "fire")
 
 in_spark = Damaging('Inferior Spark',
-    "Summon a weak spark to destroy your foes.",
-    3, 2, 4, "electric")
+                    "Summon a weak spark to destroy your foes.",
+                    3, 2, 4, "electric")
 pwr_jolt = Damaging('Powerful Jolt',
-    "Summon a powerful jolt of energy to destroy your foes.",
-    10, 8, 12, "electric")
+                    "Summon a powerful jolt of energy to destroy your foes.",
+                    10, 8, 12, "electric")
 sp_storm = Damaging('Superior Storm',
-    "Unleash a devastating lightning storm to destroy your foes.",
-    19, 18, 23, "electric")
+                    "Unleash a devastating lightning storm to destroy your foes.",
+                    19, 18, 23, "electric")
 
 lef_blad = Damaging('Leaf Blade',
-    "Summon a weak blade of grass to destroy your foes.",
-    3, 1, 4, "grass")
+                    "Summon a weak blade of grass to destroy your foes.",
+                    3, 1, 4, "grass")
 gra_gren = Damaging('Grass Grenade',
-    "Summon a small explosion to destroy your foes.",
-    10, 8, 12, "grass")
+                    "Summon a small explosion to destroy your foes.",
+                    10, 8, 12, "grass")
 vin_strm = Damaging('Vine Storm',
-    "Unleash a frenzy of powerful vines to destroy your foes.",
-    19, 18, 23, "grass")
+                    "Unleash a frenzy of powerful vines to destroy your foes.",
+                    19, 18, 23, "grass")
 
 min_heal = Healing('Minor Healing',
-    "Restore a small amount of HP by using magic.",
-    3, 1, 20)
+                   "Restore a small amount of HP by using magic.",
+                   3, 1, 20)
 adv_heal = Healing('Advanced Healing',
-    "Restore a large amount of HP by using magic.",
-    10, 9, 60)
+                   "Restore a large amount of HP by using magic.",
+                   10, 9, 60)
 div_heal = Healing('Divine Healing',
-    "Call upon the arcane arts to greatly restore your HP.",
-    25, 20, 125)
+                   "Call upon the arcane arts to greatly restore your HP.",
+                   25, 20, 125)
 
 m_quick = Buff('Minor Quickness',
-    "Temporarily raise your speed by a small amount.",
-    2, 4, 3, "Speed")
+               "Temporarily raise your speed by a small amount.",
+               2, 4, 3, "Speed")
 m_evade = Buff('Minor Evade',
-    "Temporarily raise your evasion by a small amount.",
-    2, 4, 3, "Evasion")
+               "Temporarily raise your evasion by a small amount.",
+               2, 4, 3, "Evasion")
 
 m_defend = Buff('Minor Defend',
-    "Temporarily raise your defense by a small amount.",
-    2, 5, 2, "Defense")
+                "Temporarily raise your defense by a small amount.",
+                2, 5, 2, "Defense")
 m_shield = Buff('Minor Shield',
-    "Temporarily raise your magic defense by a small amount.",
-    2, 5, 2, "Magic Defense")
+                "Temporarily raise your magic defense by a small amount.",
+                2, 5, 2, "Magic Defense")
 
 m_stren = Buff('Minor Strengthen',
-    "Temporarily raise your attack by a small amount.",
-    2, 6, 2, "Attack")
+               "Temporarily raise your attack by a small amount.",
+               2, 6, 2, "Attack")
 m_power = Buff('Minor Empower',
-    "Temporarily raise your magic attack by a small amount.",
-    2, 6, 2, "Magic Attack")
+               "Temporarily raise your magic attack by a small amount.",
+               2, 6, 2, "Magic Attack")
 
 a_defend = Buff('Adept Defend',
-    "Temporarily raise your defense by a large amount.",
-    7, 12, 5, "Defense")
+                "Temporarily raise your defense by a large amount.",
+                7, 12, 5, "Defense")
 a_shield = Buff('Adept Shield',
-    "Temporarily raise your magic defense by a large amount.",
-    7, 12, 5, "Magic Defense")
+                "Temporarily raise your magic defense by a large amount.",
+                7, 12, 5, "Magic Defense")
 
 a_stren = Buff('Adept Strengthen',
-    "Temporarily raise your attack by a large amount.",
-    7, 10, 5, "Attack")
+               "Temporarily raise your attack by a large amount.",
+               7, 10, 5, "Attack")
 a_power = Buff('Adept Empower',
-    "Temporarily raise your magic attack by a large amount.",
-    7, 10, 5, "Magic Attack")
+               "Temporarily raise your magic attack by a large amount.",
+               7, 10, 5, "Magic Attack")
 
 spells = [
-    w_flame, lef_blad, min_heal,     # Level 1
-    in_spark,                        # Level 2
-    m_quick, m_evade,                # Level 4
-    m_defend, m_shield,              # Level 5
-    m_stren, m_power,                # Level 6
-    f_blaze, gra_gren,               # Level 7
-    pwr_jolt,                        # Level 8
-    adv_heal,                        # Level 9
-    a_stren, a_power,                # Level 10
-    a_defend, a_shield,              # Level 12
-    g_infer, vin_strm,               # Level 17
-    sp_storm,                        # Level 18
-    div_heal                         # Level 20
-    ]
+    w_flame, lef_blad, min_heal,  # -- Level 1
+    in_spark,  # --------------------- Level 2
+    m_quick, m_evade,  # ------------- Level 4
+    m_defend, m_shield,  # ----------- Level 5
+    m_stren, m_power,  # ------------- Level 6
+    f_blaze, gra_gren,  # ------------ Level 7
+    pwr_jolt,  # --------------------- Level 8
+    adv_heal,  # --------------------- Level 9
+    a_stren, a_power,  # ------------- Level 10
+    a_defend, a_shield,  # ----------- Level 12
+    g_infer, vin_strm,  # ------------ Level 17
+    sp_storm,  # --------------------- Level 18
+    div_heal  # ---------------------- Level 20
+]
 
 
 # noinspection PyUnreachableCode
@@ -276,25 +276,25 @@ def pick_cat(var, dodge):
                 if cat.lower() in ['cancel', 'back', 'exit', 'x']:
                     return False
             except AttributeError:
-                    continue
+                continue
             else:
                 continue
         if not spellbook[cat]:
-            print('-'*25)
+            print('-' * 25)
             print('You do not yet have any spells in the {0} category.'.format(cat))
-            print('-'*25)
+            print('-' * 25)
             continue
         if pick_spell(cat, var, dodge):
             return True
 
 
 def pick_spell(cat, var, dodge):
-    print('-'*25)
+    print('-' * 25)
     while True:
         print(cat + ' Spells: \n      ' + '\n      '.join(
             ['[' + str((num + 1)) + '] ' + spell.name + ' --> ' + str(
-            spell.mana) + ' MP' for num, spell in enumerate(
-            spellbook[cat])]))
+                spell.mana) + ' MP' for num, spell in enumerate(
+                    spellbook[cat])]))
         while True:
             spell = input('Input [#] (or type "back"): ')
             try:
@@ -312,9 +312,9 @@ def pick_spell(cat, var, dodge):
                 spell = spellbook[cat][spell]
             except IndexError:
                 continue
-            print('-'*25)
+            print('-' * 25)
             print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
-            print('-'*25)
+            print('-' * 25)
             while True:
                 y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
                 if y_n == '':
@@ -356,8 +356,7 @@ def new_spells():
             else:
                 spellbook[cat].append(spell)
                 print('You have learned "{0}", a new {1} spell!'.format(
-                      str(spell), cat if not cat.endswith('s'
-                      ) else cat[0:len(cat) - 1]))
+                    str(spell), cat if not cat.endswith('s') else cat[0:len(cat) - 1]))
 
 
 def serialize_sb(path):

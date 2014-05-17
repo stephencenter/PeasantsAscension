@@ -165,7 +165,7 @@ class Town:
                     purchase = int(purchase) - 1
                     if purchase < 0:
                         continue
-                except (TypeError, ValueError):
+                except ValueError:
                     try:
                         purchase = purchase.lower()
                     except AttributeError:

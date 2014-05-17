@@ -3,7 +3,12 @@
     <words>
       <w>alfqst</w>
       <w>attk</w>
+      <w>battleaxe</w>
+      <w>biomes</w>
       <w>blad</w>
+      <w>chestpiece</w>
+      <w>chestplate</w>
+      <w>consum</w>
       <w>deserialize</w>
       <w>dfns</w>
       <w>evad</w>
@@ -20,14 +25,15 @@
       <w>philliard</w>
       <w>pythonia</w>
       <w>pythonius</w>
+      <w>shortsword</w>
       <w>southe</w>
       <w>southford</w>
       <w>spellbook</w>
       <w>stewson</w>
       <w>stren</w>
       <w>strm</w>
-      <w>tranlate</w>
       <w>y'know</w>
+      <w>yewen</w>
     </words>
   </dictionary>
 </component>

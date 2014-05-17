@@ -117,10 +117,10 @@ def check_region():
     elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
         region = 'Desert'
         reg_music = 'Music\\Come and Find Me.wav'
-    elif x in range(0, 116) and y in range(-115, 1): # Southeast of World
+    elif x in range(0, 116) and y in range(-115, 1):  # Southeast of World
         region = 'Swamp'
         reg_music = 'Music\\Digital Native.wav'
-    elif abs(x) in range(116, 126) or abs(y) in range(116, 126): # Edges of World
+    elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
         region = 'Beach'
         reg_music = "Music\\We're all under the stars.wav"
     if position['reg'] != region:

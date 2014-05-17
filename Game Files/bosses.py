@@ -10,8 +10,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-position = ''
-
+static = ''
 
 class Boss(monsters.Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, spd, evad,
@@ -27,7 +26,6 @@ class Boss(monsters.Monster):
         self.gold = gold
         self.experience = experience
         self.active = active
-
 
     def max_stats(self):
         global static
@@ -74,7 +72,7 @@ def serialize_bosses(path):
 
 def deserialize_bosses(path):
     global boss_list
-    with open(path, encoding='utf-8', mode='r') as i:
+    with open(path, encoding='utf-8') as i:
         json_bosslist = json.load(i)
     for key in json_bosslist:
         for boss in boss_list:
@@ -90,15 +88,17 @@ def setup_vars():
 # Boss: Master Slime -- Position: 0'N, 1'E
 master_slime = Boss('Master Slime', 35, 4, 8, 3, 5, 0, 3, 3, 5, 1, 0, [], 35, 35, active=False)
 
+
 def mastslim_ud():
     # Stands for "Master Slime -- Upon Defeating"
     npcs.alfred_quest_1.finished = True
     npcs.alfred_phrase_2.active = False
 
+
 master_slime.upon_defeating = mastslim_ud
 
 # Boss: Whispering Goblin -- Position: 4'N, -2'W
-whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25) # This is for you, Jacob!
+whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)  # This is for you, Jacob!
 
 boss_list = [whisp_goblin, master_slime]
 defeated_bosses = []  # Make sure you can only defeat the boss one time

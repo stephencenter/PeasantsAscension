@@ -16,7 +16,8 @@ position = ''
 inventory = ''
 
 
-class Monster:  # All monsters use this class. Bosses use a sub-class called
+class Monster:
+    # All monsters use this class. Bosses use a sub-class called
     # "Boss" (located in bosses.py) which inherits from this.
     def __init__(self, name, hp, mp, attk, dfns, m_attk,
                  m_dfns, spd, evad, lvl, element='none'):

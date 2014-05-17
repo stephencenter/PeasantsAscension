@@ -100,33 +100,31 @@ class PlayerCharacter:  # The Player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns,
                  spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,
                  _class=''):
-        self.name = name         # Name
-        self.hp = hp             # Health
-        self.mp = mp             # Mana Points
-        self.attk = attk         # Attack
-        self.dfns = dfns         # Defense
-        self.m_attk = m_attk     # Magic Attack
-        self.m_dfns = m_dfns     # Magic Defense
-        self.spd = spd           # Speed
-        self.evad = evad         # Evasion
-        self.lvl = lvl           # Level
-        self.exp = exp           # Experience
-        self.ext_ski = ext_ski   # Skill Points
-        self.ext_gol = ext_gol   # Extra Gold Pieces
-        self.ext_exp = ext_exp   # Extra Experience
-        self._class = _class     # Player Class
-
+        self.name = name  # Name
+        self.hp = hp  # Health
+        self.mp = mp  # Mana Points
+        self.attk = attk  # Attack
+        self.dfns = dfns  # Defense
+        self.m_attk = m_attk  # Magic Attack
+        self.m_dfns = m_dfns  # Magic Defense
+        self.spd = spd  # Speed
+        self.evad = evad  # Evasion
+        self.lvl = lvl  # Level
+        self.exp = exp  # Experience
+        self.ext_ski = ext_ski  # Skill Points
+        self.ext_gol = ext_gol  # Extra Gold Pieces
+        self.ext_exp = ext_exp  # Extra Experience
+        self._class = _class  # Player Class
 
     def player_damage(self, var):  # The formula for the player dealing damage
-        phys_dealt = int((battle.temp_stats['attk']/2) -
-                         (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
+        phys_dealt = int((battle.temp_stats['attk'] / 2) -
+                         (battle.monster.dfns / 3) + (self.lvl / 3) + var + 1)
         phys_dealt = magic.eval_element(
-                     p_elem=inv_system.equipped['weapon'].element,
-                     m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
+            p_elem=inv_system.equipped['weapon'].element,
+            m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
         if phys_dealt < 1:
             phys_dealt = 1
         return phys_dealt
-
 
     def choose_name(self):
         while True:
@@ -134,7 +132,7 @@ class PlayerCharacter:  # The Player
             while True:
                 y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
                 try:
-                   y_n = y_n.lower()
+                    y_n = y_n.lower()
                 except AttributeError:
                     continue
                 if y_n in ['yes', 'y', 'yeah']:
@@ -142,10 +140,11 @@ class PlayerCharacter:  # The Player
                 elif y_n in ['no', 'n', 'nope']:
                     break
 
-
     def choose_class(self):
         while True:
-            _class = input('Well then, {0}, which class would you like to begin training in? | Warrior or Mage: '.format(self.name))
+            _class = input(
+                'Well then, {0}, which class would you like to begin training in? | Warrior or Mage: '.format(
+                    self.name))
             try:
                 _class = _class.lower()
             except AttributeError:
@@ -154,14 +153,13 @@ class PlayerCharacter:  # The Player
                 while True:
                     y_n = input('You wish to be of the {0} class? | Yes or No: '.format(_class.title()))
                     try:
-                       y_n = y_n.lower()
+                        y_n = y_n.lower()
                     except AttributeError:
                         continue
                     if y_n in ['yes', 'y', 'yeah']:
                         return _class
                     elif y_n in ['no', 'n', 'nope']:
                         break
-
 
     def level_up(self):
         global static
@@ -193,15 +191,14 @@ class PlayerCharacter:  # The Player
                 temp_ski += self.ext_ski
                 magic.new_spells()
                 self.exp -= static['r_xp']
-                static['r_xp'] = int((math.pow(self.lvl*2, 1.8) - (self.lvl)))
-            print('-'*25)
+                static['r_xp'] = int((math.pow(self.lvl * 2, 1.8) - self.lvl))
+            print('-' * 25)
             self.skill_points(temp_ski)
             static['hp_p'] = self.hp
             static['mp_p'] = self.mp
-            print('-'*25)
+            print('-' * 25)
             save_game()
             return
-
 
     def skill_points(self, temp_ski):
         global static
@@ -250,7 +247,6 @@ class PlayerCharacter:  # The Player
         print()
         print('You are out of skill points.')
 
-
     def player_info(self):
         print("-{0}'s Stats-".format(self.name))
         print('Level: {0} | Class: {1}'.format(self.lvl, self._class.title()))
@@ -260,9 +256,9 @@ class PlayerCharacter:  # The Player
         print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
         print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
         print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
-              static['int'], static['str'],
-              static['con'], static['dex'],
-              static['luc']))
+            static['int'], static['str'],
+            static['con'], static['dex'],
+            static['luc']))
         print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
                                                                   static['r_xp'],
                                                                   static['gp']))
@@ -299,13 +295,13 @@ def create_player():
         inv_system.equipped['weapon'] = copy.copy(inv_system.mag_twg)
     player.hp = copy.copy(static['hp_p'])
     player.mp = copy.copy(static['mp_p'])
-    print('-'*25)
+    print('-' * 25)
 
 
 def check_save():  # Check for save files and load the game if they're found
     global static
     global position
-    print('-'*25)
+    print('-' * 25)
     # Check each part of the save file
     for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7, sav8, sav9]:
         if os.path.isfile(file):
@@ -324,16 +320,16 @@ def check_save():  # Check for save files and load the game if they're found
             print('Loading...')
             time.sleep(0.25)
             try:  # Attempt to open the save files and translate
-                  # them into objects/dictionaries
-                with open(sav1, mode='r', encoding='utf-8') as a:
-                        static = json.load(a)
-                with open(sav2, mode='r', encoding='utf-8') as b:
-                        position = json.load(b)
+                # them into objects/dictionaries
+                with open(sav1, encoding='utf-8') as a:
+                    static = json.load(a)
+                with open(sav2, encoding='utf-8') as b:
+                    position = json.load(b)
                 inv_system.deserialize_inv(sav3)
                 inv_system.deserialize_equip(sav4)
                 deserialize_player(sav5)
                 magic.deserialize_sb(sav6)
-                with open(sav7, mode='r', encoding='utf-8') as g:
+                with open(sav7, encoding='utf-8') as g:
                     bosses.defeated_bosses = list(json.load(g))
                 npcs.deserialize_dialogue(sav8)
                 bosses.deserialize_bosses(sav9)
@@ -341,17 +337,15 @@ def check_save():  # Check for save files and load the game if they're found
                 return
             except IOError:
                 print('There was an error loading your game. Error code: IO')
-            except OSError:
-                print('There was an error loading your game. Error code: OS')
             except ValueError:
                 print('There was an error loading your game. Error code: VE')
-            print('-'*25)
+            print('-' * 25)
             create_player()
             return
         elif y_n in ['no', 'n', 'nope']:
-                print('-'*25)
-                create_player()
-                return
+            print('-' * 25)
+            create_player()
+            return
 
 
 def save_game():
@@ -385,8 +379,6 @@ def save_game():
                 return
             except IOError:
                 print('There was an error saving your game. Error code: IO')
-            except OSError:
-                print('There was an error saving your game. Error code: OS')
             except ValueError:
                 print('There was an error saving your game. Error code: VE')
         elif y_n in ['no', 'n', 'nope']:
@@ -399,10 +391,10 @@ def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
 
 
 def deserialize_player(path):  # Load the JSON file and translate
-                               # it into a "PlayerCharacter" object
+    # it into a "PlayerCharacter" object
     global player
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
-    with open(path, mode='r', encoding='utf-8') as e:
+    with open(path, encoding='utf-8') as e:
         player.__dict__ = json.load(e)
 
 
@@ -430,11 +422,11 @@ Pythonius {0}
         if choice.startswith('p'):
             return
         elif choice.startswith('c'):
-            print('-'*25)
-            with open('Music Credits.txt', 'r') as f:
+            print('-' * 25)
+            with open('Music Credits.txt') as f:
                 print(f.read())
 
-            print('-'*25)
+            print('-' * 25)
         elif choice.startswith('e'):
             sys.exit()
 
