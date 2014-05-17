@@ -1,0 +1,21 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0" is_locked="false">
+    <option name="myName" value="Project Default" />
+    <option name="myLocal" value="false" />
+    <inspection_tool class="PyArgumentEqualDefaultInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <value>
+          <list size="6">
+            <item index="0" class="java.lang.String" itemvalue="inv_system" />
+            <item index="1" class="java.lang.String" itemvalue="battle" />
+            <item index="2" class="java.lang.String" itemvalue="monsters" />
+            <item index="3" class="java.lang.String" itemvalue="npcs" />
+            <item index="4" class="java.lang.String" itemvalue="items" />
+            <item index="5" class="java.lang.String" itemvalue="world" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

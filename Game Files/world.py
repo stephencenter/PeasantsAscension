@@ -25,7 +25,7 @@ def setup_vars():
 
 
 def movement_system():
-    """Adjust the player's x/y coordinates based on inputed direction."""
+    """Adjust the player's x/y coordinates based on inputted direction."""
     global position
 
     setup_vars()
@@ -51,10 +51,10 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('Position: {0}{1}, {2}{3} | {4} | Which direction do you want to travel in? | N, S, E, W: '.format(
-                              position['y'], position['v'],
-                              position['x'], position['h'],
-                              position['reg']))
+            direction = input('Position: {0}{1}, {2}{3} | {4} | Which direction do you want to travel in? | N, S, E, \
+W: '.format(position['y'], position['v'],
+            position['x'], position['h'],
+            position['reg']))
             try:
                 direction = direction.lower()
             except AttributeError:

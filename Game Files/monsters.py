@@ -1,4 +1,3 @@
-import math
 import random
 import sys
 import inv_system
@@ -18,19 +17,19 @@ inventory = ''
 
 
 class Monster:  # All monsters use this class. Bosses use a sub-class called
-                # "Boss" (located in bosses.py) which inherits from this.
+    # "Boss" (located in bosses.py) which inherits from this.
     def __init__(self, name, hp, mp, attk, dfns, m_attk,
                  m_dfns, spd, evad, lvl, element='none'):
-        self.name = name        # Name
-        self.hp = hp            # Health
-        self.mp = mp            # Mana
-        self.attk = attk        # Attack
-        self.dfns = dfns        # Defense
-        self.m_attk = m_attk    # Magic Attack
-        self.m_dfns = m_dfns    # Magic Defense
-        self.spd = spd          # Speed
-        self.evad = evad        # Evasion
-        self.lvl = lvl          # Level
+        self.name = name  # Name
+        self.hp = hp  # Health
+        self.mp = mp  # Mana
+        self.attk = attk  # Attack
+        self.dfns = dfns  # Defense
+        self.m_attk = m_attk  # Magic Attack
+        self.m_dfns = m_dfns  # Magic Defense
+        self.spd = spd  # Speed
+        self.evad = evad  # Evasion
+        self.lvl = lvl  # Level
         self.element = element  # Element
         self.items = ''
         num = random.randint(0, 5)
@@ -51,7 +50,7 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
 
     def monst_level(self):
         global static
-        self.lvl = int(1/2*abs(1.5*position['avg'] - 1)) + 1
+        self.lvl = int(1 / 2 * abs(1.5 * position['avg'] - 1)) + 1
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 6)
             self.mp += random.randint(1, 2)
@@ -74,22 +73,20 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
             print("You narrowly avoid the {0}'s attack!".format(self.name))
 
     def monst_name(self):
-        monster_type = {
-                       'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],
-                       'Swamp': ['Moss Ogre', 'Bog Slime', 'Sludge Rat'],
-                       'Forest': ['Imp', 'Skeleton', 'Goblin'],
-                       'Desert': ['Sand Golem', 'Desert Python', 'Fire Ant'],
-                       'Tundra': ['Frost Bat', 'Arctic Wolf', 'Minor Yeti'],
-                       'Mountain': ['Rock Giant', 'Giant Worm', 'Troll']
-                       }
+        monster_type = {'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],
+                        'Swamp': ['Moss Ogre', 'Bog Slime', 'Sludge Rat'],
+                        'Forest': ['Imp', 'Skeleton', 'Goblin'],
+                        'Desert': ['Sand Golem', 'Desert Python', 'Fire Ant'],
+                        'Tundra': ['Frost Bat', 'Arctic Wolf', 'Minor Yeti'],
+                        'Mountain': ['Rock Giant', 'Giant Worm', 'Troll']}
         self.name = random.choice(monster_type[position['reg']])
         modifiers = [
-                    'Slow', 'Fast',
-                    'Powerful', 'Weak',
-                    'Nimble', 'Clumsy',
-                    'Armored', 'Broken',
-                    'Mystic', 'Foolish'
-                    ]
+            'Slow', 'Fast',
+            'Powerful', 'Weak',
+            'Nimble', 'Clumsy',
+            'Armored', 'Broken',
+            'Mystic', 'Foolish'
+        ]
         modifier = random.choice(modifiers)
         if modifier == 'Slow':  # Very-low speed, below-average speed
             self.spd -= 3

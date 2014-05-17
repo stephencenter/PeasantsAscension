@@ -65,11 +65,11 @@ class Quest(Conversation):
                  req_lvl=1, started=False, finished=False, repeat=False, active=False):
         Conversation.__init__(self, sentences, repeat, active)
         self.name = name  # The name of the quest
-        self.desc = desc  # A breif summary of the goal of the quest
+        self.desc = desc  # A brief summary of the goal of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
         self.reward = reward  # A list [experience, gold] of your reward for the quest
         self.req_lvl = req_lvl  # The level that you must be at to begin the quest
-        self.started = started  # is True if tje quest has been started, false otherwise
+        self.started = started  # is True if the quest has been started, false otherwise
         self.finished = finished  # is True if the quest is complete, false otherwise
         self.end_dialogue = end_dialogue  # What is printed when the quest is over
 
@@ -101,7 +101,7 @@ class Quest(Conversation):
     def completion(self):
         main.player.exp += self.reward[0]
         main.static['gp'] += self.reward[1]
-        print("You've recieved {0} XP and {1} GP for completing this quest.".format(self.reward[0], self.reward[1]))
+        print("You've received {0} XP and {1} GP for completing this quest.".format(self.reward[0], self.reward[1]))
         self.upon_completing()
         self.active = False
 

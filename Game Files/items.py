@@ -123,9 +123,6 @@ class Armor(Item):
         self._class = _class
         self.equip = equip
 
-    def __str__(self):
-        return self.name
-
     def equip_armor(self):
         global equipped
         global inventory
@@ -183,17 +180,17 @@ x_potion = Consumable('Super Potion',
     120, 40, heal=200)
 
 # Potions -- Mana
-s_elixr = Consumable('Basic Elixr',
-    'A generic elixr that restores 15 MP when consumed.',
+s_elixr = Consumable('Basic Elixir',
+    'A generic elixir that restores 15 MP when consumed.',
     10, 3, mana=10)
-m_elixr = Consumable('Enhanced Elixr',
-    'A more potent elixr that restores 45 MP when consumed.',
+m_elixr = Consumable('Enhanced Elixir',
+    'A more potent elixir that restores 45 MP when consumed.',
     25, 8, mana=35)
-l_elixr = Consumable('Grand Elixr',
-    'A powerful elixr that restores 100 MP when consumed.',
+l_elixr = Consumable('Grand Elixir',
+    'A powerful elixir that restores 100 MP when consumed.',
     50, 17, mana=75)
-x_elixr = Consumable('Extreme Elixr',
-    'A super powerful elixr that restores 175 MP when consumed.',
+x_elixr = Consumable('Extreme Elixir',
+    'A super powerful elixir that restores 175 MP when consumed.',
     100, 35, mana=175)
 
 # Weapons -- Melee
@@ -308,7 +305,7 @@ myst_hat = Armor('Mystical Hood',
 myst_rob = Armor('Mystical Robe',
     'A mysterious robe with strange symbols sewn into it (+7 Magic Defense)',
     175, 60, 7, 'magic', 'body', 'mage')
-myst_gar = Armor('Mystical Garmnets',
+myst_gar = Armor('Mystical Garments',
     'Mysterious garments with strange symbols sewn into it (+6 Magic Defense).',
     160, 55, 6, 'magic', 'legs', 'mage')
 

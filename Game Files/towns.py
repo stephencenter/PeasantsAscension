@@ -3,7 +3,6 @@ import time
 import copy
 import inv_system
 import world
-import items
 import npcs
 import winsound
 
@@ -30,7 +29,7 @@ class Town:
         print('-'*25)
         print('Welcome to {0}!'.format(self.name))
         while True:
-            choice = input('1. Town Desc; 2. Buildings; 3. People; 4. Player Info; 5. View Inv; 6. Exit | Input #(1-6): ')
+            choice = input('1. Town Desc 2. Buildings 3. People 4. Player Info 5. View Inv 6. Exit | Input #(1-6): ')
             if choice == '1':
                 print('-'*25)
                 print(self.desc)
@@ -60,7 +59,7 @@ class Town:
                 print('-'*25)
                 return
 
-    def new_location(self):  # Tranlate the location of newly-found towns
+    def new_location(self):  # Translate the location of newly-found towns
         if self.y >= 0:      # into a string, then add to inventory.
             foo = "'N"
         else:
@@ -92,7 +91,7 @@ class Town:
                 buildings = inn_words[:]
                 buildings.extend(gen_words)
             if buildings:
-                while spam == False:
+                while not spam:
                     selected = input('What building would you like to enter? | Input Building Name (or type "exit"): ')
                     try:
                         selected = selected.lower()
@@ -124,7 +123,8 @@ class Town:
         print('Inn Keeper: "Greetings, Traveler!"')
         while True:
             choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
-            "It's free, y'know." if not self.inn_cost else ' '.join(["One Night is", str(self.inn_cost), "GP."])))
+                "It's free, y'know." if not self.inn_cost else ' '.join(
+                ["One Night is", str(self.inn_cost), "GP."])))
             try:
                 choice = choice.lower()
             except AttributeError:
@@ -155,7 +155,6 @@ class Town:
         print('-'*25)
         print('Owner: "Welcome, Traveler!"')
         print('-'*25)
-        spam = True
         while True:
             print('"Well, here\'s what I have in my stock: " | {0} GP'.format(main.static['gp']))
             for num, item in enumerate(stock):
@@ -184,7 +183,7 @@ class Town:
                 print('-'*25)
                 while True:
                     confirm = input("\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
-                    'these' if str(i).endswith('s') else 'this', str(i), i.buy))
+                        'these' if str(i).endswith('s') else 'this', str(i), i.buy))
                     try:
                         confirm = confirm.lower()
                     except AttributeError:
@@ -197,7 +196,8 @@ class Town:
                             input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(str(i), i.buy))
                             print('-'*25)
                         else:
-                            input('"Hey, you don\'t even have enough GP for this {0}!" (Press enter/return)'.format(str(i)))
+                            input('"Hey, you don\'t even have enough GP for this {0}!" (Press enter/return)'.format(
+                                str(i)))
                             print()
                         break
                     elif confirm in ['no', 'n']:
@@ -207,7 +207,8 @@ class Town:
 
     def speak_to_npcs(self):
         while True:
-            print('NPCs:\n      ' + '\n      '.join(["[" + str(x + 1) + "] " + npc.name for x, npc in enumerate(self.people)]))
+            print('NPCs:\n      ' + '\n      '.join(["[" + str(x + 1) + "] " + npc.name for x, npc in enumerate(
+                self.people)]))
             while True:
                 npc = input('Input [#] (or type "exit"): ')
                 try:
@@ -229,17 +230,17 @@ class Town:
                     continue
                 winsound.PlaySound(None, winsound.SND_ASYNC)
                 winsound.PlaySound('Music\\Mayhem in the Village.wav',
-                winsound.SND_LOOP |
-                winsound.SND_NODEFAULT |
-                winsound.SND_ASYNC)
+                                   winsound.SND_LOOP |
+                                   winsound.SND_NODEFAULT |
+                                   winsound.SND_ASYNC)
                 print('-'*25)
                 npc.speak()
                 print('-'*25)
                 winsound.PlaySound(None, winsound.SND_ASYNC)
                 winsound.PlaySound('Music\\Chickens (going peck peck peck).wav',
-                winsound.SND_LOOP |
-                winsound.SND_NODEFAULT |
-                winsound.SND_ASYNC)
+                                   winsound.SND_LOOP |
+                                   winsound.SND_NODEFAULT |
+                                   winsound.SND_ASYNC)
                 break
 
 
@@ -258,7 +259,7 @@ are rumored to be masters of the arcane arts, and may be willing to train
 your magical abilities for a reasonable price. There is a general store, an
 inn, and several houses in this town.""", [npcs.wesley], -2, -6, inn_cost=2)
 
-town3 = Town('Overshire', """Overshire: A city in the nortwestern region of th\
+town3 = Town('Overshire', """Overshire: A city in the northwestern region of th\
 e Forest.
 Overshire is the capitol of the Forest, and as such is very densely populated.
 The city is separated into three sectors: the upper-class inner portion, the

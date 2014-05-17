@@ -1,5 +1,4 @@
 import sys
-import towns
 import json
 from copy import copy as _c
 from items import *
@@ -135,46 +134,46 @@ def pick_action(cat, item):
         if isinstance(item, Weapon) or isinstance(item, Armor):
             use_equip = 'Equip'
             if item.equip:
-               break
+                break
         else:
             use_equip = 'Use'
         action = input('{0} | 1: {1}, 2: Read Desc, 3: Drop, 4: Cancel | Input #(1-4): '.format(
-        str(item), use_equip))
+            str(item), use_equip))
         try:
             action = int(action)
         except TypeError:
             continue
         if action == 1:
             if isinstance(item, Weapon):
-                 item.equip_weapon()
+                item.equip_weapon()
             elif isinstance(item, Armor):
-                 item.equip_armor()
+                item.equip_armor()
             elif isinstance(item, Consumable):
-                 item.consume_item()
+                item.consume_item()
         elif action == 2:
             print('-'*25)
             print(str(item) + ': ' + item.desc)
             print('-'*25)
         elif action == 3:
             if item.imp:
-                 print('You cannot dispose of quest-related items.')
+                print('You cannot dispose of quest-related items.')
             else:
-                 while True:
-                     y_n = input('Are you sure you want to get rid of this {0}? | Yes or No: '.format(str(item)))
-                     try:
-                         y_n = y_n.lower()
-                     except AttributeError:
-                         continue
-                     if y_n in ['yes', 'y']:
-                         print('You toss the {0} aside and continue on your journey.'.format(str(item)))
-                         for x, y in enumerate(inventory[cat]):
-                             if y.name == item.name:
-                                 inventory[cat].remove(y)
-                                 break
-                         return
-                     elif y_n in ['no', 'n']:
-                         print('You decide to keep the {0} with you.'.format(str(item)))
-                         break
+                while True:
+                    y_n = input('Are you sure you want to get rid of this {0}? | Yes or No: '.format(str(item)))
+                    try:
+                        y_n = y_n.lower()
+                    except AttributeError:
+                        continue
+                    if y_n in ['yes', 'y']:
+                        print('You toss the {0} aside and continue on your journey.'.format(str(item)))
+                        for x, y in enumerate(inventory[cat]):
+                            if y.name == item.name:
+                                inventory[cat].remove(y)
+                                break
+                        return
+                    elif y_n in ['no', 'n']:
+                        print('You decide to keep the {0} with you.'.format(str(item)))
+                        break
         elif action == 4:
             return
 
@@ -195,8 +194,8 @@ def serialize_inv(path):
 def deserialize_inv(path):
     global inventory
     norm_inv = {}
-    with open(path, mode='r', encoding='utf-8') as c:
-       j_inventory = json.load(c)
+    with open(path, encoding='utf-8') as c:
+        j_inventory = json.load(c)
     for category in j_inventory:
         norm_inv[category] = []
         for item in j_inventory[category]:
@@ -230,7 +229,7 @@ def serialize_equip(path):
 def deserialize_equip(path):
     global equipped
     norm_equip = {}
-    with open(path, mode='r', encoding='utf-8') as d:
+    with open(path, encoding='utf-8') as d:
         j_equipped = json.load(d)
     for category in j_equipped:
         if j_equipped[category] == '(None)':

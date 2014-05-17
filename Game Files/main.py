@@ -1,5 +1,5 @@
-# Pythonius; v0.2.0 Alpha
-game_version = 'v0.2.0'
+# Pythonius; v0.2.2 Alpha
+game_version = 'v0.2.2'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -20,18 +20,18 @@ game_version = 'v0.2.0'
 #     you did to cause the bug, that'd be great. Contact information is near
 #     the top of the module.
 #-----------------------------------------------------------------------------#
-# Explaination of the number-based selection system:
+# Explanation of the number-based selection system:
 #
 #   The number-based selection system is a heavy improvement over the previous
 #   word-based selection system. Previously, when confronted with options, you
-#   had to type out the entire word (there were a few exceptions), unecessarily
+#   had to type out the entire word (there were a few exceptions), unnecessarily
 #   wasting time. For example, when going to view your inventory, selecting an
 #   item looked like this:
-#       Item Catagory: Item 1, Item 2, Item 3, Item 4, etc... | Input item name:
+#       Item Category: Item 1, Item 2, Item 3, Item 4, etc... | Input item name:
 #
 #   This was very-much time consuming and gets tedious quickly. As such, I
 #   decided to improve it:
-#       Item catagory:
+#       Item category:
 #             [1] Item 1
 #             [2] Item 2
 #             [3] Item 3
@@ -50,8 +50,6 @@ import json
 import winsound
 import copy
 
-import towns
-import monsters
 import battle
 import world
 import inv_system
@@ -94,10 +92,8 @@ if os.name == 'nt':  # Windows devices
 
 else:
     raise OSError('This game is not supported by your operating system.')
-    # Due to module incompatibity, this game is unfortunately not playable
+    # Due to module incompatibility, this game is unfortunately not playable
     # on Unix-based devices, such as Androids, Macs, and Linux devices.
-    input('Press enter to exit')
-    sys.exit()
 
 
 class PlayerCharacter:  # The Player

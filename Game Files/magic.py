@@ -73,9 +73,9 @@ class Damaging(Spell):
             attk_pwr = int(self.damage + (battle.temp_stats['m_attk']/3) -
                           (battle.monster.m_dfns/2) + var)
             attk_pwr = eval_element(
-                       p_elem=self.element,
-                       m_elem=monsters.monster.element,
-                       p_dmg=attk_pwr)[0]
+                p_elem=self.element,
+                m_elem=monsters.monster.element,
+                p_dmg=attk_pwr)[0]
             print('-Player Turn-')
             print('You begin to use your {0} to summon a powerful spell.'.format(
                   inv_system.equipped['weapon']))
@@ -135,7 +135,7 @@ f_blaze = Damaging('Fierce Blaze',
     "Summon a powerful flame to destroy your foes.",
     10, 8, 12, "fire")
 g_infer = Damaging('Grand Inferno',
-    "Unleash a monsterous blaze destroy your foes.",
+    "Unleash a monstrous blaze destroy your foes.",
     18, 18, 23, "fire")
 
 in_spark = Damaging('Inferior Spark',
@@ -220,6 +220,7 @@ spells = [
     ]
 
 
+# noinspection PyUnreachableCode
 def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     # Fire < Water < Electricity < Earth < Grass < Wind < Ice < Fire
     # "None" element is neutral to all stats.
@@ -229,39 +230,36 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     for x, y in enumerate(element_list):
         if p_elem == x:
             player = y
+        if m_elem == x:
+            monster = y
     else:
+        player, monster = 'none', 'none'
         return [p_dmg, m_dmg]
-    for a, b in enumerate(element_list):
-        if m_elem == b:
-            monster = a
-    else:
-        return [p_dmg, m_dmg]
-    try:
-        if m_elem == element_list[player + 1]:
-            p_dmg /= 1.5
-        elif m_elem == element_list[player - 1]:
-            p_dmg *= 1.5
-    except IndexError:
-        m_elem = 'fire'
-        if p_elem == 'ice':
-            p_dmg /= 1.5
-        elif p_elem == 'water':
-            p_dmg *= 1.5
+
     try:
         if p_elem == element_list[monster + 1]:
             m_dmg /= 1.5
         elif p_elem == element_list[monster - 1]:
             m_dmg *= 1.5
     except IndexError:
-        p_elem = 'fire'
         if m_elem == 'ice':
             m_dmg /= 1.5
         elif m_elem == 'water':
             m_dmg *= 1.5
+    try:
+        if m_elem == element_list[player + 1]:
+            p_dmg /= 1.5
+        elif m_elem == element_list[player - 1]:
+            p_dmg *= 1.5
+    except IndexError:
+        if p_elem == 'ice':
+            p_dmg /= 1.5
+        elif p_elem == 'water':
+            p_dmg *= 1.5
     return [int(p_dmg), int(m_dmg)]
 
 
-spellbook = {'Healing':[min_heal], 'Damaging':[w_flame, lef_blad], 'Buffs':[]}
+spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []}
 
 
 def pick_cat(var, dodge):
@@ -294,9 +292,9 @@ def pick_spell(cat, var, dodge):
     print('-'*25)
     while True:
         print(cat + ' Spells: \n      ' + '\n      '.join(
-              ['[' + str((num + 1)) + '] ' +  spell.name + ' --> ' + str(
-              spell.mana) + ' MP' for num, spell in enumerate(
-              spellbook[cat])]))
+            ['[' + str((num + 1)) + '] ' + spell.name + ' --> ' + str(
+            spell.mana) + ' MP' for num, spell in enumerate(
+            spellbook[cat])]))
         while True:
             spell = input('Input [#] (or type "back"): ')
             try:
@@ -375,7 +373,7 @@ def serialize_sb(path):
 def deserialize_sb(path):
     global spellbook
     norm_sb = {}
-    with open(path, mode='r', encoding='utf-8') as f:
+    with open(path, encoding='utf-8') as f:
         j_spellbook = json.load(f)
     for category in j_spellbook:
         norm_sb[category] = []
