@@ -15,16 +15,17 @@ class NPC:
         self.conversations = conversations
 
     def speak(self):
+        # Print the NPC's dialogue to the player
         dialogue = []
         for w in self.conversations:
             if w.active and not w.repeat:
                 try:
-                    if not w.started:
+                    if not w.started:  # Quests
                         dialogue.append(w.sentences)
                     elif w.started and w.finished and w.active:
                         dialogue = [w.end_dialogue]
                         break
-                except AttributeError:
+                except AttributeError:  # Non-quests
                     dialogue.append(w.sentences)
         else:
             for x in self.conversations:
@@ -32,6 +33,7 @@ class NPC:
                     dialogue.append(x.sentences)
                     break
         for y in dialogue[:]:
+            # Dialogue is being modified, so we're iterating over a copy of it.
             for z in y:
                 input(self.name + ': "' + z + '" | Press enter/return ')
             dialogue.remove(y)
@@ -50,29 +52,34 @@ class NPC:
 class Conversation:
     def __init__(self, sentences, repeat=False, active=False):
         self.sentences = sentences
-        self.repeat = repeat
+        self.repeat = repeat  # True if the conversation is generic and unimportant
         self.active = active
 
     def __str__(self):
+        # Returns a unique string based on the content of the conversation.
+        # This is used as a dictionary key to save information about conversations.
         return ''.join([x[0:6] for x in self.sentences])
 
 class Quest(Conversation):
     def __init__(self, sentences, name, desc, q_giver, reward, end_dialogue,
                  req_lvl=1, started=False, finished=False, repeat=False, active=False):
         Conversation.__init__(self, sentences, repeat, active)
-        self.name = name
-        self.desc = desc
-        self.q_giver = q_giver
-        self.reward = reward
-        self.req_lvl = req_lvl
-        self.started = started
-        self.finished = finished
-        self.end_dialogue = end_dialogue
+        self.name = name  # The name of the quest
+        self.desc = desc  # A breif summary of the goal of the quest
+        self.q_giver = q_giver  # The name of the person who gave you the quest
+        self.reward = reward  # A list [experience, gold] of your reward for the quest
+        self.req_lvl = req_lvl  # The level that you must be at to begin the quest
+        self.started = started  # is True if tje quest has been started, false otherwise
+        self.finished = finished  # is True if the quest is complete, false otherwise
+        self.end_dialogue = end_dialogue  # What is printed when the quest is over
 
     def give_quest(self):
         print('-'*25)
         print(''.join([self.name, ': \n  ', '\n  '.join([x for x in self.desc])]))
         print('-'*25)
+        if self.req_lvl > main.player.lvl:
+            print('You are not a high enough level to begin the quest "{0}".\
+(Must be level {1})'.format(self.name, self.req_lvl))
         print('{0} is offering you the quest, "{1}".'.format(self.q_giver, self.name))
         while True:
             accept = input('Do you accept this quest? | Yes or No: ')

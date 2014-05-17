@@ -24,6 +24,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
+
 def setup_vars():
     global position
     global static
@@ -34,6 +35,7 @@ def setup_vars():
     player = main.player
     static = main.static
     position = main.position
+
 
 def update_stats(): # Forces stats to return to normal when battle is finished
     global temp_stats
@@ -110,11 +112,10 @@ def battle_system(is_boss=False):
                                    winsound.SND_NODEFAULT)
                 return
             enemy_turn(var, dodge)
-            # If it fails, the enemy will
-            # attack you and skip your turn
+            # If it fails, the enemy will attack you and skip your turn
             continue
 
-        elif player.spd > monster.spd or move == '2':
+        elif temp_stats['spd'] > monster.spd or move == '2':
             # The player goes first if they have a higher speed
             if player_turn(var, dodge, move) and monster.hp > 0:
                 enemy_turn(var, dodge)

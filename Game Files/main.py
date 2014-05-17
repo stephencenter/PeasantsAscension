@@ -20,6 +20,27 @@ game_version = 'v0.2.0'
 #     you did to cause the bug, that'd be great. Contact information is near
 #     the top of the module.
 #-----------------------------------------------------------------------------#
+# Explaination of the number-based selection system:
+#
+#   The number-based selection system is a heavy improvement over the previous
+#   word-based selection system. Previously, when confronted with options, you
+#   had to type out the entire word (there were a few exceptions), unecessarily
+#   wasting time. For example, when going to view your inventory, selecting an
+#   item looked like this:
+#       Item Catagory: Item 1, Item 2, Item 3, Item 4, etc... | Input item name:
+#
+#   This was very-much time consuming and gets tedious quickly. As such, I
+#   decided to improve it:
+#       Item catagory:
+#             [1] Item 1
+#             [2] Item 2
+#             [3] Item 3
+#       Input [#]:
+#
+#   Not only does this save time, but it also looks much more visually
+#   appealing in my opinion. I felt the need to explain this, I don't know why.
+#-----------------------------------------------------------------------------#
+
 import sys
 import os
 import random
@@ -101,12 +122,11 @@ class PlayerCharacter:  # The Player
 
 
     def player_damage(self, var):  # The formula for the player dealing damage
-        phys_dealt = int((self.attk/2) - (battle.monster.dfns/3) +
-                                         (self.lvl/3) + var + 1)
+        phys_dealt = int((battle.temp_stats['attk']/2) -
+                         (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
         phys_dealt = magic.eval_element(
                      p_elem=inv_system.equipped['weapon'].element,
-                     m_elem=battle.monster.element,
-                     p_dmg=phys_dealt)[0]
+                     m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
         if phys_dealt < 1:
             phys_dealt = 1
         return phys_dealt

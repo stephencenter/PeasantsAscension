@@ -3,6 +3,7 @@ import battle
 import npcs
 import sys
 import copy
+import json
 
 if __name__ == "__main__":
     sys.exit()

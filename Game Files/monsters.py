@@ -33,18 +33,18 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
         self.lvl = lvl          # Level
         self.element = element  # Element
         self.items = ''
-        num = random.randint(0, 4)
+        num = random.randint(0, 5)
         if num == 4:
             self.items = random.choice(items.monster_drop(self.lvl, self.element))
 
     def monst_damage(self, var):
-        monst_dealt = int((self.attk/2) - (player.dfns/3) + (self.lvl/3) + var + 1)
+        monst_dealt = int((self.attk/2) - (battle.temp_stats['dfns']/3) + (self.lvl/3) + var + 1)
         if monst_dealt < 1:
             monst_dealt = 1
         return monst_dealt
 
     def monst_magic(self, var):
-        monst_dealt = int((self.m_attk/2) - (player.m_dfns/3) + (self.lvl/3) + var + 1)
+        monst_dealt = int((self.m_attk/2) - (battle.temp_stats['m_dfns']/3) + (self.lvl/3) + var + 1)
         if monst_dealt < 1:
             monst_dealt = 1
         return monst_dealt
@@ -91,35 +91,35 @@ class Monster:  # All monsters use this class. Bosses use a sub-class called
                     'Mystic', 'Foolish'
                     ]
         modifier = random.choice(modifiers)
-        if modifier == 'Slow':
+        if modifier == 'Slow':  # Very-low speed, below-average speed
             self.spd -= 3
             self.evad -= 1
-        if modifier == 'Fast':
+        if modifier == 'Fast':  # Very-high speed, above-average speed
             self.spd += 3
             self.evad += 1
-        if modifier == 'Powerful':
+        if modifier == 'Powerful':  # High attack stats
             self.attk += 2
             self.m_attk += 2
-        if modifier == 'Weak':
+        if modifier == 'Weak':  # Low attack stats
             self.attk -= 2
             self.m_attk -= 2
-        if modifier == 'Nimble':
+        if modifier == 'Nimble':  # Very-high evasion, above-average speed
             self.evad += 3
             self.spd += 1
-        if modifier == 'Clumsy':
+        if modifier == 'Clumsy':  # Very-low evasion, below-average speed
             self.evad -= 3
             self.spd -= 1
-        if modifier == 'Armored':
+        if modifier == 'Armored':  # High defense stats
             self.dfns += 2
             self.m_dfns += 2
-        if modifier == 'Broken':
+        if modifier == 'Broken':  # Low defense stats
             self.dfns -= 2
             self.m_dfns -= 2
-        if modifier == 'Mystic':
+        if modifier == 'Mystic':  # High magic stats
             self.m_attk += 2
             self.m_dfns += 2
             self.mp += 3
-        if modifier == 'Foolish':
+        if modifier == 'Foolish':  # Low magic stats
             self.m_attk -= 2
             self.m_dfns -= 2
 

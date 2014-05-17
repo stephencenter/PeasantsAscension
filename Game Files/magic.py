@@ -70,7 +70,7 @@ class Damaging(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            attk_pwr = int(self.damage + (main.player.m_attk/3) -
+            attk_pwr = int(self.damage + (battle.temp_stats['m_attk']/3) -
                           (battle.monster.m_dfns/2) + var)
             attk_pwr = eval_element(
                        p_elem=self.element,
@@ -221,8 +221,11 @@ spells = [
 
 
 def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
+    # Fire < Water < Electricity < Earth < Grass < Wind < Ice < Fire
+    # "None" element is neutral to all stats.
     element_list = ['fire', 'water', 'electric', 'earth',
                     'grass', 'wind', 'ice']
+
     for x, y in enumerate(element_list):
         if p_elem == x:
             player = y
@@ -258,7 +261,7 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     return [int(p_dmg), int(m_dmg)]
 
 
-spellbook = {'Healing':[], 'Damaging':[w_flame, min_heal, lef_blad], 'Buffs':[]}
+spellbook = {'Healing':[min_heal], 'Damaging':[w_flame, lef_blad], 'Buffs':[]}
 
 
 def pick_cat(var, dodge):
@@ -338,6 +341,8 @@ def pick_spell(cat, var, dodge):
 
 
 def new_spells():
+    # Teach the player new spells as they level up, or low-level spells not
+    # previously in the game.
     global spellbook
     for spell in spells:
         if isinstance(spell, Damaging):
