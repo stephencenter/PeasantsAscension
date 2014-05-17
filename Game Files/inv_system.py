@@ -86,7 +86,7 @@ def pick_category():
 
 def pick_item(cat, vis_cat):
     while inventory[cat]:
-        if cat == 'armor' or cat == 'weapons':
+        if cat in ['armor', 'weapons']:
             if [x for x in inventory[cat] if not x.equip]:
                 print('-'*25)
                 print(vis_cat + ': \n      ' + '\n      '.join(
@@ -143,7 +143,7 @@ def pick_action(cat, item):
             str(item), use_equip))
         try:
             action = int(action)
-        except TypeError:
+        except (TypeError, ValueError):
             continue
         if action == 1:
             if isinstance(item, Weapon):

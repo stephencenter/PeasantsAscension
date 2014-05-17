@@ -350,6 +350,6 @@ def monster_drop(level, element):
     else:
         drops = [l_potion, l_elixir, x_potion, x_elixir, stl_hlm, elem_rob, bnz_spr]
     try:
-        return drops.append(random.choice(unique_drops[element])) if random.randint(0, 1) else ''
-    except KeyError:
-        return drops if random.randint(0, 1) else ''
+        return [drops.append(random.choice(unique_drops[element]))] if random.randint(0, 1) else drops
+    except (KeyError, IndexError):
+        return drops

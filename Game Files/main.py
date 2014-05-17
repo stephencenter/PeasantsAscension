@@ -1,5 +1,5 @@
-# Pythonius; v0.2.2 Alpha
-game_version = 'v0.2.2'
+# Pythonius; v0.2.3 Alpha
+game_version = 'v0.2.3'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -404,15 +404,15 @@ def title_screen():
                        winsound.SND_LOOP |
                        winsound.SND_NODEFAULT)
     print("""
-  ____        _   _                 _
- |  _ \\ _   _| |_| |__   ___  _ __ (_)_   _ ___
- | |_) | | | | __| '_ \\ / _ \\| '_ \\| | | | / __|
- |  __/| |_| | |_| | | | (_) | | | | | |_| \\__ \\
- |_|    \\__, |\\__|_| |_|\\___/|_| |_|_|\\__,_|___/
-        |___/
+      ____        _   _                 _
+     |  _ \\ _   _| |_| |__   ___  _ __ (_)_   _ ___
+     | |_) | | | | __| '_ \\ / _ \\| '_ \\| | | | / __|
+     |  __/| |_| | |_| | | | (_) | | | | | |_| \\__ \\
+     |_|    \\__, |\\__|_| |_|\\___/|_| |_|_|\\__,_|___/
+            |___/
 
-Pythonius {0}
-------------------------------------------------""".format(game_version))
+Pythonius {0} -- Programmed in Python by Stephen Center
+-----------------------------------------------------------""".format(game_version))
     while True:
         choice = input('[P]Lay Game  |  [C]redits  |  [E]xit  |  Input letter: ')
         try:

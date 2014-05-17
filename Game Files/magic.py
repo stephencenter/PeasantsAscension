@@ -130,30 +130,30 @@ class Buff(Spell):
 
 w_flame = Damaging('Weak Flame',
                    "Summon a weak fireball to destroy your foes.",
-                   3, 1, 4, "fire")
+                   3, 1, 6, "fire")
 f_blaze = Damaging('Fierce Blaze',
                    "Summon a powerful flame to destroy your foes.",
-                   10, 8, 12, "fire")
+                   10, 8, 13, "fire")
 g_infer = Damaging('Grand Inferno',
                    "Unleash a monstrous blaze destroy your foes.",
                    18, 18, 23, "fire")
 
 in_spark = Damaging('Inferior Spark',
                     "Summon a weak spark to destroy your foes.",
-                    3, 2, 4, "electric")
+                    3, 2, 6, "electric")
 pwr_jolt = Damaging('Powerful Jolt',
                     "Summon a powerful jolt of energy to destroy your foes.",
-                    10, 8, 12, "electric")
+                    10, 8, 13, "electric")
 sp_storm = Damaging('Superior Storm',
                     "Unleash a devastating lightning storm to destroy your foes.",
                     19, 18, 23, "electric")
 
 lef_blad = Damaging('Leaf Blade',
                     "Summon a weak blade of grass to destroy your foes.",
-                    3, 1, 4, "grass")
+                    3, 1, 5, "grass")
 gra_gren = Damaging('Grass Grenade',
                     "Summon a small explosion to destroy your foes.",
-                    10, 8, 12, "grass")
+                    10, 8, 13, "grass")
 vin_strm = Damaging('Vine Storm',
                     "Unleash a frenzy of powerful vines to destroy your foes.",
                     19, 18, 23, "grass")
@@ -220,7 +220,6 @@ spells = [
 ]
 
 
-# noinspection PyUnreachableCode
 def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     # Fire < Water < Electricity < Earth < Grass < Wind < Ice < Fire
     # "None" element is neutral to all stats.
@@ -228,34 +227,33 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
                     'grass', 'wind', 'ice']
 
     for x, y in enumerate(element_list):
-        if p_elem == x:
-            player = y
-        if m_elem == x:
-            monster = y
-    else:
-        player, monster = 'none', 'none'
-        return [p_dmg, m_dmg]
-
+        if p_elem == y:
+            player = x
+        if m_elem == y:
+            monster = x
     try:
         if p_elem == element_list[monster + 1]:
             m_dmg /= 1.5
         elif p_elem == element_list[monster - 1]:
             m_dmg *= 1.5
-    except IndexError:
-        if m_elem == 'ice':
-            m_dmg /= 1.5
-        elif m_elem == 'water':
-            m_dmg *= 1.5
-    try:
-        if m_elem == element_list[player + 1]:
-            p_dmg /= 1.5
-        elif m_elem == element_list[player - 1]:
-            p_dmg *= 1.5
-    except IndexError:
-        if p_elem == 'ice':
-            p_dmg /= 1.5
-        elif p_elem == 'water':
-            p_dmg *= 1.5
+    except (IndexError, NameError):
+        if p_elem != 'none':
+            if m_elem == 'ice':
+                m_dmg /= 1.5
+            elif m_elem == 'water':
+                m_dmg *= 1.5
+    finally:
+        try:
+            if m_elem == element_list[player + 1]:
+                p_dmg /= 1.5
+            elif m_elem == element_list[player - 1]:
+                p_dmg *= 1.5
+        except (IndexError, NameError):
+            if m_elem != 'none':
+                if p_elem == 'ice':
+                    p_dmg /= 1.5
+                elif p_elem == 'water':
+                    p_dmg *= 1.5
     return [int(p_dmg), int(m_dmg)]
 
 
