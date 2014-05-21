@@ -51,7 +51,7 @@ class Monster:
 
     def monst_level(self):
         global static
-        self.lvl = int(1 / 2 * abs(1.5 * position['avg'] - 1)) + 1
+        self.lvl = int((1/3)*abs(1.5*position['avg'] - 1)) + 1
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 6)
             self.mp += random.randint(1, 2)

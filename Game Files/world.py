@@ -133,7 +133,7 @@ def check_region():
         print('-'*25)
         position['reg'] = region
         position['reg_music'] = reg_music
-        save_coords( position['pos_x'],  position['pos_y'])
+        save_coords( position['x'],  position['y'])
         return True
     else:
         return False

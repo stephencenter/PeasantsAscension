@@ -7,6 +7,7 @@ import monsters
 import magic
 import world
 import bosses
+import pets
 
 from copy import copy as _c
 
@@ -149,20 +150,19 @@ def player_turn(var, dodge, move):
                     monster.name, dealt))
             else:
                 print('The {0} dodges your attack with ease!'.format(monster.name))
-            return True
 
         elif move == '2':  # Magic
             magic.pick_cat(var, dodge)
-            return True
 
         elif move == '3':  # Wait
             print('You wait for your turn to end while you gather your strength.')
             player.hp += 2
             player.mp += 2
-            return True
 
         else:
             return False
+        player.current_pet.use_ability() if player.current_pet else ''
+        return True
 
 
 def enemy_turn(var, dodge):
@@ -373,7 +373,11 @@ def bat_stats():
           player.name, player.hp,
           static['hp_p'], player.mp,
           static['mp_p'], player.lvl))
-
+    # Pet Stats
+    pet = player.current_pet
+    if pet:
+        if isinstance(player.current_pet, pets.Healer):
+            print("{0}'s {1}: {2}/{3} MP LVL: {4}".format(player.name, pet.name, pet.mana, pet.max_m, pet.level))
     # Monster Stats
     print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
           monster.name, monster.hp,

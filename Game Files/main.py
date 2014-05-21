@@ -57,6 +57,7 @@ import inv_system
 import magic
 import bosses
 import npcs
+import pets
 
 # Establish "player" as a global variable
 player = ''
@@ -116,6 +117,7 @@ class PlayerCharacter:  # The Player
         self.ext_gol = ext_gol  # Extra Gold Pieces
         self.ext_exp = ext_exp  # Extra Experience
         self._class = _class  # Player Class
+        self.current_pet = ''  # Current Pet
 
     def player_damage(self, var):  # The formula for the player dealing damage
         phys_dealt = int((battle.temp_stats['attk'] / 2) -
@@ -130,6 +132,8 @@ class PlayerCharacter:  # The Player
     def choose_name(self):
         while True:
             self.name = input('What is your name, young adventurer? | Input Name: ')
+            if not ''.join(self.name.split()):
+                continue
             while True:
                 y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
                 try:
@@ -412,8 +416,14 @@ def save_game():
 
 
 def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
+    spam = {}
+    for key in player.__dict__:
+        if (player.__dict__[key] != player.current_pet) or (not player.current_pet):
+            spam[key] = player.__dict__[key]
+        else:
+            spam[key] = [player.__dict__[key].name, player.__dict__[key].level]
     with open(path, mode='w', encoding='utf-8') as e:
-        json.dump(player.__dict__, e, indent=4, separators=(', ', ': '))
+        json.dump(spam, e, indent=4, separators=(', ', ': '))
 
 
 def deserialize_player(path):  # Load the JSON file and translate
@@ -421,7 +431,14 @@ def deserialize_player(path):  # Load the JSON file and translate
     global player
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
     with open(path, encoding='utf-8') as e:
-        player.__dict__ = json.load(e)
+        spam = json.load(e)
+    for key in spam:
+        if key == 'current_pet' and spam[key][0]:
+            for pet in pets.all_pets:
+                if pet.name == spam[key][0]:
+                    pet.level = spam[key][1]
+                    spam[key] = pet
+    player.__dict__ = spam
 
 
 def title_screen():
