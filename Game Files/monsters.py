@@ -76,10 +76,12 @@ class Monster:
     def monst_name(self):
         monster_type = {'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],
                         'Swamp': ['Moss Ogre', 'Bog Slime', 'Sludge Rat'],
-                        'Forest': ['Imp', 'Skeleton', 'Goblin'],
-                        'Desert': ['Sand Golem', 'Desert Python', 'Fire Ant'],
+                        'Forest': ['Imp', 'Sprite', 'Goblin'],
+                        'Desert': ['Sand Golem', 'Mummy', 'Fire Ant'],
                         'Tundra': ['Frost Bat', 'Arctic Wolf', 'Minor Yeti'],
-                        'Mountain': ['Rock Giant', 'Giant Worm', 'Troll']}
+                        'Mountain': ['Rock Giant', 'Giant Worm', 'Troll'],
+                        'Graveyard': ['Ghoul', 'Zombie', 'Skeleton']
+        }
         self.name = random.choice(monster_type[position['reg']])
         modifiers = [
             'Slow', 'Fast',
@@ -133,6 +135,10 @@ class Monster:
             self.element = 'grass'
         elif position['reg'] == 'Swamp':
             self.element = 'water'
+        elif position['reg'] == 'Graveyard':
+            self.element = 'death'
+        else:
+            self.element = 'none'
         self.name = ' '.join([modifier, self.name])
 
 

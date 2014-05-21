@@ -12,6 +12,7 @@ else:
 
 static = ''
 
+
 class Boss(monsters.Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, spd, evad,
                  lvl, pos_x, pos_y, item, gold, experience,
@@ -100,5 +101,8 @@ master_slime.upon_defeating = mastslim_ud
 # Boss: Whispering Goblin -- Position: 4'N, -2'W
 whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)  # This is for you, Jacob!
 
-boss_list = [whisp_goblin, master_slime]
+# Boss: Menacing Phantom -- Position: 8'N, -12'W
+menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [], 100, 100)
+
+boss_list = [whisp_goblin, master_slime, menac_phantom]
 defeated_bosses = []  # Make sure you can only defeat the boss one time

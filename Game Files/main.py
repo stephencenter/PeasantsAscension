@@ -1,5 +1,5 @@
-# Pythonius; v0.2.3 Alpha
-game_version = 'v0.2.3'
+# Pythonius; v0.2.4 Alpha
+game_version = 'v0.2.4'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -31,6 +31,7 @@ game_version = 'v0.2.3'
 #
 #   This was very-much time consuming and gets tedious quickly. As such, I
 #   decided to improve it:
+
 #       Item category:
 #             [1] Item 1
 #             [2] Item 2
@@ -191,59 +192,84 @@ class PlayerCharacter:  # The Player
                 temp_ski += self.ext_ski
                 magic.new_spells()
                 self.exp -= static['r_xp']
-                static['r_xp'] = int((math.pow(self.lvl * 2, 1.8) - self.lvl))
-            print('-' * 25)
+                static['r_xp'] = int((math.pow(self.lvl*2, 1.8) - self.lvl))
+            print('-'*25)
             self.skill_points(temp_ski)
             static['hp_p'] = self.hp
             static['mp_p'] = self.mp
-            print('-' * 25)
+            print('-'*25)
             save_game()
             return
 
     def skill_points(self, temp_ski):
         global static
-        intelligence = ['int', 'intel', 'intelligence']
-        strength = ['str', 'strength']
-        constitution = ['con', 'const', 'constitution']
-        dexterity = ['dex', 'dexterity']
-        luck = ['luc', 'luck', 'lucky']
         while temp_ski > 0:
             print()
-            print('You have {0} skill points left to spend.'.format(temp_ski))
+            print('You have {0} skill point{1} left to spend.'.format(
+                temp_ski, 's' if temp_ski > 1 else ''))
             while temp_ski > 0:
-                skill = input('INT, STR, CON, DEX, LUC | Choose one skill to advance: ')
+                skill = input("""Choose a skill to advance:
+    [I]ntelligence - Use the power of magic with higher magic attack/defense and MP!
+    [S]trength - Easily smash through enemies with higher attack and defense!
+    [C]onstitution - Become a tank with higher magical/physical defense and HP!
+    [D]exterity - Improve your aerobic ability with higher evade/speed stats!
+    [L]uck - Receive more gold, more experience, and possibly even more skill points!
+  Input letter: """)
                 try:
                     skill = skill.lower()
                 except AttributeError:
                     continue
-                if skill in intelligence:
-                    self.m_dfns += 1
-                    self.m_attk += 1
-                    self.mp += random.randint(3, 5)
-                    static['int'] += 1
-                elif skill in strength:
-                    self.attk += 1
-                    self.dfns += 1
-                    static['str'] += 1
-                elif skill in constitution:
-                    self.hp += random.randint(4, 6)
-                    self.dfns += random.randint(0, 1)
-                    self.m_dfns += random.randint(0, 1)
-                    static['con'] += 1
-                elif skill in dexterity:
-                    self.spd += 1
-                    self.evad += 1
-                    static['dex'] += 1
-                elif skill in luck:
-                    self.ext_ski += random.choice([0, 0, 0, 1])
-                    self.ext_gol += random.randint(0, 2)
-                    self.ext_exp += random.randint(0, 1)
-                    static['luc'] += 1
-                else:
-                    continue
-                print('Your experience in {0} has increased.'.format(skill.upper()))
-                temp_ski -= 1
-                break
+                if skill[0] in ['i', 's', 'c', 'd', 'l']:
+                    if skill.startswith('i'):
+                        vis_skill = 'Intelligence'
+                    elif skill.startswith('s'):
+                        vis_skill = 'Strength'
+                    elif skill.startswith('c'):
+                        vis_skill = 'Constitution'
+                    elif skill.startswith('d'):
+                        vis_skill = 'Dexterity'
+                    else:
+                        vis_skill = 'Luck'
+                    while True:
+                        y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
+                        try:
+                            y_n = y_n.lower()
+                        except AttributeError:
+                            continue
+                        if y_n in ['y', 'yes', 'yeah', 'yep']:
+                            pass
+                        elif y_n in ['n', 'no', 'nope']:
+                            break
+                        else:
+                            continue
+                        if skill.startswith('i'):  # Higher intelligence means better magical stats
+                            self.m_dfns += 1
+                            self.m_attk += 1
+                            self.mp += random.randint(3, 5)
+                            static['int'] += 1
+                        elif skill.startswith('s'):  #
+                            self.attk += 1
+                            self.dfns += 1
+                            static['str'] += 1
+                        elif skill.startswith('c'):
+                            self.hp += random.randint(4, 6)
+                            self.dfns += random.randint(0, 1)
+                            self.m_dfns += random.randint(0, 1)
+                            static['con'] += 1
+                        elif skill.startswith('d'):
+                            self.spd += 1
+                            self.evad += 1
+                            static['dex'] += 1
+                        elif skill.startswith('l'):
+                            self.ext_ski += random.choice([0, 0, 0, 1])
+                            self.ext_gol += random.randint(0, 2)
+                            self.ext_exp += random.randint(0, 1)
+                            static['luc'] += 1
+                        else:
+                            continue
+                        print('Your {0} has increased!'.format(vis_skill))
+                        temp_ski -= 1
+                        break
         print()
         print('You are out of skill points.')
 

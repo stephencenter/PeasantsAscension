@@ -338,6 +338,9 @@ ice_blade = Weapon('Blade of Frost',
 enc_yw = Weapon('Enchanted Yew Wand',
                 'A yewen wand of remarkable craftsmanship (+16 Magic Attack, GRASS).',
                 0, 225, 16, 'magic', 'mage', element='grass')
+spect_wand = Weapon('Spectre Wand',
+                    'A ghastly wand made of an indescribable material (+15 Magic Attack, DEATH).',
+                    0, 225, 15, 'magic', 'mage', element='death')
 
 unique_drops = {'ice': [ice_blade], 'grass': [enc_yw], 'none': [bnz_leg]}
 

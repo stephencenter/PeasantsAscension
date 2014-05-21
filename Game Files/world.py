@@ -105,7 +105,10 @@ def out_of_bounds():
 def check_region():
     global position
     x, y = position['x'], position['y']
-    if x in range(-50, 51) and y in range(-50, 51):  # Center of World
+    if x in range(-15, -9) and y in range(5, 11): # Micro-region in the North-west of the Forest
+        region = 'Graveyard'
+        reg_music = 'Music\\Frontier.wav'
+    elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
         region = 'Forest'
         reg_music = 'Music\\Through the Forest.wav'
     elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
@@ -123,12 +126,14 @@ def check_region():
     elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
         region = 'Beach'
         reg_music = "Music\\We're all under the stars.wav"
+
     if position['reg'] != region:
         print('-'*25)
         print('You have left the {0} region and are now entering the {1} region.'.format(position['reg'], region))
         print('-'*25)
         position['reg'] = region
         position['reg_music'] = reg_music
+        save_coords( position['pos_x'],  position['pos_y'])
         return True
     else:
         return False

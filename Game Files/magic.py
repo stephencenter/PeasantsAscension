@@ -43,7 +43,7 @@ class Healing(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            main.player.hp += self.health + int(main.static['int'] / 4) + random.randint(-2, 2)
+            main.player.hp += self.health + int(main.static['int']/4) + random.randint(-2, 2)
             if main.player.hp > main.static['hp_p']:
                 main.player.hp -= (main.player.hp - main.static['hp_p'])
             print('-Player Turn-')
@@ -70,8 +70,8 @@ class Damaging(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            attk_pwr = int(self.damage + (battle.temp_stats['m_attk'] / 3) -
-                           (battle.monster.m_dfns / 2) + var)
+            attk_pwr = int(self.damage + (battle.temp_stats['m_attk']/3) -
+                           (battle.monster.m_dfns/2) + var)
             attk_pwr = eval_element(
                 p_elem=self.element,
                 m_elem=monsters.monster.element,
@@ -222,10 +222,18 @@ spells = [
 
 def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     # Fire < Water < Electricity < Earth < Grass < Wind < Ice < Fire
-    # "None" element is neutral to all stats.
+    # Life < Death and Death < Life
+    # "None" element is neutral to all elements.
     element_list = ['fire', 'water', 'electric', 'earth',
                     'grass', 'wind', 'ice']
-
+    if (p_elem == 'death' and m_elem == 'life') or (p_elem == 'life' and m_elem == 'death'):
+        p_dmg *= 1.5
+        m_dmg *= 1.5
+        return [p_dmg, m_dmg]
+    elif (p_elem == 'death' and m_elem == 'death') or (p_elem == 'life' and m_elem == 'life'):
+        p_dmg /= 1.5
+        m_dmg /= 1.5
+        return [p_dmg, m_dmg]
     for x, y in enumerate(element_list):
         if p_elem == y:
             player = x
