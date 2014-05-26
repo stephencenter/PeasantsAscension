@@ -4,11 +4,16 @@ import monsters
 import battle
 import random
 import inv_system
+import sounds
+import pygame
 
 if __name__ == "__main__":
     sys.exit()
 else:
     main = sys.modules["__main__"]
+
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 
 # This is the message that is printed if you attempt to use magic
 # without the required amount of mana.
@@ -46,6 +51,7 @@ class Healing(Spell):
             main.player.hp += self.health + int(main.static['int']/4) + random.randint(-2, 2)
             if main.player.hp > main.static['hp_p']:
                 main.player.hp -= (main.player.hp - main.static['hp_p'])
+            sounds.magic_healing.play()
             print('-Player Turn-')
             print('Using "{0}", you are healed by {1} HP!'.format(self.name, self.health))
             return True
@@ -76,6 +82,7 @@ class Damaging(Spell):
                 p_elem=self.element,
                 m_elem=monsters.monster.element,
                 p_dmg=attk_pwr)[0]
+            sounds.magic_attack.play()
             print('-Player Turn-')
             print('You begin to use your {0} to summon a powerful spell.'.format(
                 inv_system.equipped['weapon']))
@@ -286,16 +293,16 @@ def pick_cat(var, dodge):
             else:
                 continue
         if not spellbook[cat]:
-            print('-' * 25)
+            print('-'*25)
             print('You do not yet have any spells in the {0} category.'.format(cat))
-            print('-' * 25)
+            print('-'*25)
             continue
         if pick_spell(cat, var, dodge):
             return True
 
 
 def pick_spell(cat, var, dodge):
-    print('-' * 25)
+    print('-'*25)
     while True:
         print(cat + ' Spells: \n      ' + '\n      '.join(
             ['[' + str((num + 1)) + '] ' + spell.name + ' --> ' + str(
@@ -318,9 +325,9 @@ def pick_spell(cat, var, dodge):
                 spell = spellbook[cat][spell]
             except IndexError:
                 continue
-            print('-' * 25)
+            print('-'*25)
             print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
-            print('-' * 25)
+            print('-'*25)
             while True:
                 y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
                 if y_n == '':

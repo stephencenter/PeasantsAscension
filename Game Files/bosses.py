@@ -53,6 +53,7 @@ def check_bosses(x, y):
                     monsters.setup_vars()
                     battle.setup_vars()
                     boss.max_stats()
+                    print('-'*25)
                     battle.battle_system(is_boss=True)
                     return True
                 elif y_n in ['no', 'n']:

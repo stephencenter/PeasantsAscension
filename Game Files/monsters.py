@@ -3,11 +3,17 @@ import sys
 import inv_system
 import items
 import battle
+import pygame
+import sounds
+import time
 
 if __name__ == "__main__":
     sys.exit()
 else:
     main = sys.modules["__main__"]
+
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 
 player = ''
 monster = ''
@@ -51,7 +57,7 @@ class Monster:
 
     def monst_level(self):
         global static
-        self.lvl = int((1/3)*abs(1.5*position['avg'] - 1)) + 1
+        self.lvl = int((1/3)*abs(1.2*position['avg'] - 1)) + 1
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 6)
             self.mp += random.randint(1, 2)
@@ -65,10 +71,13 @@ class Monster:
         static['mp_m'] = self.mp
 
     def monst_attk(self, var, dodge):
+        sounds.sword_slash.play()
         print('The {0} angrily begins to charge at you!'.format(self.name))
+        time.sleep(0.75)
         if dodge in range(player.evad, 250):
             dealt = self.monst_damage(var)
             player.hp -= dealt
+            sounds.enemy_hit.play()
             print('The {0} hits you, dealing {1} damage!'.format(self.name, dealt))
         else:
             print("You narrowly avoid the {0}'s attack!".format(self.name))
@@ -81,7 +90,7 @@ class Monster:
                         'Tundra': ['Frost Bat', 'Arctic Wolf', 'Minor Yeti'],
                         'Mountain': ['Rock Giant', 'Giant Worm', 'Troll'],
                         'Graveyard': ['Ghoul', 'Zombie', 'Skeleton']
-        }
+                        }
         self.name = random.choice(monster_type[position['reg']])
         modifiers = [
             'Slow', 'Fast',

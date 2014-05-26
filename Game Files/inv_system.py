@@ -1,6 +1,5 @@
 import sys
 import json
-import monsters
 import npcs
 from copy import copy as _c
 from items import *
@@ -16,8 +15,10 @@ equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
 
 gs_stock = [[s_potion, s_potion, m_potion, l_potion, l_potion, x_potion],
             [s_elixir, s_elixir, m_elixir, l_elixir, l_elixir, x_elixir],
+            [s_rejuv, s_rejuv, m_rejuv, m_rejuv, l_rejuv, l_rejuv],
             [cpr_swd, en_cpr_swd, bnz_spr, en_bnz_spr, irn_axe, en_irn_axe],
-            [oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf, en_irn_axe],
+            [oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf, en_rnc_stf],
+            [sht_bow, en_sht_bow, lng_bow, en_lng_bow, myth_sb, en_myth_sb],
             [bnz_hlm, en_bnz_hlm, irn_hlm, stl_hlm],
             [bnz_cst, en_bnz_cst, irn_cst, stl_cst],
             [bnz_leg, en_bnz_leg, irn_leg, stl_leg],
@@ -32,7 +33,7 @@ item_setup_vars()
 def pick_category():
     global inventory
     while True:
-        print('Categories: 1: Armor; 2: Consumables; 3: Weapons; 4: Quest Items; 5: Misc.')
+        print('Categories: 1: Armor, 2: Consumables, 3: Weapons, 4: Quest Items, 5: Coordinate, 6: Misc.')
         while True:
             cat = input('Input the number of the category you want to view (or type "exit"): ')
             try:
@@ -54,6 +55,9 @@ def pick_category():
                 cat = 'quest'
                 vis_cat = 'Quest Items'
             elif cat == '5':
+                cat = 'coord'
+                vis_cat = 'Coordinates'
+            elif cat == '6':
                 cat = 'misc'
                 vis_cat = 'Misc.'
             else:

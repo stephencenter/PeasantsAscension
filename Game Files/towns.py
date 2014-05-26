@@ -4,12 +4,15 @@ import copy
 import inv_system
 import world
 import npcs
-import winsound
+import pygame
 
 if __name__ == "__main__":
     sys.exit()
 else:
     main = sys.modules["__main__"]
+
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 
 
 class Town:
@@ -27,37 +30,45 @@ class Town:
 
     def town_choice(self):
         print('-'*25)
-        print('Welcome to {0}!'.format(self.name))
+        print('Welcome to {0}!\n{1}'.format(self.name, '-'*25))
         while True:
-            choice = input('1. Town Desc 2. Buildings 3. People 4. Player Info 5. View Inv 6. Exit | Input #(1-6): ')
-            if choice == '1':
-                print('-'*25)
-                print(self.desc)
-                print('-'*25)
-            elif choice == '2':
-                print('-'*25)
-                self.inside_town()
-                print('-'*25)
-            elif choice == '3':
-                print('-'*25)
-                self.speak_to_npcs()
-                print('-'*25)
-            elif choice == '4':
-                print('-'*25)
-                main.player.player_info()
-                print('-'*25)
-            elif choice == '5':
-                print('-'*25)
-                inv_system.pick_category()
-                print('-'*25)
-            elif choice == '6':
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound(world.position['reg_music'],
-                                   winsound.SND_ASYNC |
-                                   winsound.SND_LOOP |
-                                   winsound.SND_NODEFAULT)
-                print('-'*25)
-                return
+            print("""What do you wish to do?
+      [1] --> Town Desc
+      [2] --> Buildings
+      [3] --> People
+      [4] --> Player Info
+      [5] --> View Inventory
+      [6] --> Exit""")
+            while True:
+                choice = input('Input [#]: ')
+                if choice == '1':
+                    print('-'*25)
+                    input(''.join([self.desc, '\nPress Enter/Return ']))
+                    print('-'*25)
+                elif choice == '2':
+                    print('-'*25)
+                    self.inside_town()
+                    print('-'*25)
+                elif choice == '3':
+                    print('-'*25)
+                    self.speak_to_npcs()
+                    print('-'*25)
+                elif choice == '4':
+                    print('-'*25)
+                    main.player.player_info()
+                    print('-'*25)
+                elif choice == '5':
+                    print('-'*25)
+                    inv_system.pick_category()
+                    print('-'*25)
+                elif choice == '6':
+                    pygame.mixer.music.load(world.position['reg_music'])
+                    pygame.mixer.music.play(-1)
+                    print('-'*25)
+                    return
+                else:
+                    continue
+                break
 
     def new_location(self):  # Translate the location of newly-found towns
         if self.y >= 0:      # into a string, then add to inventory.
@@ -98,11 +109,8 @@ class Town:
                     except AttributeError:
                         continue
                     if selected in buildings:
-                        winsound.PlaySound(None, winsound.SND_ASYNC)
-                        winsound.PlaySound('Music\\Mayhem in the Village.wav',
-                                           winsound.SND_ASYNC |
-                                           winsound.SND_LOOP |
-                                           winsound.SND_NODEFAULT)
+                        pygame.mixer.music.load('Music\\Mayhem in the Village.ogg')
+                        pygame.mixer.music.play(-1)
                         if selected in gen_words:
                             self.town_gen()
                             spam = True
@@ -110,11 +118,8 @@ class Town:
                             if self.town_inn():
                                 spam = True
                         print('-'*25)
-                        winsound.PlaySound(None, winsound.SND_ASYNC)
-                        winsound.PlaySound('Music\\Chickens (going peck peck peck).wav',
-                                           winsound.SND_ASYNC |
-                                           winsound.SND_LOOP |
-                                           winsound.SND_NODEFAULT)
+                        pygame.mixer.music.load('Music\\Chickens (going peck peck peck).ogg')
+                        pygame.mixer.music.play(-1)
                     elif selected in ['back', 'exit', 'x', 'cancel']:
                         return
 
@@ -220,7 +225,7 @@ class Town:
                         npc = npc.lower()
                     except AttributeError:
                         continue
-                    if npc in ['back', 'exit', 'x', 'cancel']:
+                    if npc in ['b', 'back', 'x', 'exit', 'c', 'cancel']:
                         return
                     else:
                         continue
@@ -228,21 +233,14 @@ class Town:
                     npc = self.people[npc]
                 except IndexError:
                     continue
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound('Music\\Mayhem in the Village.wav',
-                                   winsound.SND_LOOP |
-                                   winsound.SND_NODEFAULT |
-                                   winsound.SND_ASYNC)
+                pygame.mixer.music.load('Music\\Mayhem in the Village.ogg')
+                pygame.mixer.music.play(-1)
                 print('-'*25)
                 npc.speak()
                 print('-'*25)
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound('Music\\Chickens (going peck peck peck).wav',
-                                   winsound.SND_LOOP |
-                                   winsound.SND_NODEFAULT |
-                                   winsound.SND_ASYNC)
+                pygame.mixer.music.load('Music\\Chickens (going peck peck peck).ogg')
+                pygame.mixer.music.play(-1)
                 break
-
 
 # List of Towns:
 town1 = Town('Nearton', """Nearton: a small village in the central region of t\
@@ -284,11 +282,8 @@ def search_towns(pos_x, pos_y, enter=True):
                     except AttributeError:
                         continue
                     if y_n in ['yes', 'y']:
-                        winsound.PlaySound(None, winsound.SND_ASYNC)
-                        winsound.PlaySound('Music\\Chickens (going peck peck peck).wav',
-                                           winsound.SND_ASYNC |
-                                           winsound.SND_LOOP |
-                                           winsound.SND_NODEFAULT)
+                        pygame.mixer.music.load('Music\\Chickens (going peck peck peck).ogg')
+                        pygame.mixer.music.play(-1)
                         world.save_coords(town.x, town.y)
                         town.new_location()
                         town.town_choice()

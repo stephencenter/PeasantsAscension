@@ -4,7 +4,11 @@ import monsters
 import towns
 import bosses
 import random
-import winsound
+import pygame
+import sounds
+
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 
 if __name__ == "__main__":
     sys.exit()
@@ -29,18 +33,9 @@ def movement_system():
     global position
 
     setup_vars()
-    winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound(position['reg_music'],
-                       winsound.SND_ASYNC |
-                       winsound.SND_LOOP |
-                       winsound.SND_NODEFAULT)
+    pygame.mixer.music.load(position['reg_music'])
+    pygame.mixer.music.play(-1)
     while True:
-        if check_region():
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound(position['reg_music'],
-                               winsound.SND_ASYNC |
-                               winsound.SND_LOOP |
-                               winsound.SND_NODEFAULT)
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
             position['h'] = "'E"
@@ -51,7 +46,7 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('Position: {0}{1}, {2}{3} | {4} | Which direction do you want to travel in? | N, S, E, \
+            direction = input('{0}{1}, {2}{3} | {4} | Which direction do you want to travel in? | N, S, E, \
 W: '.format(position['y'], position['v'],
             position['x'], position['h'],
             position['reg']))
@@ -60,6 +55,7 @@ W: '.format(position['y'], position['v'],
             except AttributeError:
                 continue
             if [x for x in [north, south, east, west] if direction in x]:
+                sounds.foot_steps.play()
                 if direction in north:
                     if position['y'] < 125:
                         position['y'] += 1
@@ -86,10 +82,14 @@ W: '.format(position['y'], position['v'],
                         continue
                 position['avg'] = int(((abs(position['x'])) +
                                        (abs(position['y'])))/2)
-                if not bosses.check_bosses(position['x'], position['y']):
-                    if not towns.search_towns(position['x'], position['y'], enter=False):
+                if (not check_region() and  # Check for region changes
+                    not bosses.check_bosses(position['x'], position['y']) and  # Check for bosses to fight
+                    not towns.search_towns(position['x'], position['y'], enter=False)):  # Check for towns to visit
+                        # If none of the previous statements return True, then a battle can occur.
+                        # There is a 1 in 7 chance for a battle to occur (~14.28%)
                         is_battle = not random.randint(0, 7)
                         if is_battle:
+                            print('-'*25)
                             monsters.spawn_monster()
                             battle.setup_vars()
                             battle.battle_system()
@@ -105,27 +105,27 @@ def out_of_bounds():
 def check_region():
     global position
     x, y = position['x'], position['y']
-    if x in range(-15, -9) and y in range(5, 11): # Micro-region in the North-west of the Forest
+    if x in range(-15, -9) and y in range(5, 11):  # Micro-region in the North-west of the Forest
         region = 'Graveyard'
-        reg_music = 'Music\\Frontier.wav'
+        reg_music = 'Music\\Frontier.ogg'
     elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
         region = 'Forest'
-        reg_music = 'Music\\Through the Forest.wav'
+        reg_music = 'Music\\Through the Forest.ogg'
     elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
         region = 'Tundra'
-        reg_music = 'Music\\Arpanauts.wav'
+        reg_music = 'Music\\Arpanauts.ogg'
     elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
         region = 'Mountain'
-        reg_music = 'Music\\Mountain.wav'
+        reg_music = 'Music\\Mountain.ogg'
     elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
         region = 'Desert'
-        reg_music = 'Music\\Come and Find Me.wav'
+        reg_music = 'Music\\Come and Find Me.ogg'
     elif x in range(0, 116) and y in range(-115, 1):  # Southeast of World
         region = 'Swamp'
-        reg_music = 'Music\\Digital Native.wav'
+        reg_music = 'Music\\Digital Native.ogg'
     elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
         region = 'Beach'
-        reg_music = "Music\\We're all under the stars.wav"
+        reg_music = "Music\\We're all under the stars.ogg"
 
     if position['reg'] != region:
         print('-'*25)
@@ -133,7 +133,10 @@ def check_region():
         print('-'*25)
         position['reg'] = region
         position['reg_music'] = reg_music
-        save_coords( position['x'],  position['y'])
+        save_coords(position['x'],  position['y'])
+        # Change the music & play it
+        pygame.mixer.music.load(reg_music)
+        pygame.mixer.music.play(-1)
         return True
     else:
         return False

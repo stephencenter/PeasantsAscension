@@ -1,5 +1,5 @@
-# Pythonius; v0.2.4 Alpha
-game_version = 'v0.2.4'
+# Pythonius; v0.3.0 Alpha
+game_version = 'v0.3.0'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -48,8 +48,9 @@ import random
 import math
 import time
 import json
-import winsound
 import copy
+
+import pygame
 
 import battle
 import world
@@ -58,6 +59,9 @@ import magic
 import bosses
 import npcs
 import pets
+
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 
 # Establish "player" as a global variable
 player = ''
@@ -69,7 +73,7 @@ static = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
-            'reg_music': 'Music\\Through the Forest.wav',
+            'reg_music': 'Music\\Through the Forest.ogg',
             'h': '', 'v': '', 'prev_town': [0, 0]}
 
 # Identify the player's OS and set their save destination
@@ -84,6 +88,17 @@ if os.name == 'nt':  # Windows devices
     sav8 = 'C:\\Pythonius\\Save Files\\sav_h.json'  # Quests & Dialogue
     sav9 = 'C:\\Pythonius\\Save Files\\sav_i.json'  # Misc Boss Info
 
+elif os.name == 'posix':  # Unix-based devices
+    sav1 = '/opt/Pythonius/Save Files/sav_a.json'  # Misc Variables
+    sav2 = '/opt/Pythonius/Save Files/sav_b.json'  # Position
+    sav3 = '/opt/Pythonius/Save Files/sav_c.json'  # Inventory
+    sav4 = '/opt/Pythonius/Save Files/sav_d.json'  # Equipped Items
+    sav5 = '/opt/Pythonius/Save Files/sav_e.json'  # Player Stats
+    sav6 = '/opt/Pythonius/Save Files/sav_f.json'  # Spellbook
+    sav7 = '/opt/Pythonius/Save Files/sav_g.json'  # Defeated Bosses
+    sav8 = '/opt/Pythonius/Save Files/sav_h.json'  # Quests & Dialogue
+    sav9 = '/opt/Pythonius/Save Files/sav_i.json'  # Misc Boss Info
+
 # NOTE: If one of these files is missing, the entire game won't work,
 # and as such will not be recognized as a save file anymore.
 
@@ -94,14 +109,12 @@ if os.name == 'nt':  # Windows devices
 
 else:
     raise OSError('This game is not supported by your operating system.')
-    # Due to module incompatibility, this game is unfortunately not playable
-    # on Unix-based devices, such as Androids, Macs, and Linux devices.
 
 
 class PlayerCharacter:  # The Player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns,
                  spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,
-                 _class=''):
+                 class_=''):
         self.name = name  # Name
         self.hp = hp  # Health
         self.mp = mp  # Mana Points
@@ -116,12 +129,12 @@ class PlayerCharacter:  # The Player
         self.ext_ski = ext_ski  # Skill Points
         self.ext_gol = ext_gol  # Extra Gold Pieces
         self.ext_exp = ext_exp  # Extra Experience
-        self._class = _class  # Player Class
+        self.class_ = class_  # Player Class
         self.current_pet = ''  # Current Pet
 
     def player_damage(self, var):  # The formula for the player dealing damage
-        phys_dealt = int((battle.temp_stats['attk'] / 2) -
-                         (battle.monster.dfns / 3) + (self.lvl / 3) + var + 1)
+        phys_dealt = int((battle.temp_stats['attk']/2) -
+                         (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
         phys_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
             m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
@@ -147,24 +160,31 @@ class PlayerCharacter:  # The Player
 
     def choose_class(self):
         while True:
-            _class = input(
-                'Well then, {0}, which class would you like to begin training in? | Warrior or Mage: '.format(
-                    self.name))
+            class_ = input(
+                'Well then, {0}, which class would you like to begin training in? | Warrior, Mage, or Rogue: '.format(
+                self.name))
             try:
-                _class = _class.lower()
+                class_ = class_.lower()
             except AttributeError:
                 continue
-            if _class in ['warrior', 'mage']:
-                while True:
-                    y_n = input('You wish to be of the {0} class? | Yes or No: '.format(_class.title()))
-                    try:
-                        y_n = y_n.lower()
-                    except AttributeError:
-                        continue
-                    if y_n in ['yes', 'y', 'yeah']:
-                        return _class
-                    elif y_n in ['no', 'n', 'nope']:
-                        break
+            classes = ['warrior', 'mage', 'rogue']
+            spam = False
+            for x, y in enumerate(['w', 'm', 'r']):
+                if class_.startswith(y):
+                    class_ = classes[x]
+                    spam = True
+            if not spam:
+                continue
+            while True:
+                y_n = input('You wish to be of the {0} class? | Yes or No: '.format(class_.title()))
+                try:
+                    y_n = y_n.lower()
+                except AttributeError:
+                    continue
+                if y_n in ['yes', 'y', 'yeah']:
+                    return class_
+                elif y_n in ['no', 'n', 'nope']:
+                    break
 
     def level_up(self):
         global static
@@ -175,7 +195,7 @@ class PlayerCharacter:  # The Player
             while self.exp >= static['r_xp']:
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
-                if self._class == 'warrior':
+                if self.class_ == 'warrior':
                     self.attk += random.randint(2, 3)
                     self.dfns += random.randint(2, 3)
                     self.m_attk += random.randint(0, 2)
@@ -184,7 +204,7 @@ class PlayerCharacter:  # The Player
                     self.evad += random.randint(0, 1)
                     self.hp += random.randint(1, 2)
                     self.mp += random.randint(1, 2)
-                elif self._class == 'mage':
+                elif self.class_ == 'mage':
                     self.attk += random.randint(0, 2)
                     self.dfns += random.randint(1, 2)
                     self.m_attk += random.randint(2, 3)
@@ -193,6 +213,15 @@ class PlayerCharacter:  # The Player
                     self.evad += random.randint(0, 1)
                     self.hp += random.randint(1, 2)
                     self.mp += random.randint(2, 3)
+                elif self.class_ == 'rogue':
+                    self.attk += random.randint(2, 3)
+                    self.dfns += random.randint(1, 2)
+                    self.m_attk += random.randint(0, 2)
+                    self.m_dfns += random.randint(1, 2)
+                    self.spd += random.randint(2, 4)
+                    self.evad += random.randint(1, 2)
+                    self.hp += random.randint(2, 3)
+                    self.mp += random.randint(1, 2)
                 temp_ski += self.ext_ski
                 magic.new_spells()
                 self.exp -= static['r_xp']
@@ -208,7 +237,6 @@ class PlayerCharacter:  # The Player
     def skill_points(self, temp_ski):
         global static
         while temp_ski > 0:
-            print()
             print('You have {0} skill point{1} left to spend.'.format(
                 temp_ski, 's' if temp_ski > 1 else ''))
             while temp_ski > 0:
@@ -279,26 +307,40 @@ class PlayerCharacter:  # The Player
 
     def player_info(self):
         print("-{0}'s Stats-".format(self.name))
-        print('Level: {0} | Class: {1}'.format(self.lvl, self._class.title()))
+        time.sleep(0.5)
+        print('Level: {0} | Class: {1}'.format(self.lvl, self.class_.title()))
+        time.sleep(0.5)
         print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
                                                  self.mp, static['mp_p']))
+        time.sleep(0.5)
         print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
+        time.sleep(0.5)
         print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
+        time.sleep(0.5)
         print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
+        time.sleep(0.5)
         print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
             static['int'], static['str'],
             static['con'], static['dex'],
             static['luc']))
+        time.sleep(0.5)
         print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
                                                                   static['r_xp'],
                                                                   static['gp']))
+        time.sleep(0.5)
         print()
         print('-Equipped Items-')
+        time.sleep(0.5)
         print('Weapon: {0}'.format(str(inv_system.equipped['weapon'])))
+        time.sleep(0.5)
         print('Armor:')
+        time.sleep(0.5)
         print('  Head: {0}'.format(str(inv_system.equipped['head'])))
+        time.sleep(0.5)
         print('  Body: {0}'.format(str(inv_system.equipped['body'])))
+        time.sleep(0.5)
         print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
+        input('Press Enter/Return ')
 
 
 def create_player():
@@ -308,8 +350,8 @@ def create_player():
     static['hp_p'] = copy.copy(player.hp)
     static['mp_p'] = copy.copy(player.mp)
     player.name = player.choose_name()
-    player._class = player.choose_class()
-    if player._class == "warrior":
+    player.class_ = player.choose_class()
+    if player.class_ == "warrior":
         static['hp_p'] += 5
         static['mp_p'] -= 1
         player.dfns += 2
@@ -317,21 +359,29 @@ def create_player():
         player.spd -= 1
         player.evad -= 1
         inv_system.equipped['weapon'] = copy.copy(inv_system.wdn_sht)
-    elif player._class == "mage":
+    elif player.class_ == "mage":
         static['hp_p'] += 1
         static['mp_p'] += 4
         player.m_attk += 2
         player.m_dfns += 2
         inv_system.equipped['weapon'] = copy.copy(inv_system.mag_twg)
+    elif player.class_ == "rogue":
+        static['hp_p'] += 2
+        static['mp_p'] += 1
+        player.attk += 1
+        player.dfns += 1
+        player.spd += 3
+        player.evad += 1
+        inv_system.equipped['weapon'] = copy.copy(inv_system.stn_dag)
     player.hp = copy.copy(static['hp_p'])
     player.mp = copy.copy(static['mp_p'])
-    print('-' * 25)
+    print('-'*25)
 
 
 def check_save():  # Check for save files and load the game if they're found
     global static
     global position
-    print('-' * 25)
+    print('-'*25)
     # Check each part of the save file
     for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7, sav8, sav9]:
         if os.path.isfile(file):
@@ -369,11 +419,11 @@ def check_save():  # Check for save files and load the game if they're found
                 print('There was an error loading your game. Error code: IO')
             except ValueError:
                 print('There was an error loading your game. Error code: VE')
-            print('-' * 25)
+            print('-'*25)
             create_player()
             return
         elif y_n in ['no', 'n', 'nope']:
-            print('-' * 25)
+            print('-'*25)
             create_player()
             return
 
@@ -433,7 +483,7 @@ def deserialize_player(path):  # Load the JSON file and translate
     with open(path, encoding='utf-8') as e:
         spam = json.load(e)
     for key in spam:
-        if key == 'current_pet' and spam[key][0]:
+        if key == 'current_pet' and spam[key]:
             for pet in pets.all_pets:
                 if pet.name == spam[key][0]:
                     pet.level = spam[key][1]
@@ -442,10 +492,8 @@ def deserialize_player(path):  # Load the JSON file and translate
 
 
 def title_screen():
-    winsound.PlaySound('Music\\Prologue.wav',
-                       winsound.SND_ASYNC |
-                       winsound.SND_LOOP |
-                       winsound.SND_NODEFAULT)
+    pygame.mixer.music.load('Music\\Prologue.ogg')
+    pygame.mixer.music.play(-1)
     print("""
       ____        _   _                 _
      |  _ \\ _   _| |_| |__   ___  _ __ (_)_   _ ___
@@ -457,7 +505,7 @@ def title_screen():
 Pythonius {0} -- Programmed in Python by Stephen Center
 -----------------------------------------------------------""".format(game_version))
     while True:
-        choice = input('[P]Lay Game  |  [C]redits  |  [E]xit  |  Input letter: ')
+        choice = input('[P]Lay Game  |  [C]redits  | [E]xit  |  Input letter: ')
         try:
             choice = choice.lower()
         except AttributeError:
@@ -465,12 +513,14 @@ Pythonius {0} -- Programmed in Python by Stephen Center
         if choice.startswith('p'):
             return
         elif choice.startswith('c'):
-            print('-' * 25)
-            with open('Music Credits.txt') as f:
-                print(f.read())
-
-            print('-' * 25)
+            print('-'*25)
+            with open('Credits.txt') as f:
+                for f.readline in f:
+                    print(''.join(f.readline.rstrip("\n").split(";")))
+                    time.sleep(0.35)
+            print('-'*25)
         elif choice.startswith('e'):
+            pygame.quit()
             sys.exit()
 
 

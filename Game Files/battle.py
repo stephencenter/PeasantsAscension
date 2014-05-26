@@ -1,6 +1,9 @@
 import sys
 import random
-import winsound
+import time
+from copy import copy as _c
+
+import pygame
 
 import inv_system
 import monsters
@@ -8,8 +11,11 @@ import magic
 import world
 import bosses
 import pets
+import sounds
 
-from copy import copy as _c
+
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 
 monster = ''
 player = ''
@@ -53,20 +59,13 @@ def player_choice():
 
 
 def battle_system(is_boss=False):
-    winsound.PlaySound(None, winsound.SND_ASYNC)
     if is_boss:  # Bosses have different battle music than normal enemies
-        winsound.PlaySound('Music\\Terrible Tarantuloid.wav',
-                           winsound.SND_ASYNC |
-                           winsound.SND_LOOP |
-                           winsound.SND_NODEFAULT)
-        print('-'*25)
+        pygame.mixer.music.load('Music\\Terrible Tarantuloid.ogg')
+        pygame.mixer.music.play(-1)
         print('The legendary {0} has awoken!'.format(monster.name))
-
     else:
-        winsound.PlaySound('Music\\Jumpshot.wav',
-                           winsound.SND_ASYNC |
-                           winsound.SND_LOOP |
-                           winsound.SND_NODEFAULT)
+        pygame.mixer.music.load('Music\\Jumpshot.ogg')
+        pygame.mixer.music.play(-1)
 
         if monster.name[0] in vowels:
         # Remember to use proper grammar!
@@ -74,9 +73,8 @@ def battle_system(is_boss=False):
         else:
             a_an = 'A '
 
-        print('-'*25)
         print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monster.name))
-
+    time.sleep(0.5)
     update_stats()
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
@@ -85,6 +83,7 @@ def battle_system(is_boss=False):
 
         bat_stats()
         # First, display the Player and Monster's stats
+
         move = player_choice()
         # Second, get the player's decision on moves
 
@@ -97,7 +96,10 @@ def battle_system(is_boss=False):
 
         if move == '4':  # Use the Battle Inventory
             if battle_inventory() and monster.hp > 0:
+                input('\nPress Enter/Return ')
                 enemy_turn(var, dodge)
+                if player.hp > 0:
+                    input('\nPress Enter/Return ')
             continue
 
         elif move == '5':
@@ -105,27 +107,31 @@ def battle_system(is_boss=False):
             if run:
                 # If it succeeds, end the battle without giving the player a reward
                 print('-'*25)
-                winsound.PlaySound(None, winsound.SND_ASYNC)
-                winsound.PlaySound(position['reg_music'],
-                                   winsound.SND_ASYNC |
-                                   winsound.SND_LOOP |
-                                   winsound.SND_NODEFAULT)
+                pygame.mixer.music.load(position['reg_music'])
+                pygame.mixer.music.play(-1)
                 return
             enemy_turn(var, dodge)
+            if player.hp > 0:
+                input('\nPress Enter/Return ')
             # If it fails, the enemy will attack you and skip your turn
             continue
 
         elif temp_stats['spd'] > monster.spd or move == '2':
             # The player goes first if they have a higher speed
             if player_turn(var, dodge, move) and monster.hp > 0:
+                input('\nPress Enter/Return ')
                 enemy_turn(var, dodge)
+                if player.hp > 0:
+                    input('\nPress Enter/Return ')
             continue
 
         else:
             # Otherwise, the monster will go first
             enemy_turn(var, dodge)
             if player.hp > 0:
+                input('\nPress Enter/Return ')
                 player_turn(var, dodge, move)
+                input('\nPress Enter/Return ')
 
     else:
         if after_battle(is_boss) != 'dead':
@@ -141,11 +147,19 @@ def player_turn(var, dodge, move):
         # "2" refers to magic, which will print this later
 
         if move == '1':  # Attack
-            print('You begin to fiercely attack the {0} using your {1}!'.format(
-                monster.name, str(inv_system.equipped['weapon'])))
+            if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
+                sounds.sword_slash.play()
+                print('You begin to fiercely attack the {0} using your {1}...'.format(
+                    monster.name, str(inv_system.equipped['weapon'])))
+            else:
+                sounds.aim_weapons.play()
+                print('You aim carefully at the {0} using your {1}...'.format(
+                    monster.name, str(inv_system.equipped['weapon'])))
+            time.sleep(0.75)
             if dodge in range(monster.evad, 250):
                 dealt = player.player_damage(var)
                 monster.hp -= dealt
+                sounds.enemy_hit.play()
                 print('Your attack connects with the {0}, dealing {1} damage!'.format(
                     monster.name, dealt))
             else:
@@ -191,13 +205,16 @@ def enemy_turn(var, dodge):
 
     elif monster.m_attk >= monster.attk and monster.mp >= 2:
         # Magic Attack
-        print('The {0} is attempting to cast a strange spell!'.format(monster.name))
+        sounds.magic_attack.play()
+        print('The {0} is attempting to cast a strange spell...'.format(monster.name))
+        time.sleep(0.75)
         if dodge in range(temp_stats['evad'], 250):
             dealt = monster.monst_magic(var)
             player.hp -= dealt
+            sounds.enemy_hit.play()
             print("The {0}'s spell succeeds, and deals {1} damage to you!".format(monster.name, dealt))
         else:
-            print("The spell doesn't appear to have had any effect...")
+            print("The spell misses you by a landslide!")
         monster.mp -= 2
 
     else:
@@ -208,19 +225,13 @@ def after_battle(is_boss):  # Assess the results of the battle
     global player
     update_stats()  # Reset non-hp/mp stats to the way they were before battle
     print('-'*25)
-    winsound.PlaySound(None, winsound.SND_ASYNC)
-    winsound.PlaySound('Music\\Adventures in Pixels',
-                       winsound.SND_ASYNC |
-                       winsound.SND_LOOP |
-                       winsound.SND_NODEFAULT)
+    pygame.mixer.music.load('Music\\Adventures in Pixels.ogg')
+    pygame.mixer.music.play(-1)
     while True:
         if monster.hp > 0 >= player.hp:
             # If the monster wins...
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound('Music\\Power-Up.wav',
-                               winsound.SND_ASYNC |
-                               winsound.SND_LOOP |
-                               winsound.SND_NODEFAULT)
+            pygame.mixer.music.load('Music\\Power-Up.ogg')
+            pygame.mixer.music.play(-1)
             print('Despite your best efforts, the {0} has bested you. You are dead.'.format(monster.name))
             print('-'*25)
             while True:
@@ -230,16 +241,13 @@ def after_battle(is_boss):  # Assess the results of the battle
                 except AttributeError:
                     continue
                 if y_n in ['yes', 'y', 'yeah']:
-                    # If you die, you return to the last town visited or 0, 0
+                    # If you die, you return to the last town visited or 0'N, 0'E
                     # if you haven't been to a town yet.
                     world.back_to_coords()
                     player.hp = int(static['hp_p']/2)
                     player.mp = int(static['mp_p']/2)
-                    winsound.PlaySound(None, winsound.SND_ASYNC)
-                    winsound.PlaySound(position['reg_music'],
-                                       winsound.SND_ASYNC |
-                                       winsound.SND_LOOP |
-                                       winsound.SND_NODEFAULT)
+                    pygame.mixer.music.load(position['reg_music'])
+                    pygame.mixer.music.play(-1)
                     return 'dead'
                 elif y_n in ['no', 'n', 'nope']:
                     sys.exit()
@@ -250,7 +258,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 # Only do the following if the player defeated a
                 # normal enemy, and not a boss
                 print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
-                # Enemies drop gold/exp based on the player's/monster's levels
+                # Enemies drop gold/exp based on the player/monster's levels
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
                 if gold <= 0:
                     gold = random.randint(1, 2)
@@ -269,8 +277,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 # ...and exp
 
                 try:
-                    # Check to see if the boss does
-                    # anything special at death
+                    # Check to see if the boss does anything special at death
                     monster.upon_defeating()
                 except AttributeError:
                     pass
@@ -292,11 +299,8 @@ def after_battle(is_boss):  # Assess the results of the battle
             player.level_up()
             # Check to see if the player gained any levels
 
-            winsound.PlaySound(None, winsound.SND_ASYNC)
-            winsound.PlaySound(position['reg_music'],
-                               winsound.SND_ASYNC |
-                               winsound.SND_LOOP |
-                               winsound.SND_NODEFAULT)
+            pygame.mixer.music.load(position['reg_music'])
+            pygame.mixer.music.play(-1)
             return
         elif player.hp <= 0 and monster.hp <= 0:
             # If the battle is a tie, the player wins

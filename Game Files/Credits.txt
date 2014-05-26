@@ -1,0 +1,43 @@
+Pythonius was a game programmed by Stephen Center, also known as "RbwNjaFurret".
+
+Other people who have more talent than me:	
+  Ben Landis, who composed:
+    Through the Forest------------> [Forest Overworld Theme]
+    Terrible Tarantuloid----------> [Boss-battle Theme]
+    Power-up----------------------> [Game-over Theme]
+    Adventure In Pixels-----------> [Level-up Theme]
+    Mountain----------------------> [Mountain Region Theme]
+    Chickens going peck peck peck-> [Town Theme]
+    Mayhem in the Village---------> [NPC Theme]
+	Frontier----------------------> [Graveyard Theme]
+		
+    His website: http://www.benlandis.com/ <--- Check it out!
+	His soundcloud: https://soundcloud.com/benlandis <--- Check it out!
+	
+  Eric Skiff, who composed:
+    Jumpshot----------------------> [Battle Theme]
+    Prologue----------------------> [Title screen & Character Creation Themes]
+    Arpanauts---------------------> [Tundra Region Theme]
+    We're All Under the Stars-----> [Beach Region Theme]
+    Digital Native----------------> [Swamp Region Theme]
+		
+    His website: http://www.ericskiff.com/music/ <--- Check it out!
+	His soundcloud: https://soundcloud.com/eric-skiff <--- Check it out!
+	
+  Gabriel Tucker, who drew:
+	pythonius_art_1.png
+	
+	His deviantArt: http://flygonjones.deviantart.com/ <--- Check it out!
+	His YouTube: http://tinyurl.com/flygon-jones <--- Check it out!
+	
+  Jacob Hall, who drew:
+	pythonius_art_2.png
+	
+	His YouTube : http://tinyurl.com/hitmanjake101 <--- Check it out!
+
+All rights go to those people.
+
+Sound FX were made by me (RbwNjaFurret) using the open-source tool known as Bfxr.
+	http://www.bfxr.net/
+
+Thanks for playing this game!
