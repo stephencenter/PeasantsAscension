@@ -231,6 +231,7 @@ class Town:
                         except AttributeError:
                             pass
                         if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                            spam = False
                             break
                         elif cat == '1':
                             cat = 'armor'

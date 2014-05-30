@@ -1,6 +1,7 @@
 import sys
 import copy
 import random
+import math
 import inv_system
 
 if __name__ == "__main__":
@@ -71,8 +72,10 @@ class Weapon(Item):
         if self.equip:
             if self.type_ == 'melee':
                 main.player.attk += self.power
+                main.player.m_attk += int(math.ceil(self.power/3))
             elif self.type_ == 'magic':
                 main.player.m_attk += self.power
+                main.player.attk += int(math.ceil(self.power/3))
 
     def __str__(self):
         return self.name
@@ -95,8 +98,10 @@ class Weapon(Item):
             equipped['weapon'] = spam
             if self.type_ in ['melee', 'ranged']:
                 main.player.attk += self.power
+                main.player.m_attk += int(math.ceil(self.power/3))
             elif self.type_ == 'magic':
                 main.player.m_attk += self.power
+                main.player.attk += int(math.ceil(self.power/3))
             for x, y in enumerate(inventory[self.cat]):
                 if self.name == y.name:
                     key = x
@@ -135,17 +140,17 @@ class Armor(Item):
                 old.equip = False
                 if old.type_ == 'melee':
                     main.player.dfns -= old.defense
-                    main.player.m_dfns -= int(old.defense/3)
+                    main.player.m_dfns -= int(math.ceil(self.defense/3))
                 elif old.type_ == 'magic':
                     main.player.m_dfns -= old.defense
-                    main.player.dfns -= int(old.defense/3)
+                    main.player.dfns -= int(math.ceil(self.defense/3))
             equipped[self.part] = fizz
             if self.type_ == 'melee':
                 main.player.dfns += self.defense
-                main.player.m_dfns += int(self.defense/3)
+                main.player.m_dfns += int(math.ceil(self.defense/3))
             elif self.type_ == 'magic':
                 main.player.m_dfns += self.defense
-                main.player.dfns += int(self.defense/3)
+                main.player.dfns += int(math.ceil(self.defense/3))
             for x, y in enumerate(inventory[self.cat]):
                 if self.name == y.name:
                     key = x

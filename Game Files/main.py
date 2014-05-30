@@ -241,8 +241,8 @@ class PlayerCharacter:  # The Player
                 temp_ski, 's' if temp_ski > 1 else ''))
             while temp_ski > 0:
                 skill = input("""Choose a skill to advance:
-    [I]ntelligence - Use the power of magic with higher magic attack/defense and MP!
-    [S]trength - Easily smash through enemies with higher attack and defense!
+    [I]ntelligence - Use powerful magic with higher magic stats and MP!
+    [S]trength -  Smash through enemies with higher attack and defense!
     [C]onstitution - Become a tank with higher magical/physical defense and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
     [L]uck - Receive more gold, more experience, and possibly even more skill points!
