@@ -159,56 +159,111 @@ class Town:
             stock.append(item[self.gs_level - 1])
         print('-'*25)
         print('Owner: "Welcome, Traveler!"')
-        print('-'*25)
         while True:
-            print('"Well, here\'s what I have in my stock: " | {0} GP'.format(main.static['gp']))
-            for num, item in enumerate(stock):
-                print('      [' + str(num + 1) + '] ' + str(item))
-            while True:
-                purchase = input('Input [#] (or type "exit"): ')
-                try:
-                    purchase = int(purchase) - 1
-                    if purchase < 0:
-                        continue
-                except ValueError:
-                    try:
-                        purchase = purchase.lower()
-                    except AttributeError:
-                        continue
-                    if purchase in ['exit', 'cancel', 'x', 'back']:
-                        return
-                    else:
-                        continue
-                try:
-                    i = stock[purchase]
-                except IndexError:
-                    continue
-                print('-'*25)
-                print(i.desc)
-                print('-'*25)
+            b_s = input('Do you want to [b]uy or [s]ell items? | Input letter: ')
+            try:
+                b_s = b_s.lower()
+            except AttributeError:
+                continue
+            if b_s.startswith('b'):
                 while True:
-                    confirm = input("\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
-                        'these' if str(i).endswith('s') else 'this', str(i), i.buy))
-                    try:
-                        confirm = confirm.lower()
-                    except AttributeError:
-                        continue
-                    if confirm in ['yes', 'y']:
-                        if main.static['gp'] >= i.buy:
-                            inv_system.inventory[i.cat].append(i)
-                            main.static['gp'] -= i.buy
-                            print('-'*25)
-                            input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(str(i), i.buy))
-                            print('-'*25)
+                    print('"Well, here\'s what I have in my stock: " | {0} GP'.format(main.static['gp']))
+                    for num, item in enumerate(stock):
+                        print('      [' + str(num + 1) + '] ' + str(item))
+                    while True:
+                        purchase = input('Input [#] (or type "exit"): ')
+                        try:
+                            purchase = int(purchase) - 1
+                            if purchase < 0:
+                                continue
+                        except ValueError:
+                            try:
+                                purchase = purchase.lower()
+                            except AttributeError:
+                                continue
+                            if purchase in ['exit', 'cancel', 'x', 'back']:
+                                return
+                            else:
+                                continue
+                        try:
+                            i = stock[purchase]
+                        except IndexError:
+                            continue
+                        print('-'*25)
+                        print(i.desc)
+                        print('-'*25)
+                        while True:
+                            confirm = input("\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
+                                'these' if str(i).endswith('s') else 'this', str(i), i.buy))
+                            try:
+                                confirm = confirm.lower()
+                            except AttributeError:
+                                continue
+                            if confirm in ['yes', 'y']:
+                                if main.static['gp'] >= i.buy:
+                                    inv_system.inventory[i.cat].append(i)
+                                    main.static['gp'] -= i.buy
+                                    print('-'*25)
+                                    input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(str(i), i.buy))
+                                    print('-'*25)
+                                else:
+                                    input('"Hey, you don\'t even have enough GP for this {0}!" (Press enter/return)'.format(
+                                        str(i)))
+                                    print()
+                                break
+                            elif confirm in ['no', 'n']:
+                                print()
+                                break
+                        break
+            elif b_s.startswith('s'):
+                spam = True
+                while spam:
+                    print("""Categories:
+      [1] Armor
+      [2] Consumables
+      [3] Weapons
+      [4] Miscellaneous""")
+                    while True:
+                        cat = input('Input [#] (or type "back"): ')
+                        try:
+                            cat = cat.lower()
+                        except AttributeError:
+                            pass
+                        if cat in ['x', 'exit', 'c', 'cancel', 'b', 'back']:
+                            return
+                        elif cat == '1':
+                            cat = 'armor'
+                            vis_cat = 'Armor'
+                        elif cat == '2':
+                            cat = 'consum'
+                            vis_cat = 'Consumables'
+                        elif cat == '3':
+                            cat = 'weapons'
+                            vis_cat = 'Weapons'
+                        elif cat == '4':
+                            cat = 'misc'
+                            vis_cat = 'Miscellaneous'
                         else:
-                            input('"Hey, you don\'t even have enough GP for this {0}!" (Press enter/return)'.format(
-                                str(i)))
-                            print()
-                        break
-                    elif confirm in ['no', 'n']:
-                        print()
-                        break
-                break
+                            continue
+                        if cat in inv_system.inventory:
+                            if inv_system.inventory[cat]:
+                                if cat not in ['weapons', 'armor']:
+                                    inv_system.pick_item(cat, vis_cat, gs=True)
+                                    print('-'*25)
+                                else:
+                                    if [x for x in inv_system.inventory[cat] if not x.equip]:
+                                        inv_system.pick_item(cat, vis_cat, gs=True)
+                                        print('-'*25)
+                                    else:
+                                        print('-'*25)
+                                        print('The "{0}" category is empty...'.format(vis_cat))
+                                        print('-'*25)
+                                break
+                            else:
+                                print('-'*25)
+                                print('The "{0}" category is empty...'.format(vis_cat))
+                                print('-'*25)
+                                break
 
     def speak_to_npcs(self):
         while True:

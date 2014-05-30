@@ -24,7 +24,10 @@ gs_stock = [[s_potion, s_potion, m_potion, l_potion, l_potion, x_potion],
             [bnz_leg, en_bnz_leg, irn_leg, stl_leg],
             [wiz_hat, en_wiz_hat, myst_hat, elem_hat],
             [wiz_rob, en_wiz_rob, myst_rob, elem_rob],
-            [wiz_gar, en_wiz_gar, myst_gar, elem_gar]]
+            [wiz_gar, en_wiz_gar, myst_gar, elem_gar],
+            [lth_cap, en_lth_cap],
+            [lth_bdy, en_lth_bdy],
+            [lth_leg, en_lth_leg]]
 
 gs_stock = list(gs_stock)
 item_setup_vars()
@@ -33,14 +36,20 @@ item_setup_vars()
 def pick_category():
     global inventory
     while True:
-        print('Categories: 1: Armor, 2: Consumables, 3: Weapons, 4: Quest Items, 5: Coordinate, 6: Misc.')
+        print("""Categories:
+      [1] Armor
+      [2] Consumables
+      [3] Weapons
+      [4] Quest Items
+      [5] Coordinates
+      [6] Miscellaneous""")
         while True:
-            cat = input('Input the number of the category you want to view (or type "exit"): ')
+            cat = input('Input [#] (or type "exit"): ')
             try:
                 cat = cat.lower()
             except AttributeError:
                 pass
-            if cat in ['exit', 'cancel', 'x', 'back']:
+            if cat in ['x', 'exit', 'c', 'cancel', 'b', 'back']:
                 return
             elif cat == '1':
                 cat = 'armor'
@@ -59,7 +68,7 @@ def pick_category():
                 vis_cat = 'Coordinates'
             elif cat == '6':
                 cat = 'misc'
-                vis_cat = 'Misc.'
+                vis_cat = 'Miscellaneous'
             else:
                 continue
             if cat in inventory:
@@ -88,7 +97,7 @@ def pick_category():
                     break
 
 
-def pick_item(cat, vis_cat):
+def pick_item(cat, vis_cat, gs=False):
     while inventory[cat]:
         if cat in ['armor', 'weapons']:
             if [x for x in inventory[cat] if not x.equip]:
@@ -114,7 +123,7 @@ def pick_item(cat, vis_cat):
                     item = item.lower()
                 except AttributeError:
                     continue
-                if item in ['exit', 'cancel', 'x', 'back']:
+                if item in  ['x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return
                 else:
                     continue
@@ -126,7 +135,10 @@ def pick_item(cat, vis_cat):
             except IndexError:
                 continue
             if not isinstance(item, npcs.Quest):
-                pick_action(cat, item)
+                if gs:
+                    sell_item(cat, item)
+                else:
+                    pick_action(cat, item)
             else:
                 print('This has not yet been implemented. Sorry! -RbwNjaFurret')
                 # Viewing quests in the inventory is planned for the next update.
@@ -183,6 +195,26 @@ def pick_action(cat, item):
         elif action == 4:
             return
 
+
+def sell_item(cat, item):
+    print('-'*25)
+    print(item.desc)
+    print('-'*25)
+    while True:
+        y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(item.name, item.sell))
+        try:
+            y_n = y_n.lower()
+        except AttributeError:
+            continue
+        if y_n.startswith('y'):
+            for num, i in enumerate(inventory[cat]):
+                if i.name == item.name:
+                    inventory[cat].remove(inventory[cat][num])
+                    main.static['gp'] += item.sell
+                    print('You hand the shopkeep your {0} and recieve {1} GP.'.format(item.name, item.sell))
+                    return
+        elif y_n.startswith('n'):
+            return
 
 def serialize_inv(path):
     j_inventory = {}

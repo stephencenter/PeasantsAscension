@@ -186,6 +186,7 @@ def enemy_turn(var, dodge):
     print('\n-Enemy Turn-')
     if monster.hp <= int(static['hp_m']/4) and monster.mp >= 5:
         # Magic heal
+        sounds.magic_healing.play()
         heal = int(((monster.m_attk + monster.m_dfns)/2) + monster.lvl/2)
         if heal < 5:
             heal = 5

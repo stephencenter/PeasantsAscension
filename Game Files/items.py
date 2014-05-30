@@ -210,7 +210,7 @@ l_rejuv = Consumable('Mighty Rejuvenation Potion',
                      'A super powerful mixture that restores 100 HP and 100 MP when consumed.',
                      225, 80, heal=100, mana=100)
 
-# Weapons -- Melee -- Warrior
+# Weapons -- Warrior
 wdn_sht = Weapon('Wooden Shortsword',
                  'A small sword carved from an oak branch (+3 Attack).',
                  10, 5, 3, 'melee', 'warrior')
@@ -262,7 +262,7 @@ en_myth_sb = Weapon('Enhanced Mythril Shortblade',
                     'An enhanced version of your typical Mythril Shortblade (+25 Attack).',
                     420, 135, 25, 'melee', 'rogue')
 
-# Weapons -- Magic
+# Weapons -- Mage
 mag_twg = Weapon('Magical Twig',
                  'A small stick with basic magical properties (+3 Magic Attack).',
                  10, 5, 3, 'magic', 'mage')
@@ -288,91 +288,112 @@ en_rnc_stf = Weapon('Enhanced Runic Staff',
                     'An enhanced version of your typical Runic Staff (+25 Magic Attack',
                     420, 135, 25, 'magic', 'mage')
 
-# Armor -- Melee -- Weak
+# Armor -- Warrior -- Weak
 bnz_hlm = Armor('Bronze Helmet',
                 'A simple helmet crafted from bronze (+1 Defense).',
-                25, 8, 1, 'melee', 'head', 'warrior')
+                20, 8, 1, 'melee', 'head', 'warrior')
 bnz_cst = Armor('Bronze Chestpiece',
                 'Simple chest armor crafted from bronze (+2 Defense).',
-                35, 12, 1, 'melee', 'body', 'warrior')
+                30, 12, 2, 'melee', 'body', 'warrior')
 bnz_leg = Armor('Bronze Leggings',
                 'Simple leg armor crafted from bronze (+1 Defense).',
-                30, 10, 1, 'melee', 'legs', 'warrior')
+                25, 10, 1, 'melee', 'legs', 'warrior')
 
 en_bnz_hlm = Armor('Enhanced Bronze Helmet',
                    'An enhanced version of your typical bronze helmet (+3 Defense).',
-                   65, 25, 3, 'melee', 'head', 'warrior')
+                   60, 25, 3, 'melee', 'head', 'warrior')
 en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
                    'An enhanced version of your typical bronze chestpiece (+4 Defense).',
-                   75, 35, 4, 'melee', 'body', 'warrior')
+                   70, 35, 4, 'melee', 'body', 'warrior')
 en_bnz_leg = Armor('Enhanced Bronze Leggings',
                    'An enhanced version of your typical bronze leggings (+3 Defense).',
-                   70, 30, 3, 'melee', 'legs', 'warrior')
+                   65, 30, 3, 'melee', 'legs', 'warrior')
 
-# Armor -- Magic -- Weak
+# Armor -- Mage -- Weak
 wiz_hat = Armor('Wizard Hat',
                 'A silk hat woven with magic thread (+1 Magic Defense).',
-                25, 8, 1, 'magic', 'head', 'mage')
+                20, 8, 1, 'magic', 'head', 'mage')
 wiz_rob = Armor('Wizard Robe',
                 'A silk robe woven with magic thread (+2 Magic Defense).',
-                35, 12, 1, 'magic', 'body', 'mage')
+                30, 12, 2, 'magic', 'body', 'mage')
 wiz_gar = Armor('Wizard Garments',
                 'Silk garments woven with magic thread (+1 Magic Defense).',
-                30, 10, 1, 'magic', 'legs', 'mage')
+                25, 10, 1, 'magic', 'legs', 'mage')
 
 en_wiz_hat = Armor('Enhanced Wizard Hat',
                    'An enhanced version of your typical wizard hat (+3 Magic Defense).',
-                   65, 25, 3, 'magic', 'head', 'mage')
+                   60, 25, 3, 'magic', 'head', 'mage')
 en_wiz_rob = Armor('Enhanced Wizard Robe',
                    'An enhanced version of your typical wizard robe (+4 Magic Defense).',
-                   75, 35, 4, 'magic', 'body', 'mage')
+                   70, 35, 4, 'magic', 'body', 'mage')
 en_wiz_gar = Armor('Enhanced Wizard Garments',
                    'An enhanced version of your typical wizard garments (+3 Magic Defense).',
-                   70, 30, 3, 'magic', 'legs', 'mage')
+                   65, 30, 3, 'magic', 'legs', 'mage')
+
+# Armor -- Rogue -- Weak
+lth_cap = Armor('Leather Cap',
+                'A simple leather cap providing equally simple protection (+1 Defense).',
+                20, 8, 1, 'melee', 'head', 'rogue')
+lth_bdy = Armor('Leather Bodyarmor',
+                'Simple body armor providing equally simple protection (+1 Defense).',
+                30, 12, 1, 'melee', 'body', 'rogue')
+lth_leg = Armor('Leather Leggings',
+                'Simple leggings providing equally simple protection (+1 Defense).',
+                25, 10, 1, 'melee', 'legs', 'rogue')
+
+en_lth_cap = Armor('Enhanced Leather Cap',
+                   'An enhanced version of your typical leather cap (+3 Defense).',
+                   60, 25, 3, 'melee', 'head', 'rogue')
+en_lth_bdy = Armor('Enhanced Leather Bodyarmor',
+                   'An enhanced version of your typical leather bodyarmor (+3 Defense).',
+                   70, 35, 3, 'melee', 'body', 'rogue')
+en_lth_leg = Armor('Enhanced Leather Leggings',
+                   'An enhanced version of your typical leather leggings (+3 Defense).',
+                   65, 30, 3, 'melee', 'legs', 'rogue')
 
 # Armor -- Melee -- Mid
 irn_hlm = Armor('Iron Helmet',
                 'A decent helmet created from a solid metal (+6 Defense).',
-                150, 50, 6, 'melee', 'head', 'warrior')
+                145, 50, 6, 'melee', 'head', 'warrior')
 irn_cst = Armor('Iron Chestpiece',
                 'Decent body armor made from a solid metal (+7 Defense).',
-                175, 60, 7, 'melee', 'body', 'warrior')
+                165, 60, 7, 'melee', 'body', 'warrior')
 irn_leg = Armor('Iron Leggings',
                 'Decent leggings made from a solid metal (+6 Defense).',
-                160, 55, 6, 'melee', 'legs', 'warrior')
+                155 , 55, 6, 'melee', 'legs', 'warrior')
 
 # Armor -- Magic -- Mid
 myst_hat = Armor('Mystical Hood',
                  'A mysterious hood with strange symbols sewn into it (+6 Magic Defense).',
-                 150, 50, 6, 'magic', 'head', 'mage')
+                 145, 50, 6, 'magic', 'head', 'mage')
 myst_rob = Armor('Mystical Robe',
                  'A mysterious robe with strange symbols sewn into it (+7 Magic Defense)',
-                 175, 60, 7, 'magic', 'body', 'mage')
+                 165, 60, 7, 'magic', 'body', 'mage')
 myst_gar = Armor('Mystical Garments',
                  'Mysterious garments with strange symbols sewn into it (+6 Magic Defense).',
-                 160, 55, 6, 'magic', 'legs', 'mage')
+                 155, 55, 6, 'magic', 'legs', 'mage')
 
 # Armor -- Melee -- Pow
 stl_hlm = Armor('Steel Helmet',
                 'A strong helmet smelted from refined iron (+14 Defense).',
-                325, 110, 4, 'melee', 'head', 'warrior')
+                320, 110, 4, 'melee', 'head', 'warrior')
 stl_cst = Armor('Steel Chestplate',
                 'Strong chest armor smelted from refined iron (+15 Defense).',
-                350, 120, 5, 'melee', 'body', 'warrior')
+                340, 120, 5, 'melee', 'body', 'warrior')
 stl_leg = Armor('Steel Leggings',
                 'Strong leg armor smelted from refined iron (+14 Defense).',
-                335, 115, 4, 'melee', 'legs', 'warrior')
+                330, 115, 4, 'melee', 'legs', 'warrior')
 
 # Armor -- Magic -- Pow
 elem_hat = Armor('Elemental Hat',
                  'A leather hat enchanted with elemental power (+14 Magic Defense).',
-                 325, 110, 14, 'magic', 'head', 'mage')
+                 320, 110, 14, 'magic', 'head', 'mage')
 elem_rob = Armor('Elemental Robe',
                  'A leather robe enchanted with elemental power (+15 Magic Defense).',
-                 350, 120, 15, 'magic', 'body', 'mage')
+                 340, 120, 15, 'magic', 'body', 'mage')
 elem_gar = Armor('Elemental Garments',
                  'Leather garments enchanted with elemental power (+14 Magic Defense).',
-                 335, 115, 14, 'magic', 'legs', 'mage')
+                 330, 115, 14, 'magic', 'legs', 'mage')
 
 # Unique Drops -- Weapons
 ice_blade = Weapon('Blade of Frost',
