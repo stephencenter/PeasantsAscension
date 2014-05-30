@@ -89,7 +89,8 @@ def battle_system(is_boss=False):
 
         var = random.randint(-1, 1)
         # var is how much less/more the attacks will deal than normal.
-        # This makes the battle less predictable and more interesting.
+        # This makes the battle less predictable and more interesb
+        # ting.
 
         dodge = random.randint(0, 250)
         # If dodge is in a certain range, the attack will miss
@@ -142,7 +143,6 @@ def player_turn(var, dodge, move):
     global player
     global monster
     while True:
-
         print('\n-Player Turn-') if move != '2' else ''
         # "2" refers to magic, which will print this later
 
@@ -337,7 +337,7 @@ def battle_inventory():
                     item = item.lower()
                 except AttributeError:
                     continue
-                if item in ['cancel', 'c', 'back', 'exit', 'x']:
+                if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return False
                 else:
                     continue

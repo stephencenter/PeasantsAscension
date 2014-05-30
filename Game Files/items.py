@@ -118,7 +118,7 @@ class Armor(Item):
                  class_, equip=False, cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.defense = defense
-        self.type = type_
+        self.type_ = type_
         self.part = part
         self.class_ = class_
         self.equip = equip

@@ -120,7 +120,7 @@ class Town:
                         print('-'*25)
                         pygame.mixer.music.load('Music\\Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
-                    elif selected in ['back', 'exit', 'x', 'cancel']:
+                    elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
 
     def town_inn(self):
@@ -160,18 +160,19 @@ class Town:
         print('-'*25)
         print('Owner: "Welcome, Traveler!"')
         while True:
-            b_s = input('Do you want to [b]uy or [s]ell items? | Input letter: ')
+            b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ')
             try:
                 b_s = b_s.lower()
             except AttributeError:
                 continue
             if b_s.startswith('b'):
                 while True:
-                    print('"Well, here\'s what I have in my stock: " | {0} GP'.format(main.static['gp']))
+                    print('"Well, here\'s what I have in my stock: "')
                     for num, item in enumerate(stock):
-                        print('      [' + str(num + 1) + '] ' + str(item))
+                        print(''.join(['[', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
+                    print('You have {0} GP'.format(main.static['gp']))
                     while True:
-                        purchase = input('Input [#] (or type "exit"): ')
+                        purchase = input('Input [#] (or type "back"): ')
                         try:
                             purchase = int(purchase) - 1
                             if purchase < 0:
@@ -181,7 +182,7 @@ class Town:
                                 purchase = purchase.lower()
                             except AttributeError:
                                 continue
-                            if purchase in ['exit', 'cancel', 'x', 'back']:
+                            if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                 return
                             else:
                                 continue
@@ -229,8 +230,8 @@ class Town:
                             cat = cat.lower()
                         except AttributeError:
                             pass
-                        if cat in ['x', 'exit', 'c', 'cancel', 'b', 'back']:
-                            return
+                        if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                            break
                         elif cat == '1':
                             cat = 'armor'
                             vis_cat = 'Armor'
@@ -264,6 +265,8 @@ class Town:
                                 print('The "{0}" category is empty...'.format(vis_cat))
                                 print('-'*25)
                                 break
+            elif b_s in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                return
 
     def speak_to_npcs(self):
         while True:
@@ -280,7 +283,7 @@ class Town:
                         npc = npc.lower()
                     except AttributeError:
                         continue
-                    if npc in ['b', 'back', 'x', 'exit', 'c', 'cancel']:
+                    if npc in ['e', 'x', 'exit', 'b', 'back', 'c', 'cancel']:
                         return
                     else:
                         continue

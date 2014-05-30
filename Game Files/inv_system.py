@@ -49,7 +49,7 @@ def pick_category():
                 cat = cat.lower()
             except AttributeError:
                 pass
-            if cat in ['x', 'exit', 'c', 'cancel', 'b', 'back']:
+            if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                 return
             elif cat == '1':
                 cat = 'armor'
@@ -123,7 +123,7 @@ def pick_item(cat, vis_cat, gs=False):
                     item = item.lower()
                 except AttributeError:
                     continue
-                if item in  ['x', 'exit', 'c', 'cancel', 'b', 'back']:
+                if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return
                 else:
                     continue

@@ -286,7 +286,7 @@ def pick_cat(var, dodge):
             cat = 'Healing'
         else:
             try:
-                if cat.lower() in ['cancel', 'back', 'exit', 'x']:
+                if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return False
             except AttributeError:
                 continue
@@ -317,7 +317,7 @@ def pick_spell(cat, var, dodge):
                     spell = spell.lower()
                 except AttributeError:
                     continue
-                if spell in ['exit', 'cancel', 'x', 'back']:
+                if spell in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return
                 else:
                     continue
