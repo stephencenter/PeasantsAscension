@@ -208,9 +208,8 @@ class Town:
                                     input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(str(i), i.buy))
                                     print('-'*25)
                                 else:
-                                    input('"Hey, you don\'t even have\
-enough GP for this {0}!" (Press enter/return) '.format(
-                                        str(i)))
+                                    input('"Hey, you don\'t even have enough GP for this \
+{0}!" (Press enter/return) '.format(str(i)))
                                     print()
                                 break
                             elif confirm in ['no', 'n']:
@@ -272,8 +271,10 @@ enough GP for this {0}!" (Press enter/return) '.format(
 
     def speak_to_npcs(self):
         while True:
-            print('NPCs:\n      ' + '\n      '.join(["[" + str(x + 1) + "] " + npc.name for x, npc in enumerate(
-                self.people)]))
+            print('NPCs:\n      '
+                  + '\n      '.join(["[" + str(x + 1) + "] "
+                                     + npc.name for x, npc in enumerate(
+                                     self.people)]))
             while True:
                 npc = input('Input [#] (or type "exit"): ')
                 try:
@@ -307,8 +308,8 @@ town1 = Town('Nearton', """Nearton: a small village in the central region of t\
 he Forest.
 It is in this very town where numerous brave adventurers have begun
 their journey. Nearton has a general store, an inn, and a few small houses.
-An old man is standing near one of the houses, and appears to be talking
-to a small group of strangers.""", [npcs.philliard, npcs.alfred], 0, 1)
+An old man is standing near one of the houses, and appears to be very
+troubled about something.""", [npcs.philliard, npcs.alfred], 0, 1)
 
 town2 = Town('Southford', """Southford: A fair-size town in the central-southe\
 rn region of the Forest.
@@ -325,7 +326,12 @@ lower-class outer portion, with the middle-class section situated in between.
 As an outsider, you are forbidden to enter the upper two, but are welcome to
 do as you wish in the lower.""", [npcs.stewson], -11, 13, inn_cost=5, gs_level=2)
 
-town_list = [town1, town2, town3]
+town4 = Town('Charsulville', """Charsulville: A plain village in the south east
+region of the Forest. It is home to nothing too special, although it's cheap
+inn service and higher-quality products it sells more than makes up for this.
+There is a ragged beggar standing in the middle of the road.""", [npcs.ethos],
+19, -7, inn_cost=2, gs_level=3)
+town_list = [town1, town2, town3, town4]
 
 
 def search_towns(pos_x, pos_y, enter=True):

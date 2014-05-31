@@ -103,7 +103,7 @@ master_slime.upon_defeating = mastslim_ud
 whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)  # This is for you, Jacob!
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
-menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [], 100, 100, active=False)
+menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [], 75, 75, active=False)
 
 
 def menacphan_ud():

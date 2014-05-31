@@ -6,6 +6,7 @@ import bosses
 import random
 import pygame
 import sounds
+import inv_system
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
@@ -46,8 +47,7 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('{0}{1}, {2}{3} | {4} | Which direction do you want to travel in?\
-| N, S, E, W: '.format(position['y'], position['v'],
+            direction = input('{0}{1}, {2}{3} | {4} | Input direction (N, S, E, W), or type "player": '.format(position['y'], position['v'],
                        position['x'], position['h'],
                        position['reg']))
             try:
@@ -96,7 +96,26 @@ def movement_system():
                         battle.setup_vars()
                         battle.battle_system()
                 break
-
+            elif direction.startswith('p'):
+                print('-'*25)
+                print('You stop to rest for a moment.')
+                while True:
+                    decision = input('View your [i]nventory or your [s]tats? | Input Letter (or type "exit"): ')
+                    try:
+                        decision = decision.lower()
+                    except AttributeError:
+                        continue
+                    if decision.startswith('i'):
+                        print('-'*25)
+                        inv_system.pick_category()
+                        print('-'*25)
+                    elif decision.startswith('s'):
+                        print('-'*25)
+                        main.player.player_info()
+                        print('-'*25)
+                    elif decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        print('-'*25)
+                        break
 
 def out_of_bounds():
     print('-'*25)

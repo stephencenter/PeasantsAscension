@@ -218,6 +218,13 @@ stewson_quest_1.upon_completing = stwqst_uc1
 
 stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
 
+# Name: Ethos -- Town: Charsulville
+ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
+    'in his inventory. If you get lost, check there.', '...', 'Raisins!'], active=True)
+
+ethos = NPC('Ethos', [ethos_phrase_1])
+
+
 all_dialogue = [
     philliard_phrase_1, wesley_phrase_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,

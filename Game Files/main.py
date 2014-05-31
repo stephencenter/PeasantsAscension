@@ -1,5 +1,5 @@
-# Pythonius; v0.3.2 Alpha
-game_version = 'v0.3.2'
+# Pythonius; v0.3.4 Alpha
+game_version = 'v0.3.4'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -309,38 +309,38 @@ Input letter: """)
 
     def player_info(self):
         print("-{0}'s Stats-".format(self.name))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('Level: {0} | Class: {1}'.format(self.lvl, self.class_.title()))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
                                                  self.mp, static['mp_p']))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
         time.sleep(0.45)
         print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
             static['int'], static['str'],
             static['con'], static['dex'],
             static['luc']))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
                                                                   static['r_xp'],
                                                                   static['gp']))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print()
         print('-Equipped Items-')
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('Weapon: {0}'.format(str(inv_system.equipped['weapon'])))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('Armor:')
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('  Head: {0}'.format(str(inv_system.equipped['head'])))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('  Body: {0}'.format(str(inv_system.equipped['body'])))
-        time.sleep(0.45)
+        time.sleep(0.40)
         print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
         input('Press Enter/Return ')
 

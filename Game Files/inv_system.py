@@ -11,7 +11,7 @@ else:
 
 inventory = {'q_items': [], 'consum': [_c(s_potion), _c(s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': []}
-equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
+equipped = {'weapon': '', 'head': _c(straw_hat), 'body': _c(cotton_shirt), 'legs': _c(sunday_trousers)}
 
 gs_stock = [[s_potion, s_potion, m_potion, l_potion, l_potion, x_potion],
             [s_elixir, s_elixir, m_elixir, l_elixir, l_elixir, x_elixir],
@@ -22,12 +22,12 @@ gs_stock = [[s_potion, s_potion, m_potion, l_potion, l_potion, x_potion],
             [bnz_hlm, en_bnz_hlm, irn_hlm, stl_hlm],
             [bnz_cst, en_bnz_cst, irn_cst, stl_cst],
             [bnz_leg, en_bnz_leg, irn_leg, stl_leg],
-            [wiz_hat, en_wiz_hat, myst_hat, elem_hat],
-            [wiz_rob, en_wiz_rob, myst_rob, elem_rob],
-            [wiz_gar, en_wiz_gar, myst_gar, elem_gar],
-            [lth_cap, en_lth_cap],
-            [lth_bdy, en_lth_bdy],
-            [lth_leg, en_lth_leg]]
+            [wiz_hat, en_wiz_hat, myst_hat, en_myst_hat, elem_hat],
+            [wiz_rob, en_wiz_rob, myst_rob, en_myst_rob, elem_rob],
+            [wiz_gar, en_wiz_gar, myst_gar, en_myst_gar, elem_gar],
+            [lth_cap, en_lth_cap, std_cwl],
+            [lth_bdy, en_lth_bdy, std_bdy],
+            [lth_leg, en_lth_leg, std_leg]]
 
 gs_stock = list(gs_stock)
 item_setup_vars()

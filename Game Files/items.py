@@ -293,6 +293,17 @@ en_rnc_stf = Weapon('Enhanced Runic Staff',
                     'An enhanced version of your typical Runic Staff (+25 Magic Attack',
                     420, 135, 25, 'magic', 'mage')
 
+# Starting Armor (Useless)
+straw_hat = Armor('Straw Hat',
+                  "Other than keeping the sun out of your eyes, this doesn't do much.",
+                  0, 2, 0, 'melee', 'head', 'none')
+cotton_shirt = Armor('Cotton Shirt',
+                     "It's barely even worth the material it's made of.",
+                     0, 2, 0, 'melee', 'body', 'none')
+sunday_trousers = Armor('Sunday Trousers',
+                        "At least they look nice... Wait, isn't it Thursday?",
+                        0, 2, 0, 'melee', 'legs', 'none')
+
 # Armor -- Warrior -- Weak
 bnz_hlm = Armor('Bronze Helmet',
                 'A simple helmet crafted from bronze (+1 Defense).',
@@ -305,13 +316,13 @@ bnz_leg = Armor('Bronze Leggings',
                 25, 10, 1, 'melee', 'legs', 'warrior')
 
 en_bnz_hlm = Armor('Enhanced Bronze Helmet',
-                   'An enhanced version of your typical bronze helmet (+3 Defense).',
+                   'An enhanced version of your typical Bronze Helmet (+3 Defense).',
                    60, 25, 3, 'melee', 'head', 'warrior')
 en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
-                   'An enhanced version of your typical bronze chestpiece (+4 Defense).',
+                   'An enhanced version of your typical Bronze Chestpiece (+4 Defense).',
                    70, 35, 4, 'melee', 'body', 'warrior')
 en_bnz_leg = Armor('Enhanced Bronze Leggings',
-                   'An enhanced version of your typical bronze leggings (+3 Defense).',
+                   'An enhanced version of your typical Bronze Leggings (+3 Defense).',
                    65, 30, 3, 'melee', 'legs', 'warrior')
 
 # Armor -- Mage -- Weak
@@ -326,13 +337,13 @@ wiz_gar = Armor('Wizard Garments',
                 25, 10, 1, 'magic', 'legs', 'mage')
 
 en_wiz_hat = Armor('Enhanced Wizard Hat',
-                   'An enhanced version of your typical wizard hat (+3 Magic Defense).',
+                   'An enhanced version of your typical Wizard Hat (+3 Magic Defense).',
                    60, 25, 3, 'magic', 'head', 'mage')
 en_wiz_rob = Armor('Enhanced Wizard Robe',
-                   'An enhanced version of your typical wizard robe (+4 Magic Defense).',
+                   'An enhanced version of your typical Wizard Robe (+4 Magic Defense).',
                    70, 35, 4, 'magic', 'body', 'mage')
 en_wiz_gar = Armor('Enhanced Wizard Garments',
-                   'An enhanced version of your typical wizard garments (+3 Magic Defense).',
+                   'An enhanced version of your typical Wizard Garments (+3 Magic Defense).',
                    65, 30, 3, 'magic', 'legs', 'mage')
 
 # Armor -- Rogue -- Weak
@@ -347,13 +358,13 @@ lth_leg = Armor('Leather Leggings',
                 25, 10, 1, 'melee', 'legs', 'rogue')
 
 en_lth_cap = Armor('Enhanced Leather Cap',
-                   'An enhanced version of your typical leather cap (+3 Defense).',
+                   'An enhanced version of your typical Leather Cap (+3 Defense).',
                    60, 25, 3, 'melee', 'head', 'rogue')
 en_lth_bdy = Armor('Enhanced Leather Bodyarmor',
-                   'An enhanced version of your typical leather bodyarmor (+3 Defense).',
+                   'An enhanced version of your typical Leather Bodyarmor (+3 Defense).',
                    70, 35, 3, 'melee', 'body', 'rogue')
 en_lth_leg = Armor('Enhanced Leather Leggings',
-                   'An enhanced version of your typical leather leggings (+3 Defense).',
+                   'An enhanced version of your typical Leather Leggings (+3 Defense).',
                    65, 30, 3, 'melee', 'legs', 'rogue')
 
 # Armor -- Warrior -- Mid
@@ -378,6 +389,16 @@ myst_gar = Armor('Mystical Garments',
                  'Mysterious garments with strange symbols sewn into it (+6 Magic Defense).',
                  155, 55, 6, 'magic', 'legs', 'mage')
 
+en_myst_hat = Armor('Enhanced Mystical Hood',
+                    'An enhanced version of your typical Mystical Hood (+10 Magic Defense).',
+                    260, 75, 10, 'magic', 'head', 'mage')
+en_myst_rob = Armor('Enhanced Mystical Robe',
+                    'An enhanced version of your typical Mystical Robe (+11 Magic Defense).',
+                    280, 80, 11, 'magic', 'body', 'mage')
+en_myst_gar = Armor('Enhanced Mystical Garments',
+                    'An enhanced version of your typical Mystical Garments (+10 Magic Defense).',
+                    270, 85, 10, 'magic', 'legs', 'mage')
+
 # Armor -- Rogue -- Mid
 std_cwl = Armor('Studded Cowl',
                 'A soft leather cap studded with steel pieces (+6 Defense).',
@@ -387,7 +408,7 @@ std_bdy = Armor('Studded Bodyarmor',
                 165, 60, 6, 'melee', 'body', 'rogue')
 std_leg = Armor('Studded Leggings',
                 'Soft leather leggings studded with steel pieces (+6 Defense).',
-                155, 55, 6, 'melee', 'body', 'rogue')
+                155, 55, 6, 'melee', 'legs', 'rogue')
 
 # Armor -- Warrior -- Pow
 stl_hlm = Armor('Steel Helmet',
