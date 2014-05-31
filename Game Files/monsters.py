@@ -61,9 +61,9 @@ class Monster:
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 6)
             self.mp += random.randint(1, 2)
-            self.attk = random.randint(1, 2)
+            self.attk = random.randint(1, 3)
             self.dfns += random.randint(0, 2)
-            self.m_attk += random.randint(1, 2)
+            self.m_attk += random.randint(1, 3)
             self.m_dfns += random.randint(0, 2)
             self.spd += random.randint(1, 2)
             self.evad += random.randint(0, 2)

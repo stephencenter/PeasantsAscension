@@ -243,9 +243,9 @@ class PlayerCharacter:  # The Player
                 skill = input("""Choose a skill to advance:
     [I]ntelligence - Use powerful magic with higher magic stats and MP!
     [S]trength -  Smash through enemies with higher attack and defense!
-    [C]onstitution - Become a tank with higher magical/physical defense and HP!
+    [C]onstitution - Become a tank with higher defense stats and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
-    [L]uck - Receive more gold, more experience, and possibly even more skill points!
+    [L]uck - Receive more gold, more experience, and even more skill points!
   Input letter: """)
                 try:
                     skill = skill.lower()
@@ -274,14 +274,14 @@ class PlayerCharacter:  # The Player
                             break
                         else:
                             continue
-                        if skill.startswith('i'):  # Higher intelligence means better magical stats
+                        if skill.startswith('i'):
                             self.m_dfns += 1
                             self.m_attk += 1
                             self.mp += random.randint(3, 5)
                             static['int'] += 1
-                        elif skill.startswith('s'):  #
-                            self.attk += 1
-                            self.dfns += 1
+                        elif skill.startswith('s'):
+                            self.attk += 2
+                            self.dfns += 2
                             static['str'] += 1
                         elif skill.startswith('c'):
                             self.hp += random.randint(4, 6)
@@ -289,7 +289,7 @@ class PlayerCharacter:  # The Player
                             self.m_dfns += random.randint(0, 1)
                             static['con'] += 1
                         elif skill.startswith('d'):
-                            self.spd += 1
+                            self.spd += 2
                             self.evad += 1
                             static['dex'] += 1
                         elif skill.startswith('l'):
@@ -307,38 +307,38 @@ class PlayerCharacter:  # The Player
 
     def player_info(self):
         print("-{0}'s Stats-".format(self.name))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('Level: {0} | Class: {1}'.format(self.lvl, self.class_.title()))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
                                                  self.mp, static['mp_p']))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
             static['int'], static['str'],
             static['con'], static['dex'],
             static['luc']))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
                                                                   static['r_xp'],
                                                                   static['gp']))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print()
         print('-Equipped Items-')
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('Weapon: {0}'.format(str(inv_system.equipped['weapon'])))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('Armor:')
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('  Head: {0}'.format(str(inv_system.equipped['head'])))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('  Body: {0}'.format(str(inv_system.equipped['body'])))
-        time.sleep(0.5)
+        time.sleep(0.45)
         print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
         input('Press Enter/Return ')
 

@@ -356,7 +356,7 @@ en_lth_leg = Armor('Enhanced Leather Leggings',
                    'An enhanced version of your typical leather leggings (+3 Defense).',
                    65, 30, 3, 'melee', 'legs', 'rogue')
 
-# Armor -- Melee -- Mid
+# Armor -- Warrior -- Mid
 irn_hlm = Armor('Iron Helmet',
                 'A decent helmet created from a solid metal (+6 Defense).',
                 145, 50, 6, 'melee', 'head', 'warrior')
@@ -367,7 +367,7 @@ irn_leg = Armor('Iron Leggings',
                 'Decent leggings made from a solid metal (+6 Defense).',
                 155 , 55, 6, 'melee', 'legs', 'warrior')
 
-# Armor -- Magic -- Mid
+# Armor -- Mage -- Mid
 myst_hat = Armor('Mystical Hood',
                  'A mysterious hood with strange symbols sewn into it (+6 Magic Defense).',
                  145, 50, 6, 'magic', 'head', 'mage')
@@ -378,7 +378,18 @@ myst_gar = Armor('Mystical Garments',
                  'Mysterious garments with strange symbols sewn into it (+6 Magic Defense).',
                  155, 55, 6, 'magic', 'legs', 'mage')
 
-# Armor -- Melee -- Pow
+# Armor -- Rogue -- Mid
+std_cwl = Armor('Studded Cowl',
+                'A soft leather cap studded with steel pieces (+6 Defense).',
+                145, 50, 6, 'melee', 'head', 'rogue')
+std_bdy = Armor('Studded Bodyarmor',
+                'Soft leather body armor studded with steel pieces (+6 Defense).',
+                165, 60, 6, 'melee', 'body', 'rogue')
+std_leg = Armor('Studded Leggings',
+                'Soft leather leggings studded with steel pieces (+6 Defense).',
+                155, 55, 6, 'melee', 'body', 'rogue')
+
+# Armor -- Warrior -- Pow
 stl_hlm = Armor('Steel Helmet',
                 'A strong helmet smelted from refined iron (+14 Defense).',
                 320, 110, 4, 'melee', 'head', 'warrior')
@@ -389,7 +400,7 @@ stl_leg = Armor('Steel Leggings',
                 'Strong leg armor smelted from refined iron (+14 Defense).',
                 330, 115, 4, 'melee', 'legs', 'warrior')
 
-# Armor -- Magic -- Pow
+# Armor -- Mage -- Pow
 elem_hat = Armor('Elemental Hat',
                  'A leather hat enchanted with elemental power (+14 Magic Defense).',
                  320, 110, 14, 'magic', 'head', 'mage')

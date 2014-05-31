@@ -1,6 +1,7 @@
 import sys
 import random
 import time
+import math
 from copy import copy as _c
 
 import pygame
@@ -263,7 +264,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
                 if gold <= 0:
                     gold = random.randint(1, 2)
-                experience = int((monster.lvl - player.lvl/3 + 1.5 + player.ext_exp)/2)
+                experience = int(math.ceil((monster.lvl + 1.5 + player.ext_exp)/1.75))
                 if experience <= 0:
                     experience = random.randint(1, 2)
 
@@ -272,7 +273,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 bosses.defeated_bosses.append(monster.name)
                 print('The almighty {0} has been slain!'.format(monster.name))
 
-                gold = monster.gold
+                gold = monster.gold + player.ext_gol
                 # Bosses drop a set amount of gold...
                 experience = monster.experience
                 # ...and exp
@@ -283,7 +284,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 except AttributeError:
                     pass
 
-            static['gp'] += gold
+            static['gp'] += gold + player.ext_gol
             player.exp += experience
             print("You've gained {0} GP!".format(gold))
             print("You've gained {0} experience point{1}!".format(

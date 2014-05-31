@@ -9,7 +9,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-inventory = {'quest': [], 'consum': [_c(s_potion), _c(s_elixir)], 'coord': [],
+inventory = {'q_items': [], 'consum': [_c(s_potion), _c(s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': []}
 equipped = {'weapon': '', 'head': '(None)', 'body': '(None)', 'legs': '(None)'}
 
@@ -42,7 +42,8 @@ def pick_category():
       [3] Weapons
       [4] Quest Items
       [5] Coordinates
-      [6] Miscellaneous""")
+      [6] Miscellaneous
+      [7] Quests""")
         while True:
             cat = input('Input [#] (or type "exit"): ')
             try:
@@ -61,7 +62,7 @@ def pick_category():
                 cat = 'weapons'
                 vis_cat = 'Weapons'
             elif cat == '4':
-                cat = 'quest'
+                cat = 'q_items'
                 vis_cat = 'Quest Items'
             elif cat == '5':
                 cat = 'coord'
@@ -69,6 +70,9 @@ def pick_category():
             elif cat == '6':
                 cat = 'misc'
                 vis_cat = 'Miscellaneous'
+            elif cat == '7':
+                cat = 'quests'
+                vis_cat = 'Quests'
             else:
                 continue
             if cat in inventory:
@@ -95,54 +99,85 @@ def pick_category():
                     print('The "{0}" category is empty...'.format(vis_cat))
                     print('-'*25)
                     break
+            elif cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.started]:
+                pick_item(cat, vis_cat)
+            else:
+                print("You have no active or completed quests.")
 
 
 def pick_item(cat, vis_cat, gs=False):
-    while inventory[cat]:
-        if cat in ['armor', 'weapons']:
-            if [x for x in inventory[cat] if not x.equip]:
-                print('-'*25)
-                print(vis_cat + ': \n      ' + '\n      '.join(
-                      ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
-                      inventory[cat]) if not y.equip]))
-            else:
-                return
-        else:
+    while cat == 'quests' or inventory[cat]:
+        if cat == 'quests':
             print('-'*25)
-            print(vis_cat + ': \n      ' + '\n      '.join(
-                  ['[' + str(x + 1) + '] ' + str(y)
-                  for x, y in enumerate(inventory[cat])]))
-        while True:
-            item = input('Input [#] (or type "back"): ')
-            try:
-                item = int(item) - 1
-                if item < 0:
-                    continue
-            except (TypeError, ValueError):
+            while True:
+                choice = input('View [f]inished or [u]nfinished quests? | Input letter (or type "back"): ')
                 try:
-                    item = item.lower()
+                    choice = choice.lower()
                 except AttributeError:
                     continue
-                if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                if choice.startswith('f'):
+                    print('-'*25)
+                    if [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.finished]:
+                        print('Finished Quests: ')
+                        print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
+                            for num, x in enumerate([y for y in npcs.all_dialogue
+                            if isinstance(y, npcs.Quest) and y.finished])]))
+                    else:
+                        print('You have no finished quests!')
+                    print('-'*25)
+                elif choice.startswith('u'):
+                    print('-'*25)
+                    if [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and not x.finished and x.started]:
+                        print('Active Quests: ')
+                        print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
+                            for num, x in enumerate([y for y in npcs.all_dialogue
+                            if isinstance(y, npcs.Quest) and not y.finished and y.started])]))
+                    else:
+                        print('You have no active quests!')
+                    print('-'*25)
+                elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return
+        else:
+            if cat in ['armor', 'weapons']:
+                if [x for x in inventory[cat] if not x.equip]:
+                    print('-'*25)
+                    print(vis_cat + ': \n      ' + '\n      '.join(
+                        ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
+                            inventory[cat]) if not y.equip]))
                 else:
+                    return
+            else:
+                print('-'*25)
+                print(''.join([vis_cat, ': \n      ', '\n      '.join(
+                    ['[' + str(x + 1) + '] ' + str(y)
+                     for x, y in enumerate(inventory[cat])])]))
+            while True:
+                item = input('Input [#] (or type "back"): ')
+                try:
+                    item = int(item) - 1
+                    if item < 0:
+                        continue
+                except (TypeError, ValueError):
+                    try:
+                        item = item.lower()
+                    except AttributeError:
+                        continue
+                    if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        return
+                    else:
+                        continue
+                try:
+                    if cat in ['weapons', 'armor']:
+                        item = [x for x in inventory[cat] if not x.equip][item]
+                    else:
+                        item = inventory[cat][item]
+                except IndexError:
                     continue
-            try:
-                if cat in ['weapons', 'armor']:
-                    item = [x for x in inventory[cat] if not x.equip][item]
-                else:
-                    item = inventory[cat][item]
-            except IndexError:
-                continue
-            if not isinstance(item, npcs.Quest):
                 if gs:
                     sell_item(cat, item)
                 else:
                     pick_action(cat, item)
-            else:
-                print('This has not yet been implemented. Sorry! -RbwNjaFurret')
-                # Viewing quests in the inventory is planned for the next update.
-            break
+                break
 
 
 def pick_action(cat, item):
@@ -215,6 +250,7 @@ def sell_item(cat, item):
                     return
         elif y_n.startswith('n'):
             return
+
 
 def serialize_inv(path):
     j_inventory = {}

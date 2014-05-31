@@ -102,6 +102,7 @@ class Quest(Conversation):
         main.player.exp += self.reward[0]
         main.static['gp'] += self.reward[1]
         print("You've received {0} XP and {1} GP for completing this quest.".format(self.reward[0], self.reward[1]))
+        main.player.level_up()
         self.upon_completing()
         self.active = False
 
