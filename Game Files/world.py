@@ -46,10 +46,10 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('{0}{1}, {2}{3} | {4} | Which direction do you want to travel in? | N, S, E, \
-W: '.format(position['y'], position['v'],
-            position['x'], position['h'],
-            position['reg']))
+            direction = input('{0}{1}, {2}{3} | {4} | Which direction do you want to travel in?\
+| N, S, E, W: '.format(position['y'], position['v'],
+                       position['x'], position['h'],
+                       position['reg']))
             try:
                 direction = direction.lower()
             except AttributeError:
@@ -83,16 +83,18 @@ W: '.format(position['y'], position['v'],
                 position['avg'] = int(((abs(position['x'])) +
                                        (abs(position['y'])))/2)
                 if (not check_region() and  # Check for region changes
-                    not bosses.check_bosses(position['x'], position['y']) and  # Check for bosses to fight
-                    not towns.search_towns(position['x'], position['y'], enter=False)):  # Check for towns to visit
-                        # If none of the previous statements return True, then a battle can occur.
-                        # There is a 1 in 7 chance for a battle to occur (~14.28%)
-                        is_battle = not random.randint(0, 7)
-                        if is_battle:
-                            print('-'*25)
-                            monsters.spawn_monster()
-                            battle.setup_vars()
-                            battle.battle_system()
+                        not bosses.check_bosses(position['x'],
+                                                position['y']) and  # Check for bosses to fight
+                        not towns.search_towns(position['x'], position['y'],
+                                               enter=False)):  # Check for towns to visit
+                    # If none of the previous statements return True, then a battle can occur.
+                    # There is a 1 in 7 chance for a battle to occur (~14.28%)
+                    is_battle = not random.randint(0, 7)
+                    if is_battle:
+                        print('-'*25)
+                        monsters.spawn_monster()
+                        battle.setup_vars()
+                        battle.battle_system()
                 break
 
 
@@ -129,11 +131,12 @@ def check_region():
 
     if position['reg'] != region:
         print('-'*25)
-        print('You have left the {0} region and are now entering the {1} region.'.format(position['reg'], region))
+        print('You have left the {0} region and are now entering the {1} region.'.format(
+            position['reg'], region))
         print('-'*25)
         position['reg'] = region
         position['reg_music'] = reg_music
-        save_coords(position['x'],  position['y'])
+        save_coords(position['x'], position['y'])
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
         pygame.mixer.music.play(-1)

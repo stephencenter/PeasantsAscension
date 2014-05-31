@@ -189,6 +189,8 @@ class PlayerCharacter:  # The Player
     def level_up(self):
         global static
         if self.exp >= static['r_xp']:
+            pygame.mixer.music.load('Music\\Adventures in Pixels.ogg')
+            pygame.mixer.music.play(-1)
             self.hp = static['hp_p']
             self.mp = static['mp_p']
             temp_ski = 0  # Temporary Skill Points
@@ -246,7 +248,7 @@ class PlayerCharacter:  # The Player
     [C]onstitution - Become a tank with higher defense stats and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
     [L]uck - Receive more gold, more experience, and even more skill points!
-  Input letter: """)
+Input letter: """)
                 try:
                     skill = skill.lower()
                 except AttributeError:

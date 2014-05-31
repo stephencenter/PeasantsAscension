@@ -365,7 +365,7 @@ irn_cst = Armor('Iron Chestpiece',
                 165, 60, 7, 'melee', 'body', 'warrior')
 irn_leg = Armor('Iron Leggings',
                 'Decent leggings made from a solid metal (+6 Defense).',
-                155 , 55, 6, 'melee', 'legs', 'warrior')
+                155, 55, 6, 'melee', 'legs', 'warrior')
 
 # Armor -- Mage -- Mid
 myst_hat = Armor('Mystical Hood',

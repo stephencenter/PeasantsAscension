@@ -227,8 +227,6 @@ def after_battle(is_boss):  # Assess the results of the battle
     global player
     update_stats()  # Reset non-hp/mp stats to the way they were before battle
     print('-'*25)
-    pygame.mixer.music.load('Music\\Adventures in Pixels.ogg')
-    pygame.mixer.music.play(-1)
     while True:
         if monster.hp > 0 >= player.hp:
             # If the monster wins...

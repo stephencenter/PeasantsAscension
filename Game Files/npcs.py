@@ -1,6 +1,7 @@
 import sys
 import json
 import bosses
+import pets
 
 if __name__ == "__main__":
     sys.exit()
@@ -109,27 +110,28 @@ class Quest(Conversation):
 
 # Name: Philliard -- Town: Nearton
 philliard_phrase_1 = Conversation(["Hello, adventurer!",
-                                   "Welcome to the Kingdom of Pythonia."], active=True)
+    "Welcome to the Kingdom of Pythonia."], active=True)
 philliard = NPC('Philliard', [philliard_phrase_1])
 
 # Name: Alfred -- Town: Nearton
 alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives south-east",
-                                "of this very town. I'd be careful around there if I were you."], active=True)
+    "of this very town. I'd be careful around there if I were you."], active=True)
 alfred_phrase_2 = Conversation(["Come back here when you defeat the evil",
-                                "Master Slime. Good luck!"])
+    "Master Slime. Good luck!"])
+
 alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"], repeat=True)
 
 alfred_quest_1 = Quest(["...Actually, now that I think about it, do you think you could possibly",
-                        "dispose of this vile creature? His location is 0'N, 1'E."], 'A Slimy Specimen',
-                       ["Defeat the dreaded Master Slime at location 0'N, 1'E and then",
-                        "return to Alfred in Nearton."], 'Alfred', [30, 50],
-                       ["You defeated the evil Master Slime?!",
-                        "Amazing! Take this, adventurer, you've earned it."], active=True)
+     "dispose of this vile creature? His location is 0'N, 1'E."], 'A Slimy Specimen',
+    ["Defeat the dreaded Master Slime at location 0'N, 1'E and then",
+     "return to Alfred in Nearton."], 'Alfred', [30, 50],
+    ["You defeated the evil Master Slime?!",
+     "Amazing! Take this, adventurer, you've earned it."], active=True)
 
 
 def alfqst_us1():
     # Stands for "Alfred Quest 1 -- Upon Starting
-    # Changes one of his dialogue options to reflect a quest beginning.
+    # Changes some of his dialogue options to reflect a quest beginning.
     global alfred_phrase_1
     global alfred_phrase_2
     bosses.master_slime.active = True
@@ -145,26 +147,81 @@ def alfqst_uc1():
 
 alfred_quest_1.upon_starting = alfqst_us1
 alfred_quest_1.upon_completing = alfqst_uc1
+
 alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
                         alfred_quest_1, alfred_phrase_3])
 
 # Name: Wesley -- Town: Southford
 wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
-                                "to be stronger the farther from 0'N, 0'E that you travel.",
-                                "However, monsters there also give better loot. Be careful."], active=True)
+    "to be stronger the farther from 0'N, 0'E that you travel.",
+    "However, monsters there also give better loot. Be careful."
+                               ], active=True)
 wesley = NPC('Wesley', [wesley_phrase_1])
 
 # Name: Stewson -- Town: Overshire
 stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
-                                 "Tundra in the northwest, Swamp in the southeast,",
-                                 "Mountains in the northeast, and Desert in the southwest.",
-                                 "The Forest lies in the center, while the Beach surrounds them."], active=True)
-stewson = NPC('Stewson', [stewson_phrase_1])
+     "Tundra in the northwest, Swamp in the southeast,",
+     "Mountains in the northeast, and Desert in the southwest.",
+     "The Forest lies in the center, while the Beach surrounds them.",
+     "There's a small region somewhere around here that is the",
+     "cause of much worry and panic in this town: The Graveyard.",
+     "Inside lies a dangerous aparrition, feared by all who have seen it.",
+                                ], active=True)
+
+stewson_phrase_2 = Conversation(["Please save us from this monsterous wraith!"])
+
+stewson_phrase_3 = Conversation(["Thank you again for your help, adventurer!"])
+
+stewson_quest_1 = Quest(["I wish someone would do something about this terrible",
+    "ghost... Hey! You're a strong adventurer, perhaps you",
+    "could defeat this phantom? It's at position 8'N, -12'W."],
+    'The Shadowy Spirit', ["Defeat the feared Menacing Phantom at location",
+    "8'N, -12'W and then return to Stewson in Overshire."], 'Stewson', [50, 75],
+    ["You... you actually defeated it?! Thank you ever so much!",
+     "Take this, it is the least our town can do for your bravery."], active=True)
+
+
+def stwqst_us1():
+    global stewson_phrase_1
+    global stewson_phrase_2
+    bosses.menac_phantom.active = True
+    stewson_phrase_1.active = False
+    stewson_phrase_2.active = True
+
+def stwqst_uc1():
+    global stewson_phrase_3
+    stewson_phrase_3.active = True
+    print('-'*25)
+    if not main.player.current_pet:
+        print('You have recieved a Cherub pet!')
+        main.player.current_pet = pets.pet_cherub
+    else:
+        print('You are being offered a Cherub pet (Healer) by Stewson.')
+        print('Accepting this pet will cause your current pet to be replaced.')
+        while True:
+            y_n = input('Replace your {0} pet with a pet Cherub (Healer)? | Yes or No: '.format(main.current_pet.name))
+            try:
+                y_n = y_n.lower()
+            except AttributeError:
+                continue
+            if y_n.startswith('y'):
+                print('You have recieved a Cherub pet!')
+                main.player.current_pet = pets.pet_cherub
+                return
+            elif y_n.startswith('n'):
+                print('You have declined the offer to recieve a Cherub pet.')
+                return
+
+
+stewson_quest_1.upon_starting = stwqst_us1
+stewson_quest_1.upon_completing = stwqst_uc1
+
+stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
 
 all_dialogue = [
-    philliard_phrase_1,
+    philliard_phrase_1, wesley_phrase_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
-    stewson_phrase_1
+    stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1
 ]
 
 

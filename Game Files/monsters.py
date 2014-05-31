@@ -50,7 +50,9 @@ class Monster:
         return monst_dealt
 
     def monst_magic(self, var):
-        monst_dealt = int((self.m_attk/2) - (battle.temp_stats['m_dfns']/3) + (self.lvl/3) + var + 1)
+        monst_dealt = int((self.m_attk/2)
+                          - (battle.temp_stats['m_dfns']/3)
+                          + (self.lvl/3) + var + 1)
         if monst_dealt < 1:
             monst_dealt = 1
         return monst_dealt

@@ -103,7 +103,16 @@ master_slime.upon_defeating = mastslim_ud
 whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)  # This is for you, Jacob!
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
-menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [], 100, 100)
+menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [], 100, 100, active=False)
+
+
+def menacphan_ud():
+    # Stands for "Menacing Phantom -- Upon Defeating"
+    npcs.stewson_quest_1.finished = True
+    npcs.stewson_phrase_2.active = False
+
+
+menac_phantom.upon_defeating = menacphan_ud
 
 boss_list = [whisp_goblin, master_slime, menac_phantom]
 defeated_bosses = []  # Make sure you can only defeat the boss one time

@@ -208,7 +208,8 @@ class Town:
                                     input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(str(i), i.buy))
                                     print('-'*25)
                                 else:
-                                    input('"Hey, you don\'t even have enough GP for this {0}!" (Press enter/return)'.format(
+                                    input('"Hey, you don\'t even have\
+enough GP for this {0}!" (Press enter/return) '.format(
                                         str(i)))
                                     print()
                                 break
