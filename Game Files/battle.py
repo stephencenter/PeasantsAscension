@@ -61,11 +61,11 @@ def player_choice():
 
 def battle_system(is_boss=False):
     if is_boss:  # Bosses have different battle music than normal enemies
-        pygame.mixer.music.load('Music\\Terrible Tarantuloid.ogg')
+        pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
         print('The legendary {0} has awoken!'.format(monster.name))
     else:
-        pygame.mixer.music.load('Music\\Jumpshot.ogg')
+        pygame.mixer.music.load('Music/Jumpshot.ogg')
         pygame.mixer.music.play(-1)
 
         if monster.name[0] in vowels:
@@ -230,7 +230,7 @@ def after_battle(is_boss):  # Assess the results of the battle
     while True:
         if monster.hp > 0 >= player.hp:
             # If the monster wins...
-            pygame.mixer.music.load('Music\\Power-Up.ogg')
+            pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             print('Despite your best efforts, the {0} has bested you. You are dead.'.format(monster.name))
             print('-'*25)

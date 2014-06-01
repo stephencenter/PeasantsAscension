@@ -73,7 +73,7 @@ static = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
-            'reg_music': 'Music\\Through the Forest.ogg',
+            'reg_music': 'Music/Through the Forest.ogg',
             'h': '', 'v': '', 'prev_town': [0, 0]}
 
 # Identify the player's OS and set their save destination
@@ -189,7 +189,7 @@ class PlayerCharacter:  # The Player
     def level_up(self):
         global static
         if self.exp >= static['r_xp']:
-            pygame.mixer.music.load('Music\\Adventures in Pixels.ogg')
+            pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
             self.hp = static['hp_p']
             self.mp = static['mp_p']
@@ -494,7 +494,7 @@ def deserialize_player(path):  # Load the JSON file and translate
 
 
 def title_screen():
-    pygame.mixer.music.load('Music\\Prologue.ogg')
+    pygame.mixer.music.load('Music/Prologue.ogg')
     pygame.mixer.music.play(-1)
     print("""
       ____        _   _                 _
@@ -507,7 +507,7 @@ def title_screen():
 Pythonius {0} -- Programmed in Python by Stephen Center
 -----------------------------------------------------------""".format(game_version))
     while True:
-        choice = input('[P]Lay Game  |  [C]redits  | [E]xit  |  Input letter: ')
+        choice = input('[P]lay Game  |  [C]redits  | [E]xit  |  Input letter: ')
         try:
             choice = choice.lower()
         except AttributeError:

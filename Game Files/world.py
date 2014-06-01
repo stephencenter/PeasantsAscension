@@ -47,9 +47,10 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('{0}{1}, {2}{3} | {4} | Input direction (N, S, E, W), or type "player": '.format(position['y'], position['v'],
-                       position['x'], position['h'],
-                       position['reg']))
+            direction = input('{0}{1}, {2}{3} | {4} | Input direction (N, S, E, W), \
+or type "player": '.format(position['y'], position['v'],
+                           position['x'], position['h'],
+                           position['reg']))
             try:
                 direction = direction.lower()
             except AttributeError:
@@ -128,25 +129,25 @@ def check_region():
     x, y = position['x'], position['y']
     if x in range(-15, -9) and y in range(5, 11):  # Micro-region in the North-west of the Forest
         region = 'Graveyard'
-        reg_music = 'Music\\Frontier.ogg'
+        reg_music = 'Music/Frontier.ogg'
     elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
         region = 'Forest'
-        reg_music = 'Music\\Through the Forest.ogg'
+        reg_music = 'Music/Through the Forest.ogg'
     elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
         region = 'Tundra'
-        reg_music = 'Music\\Arpanauts.ogg'
+        reg_music = 'Music/Arpanauts.ogg'
     elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
         region = 'Mountain'
-        reg_music = 'Music\\Mountain.ogg'
+        reg_music = 'Music/Mountain.ogg'
     elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
         region = 'Desert'
-        reg_music = 'Music\\Come and Find Me.ogg'
+        reg_music = 'Music/Come and Find Me.ogg'
     elif x in range(0, 116) and y in range(-115, 1):  # Southeast of World
         region = 'Swamp'
-        reg_music = 'Music\\Digital Native.ogg'
+        reg_music = 'Music/Digital Native.ogg'
     elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
         region = 'Beach'
-        reg_music = "Music\\We're all under the stars.ogg"
+        reg_music = "Music/We're all under the stars.ogg"
 
     if position['reg'] != region:
         print('-'*25)

@@ -92,24 +92,24 @@ class Town:
         while True:
             spam = False
             if self.inn and not self.gen_store:
-                print('There is an Inn in this town.')
+                print('There is an [I]nn in this town.')
                 buildings = gen_words
             elif self.gen_store and not self.inn:
-                print('There is a General Store in this town.')
+                print('There is a [G]eneral Store in this town.')
                 buildings = inn_words
             elif self.gen_store and self.inn:
-                print('There is both an Inn and a General Store in this town.')
+                print('There is both an [I]nn and a [G]eneral Store in this town.')
                 buildings = inn_words[:]
                 buildings.extend(gen_words)
             if buildings:
                 while not spam:
-                    selected = input('What building would you like to enter? | Input Building Name (or type "exit"): ')
+                    selected = input('What building will you enter? | Input Letter (or type "exit"): ')
                     try:
                         selected = selected.lower()
                     except AttributeError:
                         continue
                     if selected in buildings:
-                        pygame.mixer.music.load('Music\\Mayhem in the Village.ogg')
+                        pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                         pygame.mixer.music.play(-1)
                         if selected in gen_words:
                             self.town_gen()
@@ -118,7 +118,7 @@ class Town:
                             if self.town_inn():
                                 spam = True
                         print('-'*25)
-                        pygame.mixer.music.load('Music\\Chickens (going peck peck peck).ogg')
+                        pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
                     elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
@@ -294,12 +294,12 @@ class Town:
                     npc = self.people[npc]
                 except IndexError:
                     continue
-                pygame.mixer.music.load('Music\\Mayhem in the Village.ogg')
+                pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
                 print('-'*25)
                 npc.speak()
                 print('-'*25)
-                pygame.mixer.music.load('Music\\Chickens (going peck peck peck).ogg')
+                pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                 pygame.mixer.music.play(-1)
                 break
 
@@ -331,6 +331,7 @@ region of the Forest. It is home to nothing too special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos],
 19, -7, inn_cost=2, gs_level=3)
+
 town_list = [town1, town2, town3, town4]
 
 
@@ -348,7 +349,7 @@ def search_towns(pos_x, pos_y, enter=True):
                     except AttributeError:
                         continue
                     if y_n in ['yes', 'y']:
-                        pygame.mixer.music.load('Music\\Chickens (going peck peck peck).ogg')
+                        pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
                         world.save_coords(town.x, town.y)
                         town.new_location()
