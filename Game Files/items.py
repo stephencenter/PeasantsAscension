@@ -40,7 +40,7 @@ class Consumable(Item):
     def __str__(self):
         return self.name
 
-    def consume_item(self):
+    def use_item(self):
         print('-' * 25)
         global inventory
         item_setup_vars()
@@ -80,7 +80,7 @@ class Weapon(Item):
     def __str__(self):
         return self.name
 
-    def equip_weapon(self):
+    def use_item(self):
         global equipped
         global inventory
         item_setup_vars()
@@ -128,7 +128,7 @@ class Armor(Item):
         self.class_ = class_
         self.equip = equip
 
-    def equip_armor(self):
+    def use_item(self):
         global equipped
         global inventory
         item_setup_vars()

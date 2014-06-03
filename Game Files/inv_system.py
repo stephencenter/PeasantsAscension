@@ -1,36 +1,39 @@
 import sys
 import json
 import npcs
+import items as i
 from copy import copy as _c
-from items import *
+
 
 if __name__ == "__main__":
     sys.exit()
 else:
     main = sys.modules["__main__"]
 
-inventory = {'q_items': [], 'consum': [_c(s_potion), _c(s_elixir)], 'coord': [],
+inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': []}
-equipped = {'weapon': '', 'head': _c(straw_hat), 'body': _c(cotton_shirt), 'legs': _c(sunday_trousers)}
+equipped = {'weapon': '', 'head': _c(i.straw_hat),
+            'body': _c(i.cotton_shirt),
+            'legs': _c(i.sunday_trousers)}
 
-gs_stock = [[s_potion, s_potion, m_potion, l_potion, l_potion, x_potion],
-            [s_elixir, s_elixir, m_elixir, l_elixir, l_elixir, x_elixir],
-            [s_rejuv, s_rejuv, m_rejuv, m_rejuv, l_rejuv, l_rejuv],
-            [cpr_swd, en_cpr_swd, bnz_spr, en_bnz_spr, irn_axe, en_irn_axe],
-            [oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf, en_rnc_stf],
-            [sht_bow, en_sht_bow, lng_bow, en_lng_bow, myth_sb, en_myth_sb],
-            [bnz_hlm, en_bnz_hlm, irn_hlm, stl_hlm],
-            [bnz_cst, en_bnz_cst, irn_cst, stl_cst],
-            [bnz_leg, en_bnz_leg, irn_leg, stl_leg],
-            [wiz_hat, en_wiz_hat, myst_hat, en_myst_hat, elem_hat],
-            [wiz_rob, en_wiz_rob, myst_rob, en_myst_rob, elem_rob],
-            [wiz_gar, en_wiz_gar, myst_gar, en_myst_gar, elem_gar],
-            [lth_cap, en_lth_cap, std_cwl],
-            [lth_bdy, en_lth_bdy, std_bdy],
-            [lth_leg, en_lth_leg, std_leg]]
+gs_stock = [[i.s_potion, i.s_potion, i.m_potion, i.l_potion, i.l_potion, i.x_potion],
+            [i.s_elixir, i.s_elixir, i.m_elixir, i.l_elixir, i.l_elixir, i.x_elixir],
+            [i.s_rejuv, i.s_rejuv, i.m_rejuv, i.m_rejuv, i.l_rejuv, i.l_rejuv],
+            [i.cpr_swd, i.en_cpr_swd, i.bnz_spr, i.en_bnz_spr, i.irn_axe, i.en_irn_axe],
+            [i.oak_stf, i.en_oak_stf, i.arc_spb, i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],
+            [i.sht_bow, i.en_sht_bow, i.lng_bow, i.en_lng_bow, i.myth_sb, i.en_myth_sb],
+            [i.bnz_hlm, i.en_bnz_hlm, i.irn_hlm, i.stl_hlm],
+            [i.bnz_cst, i.en_bnz_cst, i.irn_cst, i.stl_cst],
+            [i.bnz_leg, i.en_bnz_leg, i.irn_leg, i.stl_leg],
+            [i.wiz_hat, i.en_wiz_hat, i.myst_hat, i.en_myst_hat, i.elem_hat],
+            [i.wiz_rob, i.en_wiz_rob, i.myst_rob, i.en_myst_rob, i.elem_rob],
+            [i.wiz_gar, i.en_wiz_gar, i.myst_gar, i.en_myst_gar, i.elem_gar],
+            [i.lth_cap, i.en_lth_cap, i.std_cwl],
+            [i.lth_bdy, i.en_lth_bdy, i.std_bdy],
+            [i.lth_leg, i.en_lth_leg, i.std_leg]]
 
 gs_stock = list(gs_stock)
-item_setup_vars()
+i.item_setup_vars()
 
 
 def pick_category():
@@ -91,19 +94,19 @@ def pick_category():
                             print('-'*25)
                         else:
                             print('-'*25)
-                            print('The "{0}" category is empty...'.format(vis_cat))
+                            input('The "{0}" category is empty. (Press Enter/Return) '.format(vis_cat))
                             print('-'*25)
                     break
                 else:
                     print('-'*25)
-                    print('The "{0}" category is empty...'.format(vis_cat))
+                    input('The "{0}" category is empty. (Press Enter/Return) '.format(vis_cat))
                     print('-'*25)
                     break
             elif cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.started]:
                 pick_item(cat, vis_cat)
                 break
             else:
-                print("You have no active or completed quests.")
+                print("You have no active or completed quests. (Press Enter/Return) ")
 
 
 def pick_item(cat, vis_cat, gs=False):
@@ -112,7 +115,7 @@ def pick_item(cat, vis_cat, gs=False):
             print('-'*25)
             while True:
                 fizz = True
-                choice = input('View [f]inished or [u]nfinished quests? | Input letter (or type "back"): ')
+                choice = input('View [f]inished or [a]ctive quests? | Input letter (or type "back"): ')
                 try:
                     choice = choice.lower()
                 except AttributeError:
@@ -151,10 +154,10 @@ def pick_item(cat, vis_cat, gs=False):
                                 print('-'*25)
                                 break
                     else:
-                        print('You have no finished quests!')
+                        input('You have no finished quests! (Press Enter/Return) ')
                     print('-'*25)
 
-                elif choice.startswith('u'):
+                elif choice.startswith('a'):
                     print('-'*25)
                     dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
                                 and not x.finished and x.started]
@@ -237,7 +240,7 @@ def pick_action(cat, item):
     global inventory
     print('-'*25)
     while item in inventory[cat]:
-        if isinstance(item, Weapon) or isinstance(item, Armor):
+        if isinstance(item, i.Weapon) or isinstance(item, i.Armor):
             use_equip = 'Equip'
             if item.equip:
                 break
@@ -245,22 +248,13 @@ def pick_action(cat, item):
             use_equip = 'Use'
         action = input('{0} | 1: {1}, 2: Read Desc, 3: Drop, 4: Cancel | Input #(1-4): '.format(
             str(item), use_equip))
-        try:
-            action = int(action)
-        except (TypeError, ValueError):
-            continue
-        if action == 1:
-            if isinstance(item, Weapon):
-                item.equip_weapon()
-            elif isinstance(item, Armor):
-                item.equip_armor()
-            elif isinstance(item, Consumable):
-                item.consume_item()
-        elif action == 2:
+        if action == '1':
+            item.use_item()
+        elif action == '2':
             print('-'*25)
             print(str(item) + ': ' + item.desc)
             print('-'*25)
-        elif action == 3:
+        elif action == '3':
             if item.imp:
                 print('You cannot dispose of quest-related items.')
             else:
@@ -270,17 +264,17 @@ def pick_action(cat, item):
                         y_n = y_n.lower()
                     except AttributeError:
                         continue
-                    if y_n in ['yes', 'y']:
+                    if y_n.startswith('y'):
                         print('You toss the {0} aside and continue on your journey.'.format(str(item)))
                         for x, y in enumerate(inventory[cat]):
                             if y.name == item.name:
                                 inventory[cat].remove(y)
                                 break
                         return
-                    elif y_n in ['no', 'n']:
+                    elif y_n.startswith('n'):
                         print('You decide to keep the {0} with you.'.format(str(item)))
                         break
-        elif action == 4:
+        elif action == '4':
             return
 
 
@@ -327,11 +321,11 @@ def deserialize_inv(path):
         norm_inv[category] = []
         for item in j_inventory[category]:
             if category == 'consum':
-                x = Consumable('', '', '', '')
+                x = i.Consumable('', '', '', '')
             elif category == 'weapon':
-                x = Weapon('', '', '', '', '', '', '')
+                x = i.Weapon('', '', '', '', '', '', '')
             elif category == 'armor':
-                x = Armor('', '', '', '', '', '', '', '')
+                x = i.Armor('', '', '', '', '', '', '', '')
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue
@@ -363,9 +357,9 @@ def deserialize_equip(path):
             norm_equip[category] = '(None)'
             continue
         elif category == 'weapon':
-            x = Weapon('', '', '', '', '', '', '')
+            x = i.Weapon('', '', '', '', '', '', '')
         else:
-            x = Armor('', '', '', '', '', '', '', '')
+            x = i.Armor('', '', '', '', '', '', '', '')
         x.__dict__ = j_equipped[category]
         norm_equip[category] = x
     equipped = norm_equip

@@ -240,7 +240,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in ['yes', 'y', 'yeah']:
+                if y_n.startswith('y'):
                     # If you die, you return to the last town visited or 0'N, 0'E
                     # if you haven't been to a town yet.
                     world.back_to_coords()
@@ -249,7 +249,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     pygame.mixer.music.load(position['reg_music'])
                     pygame.mixer.music.play(-1)
                     return 'dead'
-                elif y_n in ['no', 'n', 'nope']:
+                elif y_n.startswith('n'):
                     sys.exit()
 
         elif monster.hp <= 0 < player.hp:
@@ -345,7 +345,7 @@ def battle_inventory():
             except IndexError:
                 continue
             print('\n-Player Turn-')
-            item.consume_item()
+            item.use_item()
             return True
 
 
@@ -381,7 +381,9 @@ def bat_stats():
     pet = player.current_pet
     if pet:
         if isinstance(player.current_pet, pets.Healer):
-            print("{0}'s {1}: {2}/{3} MP LVL: {4}".format(player.name, pet.name, pet.mana, pet.max_m, pet.level))
+            print("{0}'s {1}: {2}/{3} MP LVL: {4}".format(
+                player.name, pet.name, pet.mana, pet.max_m, pet.level))
+
     # Monster Stats
     print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
           monster.name, monster.hp,

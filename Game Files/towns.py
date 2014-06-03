@@ -167,9 +167,9 @@ class Town:
                 continue
             if b_s.startswith('b'):
                 while True:
-                    print('"Well, here\'s what I have in my stock: "')
+                    print('''"Well, here's what I have in my stock: "''')
                     for num, item in enumerate(stock):
-                        print(''.join(['[', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
+                        print(''.join(['   [', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
                     print('You have {0} GP'.format(main.static['gp']))
                     while True:
                         purchase = input('Input [#] (or type "back"): ')
@@ -212,7 +212,7 @@ class Town:
 {0}!" (Press enter/return) '.format(str(i)))
                                     print()
                                 break
-                            elif confirm in ['no', 'n']:
+                            elif confirm.startswith('n'):
                                 print()
                                 break
                         break

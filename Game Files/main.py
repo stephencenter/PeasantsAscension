@@ -59,6 +59,7 @@ import magic
 import bosses
 import npcs
 import pets
+import items
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
@@ -78,26 +79,26 @@ position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
 
 # Identify the player's OS and set their save destination
 if os.name == 'nt':  # Windows devices
-    sav1 = 'C:\\Pythonius\\Save Files\\sav_a.json'  # Misc Variables
-    sav2 = 'C:\\Pythonius\\Save Files\\sav_b.json'  # Position
-    sav3 = 'C:\\Pythonius\\Save Files\\sav_c.json'  # Inventory
-    sav4 = 'C:\\Pythonius\\Save Files\\sav_d.json'  # Equipped Items
-    sav5 = 'C:\\Pythonius\\Save Files\\sav_e.json'  # Player Stats
-    sav6 = 'C:\\Pythonius\\Save Files\\sav_f.json'  # Spellbook
-    sav7 = 'C:\\Pythonius\\Save Files\\sav_g.json'  # Defeated Bosses
-    sav8 = 'C:\\Pythonius\\Save Files\\sav_h.json'  # Quests & Dialogue
-    sav9 = 'C:\\Pythonius\\Save Files\\sav_i.json'  # Misc Boss Info
+    sav1 = 'Save Files\\misc_vars.json'  # Misc Variables
+    sav2 = 'Save Files\\postition.json'  # Position
+    sav3 = 'Save Files\\inventory.json'  # Inventory
+    sav4 = 'Save Files\\equip_items.json'  # Equipped Items
+    sav5 = 'Save Files\\play_stats.json'  # Player Stats
+    sav6 = 'Save Files\\spellbook.json'  # Spellbook
+    sav7 = 'Save Files\\def_bosses.json'  # Defeated Bosses
+    sav8 = 'Save Files\\quests_dia.json'  # Quests & Dialogue
+    sav9 = 'Save Files\\misc_boss_info.json'  # Misc Boss Info
 
 elif os.name == 'posix':  # Unix-based devices
-    sav1 = '/opt/Pythonius/Save Files/sav_a.json'  # Misc Variables
-    sav2 = '/opt/Pythonius/Save Files/sav_b.json'  # Position
-    sav3 = '/opt/Pythonius/Save Files/sav_c.json'  # Inventory
-    sav4 = '/opt/Pythonius/Save Files/sav_d.json'  # Equipped Items
-    sav5 = '/opt/Pythonius/Save Files/sav_e.json'  # Player Stats
-    sav6 = '/opt/Pythonius/Save Files/sav_f.json'  # Spellbook
-    sav7 = '/opt/Pythonius/Save Files/sav_g.json'  # Defeated Bosses
-    sav8 = '/opt/Pythonius/Save Files/sav_h.json'  # Quests & Dialogue
-    sav9 = '/opt/Pythonius/Save Files/sav_i.json'  # Misc Boss Info
+    sav1 = 'Save Files/misc_vars.json'  # Misc Variables
+    sav2 = 'Save Files/postition.json'  # Position
+    sav3 = 'Save Files/inventory.json'  # Inventory
+    sav4 = 'Save Files/equip_items.json'  # Equipped Items
+    sav5 = 'Save Files/play_stats.json'  # Player Stats
+    sav6 = 'Save Files/spellbook.json'  # Spellbook
+    sav7 = 'Save Files/def_bosses.json'  # Defeated Bosses
+    sav8 = 'Save Files/quests_dia.json'  # Quests & Dialogue
+    sav9 = 'Save Files/misc_boss_info.json'  # Misc Boss Info
 
 # NOTE: If one of these files is missing, the entire game won't work,
 # and as such will not be recognized as a save file anymore.
@@ -153,7 +154,7 @@ class PlayerCharacter:  # The Player
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in ['yes', 'y', 'yeah']:
+                if y_n.startswith('y'):
                     return self.name
                 elif y_n in ['no', 'n', 'nope']:
                     break
@@ -181,7 +182,7 @@ class PlayerCharacter:  # The Player
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in ['yes', 'y', 'yeah']:
+                if y_n.startswith('y'):
                     return class_
                 elif y_n in ['no', 'n', 'nope']:
                     break
@@ -270,7 +271,7 @@ Input letter: """)
                             y_n = y_n.lower()
                         except AttributeError:
                             continue
-                        if y_n in ['y', 'yes', 'yeah', 'yep']:
+                        if y_n.startswith('y'):
                             pass
                         elif y_n in ['n', 'no', 'nope']:
                             break
@@ -360,13 +361,13 @@ def create_player():
         player.attk += 2
         player.spd -= 1
         player.evad -= 1
-        inv_system.equipped['weapon'] = copy.copy(inv_system.wdn_sht)
+        inv_system.equipped['weapon'] = copy.copy(items.wdn_sht)
     elif player.class_ == "mage":
         static['hp_p'] += 1
         static['mp_p'] += 4
         player.m_attk += 2
         player.m_dfns += 2
-        inv_system.equipped['weapon'] = copy.copy(inv_system.mag_twg)
+        inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
     elif player.class_ == "rogue":
         static['hp_p'] += 2
         static['mp_p'] += 1
@@ -374,7 +375,7 @@ def create_player():
         player.dfns += 1
         player.spd += 3
         player.evad += 1
-        inv_system.equipped['weapon'] = copy.copy(inv_system.stn_dag)
+        inv_system.equipped['weapon'] = copy.copy(items.stn_dag)
     player.hp = copy.copy(static['hp_p'])
     player.mp = copy.copy(static['mp_p'])
     print('-'*25)
@@ -398,7 +399,7 @@ def check_save():  # Check for save files and load the game if they're found
             y_n = y_n.lower()
         except AttributeError:
             continue
-        if y_n in ['yes', 'y', 'yeah']:
+        if y_n.startswith('y'):
             print('Loading...')
             time.sleep(0.25)
             try:  # Attempt to open the save files and translate
@@ -424,7 +425,7 @@ def check_save():  # Check for save files and load the game if they're found
             print('-'*25)
             create_player()
             return
-        elif y_n in ['no', 'n', 'nope']:
+        elif y_n .startswith('y'):
             print('-'*25)
             create_player()
             return
@@ -437,12 +438,12 @@ def save_game():
             y_n = y_n.lower()
         except AttributeError:
             continue
-        if y_n in ['yes', 'y', 'yeah']:
+        if y_n.startswith('y'):
             print('Saving...')
             time.sleep(0.25)
             # Check if the save directory already exists, and create it if it doesn't
-            if not os.path.exists("c:\\Pythonius\\Save Files"):
-                os.makedirs("c:\\Pythonius\\Save Files")
+            if not os.path.exists("Save Files"):
+                os.makedirs("Save Files")
             try:
                 with open(sav1, mode='w', encoding='utf-8') as a:
                     json.dump(static, a, indent=4, separators=(', ', ': '))
@@ -463,7 +464,7 @@ def save_game():
                 print('There was an error saving your game. Error code: IO')
             except ValueError:
                 print('There was an error saving your game. Error code: VE')
-        elif y_n in ['no', 'n', 'nope']:
+        elif y_n.startswith('n'):
             return
 
 
@@ -504,7 +505,7 @@ def title_screen():
      |_|    \\__, |\\__|_| |_|\\___/|_| |_|_|\\__,_|___/
             |___/
 
-Pythonius {0} -- Programmed in Python by Stephen Center
+PythoniusRPG {0} -- Programmed in Python by Stephen Center
 -----------------------------------------------------------""".format(game_version))
     while True:
         choice = input('[P]lay Game  |  [C]redits  | [E]xit  |  Input letter: ')
