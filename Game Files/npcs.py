@@ -231,7 +231,7 @@ seriph_phrase_1 = Conversation(['...You actually came to this town? And of your 
 seriph = NPC('Seriph', [seriph_phrase_1])
 
 # Name: Kyle -- Town: Tripton
-kyle_phrase_1 = Conversation(["Those stupid Fallvillians need get away from our",
+kyle_phrase_1 = Conversation(["Those stupid Fallvillians need to get away from our",
     "land! It's they're fault they made a town that was so",
     "easy to miss! I don't care if we have to go to war",
     "with those dingbats, I'm not leaving this spot!"], active=True)
