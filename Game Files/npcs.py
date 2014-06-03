@@ -230,10 +230,28 @@ seriph_phrase_1 = Conversation(['...You actually came to this town? And of your 
 
 seriph = NPC('Seriph', [seriph_phrase_1])
 
+# Name: Kyle -- Town: Tripton
+kyle_phrase_1 = Conversation(["Those stupid Fallvillians need get away from our",
+    "land! It's they're fault they made a town that was so",
+    "easy to miss! I don't care if we have to go to war",
+    "with those dingbats, I'm not leaving this spot!"], active=True)
+
+kyle = NPC('Kyle', [kyle_phrase_1])
+
+# Name: Krystal -- Town: Fallville
+krystal_phrase_1 = Conversation(["What I don't understand is that the silly",
+    "Triptonians blame us for their poor eyesight. It's all",
+    "their fault, and they know it! Besides, everything would be",
+    "more peaceful if we'd just put this whole mistake of",
+    "theirs behind us and get along."], active=True)
+
+krystal = NPC('Krystal', [krystal_phrase_1])
+
 all_dialogue = [
     philliard_phrase_1, wesley_phrase_1, seriph_phrase_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
-    stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1
+    stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
+    kyle_phrase_1, krystal_phrase_1
 ]
 
 

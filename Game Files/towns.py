@@ -42,7 +42,7 @@ class Town:
                 choice = input('Input [#] (or type "exit"): ')
                 if choice == '1':
                     print('-'*25)
-                    input(''.join([self.desc, '\nPress Enter/Return ']))
+                    input(''.join([self.desc, '\n\nPress Enter/Return ']))
                     print('-'*25)
                 elif choice == '2':
                     print('-'*25)
@@ -345,7 +345,21 @@ fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
 visitors. Perhaps there's a reason...""", [npcs.seriph],
              2, 22, gs_level=3)
 
-town_list = [town1, town2, town3, town4, town5]
+town6 = Town('Tripton', """Tripton: When the town of Tripton was being built,
+  the people working on the project failed to notice that another town,
+  Fallville, just so happened to be located mere meters away from the
+  new town's borders. This has led to a bit of a rivalry between the
+  two towns, particularly between the village leaders.""", [npcs.kyle],
+             -10, -24, inn_cost=3, gs_level=3)
+
+town7 = Town('Fallville', """Fallville: When the town of Tripton was being built,
+the people working on the project failed to notice that another town,
+Fallville, just so happened to be located mere meters away from the
+new town's borders. This has led to a bit of a rivalry between the
+two towns, particularly between the village leaders.""", [npcs.krystal],
+             -11, -24, gs_level=2)
+
+town_list = [town1, town2, town3, town4, town5, town6, town7]
 
 
 def search_towns(pos_x, pos_y, enter=True):

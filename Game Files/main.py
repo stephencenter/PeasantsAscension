@@ -1,5 +1,5 @@
-# Pythonius; v0.3.7 Alpha
-game_version = 'v0.3.7'
+# Pythonius; v0.3.9 Alpha
+game_version = 'v0.3.9'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/

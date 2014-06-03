@@ -133,7 +133,8 @@ def battle_system(is_boss=False):
             if player.hp > 0:
                 input('\nPress Enter/Return ')
                 player_turn(var, dodge, move)
-                input('\nPress Enter/Return ')
+                if monster.hp > 0:
+                    input('\nPress Enter/Return ')
 
     else:
         if after_battle(is_boss) != 'dead':
