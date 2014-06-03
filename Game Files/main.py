@@ -42,28 +42,6 @@ game_version = 'v0.3.7'
 #   appealing in my opinion. I felt the need to explain this, I don't know why.
 #-----------------------------------------------------------------------------#
 
-import sys
-import os
-import random
-import math
-import time
-import json
-import copy
-
-import pygame
-
-import battle
-import world
-import inv_system
-import magic
-import bosses
-import npcs
-import pets
-import items
-
-pygame.mixer.pre_init(44100, -16, 2, 2048)
-pygame.mixer.init()
-
 # Establish "player" as a global variable
 player = ''
 
@@ -76,6 +54,28 @@ static = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
             'reg_music': 'Music/Through the Forest.ogg',
             'h': '', 'v': '', 'prev_town': [0, 0]}
+
+import sys
+import os
+import random
+import math
+import time
+import json
+import copy
+
+import pygame
+
+import world
+import inv_system
+import battle
+import magic
+import bosses
+import npcs
+import pets
+import items
+
+pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.init()
 
 # Identify the player's OS and set their save destination
 if os.name == 'nt':  # Windows devices

@@ -37,10 +37,9 @@ class Town:
       [2] --> Buildings
       [3] --> People
       [4] --> Player Info
-      [5] --> View Inventory
-      [6] --> Exit""")
+      [5] --> View Inventory""")
             while True:
-                choice = input('Input [#]: ')
+                choice = input('Input [#] (or type "exit"): ')
                 if choice == '1':
                     print('-'*25)
                     input(''.join([self.desc, '\nPress Enter/Return ']))
@@ -61,7 +60,7 @@ class Town:
                     print('-'*25)
                     inv_system.pick_category()
                     print('-'*25)
-                elif choice == '6':
+                elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     pygame.mixer.music.load(world.position['reg_music'])
                     pygame.mixer.music.play(-1)
                     print('-'*25)
@@ -339,7 +338,14 @@ inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos],
              19, -7, inn_cost=2, gs_level=3)
 
-town_list = [town1, town2, town3, town4]
+town5 = Town('Fort Sigil', """Fort Sigil: A small village in the northern region
+of the Forest. The citizens of this town have worked tremendously hard to
+convert the rarely-used fort into a hospitable village, and have done
+fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
+visitors. Perhaps there's a reason...""", [npcs.seriph],
+             2, 22, gs_level=3)
+
+town_list = [town1, town2, town3, town4, town5]
 
 
 def search_towns(pos_x, pos_y, enter=True):

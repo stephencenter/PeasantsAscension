@@ -2,7 +2,9 @@ import sys
 import copy
 import random
 import math
+
 import inv_system
+
 
 if __name__ == "__main__":
     sys.exit()
@@ -41,7 +43,7 @@ class Consumable(Item):
         return self.name
 
     def use_item(self):
-        print('-' * 25)
+        print('-'*25)
         global inventory
         item_setup_vars()
         main.player.hp += self.heal
@@ -114,7 +116,7 @@ class Weapon(Item):
             print('-'*25)
             print('You equip the {0}.'.format(str(self)))
         else:
-            print('-' * 25)
+            print('-'*25)
             print("You must be a {0} to equip this.".format(self.class_.title()))
 
 
@@ -134,7 +136,7 @@ class Armor(Item):
         item_setup_vars()
         if main.player.class_ == self.class_ or self.class_ == 'none':
             fizz = copy.copy(self)  # A copy of the armor is created for the same
-                                    # reason as for weapons.
+            # reason as for weapons.
             if isinstance(equipped[self.part], Armor):
                 old = copy.copy(equipped[self.part])
                 old.equip = False
@@ -368,15 +370,26 @@ en_lth_leg = Armor('Enhanced Leather Leggings',
                    65, 30, 3, 'melee', 'legs', 'rogue')
 
 # Armor -- Warrior -- Mid
-irn_hlm = Armor('Iron Helmet',
+stl_hlm = Armor('Steel Helmet',
                 'A decent helmet created from a solid metal (+6 Defense).',
                 145, 50, 6, 'melee', 'head', 'warrior')
-irn_cst = Armor('Iron Chestpiece',
+stl_cst = Armor('Steel Chestpiece',
                 'Decent body armor made from a solid metal (+7 Defense).',
                 165, 60, 7, 'melee', 'body', 'warrior')
-irn_leg = Armor('Iron Leggings',
+stl_leg = Armor('Steel Leggings',
                 'Decent leggings made from a solid metal (+6 Defense).',
                 155, 55, 6, 'melee', 'legs', 'warrior')
+
+en_stl_hlm = Armor('Enhanced Steel Helmet',
+                   'An enhanced version of your typical Steel Helmet (+10 Defense).',
+                   260, 75, 10, 'melee', 'head', 'warrior')
+en_stl_cst = Armor('Enhanced Steel Chestpiece',
+                   'An enhanced version of your typical Steel Chestpiece (+11 Defense).',
+                   280, 80, 11, 'melee', 'body', 'warrior')
+en_stl_leg = Armor('Enhanced Steel Leggings',
+                   'An enhanced version of your typical Steel Leggings (+10 Defense).',
+                   270, 85, 10, 'melee', 'legs', 'warrior')
+
 
 # Armor -- Mage -- Mid
 myst_hat = Armor('Mystical Hood',
@@ -410,15 +423,26 @@ std_leg = Armor('Studded Leggings',
                 'Soft leather leggings studded with steel pieces (+6 Defense).',
                 155, 55, 6, 'melee', 'legs', 'rogue')
 
+en_std_cwl = Armor('Enhanced Studded Cowl',
+                   'An enhanced version of your typical Studded Hood (+10 Defense).',
+                   260, 75, 10, 'melee', 'head', 'rogue')
+en_std_bdy = Armor('Enhanced Studded Bodyarmor',
+                   'An enhanced version of your typical Studded Bodyarmor (+10 Defense).',
+                   280, 80, 10, 'melee', 'body', 'rogue')
+en_std_leg = Armor('Enhanced Studded Leggings',
+                   'An enhanced version of your typical Studded Leggings (+10 Defense).',
+                   270, 85, 10, 'melee', 'legs', 'rogue')
+
+
 # Armor -- Warrior -- Pow
-stl_hlm = Armor('Steel Helmet',
-                'A strong helmet smelted from refined iron (+14 Defense).',
+ori_hlm = Armor('Orichalcum Helmet',
+                'A strong helmet smelted from rare mountain copper  (+14 Defense).',
                 320, 110, 4, 'melee', 'head', 'warrior')
-stl_cst = Armor('Steel Chestplate',
-                'Strong chest armor smelted from refined iron (+15 Defense).',
+ori_cst = Armor('Orichalcum Chestplate',
+                'Strong chest armor smelted from rare mountain copper  (+15 Defense).',
                 340, 120, 5, 'melee', 'body', 'warrior')
-stl_leg = Armor('Steel Leggings',
-                'Strong leg armor smelted from refined iron (+14 Defense).',
+ori_leg = Armor('Orichalcum Leggings',
+                'Strong leg armor smelted from rare mountain copper (+14 Defense).',
                 330, 115, 4, 'melee', 'legs', 'warrior')
 
 # Armor -- Mage -- Pow

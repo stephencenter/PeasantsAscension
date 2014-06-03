@@ -1,6 +1,7 @@
 import monsters
 import battle
 import npcs
+import items
 import sys
 import copy
 import json

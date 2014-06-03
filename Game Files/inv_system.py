@@ -22,15 +22,15 @@ gs_stock = [[i.s_potion, i.s_potion, i.m_potion, i.l_potion, i.l_potion, i.x_pot
             [i.cpr_swd, i.en_cpr_swd, i.bnz_spr, i.en_bnz_spr, i.irn_axe, i.en_irn_axe],
             [i.oak_stf, i.en_oak_stf, i.arc_spb, i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],
             [i.sht_bow, i.en_sht_bow, i.lng_bow, i.en_lng_bow, i.myth_sb, i.en_myth_sb],
-            [i.bnz_hlm, i.en_bnz_hlm, i.irn_hlm, i.stl_hlm],
-            [i.bnz_cst, i.en_bnz_cst, i.irn_cst, i.stl_cst],
-            [i.bnz_leg, i.en_bnz_leg, i.irn_leg, i.stl_leg],
+            [i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm, i.en_stl_hlm, i.ori_hlm],
+            [i.bnz_cst, i.en_bnz_cst, i.stl_cst, i.en_stl_cst, i.ori_cst],
+            [i.bnz_leg, i.en_bnz_leg, i.stl_leg, i.en_stl_leg, i.ori_leg],
             [i.wiz_hat, i.en_wiz_hat, i.myst_hat, i.en_myst_hat, i.elem_hat],
             [i.wiz_rob, i.en_wiz_rob, i.myst_rob, i.en_myst_rob, i.elem_rob],
             [i.wiz_gar, i.en_wiz_gar, i.myst_gar, i.en_myst_gar, i.elem_gar],
-            [i.lth_cap, i.en_lth_cap, i.std_cwl],
-            [i.lth_bdy, i.en_lth_bdy, i.std_bdy],
-            [i.lth_leg, i.en_lth_leg, i.std_leg]]
+            [i.lth_cap, i.en_lth_cap, i.std_cwl, i.en_std_cwl],
+            [i.lth_bdy, i.en_lth_bdy, i.std_bdy, i.en_std_bdy],
+            [i.lth_leg, i.en_lth_leg, i.std_leg, i.en_std_leg]]
 
 gs_stock = list(gs_stock)
 i.item_setup_vars()
@@ -161,7 +161,6 @@ Input letter (or type "back"): ')
                                 print('-'*25)
                                 break
                     else:
-                        pr
                         input('You have no finished quests! (Press Enter/Return) ')
                     print('-'*25)
 

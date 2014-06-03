@@ -1,7 +1,7 @@
 import sys
 import json
-import bosses
 import pets
+import bosses
 
 if __name__ == "__main__":
     sys.exit()
@@ -224,9 +224,14 @@ ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town co
 
 ethos = NPC('Ethos', [ethos_phrase_1])
 
+# Name: Seriph -- Town: Fort Sigil
+seriph_phrase_1 = Conversation(['...You actually came to this town? And of your own',
+    'free will, too?! You are either very brave or very stupid.'], active=True)
+
+seriph = NPC('Seriph', [seriph_phrase_1])
 
 all_dialogue = [
-    philliard_phrase_1, wesley_phrase_1,
+    philliard_phrase_1, wesley_phrase_1, seriph_phrase_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1
 ]
