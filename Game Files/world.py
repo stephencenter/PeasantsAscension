@@ -101,7 +101,8 @@ or type "player": '.format(position['y'], position['v'],
                 print('-'*25)
                 print('You stop to rest for a moment.')
                 while True:
-                    decision = input('View your [i]nventory or your [s]tats? | Input Letter (or type "exit"): ')
+                    decision = input(
+                        'View your [i]nventory or your [s]tats? | Input Letter (or type "exit"): ')
                     try:
                         decision = decision.lower()
                     except AttributeError:
@@ -117,6 +118,7 @@ or type "player": '.format(position['y'], position['v'],
                     elif decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         print('-'*25)
                         break
+
 
 def out_of_bounds():
     print('-'*25)

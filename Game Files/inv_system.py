@@ -94,7 +94,8 @@ def pick_category():
                             print('-'*25)
                         else:
                             print('-'*25)
-                            input('The "{0}" category is empty. (Press Enter/Return) '.format(vis_cat))
+                            input('The "{0}" category is empty. (Press Enter/Return) '.format(
+                                vis_cat))
                             print('-'*25)
                     break
                 else:
@@ -102,11 +103,14 @@ def pick_category():
                     input('The "{0}" category is empty. (Press Enter/Return) '.format(vis_cat))
                     print('-'*25)
                     break
-            elif cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.started]:
+            elif cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(
+                    x, npcs.Quest) and x.started]:
                 pick_item(cat, vis_cat)
                 break
             else:
+                print('-'*25)
                 print("You have no active or completed quests. (Press Enter/Return) ")
+                print('-'*25)
 
 
 def pick_item(cat, vis_cat, gs=False):
@@ -115,7 +119,8 @@ def pick_item(cat, vis_cat, gs=False):
             print('-'*25)
             while True:
                 fizz = True
-                choice = input('View [f]inished or [a]ctive quests? | Input letter (or type "back"): ')
+                choice = input('View [f]inished or [a]ctive quests? |\
+Input letter (or type "back"): ')
                 try:
                     choice = choice.lower()
                 except AttributeError:
@@ -138,7 +143,8 @@ def pick_item(cat, vis_cat, gs=False):
                                     number = int(number) - 1
                                 except (TypeError, ValueError):
                                     try:
-                                        if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                        if number.lower() in [
+                                            'e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                             fizz = False
                                             break
                                         else:
@@ -150,10 +156,12 @@ def pick_item(cat, vis_cat, gs=False):
                                 quest = dialogue[number]
                                 print('-'*25)
                                 print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
-                                    quest.name, '\n     '.join([x for x in quest.desc]), quest.q_giver))
+                                    quest.name, '\n     '.join([
+                                        x for x in quest.desc]), quest.q_giver))
                                 print('-'*25)
                                 break
                     else:
+                        pr
                         input('You have no finished quests! (Press Enter/Return) ')
                     print('-'*25)
 
@@ -165,15 +173,17 @@ def pick_item(cat, vis_cat, gs=False):
                         while fizz:
                             print('Active Quests: ')
                             print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
-                            for num, x in enumerate([y for y in npcs.all_dialogue
-                            if isinstance(y, npcs.Quest) and not y.finished and y.started])]))
+                                for num, x in enumerate([y for y in npcs.all_dialogue
+                                    if isinstance(y, npcs.Quest)
+                                        and not y.finished and y.started])]))
                             while True:
                                 number = input('Input [#] (or type "back"): ')
                                 try:
                                     number = int(number) - 1
                                 except (TypeError, ValueError):
                                     try:
-                                        if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                        if number.lower() in [
+                                            'e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                             fizz = False
                                             break
                                         else:
@@ -185,7 +195,8 @@ def pick_item(cat, vis_cat, gs=False):
                                 quest = dialogue[number]
                                 print('-'*25)
                                 print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
-                                    quest.name, '\n     '.join([x for x in quest.desc]), quest.q_giver))
+                                    quest.name, '\n     '.join([
+                                        x for x in quest.desc]), quest.q_giver))
                                 print('-'*25)
                                 break
                     else:
@@ -205,8 +216,7 @@ def pick_item(cat, vis_cat, gs=False):
             else:
                 print('-'*25)
                 print(''.join([vis_cat, ': \n      ', '\n      '.join(
-                    ['[' + str(x + 1) + '] ' + str(y)
-                     for x, y in enumerate(inventory[cat])])]))
+                    ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(inventory[cat])])]))
             while True:
                 item = input('Input [#] (or type "back"): ')
                 try:
@@ -259,13 +269,15 @@ def pick_action(cat, item):
                 print('You cannot dispose of quest-related items.')
             else:
                 while True:
-                    y_n = input('Are you sure you want to get rid of this {0}? | Yes or No: '.format(str(item)))
+                    y_n = input('Are you sure you want to get rid of this {0}\
+? | Yes or No: '.format(str(item)))
                     try:
                         y_n = y_n.lower()
                     except AttributeError:
                         continue
                     if y_n.startswith('y'):
-                        print('You toss the {0} aside and continue on your journey.'.format(str(item)))
+                        print('You toss the {0} aside and continue on your journey.'.format(
+                            str(item)))
                         for x, y in enumerate(inventory[cat]):
                             if y.name == item.name:
                                 inventory[cat].remove(y)
@@ -283,7 +295,8 @@ def sell_item(cat, item):
     print(item.desc)
     print('-'*25)
     while True:
-        y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(item.name, item.sell))
+        y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(
+            item.name, item.sell))
         try:
             y_n = y_n.lower()
         except AttributeError:
@@ -293,7 +306,8 @@ def sell_item(cat, item):
                 if i.name == item.name:
                     inventory[cat].remove(inventory[cat][num])
                     main.static['gp'] += item.sell
-                    print('You hand the shopkeep your {0} and recieve {1} GP.'.format(item.name, item.sell))
+                    print('You hand the shopkeep your {0} and recieve {1} GP.'.format(
+                        item.name, item.sell))
                     return
         elif y_n.startswith('n'):
             return

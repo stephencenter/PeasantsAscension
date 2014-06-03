@@ -26,7 +26,7 @@ class Town:
         self.inn_cost = inn_cost  # How much money it costs to sleep at the inn
         self.gen_store = gen_store  # If true, the town contains a General Store
         self.gs_level = gs_level  # The higher this value is, the better the
-                                  # items the store will sell.
+        # items the store will sell.
 
     def town_choice(self):
         print('-'*25)
@@ -71,7 +71,7 @@ class Town:
                 break
 
     def new_location(self):  # Translate the location of newly-found towns
-        if self.y >= 0:      # into a string, then add to inventory.
+        if self.y >= 0:  # into a string, then add to inventory.
             foo = "'N"
         else:
             foo = "'S"
@@ -79,11 +79,13 @@ class Town:
             bar = "'E"
         else:
             bar = "'W"
-        spam = ''.join([str(x) for x in [self.name, ': ', str(self.y), foo, ', ', str(self.x), bar]])
+        spam = ''.join(
+            [str(x) for x in [self.name, ': ', str(self.y), foo, ', ', str(self.x), bar]])
         if spam not in inv_system.inventory['coord']:
             inv_system.inventory['coord'].append(spam)
             print('-'*25)
-            print("{0}'s location has been added to the coordinates page of your inventory.".format(self.name))
+            print("{0}'s location has been added to the coordinates page of your inventory.".format(
+                self.name))
 
     def inside_town(self):
         gen_words = ['general store', 'gen', 'gen store', 'shop', 'store', 's', 'g']
@@ -103,7 +105,8 @@ class Town:
                 buildings.extend(gen_words)
             if buildings:
                 while not spam:
-                    selected = input('What building will you enter? | Input Letter (or type "exit"): ')
+                    selected = input(
+                        'What building will you enter? | Input Letter (or type "exit"): ')
                     try:
                         selected = selected.lower()
                     except AttributeError:
@@ -129,7 +132,7 @@ class Town:
         while True:
             choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
                 "It's free, y'know." if not self.inn_cost else ' '.join(
-                ["One Night is", str(self.inn_cost), "GP."])))
+                    ["One Night is", str(self.inn_cost), "GP."])))
             try:
                 choice = choice.lower()
             except AttributeError:
@@ -154,7 +157,7 @@ class Town:
                 return False
 
     def town_gen(self):  # Let the player purchase items from the General Store
-        stock = []       # A list containing objects the player can purchase
+        stock = []  # A list containing objects the player can purchase
         for item in inv_system.gs_stock:
             stock.append(item[self.gs_level - 1])
         print('-'*25)
@@ -169,7 +172,8 @@ class Town:
                 while True:
                     print('''"Well, here's what I have in my stock: "''')
                     for num, item in enumerate(stock):
-                        print(''.join(['   [', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
+                        print(''.join(
+                            ['   [', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
                     print('You have {0} GP'.format(main.static['gp']))
                     while True:
                         purchase = input('Input [#] (or type "back"): ')
@@ -194,8 +198,9 @@ class Town:
                         print(i.desc)
                         print('-'*25)
                         while True:
-                            confirm = input("\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
-                                'these' if str(i).endswith('s') else 'this', str(i), i.buy))
+                            confirm = input(
+                                "\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
+                                    'these' if str(i).endswith('s') else 'this', str(i), i.buy))
                             try:
                                 confirm = confirm.lower()
                             except AttributeError:
@@ -205,7 +210,9 @@ class Town:
                                     inv_system.inventory[i.cat].append(i)
                                     main.static['gp'] -= i.buy
                                     print('-'*25)
-                                    input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(str(i), i.buy))
+                                    input(
+                                        'You purchase the {0} (-{1} GP). (Press enter/return).'.format(
+                                            str(i), i.buy))
                                     print('-'*25)
                                 else:
                                     input('"Hey, you don\'t even have enough GP for this \
@@ -274,7 +281,7 @@ class Town:
             print('NPCs:\n      '
                   + '\n      '.join(["[" + str(x + 1) + "] "
                                      + npc.name for x, npc in enumerate(
-                                     self.people)]))
+                self.people)]))
             while True:
                 npc = input('Input [#] (or type "exit"): ')
                 try:
@@ -330,13 +337,13 @@ town4 = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing too special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos],
-19, -7, inn_cost=2, gs_level=3)
+             19, -7, inn_cost=2, gs_level=3)
 
 town_list = [town1, town2, town3, town4]
 
 
 def search_towns(pos_x, pos_y, enter=True):
-        # Check to see if there is a
+    # Check to see if there is a
     # town where the player is located
     for town in town_list:
         if town.x == pos_x and town.y == pos_y:

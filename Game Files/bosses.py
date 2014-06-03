@@ -27,6 +27,9 @@ class Boss(monsters.Monster):
         self.gold = gold
         self.experience = experience
         self.active = active
+        self.max_stats()
+        self.hp = copy.copy(static['hp_m'])
+        self.mp = copy.copy(static['mp_m'])
 
     def max_stats(self):
         global static
@@ -99,11 +102,12 @@ def mastslim_ud():
 
 master_slime.upon_defeating = mastslim_ud
 
-# Boss: Whispering Goblin -- Position: 4'N, -2'W
-whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)  # This is for you, Jacob!
+# Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
+whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
-menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [], 75, 75, active=False)
+menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [
+    items.spect_wand], 75, 75, active=False)
 
 
 def menacphan_ud():

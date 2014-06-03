@@ -214,7 +214,8 @@ def enemy_turn(var, dodge):
             dealt = monster.monst_magic(var)
             player.hp -= dealt
             sounds.enemy_hit.play()
-            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(monster.name, dealt))
+            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
+                monster.name, dealt))
         else:
             print("The spell misses you by a landslide!")
         monster.mp -= 2
@@ -232,7 +233,8 @@ def after_battle(is_boss):  # Assess the results of the battle
             # If the monster wins...
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
-            print('Despite your best efforts, the {0} has bested you. You are dead.'.format(monster.name))
+            print('Despite your best efforts, the {0} has bested you. You are dead.'.format(
+                monster.name))
             print('-'*25)
             while True:
                 y_n = input('Do you wish to continue playing? | Yes or No: ')
