@@ -85,7 +85,7 @@ def pick_category():
                         print('-'*25)
                     elif cat == 'coord':
                         print('-'*25)
-                        print(inventory[cat])
+                        print(' ', '\n  '.join(inventory[cat]))
                         input("Press enter/return when you are finished viewing these coordinates.")
                         print('-'*25)
                     else:
@@ -144,7 +144,8 @@ Input letter (or type "back"): ')
                                 except (TypeError, ValueError):
                                     try:
                                         if number.lower() in [
-                                            'e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                        'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                                        ]:
                                             fizz = False
                                             break
                                         else:
@@ -182,7 +183,8 @@ Input letter (or type "back"): ')
                                 except (TypeError, ValueError):
                                     try:
                                         if number.lower() in [
-                                            'e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                            'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                                        ]:
                                             fizz = False
                                             break
                                         else:

@@ -63,13 +63,14 @@ class Town:
                 elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     pygame.mixer.music.load(world.position['reg_music'])
                     pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(main.music_vol)
                     print('-'*25)
                     return
                 else:
                     continue
                 break
 
-    def new_location(self):  # Translate the location of newly-found towns
+    def new_location(self, add=True):  # Translate the location of newly-found towns
         if self.y >= 0:  # into a string, then add to inventory.
             foo = "'N"
         else:
@@ -78,13 +79,15 @@ class Town:
             bar = "'E"
         else:
             bar = "'W"
-        spam = ''.join(
-            [str(x) for x in [self.name, ': ', str(self.y), foo, ', ', str(self.x), bar]])
-        if spam not in inv_system.inventory['coord']:
-            inv_system.inventory['coord'].append(spam)
-            print('-'*25)
-            print("{0}'s location has been added to the coordinates page of your inventory.".format(
-                self.name))
+        spam = ''.join([self.name, ': ', str(self.y), foo, ', ', str(self.x), bar])
+        if add:
+            if spam not in inv_system.inventory['coord']:
+                inv_system.inventory['coord'].append(spam)
+                print('-'*25)
+                print("{0}'s location has been added to the coordinates page of your inventory.".format(
+                    self.name))
+        else:
+            return spam
 
     def inside_town(self):
         gen_words = ['general store', 'gen', 'gen store', 'shop', 'store', 's', 'g']
@@ -113,6 +116,7 @@ class Town:
                     if selected in buildings:
                         pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                         pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(main.music_vol)
                         if selected in gen_words:
                             self.town_gen()
                             spam = True
@@ -122,6 +126,7 @@ class Town:
                         print('-'*25)
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(main.music_vol)
                     elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
 
@@ -277,10 +282,8 @@ class Town:
 
     def speak_to_npcs(self):
         while True:
-            print('NPCs:\n      '
-                  + '\n      '.join(["[" + str(x + 1) + "] "
-                                     + npc.name for x, npc in enumerate(
-                self.people)]))
+            print('NPCs:\n      ', '\n      '.join(
+                ["[" + str(x + 1) + "] " + npc.name for x, npc in enumerate(self.people)]))
             while True:
                 npc = input('Input [#] (or type "exit"): ')
                 try:
@@ -302,11 +305,13 @@ class Town:
                     continue
                 pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
                 print('-'*25)
                 npc.speak()
                 print('-'*25)
                 pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                 pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
                 break
 
 # List of Towns:
@@ -370,7 +375,12 @@ def search_towns(pos_x, pos_y, enter=True):
             if enter:
                 print('-'*25)
                 while True:
-                    y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
+                    if town.new_location(add=False) not in inv_system.inventory['coord']:
+                        y_n = input('There is a town nearby. \
+Do you wish to investigate? | Yes or No: ')
+                    else:
+                        y_n = input('The town of {0} is nearby. \
+Do you want to visit it? | Yes or No: '.format(town.name))
                     try:
                         y_n = y_n.lower()
                     except AttributeError:
@@ -378,6 +388,7 @@ def search_towns(pos_x, pos_y, enter=True):
                     if y_n in ['yes', 'y']:
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(main.music_vol)
                         world.save_coords(town.x, town.y)
                         town.new_location()
                         town.town_choice()

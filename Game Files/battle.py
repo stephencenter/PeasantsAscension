@@ -63,10 +63,12 @@ def battle_system(is_boss=False):
     if is_boss:  # Bosses have different battle music than normal enemies
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(main.music_vol)
         print('The legendary {0} has awoken!'.format(monster.name))
     else:
         pygame.mixer.music.load('Music/Jumpshot.ogg')
         pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(main.music_vol)
 
         if monster.name[0] in vowels:
         # Remember to use proper grammar!
@@ -90,8 +92,7 @@ def battle_system(is_boss=False):
 
         var = random.randint(-1, 1)
         # var is how much less/more the attacks will deal than normal.
-        # This makes the battle less predictable and more interesb
-        # ting.
+        # This makes the battle less predictable and more interesting.
 
         dodge = random.randint(0, 250)
         # If dodge is in a certain range, the attack will miss
@@ -111,6 +112,7 @@ def battle_system(is_boss=False):
                 print('-'*25)
                 pygame.mixer.music.load(position['reg_music'])
                 pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
                 return
             enemy_turn(var, dodge)
             if player.hp > 0:
@@ -234,6 +236,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             # If the monster wins...
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(main.music_vol)
             print('Despite your best efforts, the {0} has bested you. You are dead.'.format(
                 monster.name))
             print('-'*25)
@@ -251,6 +254,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     player.mp = int(static['mp_p']/2)
                     pygame.mixer.music.load(position['reg_music'])
                     pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(main.music_vol)
                     return 'dead'
                 elif y_n.startswith('n'):
                     sys.exit()
@@ -304,6 +308,8 @@ def after_battle(is_boss):  # Assess the results of the battle
 
             pygame.mixer.music.load(position['reg_music'])
             pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(main.music_vol)
+            pygame.mixer.music.set_volume(main.music_vol)
             return
         elif player.hp <= 0 and monster.hp <= 0:
             # If the battle is a tie, the player wins

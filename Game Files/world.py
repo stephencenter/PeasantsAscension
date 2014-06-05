@@ -36,6 +36,7 @@ def movement_system():
     setup_vars()
     pygame.mixer.music.load(position['reg_music'])
     pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(main.music_vol)
     while True:
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
@@ -162,6 +163,7 @@ def check_region():
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
         pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(main.music_vol)
         return True
     else:
         return False

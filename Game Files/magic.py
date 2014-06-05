@@ -277,7 +277,8 @@ spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []
 
 def pick_cat(var, dodge):
     while True:
-        cat = input('Spellbook: 1: Damaging;  2: Buffs;  3: Healing  |  Input #1-3 (or type "exit"): ')
+        cat = input(
+            'Spellbook: 1: Damaging;  2: Buffs;  3: Healing  |  Input #1-3 (or type "exit"): ')
         if cat == '1':
             cat = 'Damaging'
         elif cat == '2':

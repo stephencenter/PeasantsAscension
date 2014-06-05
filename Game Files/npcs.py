@@ -102,7 +102,8 @@ class Quest(Conversation):
     def completion(self):
         main.player.exp += self.reward[0]
         main.static['gp'] += self.reward[1]
-        print("You've received {0} XP and {1} GP for completing this quest.".format(self.reward[0], self.reward[1]))
+        print("You've received {0} XP and {1} GP for completing this quest.".format(
+            self.reward[0], self.reward[1]))
         main.player.level_up()
         self.upon_completing()
         self.active = False
@@ -188,6 +189,7 @@ def stwqst_us1():
     stewson_phrase_1.active = False
     stewson_phrase_2.active = True
 
+
 def stwqst_uc1():
     global stewson_phrase_3
     stewson_phrase_3.active = True
@@ -199,7 +201,8 @@ def stwqst_uc1():
         print('You are being offered a Cherub pet (Healer) by Stewson.')
         print('Accepting this pet will cause your current pet to be replaced.')
         while True:
-            y_n = input('Replace your {0} pet with a pet Cherub (Healer)? | Yes or No: '.format(main.current_pet.name))
+            y_n = input('Replace your {0} pet with a pet Cherub (Healer)? | Yes or No: '.format(
+                main.current_pet.name))
             try:
                 y_n = y_n.lower()
             except AttributeError:

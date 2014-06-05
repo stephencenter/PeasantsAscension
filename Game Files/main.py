@@ -1,5 +1,5 @@
-# Pythonius; v0.3.9 Alpha
-game_version = 'v0.3.9'
+# Pythonius; v0.4.0 Alpha
+game_version = 'v0.4.0'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -62,6 +62,7 @@ import math
 import time
 import json
 import copy
+import configparser
 
 import pygame
 
@@ -73,43 +74,35 @@ import bosses
 import npcs
 import pets
 import items
+import sounds
+import towns
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
-# Identify the player's OS and set their save destination
-if os.name == 'nt':  # Windows devices
-    sav1 = 'Save Files\\misc_vars.json'  # Misc Variables
-    sav2 = 'Save Files\\postition.json'  # Position
-    sav3 = 'Save Files\\inventory.json'  # Inventory
-    sav4 = 'Save Files\\equip_items.json'  # Equipped Items
-    sav5 = 'Save Files\\play_stats.json'  # Player Stats
-    sav6 = 'Save Files\\spellbook.json'  # Spellbook
-    sav7 = 'Save Files\\def_bosses.json'  # Defeated Bosses
-    sav8 = 'Save Files\\quests_dia.json'  # Quests & Dialogue
-    sav9 = 'Save Files\\misc_boss_info.json'  # Misc Boss Info
+save_dir = 'Save Files'
+sav1 = 'Save Files/misc_vars.json'  # Misc Variables
+sav2 = 'Save Files/postition.json'  # Position
+sav3 = 'Save Files/inventory.json'  # Inventory
+sav4 = 'Save Files/equip_items.json'  # Equipped Items
+sav5 = 'Save Files/play_stats.json'  # Player Stats
+sav6 = 'Save Files/spellbook.json'  # Spellbook
+sav7 = 'Save Files/def_bosses.json'  # Defeated Bosses
+sav8 = 'Save Files/quests_dia.json'  # Quests & Dialogue
+sav9 = 'Save Files/misc_boss_info.json'  # Misc Boss Info
 
-elif os.name == 'posix':  # Unix-based devices
-    sav1 = 'Save Files/misc_vars.json'  # Misc Variables
-    sav2 = 'Save Files/postition.json'  # Position
-    sav3 = 'Save Files/inventory.json'  # Inventory
-    sav4 = 'Save Files/equip_items.json'  # Equipped Items
-    sav5 = 'Save Files/play_stats.json'  # Player Stats
-    sav6 = 'Save Files/spellbook.json'  # Spellbook
-    sav7 = 'Save Files/def_bosses.json'  # Defeated Bosses
-    sav8 = 'Save Files/quests_dia.json'  # Quests & Dialogue
-    sav9 = 'Save Files/misc_boss_info.json'  # Misc Boss Info
+# NOTE 1: The save file locations can be changed in the file "settings.cfg".
 
-# NOTE: If one of these files is missing, the entire game won't work,
+# NOTE 2: If one of these files is missing, the entire game won't work,
 # and as such will not be recognized as a save file anymore.
 
-# NOTE 2: It is entirely possible (and actually very easy) to modify these
+# NOTE 3: It is entirely possible (and actually very easy) to modify these
 # save files to change your character's stats, items, etc. However, it CAN also
 # cause the file to become corrupted if it is done incorrectly, so backup your
 # files before doing so.
 
-else:
-    raise OSError('This game is not supported by your operating system.')
+music_vol = 1.0
+sound_vol = 1.0
 
 
 class PlayerCharacter:  # The Player
@@ -162,8 +155,8 @@ class PlayerCharacter:  # The Player
     def choose_class(self):
         while True:
             class_ = input(
-                'Well then, {0}, which class would you like to begin training in? | Warrior, Mage, or Rogue: '.format(
-                self.name))
+                'Well then, {0}, which class would you like to begin training in? | \
+Warrior, Mage, or Rogue: '.format(self.name))
             try:
                 class_ = class_.lower()
             except AttributeError:
@@ -192,6 +185,7 @@ class PlayerCharacter:  # The Player
         if self.exp >= static['r_xp']:
             pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(music_vol)
             self.hp = static['hp_p']
             self.mp = static['mp_p']
             temp_ski = 0  # Temporary Skill Points
@@ -381,17 +375,41 @@ def create_player():
     print('-'*25)
 
 
+def set_saves():
+    config = configparser.ConfigParser()
+    if os.path.isfile("settings.cfg"):
+        config.read("settings.cfg")
+        for x in config['save_files']:
+            globals()[x] = config['save_files'][x]
+
+
+def set_volume():
+    config = configparser.ConfigParser()
+    if os.path.isfile("settings.cfg"):
+        config.read("settings.cfg")
+        for x in config['volume_levels']:
+            globals()[x] = float(config['volume_levels'][x])/100
+        sounds.change_volume()
+
+
 def check_save():  # Check for save files and load the game if they're found
     global static
     global position
     print('-'*25)
+
     # Check each part of the save file
+    print('Searching for valid save files...')
+    time.sleep(0.25)
     for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7, sav8, sav9]:
         if os.path.isfile(file):
             pass
         else:
+            print('No save files found. Starting new game...')
+            time.sleep(0.35)
+            print('-'*25)
             create_player()
             return
+    print('-'*25)
     print('It appears that you already have a save file for this game.')
     while True:
         y_n = input('Do you wish to load the previous save file? | Yes or No: ')
@@ -417,6 +435,8 @@ def check_save():  # Check for save files and load the game if they're found
                 npcs.deserialize_dialogue(sav8)
                 bosses.deserialize_bosses(sav9)
                 print('Load successful.')
+                if not towns.search_towns(position['x'], position['y'], enter=False):
+                    print('-'*25)
                 return
             except IOError:
                 print('There was an error loading your game. Error code: IO')
@@ -442,8 +462,8 @@ def save_game():
             print('Saving...')
             time.sleep(0.25)
             # Check if the save directory already exists, and create it if it doesn't
-            if not os.path.exists("Save Files"):
-                os.makedirs("Save Files")
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
             try:
                 with open(sav1, mode='w', encoding='utf-8') as a:
                     json.dump(static, a, indent=4, separators=(', ', ': '))
@@ -495,8 +515,11 @@ def deserialize_player(path):  # Load the JSON file and translate
 
 
 def title_screen():
+    set_saves()
+    set_volume()
     pygame.mixer.music.load('Music/Prologue.ogg')
     pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(music_vol)
     print("""
       ____        _   _                 _
      |  _ \\ _   _| |_| |__   ___  _ __ (_)_   _ ___
