@@ -456,6 +456,17 @@ elem_gar = Armor('Elemental Garments',
                  'Leather garments enchanted with elemental power (+14 Magic Defense).',
                  330, 115, 14, 'magic', 'legs', 'mage')
 
+# Armor -- Rogue -- Pow
+drg_cwl = Armor('Dragonhide Cowl',
+                'A tough hood crafted from high-quality dragonskin (+14 Defense).',
+                320, 110, 14, 'melee', 'head', 'rogue')
+drg_bdy = Armor('Dragonhide Bodyarmor',
+                'Tough bodyarmor crafted from high-quality dragonskin (+14 Defense).',
+                340, 120, 14, 'melee', 'body', 'rogue')
+drg_leg = Armor('Dragonhide Leggings',
+                'Tough leggings crafted from high-quality dragonskin (+14 Defense).',
+                330, 115, 14, 'melee', 'legs', 'rogue')
+
 # Unique Drops -- Weapons
 ice_blade = Weapon('Blade of Frost',
                    'A stunning blade enchanted with the power of ice (+16 Attack, ICE).',

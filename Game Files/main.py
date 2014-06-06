@@ -445,7 +445,7 @@ def check_save():  # Check for save files and load the game if they're found
             print('-'*25)
             create_player()
             return
-        elif y_n .startswith('y'):
+        elif y_n .startswith('n'):
             print('-'*25)
             create_player()
             return
