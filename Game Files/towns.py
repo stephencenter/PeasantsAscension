@@ -119,10 +119,9 @@ class Town:
                         pygame.mixer.music.set_volume(main.music_vol)
                         if selected in gen_words:
                             self.town_gen()
-                            spam = True
                         elif selected in inn_words:
-                            if self.town_inn():
-                                spam = True
+                            self.town_inn()
+                        spam = True
                         print('-'*25)
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
@@ -153,19 +152,18 @@ class Town:
                     print('Your HP and MP have been fully restored. ')
                     print('-'*25)
                     main.save_game()
-                    return True
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
-                return True
+                return
             elif choice in ['no', 'n', 'nope']:
-                return False
+                return
 
     def town_gen(self):  # Let the player purchase items from the General Store
         stock = []  # A list containing objects the player can purchase
         for item in inv_system.gs_stock:
             stock.append(item[self.gs_level - 1])
         print('-'*25)
-        print('Owner: "Welcome, Traveler!"')
+        print('Merchant: "Welcome, Traveler!"')
         while True:
             b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ')
             try:

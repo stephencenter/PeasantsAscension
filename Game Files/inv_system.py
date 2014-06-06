@@ -109,115 +109,39 @@ def pick_category():
                 break
             else:
                 print('-'*25)
-                print("You have no active or completed quests. (Press Enter/Return) ")
+                input("You have no active or completed quests. (Press Enter/Return) ")
                 print('-'*25)
 
 
 def pick_item(cat, vis_cat, gs=False):
     while cat == 'quests' or inventory[cat]:
         if cat == 'quests':
-            print('-'*25)
-            while True:
-                fizz = True
-                choice = input('View [f]inished or [a]ctive quests? |\
-Input letter (or type "back"): ')
-                try:
-                    choice = choice.lower()
-                except AttributeError:
-                    continue
-
-                if choice.startswith('f'):
-                    print('-'*25)
-                    dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
-                                and x.finished]
-                    if dialogue:
-                        while fizz:
-                            print('Finished Quests: ')
-                            print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
-                                for num, x in enumerate([y for y in npcs.all_dialogue
-                                if isinstance(y, npcs.Quest) and y.finished])]))
-
-                            while True:
-                                number = input('Input [#] (or type "back"): ')
-                                try:
-                                    number = int(number) - 1
-                                except (TypeError, ValueError):
-                                    try:
-                                        if number.lower() in [
-                                        'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                                        ]:
-                                            fizz = False
-                                            break
-                                        else:
-                                            continue
-                                    except AttributeError:
-                                        continue
-                                if (number < 0) or (number > len(dialogue) - 1):
-                                    continue
-                                quest = dialogue[number]
-                                print('-'*25)
-                                print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
-                                    quest.name, '\n     '.join([
-                                        x for x in quest.desc]), quest.q_giver))
-                                print('-'*25)
-                                break
-                    else:
-                        input('You have no finished quests! (Press Enter/Return) ')
-                    print('-'*25)
-
-                elif choice.startswith('a'):
-                    print('-'*25)
-                    dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
-                                and not x.finished and x.started]
-                    if dialogue:
-                        while fizz:
-                            print('Active Quests: ')
-                            print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
-                                for num, x in enumerate([y for y in npcs.all_dialogue
-                                    if isinstance(y, npcs.Quest)
-                                        and not y.finished and y.started])]))
-                            while True:
-                                number = input('Input [#] (or type "back"): ')
-                                try:
-                                    number = int(number) - 1
-                                except (TypeError, ValueError):
-                                    try:
-                                        if number.lower() in [
-                                            'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                                        ]:
-                                            fizz = False
-                                            break
-                                        else:
-                                            continue
-                                    except AttributeError:
-                                        continue
-                                if (number < 0) or (number > len(dialogue) - 1):
-                                    continue
-                                quest = dialogue[number]
-                                print('-'*25)
-                                print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
-                                    quest.name, '\n     '.join([
-                                        x for x in quest.desc]), quest.q_giver))
-                                print('-'*25)
-                                break
-                    else:
-                        print('You have no active quests!')
-                    print('-'*25)
-                elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    return
+            view_quests()
+            return
         else:
             if cat in ['armor', 'weapons']:
                 if [x for x in inventory[cat] if not x.equip]:
                     print('-'*25)
-                    print(vis_cat + ': \n      ' + '\n      '.join(
-                        ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
-                            inventory[cat]) if not y.equip]))
+                    if not gs:
+                        print(vis_cat + ': \n      ' + '\n      '.join(
+                            ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
+                                inventory[cat]) if not y.equip]))
+                    else:
+                        print(vis_cat + ': \n      ' + '\n      '.join(
+                            ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
+                                for x, y in enumerate(inventory[cat]) if not y.equip]))
                 else:
                     return
             else:
                 print('-'*25)
-                print(''.join([vis_cat, ': \n      ', '\n      '.join(
-                    ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(inventory[cat])])]))
+                if not gs:
+                    print(''.join([vis_cat, ': \n      ', '\n      '.join(
+                        ['[' + str(x + 1) + '] ' + str(y)
+                            for x, y in enumerate(inventory[cat])])]))
+                else:
+                    print(''.join([vis_cat, ': \n      ', '\n      '.join(
+                        ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
+                         for x, y in enumerate(inventory[cat])])]))
             while True:
                 item = input('Input [#] (or type "back"): ')
                 try:
@@ -291,6 +215,96 @@ def pick_action(cat, item):
             return
 
 
+def view_quests():
+    print('-'*25)
+    while True:
+        fizz = True
+        choice = input('View [f]inished or [a]ctive quests? |\
+Input letter (or type "back"): ')
+        try:
+            choice = choice.lower()
+        except AttributeError:
+            continue
+
+        if choice.startswith('f'):
+            print('-'*25)
+            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
+                        and x.finished]
+            if dialogue:
+                while fizz:
+                    print('Finished Quests: ')
+                    print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
+                        for num, x in enumerate([y for y in npcs.all_dialogue
+                        if isinstance(y, npcs.Quest) and y.finished])]))
+
+                    while True:
+                        number = input('Input [#] (or type "back"): ')
+                        try:
+                            number = int(number) - 1
+                        except (TypeError, ValueError):
+                            try:
+                                if number.lower() in [
+                                'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                                ]:
+                                    fizz = False
+                                    break
+                                else:
+                                    continue
+                            except AttributeError:
+                                continue
+                        if (number < 0) or (number > len(dialogue) - 1):
+                            continue
+                        quest = dialogue[number]
+                        print('-'*25)
+                        print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
+                            quest.name, '\n     '.join([
+                                x for x in quest.desc]), quest.q_giver))
+                        print('-'*25)
+                        break
+            else:
+                input('You have no finished quests! (Press Enter/Return) ')
+            print('-'*25)
+
+        elif choice.startswith('a'):
+            print('-'*25)
+            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
+                        and not x.finished and x.started]
+            if dialogue:
+                while fizz:
+                    print('Active Quests: ')
+                    print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
+                        for num, x in enumerate([y for y in npcs.all_dialogue
+                            if isinstance(y, npcs.Quest)
+                                and not y.finished and y.started])]))
+                    while True:
+                        number = input('Input [#] (or type "back"): ')
+                        try:
+                            number = int(number) - 1
+                        except (TypeError, ValueError):
+                            try:
+                                if number.lower() in [
+                                    'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                                ]:
+                                    fizz = False
+                                    break
+                                else:
+                                    continue
+                            except AttributeError:
+                                continue
+                        if (number < 0) or (number > len(dialogue) - 1):
+                            continue
+                        quest = dialogue[number]
+                        print('-'*25)
+                        print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
+                            quest.name, '\n     '.join([
+                                x for x in quest.desc]), quest.q_giver))
+                        print('-'*25)
+                        break
+            else:
+                print('You have no active quests!')
+            print('-'*25)
+        elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+            return
 def sell_item(cat, item):
     print('-'*25)
     print(item.desc)
