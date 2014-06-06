@@ -141,7 +141,7 @@ def pick_item(cat, vis_cat, gs=False):
                 else:
                     print(''.join([vis_cat, ': \n      ', '\n      '.join(
                         ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
-                         for x, y in enumerate(inventory[cat])])]))
+                         for x, y in enumerate(inventory[cat]) if not y.imp])]))
             while True:
                 item = input('Input [#] (or type "back"): ')
                 try:
@@ -159,9 +159,15 @@ def pick_item(cat, vis_cat, gs=False):
                         continue
                 try:
                     if cat in ['weapons', 'armor']:
-                        item = [x for x in inventory[cat] if not x.equip][item]
+                        if gs:
+                            item = [x for x in inventory[cat] if not x.equip and not x.imp][item]
+                        else:
+                            item = [x for x in inventory[cat] if not x.equip][item]
                     else:
-                        item = inventory[cat][item]
+                        if gs:
+                            item = [x for x in inventory[cat] if not x.imp][item]
+                        else:
+                            item = inventory[cat][item]
                 except IndexError:
                     continue
                 if gs:

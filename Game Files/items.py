@@ -480,6 +480,14 @@ spect_wand = Weapon('Spectre Wand',
 
 unique_drops = {'ice': [ice_blade], 'grass': [enc_yw], 'none': [bnz_leg]}
 
+# Quest items
+message_joseph = Item('Message from Joseph',
+                      'A neatly written message addressed from Joseph to Philliard.',
+                      0, 0, cat='q_items', imp=True)
+message_philliard = Item('Message from Philliard',
+                         'A neatly written message addressed from Philliard to Joseph.',
+                         0, 0, cat='q_items', imp=True)
+
 
 def monster_drop(level, element):
     if level in range(1, 13):
