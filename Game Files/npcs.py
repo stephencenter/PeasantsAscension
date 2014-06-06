@@ -2,10 +2,10 @@ import sys
 import json
 import copy
 
-import items
+import bosses
 import inv_system
 import pets
-import bosses
+import items
 
 
 if __name__ == "__main__":
@@ -110,12 +110,12 @@ class Quest(Conversation):
                 return
 
     def completion(self):
-        main.player.exp += self.reward[0]
-        main.static['gp'] += self.reward[1]
+        self.upon_completing()
         print("You've received {0} XP and {1} GP for completing this quest.".format(
             self.reward[0], self.reward[1]))
+        main.player.exp += self.reward[0]
+        main.static['gp'] += self.reward[1]
         main.player.level_up()
-        self.upon_completing()
         self.active = False
 
 
@@ -143,7 +143,7 @@ def pp2_at():
 
 philliard_phrase_2.after_talking = pp2_at
 
-philliard = NPC('Philliard', [philliard_phrase_1])
+philliard = NPC('Philliard', [philliard_phrase_1, philliard_phrase_2])
 
 # Name: Alfred -- Town: Nearton
 alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives south-east",
@@ -212,7 +212,7 @@ stewson_quest_1 = Quest(["I wish someone would do something about this terrible"
                          "could defeat this phantom? It's at position 8'N, -12'W."],
                         'The Shadowy Spirit',
                         ["Defeat the feared Menacing Phantom at location",
-                        "8'N, -12'W and then return to Stewson in Overshire."],
+                         "8'N, -12'W and then return to Stewson in Overshire."],
                         'Stewson', [50, 75],
                         ["You... you actually defeated it?! Thank you ever so much!",
                          "Take this, it is the least our town can do for your bravery."],
@@ -262,6 +262,7 @@ stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, 
 ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
                                'in his inventory. If you get lost, check there.', '...',
                                'Raisins!'], active=True)
+# The "Raisins!" is a Game Grumps reference by the way
 
 ethos = NPC('Ethos', [ethos_phrase_1])
 
@@ -269,27 +270,50 @@ ethos = NPC('Ethos', [ethos_phrase_1])
 joseph_phrase_1 = Conversation(['Greetings, young adventurer. Welcome to Charsulville.'
                                ], active=True)
 joseph_phrase_2 = Conversation(['Report back to me when you have delivered that letter.'])
-joseph_quest_1 = Quest(["Wait a second... are you {0)? I've recieved word that a",
-                        'traveller from Nearton was heading this way. Yes, that',
-                        "MUST be you they're talking about! Could you please do",
-                        'me a favor and take this message to Philliard in Nearton?',
-                        "Nearton, in case you've forgotton, is at 1'N, 0'E."],
+
+joseph_quest_1 = Quest(["Wait a second... are you who I think you are? I've recieved",
+                        'word that a traveller from Nearton was heading',
+                        "this way. Yes, that MUST be you they're talking",
+                        'about! Could you please do me a favor and take',
+                        "this message to Philliard in Nearton? Nearton,",
+                        "in case you've forgotton, is at 1'N, 0'E."],
                        'An Important Message',
-                       "Deliver a message (located in your Quest Items) to Philliard in Nearton,",
-                       "located at 1'N, 0'E, and then return to Joseph in Charsulville.", [15, 25],
+                       ["Deliver a message (located in your Quest Items) to Philliard in Nearton,",
+                       "located at 1'N, 0'E, and then return to Joseph in Charsulville."],
+                       'Joseph', [15, 25],
                        ["You have delivered the message? Thank you ever so",
                         "much! You have no idea how much trouble you've saved me.",
                         "Here, take this as a reward."], active=True)
 
+
 def jphqst_us1():
     global philliard_phrase_1
     global philliard_phrase_2
+    global joseph_phrase_1
+    global joseph_phrase_2
+
     philliard_phrase_1.active = False
     philliard_phrase_2.active = True
     joseph_phrase_1.active = False
+    joseph_phrase_2.active = True
     inv_system.inventory['q_items'].append(copy.copy(items.message_joseph))
 
-joseph = NPC('Joseph', [joseph_phrase_1, joseph_quest_1])
+
+def jphqst_uc1():
+    global joseph_phrase_1
+    global joseph_phrase_2
+    joseph_phrase_1.active = True
+    joseph_phrase_2.active = False
+    print('-'*25)
+    print("You've recieved a Magic Compass from Joseph.")
+    print('It has been added to the "Misc" section of your inventory.')
+    inv_system.inventory['misc'].append(items.magic_compass)
+
+
+joseph_quest_1.upon_starting = jphqst_us1
+joseph_quest_1.upon_completing = jphqst_uc1
+
+joseph = NPC('Joseph', [joseph_phrase_1, joseph_quest_1, joseph_phrase_2])
 
 # Name: Seriph -- Town: Fort Sigil
 seriph_phrase_1 = Conversation(['...You actually came to this town? And of your own',
@@ -317,12 +341,12 @@ krystal_phrase_1 = Conversation(["What I don't understand is that the silly",
 krystal = NPC('Krystal', [krystal_phrase_1])
 
 all_dialogue = [
-    philliard_phrase_1,
+    philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
     kyle_phrase_1, krystal_phrase_1,
-    joseph_phrase_1, joseph_quest_1
+    joseph_phrase_1, joseph_phrase_2, joseph_quest_1
 ]
 
 

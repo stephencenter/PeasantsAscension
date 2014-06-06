@@ -1,10 +1,12 @@
 import sys
 import time
 import copy
+
+import pygame
+
 import inv_system
 import world
-import npcs
-import pygame
+
 
 if __name__ == "__main__":
     sys.exit()
@@ -312,6 +314,7 @@ class Town:
                 pygame.mixer.music.set_volume(main.music_vol)
                 break
 
+import npcs
 # List of Towns:
 town1 = Town('Nearton', """Nearton: a small village in the central region of t\
 he Forest.
@@ -338,7 +341,7 @@ do as you wish in the lower.""", [npcs.stewson], -11, 13, inn_cost=5, gs_level=2
 town4 = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing too special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
-There is a ragged beggar standing in the middle of the road.""", [npcs.ethos],
+There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.joseph],
              19, -7, inn_cost=2, gs_level=3)
 
 town5 = Town('Fort Sigil', """Fort Sigil: A small village in the northern region

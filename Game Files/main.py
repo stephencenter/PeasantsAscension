@@ -71,14 +71,16 @@ import inv_system
 import battle
 import magic
 import bosses
-import npcs
 import pets
 import items
 import sounds
 import towns
 
+
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
+
+town_list = towns.town_list
 
 save_dir = 'Save Files'
 sav1 = 'Save Files/misc_vars.json'  # Misc Variables
@@ -551,6 +553,7 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
 
 
 if __name__ == "__main__":
+    import npcs
     title_screen()
     check_save()  # Check for save files...
     world.movement_system()  # ...and then start the game

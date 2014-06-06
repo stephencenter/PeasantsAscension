@@ -1,11 +1,14 @@
 import random
 import sys
+import time
+
+import pygame
+
 import inv_system
 import items
 import battle
-import pygame
 import sounds
-import time
+
 
 if __name__ == "__main__":
     sys.exit()

@@ -1,10 +1,12 @@
-import monsters
-import battle
-import npcs
-import items
 import sys
 import copy
 import json
+
+import npcs
+import monsters
+import battle
+import items
+
 
 if __name__ == "__main__":
     sys.exit()

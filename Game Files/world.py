@@ -1,12 +1,15 @@
 import sys
+import random
+
+import pygame
+
 import battle
 import monsters
 import towns
 import bosses
-import random
-import pygame
 import sounds
 import inv_system
+
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()

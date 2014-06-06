@@ -29,6 +29,12 @@ class Item:
     def __str__(self):
         return self.name
 
+    def use_item(self):
+        if 'Message' in self.name:
+            print("It would probably be best if you didn't read this.")
+        else:
+            print("You can't think of anything useful to do with this.")
+
 
 class Consumable(Item):
     # Items that restore you HP, MP, or both. All items of this class stacks
@@ -167,6 +173,22 @@ class Armor(Item):
         else:
             print('-'*25)
             print("You must be a {0} to equip this.".format(self.class_.title()))
+
+
+class Radar(Item):
+    def __init__(self, name, desc, buy, sell, cat='', imp=True):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
+
+    def use_item(self):
+        from towns import town_list
+        pos_towns = [tuple([town.name, round(math.hypot(town.x - main.position['x'],
+                                                        town.y - main.position['y']))])
+                     for town in town_list]
+        distance = min(pos_towns, key=lambda x: x[1])
+        print('-'*25)
+        print('The closest town to you is {0} at ~{1} degrees away.'.format(
+            distance[0], distance[1]))
+        print('-'*25)
 
 
 def item_setup_vars():
@@ -479,6 +501,11 @@ spect_wand = Weapon('Spectre Wand',
                     0, 225, 15, 'magic', 'mage', element='death')
 
 unique_drops = {'ice': [ice_blade], 'grass': [enc_yw], 'none': [bnz_leg]}
+
+# Misc. Items
+magic_compass = Radar('Magical Compass',
+                      'A compass infused with the power of magic capable of finding towns nearby.',
+                      0, 0, cat='misc', imp=True)
 
 # Quest items
 message_joseph = Item('Message from Joseph',

@@ -1,8 +1,11 @@
 import sys
 import json
-import npcs
-import items as i
+import math
 from copy import copy as _c
+
+import npcs
+import pets
+import items as i
 
 
 if __name__ == "__main__":
@@ -311,6 +314,8 @@ Input letter (or type "back"): ')
             print('-'*25)
         elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
             return
+
+
 def sell_item(cat, item):
     print('-'*25)
     print(item.desc)
@@ -364,6 +369,13 @@ def deserialize_inv(path):
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue
+            elif category in ['misc', 'q_items']:
+                if item['name'] == 'Magical Compass':
+                    item = i.magic_compass
+                    norm_inv[category].append(item)
+                    continue
+                else:
+                    x = i.Item('', '', '', '')
             else:
                 continue
             x.__dict__ = item

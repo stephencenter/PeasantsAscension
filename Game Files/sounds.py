@@ -1,6 +1,8 @@
 import sys
+
 from pygame import mixer
 from pygame.mixer import Sound
+
 
 if __name__ == "__main__":
     sys.exit()

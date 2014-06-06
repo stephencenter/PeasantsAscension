@@ -1,11 +1,14 @@
 import sys
 import json
+import random
+
+import pygame
+
 import monsters
 import battle
-import random
 import inv_system
 import sounds
-import pygame
+
 
 if __name__ == "__main__":
     sys.exit()
