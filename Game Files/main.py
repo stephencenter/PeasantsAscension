@@ -1,5 +1,5 @@
-# Pythonius; v0.4.0 Alpha
-game_version = 'v0.4.0'
+# Pythonius; v0.4.1 Alpha
+game_version = 'v0.4.1'
 # Programmed in Python 3 by Stephen Center, (c)2013-2014
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -84,7 +84,7 @@ town_list = towns.town_list
 
 save_dir = 'Save Files'
 sav1 = 'Save Files/misc_vars.json'  # Misc Variables
-sav2 = 'Save Files/postition.json'  # Position
+sav2 = 'Save Files/position.json'  # Position
 sav3 = 'Save Files/inventory.json'  # Inventory
 sav4 = 'Save Files/equip_items.json'  # Equipped Items
 sav5 = 'Save Files/play_stats.json'  # Player Stats
