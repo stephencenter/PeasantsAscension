@@ -18,6 +18,7 @@ import json
 from copy import copy as _c
 
 import npcs
+import towns
 import items as i
 
 
@@ -350,6 +351,51 @@ def sell_item(cat, item):
                     return
         elif y_n.startswith('n'):
             return
+
+
+def tools_menu():
+    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass']
+    available_tools = []
+    spam = True
+    for cat in inventory:
+        if cat in ['coord', 'quests']:
+            continue
+        for item in set(inventory[cat]):
+            if item.name in tool_names:
+                available_tools.append(item)
+    print('-'*25)
+    if not available_tools:
+        print('You have no available tools to use...')
+        print('-'*25)
+        return
+    while spam:
+        print(''.join(['Tools', ': \n      ', '\n      '.join(
+            ['[' + str(x + 1) + '] ' + str(y)
+                for x, y in enumerate(available_tools)])]))
+        while True:
+            tool = input('Input [#] (or type "exit"): ')
+            try:
+                tool = int(tool) - 1
+            except (TypeError, ValueError):
+                try:
+                    if tool.lower() in [
+                        'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                    ]:
+                        spam = False
+                        print('-'*25) if not towns.search_towns(
+                            main.position['x'],
+                            main.position['y'], enter=False
+                        ) else ''
+                        break
+                    else:
+                        continue
+                except AttributeError:
+                    continue
+            if (tool < 0) or (tool > len(available_tools) - 1):
+                continue
+            tool = available_tools[tool]
+            tool.use_item()
+            break
 
 
 def serialize_inv(path):

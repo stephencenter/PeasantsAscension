@@ -66,10 +66,10 @@ def movement_system():
         else:
             position['v'] = "'S"
         while True:
-            direction = input('{0}{1}, {2}{3} | {4} | Input direction (N, S, E, W), \
-or type "player": '.format(position['y'], position['v'],
-                           position['x'], position['h'],
-                           position['reg']))
+            direction = input('{0}{1}, {2}{3} | {4} | Input Dir. (N, S, E, W), \
+[P]layer, [T]ools, [R]est: '.format(position['y'], position['v'],
+                                    position['x'], position['h'],
+                                    position['reg']))
             try:
                 direction = direction.lower()
             except AttributeError:
@@ -137,7 +137,9 @@ or type "player": '.format(position['y'], position['v'],
                     elif decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         print('-'*25)
                         break
-
+            elif direction.startswith('t'):
+                inv_system.tools_menu()
+                break
 
 def out_of_bounds():
     print('-'*25)
