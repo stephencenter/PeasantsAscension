@@ -100,7 +100,51 @@ class Monster:
             sounds.enemy_hit.play()
             print('The {0} hits you, dealing {1} damage!'.format(self.name, dealt))
         else:
+            sounds.attack_miss.play()
             print("You narrowly avoid the {0}'s attack!".format(self.name))
+
+    def enemy_turn(self, var, dodge):
+        # This is the Enemy's AI.
+
+        print('\n-Enemy Turn-')
+        if self.hp <= int(static['hp_m']/4) and self.mp >= 5:
+            # Magic heal
+            sounds.magic_healing.play()
+            heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
+            if heal < 5:
+                heal = 5
+            self.hp += heal
+            self.mp -= 5
+            print('The {0} casts a healing spell!'.format(self.name))
+
+        elif self.attk >= self.m_attk:
+            # Physical Attack
+            self.monst_attk(var, dodge)
+
+        elif int((self.dfns + self.m_dfns)/2) <= int(self.lvl/3):
+            # Defend
+            self.dfns += random.randint(1, 2)
+            self.m_dfns += random.randint(1, 2)
+            print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
+
+        elif self.m_attk >= self.attk and self.mp >= 2:
+            # Magic Attack
+            sounds.magic_attack.play()
+            print('The {0} is attempting to cast a strange spell...'.format(self.name))
+            time.sleep(0.75)
+            if dodge in range(battle.temp_stats['evad'], 250):
+                dealt = self.monst_magic(var)
+                player.hp -= dealt
+                sounds.enemy_hit.play()
+                print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
+                    self.name, dealt))
+            else:
+                sounds.attack_miss.play()
+                print("The spell misses you by a landslide!")
+            self.mp -= 2
+
+        else:
+            self.monst_attk(var, dodge)
 
     def monst_name(self):
         monster_type = {'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],

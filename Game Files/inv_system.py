@@ -15,11 +15,9 @@
 
 import sys
 import json
-import math
 from copy import copy as _c
 
 import npcs
-import pets
 import items as i
 
 
@@ -268,7 +266,7 @@ Input letter (or type "back"): ')
                         except (TypeError, ValueError):
                             try:
                                 if number.lower() in [
-                                'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                                    'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
                                 ]:
                                     fizz = False
                                     break

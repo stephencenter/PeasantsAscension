@@ -45,9 +45,13 @@ foot_steps = Sound('Sound FX/foot_steps.wav')
 # Aim Weapon -- Played when attempting to attack with a ranged weapon
 aim_weapon = Sound('Sound FX/aim_weapon.wav')
 
+# Attack Miss -- Played when attempting to attack and then failing
+attack_miss = Sound('Sound FX/attack_miss.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
               'magic_healing', 'enemy_hit',
-              'foot_steps', 'aim_weapon']:
+              'foot_steps', 'aim_weapon',
+              'attack_miss']:
         globals()[x].set_volume(main.sound_vol)

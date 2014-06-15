@@ -115,7 +115,7 @@ def battle_system(is_boss=False):
         if move == '4':  # Use the Battle Inventory
             if battle_inventory() and monster.hp > 0:
                 input('\nPress Enter/Return ')
-                enemy_turn(var, dodge)
+                monster.enemy_turn(var, dodge)
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
             continue
@@ -129,7 +129,7 @@ def battle_system(is_boss=False):
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
                 return
-            enemy_turn(var, dodge)
+            monster.enemy_turn(var, dodge)
             if player.hp > 0:
                 input('\nPress Enter/Return ')
             # If it fails, the enemy will attack you and skip your turn
@@ -139,14 +139,14 @@ def battle_system(is_boss=False):
             # The player goes first if they have a higher speed
             if player_turn(var, dodge, move) and monster.hp > 0:
                 input('\nPress Enter/Return ')
-                enemy_turn(var, dodge)
+                monster.enemy_turn(var, dodge)
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
             continue
 
         else:
             # Otherwise, the monster will go first
-            enemy_turn(var, dodge)
+            monster.enemy_turn(var, dodge)
             if player.hp > 0:
                 input('\nPress Enter/Return ')
                 player_turn(var, dodge, move)
@@ -182,6 +182,7 @@ def player_turn(var, dodge, move):
                 print('Your attack connects with the {0}, dealing {1} damage!'.format(
                     monster.name, dealt))
             else:
+                sounds.attack_miss.play()
                 print('The {0} dodges your attack with ease!'.format(monster.name))
 
         elif move == '2':  # Magic
@@ -196,50 +197,6 @@ def player_turn(var, dodge, move):
             return False
         player.current_pet.use_ability() if player.current_pet else ''
         return True
-
-
-def enemy_turn(var, dodge):
-    # This is the Enemy's AI.
-    global player
-    global monster
-    print('\n-Enemy Turn-')
-    if monster.hp <= int(static['hp_m']/4) and monster.mp >= 5:
-        # Magic heal
-        sounds.magic_healing.play()
-        heal = int(((monster.m_attk + monster.m_dfns)/2) + monster.lvl/2)
-        if heal < 5:
-            heal = 5
-        monster.hp += heal
-        monster.mp -= 5
-        print('The {0} casts a healing spell!'.format(monster.name))
-
-    elif monster.attk >= monster.m_attk:
-        # Physical Attack
-        monster.monst_attk(var, dodge)
-
-    elif int((monster.dfns + monster.m_dfns)/2) <= int(player.lvl/3):
-        # Defend
-        monster.dfns += random.randint(1, 2)
-        monster.m_dfns += random.randint(1, 2)
-        print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(monster.name))
-
-    elif monster.m_attk >= monster.attk and monster.mp >= 2:
-        # Magic Attack
-        sounds.magic_attack.play()
-        print('The {0} is attempting to cast a strange spell...'.format(monster.name))
-        time.sleep(0.75)
-        if dodge in range(temp_stats['evad'], 250):
-            dealt = monster.monst_magic(var)
-            player.hp -= dealt
-            sounds.enemy_hit.play()
-            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
-                monster.name, dealt))
-        else:
-            print("The spell misses you by a landslide!")
-        monster.mp -= 2
-
-    else:
-        monster.monst_attk(var, dodge)
 
 
 def after_battle(is_boss):  # Assess the results of the battle

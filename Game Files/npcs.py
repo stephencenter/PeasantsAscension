@@ -1,6 +1,6 @@
-#   This file is part of PythoniusRPG.
+# This file is part of PythoniusRPG.
 #
-#	 PythoniusRPG is free software: you can redistribute it and/or modify
+# PythoniusRPG is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -294,7 +294,7 @@ joseph_quest_1 = Quest(["Wait a second... are you who I think you are? I've reci
                         "in case you've forgotton, is at 1'N, 0'E."],
                        'An Important Message',
                        ["Deliver a message (located in your Quest Items) to Philliard in Nearton,",
-                       "located at 1'N, 0'E, and then return to Joseph in Charsulville."],
+                        "located at 1'N, 0'E, and then return to Joseph in Charsulville."],
                        'Joseph', [15, 25],
                        ["You have delivered the message? Thank you ever so",
                         "much! You have no idea how much trouble you've saved me.",

@@ -109,6 +109,7 @@ class Damaging(Spell):
                     self.name, attk_pwr, monsters.monster.name))
                 monsters.monster.hp -= attk_pwr
             else:
+                sounds.attack_miss.play()
                 print('The {0} dodges your attack!'.format(monsters.monster.name))
             return True
         else:

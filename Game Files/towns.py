@@ -101,8 +101,8 @@ class Town:
             if spam not in inv_system.inventory['coord']:
                 inv_system.inventory['coord'].append(spam)
                 print('-'*25)
-                print("{0}'s location has been added to the coordinates page of your inventory.".format(
-                    self.name))
+                print("{0}'s location has been added to \
+the coordinates page of your inventory.".format(self.name))
         else:
             return spam
 
@@ -229,9 +229,8 @@ class Town:
                                     inv_system.inventory[i.cat].append(i)
                                     main.static['gp'] -= i.buy
                                     print('-'*25)
-                                    input(
-                                        'You purchase the {0} (-{1} GP). (Press enter/return).'.format(
-                                            str(i), i.buy))
+                                    input('You purchase the {0} (-{1} \
+GP). (Press enter/return).'.format(str(i), i.buy))
                                     print('-'*25)
                                 else:
                                     input('"Hey, you don\'t even have enough GP for this \
