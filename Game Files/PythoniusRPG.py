@@ -1,6 +1,22 @@
-# Pythonius; v0.4.1 Alpha
-game_version = 'v0.4.1'
-# Programmed in Python 3 by Stephen Center, (c)2013-2014
+# Pythonius; v0.4.2 Alpha
+game_version = 'v0.4.2'
+# Copyright 2013, 2014 Stephen Center
+#-----------------------------------------------------------------------------#
+#   This file is part of PythoniusRPG.
+#
+#	 PythoniusRPG is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    PythoniusRPG is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+#-----------------------------------------------------------------------------#
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
 #-----------------------------------------------------------------------------#
@@ -31,7 +47,7 @@ game_version = 'v0.4.1'
 #
 #   This was very-much time consuming and gets tedious quickly. As such, I
 #   decided to improve it:
-
+#
 #       Item category:
 #             [1] Item 1
 #             [2] Item 2
@@ -379,16 +395,16 @@ def create_player():
 
 def set_saves():
     config = configparser.ConfigParser()
-    if os.path.isfile("settings.cfg"):
-        config.read("settings.cfg")
+    if os.path.isfile("../settings.cfg"):
+        config.read("../settings.cfg")
         for x in config['save_files']:
             globals()[x] = config['save_files'][x]
 
 
 def set_volume():
     config = configparser.ConfigParser()
-    if os.path.isfile("settings.cfg"):
-        config.read("settings.cfg")
+    if os.path.isfile("../settings.cfg"):
+        config.read("../settings.cfg")
         for x in config['volume_levels']:
             globals()[x] = float(config['volume_levels'][x])/100
         sounds.change_volume()
@@ -517,8 +533,6 @@ def deserialize_player(path):  # Load the JSON file and translate
 
 
 def title_screen():
-    set_saves()
-    set_volume()
     pygame.mixer.music.load('Music/Prologue.ogg')
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(music_vol)
@@ -542,18 +556,30 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
             return
         elif choice.startswith('c'):
             print('-'*25)
-            with open('Credits.txt') as f:
-                for f.readline in f:
-                    print(''.join(f.readline.rstrip("\n").split(";")))
-                    time.sleep(0.35)
+            try:
+                with open('../Credits.txt') as f:
+                    for f.readline in f:
+                        print(''.join(f.readline.rstrip("\n").split(";")))
+                        time.sleep(0.35)
+            except FileNotFoundError:
+                print('The "Credits.txt" file could not be found.')
+            except OSError:
+                print('There was a problem opening "Credits.txt".')
             print('-'*25)
         elif choice.startswith('e'):
             pygame.quit()
             sys.exit()
 
 
-if __name__ == "__main__":
-    import npcs
+def main():
+    set_saves()
+    set_volume()
+
     title_screen()
     check_save()  # Check for save files...
     world.movement_system()  # ...and then start the game
+
+
+if __name__ == "__main__":
+    import npcs
+    main()
