@@ -109,6 +109,7 @@ sav6 = 'Save Files/spellbook.json'  # Spellbook
 sav7 = 'Save Files/def_bosses.json'  # Defeated Bosses
 sav8 = 'Save Files/quests_dia.json'  # Quests & Dialogue
 sav9 = 'Save Files/misc_boss_info.json'  # Misc Boss Info
+sav10 = 'Save Files/acquired_gems.json'  # Acquired Gems
 
 # NOTE 1: The save file locations can be changed in the file "settings.cfg".
 
@@ -419,7 +420,7 @@ def check_save():  # Check for save files and load the game if they're found
     # Check each part of the save file
     print('Searching for valid save files...')
     time.sleep(0.25)
-    for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7, sav8, sav9]:
+    for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7, sav8, sav9, sav10]:
         if os.path.isfile(file):
             pass
         else:
@@ -453,6 +454,7 @@ def check_save():  # Check for save files and load the game if they're found
                     bosses.defeated_bosses = list(json.load(g))
                 npcs.deserialize_dialogue(sav8)
                 bosses.deserialize_bosses(sav9)
+                items.deserialize_gems(sav10)
                 print('Load successful.')
                 if not towns.search_towns(position['x'], position['y'], enter=False):
                     print('-'*25)
@@ -497,6 +499,7 @@ def save_game():
                               indent=4, separators=(', ', ': '))
                 npcs.serialize_dialogue(sav8)
                 bosses.serialize_bosses(sav9)
+                items.serialize_gems(sav10)
                 print('Save successful.')
                 return
             except IOError:

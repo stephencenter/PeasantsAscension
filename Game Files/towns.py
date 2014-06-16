@@ -179,6 +179,10 @@ the coordinates page of your inventory.".format(self.name))
         stock = []  # A list containing objects the player can purchase
         for item in inv_system.gs_stock:
             stock.append(item[self.gs_level - 1])
+        if self.gs_level == 2:
+            stock.append(i.shovel)
+        elif self.gs_level == 4:
+            stock.append(i.divining_rod)
         print('-'*25)
         print('Merchant: "Welcome, Traveler!"')
         while True:

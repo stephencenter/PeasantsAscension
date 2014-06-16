@@ -17,6 +17,8 @@ import sys
 import copy
 import random
 import math
+import json
+import time
 
 import inv_system
 
@@ -190,8 +192,8 @@ class Armor(Item):
             print("You must be a {0} to equip this.".format(self.class_.title()))
 
 
-class Radar(Item):
-    def __init__(self, name, desc, buy, sell, cat='', imp=True):
+class MagicCompass(Item):
+    def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
 
     def use_item(self):
@@ -204,6 +206,54 @@ class Radar(Item):
         print('The closest town to you is {0} at ~{1} degrees away.'.format(
             distance[0], distance[1]))
         print('-'*25)
+
+
+class DiviningRod(Item):
+    def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
+
+    def use_item(self):
+        pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.position['x'],
+                                                      gem.posy - main.position['y']))])
+                     for gem in valuable_list if not gem.acquired]
+        if not pos_gems:
+            return print('You are unable to detect any gems.')
+        distance = min(pos_gems, key=lambda x: x[1])
+        print('-'*25)
+        print('The closest gem to you is {0} {1} at ~{2} degrees away.'.format(
+            'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
+            else 'a', distance[0], distance[1]))
+        print('-'*25)
+
+
+class Valuable(Item):
+    def __init__(self, name, desc, buy, sell, posx, posy, acquired=False, cat='misc', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
+        self.posx = posx
+        self.posy = posy
+        self.acquired = acquired
+
+    def use_item(self):
+        print('You admire the {0}. It looks very valuable.'.format(self.name))
+
+
+class Shovel(Item):
+    def __init__(self, name, desc, buy, sell, cat='misc'):
+        Item.__init__(self, name, desc, buy, sell, cat)
+
+    def use_item(self):
+        print('-'*25)
+        print('You begin to search using your shovel...')
+        time.sleep(1)
+        for gem in valuable_list:
+            if (main.position['x'], main.position['y']) == (gem.posx, gem.posy):
+                gem.acquired = True
+                print('Using your shovel, you manage to uncover a {0}!'.format(gem.name))
+                inventory['misc'].append(gem)
+                return
+        print('You were unable to uncover anything.')
+        print('-'*25)
+
 
 
 def item_setup_vars():
@@ -422,10 +472,10 @@ en_stl_hlm = Armor('Enhanced Steel Helmet',
                    260, 75, 10, 'melee', 'head', 'warrior')
 en_stl_cst = Armor('Enhanced Steel Chestpiece',
                    'An enhanced version of your typical Steel Chestpiece (+11 Defense).',
-                   280, 80, 11, 'melee', 'body', 'warrior')
+                   280, 85  , 11, 'melee', 'body', 'warrior')
 en_stl_leg = Armor('Enhanced Steel Leggings',
                    'An enhanced version of your typical Steel Leggings (+10 Defense).',
-                   270, 85, 10, 'melee', 'legs', 'warrior')
+                   270, 80, 10, 'melee', 'legs', 'warrior')
 
 
 # Armor -- Mage -- Mid
@@ -444,10 +494,10 @@ en_myst_hat = Armor('Enhanced Mystical Hood',
                     260, 75, 10, 'magic', 'head', 'mage')
 en_myst_rob = Armor('Enhanced Mystical Robe',
                     'An enhanced version of your typical Mystical Robe (+11 Magic Defense).',
-                    280, 80, 11, 'magic', 'body', 'mage')
+                    280, 85, 11, 'magic', 'body', 'mage')
 en_myst_gar = Armor('Enhanced Mystical Garments',
                     'An enhanced version of your typical Mystical Garments (+10 Magic Defense).',
-                    270, 85, 10, 'magic', 'legs', 'mage')
+                    270, 80, 10, 'magic', 'legs', 'mage')
 
 # Armor -- Rogue -- Mid
 std_cwl = Armor('Studded Cowl',
@@ -465,10 +515,10 @@ en_std_cwl = Armor('Enhanced Studded Cowl',
                    260, 75, 10, 'melee', 'head', 'rogue')
 en_std_bdy = Armor('Enhanced Studded Bodyarmor',
                    'An enhanced version of your typical Studded Bodyarmor (+10 Defense).',
-                   280, 80, 10, 'melee', 'body', 'rogue')
+                   280, 85, 10, 'melee', 'body', 'rogue')
 en_std_leg = Armor('Enhanced Studded Leggings',
                    'An enhanced version of your typical Studded Leggings (+10 Defense).',
-                   270, 85, 10, 'melee', 'legs', 'rogue')
+                   270, 80, 10, 'melee', 'legs', 'rogue')
 
 
 # Armor -- Warrior -- Pow
@@ -517,10 +567,7 @@ spect_wand = Weapon('Spectre Wand',
 
 unique_drops = {'ice': [ice_blade], 'grass': [enc_yw], 'none': [bnz_leg]}
 
-# Misc. Items
-magic_compass = Radar('Magical Compass',
-                      'A compass infused with the power of magic capable of finding towns nearby.',
-                      0, 0, cat='misc', imp=True)
+
 
 # Quest items
 message_joseph = Item('Message from Joseph',
@@ -529,6 +576,44 @@ message_joseph = Item('Message from Joseph',
 message_philliard = Item('Message from Philliard',
                          'A neatly written message addressed from Philliard to Joseph.',
                          0, 0, cat='q_items', imp=True)
+
+# Gems & Valuables
+pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
+                     0, 150, 119, -121)
+    # Alternate Description: Impossible to read, but will sell for money nonetheless
+
+ruby_gem = Valuable('Ruby', 'A valuable ruby. Could be sold for quite a bit.',
+                    0, 150, -62, -84)  # better_than_perl=True
+
+sapphire_gem = Valuable('Sapphire',
+                        'A valuable sapphire. This could probably be sold for quite a bit.',
+                        0, 150, -78, 102)
+
+emerald_gem = Valuable('Emerald',
+                       'A valuable emerald. This could probably be sold for quite a bit.',
+                       0, 150, 26, -13)
+
+citrine_gem = Valuable('Citrine',
+                       'A valuable citrine. This could probably be sold for quite a bit.',
+                       0, 150, 53, 92)
+
+jade_gem = Valuable('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
+                    0, 150, 99, -107)
+
+valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem]
+
+# Tools
+magic_compass = MagicCompass(
+    'Magical Compass',
+    'A compass infused with the power of magic capable of detecting nearby towns.',
+    0, 0, imp=True)
+
+divining_rod = DiviningRod('Divining Rod',
+                           'A supposedly magical stick capable of detecting nearby ores and gems.',
+                           325, 107)
+
+shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.',
+                175, 56)
 
 
 def monster_drop(level, element):
@@ -543,3 +628,20 @@ def monster_drop(level, element):
             random.choice(unique_drops[element]))] if random.randint(0, 1) else drops
     except (KeyError, IndexError):
         return drops
+
+
+def serialize_gems(path):
+    with open(path, mode='w') as j:
+        json.dump([gem.name for gem in valuable_list if gem.acquired],
+                  j, indent=4, separators=(', ', ': '))
+
+
+def deserialize_gems(path):
+    global valuable_list
+
+    with open(path, mode='r') as j:
+        gems = json.load(j)
+    for name in gems:
+        for gem in valuable_list:
+            if gem.name == name:
+                gem.acquired = True
