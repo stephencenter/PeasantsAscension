@@ -92,7 +92,12 @@ import pets
 import items
 import sounds
 import towns
+import logging
 
+# Log everything, and send it to stderr.
+logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
+
+logging.debug("An exception was raised!")
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
@@ -589,4 +594,8 @@ def main():
 
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
-    main()
+    try:  # Run the game
+        main()
+    except:  # If an exception is raised and not caught, log the error message.
+        logging.exception('Got exception of main handler.')
+        raise

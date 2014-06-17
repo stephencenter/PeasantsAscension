@@ -108,16 +108,18 @@ def battle_system(is_boss=False, ambush=False):
         # Second, get the player's decision on moves
 
         var = random.randint(-1, 1)
+        m_var = random.randint(-1, 1)
         # var is how much less/more the attacks will deal than normal.
         # This makes the battle less predictable and more interesting.
 
         dodge = random.randint(0, 250)
+        m_dodge = random.randint(0, 250)
         # If dodge is in a certain range, the attack will miss
 
         if move == '4':  # Use the Battle Inventory
             if battle_inventory() and monster.hp > 0:
                 input('\nPress Enter/Return ')
-                monster.enemy_turn(var, dodge)
+                monster.enemy_turn(m_var, m_dodge)
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
             continue
@@ -131,7 +133,7 @@ def battle_system(is_boss=False, ambush=False):
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
                 return
-            monster.enemy_turn(var, dodge)
+            monster.enemy_turn(m_var, m_dodge)
             if player.hp > 0:
                 input('\nPress Enter/Return ')
             # If it fails, the enemy will attack you and skip your turn
@@ -141,14 +143,14 @@ def battle_system(is_boss=False, ambush=False):
             # The player goes first if they have a higher speed
             if player_turn(var, dodge, move) and monster.hp > 0:
                 input('\nPress Enter/Return ')
-                monster.enemy_turn(var, dodge)
+                monster.enemy_turn(m_var, m_dodge)
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
             continue
 
         else:
             # Otherwise, the monster will go first
-            monster.enemy_turn(var, dodge)
+            monster.enemy_turn(m_var, m_dodge)
             if player.hp > 0:
                 input('\nPress Enter/Return ')
                 player_turn(var, dodge, move)

@@ -37,7 +37,7 @@ Other people who have more talent than me:
 
 All rights go to those people.
 
-Sound FX were made by me (RbwNjaFurret) using the open-source tool known as Bfxr.
+Sound FX were made by Gabriel Tucker and me using an open-source tool known as Bfxr.
 	http://www.bfxr.net/
 
 Thanks for playing this game!

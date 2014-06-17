@@ -47,6 +47,27 @@ How to play:
 		Simply input the number in the brackets next to the 
 		command you want to use.
 ----------------------------------------------------
+What to do if the game crashes:
+	Due to how the Windows Command Prompt and Python work, errors
+	raised through the console immediately close the game, preventing
+	the error message from being read. To counteract this, the game
+	automatically logs the error in a file named "error_log.out". If 
+	you encounter an error, the message will be located there, and the 
+	file can be sent to me (ninjafurret@gmail.com) so I can fix the 
+	problem. Don't worry, the only information located in the file is
+	a generic error message and nothing else. (If you want to verify 
+	this, you can open the file using a program like Notepad, Notepad++, 
+	or Sublime Text.) I appreciate your help!
+----------------------------------------------------
+How to change the settings:
+	By default, the game saves its files in a folder called "Save Files",
+	located in the Game Files directory. It also defaults to playing all
+	music/sound-effects at full volume. These can both be changed by 
+	editing a set of variables in a file called "settings.cfg", located in
+	the "PythoniusRPG" folder. This file can be opened using a program like
+	Notepad, Notepad++, or Sublime Text. Instructions on changing these
+	are located in the file.
+----------------------------------------------------
 Credits:
 	Programmed by Stephen Center
 	Music by Eric Skiff and Ben Landis
