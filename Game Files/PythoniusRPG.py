@@ -1,5 +1,5 @@
-# Pythonius; v0.4.3 Alpha
-game_version = 'v0.4.3'
+# Pythonius; v0.4.5 Alpha
+game_version = 'v0.4.5'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
