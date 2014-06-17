@@ -15,6 +15,7 @@
 
 import sys
 import random
+import time
 
 import pygame
 
@@ -44,11 +45,16 @@ west = ['w', 'wes', 'west']
 
 def setup_vars():
     global position
+    global static
+    global player
+
     position = main.position
+    static = main.static
+    player = main.player
 
 
 def movement_system():
-    """Adjust the player's x/y coordinates based on inputted direction."""
+    # Adjust the player's x/y coordinates based on inputted direction.
     global position
 
     setup_vars()
@@ -140,6 +146,8 @@ def movement_system():
             elif direction.startswith('t'):
                 inv_system.tools_menu()
                 break
+            elif direction.startswith('r'):
+                rest()
 
 def out_of_bounds():
     print('-'*25)
@@ -198,3 +206,28 @@ def back_to_coords():
     global position
     position['x'] = position['prev_town'][0]
     position['y'] = position['prev_town'][1]
+
+
+def rest():
+    setup_vars()
+    print('-'*25)
+    if player.hp == static['hp_p'] and player.mp == static['mp_p']:
+        print('You feel fine, and decide not to rest.')
+        print('-'*25)
+        return
+    print('You set up camp and begin to rest.')
+    time.sleep(1)
+    player.hp += int(static['hp_p']/4)
+    player.mp += int(static['mp_p']/4)
+    if player.hp > static['hp_p']:
+        player.hp -= (player.hp - static['hp_p'])
+    if player.mp > static['mp_p']:
+        player.mp -= (player.mp - static['mp_p'])
+    is_battle = not random.randint(0, 3)
+    if is_battle:
+        monsters.spawn_monster()
+        battle.setup_vars()
+        battle.battle_system(ambush=True)
+    else:
+        print('You rested well and decide to continue on your way.')
+        print('-'*25)

@@ -74,7 +74,7 @@ def player_choice():
             return move
 
 
-def battle_system(is_boss=False):
+def battle_system(is_boss=False, ambush=False):
     if is_boss:  # Bosses have different battle music than normal enemies
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
@@ -90,8 +90,10 @@ def battle_system(is_boss=False):
             a_an = 'An '
         else:
             a_an = 'A '
-
-        print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monster.name))
+        if ambush:
+            print('{0}{1} ambushed you while you were resting!'.format(a_an, monster.name))
+        else:
+            print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monster.name))
     time.sleep(0.5)
     update_stats()
     # Record the player's non-hp/mp stats (e.g. defense)
