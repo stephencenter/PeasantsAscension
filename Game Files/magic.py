@@ -16,6 +16,7 @@
 import sys
 import json
 import random
+import time
 
 import pygame
 
@@ -102,9 +103,12 @@ class Damaging(Spell):
                 p_dmg=attk_pwr)[0]
             sounds.magic_attack.play()
             print('-Player Turn-')
+            sounds.magic_attack.play()
             print('You begin to use your {0} to summon a powerful spell.'.format(
                 inv_system.equipped['weapon']))
+            time.sleep(0.75)
             if dodge in range(monsters.monster.evad, 250):
+                sounds.enemy_hit.play()
                 print('Using the power of "{0}", you deal {1} damage to the {2}!'.format(
                     self.name, attk_pwr, monsters.monster.name))
                 monsters.monster.hp -= attk_pwr
@@ -159,47 +163,57 @@ w_flame = Damaging('Weak Flame',
                    3, 1, 6, "fire")
 f_blaze = Damaging('Fierce Blaze',
                    "Summon a powerful flame to destroy your foes.",
-                   10, 8, 13, "fire")
+                   10, 11, 13, "fire")
 g_infer = Damaging('Grand Inferno',
                    "Unleash a monstrous blaze destroy your foes.",
-                   18, 18, 23, "fire")
+                   18, 23, 23, "fire")
 
 in_spark = Damaging('Inferior Spark',
                     "Summon a weak spark to destroy your foes.",
                     3, 2, 6, "electric")
 pwr_jolt = Damaging('Powerful Jolt',
                     "Summon a powerful jolt of energy to destroy your foes.",
-                    10, 8, 13, "electric")
+                    10, 10, 13, "electric")
 sp_storm = Damaging('Superior Storm',
                     "Unleash a devastating lightning storm to destroy your foes.",
-                    19, 18, 23, "electric")
+                    19, 22, 23, "electric")
 
 lef_blad = Damaging('Leaf Blade',
                     "Summon a weak blade of grass to destroy your foes.",
                     3, 1, 5, "grass")
 gra_gren = Damaging('Grass Grenade',
                     "Summon a small explosion to destroy your foes.",
-                    10, 8, 13, "grass")
+                    10, 12, 13, "grass")
 vin_strm = Damaging('Vine Storm',
                     "Unleash a frenzy of powerful vines to destroy your foes.",
-                    19, 18, 23, "grass")
+                    19, 24, 23, "grass")
+
+bub_splsh = Damaging('Bubble Splash',
+                     "Summon a small wave of bubbles to destroy your foes.",
+                     3, 2, 5, "water")
+wtr_blast = Damaging('Water Blast',
+                     "Summon a large burst of water to destroy your foes.",
+                     10, 12, 13, "water")
+tsunami = Damaging('Tsunami',
+                   "Unleash a terrifying wrath  of waves upon your foes.",
+                   19, 24, 23, "water")
 
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic.",
                    3, 1, 20)
 adv_heal = Healing('Advanced Healing',
                    "Restore a large amount of HP by using magic.",
-                   10, 9, 60)
+                   10, 13, 60)
 div_heal = Healing('Divine Healing',
                    "Call upon the arcane arts to greatly restore your HP.",
-                   25, 20, 125)
+                   25, 25, 125)
 
 m_quick = Buff('Minor Quickness',
                "Temporarily raise your speed by a small amount.",
-               2, 4, 3, "Speed")
+               2, 4, 2, "Speed")
 m_evade = Buff('Minor Evade',
                "Temporarily raise your evasion by a small amount.",
-               2, 4, 3, "Evasion")
+               2, 4, 2, "Evasion")
 
 m_defend = Buff('Minor Defend',
                 "Temporarily raise your defense by a small amount.",
@@ -229,20 +243,19 @@ a_power = Buff('Adept Empower',
                "Temporarily raise your magic attack by a large amount.",
                7, 10, 5, "Magic Attack")
 
+a_quick = Buff('Adept Quickness',
+               "Temporarily raise your speed by a large amount.",
+               7, 11, 5, "Speed")
+a_evade = Buff('Adept Evade',
+               "Temporarily raise your evasion by a large amount.",
+               7, 11, 5, "Evasion")
+
 spells = [
-    w_flame, lef_blad, min_heal,  # -- Level 1
-    in_spark,  # --------------------- Level 2
-    m_quick, m_evade,  # ------------- Level 4
-    m_defend, m_shield,  # ----------- Level 5
-    m_stren, m_power,  # ------------- Level 6
-    f_blaze, gra_gren,  # ------------ Level 7
-    pwr_jolt,  # --------------------- Level 8
-    adv_heal,  # --------------------- Level 9
-    a_stren, a_power,  # ------------- Level 10
-    a_defend, a_shield,  # ----------- Level 12
-    g_infer, vin_strm,  # ------------ Level 17
-    sp_storm,  # --------------------- Level 18
-    div_heal  # ---------------------- Level 20
+    w_flame, lef_blad, in_spark, bub_splsh, min_heal,
+    m_quick, m_evade, m_defend, m_shield, m_stren, m_power,
+    f_blaze, gra_gren, pwr_jolt, wtr_blast, adv_heal,
+    a_stren, a_power, a_defend, a_shield, a_quick, a_evade,
+    g_infer, vin_strm, sp_storm, tsunami, div_heal
 ]
 
 
@@ -338,7 +351,7 @@ def pick_spell(cat, var, dodge):
                 except AttributeError:
                     continue
                 if spell in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    return
+                    return False
                 else:
                     continue
             try:

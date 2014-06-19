@@ -190,7 +190,8 @@ def player_turn(var, dodge, move):
                 print('The {0} dodges your attack with ease!'.format(monster.name))
 
         elif move == '2':  # Magic
-            magic.pick_cat(var, dodge)
+            if not magic.pick_cat(var, dodge):
+                return False
 
         elif move == '3':  # Wait
             print('You wait for your turn to end while you gather your strength.')
