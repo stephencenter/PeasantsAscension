@@ -23,6 +23,7 @@ import inv_system
 import items
 import battle
 import sounds
+import magic
 
 
 if __name__ == "__main__":
@@ -95,7 +96,9 @@ class Monster:
         print('The {0} angrily begins to charge at you!'.format(self.name))
         time.sleep(0.75)
         if dodge in range(player.evad, 250):
-            dealt = self.monst_damage(var)
+            dealt = magic.eval_element(
+                    p_elem=battle.player.element,
+                    m_elem=battle.monster.element, m_dmg=self.monst_damage(var))[1]
             player.hp -= dealt
             sounds.enemy_hit.play()
             print('The {0} hits you, dealing {1} damage!'.format(self.name, dealt))
@@ -133,7 +136,9 @@ class Monster:
             print('The {0} is attempting to cast a strange spell...'.format(self.name))
             time.sleep(0.75)
             if dodge in range(battle.temp_stats['evad'], 250):
-                dealt = self.monst_magic(var)
+                dealt = magic.eval_element(
+                    p_elem=battle.player.element,
+                    m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
                 player.hp -= dealt
                 sounds.enemy_hit.play()
                 print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
@@ -158,43 +163,56 @@ class Monster:
         self.name = random.choice(monster_type[position['reg']])
         modifiers = [
             'Slow', 'Fast',
-            'Powerful', 'Weak',
+            'Powerful', 'Ineffective',
             'Nimble', 'Clumsy',
             'Armored', 'Broken',
-            'Mystic', 'Foolish'
+            'Mystic', 'Foolish',
+            'Strong', 'Weak', ''
         ]
         modifier = random.choice(modifiers)
+
         if modifier == 'Slow':  # Very-low speed, below-average speed
             self.spd -= 3
             self.evad -= 1
-        if modifier == 'Fast':  # Very-high speed, above-average speed
+        elif modifier == 'Fast':  # Very-high speed, above-average speed
             self.spd += 3
             self.evad += 1
-        if modifier == 'Powerful':  # High attack stats
-            self.attk += 2
-            self.m_attk += 2
-        if modifier == 'Weak':  # Low attack stats
-            self.attk -= 2
-            self.m_attk -= 2
-        if modifier == 'Nimble':  # Very-high evasion, above-average speed
+        elif modifier == 'Nimble':  # Very-high evasion, above-average speed
             self.evad += 3
             self.spd += 1
-        if modifier == 'Clumsy':  # Very-low evasion, below-average speed
+        elif modifier == 'Clumsy':  # Very-low evasion, below-average speed
             self.evad -= 3
             self.spd -= 1
-        if modifier == 'Armored':  # High defense stats
+        elif modifier == 'Powerful':  # High attack stats
+            self.attk += 2
+            self.m_attk += 2
+        elif modifier == 'Ineffective':  # Low attack stats
+            self.attk -= 2
+            self.m_attk -= 2
+        elif modifier == 'Armored':  # High defense stats
             self.dfns += 2
             self.m_dfns += 2
-        if modifier == 'Broken':  # Low defense stats
+        elif modifier == 'Broken':  # Low defense stats
             self.dfns -= 2
             self.m_dfns -= 2
-        if modifier == 'Mystic':  # High magic stats
-            self.m_attk += 2
-            self.m_dfns += 2
-            self.mp += 3
-        if modifier == 'Foolish':  # Low magic stats
-            self.m_attk -= 2
-            self.m_dfns -= 2
+        else:
+            if modifier == 'Strong' and self.m_attk < self.attk and self.m_dfns < self.dfns:
+                # High melee stats
+                self.attk += 2
+                self.dfns += 2
+            elif modifier == 'Weak':  # Low melee stats
+                self.attk -= 2
+                self.dfns -= 2
+            elif modifier == 'Mystic' and self.m_attk > self.attk and self.m_dfns > self.dfns:
+                # High magic stats
+                self.m_attk += 2
+                self.m_dfns += 2
+                self.mp += 3
+            elif modifier == 'Foolish':  # Low magic stats
+                self.m_attk -= 2
+                self.m_dfns -= 2
+            else:
+                modifier = ''
 
         if position['reg'] == 'Tundra':
             self.element = 'ice'
@@ -212,7 +230,7 @@ class Monster:
             self.element = 'death'
         else:
             self.element = 'none'
-        self.name = ' '.join([modifier, self.name])
+        self.name = ' '.join([modifier, self.name]) if modifier else self.name
 
 
 def spawn_monster():

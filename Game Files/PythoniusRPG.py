@@ -1,5 +1,5 @@
-# Pythonius; v0.4.6 Alpha
-game_version = 'v0.4.6'
+# Pythonius; v0.4.7 Alpha
+game_version = 'v0.4.7'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -97,7 +97,7 @@ import logging
 # Log everything, and send it to stderr.
 logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
 
-logging.debug("An exception was raised!")
+logging.debug("Game run")
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
@@ -133,7 +133,7 @@ sound_vol = 1.0
 class PlayerCharacter:  # The Player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns,
                  spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,
-                 class_=''):
+                 class_='', element='none'):
         self.name = name  # Name
         self.hp = hp  # Health
         self.mp = mp  # Mana Points
@@ -149,6 +149,7 @@ class PlayerCharacter:  # The Player
         self.ext_gol = ext_gol  # Extra Gold Pieces
         self.ext_exp = ext_exp  # Extra Experience
         self.class_ = class_  # Player Class
+        self.element = element
         self.current_pet = ''  # Current Pet
 
     def player_damage(self, var):  # The formula for the player dealing damage
@@ -329,39 +330,42 @@ Input letter: """)
 
     def player_info(self):
         print("-{0}'s Stats-".format(self.name))
-        time.sleep(0.40)
-        print('Level: {0} | Class: {1}'.format(self.lvl, self.class_.title()))
-        time.sleep(0.40)
+        time.sleep(0.4)
+        print('Level: {0} | Class: {1} | Element: {2}'.format(self.lvl, self.class_.title(),
+                                                              self.element.title()))
+        time.sleep(0.4)
         print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
                                                  self.mp, static['mp_p']))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
-        time.sleep(0.45)
+        time.sleep(0.4)
         print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
             static['int'], static['str'],
             static['con'], static['dex'],
             static['luc']))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
                                                                   static['r_xp'],
                                                                   static['gp']))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print()
         print('-Equipped Items-')
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('Weapon: {0}'.format(str(inv_system.equipped['weapon'])))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('Armor:')
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('  Head: {0}'.format(str(inv_system.equipped['head'])))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('  Body: {0}'.format(str(inv_system.equipped['body'])))
-        time.sleep(0.40)
+        time.sleep(0.4)
         print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
+        time.sleep(0.4)
+        print('-'*25)
         input('Press Enter/Return ')
 
 
@@ -596,6 +600,8 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
     import npcs
     try:  # Run the game
         main()
+    except SystemExit:  # Don't log this error!
+        pass
     except:  # If an exception is raised and not caught, log the error message.
-        logging.exception('Got exception of main handler.')
+        logging.exception('Got exception of main handler:')
         raise
