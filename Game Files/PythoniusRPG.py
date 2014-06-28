@@ -1,5 +1,5 @@
-# Pythonius; v0.4.7 Alpha
-game_version = 'v0.4.7'
+# Pythonius; v0.4.8 Alpha
+game_version = 'v0.4.8'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -175,7 +175,7 @@ class PlayerCharacter:  # The Player
                     continue
                 if y_n.startswith('y'):
                     return self.name
-                elif y_n in ['no', 'n', 'nope']:
+                elif y_n.startswith('n'):
                     break
 
     def choose_class(self):
@@ -203,7 +203,7 @@ Warrior, Mage, or Rogue: '.format(self.name))
                     continue
                 if y_n.startswith('y'):
                     return class_
-                elif y_n in ['no', 'n', 'nope']:
+                elif y_n.startswith('n'):
                     break
 
     def level_up(self):
@@ -274,7 +274,7 @@ Input letter: """)
                     skill = skill.lower()
                 except AttributeError:
                     continue
-                if skill[0] in ['i', 's', 'c', 'd', 'l']:
+                if any(map(skill.startswith, ['i', 's', 'c', 'd', 'l'])):
                     if skill.startswith('i'):
                         vis_skill = 'Intelligence'
                     elif skill.startswith('s'):

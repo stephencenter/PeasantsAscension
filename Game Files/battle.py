@@ -17,6 +17,7 @@ import sys
 import random
 import time
 import math
+import re
 from copy import copy as _c
 
 import pygame
@@ -32,6 +33,8 @@ import sounds
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
+
+only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
 
 monster = ''
 player = ''
@@ -68,7 +71,9 @@ def update_stats():  # Forces stats to return to normal when battle is finished
 
 def player_choice():
     while True:
-        move = input('1: Attack; 2: Use Magic; 3: Wait; 4. Use Items; 5: Run | Input #(1-5): ')
+        move = only_num(
+            input('1: Attack; 2: Use Magic; 3: Wait; 4. Use Items; 5: Run | Input #(1-5): ')
+        )
         if move.isdigit() and int(move) in range(1, 6):
         # Only return if "move" refers to a valid move
             return move

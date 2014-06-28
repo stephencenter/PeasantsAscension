@@ -145,9 +145,12 @@ def movement_system():
                         break
             elif direction.startswith('t'):
                 inv_system.tools_menu()
-                break
+                if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+                    print('-'*25)
             elif direction.startswith('r'):
                 rest()
+                if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+                    print('-'*25)
 
 def out_of_bounds():
     print('-'*25)
@@ -213,7 +216,8 @@ def rest():
     print('-'*25)
     if player.hp == static['hp_p'] and player.mp == static['mp_p']:
         print('You feel fine, and decide not to rest.')
-        print('-'*25)
+        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+            print('-'*25)
         return
     print('You set up camp and begin to rest.')
     time.sleep(1)
@@ -230,4 +234,5 @@ def rest():
         battle.battle_system(ambush=True)
     else:
         print('You rested well and decide to continue on your way.')
-        print('-'*25)
+        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+            print('-'*25)

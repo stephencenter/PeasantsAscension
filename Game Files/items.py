@@ -205,7 +205,8 @@ class MagicCompass(Item):
         print('-'*25)
         print('The closest town to you is {0} at ~{1} degrees away.'.format(
             distance[0], distance[1]))
-        print('-'*25)
+        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+            print('-'*25)
 
 
 class DiviningRod(Item):
@@ -223,7 +224,8 @@ class DiviningRod(Item):
         print('The closest gem to you is {0} {1} at ~{2} degrees away.'.format(
             'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
             else 'a', distance[0], distance[1]))
-        print('-'*25)
+        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+            print('-'*25)
 
 
 class Valuable(Item):
@@ -252,7 +254,8 @@ class Shovel(Item):
                 inventory['misc'].append(gem)
                 return
         print('You were unable to uncover anything.')
-        print('-'*25)
+        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+            print('-'*25)
 
 
 

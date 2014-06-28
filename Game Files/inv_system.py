@@ -366,7 +366,8 @@ def tools_menu():
     print('-'*25)
     if not available_tools:
         print('You have no available tools to use...')
-        print('-'*25)
+        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+            print('-'*25)
         return
     while spam:
         print(''.join(['Tools', ': \n      ', '\n      '.join(
