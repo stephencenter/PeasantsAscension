@@ -145,11 +145,11 @@ def movement_system():
                         break
             elif direction.startswith('t'):
                 inv_system.tools_menu()
-                if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+                if towns.search_towns(main.position['x'], main.position['y'], enter=False):
                     print('-'*25)
             elif direction.startswith('r'):
                 rest()
-                if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+                if towns.search_towns(main.position['x'], main.position['y'], enter=False):
                     print('-'*25)
 
 def out_of_bounds():
