@@ -83,7 +83,10 @@ class Conversation:
     def __str__(self):
         # Returns a unique string based on the content of the conversation.
         # This is used as a dictionary key to save information about conversations.
-        return ''.join([x[0:6] for x in self.sentences])
+        try:
+            return ''.join([x[0:12] for x in self.sentences])[::-1]
+        except IndexError:
+            return ''.join([x[::-1] for x in self.sentences])[::-1]
 
 
 class Quest(Conversation):
@@ -162,6 +165,7 @@ philliard_phrase_2.after_talking = pp2_at
 
 philliard = NPC('Philliard', [philliard_phrase_1, philliard_phrase_2])
 
+
 # Name: Alfred -- Town: Nearton
 alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives south-east",
                                 "of this very town. I'd be careful around there if I were you."],
@@ -202,12 +206,14 @@ alfred_quest_1.upon_completing = alfqst_uc1
 alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
                         alfred_quest_1, alfred_phrase_3])
 
+
 # Name: Wesley -- Town: Southford
 wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
                                 "to be stronger the farther from 0'N, 0'E that you travel.",
                                 "However, monsters there also give better loot. Be careful."
                                ], active=True)
 wesley = NPC('Wesley', [wesley_phrase_1])
+
 
 # Name: Stewson -- Town: Overshire
 stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
@@ -275,11 +281,13 @@ stewson_quest_1.upon_completing = stwqst_uc1
 
 stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
 
+
 # Name: Ethos -- Town: Charsulville
 ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
                                'in his inventory. If you get lost, check there.'], active=True)
 
 ethos = NPC('Ethos', [ethos_phrase_1])
+
 
 # Name: Joseph -- Town: Charsulville
 joseph_phrase_1 = Conversation(['Greetings, young adventurer. Welcome to Charsulville.'
@@ -330,6 +338,7 @@ joseph_quest_1.upon_completing = jphqst_uc1
 
 joseph = NPC('Joseph', [joseph_phrase_1, joseph_quest_1, joseph_phrase_2])
 
+
 # Name: Seriph -- Town: Fort Sigil
 seriph_phrase_1 = Conversation(['...You actually came to this town? And of your own',
                                 'free will, too?! I was going to say that you were either',
@@ -337,6 +346,7 @@ seriph_phrase_1 = Conversation(['...You actually came to this town? And of your 
                                 'is far more likely.'], active=True)
 
 seriph = NPC('Seriph', [seriph_phrase_1])
+
 
 # Name: Kyle -- Town: Tripton
 kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village Elder.",
@@ -346,7 +356,36 @@ kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village
                               "easy to miss! I don't care if we have to go to war",
                               "with those dingbats, I'm not leaving this spot!"], active=True)
 
-kyle = NPC('Kyle', [kyle_phrase_1])
+kyle_phrase_2 = Conversation(["Adventurer, we have heard reports that a mighty",
+                              "beast is in our land! None of our men are willing",
+                              "to risk their lives to stop it. We are doomed."])
+
+kyle_phrase_3 = Conversation(["The mighty monster has fallen? Thank god!",
+                              "What's this you say? The Fallvillians defeated it?",
+                              "We owe them our lives. Perhaps we should think",
+                              "about negotiating peace..."])
+
+
+def kyle_p3_at():
+    # Stands for "Kyle Phrase 3: After Talking"
+    global kyle_phrase_3
+    global kyle_phrase_4
+    global alden_quest_1
+    global alden_phrase_2
+
+    kyle_phrase_3.active = False
+    kyle_phrase_4.active = True
+    if krystal_phrase_4.active:
+        alden_quest_1.finished = True
+        alden_phrase_2.active = False
+
+
+kyle_phrase_3.after_talking = kyle_p3_at
+
+kyle_phrase_4 = Conversation(["Welcome, adventurer, to the town of Tripton!"])
+
+kyle = NPC('Kyle', [kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4])
+
 
 # Name: Krystal -- Town: Fallville
 krystal_phrase_1 = Conversation(["Hello, I am the Village Elder of Fallville. We don't take",
@@ -355,14 +394,50 @@ krystal_phrase_1 = Conversation(["Hello, I am the Village Elder of Fallville. We
                                  "silly Triptonians blame us for their poor eyesight.",
                                  "It's all their fault, and they know it!"], active=True)
 
-krystal = NPC('Krystal', [krystal_phrase_1])
+krystal_phrase_2 = Conversation(["AHHH! Help! There's a m-m-monster out there!",
+                                 "Someone go kill it! AHHH!"])
+
+krystal_phrase_3 = Conversation(["What, the monster is dead? Thank goodness!",
+                                 "Oh, so the Triptonians killed it? Well then... I",
+                                 "guess that we owe them our gratitude. Perhaps we",
+                                 "should think about negotiating peace..."])
+
+
+def krys_p3_at():
+    # Stands for "Krystal Phrase 3: After Talking"
+    global krystal_phrase_3
+    global krystal_phrase_4
+    global alden_quest_1
+    global alden_phrase_2
+
+    krystal_phrase_3.active = False
+    krystal_phrase_4.active = True
+    if kyle_phrase_4.active:
+        alden_quest_1.finished = True
+        alden_phrase_2.active = False
+
+
+krystal_phrase_3.after_talking = krys_p3_at
+
+krystal_phrase_4 = Conversation(["Greetings, hero! Welcome to Fallville."])
+
+krystal = NPC('Krystal', [krystal_phrase_1, krystal_phrase_2,
+                          krystal_phrase_3, krystal_phrase_4])
+
 
 # Name: Frederick -- Town: Fallville
 frederick_phrase_1 = Conversation(["I hear that there is a wise sage that has taken up",
                                    "residence in a small cottage southwest of this town.",
-                                   "I would go and talk to him, but I have things to do."])
+                                   "I would go and talk to him, but I have things to do."],
+                                  active=True)
 
-frederick = NPC('Frederick', [frederick_phrase_1])
+frederick_phrase_2 = Conversation(["There's a monster outside of town, and a big",
+                                   "one at that! I hope it goes away..."])
+
+frederick_phrase_3 = Conversation(["Thank heavens, the mighty beast has fallen."])
+
+frederick = NPC('Frederick', [frederick_phrase_1, frederick_phrase_2, frederick_phrase_3])
+
 
 # Name: Alden -- Town: Small Cottage (1)
 alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of the",
@@ -385,16 +460,58 @@ alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of t
                        "of the monster's defeat. I thank you ever so much for helping",
                        "us, hero."], active=True)
 
-alden = NPC('Alden', [alden_quest_1])
+
+def aldqst_us1():
+    global alden_phrase_1
+    global krystal_phrase_1
+    global kyle_phrase_1
+    global krystal_phrase_2
+    global kyle_phrase_2
+    global frederick_phrase_1
+    global frederick_phrase_2
+
+    alden_phrase_1.active = True
+    krystal_phrase_1.active = False
+    kyle_phrase_1.active = False
+    krystal_phrase_2.active = True
+    kyle_phrase_2.active = True
+    frederick_phrase_1.active = False
+    frederick_phrase_2.active = True
+
+    bosses.terr_tarrant.active = True
+
+
+def aldqst_uc1():
+    global alden_phrase_3
+
+    alden_phrase_3.active = True
+
+
+alden_quest_1.upon_starting = aldqst_us1
+alden_quest_1.upon_completing = aldqst_uc1
+
+alden_phrase_1 = Conversation(["I've summoned the mighty beast. Now hurry up",
+                               "and dispose of it before it causes any damage."])
+
+alden_phrase_2 = Conversation(["You've defeated him? Good, now go talk to the village",
+                               "elders! Good luck!"])
+
+alden_phrase_3 = Conversation(["Thanks again, hero. You've saved those towns",
+                               "a lot of trouble."])
+
+alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3])
+
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
-    kyle_phrase_1, krystal_phrase_1, frederick_phrase_1,
+    kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4,
+    krystal_phrase_1, krystal_phrase_2, krystal_phrase_3, krystal_phrase_4,
+    frederick_phrase_1, frederick_phrase_2, frederick_phrase_3,
     joseph_phrase_1, joseph_phrase_2, joseph_quest_1,
-    alden_quest_1
+    alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3
 ]
 
 

@@ -1,5 +1,5 @@
-# Pythonius; v0.4.9 Alpha
-game_version = 'v0.4.9'
+# Pythonius; v0.5.0 Alpha
+game_version = 'v0.5.0'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -585,8 +585,9 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
 
 
 def main():
-    ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
-    # Set the console title to be "PythoniusRPG [game version]"
+    if os.name == 'nt':  # This will raise an error on non-Windows systems
+        ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
+        # Set the console title to be "PythoniusRPG [game version]" (Windows Only)
 
     set_saves()  # Set the save file locations
     set_volume()  # Set the sound & music volume

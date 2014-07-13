@@ -69,7 +69,7 @@ def check_bosses(x, y):
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in ['yes', 'y']:
+                if y_n.startswith('y'):
                     monsters.monster = boss
                     monsters.setup_vars()
                     battle.setup_vars()
@@ -77,7 +77,7 @@ def check_bosses(x, y):
                     print('-'*25)
                     battle.battle_system(is_boss=True)
                     return True
-                elif y_n in ['no', 'n']:
+                elif y_n.startswith('n'):
                     return True
                 else:
                     continue
@@ -109,7 +109,7 @@ def setup_vars():
 
 
 # Boss: Master Slime -- Position: 0'N, 1'E
-master_slime = Boss('Master Slime', 35, 4, 8, 3, 5, 0, 3, 3, 5, 1, 0, [], 35, 35, active=False)
+master_slime = Boss('Master Slime', 45, 4, 8, 3, 5, 0, 3, 3, 5, 1, 0, [], 35, 35, active=False)
 
 
 def mastslim_ud():
@@ -121,10 +121,10 @@ def mastslim_ud():
 master_slime.upon_defeating = mastslim_ud
 
 # Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
-whisp_goblin = Boss('Whispering Goblin', 30, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)
+whisp_goblin = Boss('Whispering Goblin', 35, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
-menac_phantom = Boss('Menacing Phantom', 50, 25, 2, 4, 12, 8, 5, 6, 10, -12,  8, [
+menac_phantom = Boss('Menacing Phantom', 60, 25, 2, 4, 12, 8, 5, 6, 9, -12,  8, [
     items.spect_wand], 75, 75, active=False)
 
 
@@ -136,5 +136,21 @@ def menacphan_ud():
 
 menac_phantom.upon_defeating = menacphan_ud
 
-boss_list = [whisp_goblin, master_slime, menac_phantom]
+# Boss: Terrible Tarrantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
+terr_tarrant = Boss('Terrible Tarrantuloid', 100, 20, 15, 15, 5, 5, 18, 6, 12, -11, -23, [],
+                    100, 100)
+
+
+def terrtarr_ud():
+    npcs.krystal_phrase_2.active = False
+    npcs.krystal_phrase_3.active = True
+    npcs.kyle_phrase_2.active = False
+    npcs.kyle_phrase_3.active = True
+    npcs.alden_phrase_1.active = False
+    npcs.alden_phrase_2.active = True
+
+
+terr_tarrant.upon_defeating = terrtarr_ud
+
+boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarrant]
 defeated_bosses = []  # Make sure you can only defeat the boss one time

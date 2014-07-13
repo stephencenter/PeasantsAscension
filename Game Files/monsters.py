@@ -110,7 +110,7 @@ class Monster:
         # This is the Enemy's AI.
 
         print('\n-Enemy Turn-')
-        if self.hp <= int(static['hp_m']/4) and self.mp >= 5:
+        if self.hp <= int(static['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
             # Magic heal
             sounds.magic_healing.play()
             heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)

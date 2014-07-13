@@ -21,6 +21,7 @@ import pygame
 
 import inv_system
 import world
+import npcs
 
 
 if __name__ == "__main__":
@@ -195,7 +196,9 @@ the coordinates page of your inventory.".format(self.name))
             except AttributeError:
                 continue
             if b_s.startswith('b'):
-                while True:
+                print('-'*25)
+                fizz = True
+                while fizz:
                     print('''"Well, here's what I have in my stock: "''')
                     for num, item in enumerate(stock):
                         print(''.join(
@@ -213,7 +216,9 @@ the coordinates page of your inventory.".format(self.name))
                             except AttributeError:
                                 continue
                             if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                                return
+                                print('-'*25)
+                                fizz = False
+                                break
                             else:
                                 continue
                         try:
@@ -249,6 +254,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                                 break
                         break
             elif b_s.startswith('s'):
+                print('-'*25)
                 spam = True
                 while spam:
                     print("""Categories:
@@ -263,6 +269,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                         except AttributeError:
                             pass
                         if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                            print('-'*25)
                             spam = False
                             break
                         elif cat == '1':
@@ -335,7 +342,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                 pygame.mixer.music.set_volume(main.music_vol)
                 break
 
-import npcs
+
 # List of Towns:
 town1 = Town('Nearton', """Nearton: a small village in the central region of t\
 he Forest.

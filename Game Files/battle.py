@@ -224,24 +224,40 @@ def after_battle(is_boss):  # Assess the results of the battle
             print('Despite your best efforts, the {0} has bested you. You are dead.'.format(
                 monster.name))
             print('-'*25)
+            spam = True
             while True:
-                y_n = input('Do you wish to continue playing? | Yes or No: ')
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+                if spam:
+                    y_n = input('Do you wish to continue playing? | Yes or No: ')
+                    try:
+                        y_n = y_n.lower()
+                    except AttributeError:
+                        continue
+                else:
+                    y_n = 'y'
                 if y_n.startswith('y'):
                     # If you die, you return to the last town visited or 0'N, 0'E
                     # if you haven't been to a town yet.
                     world.back_to_coords()
-                    player.hp = int(static['hp_p']/2)
-                    player.mp = int(static['mp_p']/2)
+                    player.hp = int(static['hp_p']/1.5)
+                    player.mp = int(static['mp_p']/1.5)
                     pygame.mixer.music.load(position['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
                     return 'dead'
                 elif y_n.startswith('n'):
-                    sys.exit()
+                    print('Are you sure you want to quit? You will lose all unsaved progress.')
+                    while True:
+                        y_n = input("Quit? | Yes or No: ")
+                        try:
+                            y_n = y_n.lower()
+                        except AttributeError:
+                            continue
+                        if y_n.startswith('y'):
+                            pygame.quit()
+                            sys.exit()
+                        elif y_n.startswith('n'):
+                            spam = False
+                            break
 
         elif monster.hp <= 0 < player.hp:
             # If the player wins...
