@@ -34,6 +34,8 @@ import sounds
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
+# Creates a lambda function that strips all non-numeric characters
+# This fixes some (possible) problems later on
 only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
 
 monster = ''
@@ -179,8 +181,8 @@ def player_turn(var, dodge, move):
                 sounds.sword_slash.play()
                 print('You begin to fiercely attack the {0} using your {1}...'.format(
                     monster.name, str(inv_system.equipped['weapon'])))
-            else:
-                sounds.aim_weapons.play()
+            else:  # Ranged weapons aren't swung, so play a different sound effect
+                sounds.aim_weapon.play()
                 print('You aim carefully at the {0} using your {1}...'.format(
                     monster.name, str(inv_system.equipped['weapon'])))
             time.sleep(0.75)

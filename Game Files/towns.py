@@ -63,7 +63,10 @@ class Town:
                     print('-'*25)
                 elif choice == '2':
                     print('-'*25)
-                    self.inside_town()
+                    if self.gen_store or self.inn:
+                        self.inside_town()
+                    else:
+                        print("There don't appear to be any unlocked buildings to enter.")
                     print('-'*25)
                 elif choice == '3':
                     print('-'*25)
@@ -380,11 +383,16 @@ town7 = Town('Fallville', """Fallville: When the town of Tripton was being built
 the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
-two towns, particularly between the village leaders.""", [npcs.krystal],
+two towns, particularly between the village leaders.""", [npcs.krystal, npcs.frederick],
              -11, -24, gs_level=2)
 
-town_list = [town1, town2, town3, town4, town5, town6, town7]
+small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
+this area only has a small cottage. An old man is tending to his
+flock in a small pasture behind the building. There doesn't appear
+be any other people near here.""", [npcs.alden],
+                    -12, -26, inn=False, gen_store=False)
 
+town_list = [town1, town2, town3, town4, town5, town6, town7, small_house1]
 
 def search_towns(pos_x, pos_y, enter=True):
     # Check to see if there is a

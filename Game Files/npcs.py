@@ -126,8 +126,10 @@ class Quest(Conversation):
 
     def completion(self):
         self.upon_completing()
+        print("Quest Complete!")
         print("You've received {0} XP and {1} GP for completing this quest.".format(
             self.reward[0], self.reward[1]))
+        input('Press Enter/Return')
         main.player.exp += self.reward[0]
         main.static['gp'] += self.reward[1]
         main.player.level_up()
@@ -275,9 +277,7 @@ stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, 
 
 # Name: Ethos -- Town: Charsulville
 ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
-                               'in his inventory. If you get lost, check there.', '...',
-                               'Raisins!'], active=True)
-# The "Raisins!" is a Game Grumps reference by the way
+                               'in his inventory. If you get lost, check there.'], active=True)
 
 ethos = NPC('Ethos', [ethos_phrase_1])
 
@@ -339,7 +339,9 @@ seriph_phrase_1 = Conversation(['...You actually came to this town? And of your 
 seriph = NPC('Seriph', [seriph_phrase_1])
 
 # Name: Kyle -- Town: Tripton
-kyle_phrase_1 = Conversation(["Those stupid Fallvillians need to get away from our",
+kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village Elder.",
+                              "You aren't from Fallville, right? Good.",
+                              "Those stupid Fallvillians need to get away from our",
                               "land! It's they're fault they made a town that was so",
                               "easy to miss! I don't care if we have to go to war",
                               "with those dingbats, I'm not leaving this spot!"], active=True)
@@ -347,21 +349,52 @@ kyle_phrase_1 = Conversation(["Those stupid Fallvillians need to get away from o
 kyle = NPC('Kyle', [kyle_phrase_1])
 
 # Name: Krystal -- Town: Fallville
-krystal_phrase_1 = Conversation(["What I don't understand is that the silly",
-                                 "Triptonians blame us for their poor eyesight. It's all",
-                                 "their fault, and they know it! Besides, everything would be",
-                                 "more peaceful if we'd just put this whole mistake of",
-                                 "theirs behind us and get along."], active=True)
+krystal_phrase_1 = Conversation(["Hello, I am the Village Elder of Fallville. We don't take",
+                                 "kindly to Triptonians around here, so tell us if",
+                                 "you see any. What I don't understand is that the",
+                                 "silly Triptonians blame us for their poor eyesight.",
+                                 "It's all their fault, and they know it!"], active=True)
 
 krystal = NPC('Krystal', [krystal_phrase_1])
+
+# Name: Frederick -- Town: Fallville
+frederick_phrase_1 = Conversation(["I hear that there is a wise sage that has taken up",
+                                   "residence in a small cottage southwest of this town.",
+                                   "I would go and talk to him, but I have things to do."])
+
+frederick = NPC('Frederick', [frederick_phrase_1])
+
+# Name: Alden -- Town: Small Cottage (1)
+alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of the",
+                       "confict going on between the villages of Fallville and",
+                       "Tripton. I have an idea on how to settle this foul feud,",
+                       "but alas, I cannot perform it due to my old and fragile",
+                       "state. You, however, appear to be a very young and capable",
+                       "adventurer. Do you perhaps think that you could help me?",
+                       "I need you to go defend the towns of Fallville and Tripton",
+                       "from a terrible monster. This is a monster I will be summoning,",
+                       "of course. Afterwards, spread word in the two towns",
+                       "that an anonymous warrior from the opposite town defeated it!",
+                       "This should bring an end to their constant bickering.",
+                       "I will summon the monster at coordinates -23'S, -11'W."],
+                      "Stop the Strife",
+                      ["Defeat the monster at location -23'S, -11'W and then inform",
+                       "The village elders at Tripton and Fallville of the opposite",
+                       "village's bravery."], 'Alden', [175, 200],
+                      ["Welcome back, brave adventurer. I have already received word",
+                       "of the monster's defeat. I thank you ever so much for helping",
+                       "us, hero."], active=True)
+
+alden = NPC('Alden', [alden_quest_1])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
-    kyle_phrase_1, krystal_phrase_1,
-    joseph_phrase_1, joseph_phrase_2, joseph_quest_1
+    kyle_phrase_1, krystal_phrase_1, frederick_phrase_1,
+    joseph_phrase_1, joseph_phrase_2, joseph_quest_1,
+    alden_quest_1
 ]
 
 

@@ -130,7 +130,8 @@ def pick_category():
                 print('-'*25)
 
 
-def pick_item(cat, vis_cat, gs=False):
+def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in your inventory
+    # If "gs == True" that means that items are being sold, and not used.
     while cat == 'quests' or inventory[cat]:
         if cat == 'quests':
             view_quests()
@@ -206,12 +207,15 @@ def pick_action(cat, item):
             use_equip = 'Use'
         action = input('{0} | 1: {1}, 2: Read Desc, 3: Drop, 4: Cancel | Input #(1-4): '.format(
             str(item), use_equip))
+
         if action == '1':
             item.use_item()
+
         elif action == '2':
             print('-'*25)
             print(str(item) + ': ' + item.desc)
             print('-'*25)
+
         elif action == '3':
             if item.imp:
                 print('You cannot dispose of quest-related items.')
@@ -234,6 +238,7 @@ def pick_action(cat, item):
                     elif y_n.startswith('n'):
                         print('You decide to keep the {0} with you.'.format(str(item)))
                         break
+
         elif action == '4':
             return
 
@@ -249,7 +254,7 @@ Input letter (or type "back"): ')
         except AttributeError:
             continue
 
-        if choice.startswith('f'):
+        if choice.startswith('f'):  # Finished Quests
             print('-'*25)
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
                         and x.finished]
@@ -269,7 +274,7 @@ Input letter (or type "back"): ')
                                 if number.lower() in [
                                     'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
                                 ]:
-                                    fizz = False
+                                    fizz = False  # Break the loop twice
                                     break
                                 else:
                                     continue
@@ -288,7 +293,7 @@ Input letter (or type "back"): ')
                 input('You have no finished quests! (Press Enter/Return) ')
             print('-'*25)
 
-        elif choice.startswith('a'):
+        elif choice.startswith('a'):  # Active Quest
             print('-'*25)
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
                         and not x.finished and x.started]
@@ -308,7 +313,7 @@ Input letter (or type "back"): ')
                                 if number.lower() in [
                                     'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
                                 ]:
-                                    fizz = False
+                                    fizz = False  # Break the loop twice
                                     break
                                 else:
                                     continue
@@ -330,7 +335,7 @@ Input letter (or type "back"): ')
             return
 
 
-def sell_item(cat, item):
+def sell_item(cat, item):  # Trade player-owned objects for money (GP)
     print('-'*25)
     print(item.desc)
     print('-'*25)
@@ -353,7 +358,7 @@ def sell_item(cat, item):
             return
 
 
-def tools_menu():
+def tools_menu():  # Display a set of usable tools on the world map
     tool_names = ['Divining Rod', 'Shovel', 'Magical Compass']
     available_tools = []
     spam = True
@@ -382,11 +387,12 @@ def tools_menu():
                     if tool.lower() in [
                         'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
                     ]:
-                        spam = False
-                        print('-'*25) if not towns.search_towns(
+                        spam = False  # Essentially breaks the loop twice
+                        if not towns.search_towns(
                             main.position['x'],
                             main.position['y'], enter=False
-                        ) else ''
+                        ):
+                            print('-'*25)
                         break
                     else:
                         continue
