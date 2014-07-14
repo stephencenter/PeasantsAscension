@@ -483,7 +483,9 @@ def aldqst_us1():
 
 def aldqst_uc1():
     global alden_phrase_3
+    global alden_quest_1
 
+    alden_quest_1.active = False
     alden_phrase_3.active = True
 
 

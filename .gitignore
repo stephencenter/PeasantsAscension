@@ -27,3 +27,14 @@ Game Files/Save Files/spellbook.json
 Game Files/Save Files/position.json
 Game Files/Save Files/acquired_gems.json
 error_log.out
+Game Files/__pycache__/battle.cpython-34.pyc
+Game Files/__pycache__/bosses.cpython-34.pyc
+Game Files/__pycache__/inv_system.cpython-34.pyc
+Game Files/__pycache__/items.cpython-34.pyc
+Game Files/__pycache__/magic.cpython-34.pyc
+Game Files/__pycache__/monsters.cpython-34.pyc
+Game Files/__pycache__/npcs.cpython-34.pyc
+Game Files/__pycache__/pets.cpython-34.pyc
+Game Files/__pycache__/sounds.cpython-34.pyc
+Game Files/__pycache__/towns.cpython-34.pyc
+Game Files/__pycache__/world.cpython-34.pyc
