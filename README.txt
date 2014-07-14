@@ -1,5 +1,4 @@
-     
-  ____        _   _                 _
+____        _   _                 _
  |  _ \ _   _| |_| |__   ___  _ __ (_)_   _ ___
  | |_) | | | | __| '_ \ / _ \| '_ \| | | | / __|
  |  __/| |_| | |_| | | | (_) | | | | | |_| \__ \
@@ -35,7 +34,7 @@ How to play:
 		Pythonius RPG is very simple. After creating a character,
 		you are placed on the world map with minimal equipment. 
 		To use a command, type in the command and then hit 
-		Enter (Windows) or Return (Mac OSX) to send it. 
+		Enter (Windows) or Return (Mac OS X) to send it. 
 		Available commands are (almost) always listed on the 
 		screen, and can often be shortened to just the first 
 		letter (i.e. "x" or "e" instead of "exit"). Sometimes,
