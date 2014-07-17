@@ -1,5 +1,7 @@
-# Pythonius; v0.5.0 Alpha
-game_version = 'v0.5.0'
+#!/usr/bin/env python
+
+#  Pythonius; v0.5.1 Alpha
+game_version = 'v0.5.1'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
