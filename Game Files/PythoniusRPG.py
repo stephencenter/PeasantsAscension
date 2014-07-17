@@ -603,7 +603,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
     import npcs
     try:  # Run the game
         main()
-    except SystemExit:  # Don't log this error!
+    except (SystemExit, KeyboardInterrupt):  # Don't log these errors!
         pass
     except:  # If an exception is raised and not caught, log the error message.
         logging.exception('Got exception of main handler:')
