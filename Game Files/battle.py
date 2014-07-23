@@ -207,7 +207,10 @@ def player_turn(var, dodge, move):
 
         else:
             return False
-        player.current_pet.use_ability() if player.current_pet else ''
+        if player.current_pet:
+            input('\nPress Enter/Return')
+            print("\n-Pet Turn-")
+            player.current_pet.use_ability()
         return True
 
 

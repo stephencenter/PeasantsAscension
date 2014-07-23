@@ -15,6 +15,7 @@
 
 import sys
 import json
+import time
 from copy import copy as _c
 
 import npcs
@@ -33,21 +34,53 @@ equipped = {'weapon': '', 'head': _c(i.straw_hat),
             'body': _c(i.cotton_shirt),
             'legs': _c(i.sunday_trousers)}
 
-gs_stock = [[i.s_potion, i.s_potion, i.m_potion, i.l_potion, i.l_potion, i.x_potion],
-            [i.s_elixir, i.s_elixir, i.m_elixir, i.l_elixir, i.l_elixir, i.x_elixir],
-            [i.s_rejuv, i.s_rejuv, i.m_rejuv, i.m_rejuv, i.l_rejuv, i.l_rejuv],
-            [i.cpr_swd, i.en_cpr_swd, i.bnz_spr, i.en_bnz_spr, i.irn_axe, i.en_irn_axe],
-            [i.oak_stf, i.en_oak_stf, i.arc_spb, i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],
-            [i.sht_bow, i.en_sht_bow, i.lng_bow, i.en_lng_bow, i.myth_sb, i.en_myth_sb],
-            [i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm, i.en_stl_hlm, i.ori_hlm],
-            [i.bnz_cst, i.en_bnz_cst, i.stl_cst, i.en_stl_cst, i.ori_cst],
-            [i.bnz_leg, i.en_bnz_leg, i.stl_leg, i.en_stl_leg, i.ori_leg],
-            [i.wiz_hat, i.en_wiz_hat, i.myst_hat, i.en_myst_hat, i.elem_hat],
-            [i.wiz_rob, i.en_wiz_rob, i.myst_rob, i.en_myst_rob, i.elem_rob],
-            [i.wiz_gar, i.en_wiz_gar, i.myst_gar, i.en_myst_gar, i.elem_gar],
-            [i.lth_cap, i.en_lth_cap, i.std_cwl, i.en_std_cwl],
-            [i.lth_bdy, i.en_lth_bdy, i.std_bdy, i.en_std_bdy],
-            [i.lth_leg, i.en_lth_leg, i.std_leg, i.en_std_leg]]
+# "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
+# what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
+
+gs_stock = [[i.s_potion, i.s_potion, i.m_potion,
+             i.l_potion, i.l_potion, i.x_potion],  # Health Potions
+
+            [i.s_elixir, i.s_elixir, i.m_elixir,
+             i.l_elixir, i.l_elixir, i.x_elixir],  # Mana Potions
+
+            [i.s_rejuv, i.s_rejuv, i.m_rejuv,
+             i.m_rejuv, i.l_rejuv, i.l_rejuv],  # HP + MP Potions
+
+            [i.cpr_swd, i.en_cpr_swd, i.bnz_spr,
+             i.en_bnz_spr, i.irn_axe, i.en_irn_axe],  # Warrior Weapons
+
+            [i.oak_stf, i.en_oak_stf, i.arc_spb,
+             i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],  # Mage Weapons
+
+            [i.sht_bow, i.en_sht_bow, i.lng_bow,
+             i.en_lng_bow, i.myth_sb, i.en_myth_sb],  # Rogue Weapons
+
+            [i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
+             i.en_stl_hlm, i.ori_hlm],  # Warrior Armor -- Head
+
+            [i.bnz_cst, i.en_bnz_cst, i.stl_cst,
+             i.en_stl_cst, i.ori_cst],  # Warrior Armor -- Body
+
+            [i.bnz_leg, i.en_bnz_leg, i.stl_leg,
+             i.en_stl_leg, i.ori_leg],  # Warrior Armor -- Legs
+
+            [i.wiz_hat, i.en_wiz_hat, i.myst_hat,
+             i.en_myst_hat, i.elem_hat],  # Mage Armor -- Head
+
+            [i.wiz_rob, i.en_wiz_rob, i.myst_rob,
+             i.en_myst_rob, i.elem_rob],  # Mage Armor -- Body
+
+            [i.wiz_gar, i.en_wiz_gar, i.myst_gar,
+             i.en_myst_gar, i.elem_gar],  # Mage Armor -- Legs
+
+            [i.lth_cap, i.en_lth_cap, i.std_cwl,
+             i.en_std_cwl, i.drg_cwl],  # Rogue Armor -- Head
+
+            [i.lth_bdy, i.en_lth_bdy, i.std_bdy,
+             i.en_std_bdy, i.drg_bdy],  # Rogue Armor -- Body
+
+            [i.lth_leg, i.en_lth_leg, i.std_leg,
+             i.en_std_leg, i.drg_leg]]  # Rogue Armor -- Legs
 
 gs_stock = list(gs_stock)
 i.item_setup_vars()
@@ -136,6 +169,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
         if cat == 'quests':
             view_quests()
             return
+
         else:
             if cat in ['armor', 'weapons']:
                 if [x for x in inventory[cat] if not x.equip]:
@@ -144,28 +178,33 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                         print(vis_cat + ': \n      ' + '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
                                 inventory[cat]) if not y.equip]))
+
                     else:
                         print(vis_cat + ': \n      ' + '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
                                 for x, y in enumerate(inventory[cat]) if not y.equip]))
                 else:
                     return
+
             else:
                 print('-'*25)
                 if not gs:
                     print(''.join([vis_cat, ': \n      ', '\n      '.join(
                         ['[' + str(x + 1) + '] ' + str(y)
                             for x, y in enumerate(inventory[cat])])]))
+
                 else:
                     print(''.join([vis_cat, ': \n      ', '\n      '.join(
                         ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
                          for x, y in enumerate(inventory[cat]) if not y.imp])]))
+
             while True:
                 item = input('Input [#] (or type "back"): ')
                 try:
                     item = int(item) - 1
                     if item < 0:
                         continue
+
                 except (TypeError, ValueError):
                     try:
                         item = item.lower()
@@ -175,6 +214,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                         return
                     else:
                         continue
+
                 try:
                     if cat in ['weapons', 'armor']:
                         if gs:
@@ -188,6 +228,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                             item = inventory[cat][item]
                 except IndexError:
                     continue
+
                 if gs:
                     sell_item(cat, item)
                 else:
@@ -205,8 +246,12 @@ def pick_action(cat, item):
                 break
         else:
             use_equip = 'Use'
-        action = input('{0} | 1: {1}, 2: Read Desc, 3: Drop, 4: Cancel | Input #(1-4): '.format(
-            str(item), use_equip))
+        action = input("""What do you want to do with {0} {1}?'
+      [1] {2}
+      [2] Read Description
+      [3] Drop
+Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else 'this',
+                                       str(item), use_equip))
 
         if action == '1':
             item.use_item()
@@ -214,9 +259,11 @@ def pick_action(cat, item):
         elif action == '2':
             print('-'*25)
             print(str(item) + ': ' + item.desc)
+            time.sleep(1)
             print('-'*25)
 
         elif action == '3':
+            print('-'*25)
             if item.imp:
                 print('You cannot dispose of quest-related items.')
             else:
@@ -234,12 +281,15 @@ def pick_action(cat, item):
                             if y.name == item.name:
                                 inventory[cat].remove(y)
                                 break
+                        time.sleep(1)
                         return
                     elif y_n.startswith('n'):
                         print('You decide to keep the {0} with you.'.format(str(item)))
+                        time.sleep(1)
                         break
+            print('-'*25)
 
-        elif action == '4':
+        elif action in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
             return
 
 

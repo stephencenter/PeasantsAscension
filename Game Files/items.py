@@ -527,13 +527,13 @@ en_std_leg = Armor('Enhanced Studded Leggings',
 # Armor -- Warrior -- Pow
 ori_hlm = Armor('Orichalcum Helmet',
                 'A strong helmet smelted from rare mountain copper  (+14 Defense).',
-                320, 110, 4, 'melee', 'head', 'warrior')
+                320, 110, 14, 'melee', 'head', 'warrior')
 ori_cst = Armor('Orichalcum Chestplate',
                 'Strong chest armor smelted from rare mountain copper  (+15 Defense).',
-                340, 120, 5, 'melee', 'body', 'warrior')
+                340, 120, 15, 'melee', 'body', 'warrior')
 ori_leg = Armor('Orichalcum Leggings',
                 'Strong leg armor smelted from rare mountain copper (+14 Defense).',
-                330, 115, 4, 'melee', 'legs', 'warrior')
+                330, 115, 14, 'melee', 'legs', 'warrior')
 
 # Armor -- Mage -- Pow
 elem_hat = Armor('Elemental Hat',

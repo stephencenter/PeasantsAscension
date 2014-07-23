@@ -166,7 +166,7 @@ the coordinates page of your inventory.".format(self.name))
                 if main.static['gp'] >= self.inn_cost:
                     print('"Good night, Traveler."')
                     print('Sleeping...')
-                    time.sleep(1.5)
+                    time.sleep(1)
                     main.static['gp'] -= self.inn_cost
                     main.player.hp = copy.copy(main.static['hp_p'])
                     main.player.mp = copy.copy(main.static['mp_p'])

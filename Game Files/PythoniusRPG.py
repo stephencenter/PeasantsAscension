@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-
-#  Pythonius; v0.5.1 Alpha
-game_version = 'v0.5.1'
+#  Pythonius; v0.5.2 Alpha
+game_version = 'v0.5.2'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -154,6 +153,7 @@ class PlayerCharacter:  # The Player
         self.element = element
         self.current_pet = ''  # Current Pet
 
+
     def player_damage(self, var):  # The formula for the player dealing damage
         phys_dealt = int((battle.temp_stats['attk']/2) -
                          (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
@@ -183,7 +183,7 @@ class PlayerCharacter:  # The Player
     def choose_class(self):
         while True:
             class_ = input(
-                'Well then, {0}, which class would you like to begin training in? | \
+                '{0}, which class would you like to train as? | \
 Warrior, Mage, or Rogue: '.format(self.name))
             try:
                 class_ = class_.lower()
