@@ -34,17 +34,27 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, x, y, inn=True, inn_cost=0, gen_store=True, gs_level=1):
+    def __init__(self, name, desc, people, x, y, inn=True, inn_cost=0,
+                 gen_store=True, gs_level=1, pet_shop=False, ps_level=1):
+
         self.name = name  # The town's name (i.e. New York City)
         self.desc = desc  # A brief description of the town
+
         self.x = x  # X-coordinate on map
         self.y = y  # Y-coordinate on map
+
         self.people = people  # A list that contains the NPCs you can talk to
-        self.inn = inn  # If true, the town contains an inn
+
+        self.inn = inn  # If True, the town contains an inn
         self.inn_cost = inn_cost  # How much money it costs to sleep at the inn
-        self.gen_store = gen_store  # If true, the town contains a General Store
+
+        self.gen_store = gen_store  # If True, the town contains a General Store
         self.gs_level = gs_level  # The higher this value is, the better the
-        # items the store will sell.
+                                  # items the store will sell.
+
+        self.pet_shop = pet_shop  # If True, the town contains a Pet Shop
+        self.ps_level = ps_level  # The higher this value, the better te pets the shop will
+                                  # allow you to purchase.
 
     def town_choice(self):
         print('-'*25)
@@ -111,37 +121,64 @@ the coordinates page of your inventory.".format(self.name))
             return spam
 
     def inside_town(self):
-        gen_words = ['general store', 'gen', 'gen store', 'shop', 'store', 's', 'g']
-        inn_words = ['inn', 'hotel', 'motel', 'save', 'sleep', 'bed', 'i']
+        gen_words = ['g']
+        inn_words = ['i']
+        pet_words = ['p']
         buildings = []
         while True:
             spam = False
-            if self.inn and not self.gen_store:
+            # (if anyone knows how to simplify this, please tell me!)
+            if self.inn and not self.gen_store and not self.pet_shop:
                 print('There is an [I]nn in this town.')
                 buildings = gen_words
-            elif self.gen_store and not self.inn:
+
+            elif self.gen_store and not self.inn and not self.pet_shop:
                 print('There is a [G]eneral Store in this town.')
                 buildings = inn_words
-            elif self.gen_store and self.inn:
-                print('There is both an [I]nn and a [G]eneral Store in this town.')
+
+            elif self.pet_shop and not self.inn and not self.gen_store:
+                print('There is a [P]et Shop in this town.')
+                buildings = pet_words
+
+            elif self.pet_shop and self.inn and not self.gen_store:
+                print('There is an [I]nn and a [P]et Shop in this town.')
+                buildings = inn_words[:]
+                buildings.extend(pet_words)
+
+            elif self.pet_shop and self.gen_store and not self.inn:
+                print('There is a [G]eneral Store and a [P]et Shop in this town.')
+                buildings = gen_words[:]
+                buildings.extend(pet_words)
+
+            elif self.gen_store and self.inn and not self.pet_shop:
+                print('There is a [G]eneral Store and an [I]nn in this town.')
+                buildings = gen_words[:]
+                buildings.extend(inn_words)
+
+            elif self.gen_store and self.inn and self.pet_shop:
+                print('There is an [I]nn, a [P]et Shop, and a [G]eneral Store in this town.')
                 buildings = inn_words[:]
                 buildings.extend(gen_words)
+                buildings.extend(pet_words)
+
             if buildings:
                 while not spam:
                     selected = input(
-                        'What building will you enter? | Input Letter (or type "exit"): ')
+                        'What building will you enter? | Input [Letter] (or type "exit"): ')
                     try:
                         selected = selected.lower()
                     except AttributeError:
                         continue
-                    if selected in buildings:
+                    if any(map(selected.startswith, buildings)):
                         pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                         pygame.mixer.music.play(-1)
                         pygame.mixer.music.set_volume(main.music_vol)
-                        if selected in gen_words:
+                        if selected.startswith('g'):
                             self.town_gen()
-                        elif selected in inn_words:
+                        elif selected.startswith('i'):
                             self.town_inn()
+                        else:
+                            self.town_pet()
                         spam = True
                         print('-'*25)
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
@@ -308,6 +345,13 @@ GP). (Press enter/return).'.format(str(i), i.buy))
             elif b_s in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                 return
 
+    def town_pet(self):
+        pet_list = [[pets.pet_wolf]][self.level - 1]
+        print('-'*25)
+        print('This has not been fully implemented yet. Check back in v0.5.4!')
+        input('Press Enter/Return')
+        print('-'*25)
+
     def speak_to_npcs(self):
         while True:
             print('NPCs:\n     ', '\n      '.join(
@@ -356,7 +400,7 @@ rn region of the Forest.
 This town is well-known for its wise inhabitants. Some of the elders here
 are rumored to be masters of the arcane arts, and may be willing to train
 your magical abilities for a reasonable price. There is a general store, an
-inn, and several houses in this town.""", [npcs.wesley], -2, -6, inn_cost=2)
+inn, and several houses in this town.""", [npcs.wesley], -2, -6, inn_cost=2, pet_shop=True)
 
 town3 = Town('Overshire', """Overshire: A city in the northwestern region of th\
 e Forest.
@@ -400,6 +444,7 @@ be any other people near here.""", [npcs.alden],
                     -12, -26, inn=False, gen_store=False)
 
 town_list = [town1, town2, town3, town4, town5, town6, town7, small_house1]
+
 
 def search_towns(pos_x, pos_y, enter=True):
     # Check to see if there is a

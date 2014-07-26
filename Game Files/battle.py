@@ -207,7 +207,7 @@ def player_turn(var, dodge, move):
 
         else:
             return False
-        if player.current_pet:
+        if player.current_pet and monster.hp > 0:
             input('\nPress Enter/Return')
             print("\n-Pet Turn-")
             player.current_pet.use_ability()
@@ -263,11 +263,16 @@ def after_battle(is_boss):  # Assess the results of the battle
                             break
 
         elif monster.hp <= 0 < player.hp:
+            pygame.mixer.music.load('Music/High Stakes.ogg')
+            pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(main.music_vol)
             # If the player wins...
             if not is_boss:
                 # Only do the following if the player defeated a
                 # normal enemy, and not a boss
-                print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
+                print('The {0} falls to the ground, dead as a stone.'.format(monster.name), end='')
+                input(' | Press Enter/Return ')
+
                 # Enemies drop gold/exp based on the player/monster's levels
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
                 if gold <= 0:
@@ -279,8 +284,8 @@ def after_battle(is_boss):  # Assess the results of the battle
             else:
                 # Only do the following if the player defeated a boss
                 bosses.defeated_bosses.append(monster.name)
-                print('The almighty {0} has been slain!'.format(monster.name))
-
+                print('The almighty {0} has been slain!'.format(monster.name), end='')
+                input(' | Press Enter/Return ')
                 gold = monster.gold + player.ext_gol
                 # Bosses drop a set amount of gold...
                 experience = monster.experience
@@ -292,19 +297,28 @@ def after_battle(is_boss):  # Assess the results of the battle
                 except AttributeError:
                     pass
 
+            # Give the Player their GP
             static['gp'] += gold + player.ext_gol
+            print("You've gained {0} GP!".format(gold), end='')
+            sounds.item_pickup.play()
+            input(' | Press Enter/Return ')
+
+            # Give the Player their XP
             player.exp += experience
-            print("You've gained {0} GP!".format(gold))
-            print("You've gained {0} experience point{1}!".format(
-                experience, 's' if experience > 1 else ''))
-            # Correct grammar is important
+            print("You've gained {0} XP!".format(experience), end='')
+            sounds.item_pickup.play()
+            input(' | Press Enter/Return ')
 
             if monster.items:
                 # If the monster has items, give them to the player
                 cat = monster.items.cat
                 inv_system.inventory[cat].append(_c(monster.items))
-                print('The {0} drops a {1}! You put it in your inventory for safe keeping.'.format(
-                      monster.name, str(monster.items)))
+                print('The {0} dropped a {1}! You decide to take {2}.'.format(
+                      monster.name, str(monster.items),
+                      'them' if str(monster.items).endswith('s') else 'it'), end='')
+                      # Grammar!!
+                sounds.item_pickup.play()
+                input(' | Press Enter/Return ')
 
             player.level_up()
             # Check to see if the player gained any levels
@@ -320,9 +334,13 @@ def after_battle(is_boss):  # Assess the results of the battle
 
 
 def run_away():
-    print('You begin to flee.')
+    print('You start to run away from the {0}...'.format(monster.name))
+    sounds.foot_steps.play()
+    time.sleep(0.75)
     if random.randint(1, 100) in range(50, (101 - int(player.evad/2))) and player.evad < 100:
-        # There's a 50% change that running will fail
+        # There's a 50% chance that running will fail. This is lowered/raised
+        # based on the player's evasion stat. If the player has an evasion stat
+        # of 100+, they always succeed.
         print('Your attempt to escape failed!')
         return False
     else:
@@ -331,7 +349,9 @@ def run_away():
 
 
 def battle_inventory():
-    # The player can use certain items during battle
+    # The player can use items from the "consum" category of their inventory during battles.
+    # In the future, there will be certain items you can use from the "misc"/"weapons" sections
+    # as well.
     while True:
         print('-'*25)
         print('Battle Inventory: \n      ' + '\n      '.join(

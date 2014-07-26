@@ -99,8 +99,8 @@ class Monster:
         time.sleep(0.75)
         if dodge in range(player.evad, 250):
             dealt = magic.eval_element(
-                    p_elem=battle.player.element,
-                    m_elem=battle.monster.element, m_dmg=self.monst_damage(var))[1]
+                p_elem=battle.player.element,
+                m_elem=battle.monster.element, m_dmg=self.monst_damage(var))[1]
             player.hp -= dealt
             sounds.enemy_hit.play()
             print('The {0} hits you, dealing {1} damage!'.format(self.name, dealt))

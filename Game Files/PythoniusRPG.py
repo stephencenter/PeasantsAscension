@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#  Pythonius; v0.5.2 Alpha
-game_version = 'v0.5.2'
+#  Pythonius; v0.5.3 Alpha
+game_version = 'v0.5.3'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -152,7 +152,6 @@ class PlayerCharacter:  # The Player
         self.class_ = class_  # Player Class
         self.element = element
         self.current_pet = ''  # Current Pet
-
 
     def player_damage(self, var):  # The formula for the player dealing damage
         phys_dealt = int((battle.temp_stats['attk']/2) -

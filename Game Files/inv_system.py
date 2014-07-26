@@ -353,7 +353,7 @@ Input letter (or type "back"): ')
                     print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
                         for num, x in enumerate([y for y in npcs.all_dialogue
                             if isinstance(y, npcs.Quest)
-                                and not y.finished and y.started])]))
+                            and not y.finished and y.started])]))
                     while True:
                         number = input('Input [#] (or type "back"): ')
                         try:

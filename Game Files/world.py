@@ -152,6 +152,7 @@ def movement_system():
                 if towns.search_towns(main.position['x'], main.position['y'], enter=False):
                     print('-'*25)
 
+
 def out_of_bounds():
     print('-'*25)
     print('Ahead of you is a seemingly endless ocean. You cannot continue in this direction.')

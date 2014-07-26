@@ -24,7 +24,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-mixer.pre_init(44100, -16, 2, 2048)
+mixer.pre_init(frequency=44100, buffer=1024)
 mixer.init()
 
 # Sword Slash -- Played when you attempt to physically attack an enemy
@@ -48,10 +48,13 @@ aim_weapon = Sound('Sound FX/aim_weapon.wav')
 # Attack Miss -- Played when attempting to attack and then failing
 attack_miss = Sound('Sound FX/attack_miss.wav')
 
+# Got Item -- Played when you receive an item, GP, or XP.
+item_pickup = Sound('Sound FX/item_pickup.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
               'magic_healing', 'enemy_hit',
               'foot_steps', 'aim_weapon',
-              'attack_miss']:
+              'attack_miss', 'item_pickup']:
         globals()[x].set_volume(main.sound_vol)

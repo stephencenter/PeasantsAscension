@@ -211,7 +211,7 @@ alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
 wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
                                 "to be stronger the farther from 0'N, 0'E that you travel.",
                                 "However, monsters there also give better loot. Be careful."
-                               ], active=True)
+                                ], active=True)
 wesley = NPC('Wesley', [wesley_phrase_1])
 
 
@@ -224,7 +224,7 @@ stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                  "cause of much worry and panic in this town: The Graveyard.",
                                  "Inside lies a dangerous aparrition, feared by all who have\
 seen it.",
-                                ], active=True)
+                                 ], active=True)
 
 stewson_phrase_2 = Conversation(["Please save us from this monsterous wraith!"])
 
@@ -291,7 +291,7 @@ ethos = NPC('Ethos', [ethos_phrase_1])
 
 # Name: Joseph -- Town: Charsulville
 joseph_phrase_1 = Conversation(['Greetings, young adventurer. Welcome to Charsulville.'
-                               ], active=True)
+                                ], active=True)
 joseph_phrase_2 = Conversation(['Report back to me when you have delivered that letter.'])
 
 joseph_quest_1 = Quest(["Wait a second... are you who I think you are? I've recieved",
