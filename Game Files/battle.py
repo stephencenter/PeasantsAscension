@@ -270,8 +270,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             if not is_boss:
                 # Only do the following if the player defeated a
                 # normal enemy, and not a boss
-                print('The {0} falls to the ground, dead as a stone.'.format(monster.name), end='')
-                input(' | Press Enter/Return ')
+                print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
 
                 # Enemies drop gold/exp based on the player/monster's levels
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
@@ -284,8 +283,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             else:
                 # Only do the following if the player defeated a boss
                 bosses.defeated_bosses.append(monster.name)
-                print('The almighty {0} has been slain!'.format(monster.name), end='')
-                input(' | Press Enter/Return ')
+                print('The almighty {0} has been slain!'.format(monster.name))
                 gold = monster.gold + player.ext_gol
                 # Bosses drop a set amount of gold...
                 experience = monster.experience

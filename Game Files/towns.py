@@ -22,6 +22,7 @@ import pygame
 import inv_system
 import world
 import npcs
+import items
 
 
 if __name__ == "__main__":
@@ -29,7 +30,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.pre_init(frequency=44100, buffer=1024)
 pygame.mixer.init()
 
 
@@ -221,9 +222,9 @@ the coordinates page of your inventory.".format(self.name))
         for item in inv_system.gs_stock:
             stock.append(item[self.gs_level - 1])
         if self.gs_level == 2:
-            stock.append(i.shovel)
+            stock.append(items.shovel)
         elif self.gs_level == 4:
-            stock.append(i.divining_rod)
+            stock.append(items.divining_rod)
         print('-'*25)
         print('Merchant: "Welcome, Traveler!"')
         while True:
