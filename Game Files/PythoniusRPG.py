@@ -155,7 +155,7 @@ class PlayerCharacter:  # The Player
 
     def player_damage(self, var):  # The formula for the player dealing damage
         phys_dealt = int((battle.temp_stats['attk']/2) -
-                         (battle.monster.dfns/3) + (self.lvl/3) + var + 1)
+                         (battle.monster.dfns/2) + (self.lvl/3) + var + 1)
         phys_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
             m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
@@ -331,41 +331,41 @@ Input letter: """)
 
     def player_info(self):
         print("-{0}'s Stats-".format(self.name))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('Level: {0} | Class: {1} | Element: {2}'.format(self.lvl, self.class_.title(),
                                                               self.element.title()))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
                                                  self.mp, static['mp_p']))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
             static['int'], static['str'],
             static['con'], static['dex'],
             static['luc']))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
                                                                   static['r_xp'],
                                                                   static['gp']))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print()
         print('-Equipped Items-')
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('Weapon: {0}'.format(str(inv_system.equipped['weapon'])))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('Armor:')
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('  Head: {0}'.format(str(inv_system.equipped['head'])))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('  Body: {0}'.format(str(inv_system.equipped['body'])))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
-        time.sleep(0.4)
+        time.sleep(0.35)
         print('-'*25)
         input('Press Enter/Return ')
 

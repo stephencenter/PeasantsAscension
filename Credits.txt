@@ -1,6 +1,6 @@
 Pythonius was a game programmed by Stephen Center, also known as "RbwNjaFurret".
-
-Other people who have more talent than me:	
+---------------------------------------------------------------------------------------
+MUSIC -- PART 1:
   Ben Landis, who composed:
     Through the Forest------------> [Forest Overworld Theme]
     Terrible Tarantuloid----------> [Boss-battle Theme]
@@ -10,7 +10,6 @@ Other people who have more talent than me:
     Chickens going peck peck peck-> [Town Theme]
     Mayhem in the Village---------> [NPC Theme]
     Frontier----------------------> [Graveyard Theme]
-    High Stakes-------------------> [Battle-over Theme]
 		
     His website: http://www.benlandis.com/ <--- Check it out!
     His Sound Cloud: https://soundcloud.com/benlandis <--- Check it out!
@@ -24,7 +23,22 @@ Other people who have more talent than me:
 		
     His website: http://www.ericskiff.com/music/ <--- Check it out!
     His Sound Cloud: https://soundcloud.com/eric-skiff <--- Check it out!
-	
+---------------------------------------------------------------------------------------
+MUSIC -- PART 2
+  In addition to those talented folks, this game also features music from 
+  "http://www.freemusicarchive.org/". All of these songs are covered under
+  the Creative Commons License: http://creativecommons.org/licenses/by/4.0/legalcode
+  
+  Songs from FMA:
+    Composed by RoleMusic (http://freemusicarchive.org/music/Rolemusic/):
+        Python --> http://tinyurl.com/python-by-rolemusic --> [Battle-over Theme]
+            Edited to loop properly. Ending portion removed
+		
+    Composed by UncleBibby (http://freemusicarchive.org/music/UncleBibby/):
+        CopperNickle --> http://tinyurl.com/coppernickle-by-unclebibby --> [Not yet used!]
+            Edited to loop properly. Also, I upped the tempo up by 5%
+---------------------------------------------------------------------------------------
+ARTWORK:
   Gabriel Tucker, who drew:
     pythonius_art_1.png
 	
@@ -35,10 +49,9 @@ Other people who have more talent than me:
     pythonius_art_2.png
 	
     His YouTube : http://tinyurl.com/hitmanjake101 <--- Check it out!
-
-All rights go to those people.
-
-Sound FX were made by Gabriel Tucker and me using an open-source tool known as Bfxr.
+---------------------------------------------------------------------------------------
+SOUND FX:
+  Sound FX were made by Gabriel Tucker and me using an open-source tool known as Bfxr:
     http://www.bfxr.net/
 
 Thanks for playing this game!

@@ -263,7 +263,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                             break
 
         elif monster.hp <= 0 < player.hp:
-            pygame.mixer.music.load('Music/High Stakes.ogg')
+            pygame.mixer.music.load('Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
             # If the player wins...
