@@ -116,13 +116,13 @@ class Quest(Conversation):
                 accept = accept.lower()
             except AttributeError:
                 continue
-            if accept in ['yes', 'y']:
+            if accept.startswith('y'):
                 print('-'*25)
                 print('{0}: "Terrific! Come see me when you are finished."'.format(self.q_giver))
                 self.started = True
                 self.upon_starting()
                 return
-            elif accept in ['no', 'n']:
+            elif accept.startswith('n'):
                 print('-'*25)
                 print('{0}: "...Oh. Come back later if you change your mind."'.format(self.q_giver))
                 return

@@ -23,6 +23,7 @@ import inv_system
 import world
 import npcs
 import items
+import pets
 
 
 if __name__ == "__main__":
@@ -199,7 +200,7 @@ the coordinates page of your inventory.".format(self.name))
                 choice = choice.lower()
             except AttributeError:
                 continue
-            if choice in ['yes', 'y', 'yeah']:
+            if choice.startswith('y'):
                 print()
                 if main.static['gp'] >= self.inn_cost:
                     print('"Good night, Traveler."')
@@ -214,7 +215,7 @@ the coordinates page of your inventory.".format(self.name))
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
                 return
-            elif choice in ['no', 'n', 'nope']:
+            elif choice.startswith('n'):
                 return
 
     def town_gen(self):  # Let the player purchase items from the General Store
@@ -274,7 +275,7 @@ the coordinates page of your inventory.".format(self.name))
                                 confirm = confirm.lower()
                             except AttributeError:
                                 continue
-                            if confirm in ['yes', 'y']:
+                            if confirm.startswith('y'):
                                 if main.static['gp'] >= i.buy:
                                     inv_system.inventory[i.cat].append(i)
                                     main.static['gp'] -= i.buy
@@ -347,11 +348,96 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                 return
 
     def town_pet(self):
-        pet_list = [[pets.pet_wolf]][self.level - 1]
+        pet_list = [[pets.pet_wolf]][self.ps_level - 1]
+
         print('-'*25)
-        print('This has not been fully implemented yet. Check back in v0.5.4!')
-        input('Press Enter/Return')
+        print('Welcome, adventurer!')
         print('-'*25)
+
+        spam = True
+        while spam:
+            print("Here's what we have to offer:\n     ", "\n     ".join(
+                ['[' + str(num + 1) + '] ' + str(pet) + ' --> ' + str(pet.cost)
+                 for num, pet in enumerate(pet_list)]))
+            print("You have {0} GP.".format(main.static['gp']))
+
+            while True:
+                chosen = input('Input [#] (or type "exit"): ')
+
+                try:
+                    chosen = int(chosen) - 1
+                    if chosen < 0:
+                        continue
+                except ValueError:
+                    try:
+                        chosen = chosen.lower()
+                    except AttributeError:
+                        continue
+                    if chosen in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        spam = False
+                        break
+                    else:
+                        continue
+
+                try:
+                    chosen_pet = pet_list[chosen]
+                except IndexError:
+                    continue
+
+                if chosen_pet in inv_system.inventory['pets']:
+                    # Players can't have more than one of each pet. This is to prevent
+                    # the player from getting confused as to which pet is which.
+
+                    print('-'*25)
+                    print("Hey, you already have a {0}! We aren't allowed to give you two.".format(
+                        chosen_pet))
+                    input("(Press Enter/Return to continue)")
+                    print('-'*25)
+                    break
+
+                print('-'*25)
+                print('{0}: {1}'.format(chosen_pet, chosen_pet.desc))
+                print('-'*25)
+
+                fizz = True
+                while fizz:
+                    y_n = input(
+                        "You want this {0}? That would cost you {1} GP. | Yes or No: ".format(
+                        chosen_pet, chosen_pet.cost))
+
+                    try:
+                        y_n = y_n.lower()
+                    except AttributeError:
+                        continue
+
+                    if y_n.startswith('y'):
+                        if main.static['gp'] >= chosen_pet.cost:
+                            print('-'*25)
+                            print("You received a {0} pet!".format(chosen_pet))
+                            print('You give the shopkeeper {0} GP.'.format(chosen_pet.cost))
+
+                            chosen_pet.equip = True
+                            if main.player.current_pet:
+                                main.player.current_pet.equip = False
+                            inv_system.inventory['pets'].append(chosen_pet)
+                            main.player.current_pet = chosen_pet
+                            main.static['gp'] -= chosen_pet.cost
+
+                            print('-'*25)
+
+                        else:
+                            print('-'*25)
+                            print("Hey, come on! You don't even have enough money for this!")
+                            print('-'*25)
+
+                        fizz = False
+
+                    elif y_n.startswith('n'):
+                        print('-'*25)
+                        fizz = False
+
+                break
+
 
     def speak_to_npcs(self):
         while True:
@@ -465,7 +551,7 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                         y_n = y_n.lower()
                     except AttributeError:
                         continue
-                    if y_n in ['yes', 'y']:
+                    if y_n.startswith('y'):
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
                         pygame.mixer.music.set_volume(main.music_vol)
@@ -473,7 +559,7 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                         town.new_location()
                         town.town_choice()
                         return
-                    elif y_n in ['no', 'n']:
+                    elif y_n.startswith('n'):
                         print('-'*25)
                         return
             else:

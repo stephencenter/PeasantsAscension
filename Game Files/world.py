@@ -37,11 +37,6 @@ else:
 
 position = ''
 
-north = ['n', 'nor', 'north']
-south = ['s', 'sou', 'south']
-east = ['e', 'eas', 'east']
-west = ['w', 'wes', 'west']
-
 
 def setup_vars():
     global position
@@ -58,9 +53,11 @@ def movement_system():
     global position
 
     setup_vars()
+
     pygame.mixer.music.load(position['reg_music'])
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(main.music_vol)
+
     while True:
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
@@ -80,41 +77,43 @@ def movement_system():
                 direction = direction.lower()
             except AttributeError:
                 continue
-            if [x for x in [north, south, east, west] if direction in x]:
+            if [any(map(direction.startswith, ['n', 's', 'w', 'e']))]:
                 sounds.foot_steps.play()
-                if direction in north:
+                if direction.startswith('n'):
                     if position['y'] < 125:
                         position['y'] += 1
                     else:
                         out_of_bounds()
                         continue
-                elif direction in south:
+                elif direction.startswith('s'):
                     if position['y'] > -125:
                         position['y'] -= 1
                     else:
                         out_of_bounds()
                         continue
-                elif direction in west:
+                elif direction.startswith('w'):
                     if position['x'] > -125:
                         position['x'] -= 1
                     else:
                         out_of_bounds()
                         continue
-                elif direction in east:
+                elif direction.startswith('e'):
                     if position['x'] < 125:
                         position['x'] += 1
                     else:
                         out_of_bounds()
                         continue
+
                 position['avg'] = int(((abs(position['x'])) +
                                        (abs(position['y'])))/2)
+
                 if (not check_region() and  # Check for region changes
                         not bosses.check_bosses(position['x'],
                                                 position['y']) and  # Check for bosses to fight
                         not towns.search_towns(position['x'], position['y'],
                                                enter=False)):  # Check for towns to visit
                     # If none of the previous statements return True, then a battle can occur.
-                    # There is a 1 in 7 chance for a battle to occur (~14.28%)
+                    # There is a 1 in 8 chance for a battle to occur (12.5%)
                     is_battle = not random.randint(0, 7)
                     if is_battle:
                         print('-'*25)
@@ -122,6 +121,7 @@ def movement_system():
                         battle.setup_vars()
                         battle.battle_system()
                 break
+
             elif direction.startswith('p'):
                 print('-'*25)
                 print('You stop to rest for a moment.')
@@ -143,10 +143,12 @@ def movement_system():
                     elif decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         print('-'*25)
                         break
+
             elif direction.startswith('t'):
                 inv_system.tools_menu()
                 if towns.search_towns(main.position['x'], main.position['y'], enter=False):
                     print('-'*25)
+
             elif direction.startswith('r'):
                 rest()
                 if towns.search_towns(main.position['x'], main.position['y'], enter=False):
@@ -197,6 +199,7 @@ def check_region():
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
         return True
+
     else:
         return False
 

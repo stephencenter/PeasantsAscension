@@ -88,8 +88,8 @@ class Monster:
             self.dfns += random.randint(1, 2)
             self.m_attk += random.randint(1, 3)
             self.m_dfns += random.randint(1, 2)
-            self.spd += random.randint(1, 2)
-            self.evad += random.randint(0, 2)
+            self.spd += random.randint(1, 3)
+            self.evad += random.randint(0, 1)
         static['hp_m'] = self.hp
         static['mp_m'] = self.mp
 
@@ -156,17 +156,20 @@ class Monster:
     def monst_name(self):
         monster_type = {'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],
                         'Swamp': ['Bog Slime', 'Moss Ogre', 'Sludge Rat'],
-                        'Forest': ['Sprite', 'Imp', 'Goblin'],
+                        'Forest': ['Sprite', 'Goblin', 'Imp'],
                         'Desert': ['Mummy', 'Sand Golem', 'Fire Ant'],
                         'Tundra': ['Frost Bat', 'Minor Yeti', 'Arctic Wolf'],
-                        'Mountain': ['Giant Worm', 'Rock Giant', 'Troll'],
-                        'Graveyard': ['Zombie', 'Ghoul', 'Skeleton']
+                        'Mountain': ['Troll', 'Rock Giant', 'Giant Worm'],
+                        'Graveyard': ['Ghoul', 'Skeleton', 'Zombie']
                         }
         self.name = random.choice(monster_type[position['reg']])
 
         if self.name == monster_type[position['reg']][1]:
             self.enemy_turn = tank_ai
             tank_stats(self)
+        elif self.name == monster_type[position['reg']][2]:
+            self.enemy_turn = fighter_ai
+            fighter_stats(self)
 
         modifiers = [
             'Slow', 'Fast',
@@ -325,6 +328,82 @@ def tank_ai(var, dodge):
             sounds.attack_miss.play()
             print("The spell misses you by a landslide!")
         self.mp -= 2
+
+    else:
+        self.monst_attk(var, dodge)
+
+# -- Fighter AI --
+"""
+Fighter AI is the opposite of the Tank AI. It has high attack and above-average
+magic attack, as well as above-average speed. However, it has below-average defense
+and magic defense. It rarely defends or heals. It has low health.
+
+"""
+
+
+def fighter_stats(self):
+    # Set stats for Fighter AI
+    self.hp *= 0.8
+    self.hp = math.ceil(self.hp)
+    static['hp_m'] = copy.copy(self.hp)
+
+    self.attk *= 1.2
+    self.attk = math.ceil(self.attk)
+
+    self.m_attk *= 1.1
+    self.m_attk = math.ceil(self.m_attk)
+
+    self.dfns *= 0.8
+    self.dfns = math.ceil(self.dfns)
+
+    self.m_dfns *= 0.8
+    self.m_dfns = math.ceil(self.m_dfns)
+
+    self.spd *= 1.1
+    self.spd = math.ceil(self.spd)
+
+
+def fighter_ai(var, dodge):
+    self = monster
+    print('\n-Enemy Turn-')
+
+    if self.attk >= self.m_attk:
+        # Physical Attack
+        self.monst_attk(var, dodge)
+
+    elif self.m_attk >= self.attk and self.mp >= 2:
+        # Magic Attack
+        sounds.magic_attack.play()
+        print('The {0} is attempting to cast a strange spell...'.format(self.name))
+        time.sleep(0.75)
+        if dodge in range(battle.temp_stats['evad'], 250):
+            dealt = magic.eval_element(
+                p_elem=battle.player.element,
+                m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
+            player.hp -= dealt
+            sounds.enemy_hit.play()
+            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
+                self.name, dealt))
+        else:
+            sounds.attack_miss.play()
+            print("The spell misses you by a landslide!")
+        self.mp -= 2
+
+    elif self.hp <= int(static['hp_m']/5) and self.mp >= 5 and random.randint(0, 1):
+        # Magic heal
+        sounds.magic_healing.play()
+        heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
+        if heal < 5:
+            heal = 5
+        self.hp += heal
+        self.mp -= 5
+        print('The {0} casts a healing spell!'.format(self.name))
+
+    elif int((self.dfns + self.m_dfns)/1.5) <= int(self.lvl/5):
+        # Defend
+        self.dfns += random.randint(1, 2)
+        self.m_dfns += random.randint(1, 2)
+        print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
 
     else:
         self.monst_attk(var, dodge)

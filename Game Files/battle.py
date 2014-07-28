@@ -335,11 +335,12 @@ def run_away():
     print('You start to run away from the {0}...'.format(monster.name))
     sounds.foot_steps.play()
     time.sleep(0.75)
-    if random.randint(1, 100) in range(50, (101 - int(player.evad/2))) and player.evad < 100:
+    if random.randint(1, 100) in range(50, (101 - int(player.evad/2))) and player.evad < 120:
         # There's a 50% chance that running will fail. This is lowered/raised
         # based on the player's evasion stat. If the player has an evasion stat
-        # of 100+, they always succeed.
+        # of 120+, they always succeed.
         print('Your attempt to escape failed!')
+        input("\nPress Enter/Return")
         return False
     else:
         print('You manage to escape from the {0}!'.format(monster.name))

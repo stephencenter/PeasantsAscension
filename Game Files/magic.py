@@ -369,7 +369,7 @@ def pick_spell(cat, var, dodge):
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
-                if y_n in ['yes', 'y']:
+                if y_n.startswith('y'):
                     if isinstance(spell, Damaging):
                         if spell.use_magic(var, dodge):
                             return True
@@ -380,7 +380,7 @@ def pick_spell(cat, var, dodge):
                             return True
                         else:
                             return False
-                elif y_n in ['no', 'n']:
+                elif y_n.startswith('n'):
                     break
 
 

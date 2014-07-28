@@ -29,7 +29,7 @@ else:
     main = sys.modules["__main__"]
 
 inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
-             'weapons': [], 'armor': [], 'misc': []}
+             'weapons': [], 'armor': [], 'pets': [], 'misc': []}
 equipped = {'weapon': '', 'head': _c(i.straw_hat),
             'body': _c(i.cotton_shirt),
             'legs': _c(i.sunday_trousers)}
@@ -95,8 +95,9 @@ def pick_category():
       [3] Weapons
       [4] Quest Items
       [5] Coordinates
-      [6] Miscellaneous
-      [7] Quests""")
+      [6] Pets
+      [7] Miscellaneous
+      [8] Quests""")
         while True:
             cat = input('Input [#] (or type "exit"): ')
             try:
@@ -121,46 +122,59 @@ def pick_category():
                 cat = 'coord'
                 vis_cat = 'Coordinates'
             elif cat == '6':
+                cat = 'pets'
+                vis_cat = 'Pets'
+            elif cat == '7':
                 cat = 'misc'
                 vis_cat = 'Miscellaneous'
-            elif cat == '7':
+            elif cat == '8':
                 cat = 'quests'
                 vis_cat = 'Quests'
             else:
                 continue
             if cat in inventory:
+
                 if inventory[cat]:
-                    if cat not in ['coord', 'weapons', 'armor']:
+
+                    if cat not in ['coord', 'weapons', 'armor', 'pets']:
                         pick_item(cat, vis_cat)
                         print('-'*25)
+
                     elif cat == 'coord':
                         print('-'*25)
                         print(' ', '\n  '.join(inventory[cat]))
                         input("Press enter/return when you are finished viewing these coordinates.")
                         print('-'*25)
+
                     else:
                         if [x for x in inventory[cat] if not x.equip]:
                             pick_item(cat, vis_cat)
                             print('-'*25)
+
                         else:
                             print('-'*25)
                             input('The "{0}" category is empty. (Press Enter/Return) '.format(
                                 vis_cat))
                             print('-'*25)
+
                     break
+
                 else:
                     print('-'*25)
                     input('The "{0}" category is empty. (Press Enter/Return) '.format(vis_cat))
                     print('-'*25)
                     break
-            elif cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(
+
+            if cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(
                     x, npcs.Quest) and x.started]:
                 pick_item(cat, vis_cat)
                 break
+
             else:
                 print('-'*25)
                 input("You have no active or completed quests. (Press Enter/Return) ")
                 print('-'*25)
+                break
 
 
 def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in your inventory
@@ -171,7 +185,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             return
 
         else:
-            if cat in ['armor', 'weapons']:
+            if cat in ['armor', 'weapons', 'pets']:
                 if [x for x in inventory[cat] if not x.equip]:
                     print('-'*25)
                     if not gs:
@@ -240,7 +254,9 @@ def pick_action(cat, item):
     global inventory
     print('-'*25)
     while item in inventory[cat]:
-        if isinstance(item, i.Weapon) or isinstance(item, i.Armor):
+        if (isinstance(item, i.Weapon)
+            or isinstance(item, i.Armor)
+                or isinstance(item, pets.Companion)):
             use_equip = 'Equip'
             if item.equip:
                 break
@@ -254,7 +270,12 @@ Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else '
                                        str(item), use_equip))
 
         if action == '1':
-            item.use_item()
+            if isinstance(item, Companion):
+                item.equip = True
+                main.player.current_pet.equip = False
+                main.player.current_pet = item
+            else:
+                item.use_item()
 
         elif action == '2':
             print('-'*25)
@@ -354,6 +375,7 @@ Input letter (or type "back"): ')
                         for num, x in enumerate([y for y in npcs.all_dialogue
                             if isinstance(y, npcs.Quest)
                             and not y.finished and y.started])]))
+
                     while True:
                         number = input('Input [#] (or type "back"): ')
                         try:
@@ -369,14 +391,18 @@ Input letter (or type "back"): ')
                                     continue
                             except AttributeError:
                                 continue
+
                         if (number < 0) or (number > len(dialogue) - 1):
                             continue
+
                         quest = dialogue[number]
+
                         print('-'*25)
                         print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
                             quest.name, '\n     '.join([
                                 x for x in quest.desc]), quest.q_giver))
                         print('-'*25)
+
                         break
             else:
                 print('You have no active quests!')
@@ -392,10 +418,12 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
     while True:
         y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(
             item.name, item.sell))
+
         try:
             y_n = y_n.lower()
         except AttributeError:
             continue
+
         if y_n.startswith('y'):
             for num, i in enumerate(inventory[cat]):
                 if i.name == item.name:
@@ -404,6 +432,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
                     print('You hand the shopkeep your {0} and recieve {1} GP.'.format(
                         item.name, item.sell))
                     return
+
         elif y_n.startswith('n'):
             return
 
@@ -412,24 +441,31 @@ def tools_menu():  # Display a set of usable tools on the world map
     tool_names = ['Divining Rod', 'Shovel', 'Magical Compass']
     available_tools = []
     spam = True
+
     for cat in inventory:
         if cat in ['coord', 'quests']:
             continue
+
         for item in set(inventory[cat]):
             if item.name in tool_names:
                 available_tools.append(item)
+
     print('-'*25)
+
     if not available_tools:
         print('You have no available tools to use...')
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
         return
+
     while spam:
         print(''.join(['Tools', ': \n      ', '\n      '.join(
             ['[' + str(x + 1) + '] ' + str(y)
                 for x, y in enumerate(available_tools)])]))
+
         while True:
             tool = input('Input [#] (or type "exit"): ')
+
             try:
                 tool = int(tool) - 1
             except (TypeError, ValueError):
@@ -448,43 +484,63 @@ def tools_menu():  # Display a set of usable tools on the world map
                         continue
                 except AttributeError:
                     continue
+
             if (tool < 0) or (tool > len(available_tools) - 1):
                 continue
+
             tool = available_tools[tool]
             tool.use_item()
+
             break
 
 
 def serialize_inv(path):
     j_inventory = {}
+
     for category in inventory:
         j_inventory[category] = []
+
         for item in inventory[category]:
             if category != 'coord':
                 j_inventory[category].append(item.__dict__)
+
             else:
                 j_inventory[category].append(item)
-    with open(path, mode='w', encoding='utf-8') as c:
-        json.dump(j_inventory, c, indent=4, separators=(', ', ': '))
+
+    with open(path, mode='w', encoding='utf-8') as f:
+        json.dump(j_inventory, f, indent=4, separators=(', ', ': '))
 
 
 def deserialize_inv(path):
     global inventory
     norm_inv = {}
-    with open(path, encoding='utf-8') as c:
-        j_inventory = json.load(c)
+
+    with open(path, encoding='utf-8') as f:
+        j_inventory = json.load(f)
+
     for category in j_inventory:
         norm_inv[category] = []
+
         for item in j_inventory[category]:
             if category == 'consum':
                 x = i.Consumable('', '', '', '')
+
             elif category == 'weapon':
                 x = i.Weapon('', '', '', '', '', '', '')
+
             elif category == 'armor':
                 x = i.Armor('', '', '', '', '', '', '', '')
+
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue
+
+            elif category == 'pets':
+                for j in pets.all_pets:
+                    for key in j_inventory['pets']:
+                        if j.name == key:
+                            norm_inventory['pets'].append(j)
+
             elif category in ['misc', 'q_items']:
                 if item['name'] == 'Magical Compass':
                     item = i.magic_compass
@@ -496,33 +552,42 @@ def deserialize_inv(path):
                 continue
             x.__dict__ = item
             norm_inv[category].append(x)
+
     inventory = norm_inv
 
 
 def serialize_equip(path):
     j_equipped = {}
+
     for category in equipped:
         if equipped[category] != '(None)':
             j_equipped[category] = equipped[category].__dict__
         else:
             j_equipped[category] = '(None)'
-    with open(path, mode='w', encoding='utf-8') as d:
-        json.dump(j_equipped, d, indent=4, separators=(', ', ': '))
+
+    with open(path, mode='w', encoding='utf-8') as f:
+        json.dump(j_equipped, f, indent=4, separators=(', ', ': '))
 
 
 def deserialize_equip(path):
     global equipped
     norm_equip = {}
-    with open(path, encoding='utf-8') as d:
-        j_equipped = json.load(d)
+
+    with open(path, encoding='utf-8') as f:
+        j_equipped = json.load(f)
+
     for category in j_equipped:
         if j_equipped[category] == '(None)':
             norm_equip[category] = '(None)'
             continue
+
         elif category == 'weapon':
             x = i.Weapon('', '', '', '', '', '', '')
+
         else:
             x = i.Armor('', '', '', '', '', '', '', '')
+
         x.__dict__ = j_equipped[category]
         norm_equip[category] = x
+
     equipped = norm_equip

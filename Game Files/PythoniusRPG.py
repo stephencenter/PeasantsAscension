@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#  Pythonius; v0.5.3 Alpha
-game_version = 'v0.5.3'
+#  PythoniusRPG v0.5.4 Alpha
+game_version = 'v0.5.4'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -116,6 +116,7 @@ sav7 = 'Save Files/def_bosses.json'  # Defeated Bosses
 sav8 = 'Save Files/quests_dia.json'  # Quests & Dialogue
 sav9 = 'Save Files/misc_boss_info.json'  # Misc Boss Info
 sav10 = 'Save Files/acquired_gems.json'  # Acquired Gems
+sav11 = 'Save Files/pet_info.json'  # Pet Information
 
 # NOTE 1: The save file locations can be changed in the file "settings.cfg".
 
@@ -269,7 +270,7 @@ Warrior, Mage, or Rogue: '.format(self.name))
     [S]trength -  Smash through enemies with higher attack and defense!
     [C]onstitution - Become a tank with higher defense stats and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
-    [L]uck - Receive more gold, more experience, and even more skill points!
+    [L]uck - Slightly improve ALL your stats, AND get more GP/XP!
 Input letter: """)
                 try:
                     skill = skill.lower()
@@ -317,7 +318,17 @@ Input letter: """)
                             self.evad += 1
                             static['dex'] += 1
                         elif skill.startswith('l'):
-                            self.ext_ski += random.choice([0, 0, 0, 1])
+                            self.hp += random.randint(0, 1)
+                            self.mp += random.randint(0, 1)
+                            if random.randint(0, 1):
+                                self.dfns += random.randint(0, 1)
+                                self.attk += random.randint(0, 1)
+                            else:
+                                self.m_dfns += random.randint(0, 1)
+                                self.m_attk += random.randint(0, 1)
+                            if random.randint(0, 1):
+                                self.spd += random.randint(0, 1)
+                                self.evad += random.randint(0, 1)
                             self.ext_gol += random.randint(0, 2)
                             self.ext_exp += random.randint(0, 1)
                             static['luc'] += 1
@@ -366,6 +377,17 @@ Input letter: """)
         time.sleep(0.35)
         print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
         time.sleep(0.35)
+        print()
+        time.sleep(0.35)
+        print('-Current pet-')
+        time.sleep(0.35)
+        if self.current_pet:
+            print('  Name: {0}'.format(self.current_pet))
+            time.sleep(0.35)
+            print('  Level: {0}'.format(self.current_pet.level))
+        else:
+            print('  (None)')
+            time.sleep(0.35)
         print('-'*25)
         input('Press Enter/Return ')
 
@@ -430,15 +452,13 @@ def check_save():  # Check for save files and load the game if they're found
     # Check each part of the save file
     print('Searching for valid save files...')
     time.sleep(0.25)
-    for file in [sav1, sav2, sav3, sav4, sav5, sav6, sav7, sav8, sav9, sav10]:
-        if os.path.isfile(file):
-            pass
-        else:
-            print('No save files found. Starting new game...')
-            time.sleep(0.35)
-            print('-'*25)
-            create_player()
-            return
+    if not all(map(os.path.isfile, [sav1, sav2, sav3, sav4, sav5,
+                                    sav6, sav7, sav8, sav9, sav10, sav11])):
+        print('No save files found. Starting new game...')
+        time.sleep(0.35)
+        print('-'*25)
+        create_player()
+        return
     print('-'*25)
     print('It appears that you already have a save file for this game.')
     while True:
@@ -452,19 +472,20 @@ def check_save():  # Check for save files and load the game if they're found
             time.sleep(0.25)
             try:  # Attempt to open the save files and translate
                 # them into objects/dictionaries
-                with open(sav1, encoding='utf-8') as a:
-                    static = json.load(a)
-                with open(sav2, encoding='utf-8') as b:
-                    position = json.load(b)
+                with open(sav1, encoding='utf-8') as f:
+                    static = json.load(f)
+                with open(sav2, encoding='utf-8') as f:
+                    position = json.load(f)
                 inv_system.deserialize_inv(sav3)
                 inv_system.deserialize_equip(sav4)
                 deserialize_player(sav5)
                 magic.deserialize_sb(sav6)
-                with open(sav7, encoding='utf-8') as g:
-                    bosses.defeated_bosses = list(json.load(g))
+                with open(sav7, encoding='utf-8') as f:
+                    bosses.defeated_bosses = list(json.load(f))
                 npcs.deserialize_dialogue(sav8)
                 bosses.deserialize_bosses(sav9)
                 items.deserialize_gems(sav10)
+                pets.deserialize_pets(sav11)
                 print('Load successful.')
                 if not towns.search_towns(position['x'], position['y'], enter=False):
                     print('-'*25)
@@ -496,20 +517,21 @@ def save_game():
             if not os.path.exists(save_dir):
                 os.makedirs(save_dir)
             try:
-                with open(sav1, mode='w', encoding='utf-8') as a:
-                    json.dump(static, a, indent=4, separators=(', ', ': '))
-                with open(sav2, mode='w', encoding='utf-8') as b:
-                    json.dump(position, b, indent=4, separators=(', ', ': '))
+                with open(sav1, mode='w', encoding='utf-8') as f:
+                    json.dump(static, f, indent=4, separators=(', ', ': '))
+                with open(sav2, mode='w', encoding='utf-8') as f:
+                    json.dump(position, f, indent=4, separators=(', ', ': '))
                 inv_system.serialize_inv(sav3)
                 inv_system.serialize_equip(sav4)
                 serialize_player(sav5)
                 magic.serialize_sb(sav6)
-                with open(sav7, mode='w', encoding='utf-8') as g:
-                    json.dump(bosses.defeated_bosses, g,
+                with open(sav7, mode='w', encoding='utf-8') as f:
+                    json.dump(bosses.defeated_bosses, f,
                               indent=4, separators=(', ', ': '))
                 npcs.serialize_dialogue(sav8)
                 bosses.serialize_bosses(sav9)
                 items.serialize_gems(sav10)
+                pets.serialize_pets(sav11)
                 print('Save successful.')
                 return
             except IOError:
