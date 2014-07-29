@@ -77,7 +77,7 @@ def movement_system():
                 direction = direction.lower()
             except AttributeError:
                 continue
-            if [any(map(direction.startswith, ['n', 's', 'w', 'e']))]:
+            if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
                 sounds.foot_steps.play()
                 if direction.startswith('n'):
                     if position['y'] < 125:

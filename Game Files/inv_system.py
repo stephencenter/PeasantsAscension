@@ -16,6 +16,7 @@
 import sys
 import json
 import time
+import pets
 from copy import copy as _c
 
 import npcs
