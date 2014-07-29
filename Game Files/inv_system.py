@@ -271,7 +271,7 @@ Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else '
                                        str(item), use_equip))
 
         if action == '1':
-            if isinstance(item, Companion):
+            if isinstance(item, pets.Companion):
                 item.equip = True
                 main.player.current_pet.equip = False
                 main.player.current_pet = item
