@@ -541,6 +541,7 @@ def deserialize_inv(path):
                     for key in j_inventory['pets']:
                         if j.name == key:
                             norm_inventory['pets'].append(j)
+                continue
 
             elif category in ['misc', 'q_items']:
                 if item['name'] == 'Magical Compass':
@@ -587,7 +588,6 @@ def deserialize_equip(path):
 
         else:
             x = i.Armor('', '', '', '', '', '', '', '')
-
         x.__dict__ = j_equipped[category]
         norm_equip[category] = x
 

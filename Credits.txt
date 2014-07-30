@@ -10,17 +10,17 @@ MUSIC -- PART 1:
     Chickens going peck peck peck-> [Town Theme]
     Mayhem in the Village---------> [NPC Theme]
     Frontier----------------------> [Graveyard Theme]
-		
+        
     His website: http://www.benlandis.com/ <--- Check it out!
     His Sound Cloud: https://soundcloud.com/benlandis <--- Check it out!
-	
+    
   Eric Skiff, who composed:
     Jumpshot----------------------> [Battle Theme]
     Prologue----------------------> [Title screen & Character Creation Themes]
     Arpanauts---------------------> [Tundra Region Theme]
     We're All Under the Stars-----> [Beach Region Theme]
     Digital Native----------------> [Swamp Region Theme]
-		
+        
     His website: http://www.ericskiff.com/music/ <--- Check it out!
     His Sound Cloud: https://soundcloud.com/eric-skiff <--- Check it out!
 ---------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ MUSIC -- PART 2
     Composed by RoleMusic (http://freemusicarchive.org/music/Rolemusic/):
         Python --> http://tinyurl.com/python-by-rolemusic --> [Battle-over Theme]
             Edited to loop properly. Ending portion removed
-		
+        
     Composed by UncleBibby (http://freemusicarchive.org/music/UncleBibby/):
         CopperNickle --> http://tinyurl.com/coppernickle-by-unclebibby --> [Not yet used!]
             Edited to loop properly. Also, I upped the tempo up by 5%
@@ -41,13 +41,13 @@ MUSIC -- PART 2
 ARTWORK:
   Gabriel Tucker, who drew:
     pythonius_art_1.png
-	
+    
     His deviantArt: http://flygonjones.deviantart.com/ <--- Check it out!
     His YouTube: http://tinyurl.com/flygon-jones <--- Check it out!
-	
+    
   Jacob Hall, who drew:
     pythonius_art_2.png
-	
+    
     His YouTube : http://tinyurl.com/hitmanjake101 <--- Check it out!
 ---------------------------------------------------------------------------------------
 SOUND FX:

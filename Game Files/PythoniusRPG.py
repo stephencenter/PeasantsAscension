@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-#  PythoniusRPG v0.5.4 Alpha
-game_version = 'v0.5.4'
+#  PythoniusRPG v0.5.5 Alpha
+game_version = 'v0.5.5'
 # Copyright 2013, 2014 Stephen Center
 #-----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -81,6 +81,7 @@ import json
 import copy
 import configparser
 import ctypes
+import re
 
 import pygame
 
@@ -106,17 +107,29 @@ pygame.mixer.init()
 town_list = towns.town_list
 
 save_dir = 'Save Files'
-sav1 = 'Save Files/misc_vars.json'  # Misc Variables
-sav2 = 'Save Files/position.json'  # Position
-sav3 = 'Save Files/inventory.json'  # Inventory
-sav4 = 'Save Files/equip_items.json'  # Equipped Items
-sav5 = 'Save Files/play_stats.json'  # Player Stats
-sav6 = 'Save Files/spellbook.json'  # Spellbook
-sav7 = 'Save Files/def_bosses.json'  # Defeated Bosses
-sav8 = 'Save Files/quests_dia.json'  # Quests & Dialogue
-sav9 = 'Save Files/misc_boss_info.json'  # Misc Boss Info
-sav10 = 'Save Files/acquired_gems.json'  # Acquired Gems
-sav11 = 'Save Files/pet_info.json'  # Pet Information
+adventure_name = ''
+
+sav_acquired_gems = 'Save Files/{CHARACTER_NAME}/acquired_gems.json'  # Acquired Gems
+
+sav_def_bosses = 'Save Files/{CHARACTER_NAME}/def_bosses.json'  # Defeated Bosses
+
+sav_equip_items = 'Save Files/{CHARACTER_NAME}/equip_items.json'  # Equipped Items
+
+sav_inventory = 'Save Files/{CHARACTER_NAME}/inventory.json'  # Inventory
+
+sav_misc_boss_info = 'Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc Boss Info
+
+sav_misc_vars = 'Save Files/{CHARACTER_NAME}/misc_vars.json'  # Misc Variables
+
+sav_pet_info = 'Save Files/{CHARACTER_NAME}/pet_info.json'  # Pet Information
+
+sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'  # Player Stats
+
+sav_position = 'Save Files/{CHARACTER_NAME}/position.json'  # Position
+
+sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'  # Quests & Dialogue
+
+sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'  # Spellbook
 
 # NOTE 1: The save file locations can be changed in the file "settings.cfg".
 
@@ -392,14 +405,97 @@ Input letter: """)
         input('Press Enter/Return ')
 
 
+def set_adventure_name():
+    # This function asks the player for an "adventure name". This is the
+    # name of the directory in which his/her save files will be stored.
+    global adventure_name
+
+    while True:
+        # Certain OSes don't allow certain characters, so this removes those characters
+        # and replaces them with whitespace. The player is then asked if this is okay.
+        choice = input("Finally, what do you want to name this adventure? ")
+        new_choice = re.sub('[^\w\-_\. ]', '', choice)
+
+        if os.path.isdir('/'.join([save_dir, new_choice])):
+            # Make sure that the folder doesn't already exist, because
+            # certain OSes don't allow duplicate folder names.
+            print("I've already read about adventures with that name; be original!")
+            print()
+            continue
+
+        elif not choice:  # Files/Folders cannot be have "" as their filename.
+            print("Silence doesn't really make for a great adventure name.")
+            print()
+            continue
+
+        elif new_choice != choice:
+            if not new_choice and choice:
+                print("Please name it something different.")
+                continue
+
+            while True:
+                y_n = input('I had to change some of that. Does "{0}" sound okay? | Yes or No: '.
+                            format(new_choice))
+
+                try:
+                    y_n = y_n.lower()
+                except AttributeError:
+                    continue
+
+                if y_n.startswith("y"):
+                    adventure_name = new_choice
+                    format_save_names()
+                    return
+
+                elif y_n.startswith("n"):
+                    print()
+                    break
+
+        else:
+            while True:
+                y_n = input('You wish for your adventure to be known as "{0}"? | Yes or No: '.
+                            format(choice))
+
+                try:
+                    y_n = y_n.lower()
+                except AttributeError:
+                    continue
+
+                if y_n.startswith("y"):
+                    adventure_name = choice
+                    format_save_names()
+                    return
+
+                elif y_n.startswith("n"):
+                    print()
+                    break
+
+
+def format_save_names():
+    for x in sorted(['sav_acquired_gems', 'sav_def_bosses',
+                     'sav_equip_items', 'sav_inventory',
+                     'sav_misc_boss_info', 'sav_misc_vars',
+                     'sav_pet_info', 'sav_play_stats',
+                     'sav_position', 'sav_quests_dia',
+                     'sav_spellbook'], key=str.lower):
+        spam = globals()[x]
+        globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
+
+
 def create_player():
     global player
     global static
+
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
     static['hp_p'] = copy.copy(player.hp)
     static['mp_p'] = copy.copy(player.mp)
+
     player.name = player.choose_name()
+    print()
     player.class_ = player.choose_class()
+    print()
+    set_adventure_name()
+
     if player.class_ == "warrior":
         static['hp_p'] += 5
         static['mp_p'] -= 1
@@ -408,12 +504,14 @@ def create_player():
         player.spd -= 1
         player.evad -= 1
         inv_system.equipped['weapon'] = copy.copy(items.wdn_sht)
+
     elif player.class_ == "mage":
         static['hp_p'] += 1
         static['mp_p'] += 4
         player.m_attk += 2
         player.m_dfns += 2
         inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
+
     elif player.class_ == "rogue":
         static['hp_p'] += 2
         static['mp_p'] += 1
@@ -422,6 +520,7 @@ def create_player():
         player.spd += 3
         player.evad += 1
         inv_system.equipped['weapon'] = copy.copy(items.stn_dag)
+
     player.hp = copy.copy(static['hp_p'])
     player.mp = copy.copy(static['mp_p'])
     print('-'*25)
@@ -447,57 +546,113 @@ def set_volume():
 def check_save():  # Check for save files and load the game if they're found
     global static
     global position
+    global adventure_name
+
     print('-'*25)
 
     # Check each part of the save file
     print('Searching for valid save files...')
+    dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
+    save_files = {}
+    for directory in dirs:
+        if all(map(os.path.isfile,
+                   [x.format(CHARACTER_NAME=directory)
+                    for x in [sav_acquired_gems, sav_def_bosses,
+                              sav_equip_items, sav_inventory,
+                              sav_misc_boss_info, sav_misc_vars,
+                              sav_pet_info, sav_play_stats,
+                              sav_position, sav_quests_dia,
+                              sav_spellbook]])
+        ):
+            save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in [
+                sav_acquired_gems, sav_def_bosses,
+                sav_equip_items, sav_inventory,
+                sav_misc_boss_info, sav_misc_vars,
+                sav_pet_info, sav_play_stats,
+                sav_position, sav_quests_dia,
+                sav_spellbook]]
+
     time.sleep(0.25)
-    if not all(map(os.path.isfile, [sav1, sav2, sav3, sav4, sav5,
-                                    sav6, sav7, sav8, sav9, sav10, sav11])):
+
+    if not save_files:
         print('No save files found. Starting new game...')
         time.sleep(0.35)
         print('-'*25)
         create_player()
         return
+
     print('-'*25)
-    print('It appears that you already have a save file for this game.')
-    while True:
-        y_n = input('Do you wish to load the previous save file? | Yes or No: ')
-        try:
-            y_n = y_n.lower()
-        except AttributeError:
-            continue
-        if y_n.startswith('y'):
-            print('Loading...')
+    print('Found {0} valid save file(s): '.format(len(save_files)))
+
+    spam = True
+    while spam:
+        print('     ', '\n      '.join(
+            ['[' + str(num + 1) + '] ' + dir_name for num, dir_name in enumerate(save_files)]))
+
+        while True:
+            chosen = input('Input [#] (or type "create new"): ')
+            try:
+                chosen = int(chosen) - 1
+                if chosen < 0:
+                    continue
+
+            except (TypeError, ValueError):
+                try:
+                    chosen = chosen.lower()
+                except AttributeError:
+                    continue
+
+                if chosen == "create new":
+                    print('-'*25)
+                    create_player()
+                    return
+
+                else:
+                    continue
+            try:
+                adventure_name = list(save_files)[chosen]
+            except IndexError:
+                continue
+
+            format_save_names()
+
+            print('-'*25)
+            print('Loading Save File: "{0}"...'.format(list(save_files)[chosen]))
             time.sleep(0.25)
+
             try:  # Attempt to open the save files and translate
-                # them into objects/dictionaries
-                with open(sav1, encoding='utf-8') as f:
-                    static = json.load(f)
-                with open(sav2, encoding='utf-8') as f:
-                    position = json.load(f)
-                inv_system.deserialize_inv(sav3)
-                inv_system.deserialize_equip(sav4)
-                deserialize_player(sav5)
-                magic.deserialize_sb(sav6)
-                with open(sav7, encoding='utf-8') as f:
+                  # them into objects/dictionaries
+
+                with open(sav_def_bosses, encoding='utf-8') as f:
                     bosses.defeated_bosses = list(json.load(f))
-                npcs.deserialize_dialogue(sav8)
-                bosses.deserialize_bosses(sav9)
-                items.deserialize_gems(sav10)
-                pets.deserialize_pets(sav11)
+
+                with open(sav_misc_vars, encoding='utf-8') as f:
+                    static = json.load(f)
+
+                with open(sav_position, encoding='utf-8') as f:
+                    position = json.load(f)
+
+                items.deserialize_gems(sav_acquired_gems)
+                inv_system.deserialize_equip(sav_equip_items)
+                inv_system.deserialize_inv(sav_inventory)
+                bosses.deserialize_bosses(sav_misc_boss_info)
+                pets.deserialize_pets(sav_pet_info)
+                deserialize_player(sav_play_stats)
+                npcs.deserialize_dialogue(sav_quests_dia)
+                magic.deserialize_sb(sav_spellbook)
+
                 print('Load successful.')
+
                 if not towns.search_towns(position['x'], position['y'], enter=False):
                     print('-'*25)
                 return
-            except IOError:
+
+            except AttributeError:
                 print('There was an error loading your game. Error code: IO')
+
             except ValueError:
                 print('There was an error loading your game. Error code: VE')
-            print('-'*25)
-            create_player()
-            return
-        elif y_n .startswith('n'):
+
             print('-'*25)
             create_player()
             return
@@ -506,38 +661,49 @@ def check_save():  # Check for save files and load the game if they're found
 def save_game():
     while True:
         y_n = input('Do you wish to save your progress? | Yes or No: ')
+
         try:
             y_n = y_n.lower()
         except AttributeError:
             continue
+
         if y_n.startswith('y'):
             print('Saving...')
             time.sleep(0.25)
+
             # Check if the save directory already exists, and create it if it doesn't
-            if not os.path.exists(save_dir):
-                os.makedirs(save_dir)
+            if not os.path.exists('/'.join([save_dir, adventure_name])):
+                os.makedirs('/'.join([save_dir, adventure_name]))
+
+            format_save_names()
+
             try:
-                with open(sav1, mode='w', encoding='utf-8') as f:
+                with open(sav_def_bosses, mode='w', encoding='utf-8') as f:
+                    json.dump(bosses.defeated_bosses, f, indent=4, separators=(', ', ': '))
+
+                with open(sav_misc_vars, mode='w', encoding='utf-8') as f:
                     json.dump(static, f, indent=4, separators=(', ', ': '))
-                with open(sav2, mode='w', encoding='utf-8') as f:
+
+                with open(sav_position, mode='w', encoding='utf-8') as f:
                     json.dump(position, f, indent=4, separators=(', ', ': '))
-                inv_system.serialize_inv(sav3)
-                inv_system.serialize_equip(sav4)
-                serialize_player(sav5)
-                magic.serialize_sb(sav6)
-                with open(sav7, mode='w', encoding='utf-8') as f:
-                    json.dump(bosses.defeated_bosses, f,
-                              indent=4, separators=(', ', ': '))
-                npcs.serialize_dialogue(sav8)
-                bosses.serialize_bosses(sav9)
-                items.serialize_gems(sav10)
-                pets.serialize_pets(sav11)
+
+
+                items.serialize_gems(sav_acquired_gems)
+                inv_system.serialize_equip(sav_equip_items)
+                inv_system.serialize_inv(sav_inventory)
+                bosses.serialize_bosses(sav_misc_boss_info)
+                pets.serialize_pets(sav_pet_info)
+                serialize_player(sav_play_stats)
+                npcs.serialize_dialogue(sav_quests_dia)
+                magic.serialize_sb(sav_spellbook)
+
                 print('Save successful.')
                 return
-            except IOError:
-                print('There was an error saving your game. Error code: IO')
-            except ValueError:
-                print('There was an error saving your game. Error code: VE')
+
+            except (IOError, ValueError):
+                input('There was an error saving your game (Press Enter/Return)')
+                raise
+
         elif y_n.startswith('n'):
             return
 
@@ -608,9 +774,14 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
 
 
 def main():
-    if os.name == 'nt':  # This will raise an error on non-Windows systems
+    # Set the console title to be "PythoniusRPG [game version]"
+
+    if os.name == 'nt':  # Windows
         ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
-        # Set the console title to be "PythoniusRPG [game version]" (Windows Only)
+
+    elif os.name == 'posix':
+        sys.stdout.write("\x1b]2;Pythonius RPG {0}\x07".format(game_version))
+
 
     set_saves()  # Set the save file locations
     set_volume()  # Set the sound & music volume
