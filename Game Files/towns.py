@@ -438,7 +438,6 @@ GP). (Press enter/return).'.format(str(i), i.buy))
 
                 break
 
-
     def speak_to_npcs(self):
         while True:
             print('NPCs:\n     ', '\n      '.join(

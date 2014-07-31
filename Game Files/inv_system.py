@@ -1,4 +1,4 @@
-#   This file is part of PythoniusRPG.
+# This file is part of PythoniusRPG.
 #
 #	 PythoniusRPG is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -197,7 +197,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                     else:
                         print(vis_cat + ': \n      ' + '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
-                                for x, y in enumerate(inventory[cat]) if not y.equip]))
+                             for x, y in enumerate(inventory[cat]) if not y.equip]))
                 else:
                     return
 
@@ -206,7 +206,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 if not gs:
                     print(''.join([vis_cat, ': \n      ', '\n      '.join(
                         ['[' + str(x + 1) + '] ' + str(y)
-                            for x, y in enumerate(inventory[cat])])]))
+                         for x, y in enumerate(inventory[cat])])]))
 
                 else:
                     print(''.join([vis_cat, ': \n      ', '\n      '.join(
@@ -334,8 +334,10 @@ Input letter (or type "back"): ')
                 while fizz:
                     print('Finished Quests: ')
                     print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
-                        for num, x in enumerate([y for y in npcs.all_dialogue
-                        if isinstance(y, npcs.Quest) and y.finished])]))
+                                                   for num, x in
+                                                   enumerate([y for y in npcs.all_dialogue
+                                                              if isinstance(y, npcs.Quest)
+                                                              and y.finished])]))
 
                     while True:
                         number = input('Input [#] (or type "back"): ')
@@ -373,9 +375,10 @@ Input letter (or type "back"): ')
                 while fizz:
                     print('Active Quests: ')
                     print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
-                        for num, x in enumerate([y for y in npcs.all_dialogue
-                            if isinstance(y, npcs.Quest)
-                            and not y.finished and y.started])]))
+                                                   for num, x in
+                                                   enumerate([y for y in npcs.all_dialogue
+                                                              if isinstance(y, npcs.Quest)
+                                                              and not y.finished and y.started])]))
 
                     while True:
                         number = input('Input [#] (or type "back"): ')
@@ -462,7 +465,7 @@ def tools_menu():  # Display a set of usable tools on the world map
     while spam:
         print(''.join(['Tools', ': \n      ', '\n      '.join(
             ['[' + str(x + 1) + '] ' + str(y)
-                for x, y in enumerate(available_tools)])]))
+             for x, y in enumerate(available_tools)])]))
 
         while True:
             tool = input('Input [#] (or type "exit"): ')
@@ -476,8 +479,8 @@ def tools_menu():  # Display a set of usable tools on the world map
                     ]:
                         spam = False  # Essentially breaks the loop twice
                         if not towns.search_towns(
-                            main.position['x'],
-                            main.position['y'], enter=False
+                                main.position['x'],
+                                main.position['y'], enter=False
                         ):
                             print('-'*25)
                         break

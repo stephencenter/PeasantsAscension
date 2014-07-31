@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-#  PythoniusRPG v0.5.5 Alpha
+# PythoniusRPG v0.5.5 Alpha
 game_version = 'v0.5.5'
 # Copyright 2013, 2014 Stephen Center
-#-----------------------------------------------------------------------------#
+# -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
 #
 #	 PythoniusRPG is free software: you can redistribute it and/or modify
@@ -414,7 +414,7 @@ def set_adventure_name():
         # Certain OSes don't allow certain characters, so this removes those characters
         # and replaces them with whitespace. The player is then asked if this is okay.
         choice = input("Finally, what do you want to name this adventure? ")
-        new_choice = re.sub('[^\w\-_\ ]', '', choice)
+        new_choice = re.sub('[^\w\-_ ]', '', choice)
 
         if not choice:  # Files/Folders cannot be have "" as their filename.
             print("Silence doesn't really make for a great adventure name.")
@@ -564,7 +564,7 @@ def check_save():  # Check for save files and load the game if they're found
                               sav_pet_info, sav_play_stats,
                               sav_position, sav_quests_dia,
                               sav_spellbook]])
-        ):
+               ):
             save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in [
                 sav_acquired_gems, sav_def_bosses,
                 sav_equip_items, sav_inventory,
@@ -622,7 +622,7 @@ def check_save():  # Check for save files and load the game if they're found
             time.sleep(0.25)
 
             try:  # Attempt to open the save files and translate
-                  # them into objects/dictionaries
+                # them into objects/dictionaries
 
                 with open(sav_def_bosses, encoding='utf-8') as f:
                     bosses.defeated_bosses = list(json.load(f))
@@ -687,7 +687,6 @@ def save_game():
 
                 with open(sav_position, mode='w', encoding='utf-8') as f:
                     json.dump(position, f, indent=4, separators=(', ', ': '))
-
 
                 items.serialize_gems(sav_acquired_gems)
                 inv_system.serialize_equip(sav_equip_items)
@@ -783,7 +782,6 @@ def main():
     elif os.name == 'posix':
         sys.stdout.write("\x1b]2;Pythonius RPG {0}\x07".format(game_version))
 
-
     set_saves()  # Set the save file locations
     set_volume()  # Set the sound & music volume
 
@@ -794,6 +792,7 @@ def main():
 
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
+
     try:  # Run the game
         main()
     except (SystemExit, KeyboardInterrupt):  # Don't log these errors!

@@ -6,7 +6,7 @@
         |___/
             
 PythoniusRPG -- Copyright 2013, 2014 Stephen Center
- -- v0.5.4 Alpha
+ -- v0.5.5 Alpha
 ----------------------------------------------------
 Legal Stuff:
 
@@ -22,6 +22,10 @@ Legal Stuff:
 
     You should have received a copy of the GNU General Public License
     along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+----------------------------------------------------
+Downloads for both the standalone and source-code versions of this game are
+available at http://rbwnjafurret.com/ We also have articles about programming,
+technology, and video games, so visit it if you enjoy those things! ;)
 ----------------------------------------------------
 How to play:
 

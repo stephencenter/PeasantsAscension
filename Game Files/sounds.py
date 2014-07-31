@@ -24,6 +24,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
+# noinspection PyArgumentList
 mixer.pre_init(frequency=44100, buffer=1024)
 mixer.init()
 
