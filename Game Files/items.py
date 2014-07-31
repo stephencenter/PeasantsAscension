@@ -94,7 +94,11 @@ class Weapon(Item):
         self.class_ = class_
         self.equip = equip
         self.element = element
-        self.desc = ' | '.join([desc, self.class_.upper() + ' ONLY'])
+        if self.class_ != 'none':
+            self.desc = ' '.join([desc, '|', self.class_.upper(), 'ONLY'''])
+        else:
+            self.desc = ' '.join([desc, '|', "ANY CLASS"])
+
         if self.equip:
             if self.type_ == 'melee':
                 main.player.attk += self.power
@@ -153,7 +157,10 @@ class Armor(Item):
         self.part = part
         self.class_ = class_
         self.equip = equip
-        self.desc = ' | '.join([desc, self.class_.upper() + ' ONLY'])
+        if self.class_ != 'none':
+            self.desc = ' '.join([desc, '|', self.class_.upper(), 'ONLY'''])
+        else:
+            self.desc = ' '.join([desc, '|', "ANY CLASS"])
 
     def use_item(self):
         global equipped

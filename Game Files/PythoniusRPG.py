@@ -414,23 +414,24 @@ def set_adventure_name():
         # Certain OSes don't allow certain characters, so this removes those characters
         # and replaces them with whitespace. The player is then asked if this is okay.
         choice = input("Finally, what do you want to name this adventure? ")
-        new_choice = re.sub('[^\w\-_\. ]', '', choice)
+        new_choice = re.sub('[^\w\-_\ ]', '', choice)
 
-        if os.path.isdir('/'.join([save_dir, new_choice])):
+        if not choice:  # Files/Folders cannot be have "" as their filename.
+            print("Silence doesn't really make for a great adventure name.")
+            print()
+            continue
+
+        elif os.path.isdir('/'.join([save_dir, new_choice])) and new_choice:
             # Make sure that the folder doesn't already exist, because
             # certain OSes don't allow duplicate folder names.
             print("I've already read about adventures with that name; be original!")
             print()
             continue
 
-        elif not choice:  # Files/Folders cannot be have "" as their filename.
-            print("Silence doesn't really make for a great adventure name.")
-            print()
-            continue
-
         elif new_choice != choice:
             if not new_choice and choice:
                 print("Please name it something different.")
+                print()
                 continue
 
             while True:
