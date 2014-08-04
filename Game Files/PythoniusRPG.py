@@ -170,24 +170,31 @@ class PlayerCharacter:  # The Player
     def player_damage(self, var):  # The formula for the player dealing damage
         phys_dealt = int((battle.temp_stats['attk']/2) -
                          (battle.monster.dfns/2) + (self.lvl/3) + var + 1)
+
         phys_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
             m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
+
         if phys_dealt < 1:
             phys_dealt = 1
+
         return phys_dealt
 
     def choose_name(self):
         while True:
             self.name = input('What is your name, young adventurer? | Input Name: ')
+
             if not ''.join(self.name.split()):
                 continue
+
             while True:
                 y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
+
                 try:
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
+
                 if y_n.startswith('y'):
                     return self.name
                 elif y_n.startswith('n'):
@@ -195,27 +202,35 @@ class PlayerCharacter:  # The Player
 
     def choose_class(self):
         while True:
-            class_ = input(
-                '{0}, which class would you like to train as? | \
+            class_ = input('{0}, which class would you like to train as? | \
 Warrior, Mage, or Rogue: '.format(self.name))
+
             try:
                 class_ = class_.lower()
             except AttributeError:
                 continue
+
             classes = ['warrior', 'mage', 'rogue']
+
             spam = False
+
             for x, y in enumerate(['w', 'm', 'r']):
                 if class_.startswith(y):
                     class_ = classes[x]
                     spam = True
+
             if not spam:
                 continue
+
             while True:
-                y_n = input('You wish to be of the {0} class? | Yes or No: '.format(class_.title()))
+                y_n = input('You wish to be of the {0} class? | Yes or No: '.format(
+                    class_.title()))
+
                 try:
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
+
                 if y_n.startswith('y'):
                     return class_
                 elif y_n.startswith('n'):
@@ -230,29 +245,33 @@ Warrior, Mage, or Rogue: '.format(self.name))
             self.hp = static['hp_p']
             self.mp = static['mp_p']
             temp_ski = 0  # Temporary Skill Points
+
             while self.exp >= static['r_xp']:
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
+
                 if self.class_ == 'warrior':
-                    self.attk += random.randint(2, 3)
-                    self.dfns += random.randint(2, 3)
+                    self.attk += random.randint(1, 3)
+                    self.dfns += random.randint(1, 3)
                     self.m_attk += random.randint(0, 2)
-                    self.m_dfns += random.randint(1, 2)
+                    self.m_dfns += random.randint(0, 2)
                     self.spd += random.randint(1, 2)
                     self.evad += random.randint(0, 1)
                     self.hp += random.randint(1, 2)
                     self.mp += random.randint(1, 2)
+
                 elif self.class_ == 'mage':
                     self.attk += random.randint(0, 2)
-                    self.dfns += random.randint(1, 2)
-                    self.m_attk += random.randint(2, 3)
-                    self.m_dfns += random.randint(2, 3)
+                    self.dfns += random.randint(0, 2)
+                    self.m_attk += random.randint(1, 3)
+                    self.m_dfns += random.randint(1, 3)
                     self.spd += random.randint(1, 2)
                     self.evad += random.randint(0, 1)
                     self.hp += random.randint(1, 2)
                     self.mp += random.randint(2, 3)
+
                 elif self.class_ == 'rogue':
-                    self.attk += random.randint(2, 3)
+                    self.attk += random.randint(1, 3)
                     self.dfns += random.randint(1, 2)
                     self.m_attk += random.randint(0, 2)
                     self.m_dfns += random.randint(1, 2)
@@ -260,23 +279,29 @@ Warrior, Mage, or Rogue: '.format(self.name))
                     self.evad += random.randint(1, 2)
                     self.hp += random.randint(2, 3)
                     self.mp += random.randint(1, 2)
+
                 temp_ski += self.ext_ski
                 magic.new_spells()
                 self.exp -= static['r_xp']
-                static['r_xp'] = int((math.pow(self.lvl*2, 1.8) - self.lvl))
+                static['r_xp'] = int((math.pow(self.lvl*2, 1.9) - 1.2*self.lvl))
+
             print('-'*25)
             self.skill_points(temp_ski)
+
             static['hp_p'] = self.hp
             static['mp_p'] = self.mp
+
             print('-'*25)
             save_game()
             return
 
     def skill_points(self, temp_ski):
         global static
+
         while temp_ski > 0:
             print('You have {0} skill point{1} left to spend.'.format(
                 temp_ski, 's' if temp_ski > 1 else ''))
+
             while temp_ski > 0:
                 skill = input("""Choose a skill to advance:
     [I]ntelligence - Use powerful magic with higher magic stats and MP!
@@ -285,10 +310,12 @@ Warrior, Mage, or Rogue: '.format(self.name))
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
     [L]uck - Slightly improve ALL your stats, AND get more GP/XP!
 Input letter: """)
+
                 try:
                     skill = skill.lower()
                 except AttributeError:
                     continue
+
                 if any(map(skill.startswith, ['i', 's', 'c', 'd', 'l'])):
                     if skill.startswith('i'):
                         vis_skill = 'Intelligence'
@@ -300,36 +327,44 @@ Input letter: """)
                         vis_skill = 'Dexterity'
                     else:
                         vis_skill = 'Luck'
+
                     while True:
                         y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
+
                         try:
                             y_n = y_n.lower()
                         except AttributeError:
                             continue
+
                         if y_n.startswith('y'):
                             pass
-                        elif y_n in ['n', 'no', 'nope']:
+                        elif y_n.startswith('n'):
                             break
                         else:
                             continue
+
                         if skill.startswith('i'):
-                            self.m_dfns += 1
-                            self.m_attk += 1
+                            self.m_dfns += random.randint(1, 2)
+                            self.m_attk += random.randint(1, 2)
                             self.mp += random.randint(3, 5)
                             static['int'] += 1
+
                         elif skill.startswith('s'):
-                            self.attk += 2
-                            self.dfns += 2
+                            self.attk += random.randint(1, 2)
+                            self.dfns += random.randint(1, 2)
                             static['str'] += 1
+
                         elif skill.startswith('c'):
                             self.hp += random.randint(4, 6)
                             self.dfns += random.randint(0, 1)
                             self.m_dfns += random.randint(0, 1)
                             static['con'] += 1
+
                         elif skill.startswith('d'):
                             self.spd += 2
                             self.evad += 1
                             static['dex'] += 1
+
                         elif skill.startswith('l'):
                             self.hp += random.randint(0, 1)
                             self.mp += random.randint(0, 1)
@@ -345,8 +380,10 @@ Input letter: """)
                             self.ext_gol += random.randint(0, 2)
                             self.ext_exp += random.randint(0, 1)
                             static['luc'] += 1
+
                         else:
                             continue
+
                         print('Your {0} has increased!'.format(vis_skill))
                         temp_ski -= 1
                         break
@@ -354,53 +391,47 @@ Input letter: """)
         print('You are out of skill points.')
 
     def player_info(self):
-        print("-{0}'s Stats-".format(self.name))
-        time.sleep(0.35)
-        print('Level: {0} | Class: {1} | Element: {2}'.format(self.lvl, self.class_.title(),
-                                                              self.element.title()))
-        time.sleep(0.35)
-        print('HP: {0}/{1} | MP: {2}/{3}'.format(self.hp, static['hp_p'],
-                                                 self.mp, static['mp_p']))
-        time.sleep(0.35)
-        print('Attack: {0} | M. Attack: {1}'.format(self.attk, self.m_attk))
-        time.sleep(0.35)
-        print('Defense: {0} | M. Defense: {1}'.format(self.dfns, self.m_dfns))
-        time.sleep(0.35)
-        print('Speed: {0} | Evasion: {1}'.format(self.spd, self.evad))
-        time.sleep(0.35)
-        print('INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
-            static['int'], static['str'],
-            static['con'], static['dex'],
-            static['luc']))
-        time.sleep(0.35)
-        print('Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(self.exp,
-                                                                  static['r_xp'],
-                                                                  static['gp']))
-        time.sleep(0.35)
-        print()
-        print('-Equipped Items-')
-        time.sleep(0.35)
-        print('Weapon: {0}'.format(str(inv_system.equipped['weapon'])))
-        time.sleep(0.35)
-        print('Armor:')
-        time.sleep(0.35)
-        print('  Head: {0}'.format(str(inv_system.equipped['head'])))
-        time.sleep(0.35)
-        print('  Body: {0}'.format(str(inv_system.equipped['body'])))
-        time.sleep(0.35)
-        print('  Legs: {0}'.format(str(inv_system.equipped['legs'])))
-        time.sleep(0.35)
-        print()
-        time.sleep(0.35)
-        print('-Current pet-')
-        time.sleep(0.35)
+        for line in [  # Iterate through this list and print the formatted versions
+                "-{0}'s Stats-".format(self.name),
+                'Level: {0} | Class: {1} | Element: {2}'.format(
+                    self.lvl, self.class_.title(),
+                    self.element.title()),
+                'HP: {0}/{1} | MP: {2}/{3}'.format(
+                    self.hp, static['hp_p'],
+                    self.mp, static['mp_p']),
+                'Attack: {0} | M. Attack: {1}'.format(
+                    self.attk, self.m_attk),
+                'Defense: {0} | M. Defense: {1}'.format(
+                    self.dfns, self.m_dfns),
+                'Speed: {0} | Evasion: {1}'.format(
+                    self.spd, self.evad),
+                'INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
+                    static['int'], static['str'],
+                    static['con'], static['dex'],
+                    static['luc']),
+                'Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(
+                    self.exp,
+                    static['r_xp'],
+                    static['gp']),
+
+                '\n-Equipped Items-',
+                'Weapon: {0}'.format(inv_system.equipped['weapon']),
+                'Armor:',
+                '  Head: {0}'.format(inv_system.equipped['head']),
+                '  Body: {0}'.format(inv_system.equipped['body']),
+                '  Legs: {0}'.format(inv_system.equipped['legs']),
+
+                '\n-Current pet-']:
+
+            print(line)
+            time.sleep(0.35)
+
         if self.current_pet:
             print('  Name: {0}'.format(self.current_pet))
             time.sleep(0.35)
             print('  Level: {0}'.format(self.current_pet.level))
         else:
             print('  (None)')
-            time.sleep(0.35)
         print('-'*25)
         input('Press Enter/Return ')
 
@@ -473,12 +504,16 @@ def set_adventure_name():
 
 
 def format_save_names():
+    # Replace "{CHARACTER_NAME}" in the save-file paths to the player's adventure name.
+    # e.g. "Save Files/{CHARACTER_NAME}/sav_acquired_gems" --> "Save Files/ADV/sav_acquired_gems
+
     for x in sorted(['sav_acquired_gems', 'sav_def_bosses',
                      'sav_equip_items', 'sav_inventory',
                      'sav_misc_boss_info', 'sav_misc_vars',
                      'sav_pet_info', 'sav_play_stats',
                      'sav_position', 'sav_quests_dia',
                      'sav_spellbook'], key=str.lower):
+
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
 
@@ -529,18 +564,23 @@ def create_player():
 
 def set_saves():
     config = configparser.ConfigParser()
+
     if os.path.isfile("../settings.cfg"):
         config.read("../settings.cfg")
+
         for x in config['save_files']:
             globals()[x] = config['save_files'][x]
 
 
 def set_volume():
     config = configparser.ConfigParser()
+
     if os.path.isfile("../settings.cfg"):
         config.read("../settings.cfg")
+
         for x in config['volume_levels']:
             globals()[x] = float(config['volume_levels'][x])/100
+
         sounds.change_volume()
 
 
@@ -555,16 +595,20 @@ def check_save():  # Check for save files and load the game if they're found
     print('Searching for valid save files...')
     dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
     save_files = {}
+
     for directory in dirs:
-        if all(map(os.path.isfile,
-                   [x.format(CHARACTER_NAME=directory)
-                    for x in [sav_acquired_gems, sav_def_bosses,
-                              sav_equip_items, sav_inventory,
-                              sav_misc_boss_info, sav_misc_vars,
-                              sav_pet_info, sav_play_stats,
-                              sav_position, sav_quests_dia,
-                              sav_spellbook]])
-               ):
+
+        # If all save-file components exist...
+        if all(map(os.path.isfile, [
+            x.format(CHARACTER_NAME=directory) for x in [
+                sav_acquired_gems, sav_def_bosses,
+                sav_equip_items, sav_inventory,
+                sav_misc_boss_info, sav_misc_vars,
+                sav_pet_info, sav_play_stats,
+                sav_position, sav_quests_dia,
+                sav_spellbook]])):
+
+            # ...then set the dictionary key equal to the newly-formatted save file names
             save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in [
                 sav_acquired_gems, sav_def_bosses,
                 sav_equip_items, sav_inventory,
@@ -710,11 +754,15 @@ def save_game():
 
 def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
     spam = {}
+
     for key in player.__dict__:
+
         if (player.__dict__[key] != player.current_pet) or (not player.current_pet):
             spam[key] = player.__dict__[key]
+
         else:
             spam[key] = [player.__dict__[key].name, player.__dict__[key].level]
+
     with open(path, mode='w', encoding='utf-8') as e:
         json.dump(spam, e, indent=4, separators=(', ', ': '))
 
@@ -722,15 +770,22 @@ def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
 def deserialize_player(path):  # Load the JSON file and translate
     # it into a "PlayerCharacter" object
     global player
+
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
+
     with open(path, encoding='utf-8') as e:
         spam = json.load(e)
+
     for key in spam:
+
         if key == 'current_pet' and spam[key]:
+
             for pet in pets.all_pets:
+
                 if pet.name == spam[key][0]:
                     pet.level = spam[key][1]
                     spam[key] = pet
+
     player.__dict__ = spam
 
 
@@ -738,6 +793,7 @@ def title_screen():
     pygame.mixer.music.load('Music/Prologue.ogg')
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(music_vol)
+
     print("""
       ____        _   _                 _
      |  _ \\ _   _| |_| |__   ___  _ __ (_)_   _ ___
@@ -748,16 +804,21 @@ def title_screen():
 
 PythoniusRPG {0} -- Programmed in Python by Stephen Center
 -----------------------------------------------------------""".format(game_version))
+
     while True:
         choice = input('[P]lay Game  |  [C]redits  | [E]xit  |  Input letter: ')
+
         try:
             choice = choice.lower()
         except AttributeError:
             continue
+
         if choice.startswith('p'):
             return
+
         elif choice.startswith('c'):
             print('-'*25)
+
             try:
                 with open('../Credits.txt') as f:
                     for f.readline in f:
@@ -767,7 +828,9 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
                 print('The "Credits.txt" file could not be found.')
             except OSError:
                 print('There was a problem opening "Credits.txt".')
+
             print('-'*25)
+
         elif choice.startswith('e'):
             pygame.quit()
             sys.exit()
