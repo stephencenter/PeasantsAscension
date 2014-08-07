@@ -82,85 +82,100 @@ def player_choice():
 
 
 def battle_system(is_boss=False, ambush=False):
-    sys.stdout.flush()
     if is_boss:  # Bosses have different battle music than normal enemies
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
         print('The legendary {0} has awoken!'.format(monster.name))
+
     else:
         pygame.mixer.music.load('Music/Jumpshot.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
 
-        if monster.name[0] in vowels:
-        # Remember to use proper grammar!
+        if any(map(monster.name.startswith, vowels)):  # Remember to use proper grammar!
             a_an = 'An '
         else:
             a_an = 'A '
+
         if ambush:
             print('{0}{1} ambushed you while you were resting!'.format(a_an, monster.name))
         else:
             print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monster.name))
-    update_stats()
+
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
+    update_stats()
 
     while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
 
-        bat_stats()
         # First, display the Player and Monster's stats
+        bat_stats()
 
-        move = player_choice()
         # Second, get the player's decision on moves
+        move = player_choice()
 
-        var = random.randint(-1, 1)
-        m_var = random.randint(-1, 1)
         # var is how much less/more the attacks will deal than normal.
         # This makes the battle less predictable and more interesting.
+        var = random.randint(-1, 1)
 
+        # m_var is the same as var, except it applies to the enemy instead of the player
+        m_var = random.randint(-1, 1)
+
+        # If dodge is in a certain range, the attack will miss
         dodge = random.randint(0, 250)
         m_dodge = random.randint(0, 250)
-        # If dodge is in a certain range, the attack will miss
 
         if move == '4':  # Use the Battle Inventory
+
             if battle_inventory() and monster.hp > 0:
                 input('\nPress Enter/Return ')
                 monster.enemy_turn(m_var, m_dodge)
+
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
+
             continue
 
         elif move == '5':
-            run = run_away()  # Attempt to run...
-            if run:
+
+            if run_away():  # Attempt to run.
                 # If it succeeds, end the battle without giving the player a reward
                 print('-'*25)
                 pygame.mixer.music.load(position['reg_music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
+
                 return
+
+            # If it fails, the enemy will attack you and skip your turn
             monster.enemy_turn(m_var, m_dodge)
+
             if player.hp > 0:
                 input('\nPress Enter/Return ')
-            # If it fails, the enemy will attack you and skip your turn
+
             continue
 
+        # The player goes first if they have a higher speed
         elif temp_stats['spd'] > monster.spd or move == '2':
-            # The player goes first if they have a higher speed
+
             if player_turn(var, dodge, move) and monster.hp > 0:
                 input('\nPress Enter/Return ')
                 monster.enemy_turn(m_var, m_dodge)
+
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
+
             continue
 
+        # Otherwise, the monster will go first
         else:
-            # Otherwise, the monster will go first
             monster.enemy_turn(m_var, m_dodge)
+
             if player.hp > 0:
                 input('\nPress Enter/Return ')
                 player_turn(var, dodge, move)
+
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
 
@@ -172,45 +187,54 @@ def battle_system(is_boss=False, ambush=False):
 def player_turn(var, dodge, move):
     global player
     global monster
+
     while True:
         print('\n-Player Turn-') if move != '2' else ''
         # "2" refers to magic, which will print this later
 
-        if move == '1':  # Attack
+        if move == '1':
+
             if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
                 sounds.sword_slash.play()
                 print('You begin to fiercely attack the {0} using your {1}...'.format(
                     monster.name, str(inv_system.equipped['weapon'])))
-            else:  # Ranged weapons aren't swung, so play a different sound effect
+
+            # Ranged weapons aren't swung, so play a different sound effect
+            else:
                 sounds.aim_weapon.play()
                 print('You aim carefully at the {0} using your {1}...'.format(
                     monster.name, str(inv_system.equipped['weapon'])))
+
             time.sleep(0.75)
+
             if dodge in range(monster.evad, 250):
                 dealt = player.player_damage(var)
                 monster.hp -= dealt
                 sounds.enemy_hit.play()
                 print('Your attack connects with the {0}, dealing {1} damage!'.format(
                     monster.name, dealt))
+
             else:
                 sounds.attack_miss.play()
                 print('The {0} dodges your attack with ease!'.format(monster.name))
 
-        elif move == '2':  # Magic
+        elif move == '2':
             if not magic.pick_cat(var, dodge):
                 return False
 
-        elif move == '3':  # Wait
+        elif move == '3':
             print('You wait for your turn to end while you gather your strength.')
             player.hp += 2
             player.mp += 2
 
         else:
             return False
+
         if player.current_pet and monster.hp > 0:
             input('\nPress Enter/Return')
             print("\n-Pet Turn-")
             player.current_pet.use_ability()
+
         return True
 
 

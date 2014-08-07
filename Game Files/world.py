@@ -25,6 +25,7 @@ import towns
 import bosses
 import sounds
 import inv_system
+import magic
 
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
@@ -61,13 +62,15 @@ def movement_system():
     while True:
         towns.search_towns(position['x'], position['y'])
         if position['x'] >= 0:
-            position['h'] = "'E"
+            position['h'] = "\u00b0E"
         else:
-            position['h'] = "'W"
+            position['h'] = "\u00b0W"
+
         if position['y'] >= 0:
-            position['v'] = "'N"
+            position['v'] = "\u00b0N"
         else:
-            position['v'] = "'S"
+            position['v'] = "\u00b0S"
+
         while True:
             direction = input('{0}{1}, {2}{3} | {4} | Input Dir. (N, S, E, W), \
 [P]layer, [T]ools, [R]est: '.format(position['y'], position['v'],
@@ -85,18 +88,21 @@ def movement_system():
                     else:
                         out_of_bounds()
                         continue
+
                 elif direction.startswith('s'):
                     if position['y'] > -125:
                         position['y'] -= 1
                     else:
                         out_of_bounds()
                         continue
+
                 elif direction.startswith('w'):
                     if position['x'] > -125:
                         position['x'] -= 1
                     else:
                         out_of_bounds()
                         continue
+
                 elif direction.startswith('e'):
                     if position['x'] < 125:
                         position['x'] += 1
@@ -107,19 +113,21 @@ def movement_system():
                 position['avg'] = int(((abs(position['x'])) +
                                        (abs(position['y'])))/2)
 
-                if (not check_region() and  # Check for region changes
-                        not bosses.check_bosses(position['x'],
-                                                position['y']) and  # Check for bosses to fight
-                        not towns.search_towns(position['x'], position['y'],
-                                               enter=False)):  # Check for towns to visit
+                if not any([check_region(),
+                           bosses.check_bosses(position['x'], position['y']),
+                           towns.search_towns(position['x'], position['y'], enter=False)]
+                           ):
+
                     # If none of the previous statements return True, then a battle can occur.
                     # There is a 1 in 8 chance for a battle to occur (12.5%)
                     is_battle = not random.randint(0, 7)
+
                     if is_battle:
                         print('-'*25)
                         monsters.spawn_monster()
                         battle.setup_vars()
                         battle.battle_system()
+
                 break
 
             elif direction.startswith('p'):
@@ -127,19 +135,27 @@ def movement_system():
                 print('You stop to rest for a moment.')
                 while True:
                     decision = input(
-                        'View your [i]nventory or your [s]tats? | Input Letter (or type "exit"): ')
+                        'View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
+
                     try:
                         decision = decision.lower()
                     except AttributeError:
                         continue
+
                     if decision.startswith('i'):
                         print('-'*25)
                         inv_system.pick_category()
                         print('-'*25)
+
                     elif decision.startswith('s'):
                         print('-'*25)
                         main.player.player_info()
                         print('-'*25)
+
+                    elif decision.startswith('m'):
+                        magic.pick_spell('Healing', 0, 0, False)
+                        print('-'*25)
+
                     elif decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         print('-'*25)
                         break
@@ -164,24 +180,30 @@ def out_of_bounds():
 def check_region():
     global position
     x, y = position['x'], position['y']
+
     if x in range(-15, -9) and y in range(5, 11):  # Micro-region in the North-west of the Forest
         region = 'Graveyard'
         reg_music = 'Music/Frontier.ogg'
+
     elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
         region = 'Forest'
         reg_music = 'Music/Through the Forest.ogg'
+
     elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
         region = 'Tundra'
         reg_music = 'Music/Arpanauts.ogg'
     elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
         region = 'Mountain'
         reg_music = 'Music/Mountain.ogg'
+
     elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
         region = 'Desert'
         reg_music = 'Music/Come and Find Me.ogg'
+
     elif x in range(0, 116) and y in range(-115, 1):  # Southeast of World
         region = 'Swamp'
         reg_music = 'Music/Digital Native.ogg'
+
     elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
         region = 'Beach'
         reg_music = "Music/We're all under the stars.ogg"
@@ -191,13 +213,16 @@ def check_region():
         print('You have left the {0} region and are now entering the {1} region.'.format(
             position['reg'], region))
         print('-'*25)
+
         position['reg'] = region
         position['reg_music'] = reg_music
         save_coords(position['x'], position['y'])
+
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
+
         return True
 
     else:
@@ -218,24 +243,31 @@ def back_to_coords():
 def rest():
     setup_vars()
     print('-'*25)
+
     if player.hp == static['hp_p'] and player.mp == static['mp_p']:
         print('You feel fine, and decide not to rest.')
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
         return
+
     print('You set up camp and begin to rest.')
+
     time.sleep(1)
     player.hp += int(static['hp_p']/4)
     player.mp += int(static['mp_p']/4)
+
     if player.hp > static['hp_p']:
         player.hp -= (player.hp - static['hp_p'])
     if player.mp > static['mp_p']:
         player.mp -= (player.mp - static['mp_p'])
+
     is_battle = not random.randint(0, 3)
+
     if is_battle:
         monsters.spawn_monster()
         battle.setup_vars()
         battle.battle_system(ambush=True)
+
     else:
         print('You rested well and decide to continue on your way.')
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):

@@ -38,7 +38,11 @@ MUSIC -- PART 2
         CopperNickle --> http://tinyurl.com/coppernickle-by-unclebibby --> [Not yet used!]
             Edited to loop properly. Also, I upped the tempo up by 5%
 ---------------------------------------------------------------------------------------
-ARTWORK:
+SOUND FX:
+  Sound FX were made by Gabriel Tucker and me using an open-source tool known as Bfxr:
+    http://www.bfxr.net/
+---------------------------------------------------------------------------------------
+OTHER STUFF:
   Gabriel Tucker, who drew:
     pythonius_art_1.png
     
@@ -49,9 +53,13 @@ ARTWORK:
     pythonius_art_2.png
     
     His YouTube : http://tinyurl.com/hitmanjake101 <--- Check it out!
----------------------------------------------------------------------------------------
-SOUND FX:
-  Sound FX were made by Gabriel Tucker and me using an open-source tool known as Bfxr:
-    http://www.bfxr.net/
-
+    
+  Both of these individuals also helped extensively by suggesting ideas and finding bugs.
+  
+  I want to thank Gabriel Tucker in particular for putting up with me constantly talking about
+  my game and asking him for suggestions/ideas. He's a big fan of strategy games/RPGs and helped
+  a TON, mostly by complaining about my game and telling me why it sucks! It's the small things
+  that count. :)
+  
 Thanks for playing this game!
+ 

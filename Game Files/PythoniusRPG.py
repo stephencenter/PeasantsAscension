@@ -523,6 +523,8 @@ def create_player():
     global static
 
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
+
+    # Set the player's max HP and MP
     static['hp_p'] = copy.copy(player.hp)
     static['mp_p'] = copy.copy(player.mp)
 
@@ -842,7 +844,7 @@ def main():
     if os.name == 'nt':  # Windows
         ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
 
-    elif os.name == 'posix':
+    elif os.name == 'posix':  # Most Unix Devices
         sys.stdout.write("\x1b]2;Pythonius RPG {0}\x07".format(game_version))
 
     set_saves()  # Set the save file locations

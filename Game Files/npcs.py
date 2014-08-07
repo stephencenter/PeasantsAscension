@@ -45,29 +45,41 @@ class NPC:
                     elif w.started and w.finished and w.active:
                         dialogue = [w.end_dialogue]
                         break
+
                 except AttributeError:  # Non-quests
                     dialogue.append(w.sentences)
+
         else:
             for x in self.conversations:
+
                 if x.active and x.repeat:
                     dialogue.append(x.sentences)
+
                     break
+
         for y in dialogue[:]:
+
             # Dialogue is being modified, so we're iterating over a copy of it.
             for z in y:
-                input(self.name + ': "' + z + '" | Press enter/return ')
+                input(self.name + ': "' + z + '" | Press enter/return '
+                                              '')
             dialogue.remove(y)
             print('-'*25) if dialogue else ''
+
             for obj in self.conversations:
+
                 if isinstance(obj, Quest) and obj.end_dialogue == y:
                     y = obj
                 elif obj.sentences == y:
                     y = obj
+
             if isinstance(y, Quest) and not y.started:
                 y.give_quest()
             elif isinstance(y, Quest) and y.finished:
                 y.completion()
+
             else:
+
                 try:
                     y.after_talking()
                 except AttributeError:
@@ -106,25 +118,33 @@ class Quest(Conversation):
         print('-'*25)
         print(''.join([self.name, ': \n  ', '\n  '.join([x for x in self.desc])]))
         print('-'*25)
+
         if self.req_lvl > main.player.lvl:
             print('You are not a high enough level to begin the quest "{0}".\
 (Must be level {1})'.format(self.name, self.req_lvl))
+
         print('{0} is offering you the quest, "{1}".'.format(self.q_giver, self.name))
+
         while True:
             accept = input('Do you accept this quest? | Yes or No: ')
+
             try:
                 accept = accept.lower()
             except AttributeError:
                 continue
+
             if accept.startswith('y'):
                 print('-'*25)
                 print('{0}: "Terrific! Come see me when you are finished."'.format(self.q_giver))
                 self.started = True
                 self.upon_starting()
+
                 return
+
             elif accept.startswith('n'):
                 print('-'*25)
                 print('{0}: "...Oh. Come back later if you change your mind."'.format(self.q_giver))
+
                 return
 
     def completion(self):

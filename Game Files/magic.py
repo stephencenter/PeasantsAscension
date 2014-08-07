@@ -63,17 +63,22 @@ class Healing(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic(self):
+    def use_magic_healing(self, is_battle):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
             main.player.hp += self.health + int(main.static['int']/4) + random.randint(-2, 2)
+
             if main.player.hp > main.static['hp_p']:
                 main.player.hp -= (main.player.hp - main.static['hp_p'])
             sounds.magic_healing.play()
-            print('-Player Turn-')
+
+            if is_battle:
+                print('-Player Turn-')
+
             print('Using "{0}", you are healed by {1} HP!'.format(self.name, self.health))
             return True
+
         else:
             print(out_of_mana)
             return False
@@ -116,6 +121,7 @@ class Damaging(Spell):
                 sounds.attack_miss.play()
                 print('The {0} dodges your attack!'.format(monsters.monster.name))
             return True
+
         else:
             print(out_of_mana)
             return False
@@ -153,6 +159,7 @@ class Buff(Spell):
             elif self.stat == 'Magic Attack':
                 battle.temp_stats['m_attk'] += self.incre
             return True
+
         else:
             print(out_of_mana)
             return False
@@ -307,7 +314,7 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
 spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []}
 
 
-def pick_cat(var, dodge):
+def pick_cat(var, dodge, is_battle=True):
     while True:
         cat = input(
             'Spellbook: 1: Damaging;  2: Buffs;  3: Healing  |  Input #1-3 (or type "exit"): ')
@@ -318,68 +325,91 @@ def pick_cat(var, dodge):
         elif cat == '3':
             cat = 'Healing'
         else:
+
             try:
                 if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return False
             except AttributeError:
                 continue
+
             else:
                 continue
+
         if not spellbook[cat]:
             print('-'*25)
             print('You do not yet have any spells in the {0} category.'.format(cat))
             print('-'*25)
             continue
-        if pick_spell(cat, var, dodge):
+
+        if pick_spell(cat, var, dodge, is_battle):
             return True
 
 
-def pick_spell(cat, var, dodge):
+def pick_spell(cat, var, dodge, is_battle):
     print('-'*25)
+
     while True:
+
         print(cat + ' Spells: \n      ' + '\n      '.join(
             ['[' + str((num + 1)) + '] ' + spell.name + ' --> ' + str(
                 spell.mana) + ' MP' for num, spell in enumerate(
                     spellbook[cat])]))
+
         while True:
             spell = input('Input [#] (or type "back"): ')
+
             try:
                 spell = int(spell) - 1
             except (TypeError, ValueError):
+
                 try:
                     spell = spell.lower()
                 except AttributeError:
                     continue
+
                 if spell in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return False
                 else:
                     continue
+
             try:
                 spell = spellbook[cat][spell]
             except IndexError:
                 continue
+
             print('-'*25)
             print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
             print('-'*25)
+
             while True:
                 y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
                 if y_n == '':
                     continue
+
                 try:
                     y_n = y_n.lower()
                 except AttributeError:
                     continue
+
                 if y_n.startswith('y'):
                     if isinstance(spell, Damaging):
+
                         if spell.use_magic(var, dodge):
                             return True
                         else:
                             return False
+
                     else:
-                        if spell.use_magic():
+                        if isinstance(spell, Healing):
+                            if spell.use_magic_healing(is_battle):
+                                return True
+
+                        elif spell.use_magic():
                             return True
+
                         else:
                             return False
+
                 elif y_n.startswith('n'):
                     break
 
@@ -409,8 +439,10 @@ def serialize_sb(path):
     j_spellbook = {}
     for cat in spellbook:
         j_spellbook[cat] = []
+
         for spell in spellbook[cat]:
             j_spellbook[cat].append(spell.__dict__)
+
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_spellbook, f, indent=4, separators=(', ', ': '))
 

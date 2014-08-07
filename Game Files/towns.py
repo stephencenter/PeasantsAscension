@@ -105,20 +105,21 @@ class Town:
 
     def new_location(self, add=True):  # Translate the location of newly-found towns
         if self.y >= 0:  # into a string, then add to inventory.
-            foo = "'N"
+            foo = "\u00b0N"
         else:
-            foo = "'S"
+            foo = "\u00b0S"
+
         if self.x >= 0:
-            bar = "'E"
+            bar = "\u00b0E"
         else:
-            bar = "'W"
+            bar = "\u00b0W"
+
         spam = ''.join([self.name, ': ', str(self.y), foo, ', ', str(self.x), bar])
         if add:
             if spam not in inv_system.inventory['coord']:
                 inv_system.inventory['coord'].append(spam)
                 print('-'*25)
-                print("{0}'s location has been added to \
-the coordinates page of your inventory.".format(self.name))
+                print("{0}'s location has been added to your coordinates.".format(self.name))
         else:
             return spam
 
@@ -132,11 +133,11 @@ the coordinates page of your inventory.".format(self.name))
             # (if anyone knows how to simplify this, please tell me!)
             if self.inn and not self.gen_store and not self.pet_shop:
                 print('There is an [I]nn in this town.')
-                buildings = gen_words
+                buildings = inn_words
 
             elif self.gen_store and not self.inn and not self.pet_shop:
                 print('There is a [G]eneral Store in this town.')
-                buildings = inn_words
+                buildings = gen_words
 
             elif self.pet_shop and not self.inn and not self.gen_store:
                 print('There is a [P]et Shop in this town.')
@@ -167,25 +168,32 @@ the coordinates page of your inventory.".format(self.name))
                 while not spam:
                     selected = input(
                         'What building will you enter? | Input [Letter] (or type "exit"): ')
+
                     try:
                         selected = selected.lower()
                     except AttributeError:
                         continue
+
                     if any(map(selected.startswith, buildings)):
                         pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                         pygame.mixer.music.play(-1)
                         pygame.mixer.music.set_volume(main.music_vol)
+
                         if selected.startswith('g'):
                             self.town_gen()
                         elif selected.startswith('i'):
                             self.town_inn()
                         else:
                             self.town_pet()
-                        spam = True
+
                         print('-'*25)
+
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
                         pygame.mixer.music.set_volume(main.music_vol)
+
+                        spam = True
+
                     elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
 
@@ -196,10 +204,12 @@ the coordinates page of your inventory.".format(self.name))
             choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
                 "It's free, y'know." if not self.inn_cost else ' '.join(
                     ["One Night is", str(self.inn_cost), "GP."])))
+
             try:
                 choice = choice.lower()
             except AttributeError:
                 continue
+
             if choice.startswith('y'):
                 print()
                 if main.static['gp'] >= self.inn_cost:
@@ -212,9 +222,12 @@ the coordinates page of your inventory.".format(self.name))
                     print('Your HP and MP have been fully restored. ')
                     print('-'*25)
                     main.save_game()
+
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
+
                 return
+
             elif choice.startswith('n'):
                 return
 
@@ -222,48 +235,61 @@ the coordinates page of your inventory.".format(self.name))
         stock = []  # A list containing objects the player can purchase
         for item in inv_system.gs_stock:
             stock.append(item[self.gs_level - 1])
+
         if self.gs_level == 2:
             stock.append(items.shovel)
         elif self.gs_level == 4:
             stock.append(items.divining_rod)
+
         print('-'*25)
         print('Merchant: "Welcome, Traveler!"')
+
         while True:
             b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ')
+
             try:
                 b_s = b_s.lower()
             except AttributeError:
                 continue
+
             if b_s.startswith('b'):
                 print('-'*25)
                 fizz = True
                 while fizz:
                     print('''"Well, here's what I have in my stock: "''')
+
                     for num, item in enumerate(stock):
                         print(''.join(
                             ['   [', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
+
                     print('You have {0} GP'.format(main.static['gp']))
+
                     while True:
                         purchase = input('Input [#] (or type "back"): ')
                         try:
                             purchase = int(purchase) - 1
                             if purchase < 0:
                                 continue
+
                         except ValueError:
                             try:
                                 purchase = purchase.lower()
                             except AttributeError:
                                 continue
+
                             if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                 print('-'*25)
                                 fizz = False
                                 break
+
                             else:
                                 continue
+
                         try:
                             i = stock[purchase]
                         except IndexError:
                             continue
+
                         print('-'*25)
                         print(i.desc)
                         print('-'*25)
@@ -271,10 +297,12 @@ the coordinates page of your inventory.".format(self.name))
                             confirm = input(
                                 "\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
                                     'these' if str(i).endswith('s') else 'this', str(i), i.buy))
+
                             try:
                                 confirm = confirm.lower()
                             except AttributeError:
                                 continue
+
                             if confirm.startswith('y'):
                                 if main.static['gp'] >= i.buy:
                                     inv_system.inventory[i.cat].append(i)
@@ -283,15 +311,21 @@ the coordinates page of your inventory.".format(self.name))
                                     input('You purchase the {0} (-{1} \
 GP). (Press enter/return).'.format(str(i), i.buy))
                                     print('-'*25)
+
                                 else:
                                     input('"Hey, you don\'t even have enough GP for this \
 {0}!" (Press enter/return) '.format(str(i)))
                                     print()
+
                                 break
+
                             elif confirm.startswith('n'):
                                 print()
+
                                 break
+
                         break
+
             elif b_s.startswith('s'):
                 print('-'*25)
                 spam = True
@@ -303,10 +337,12 @@ GP). (Press enter/return).'.format(str(i), i.buy))
       [4] Miscellaneous""")
                     while True:
                         cat = input('Input [#] (or type "back"): ')
+
                         try:
                             cat = cat.lower()
                         except AttributeError:
                             pass
+
                         if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                             print('-'*25)
                             spam = False
@@ -325,20 +361,27 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                             vis_cat = 'Miscellaneous'
                         else:
                             continue
+
                         if cat in inv_system.inventory:
+
                             if inv_system.inventory[cat]:
+
                                 if cat not in ['weapons', 'armor']:
                                     inv_system.pick_item(cat, vis_cat, gs=True)
                                     print('-'*25)
+
                                 else:
                                     if [x for x in inv_system.inventory[cat] if not x.equip]:
                                         inv_system.pick_item(cat, vis_cat, gs=True)
                                         print('-'*25)
+
                                     else:
                                         print('-'*25)
                                         print('The "{0}" category is empty...'.format(vis_cat))
                                         print('-'*25)
+
                                 break
+
                             else:
                                 print('-'*25)
                                 print('The "{0}" category is empty...'.format(vis_cat))
@@ -442,34 +485,45 @@ GP). (Press enter/return).'.format(str(i), i.buy))
         while True:
             print('NPCs:\n     ', '\n      '.join(
                 ["[" + str(x + 1) + "] " + npc.name for x, npc in enumerate(self.people)]))
+
             while True:
                 npc = input('Input [#] (or type "exit"): ')
+
                 try:
                     npc = int(npc) - 1
                     if npc < 0:
                         continue
                 except (ValueError, TypeError):
+
                     try:
                         npc = npc.lower()
                     except AttributeError:
                         continue
+
                     if npc in ['e', 'x', 'exit', 'b', 'back', 'c', 'cancel']:
                         return
                     else:
                         continue
+
                 try:
                     npc = self.people[npc]
                 except IndexError:
                     continue
+
                 pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
+
                 print('-'*25)
+
                 npc.speak()
+
                 print('-'*25)
+
                 pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
+
                 break
 
 
@@ -536,20 +590,27 @@ def search_towns(pos_x, pos_y, enter=True):
     # Check to see if there is a
     # town where the player is located
     for town in town_list:
+
         if town.x == pos_x and town.y == pos_y:
+
             if enter:
                 print('-'*25)
+
                 while True:
+
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
                         y_n = input('There is a town nearby. \
 Do you wish to investigate? | Yes or No: ')
+
                     else:
                         y_n = input('The town of {0} is nearby. \
 Do you want to visit it? | Yes or No: '.format(town.name))
+
                     try:
                         y_n = y_n.lower()
                     except AttributeError:
                         continue
+
                     if y_n.startswith('y'):
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
@@ -557,10 +618,13 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                         world.save_coords(town.x, town.y)
                         town.new_location()
                         town.town_choice()
+
                         return
+
                     elif y_n.startswith('n'):
                         print('-'*25)
                         return
+
             else:
                 return True
     else:
