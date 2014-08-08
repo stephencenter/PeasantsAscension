@@ -391,7 +391,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                 return
 
     def town_pet(self):
-        pet_list = [[pets.pet_wolf]][self.ps_level - 1]
+        pet_list = [[pets.pet_wolf], [pets.pet_sapling, pets.pet_viper]][self.ps_level - 1]
 
         print('-'*25)
         print('Welcome, adventurer!')
@@ -554,7 +554,7 @@ town4 = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing too special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.joseph],
-             19, -7, inn_cost=2, gs_level=3)
+             19, -7, inn_cost=2, gs_level=2)
 
 town5 = Town('Fort Sigil', """Fort Sigil: A small village in the northern region
 of the Forest. The citizens of this town have worked tremendously hard to

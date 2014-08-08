@@ -101,13 +101,18 @@ class Fighter(Companion):
 # --Healing Pets--
 pet_cherub = Healer("Cherub",
                     "A sweet angel skilled in the way of weak-healing.", 150, 2, 10, 5, 2)
+pet_sapling = Healer("Cherry Sapling",
+                     "A small cherry tree which, due to a magical spell, is skilled as a healer.",
+                     350, 5, 15, 6, 2)
 
 # --Fighting Pets--
 pet_wolf = Fighter("Wolf",
-                   "A fearsome but tame canine capable of low-level fighting power.", 200, 2,)
+                   "A fearsome but tame canine capable of low-level fighting power.", 200, 2)
+pet_viper = Fighter("Viper",
+                    "Despite not being that big, this viper does pack quite a punch.",
+                    400, 5, incap_chance=30)
 
-
-all_pets = [pet_cherub, pet_wolf]
+all_pets = [pet_cherub, pet_sapling, pet_wolf, pet_viper]
 
 
 def serialize_pets(path):

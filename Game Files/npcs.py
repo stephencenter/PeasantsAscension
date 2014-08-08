@@ -61,8 +61,8 @@ class NPC:
 
             # Dialogue is being modified, so we're iterating over a copy of it.
             for z in y:
-                input(self.name + ': "' + z + '" | Press enter/return '
-                                              '')
+                input(self.name + ': "' + z + '" | Press enter/return ')
+                d
             dialogue.remove(y)
             print('-'*25) if dialogue else ''
 
@@ -196,9 +196,9 @@ alfred_phrase_2 = Conversation(["Come back here when you defeat the evil",
 alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"], repeat=True)
 
 alfred_quest_1 = Quest(["...Actually, now that I think about it, do you think you could possibly",
-                        "dispose of this vile creature? His location is 0'N, 1'E."],
+                        "dispose of this vile creature? His location is 0\u00b0N, 1\u00b0E."],
                        'A Slimy Specimen',
-                       ["Defeat the dreaded Master Slime at location 0'N, 1'E and then",
+                       ["Defeat the dreaded Master Slime at location 0\u00b0N, 1\u00b0E and then",
                         "return to Alfred in Nearton."], 'Alfred', [30, 50],
                        ["You defeated the evil Master Slime?!",
                         "Amazing! Take this, adventurer, you've earned it."], active=True)
@@ -229,7 +229,8 @@ alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
 
 # Name: Wesley -- Town: Southford
 wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
-                                "to be stronger the farther from 0'N, 0'E that you travel.",
+                                "to be stronger the farther from 0\u00b0N, 0\u00b0E that you \
+travel.",
                                 "However, monsters there also give better loot. Be careful."
                                 ], active=True)
 wesley = NPC('Wesley', [wesley_phrase_1])
@@ -242,7 +243,7 @@ stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                  "The Forest lies in the center, while the Beach surrounds them.",
                                  "There's a small region somewhere around here that is the",
                                  "cause of much worry and panic in this town: The Graveyard.",
-                                 "Inside lies a dangerous aparrition, feared by all who have\
+                                 "Inside lies a dangerous aparrition, feared by all who have \
 seen it.",
                                  ], active=True)
 
@@ -252,10 +253,10 @@ stewson_phrase_3 = Conversation(["Thank you again for your help, adventurer!"])
 
 stewson_quest_1 = Quest(["I wish someone would do something about this terrible",
                          "ghost... Hey! You're a strong adventurer, perhaps you",
-                         "could defeat this phantom? It's at position 8'N, -12'W."],
+                         "could defeat this phantom? It's at position 8\u00b0N, -12\u00b0W."],
                         'The Shadowy Spirit',
                         ["Defeat the feared Menacing Phantom at location",
-                         "8'N, -12'W and then return to Stewson in Overshire."],
+                         "8\u00b0N, -12\u00b0W and then return to Stewson in Overshire."],
                         'Stewson', [50, 75],
                         ["You... you actually defeated it?! Thank you ever so much!",
                          "Take this, it is the least our town can do for your bravery."],
@@ -274,26 +275,8 @@ def stwqst_uc1():
     global stewson_phrase_3
     stewson_phrase_3.active = True
     print('-'*25)
-    if not main.player.current_pet:
-        print('You have recieved a Cherub pet!')
-        main.player.current_pet = pets.pet_cherub
-    else:
-        print('You are being offered a Cherub pet (Healer) by Stewson.')
-        print('Accepting this pet will cause your current pet to be replaced.')
-        while True:
-            y_n = input('Replace your {0} pet with a pet Cherub (Healer)? | Yes or No: '.format(
-                main.current_pet.name))
-            try:
-                y_n = y_n.lower()
-            except AttributeError:
-                continue
-            if y_n.startswith('y'):
-                print('You have recieved a Cherub pet!')
-                main.player.current_pet = pets.pet_cherub
-                return
-            elif y_n.startswith('n'):
-                print('You have declined the offer to recieve a Cherub pet.')
-                return
+    print('You have recieved a Cherub pet!')
+    inv_system.inventory['pets'].append(pets.pet_cherub)
 
 
 stewson_quest_1.upon_starting = stwqst_us1
@@ -319,10 +302,11 @@ joseph_quest_1 = Quest(["Wait a second... are you who I think you are? I've reci
                         "this way. Yes, that MUST be you they're talking",
                         'about! Could you please do me a favor and take',
                         "this message to Philliard in Nearton? Nearton,",
-                        "in case you've forgotton, is at 1'N, 0'E."],
+                        "in case you've forgotton, is at 1\u00b0N, 0\u00b0E."],
                        'An Important Message',
                        ["Deliver a message (located in your Quest Items) to Philliard in Nearton,",
-                        "located at 1'N, 0'E, and then return to Joseph in Charsulville."],
+                        "located at 1\u00b0N, 0\u00b0E, and then return to Joseph in \
+Charsulville."],
                        'Joseph', [15, 25],
                        ["You have delivered the message? Thank you ever so",
                         "much! You have no idea how much trouble you've saved me.",
@@ -471,9 +455,9 @@ alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of t
                        "of course. Afterwards, spread word in the two towns",
                        "that an anonymous warrior from the opposite town defeated it!",
                        "This should bring an end to their constant bickering.",
-                       "I will summon the monster at coordinates -23'S, -11'W."],
+                       "I will summon the monster at coordinates -23\u00b0S, -11\u00b0W."],
                       "Stop the Strife",
-                      ["Defeat the monster at location -23'S, -11'W and then inform",
+                      ["Defeat the monster at location -23\u00b0S, -11\u00b0W and then inform",
                        "The village elders at Tripton and Fallville of the opposite",
                        "village's bravery."], 'Alden', [175, 200],
                       ["Welcome back, brave adventurer. I have already received word",
@@ -539,19 +523,23 @@ all_dialogue = [
 
 def serialize_dialogue(path):
     json_dialogue = {}
+
     for c in all_dialogue:
         if isinstance(c, Quest):
             json_dialogue[str(c)] = [c.active, c.repeat, c.started, c.finished]
         else:
             json_dialogue[str(c)] = [c.active, c.repeat]
+
     with open(path, encoding='utf-8', mode='w') as h:
         json.dump(json_dialogue, h, indent=4, separators=(', ', ': '))
 
 
 def deserialize_dialogue(path):
     global all_dialogue
+
     with open(path, encoding='utf-8') as h:
         j_log = json.load(h)
+
     for key in j_log:
         for c in all_dialogue[:]:
             if key == str(c):
