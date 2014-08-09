@@ -581,7 +581,7 @@ small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest
 this area only has a small cottage. An old man is tending to his
 flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""", [npcs.alden],
-                    -12, -26, inn=False, gen_store=False)
+                    -12, -26, inn=False, gen_store=False, pet_shop=True, ps_level=2)
 
 town_list = [town1, town2, town3, town4, town5, town6, town7, small_house1]
 
