@@ -596,7 +596,7 @@ def check_save():  # Check for save files and load the game if they're found
     # Check each part of the save file
     print('Searching for valid save files...')
 
-    if not os.path.isdir("Save Files"):
+    if not os.path.isdir(save_dir):
         time.sleep(0.25)
         print('No save files found. Starting new game...')
         time.sleep(0.35)
