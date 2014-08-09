@@ -62,7 +62,7 @@ class NPC:
             # Dialogue is being modified, so we're iterating over a copy of it.
             for z in y:
                 input(self.name + ': "' + z + '" | Press enter/return ')
-                d
+
             dialogue.remove(y)
             print('-'*25) if dialogue else ''
 
@@ -284,6 +284,12 @@ stewson_quest_1.upon_completing = stwqst_uc1
 
 stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
 
+# Name: Jeffery -- Town: Overshire
+jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",
+                                 "who was in need of a messenger. I think the town was somewhere",
+                                 "around -8\u00b0S, 20\u00b0E. Somewhere around there."])
+
+jeffery = NPC('Jeffery', [jeffery_phrase_1])
 
 # Name: Ethos -- Town: Charsulville
 ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',

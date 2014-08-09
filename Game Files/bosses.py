@@ -137,7 +137,7 @@ def menacphan_ud():
 menac_phantom.upon_defeating = menacphan_ud
 
 # Boss: Terrible Tarrantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
-terr_tarrant = Boss('Terrible Tarrantuloid', 100, 20, 15, 15, 5, 5, 18, 6, 12, -11, -23, [],
+terr_tarrant = Boss('Terrible Tarrantuloid', 100, 20, 15, 15, 5, 5, 18, 6, 11, -11, -23, [],
                     100, 100)
 
 
@@ -152,5 +152,10 @@ def terrtarr_ud():
 
 terr_tarrant.upon_defeating = terrtarr_ud
 
-boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarrant]
+# Boss: Ent -- Position: 27'N, 15'E
+giant_ent = Boss('Giant Ent', 125, 35, 17, 12, 20, 20, 12, 3, 13, 15, 27, [items.enc_yw],
+                 120, 120, active=True, element='grass')
+
+boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarrant, giant_ent]
+
 defeated_bosses = []  # Make sure you can only defeat the boss one time

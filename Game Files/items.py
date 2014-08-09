@@ -577,9 +577,6 @@ spect_wand = Weapon('Spectre Wand',
                     'A ghastly wand made of an indescribable material (+15 Magic Attack, DEATH)',
                     0, 225, 15, 'magic', 'mage', element='death')
 
-unique_drops = {'ice': [ice_blade], 'grass': [enc_yw], 'none': [bnz_leg]}
-
-
 # Quest items
 message_joseph = Item('Message from Joseph',
                       'A neatly written message addressed from Joseph to Philliard.',
@@ -634,12 +631,7 @@ def monster_drop(level, element):
         drops = [s_elixir, m_potion, m_elixir, arc_spb, wiz_rob, myst_gar, irn_cst]
     else:
         drops = [l_potion, l_elixir, x_potion, x_elixir, stl_hlm, elem_rob, bnz_spr]
-    try:
-        return [drops.append(
-            random.choice(unique_drops[element]))] if random.randint(0, 1) else drops
-    except (KeyError, IndexError):
-        return drops
-
+    return drops
 
 def serialize_gems(path):
     with open(path, mode='w') as j:
