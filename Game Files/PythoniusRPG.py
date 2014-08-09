@@ -595,6 +595,16 @@ def check_save():  # Check for save files and load the game if they're found
 
     # Check each part of the save file
     print('Searching for valid save files...')
+
+    if not os.path.isdir("Save Files"):
+        time.sleep(0.25)
+        print('No save files found. Starting new game...')
+        time.sleep(0.35)
+        print('-'*25)
+        create_player()
+        return
+
+
     dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
     save_files = {}
 

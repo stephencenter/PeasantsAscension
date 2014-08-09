@@ -628,7 +628,7 @@ def monster_drop(level, element):
     if level in range(1, 13):
         drops = [s_elixir, s_potion, m_potion, wdn_sht, cpr_swd, wiz_hat, bnz_hlm]
     elif level in range(13, 26):
-        drops = [s_elixir, m_potion, m_elixir, arc_spb, wiz_rob, myst_gar, irn_cst]
+        drops = [s_elixir, m_potion, m_elixir, arc_spb, wiz_rob, myst_gar, stl_cst]
     else:
         drops = [l_potion, l_elixir, x_potion, x_elixir, stl_hlm, elem_rob, bnz_spr]
     return drops
