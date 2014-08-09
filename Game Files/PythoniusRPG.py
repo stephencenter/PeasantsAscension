@@ -703,7 +703,7 @@ def check_save():  # Check for save files and load the game if they're found
                     print('-'*25)
                 return
 
-            except AttributeError:
+            except IOError:
                 print('There was an error loading your game. Error code: IO')
 
             except ValueError:
@@ -785,19 +785,17 @@ def deserialize_player(path):  # Load the JSON file and translate
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
 
     with open(path, encoding='utf-8') as e:
-        spam = json.load(e)
+        player_dict = json.load(e)
 
-    for key in spam:
-
-        if key == 'current_pet' and spam[key]:
+    if player_dict['current_pet']:
 
             for pet in pets.all_pets:
+                if pet.name == player_dict['current_pet'][0]:
+                    pet.level = player_dict['current_pet'][1]
+                    player_dict['current_pet'] = pet
+                    break
 
-                if pet.name == spam[key][0]:
-                    pet.level = spam[key][1]
-                    spam[key] = pet
-
-    player.__dict__ = spam
+    player.__dict__ = player_dict
 
 
 def title_screen():

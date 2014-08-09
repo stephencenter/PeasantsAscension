@@ -62,7 +62,7 @@ class Monster:
         self.items = ''
         num = random.randint(0, 5)
         if num == 4:
-            self.items = random.choice(items.monster_drop(self.lvl, self.element))
+            self.items = random.choice(items.monster_drop(self.lvl))
 
     def monst_damage(self, var):
         monst_dealt = int((self.attk/2) - (battle.temp_stats['dfns']/3) + (self.lvl/3) + var + 1)
