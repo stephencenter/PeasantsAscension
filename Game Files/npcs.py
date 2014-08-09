@@ -287,7 +287,8 @@ stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, 
 # Name: Jeffery -- Town: Overshire
 jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",
                                  "who was in need of a messenger. I think the town was somewhere",
-                                 "around -8\u00b0S, 20\u00b0E. Somewhere around there."])
+                                 "around -8\u00b0S, 20\u00b0E. Something like that."],
+                                active=True)
 
 jeffery = NPC('Jeffery', [jeffery_phrase_1])
 
