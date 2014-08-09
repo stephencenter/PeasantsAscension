@@ -604,7 +604,6 @@ def check_save():  # Check for save files and load the game if they're found
         create_player()
         return
 
-
     dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
     save_files = {}
 

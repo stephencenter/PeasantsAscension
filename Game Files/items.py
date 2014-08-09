@@ -624,7 +624,7 @@ shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and 
                 175, 56)
 
 
-def monster_drop(level, element):
+def monster_drop(level):
     if level in range(1, 13):
         drops = [s_elixir, s_potion, m_potion, wdn_sht, cpr_swd, wiz_hat, bnz_hlm]
     elif level in range(13, 26):
@@ -632,6 +632,7 @@ def monster_drop(level, element):
     else:
         drops = [l_potion, l_elixir, x_potion, x_elixir, stl_hlm, elem_rob, bnz_spr]
     return drops
+
 
 def serialize_gems(path):
     with open(path, mode='w') as j:
