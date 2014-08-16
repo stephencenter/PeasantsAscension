@@ -273,10 +273,16 @@ def stwqst_us1():
 
 def stwqst_uc1():
     global stewson_phrase_3
+    global polmor_phrase_2
+    global polmor_quest_1
+
     stewson_phrase_3.active = True
+    polmor_phrase_2.active = False
+    polmor_quest_1.active = True
     print('-'*25)
     print('You have recieved a Cherub pet!')
     inv_system.inventory['pets'].append(pets.pet_cherub)
+    print('You now have experience defeating ghosts!')
 
 
 stewson_quest_1.upon_starting = stwqst_us1
@@ -358,6 +364,37 @@ seriph_phrase_1 = Conversation(['...You actually came to this town? And of your 
 
 seriph = NPC('Seriph', [seriph_phrase_1])
 
+# Name: Polmor -- Town: Fort Sigil
+polmor_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've been",
+                                "informed of the problems around here, so I'd recommend...",
+                                "Oh, what's that? You haven't? Well in that case, let me tell",
+                                "you. A long time ago, a number of foolish adventurers,",
+                                "searching for fame and glory, stumbled upon this fort.",
+                                "Inside, they found a terrifying ghost, which they",
+                                "oh-so-cunningly defeated -- or so they thought! No,",
+                                "instead the ghost had grown tired of the pointless battle,",
+                                "and decided to hide in the shadows of the unsuspecting 'heros'.",
+                                "When they least expected it, the ghost possessed them!",
+                                "As punishment for their foolishness, the evil spirit",
+                                "now forcefully takes a victim from this town every 10 days",
+                                "and forbids its inhabitants from leaving!"], active=True)
+
+polmor_phrase_2 = Conversation(["Hey... I don't suppose that you have any experiecne",
+                                "with fighting ghosts, do you? No? Ok then. If you find",
+                                "someone who has defeated a very menacing phantom before,",
+                                "please request that they come help us!"], active=True)
+
+polmor_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
+                        "with fighting ghosts, do you? Wait, what's that? You've",
+                        "defeated the Phantom that was haunting the Overshire",
+                        "Graveyard!? Well in that case, we may just have a chance!",
+                        "Please help us, oh please!"], "The Curse of Fort Sigil",
+                       ["Rid Fort Sigil of its curse by defeating the evil spirit at",
+                       "coordinates 22\u00b0N, 3\u00b0E."], "Polmor", [200, 200],
+                       ["Praise Guido's beard, you defeated the evil spirit? At last,",
+                        "we are at peace! You are forever in our gratitude, young hero!"])
+
+polmor = NPC('Polmor', [polmor_phrase_1, polmor_phrase_2, polmor_quest_1])
 
 # Name: Kyle -- Town: Tripton
 kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village Elder.",
@@ -518,6 +555,7 @@ alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phras
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
+    polmor_phrase_1, polmor_phrase_2, polmor_quest_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
     kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4,
