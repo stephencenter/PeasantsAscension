@@ -125,7 +125,7 @@ whisp_goblin = Boss('Whispering Goblin', 35, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [],
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
 menac_phantom = Boss('Menacing Phantom', 60, 25, 2, 4, 12, 8, 5, 6, 9, -12,  8, [
-    items.spect_wand], 75, 75, active=False)
+    items.spect_wand], 75, 75, active=False, element='death')
 
 
 def menacphan_ud():
@@ -152,10 +152,22 @@ def terrtarr_ud():
 
 terr_tarrant.upon_defeating = terrtarr_ud
 
+# Boss: Cursed Spectre -- Position 22'N, 3'E
+cursed_spect = Boss('Cursed Spectre', 85, 30, 10, 10, 20, 20, 14, 10, 12, 3, 22, [], 100, 100,
+                    element='death')
+
+
+def cursspect_ud():
+    npcs.polmor_phrase_3.active = False
+    npcs.polmor_quest_1.finished = True
+
+
+cursed_spect.upon_defeating = cursspect_ud
+
 # Boss: Ent -- Position: 27'N, 15'E
 giant_ent = Boss('Giant Ent', 125, 35, 17, 12, 20, 20, 12, 3, 13, 15, 27, [items.enc_yw],
                  120, 120, active=True, element='grass')
 
-boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarrant, giant_ent]
+boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarrant, cursed_spect, giant_ent]
 
 defeated_bosses = []  # Make sure you can only defeat the boss one time

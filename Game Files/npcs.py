@@ -96,9 +96,9 @@ class Conversation:
         # Returns a unique string based on the content of the conversation.
         # This is used as a dictionary key to save information about conversations.
         try:
-            return ''.join([x[0:12] for x in self.sentences])[::-1]
+            return ' | '.join([x[0:12] for x in self.sentences])
         except IndexError:
-            return ''.join([x[::-1] for x in self.sentences])[::-1]
+            return ' | '.join([x[::-1] for x in self.sentences])
 
 
 class Quest(Conversation):
@@ -114,6 +114,11 @@ class Quest(Conversation):
         self.finished = finished  # is True if the quest is complete, false otherwise
         self.end_dialogue = end_dialogue  # What is printed when the quest is over
 
+    def __str__(self):
+        try:
+            return ': '.join([self.q_giver, ' | '.join([x[0:6] for x in self.sentences])])
+        except IndexError:
+            return ': '.join([self.q_giver, ' | '.join([x[::-1] for x in self.sentences])])
     def give_quest(self):
         print('-'*25)
         print(''.join([self.name, ': \n  ', '\n  '.join([x for x in self.desc])]))
@@ -280,9 +285,9 @@ def stwqst_uc1():
     polmor_phrase_2.active = False
     polmor_quest_1.active = True
     print('-'*25)
-    print('You have recieved a Cherub pet!')
+    input('You have recieved a Cherub pet! | Press Enter/Return ')
     inv_system.inventory['pets'].append(pets.pet_cherub)
-    print('You now have experience defeating ghosts!')
+    input('You now have experience defeating ghosts! | Press Enter/Return ')
 
 
 stewson_quest_1.upon_starting = stwqst_us1
@@ -362,7 +367,14 @@ seriph_phrase_1 = Conversation(['...You actually came to this town? And of your 
                                 'very brave or very stupid, but on second thought, the latter',
                                 'is far more likely.'], active=True)
 
-seriph = NPC('Seriph', [seriph_phrase_1])
+seriph_phrase_2 = Conversation(["What?! You're going to try to kill the evil spirit?",
+                                "You're truely stupider than I thought. I wish you"
+                                "good luck nonetheless."])
+
+seriph_phrase_3 = Conversation(["I still can't believe that you killed the evil spirit!",
+                                "We cannot thank you enough!"])
+
+seriph = NPC('Seriph', [seriph_phrase_1, seriph_phrase_2, seriph_phrase_3])
 
 # Name: Polmor -- Town: Fort Sigil
 polmor_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've been",
@@ -384,6 +396,11 @@ polmor_phrase_2 = Conversation(["Hey... I don't suppose that you have any experi
                                 "someone who has defeated a very menacing phantom before,",
                                 "please request that they come help us!"], active=True)
 
+polmor_phrase_3 = Conversation(["Help us, young adventurer! You are the only one",
+                                "who can save us from this terrible ghool!"])
+
+polmor_phrase_4 = Conversation(["Thanks again, hero! We are forever indebted to you!"])
+
 polmor_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
                         "with fighting ghosts, do you? Wait, what's that? You've",
                         "defeated the Phantom that was haunting the Overshire",
@@ -391,10 +408,40 @@ polmor_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
                         "Please help us, oh please!"], "The Curse of Fort Sigil",
                        ["Rid Fort Sigil of its curse by defeating the evil spirit at",
                        "coordinates 22\u00b0N, 3\u00b0E."], "Polmor", [200, 200],
-                       ["Praise Guido's beard, you defeated the evil spirit? At last,",
-                        "we are at peace! You are forever in our gratitude, young hero!"])
+                       ["Y-you defeated the evil spirit? Praise Guido's beard! We are",
+                        "free of this curse! You are forever in our gratitude, young hero!"])
 
-polmor = NPC('Polmor', [polmor_phrase_1, polmor_phrase_2, polmor_quest_1])
+
+def polqst_us1():
+    global polmor_phrase_1
+    global polmor_phrase_2
+    global polmor_phrase_3
+    global seriph_phrase_1
+    global seriph_phrase_2
+
+    polmor_phrase_1.active = False
+    polmor_phrase_2.active = False
+    polmor_phrase_3.active = True
+    seriph_phrase_1.active = False
+    seriph_phrase_2.active = True
+    bosses.cursed_spect.active = True
+
+
+def polqst_uc1():
+    global polmor_phrase_4
+    global seriph_phrase_2
+    global seriph_phrase_3
+
+    polmor_phrase_4.active = True
+    seriph_phrase_2.active = False
+    seriph_phrase_3.active = True
+
+
+polmor_quest_1.upon_starting = polqst_us1
+polmor_quest_1.upon_completing = polqst_uc1
+
+polmor = NPC('Polmor', [polmor_phrase_1, polmor_phrase_2,
+                        polmor_phrase_3, polmor_phrase_4, polmor_quest_1])
 
 # Name: Kyle -- Town: Tripton
 kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village Elder.",
@@ -555,7 +602,7 @@ alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phras
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
-    polmor_phrase_1, polmor_phrase_2, polmor_quest_1,
+    polmor_phrase_1, polmor_phrase_2, polmor_phrase_3, polmor_phrase_4, polmor_quest_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
     kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4,
@@ -575,15 +622,15 @@ def serialize_dialogue(path):
         else:
             json_dialogue[str(c)] = [c.active, c.repeat]
 
-    with open(path, encoding='utf-8', mode='w') as h:
-        json.dump(json_dialogue, h, indent=4, separators=(', ', ': '))
+    with open(path, encoding='utf-8', mode='w') as f:
+        json.dump(json_dialogue, f, indent=4, separators=(', ', ': '))
 
 
 def deserialize_dialogue(path):
     global all_dialogue
 
-    with open(path, encoding='utf-8') as h:
-        j_log = json.load(h)
+    with open(path, encoding='utf-8') as f:
+        j_log = json.load(f)
 
     for key in j_log:
         for c in all_dialogue[:]:
