@@ -38,8 +38,8 @@ pygame.mixer.init()
 
 player = ''
 monster = ''
-static = ''
 position = ''
+misc_vars = ''
 inventory = ''
 
 
@@ -79,7 +79,7 @@ class Monster:
         return monst_dealt
 
     def monst_level(self):
-        global static
+        global misc_vars
         self.lvl = int((1/3)*abs(1.4*position['avg'] - 1)) + 1
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 6)
@@ -90,8 +90,8 @@ class Monster:
             self.m_dfns += random.randint(1, 2)
             self.spd += random.randint(1, 3)
             self.evad += random.randint(0, 1)
-        static['hp_m'] = self.hp
-        static['mp_m'] = self.mp
+        misc_vars['hp_m'] = self.hp
+        misc_vars['mp_m'] = self.mp
 
     def monst_attk(self, var, dodge):
         sounds.sword_slash.play()
@@ -112,7 +112,7 @@ class Monster:
         # This is the Enemy's AI.
 
         print('\n-Enemy Turn-')
-        if self.hp <= int(static['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
+        if self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
             # Magic heal
             sounds.magic_healing.play()
             heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
@@ -256,11 +256,11 @@ They are slower than most enemies and have low evasion.
 
 def tank_stats(self):
     # Set Tank stats
-    global static
+    global misc_vars
 
     self.hp *= 1.1
     self.hp = math.ceil(self.hp)
-    static['hp_m'] = copy.copy(self.hp)
+    misc_vars['hp_m'] = copy.copy(self.hp)
 
     self.attk *= 0.8
     self.attk = math.ceil(self.attk)
@@ -291,7 +291,7 @@ def tank_ai(var, dodge):
     self = monster
     print('\n-Enemy Turn-')
 
-    if self.hp <= int(static['hp_m']/3) and self.mp >= 5 and random.randint(0, 2):
+    if self.hp <= int(misc_vars['hp_m']/3) and self.mp >= 5 and random.randint(0, 2):
         # Magic heal
         sounds.magic_healing.play()
         heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
@@ -345,7 +345,7 @@ def fighter_stats(self):
     # Set stats for Fighter AI
     self.hp *= 0.8
     self.hp = math.ceil(self.hp)
-    static['hp_m'] = copy.copy(self.hp)
+    misc_vars['hp_m'] = copy.copy(self.hp)
 
     self.attk *= 1.2
     self.attk = math.ceil(self.attk)
@@ -389,7 +389,7 @@ def fighter_ai(var, dodge):
             print("The spell misses you by a landslide!")
         self.mp -= 2
 
-    elif self.hp <= int(static['hp_m']/5) and self.mp >= 5 and random.randint(0, 1):
+    elif self.hp <= int(misc_vars['hp_m']/5) and self.mp >= 5 and random.randint(0, 1):
         # Magic heal
         sounds.magic_healing.play()
         heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
@@ -421,10 +421,10 @@ def spawn_monster():
 
 def setup_vars():
     global player
-    global static
+    global misc_vars
     global position
     global inventory
     player = main.player
-    static = main.static
+    misc_vars = main.misc_vars
     position = main.position
     inventory = inv_system.inventory

@@ -41,11 +41,11 @@ position = ''
 
 def setup_vars():
     global position
-    global static
+    global misc_vars
     global player
 
     position = main.position
-    static = main.static
+    misc_vars = main.misc_vars
     player = main.player
 
 
@@ -244,7 +244,7 @@ def rest():
     setup_vars()
     print('-'*25)
 
-    if player.hp == static['hp_p'] and player.mp == static['mp_p']:
+    if player.hp == misc_vars['hp_p'] and player.mp == misc_vars['mp_p']:
         print('You feel fine, and decide not to rest.')
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
@@ -253,13 +253,13 @@ def rest():
     print('You set up camp and begin to rest.')
 
     time.sleep(1)
-    player.hp += int(static['hp_p']/4)
-    player.mp += int(static['mp_p']/4)
+    player.hp += int(misc_vars['hp_p']/4)
+    player.mp += int(misc_vars['mp_p']/4)
 
-    if player.hp > static['hp_p']:
-        player.hp -= (player.hp - static['hp_p'])
-    if player.mp > static['mp_p']:
-        player.mp -= (player.mp - static['mp_p'])
+    if player.hp > misc_vars['hp_p']:
+        player.hp -= (player.hp - misc_vars['hp_p'])
+    if player.mp > misc_vars['mp_p']:
+        player.mp -= (player.mp - misc_vars['mp_p'])
 
     is_battle = not random.randint(0, 3)
 

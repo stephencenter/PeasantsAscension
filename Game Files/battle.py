@@ -40,7 +40,7 @@ only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
 
 monster = ''
 player = ''
-static = ''
+misc_vars = ''
 position = ''
 
 vowels = 'AEIOU'
@@ -54,13 +54,13 @@ else:
 
 def setup_vars():
     global position
-    global static
+    global misc_vars
     global player
     global monster
 
     monster = monsters.monster
     player = main.player
-    static = main.static
+    misc_vars = main.misc_vars
     position = main.position
 
 
@@ -265,8 +265,8 @@ def after_battle(is_boss):  # Assess the results of the battle
                     # If you die, you return to the last town visited or 0'N, 0'E
                     # if you haven't been to a town yet.
                     world.back_to_coords()
-                    player.hp = int(static['hp_p']/1.5)
-                    player.mp = int(static['mp_p']/1.5)
+                    player.hp = int(misc_vars['hp_p']/1.5)
+                    player.mp = int(misc_vars['mp_p']/1.5)
                     pygame.mixer.music.load(position['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
@@ -320,7 +320,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     pass
 
             # Give the Player their GP
-            static['gp'] += gold + player.ext_gol
+            misc_vars['gp'] += gold + player.ext_gol
             print("You've gained {0} GP!".format(gold), end='')
             sounds.item_pickup.play()
             input(' | Press Enter/Return ')
@@ -413,25 +413,25 @@ def bat_stats():
         player.hp = 0
     if monster.hp < 0:
         monster.hp = 0
-    if player.hp > static['hp_p']:
-        player.hp -= (player.hp - static['hp_p'])
-    if monster.hp > static['hp_m']:
-        monster.hp -= (monster.hp - static['hp_m'])
+    if player.hp > misc_vars['hp_p']:
+        player.hp -= (player.hp - misc_vars['hp_p'])
+    if monster.hp > misc_vars['hp_m']:
+        monster.hp -= (monster.hp - misc_vars['hp_m'])
     if player.mp < 0:
         player.mp = 0
     if monster.mp < 0:
         monster.mp = 0
-    if player.mp > static['mp_p']:
-        player.mp -= (player.mp - static['mp_p'])
-    if monster.mp > static['mp_m']:
-        monster.mp -= (monster.mp - static['mp_m'])
+    if player.mp > misc_vars['mp_p']:
+        player.mp -= (player.mp - misc_vars['mp_p'])
+    if monster.mp > misc_vars['mp_m']:
+        monster.mp -= (monster.mp - misc_vars['mp_m'])
     print('-'*25)
 
     # Player Stats
     print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
           player.name, player.hp,
-          static['hp_p'], player.mp,
-          static['mp_p'], player.lvl))
+          misc_vars['hp_p'], player.mp,
+          misc_vars['mp_p'], player.lvl))
     # Pet Stats
     pet = player.current_pet
     if pet:
@@ -442,6 +442,6 @@ def bat_stats():
     # Monster Stats
     print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
           monster.name, monster.hp,
-          static['hp_m'], monster.mp,
-          static['mp_m'], monster.lvl))
+          misc_vars['hp_m'], monster.mp,
+          misc_vars['mp_m'], monster.lvl))
     print('-'*25)

@@ -212,13 +212,13 @@ class Town:
 
             if choice.startswith('y'):
                 print()
-                if main.static['gp'] >= self.inn_cost:
+                if main.misc_vars['gp'] >= self.inn_cost:
                     print('"Good night, Traveler."')
                     print('Sleeping...')
                     time.sleep(1)
-                    main.static['gp'] -= self.inn_cost
-                    main.player.hp = copy.copy(main.static['hp_p'])
-                    main.player.mp = copy.copy(main.static['mp_p'])
+                    main.misc_vars['gp'] -= self.inn_cost
+                    main.player.hp = copy.copy(main.misc_vars['hp_p'])
+                    main.player.mp = copy.copy(main.misc_vars['mp_p'])
                     print('Your HP and MP have been fully restored. ')
                     print('-'*25)
                     main.save_game()
@@ -262,7 +262,7 @@ class Town:
                         print(''.join(
                             ['   [', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
 
-                    print('You have {0} GP'.format(main.static['gp']))
+                    print('You have {0} GP'.format(main.misc_vars['gp']))
 
                     while True:
                         purchase = input('Input [#] (or type "back"): ')
@@ -304,9 +304,9 @@ class Town:
                                 continue
 
                             if confirm.startswith('y'):
-                                if main.static['gp'] >= i.buy:
+                                if main.misc_vars['gp'] >= i.buy:
                                     inv_system.inventory[i.cat].append(i)
-                                    main.static['gp'] -= i.buy
+                                    main.misc_vars['gp'] -= i.buy
                                     print('-'*25)
                                     input('You purchase the {0} (-{1} \
 GP). (Press enter/return).'.format(str(i), i.buy))
@@ -402,7 +402,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
             print("Here's what we have to offer:\n     ", "\n     ".join(
                 ['[' + str(num + 1) + '] ' + str(pet) + ' --> ' + str(pet.cost)
                  for num, pet in enumerate(pet_list)]))
-            print("You have {0} GP.".format(main.static['gp']))
+            print("You have {0} GP.".format(main.misc_vars['gp']))
 
             while True:
                 chosen = input('Input [#] (or type "exit"): ')
@@ -454,7 +454,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                         continue
 
                     if y_n.startswith('y'):
-                        if main.static['gp'] >= chosen_pet.cost:
+                        if main.misc_vars['gp'] >= chosen_pet.cost:
                             print('-'*25)
                             print("You received a {0} pet!".format(chosen_pet))
                             print('You give the shopkeeper {0} GP.'.format(chosen_pet.cost))
@@ -464,7 +464,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                                 main.player.current_pet.equip = False
                             inv_system.inventory['pets'].append(chosen_pet)
                             main.player.current_pet = chosen_pet
-                            main.static['gp'] -= chosen_pet.cost
+                            main.misc_vars['gp'] -= chosen_pet.cost
 
                             print('-'*25)
 

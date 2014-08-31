@@ -70,11 +70,11 @@ class Consumable(Item):
         global inventory
         item_setup_vars()
         main.player.hp += self.heal
-        if main.player.hp > main.static['hp_p']:
-            main.player.hp -= (main.player.hp - main.static['hp_p'])
+        if main.player.hp > main.misc_vars['hp_p']:
+            main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
         main.player.mp += self.mana
-        if main.player.mp > main.static['mp_p']:
-            main.player.mp -= (main.player.mp - main.static['mp_p'])
+        if main.player.mp > main.misc_vars['mp_p']:
+            main.player.mp -= (main.player.mp - main.misc_vars['mp_p'])
         print('You consume the {0}'.format(self.name))
         for x, y in enumerate(inventory[self.cat]):
             if y.name == self.name:

@@ -67,10 +67,10 @@ class Healing(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            main.player.hp += self.health + int(main.static['int']/4) + random.randint(-2, 2)
+            main.player.hp += self.health + int(main.misc_vars['int']/4) + random.randint(-2, 2)
 
-            if main.player.hp > main.static['hp_p']:
-                main.player.hp -= (main.player.hp - main.static['hp_p'])
+            if main.player.hp > main.misc_vars['hp_p']:
+                main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
             sounds.magic_healing.play()
 
             if is_battle:
@@ -100,26 +100,37 @@ class Damaging(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
+
+            # Determine the power of the attack
             attk_pwr = int(self.damage + (battle.temp_stats['m_attk']/3) -
                            (battle.monster.m_dfns/2) + var)
+
+            # Evaluate the element of the attack and the enemy
             attk_pwr = eval_element(
                 p_elem=self.element,
                 m_elem=monsters.monster.element,
                 p_dmg=attk_pwr)[0]
-            sounds.magic_attack.play()
+
             print('-Player Turn-')
+            if inv_system.equipped['weapon'].class_ == 'magic':
+                print('You begin to use your {0} to summon a powerful spell...'.format(
+                    inv_system.equipped['weapon']))
+            else:
+                print('You attempt to summon a powerful spell...')
+
             sounds.magic_attack.play()
-            print('You begin to use your {0} to summon a powerful spell.'.format(
-                inv_system.equipped['weapon']))
             time.sleep(0.75)
+
             if dodge in range(monsters.monster.evad, 250):
                 sounds.enemy_hit.play()
                 print('Using the power of "{0}", you deal {1} damage to the {2}!'.format(
                     self.name, attk_pwr, monsters.monster.name))
                 monsters.monster.hp -= attk_pwr
+
             else:
                 sounds.attack_miss.play()
                 print('The {0} dodges your attack!'.format(monsters.monster.name))
+
             return True
 
         else:
@@ -316,16 +327,69 @@ spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []
 
 def pick_cat(var, dodge, is_battle=True):
     while True:
-        cat = input(
-            'Spellbook: 1: Damaging;  2: Buffs;  3: Healing  |  Input #1-3 (or type "exit"): ')
+        cat = input("""Spellbook:
+      [1] Damaging Spells
+      [2] Buff Spells
+      [3] Healing Spells
+      [4] Use Most Recent Spell
+Input [#] (or type "exit"): """)
+
         if cat == '1':
             cat = 'Damaging'
+
         elif cat == '2':
             cat = 'Buffs'
+
         elif cat == '3':
             cat = 'Healing'
-        else:
 
+        elif cat == '4':
+            spell = ''
+
+            for cat in spellbook:
+                for x in spellbook[cat]:
+                    if x.name == main.misc_vars['prev_spell']:
+                        spell = x
+
+            if not spell:
+                print('-'*25)
+                print('You have no previously used spells!')
+                print('-'*25)
+                continue
+
+            while True:
+                y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
+                if not y_n:
+                    continue
+
+                try:
+                    y_n = y_n.lower()
+                except AttributeError:
+                    continue
+
+                if y_n.startswith('y'):
+                    if isinstance(spell, Damaging):
+
+                        if spell.use_magic(var, dodge):
+                            return True
+                        else:
+                            return False
+
+                    else:
+                        if isinstance(spell, Healing):
+                            if spell.use_magic_healing(is_battle):
+                                return True
+
+                        elif spell.use_magic():
+                            return True
+
+                        else:
+                            return False
+
+                elif y_n.startswith('n'):
+                    break
+
+        else:
             try:
                 if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return False
@@ -392,6 +456,8 @@ def pick_spell(cat, var, dodge, is_battle):
                     continue
 
                 if y_n.startswith('y'):
+                    main.misc_vars['prev_spell'] = spell.name
+
                     if isinstance(spell, Damaging):
 
                         if spell.use_magic(var, dodge):

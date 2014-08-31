@@ -28,7 +28,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-static = ''
+misc_vars = ''
 
 
 class Boss(monsters.Monster):
@@ -46,16 +46,16 @@ class Boss(monsters.Monster):
         self.experience = experience
         self.active = active
         self.max_stats()
-        self.hp = copy.copy(static['hp_m'])
-        self.mp = copy.copy(static['mp_m'])
+        self.hp = copy.copy(misc_vars['hp_m'])
+        self.mp = copy.copy(misc_vars['mp_m'])
 
     def max_stats(self):
-        global static
+        global misc_vars
         setup_vars()
-        static['hp_m'] = self.per_hp  # Make sure the bosses HP/MP regenerate
-        static['mp_m'] = self.per_mp  # if the player runs away
-        self.hp = copy.copy(static['hp_m'])
-        self.mp = copy.copy(static['mp_m'])
+        misc_vars['hp_m'] = self.per_hp  # Make sure the bosses HP/MP regenerate
+        misc_vars['mp_m'] = self.per_mp  # if the player runs away
+        self.hp = copy.copy(misc_vars['hp_m'])
+        self.mp = copy.copy(misc_vars['mp_m'])
 
 
 def check_bosses(x, y):
@@ -104,8 +104,8 @@ def deserialize_bosses(path):
 
 
 def setup_vars():
-    global static
-    static = main.static
+    global misc_vars
+    misc_vars = main.misc_vars
 
 
 # Boss: Master Slime -- Position: 0'N, 1'E

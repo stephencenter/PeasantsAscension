@@ -39,6 +39,7 @@ class NPC:
         dialogue = []
         for w in self.conversations:
             if w.active and not w.repeat:
+
                 try:
                     if not w.started:  # Quests
                         dialogue.append(w.sentences)
@@ -119,6 +120,7 @@ class Quest(Conversation):
             return ': '.join([self.q_giver, ' | '.join([x[0:6] for x in self.sentences])])
         except IndexError:
             return ': '.join([self.q_giver, ' | '.join([x[::-1] for x in self.sentences])])
+
     def give_quest(self):
         print('-'*25)
         print(''.join([self.name, ': \n  ', '\n  '.join([x for x in self.desc])]))
@@ -159,7 +161,7 @@ class Quest(Conversation):
             self.reward[0], self.reward[1]))
         input('Press Enter/Return')
         main.player.exp += self.reward[0]
-        main.static['gp'] += self.reward[1]
+        main.misc_vars['gp'] += self.reward[1]
         main.player.level_up()
         self.active = False
 

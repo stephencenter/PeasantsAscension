@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.5.7 Alpha
-game_version = 'v0.5.7'
+# PythoniusRPG v0.5.8 Alpha
+game_version = 'v0.5.8'
 # Copyright 2013, 2014 Stephen Center
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -62,10 +62,9 @@ game_version = 'v0.5.7'
 # Establish "player" as a global variable
 player = ''
 
-# A dictionary containing player variables that don't change until
-# level-up, as well as GP
-static = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
-          'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'luc': 1, 'gp': 20}
+# A dictionary containing miscellaneous variables made entirely of
+misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
+             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'luc': 1, 'gp': 20}
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
@@ -237,16 +236,18 @@ Warrior, Mage, or Rogue: '.format(self.name))
                     break
 
     def level_up(self):
-        global static
-        if self.exp >= static['r_xp']:
+        global misc_vars
+        if self.exp >= misc_vars['r_xp']:
             pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(music_vol)
-            self.hp = static['hp_p']
-            self.mp = static['mp_p']
+
+            self.hp = misc_vars['hp_p']
+            self.mp = misc_vars['mp_p']
+
             temp_ski = 0  # Temporary Skill Points
 
-            while self.exp >= static['r_xp']:
+            while self.exp >= misc_vars['r_xp']:
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
 
@@ -282,21 +283,21 @@ Warrior, Mage, or Rogue: '.format(self.name))
 
                 temp_ski += self.ext_ski
                 magic.new_spells()
-                self.exp -= static['r_xp']
-                static['r_xp'] = int((math.pow(self.lvl*2, 1.9) - 1.2*self.lvl))
+                self.exp -= misc_vars['r_xp']
+                misc_vars['r_xp'] = int((math.pow(self.lvl*2, 2) - 1.2*self.lvl))
 
             print('-'*25)
             self.skill_points(temp_ski)
 
-            static['hp_p'] = self.hp
-            static['mp_p'] = self.mp
+            misc_vars['hp_p'] = self.hp
+            misc_vars['mp_p'] = self.mp
 
             print('-'*25)
             save_game()
             return
 
     def skill_points(self, temp_ski):
-        global static
+        global misc_vars
 
         while temp_ski > 0:
             print('You have {0} skill point{1} left to spend.'.format(
@@ -347,23 +348,23 @@ Input letter: """)
                             self.m_dfns += random.randint(1, 2)
                             self.m_attk += random.randint(1, 2)
                             self.mp += random.randint(3, 5)
-                            static['int'] += 1
+                            misc_vars['int'] += 1
 
                         elif skill.startswith('s'):
                             self.attk += random.randint(1, 2)
                             self.dfns += random.randint(1, 2)
-                            static['str'] += 1
+                            misc_vars['str'] += 1
 
                         elif skill.startswith('c'):
                             self.hp += random.randint(4, 6)
                             self.dfns += random.randint(0, 1)
                             self.m_dfns += random.randint(0, 1)
-                            static['con'] += 1
+                            misc_vars['con'] += 1
 
                         elif skill.startswith('d'):
                             self.spd += 2
                             self.evad += 1
-                            static['dex'] += 1
+                            misc_vars['dex'] += 1
 
                         elif skill.startswith('l'):
                             self.hp += random.randint(0, 1)
@@ -379,7 +380,7 @@ Input letter: """)
                                 self.evad += random.randint(0, 1)
                             self.ext_gol += random.randint(0, 2)
                             self.ext_exp += random.randint(0, 1)
-                            static['luc'] += 1
+                            misc_vars['luc'] += 1
 
                         else:
                             continue
@@ -397,8 +398,8 @@ Input letter: """)
                     self.lvl, self.class_.title(),
                     self.element.title()),
                 'HP: {0}/{1} | MP: {2}/{3}'.format(
-                    self.hp, static['hp_p'],
-                    self.mp, static['mp_p']),
+                    self.hp, misc_vars['hp_p'],
+                    self.mp, misc_vars['mp_p']),
                 'Attack: {0} | M. Attack: {1}'.format(
                     self.attk, self.m_attk),
                 'Defense: {0} | M. Defense: {1}'.format(
@@ -406,13 +407,13 @@ Input letter: """)
                 'Speed: {0} | Evasion: {1}'.format(
                     self.spd, self.evad),
                 'INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
-                    static['int'], static['str'],
-                    static['con'], static['dex'],
-                    static['luc']),
+                    misc_vars['int'], misc_vars['str'],
+                    misc_vars['con'], misc_vars['dex'],
+                    misc_vars['luc']),
                 'Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(
                     self.exp,
-                    static['r_xp'],
-                    static['gp']),
+                    misc_vars['r_xp'],
+                    misc_vars['gp']),
 
                 '\n-Equipped Items-',
                 'Weapon: {0}'.format(inv_system.equipped['weapon']),
@@ -520,13 +521,13 @@ def format_save_names():
 
 def create_player():
     global player
-    global static
+    global misc_vars
 
     player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
 
     # Set the player's max HP and MP
-    static['hp_p'] = copy.copy(player.hp)
-    static['mp_p'] = copy.copy(player.mp)
+    misc_vars['hp_p'] = copy.copy(player.hp)
+    misc_vars['mp_p'] = copy.copy(player.mp)
 
     player.name = player.choose_name()
     print()
@@ -535,8 +536,8 @@ def create_player():
     set_adventure_name()
 
     if player.class_ == "warrior":
-        static['hp_p'] += 5
-        static['mp_p'] -= 1
+        misc_vars['hp_p'] += 5
+        misc_vars['mp_p'] -= 1
         player.dfns += 2
         player.attk += 2
         player.spd -= 1
@@ -544,23 +545,23 @@ def create_player():
         inv_system.equipped['weapon'] = copy.copy(items.wdn_sht)
 
     elif player.class_ == "mage":
-        static['hp_p'] += 1
-        static['mp_p'] += 4
+        misc_vars['hp_p'] += 1
+        misc_vars['mp_p'] += 4
         player.m_attk += 2
         player.m_dfns += 2
         inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
 
     elif player.class_ == "rogue":
-        static['hp_p'] += 2
-        static['mp_p'] += 1
+        misc_vars['hp_p'] += 2
+        misc_vars['mp_p'] += 1
         player.attk += 1
         player.dfns += 1
         player.spd += 3
         player.evad += 1
         inv_system.equipped['weapon'] = copy.copy(items.stn_dag)
 
-    player.hp = copy.copy(static['hp_p'])
-    player.mp = copy.copy(static['mp_p'])
+    player.hp = copy.copy(misc_vars['hp_p'])
+    player.mp = copy.copy(misc_vars['mp_p'])
     print('-'*25)
 
 
@@ -587,7 +588,7 @@ def set_volume():
 
 
 def check_save():  # Check for save files and load the game if they're found
-    global static
+    global misc_vars
     global position
     global adventure_name
 
@@ -683,7 +684,7 @@ def check_save():  # Check for save files and load the game if they're found
                     bosses.defeated_bosses = list(json.load(f))
 
                 with open(sav_misc_vars, encoding='utf-8') as f:
-                    static = json.load(f)
+                    misc_vars = json.load(f)
 
                 with open(sav_position, encoding='utf-8') as f:
                     position = json.load(f)
@@ -703,15 +704,11 @@ def check_save():  # Check for save files and load the game if they're found
                     print('-'*25)
                 return
 
-            except IOError:
-                print('There was an error loading your game. Error code: IO')
-
-            except ValueError:
-                print('There was an error loading your game. Error code: VE')
-
-            print('-'*25)
-            create_player()
-            return
+            except (IOError, ValueError):
+                logging.exception('Error loading game:')
+                input('There was an error loading your game (Press Enter/Return) ')
+                print('-'*25)
+                break
 
 
 def save_game():
@@ -738,7 +735,7 @@ def save_game():
                     json.dump(bosses.defeated_bosses, f, indent=4, separators=(', ', ': '))
 
                 with open(sav_misc_vars, mode='w', encoding='utf-8') as f:
-                    json.dump(static, f, indent=4, separators=(', ', ': '))
+                    json.dump(misc_vars, f, indent=4, separators=(', ', ': '))
 
                 with open(sav_position, mode='w', encoding='utf-8') as f:
                     json.dump(position, f, indent=4, separators=(', ', ': '))
@@ -756,8 +753,8 @@ def save_game():
                 return
 
             except (IOError, ValueError):
+                logging.exception('Error saving game:')
                 input('There was an error saving your game (Press Enter/Return)')
-                raise
 
         elif y_n.startswith('n'):
             return
@@ -867,8 +864,6 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
 
     try:  # Run the game
         main()
-    except (SystemExit, KeyboardInterrupt):  # Don't log these errors!
-        pass
-    except:  # If an exception is raised and not caught, log the error message.
+    except Exception:  # If an exception is raised and not caught, log the error message.
         logging.exception('Got exception of main handler:')
         raise

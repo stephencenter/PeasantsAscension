@@ -450,7 +450,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
             for num, i in enumerate(inventory[cat]):
                 if i.name == item.name:
                     inventory[cat].remove(inventory[cat][num])
-                    main.static['gp'] += item.sell
+                    main.misc_vars['gp'] += item.sell
                     print('You hand the shopkeep your {0} and recieve {1} GP.'.format(
                         item.name, item.sell))
                     return
