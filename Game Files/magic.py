@@ -347,10 +347,13 @@ Input [#] (or type "exit"): """)
         elif cat == '4':
             spell = ''
 
-            for cat in spellbook:
-                for x in spellbook[cat]:
-                    if x.name == main.misc_vars['prev_spell']:
-                        spell = x
+            try:
+                for cat in spellbook:
+                    for x in spellbook[cat]:
+                        if x.name == main.misc_vars['prev_spell']:
+                            spell = x
+            except KeyError:
+                main.misc_vars['prev_spell'] = ""
 
             if not spell:
                 print('-'*25)
