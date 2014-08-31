@@ -327,6 +327,7 @@ spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []
 
 def pick_cat(var, dodge, is_battle=True):
     while True:
+        do_continue = False
         cat = input("""Spellbook:
       [1] Damaging Spells
       [2] Buff Spells
@@ -387,6 +388,8 @@ Input [#] (or type "exit"): """)
                             return False
 
                 elif y_n.startswith('n'):
+                    print('-'*25)
+                    do_continue = True
                     break
 
         else:
@@ -398,6 +401,9 @@ Input [#] (or type "exit"): """)
 
             else:
                 continue
+
+        if do_continue:
+            continue
 
         if not spellbook[cat]:
             print('-'*25)
