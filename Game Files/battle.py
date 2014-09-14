@@ -240,67 +240,77 @@ def player_turn(var, dodge, move):
 
 def after_battle(is_boss):  # Assess the results of the battle
     global player
+
     update_stats()  # Reset non-hp/mp stats to the way they were before battle
     print('-'*25)
+
     while True:
+        # If the monster wins...
         if monster.hp > 0 >= player.hp:
-            # If the monster wins...
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
+
             print('Despite your best efforts, the {0} has bested you. You are dead.'.format(
                 monster.name))
             print('-'*25)
+
             spam = True
             while True:
                 if spam:
                     y_n = input('Do you wish to continue playing? | Yes or No: ')
-                    try:
-                        y_n = y_n.lower()
-                    except AttributeError:
-                        continue
+                    y_n = y_n.lower()
+
                 else:
                     y_n = 'y'
+
                 if y_n.startswith('y'):
                     # If you die, you return to the last town visited or 0'N, 0'E
                     # if you haven't been to a town yet.
                     world.back_to_coords()
+
                     player.hp = int(misc_vars['hp_p']/1.5)
                     player.mp = int(misc_vars['mp_p']/1.5)
+
                     pygame.mixer.music.load(position['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
+
                     return 'dead'
+
                 elif y_n.startswith('n'):
                     print('Are you sure you want to quit? You will lose all unsaved progress.')
+
                     while True:
                         y_n = input("Quit? | Yes or No: ")
-                        try:
-                            y_n = y_n.lower()
-                        except AttributeError:
-                            continue
+
+                        y_n = y_n.lower()
+
                         if y_n.startswith('y'):
                             pygame.quit()
                             sys.exit()
+
                         elif y_n.startswith('n'):
                             spam = False
                             break
 
+        # If the player wins...
         elif monster.hp <= 0 < player.hp:
             pygame.mixer.music.load('Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
-            # If the player wins...
+
             if not is_boss:
-                # Only do the following if the player defeated a
-                # normal enemy, and not a boss
+                # Only do the following if the player defeated a normal enemy, and not a boss
                 print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
 
                 # Enemies drop gold/exp based on the player/monster's levels
                 gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
+
                 if gold <= 0:
                     gold = random.randint(1, 2)
                 experience = int(math.ceil((monster.lvl + 1.5 + player.ext_exp)/1.75))
+
                 if experience <= 0:
                     experience = random.randint(1, 2)
 
@@ -308,16 +318,16 @@ def after_battle(is_boss):  # Assess the results of the battle
                 # Only do the following if the player defeated a boss
                 bosses.defeated_bosses.append(monster.name)
                 print('The almighty {0} has been slain!'.format(monster.name))
-                gold = monster.gold + player.ext_gol
-                # Bosses drop a set amount of gold...
-                experience = monster.experience
-                # ...and exp
 
-                try:
-                    # Check to see if the boss does anything special at death
-                    monster.upon_defeating()
-                except AttributeError:
-                    pass
+                # Bosses drop a set amount of gold...
+                gold = monster.gold + player.ext_gol
+
+                # ...and exp
+                experience = monster.experience
+
+
+                # Check to see if the boss does anything special at death
+                monster.upon_defeating()
 
             # Give the Player their GP
             misc_vars['gp'] += gold + player.ext_gol
@@ -335,10 +345,11 @@ def after_battle(is_boss):  # Assess the results of the battle
                 # If the monster has items, give them to the player
                 cat = monster.items.cat
                 inv_system.inventory[cat].append(_c(monster.items))
+
                 print('The {0} dropped a {1}! You decide to take {2}.'.format(
                       monster.name, str(monster.items),
-                      'them' if str(monster.items).endswith('s') else 'it'), end='')
-                      # Grammar!!
+                      'them' if str(monster.items).endswith('s') else 'it'), end='')  # Grammar!!
+
                 sounds.item_pickup.play()
                 input(' | Press Enter/Return ')
 
@@ -349,7 +360,9 @@ def after_battle(is_boss):  # Assess the results of the battle
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
             pygame.mixer.music.set_volume(main.music_vol)
+
             return
+
         elif player.hp <= 0 and monster.hp <= 0:
             # If the battle is a tie, the player wins
             player.hp = 1
@@ -357,15 +370,18 @@ def after_battle(is_boss):  # Assess the results of the battle
 
 def run_away():
     print('You start to run away from the {0}...'.format(monster.name))
+
     sounds.foot_steps.play()
     time.sleep(0.75)
+
+    # There's a 50% chance that running will fail. This is lowered/raised
+    # based on the player's evasion stat. If the player has an evasion stat
+    # of 120+, they always succeed.
     if random.randint(1, 100) in range(50, (101 - int(player.evad/2))) and player.evad < 120:
-        # There's a 50% chance that running will fail. This is lowered/raised
-        # based on the player's evasion stat. If the player has an evasion stat
-        # of 120+, they always succeed.
         print('Your attempt to escape failed!')
         input("\nPress Enter/Return")
         return False
+
     else:
         print('You manage to escape from the {0}!'.format(monster.name))
         return True
@@ -380,35 +396,38 @@ def battle_inventory():
         print('Battle Inventory: \n      ' + '\n      '.join(
               ['[' + str(x + 1) + '] ' + str(y)
               for x, y in enumerate(inv_system.inventory['consum'])]))
+
         while True:
             item = input('Input [#] (or type "cancel"): ')
             try:
                 item = int(item) - 1
                 if item < 0:
                     continue
-            except (TypeError, ValueError):
-                try:
-                    item = item.lower()
-                except AttributeError:
-                    continue
+
+            except ValueError:
+                item = item.lower()
+
                 if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return False
+
                 else:
                     continue
             try:
                 item = inv_system.inventory['consum'][item]
             except IndexError:
                 continue
+
             print('\n-Player Turn-')
             item.use_item()
             return True
 
 
+# Makes sure that the player and monster never have negative stats,
+# and then display their stats after they're fixed
 def bat_stats():
-    # Makes sure that the player and monster never have negative stats,
-    # and then display their stats after they're fixed
     global player
     global monster
+
     if player.hp < 0:
         player.hp = 0
     if monster.hp < 0:
@@ -432,6 +451,7 @@ def bat_stats():
           player.name, player.hp,
           misc_vars['hp_p'], player.mp,
           misc_vars['mp_p'], player.lvl))
+
     # Pet Stats
     pet = player.current_pet
     if pet:

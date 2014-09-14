@@ -135,10 +135,7 @@ class Quest(Conversation):
         while True:
             accept = input('Do you accept this quest? | Yes or No: ')
 
-            try:
-                accept = accept.lower()
-            except AttributeError:
-                continue
+            accept = accept.lower()
 
             if accept.startswith('y'):
                 print('-'*25)

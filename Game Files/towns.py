@@ -169,10 +169,7 @@ class Town:
                     selected = input(
                         'What building will you enter? | Input [Letter] (or type "exit"): ')
 
-                    try:
-                        selected = selected.lower()
-                    except AttributeError:
-                        continue
+                    selected = selected.lower()
 
                     if any(map(selected.startswith, buildings)):
                         pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
@@ -200,27 +197,31 @@ class Town:
     def town_inn(self):
         print('-'*25)
         print('Inn Keeper: "Greetings, Traveler!"')
+
         while True:
             choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
                 "It's free, y'know." if not self.inn_cost else ' '.join(
                     ["One Night is", str(self.inn_cost), "GP."])))
 
-            try:
-                choice = choice.lower()
-            except AttributeError:
-                continue
+            choice = choice.lower()
 
             if choice.startswith('y'):
                 print()
                 if main.misc_vars['gp'] >= self.inn_cost:
+
                     print('"Good night, Traveler."')
                     print('Sleeping...')
+
                     time.sleep(1)
+
                     main.misc_vars['gp'] -= self.inn_cost
+
                     main.player.hp = copy.copy(main.misc_vars['hp_p'])
                     main.player.mp = copy.copy(main.misc_vars['mp_p'])
+
                     print('Your HP and MP have been fully restored. ')
                     print('-'*25)
+
                     main.save_game()
 
                 else:
@@ -247,10 +248,7 @@ class Town:
         while True:
             b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ')
 
-            try:
-                b_s = b_s.lower()
-            except AttributeError:
-                continue
+            b_s = b_s.lower()
 
             if b_s.startswith('b'):
                 print('-'*25)
@@ -272,10 +270,7 @@ class Town:
                                 continue
 
                         except ValueError:
-                            try:
-                                purchase = purchase.lower()
-                            except AttributeError:
-                                continue
+                            purchase = purchase.lower()
 
                             if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                 print('-'*25)
@@ -298,10 +293,7 @@ class Town:
                                 "\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
                                     'these' if str(i).endswith('s') else 'this', str(i), i.buy))
 
-                            try:
-                                confirm = confirm.lower()
-                            except AttributeError:
-                                continue
+                            confirm = confirm.lower()
 
                             if confirm.startswith('y'):
                                 if main.misc_vars['gp'] >= i.buy:
@@ -338,10 +330,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                     while True:
                         cat = input('Input [#] (or type "back"): ')
 
-                        try:
-                            cat = cat.lower()
-                        except AttributeError:
-                            pass
+                        cat = cat.lower()
 
                         if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                             print('-'*25)
@@ -387,6 +376,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                                 print('The "{0}" category is empty...'.format(vis_cat))
                                 print('-'*25)
                                 break
+
             elif b_s in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                 return
 
@@ -398,6 +388,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
         print('-'*25)
 
         spam = True
+
         while spam:
             print("Here's what we have to offer:\n     ", "\n     ".join(
                 ['[' + str(num + 1) + '] ' + str(pet) + ' --> ' + str(pet.cost)
@@ -411,14 +402,14 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                     chosen = int(chosen) - 1
                     if chosen < 0:
                         continue
+
                 except ValueError:
-                    try:
-                        chosen = chosen.lower()
-                    except AttributeError:
-                        continue
+                    chosen = chosen.lower()
+
                     if chosen in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         spam = False
                         break
+
                     else:
                         continue
 
@@ -448,10 +439,7 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                         "You want this {0}? That would cost you {1} GP. | Yes or No: ".format(
                         chosen_pet, chosen_pet.cost))
 
-                    try:
-                        y_n = y_n.lower()
-                    except AttributeError:
-                        continue
+                    y_n = y_n.lower()
 
                     if y_n.startswith('y'):
                         if main.misc_vars['gp'] >= chosen_pet.cost:
@@ -493,12 +481,9 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                     npc = int(npc) - 1
                     if npc < 0:
                         continue
-                except (ValueError, TypeError):
+                except ValueError:
 
-                    try:
-                        npc = npc.lower()
-                    except AttributeError:
-                        continue
+                    npc = npc.lower()
 
                     if npc in ['e', 'x', 'exit', 'b', 'back', 'c', 'cancel']:
                         return
@@ -606,10 +591,7 @@ Do you wish to investigate? | Yes or No: ')
                         y_n = input('The town of {0} is nearby. \
 Do you want to visit it? | Yes or No: '.format(town.name))
 
-                    try:
-                        y_n = y_n.lower()
-                    except AttributeError:
-                        continue
+                    y_n = y_n.lower()
 
                     if y_n.startswith('y'):
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')

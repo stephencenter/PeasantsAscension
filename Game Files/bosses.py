@@ -65,10 +65,9 @@ def check_bosses(x, y):
             print('You feel the presence of an unknown entity...')
             while True:
                 y_n = input('Do you wish to investigate? | Yes or No: ')
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+
+                y_n = y_n.lower()
+
                 if y_n.startswith('y'):
                     monsters.monster = boss
                     monsters.setup_vars()
@@ -87,16 +86,20 @@ def check_bosses(x, y):
 
 def serialize_bosses(path):
     json_bosslist = {}
+
     for boss in boss_list:
         json_bosslist[boss.name] = boss.active
+
     with open(path, encoding='utf-8', mode='w') as i:
         json.dump(json_bosslist, i)
 
 
 def deserialize_bosses(path):
     global boss_list
+
     with open(path, encoding='utf-8') as i:
         json_bosslist = json.load(i)
+
     for key in json_bosslist:
         for boss in boss_list:
             if key == boss.name:

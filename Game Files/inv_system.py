@@ -102,10 +102,7 @@ def pick_category():
         while True:
             cat = input('Input [#] (or type "exit"): ')
 
-            try:
-                cat = cat.lower()
-            except AttributeError:
-                pass
+            cat = cat.lower()
 
             if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                 return
@@ -222,11 +219,8 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                     if item < 0:
                         continue
 
-                except (TypeError, ValueError):
-                    try:
-                        item = item.lower()
-                    except AttributeError:
-                        continue
+                except ValueError:
+                    item = item.lower()
 
                     if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
@@ -264,7 +258,9 @@ def pick_action(cat, item):
         if (isinstance(item, i.Weapon)
             or isinstance(item, i.Armor)
                 or isinstance(item, pets.Companion)):
+
             use_equip = 'Equip'
+
             if item.equip:
                 break
         else:
@@ -293,17 +289,16 @@ Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else '
 
         elif action == '3':
             print('-'*25)
+
             if item.imp:
                 print('You cannot dispose of quest-related items.')
+
             else:
                 while True:
                     y_n = input('Are you sure you want to get rid of this {0}\
 ? | Yes or No: '.format(str(item)))
 
-                    try:
-                        y_n = y_n.lower()
-                    except AttributeError:
-                        continue
+                    y_n = y_n.lower()
 
                     if y_n.startswith('y'):
                         print('You toss the {0} aside and continue on your journey.'.format(
@@ -334,10 +329,7 @@ def view_quests():
         fizz = True
         choice = input('View [f]inished or [a]ctive quests? | Input [Letter] (or type "back"): ')
 
-        try:
-            choice = choice.lower()
-        except AttributeError:
-            continue
+        choice = choice.lower()
 
         if choice.startswith('f'):  # Finished Quests
             print('-'*25)
@@ -354,20 +346,18 @@ def view_quests():
 
                     while True:
                         number = input('Input [#] (or type "back"): ')
+
                         try:
                             number = int(number) - 1
-                        except (TypeError, ValueError):
 
-                            try:
-                                if number.lower() in [
-                                    'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                                ]:
-                                    fizz = False  # Break the loop twice
-                                    break
+                        except ValueError:
+                            if number.lower() in [
+                                'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                            ]:
+                                fizz = False  # Break the loop twice
+                                break
 
-                                else:
-                                    continue
-                            except AttributeError:
+                            else:
                                 continue
 
                         if (number < 0) or (number > len(dialogue) - 1):
@@ -402,16 +392,13 @@ def view_quests():
                         number = input('Input [#] (or type "back"): ')
                         try:
                             number = int(number) - 1
-                        except (TypeError, ValueError):
-                            try:
-                                if number.lower() in [
-                                    'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                                ]:
-                                    fizz = False  # Break the loop twice
-                                    break
-                                else:
-                                    continue
-                            except AttributeError:
+                        except ValueError:
+                            if number.lower() in [
+                                'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                            ]:
+                                fizz = False  # Break the loop twice
+                                break
+                            else:
                                 continue
 
                         if (number < 0) or (number > len(dialogue) - 1):
@@ -441,10 +428,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
         y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(
             item.name, item.sell))
 
-        try:
-            y_n = y_n.lower()
-        except AttributeError:
-            continue
+        y_n = y_n.lower()
 
         if y_n.startswith('y'):
             for num, i in enumerate(inventory[cat]):
@@ -490,21 +474,18 @@ def tools_menu():  # Display a set of usable tools on the world map
 
             try:
                 tool = int(tool) - 1
-            except (TypeError, ValueError):
-                try:
-                    if tool.lower() in [
-                        'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                    ]:
-                        spam = False  # Essentially breaks the loop twice
-                        if not towns.search_towns(
-                                main.position['x'],
-                                main.position['y'], enter=False
-                        ):
-                            print('-'*25)
-                        break
-                    else:
-                        continue
-                except AttributeError:
+            except ValueError:
+                if tool.lower() in [
+                    'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
+                ]:
+                    spam = False  # Essentially breaks the loop twice
+                    if not towns.search_towns(
+                            main.position['x'],
+                            main.position['y'], enter=False
+                    ):
+                        print('-'*25)
+                    break
+                else:
                     continue
 
             if (tool < 0) or (tool > len(available_tools) - 1):

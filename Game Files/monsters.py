@@ -60,22 +60,27 @@ class Monster:
         self.lvl = lvl  # Level
         self.element = element  # Element
         self.items = ''
+
         num = random.randint(0, 5)
         if num == 4:
             self.items = random.choice(items.monster_drop(self.lvl))
 
     def monst_damage(self, var):
         monst_dealt = int((self.attk/2) - (battle.temp_stats['dfns']/3) + (self.lvl/3) + var + 1)
+
         if monst_dealt < 1:
             monst_dealt = 1
+
         return monst_dealt
 
     def monst_magic(self, var):
         monst_dealt = int((self.m_attk/2)
                           - (battle.temp_stats['m_dfns']/3)
                           + (self.lvl/3) + var + 1)
+
         if monst_dealt < 1:
             monst_dealt = 1
+
         return monst_dealt
 
     def monst_level(self):
@@ -90,6 +95,7 @@ class Monster:
             self.m_dfns += random.randint(1, 2)
             self.spd += random.randint(1, 3)
             self.evad += random.randint(0, 1)
+
         misc_vars['hp_m'] = self.hp
         misc_vars['mp_m'] = self.mp
 
@@ -97,13 +103,18 @@ class Monster:
         sounds.sword_slash.play()
         print('The {0} angrily begins to charge at you!'.format(self.name))
         time.sleep(0.75)
+
         if dodge in range(player.evad, 250):
+
             dealt = magic.eval_element(
                 p_elem=battle.player.element,
                 m_elem=battle.monster.element, m_dmg=self.monst_damage(var))[1]
+
             player.hp -= dealt
             sounds.enemy_hit.play()
+
             print('The {0} hits you, dealing {1} damage!'.format(self.name, dealt))
+
         else:
             sounds.attack_miss.play()
             print("You narrowly avoid the {0}'s attack!".format(self.name))
@@ -137,17 +148,22 @@ class Monster:
             sounds.magic_attack.play()
             print('The {0} is attempting to cast a strange spell...'.format(self.name))
             time.sleep(0.75)
+
             if dodge in range(battle.temp_stats['evad'], 250):
                 dealt = magic.eval_element(
                     p_elem=battle.player.element,
                     m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
+
                 player.hp -= dealt
                 sounds.enemy_hit.play()
+
                 print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
                     self.name, dealt))
+
             else:
                 sounds.attack_miss.play()
                 print("The spell misses you by a landslide!")
+
             self.mp -= 2
 
         else:
@@ -167,6 +183,7 @@ class Monster:
         if self.name == monster_type[position['reg']][1]:
             self.enemy_turn = tank_ai
             tank_stats(self)
+
         elif self.name == monster_type[position['reg']][2]:
             self.enemy_turn = fighter_ai
             fighter_stats(self)
@@ -205,6 +222,7 @@ class Monster:
         elif modifier == 'Broken':  # Low defense stats
             self.dfns -= 2
             self.m_dfns -= 2
+
         else:
             if modifier == 'Strong' and self.m_attk < self.attk and self.m_dfns < self.dfns:
                 # High melee stats
@@ -240,6 +258,7 @@ class Monster:
             self.element = 'death'
         else:
             self.element = 'none'
+
         self.name = ' '.join([modifier, self.name]) if modifier else self.name
 
 # Enemy AIs:

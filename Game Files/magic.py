@@ -366,10 +366,7 @@ Input [#] (or type "exit"): """)
                 if not y_n:
                     continue
 
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+                y_n = y_n.lower()
 
                 if y_n.startswith('y'):
                     if isinstance(spell, Damaging):
@@ -396,11 +393,8 @@ Input [#] (or type "exit"): """)
                     break
 
         else:
-            try:
-                if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    return False
-            except AttributeError:
-                continue
+            if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                return False
 
             else:
                 continue
@@ -433,12 +427,9 @@ def pick_spell(cat, var, dodge, is_battle):
 
             try:
                 spell = int(spell) - 1
-            except (TypeError, ValueError):
+            except ValueError:
 
-                try:
-                    spell = spell.lower()
-                except AttributeError:
-                    continue
+                spell = spell.lower()
 
                 if spell in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return False
@@ -459,10 +450,7 @@ def pick_spell(cat, var, dodge, is_battle):
                 if y_n == '':
                     continue
 
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+                y_n = y_n.lower()
 
                 if y_n.startswith('y'):
                     main.misc_vars['prev_spell'] = spell.name

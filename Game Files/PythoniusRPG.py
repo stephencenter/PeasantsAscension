@@ -188,11 +188,7 @@ class PlayerCharacter:  # The Player
 
             while True:
                 y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
-
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+                y_n = y_n.lower()
 
                 if y_n.startswith('y'):
                     return self.name
@@ -204,11 +200,7 @@ class PlayerCharacter:  # The Player
             class_ = input('{0}, which class would you like to train as? | \
 Warrior, Mage, or Rogue: '.format(self.name))
 
-            try:
-                class_ = class_.lower()
-            except AttributeError:
-                continue
-
+            class_ = class_.lower()
             classes = ['warrior', 'mage', 'rogue']
 
             spam = False
@@ -225,10 +217,7 @@ Warrior, Mage, or Rogue: '.format(self.name))
                 y_n = input('You wish to be of the {0} class? | Yes or No: '.format(
                     class_.title()))
 
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+                y_n = y_n.lower()
 
                 if y_n.startswith('y'):
                     return class_
@@ -312,10 +301,7 @@ Warrior, Mage, or Rogue: '.format(self.name))
     [L]uck - Slightly improve ALL your stats, AND get more GP/XP!
 Input letter: """)
 
-                try:
-                    skill = skill.lower()
-                except AttributeError:
-                    continue
+                skill = skill.lower()
 
                 if any(map(skill.startswith, ['i', 's', 'c', 'd', 'l'])):
                     if skill.startswith('i'):
@@ -332,10 +318,7 @@ Input letter: """)
                     while True:
                         y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
 
-                        try:
-                            y_n = y_n.lower()
-                        except AttributeError:
-                            continue
+                        y_n = y_n.lower()
 
                         if y_n.startswith('y'):
                             pass
@@ -470,10 +453,7 @@ def set_adventure_name():
                 y_n = input('I had to change some of that. Does "{0}" sound okay? | Yes or No: '.
                             format(new_choice))
 
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+                y_n = y_n.lower()
 
                 if y_n.startswith("y"):
                     adventure_name = new_choice
@@ -489,10 +469,7 @@ def set_adventure_name():
                 y_n = input('You wish for your adventure to be known as "{0}"? | Yes or No: '.
                             format(choice))
 
-                try:
-                    y_n = y_n.lower()
-                except AttributeError:
-                    continue
+                y_n = y_n.lower()
 
                 if y_n.startswith("y"):
                     adventure_name = choice
@@ -653,11 +630,8 @@ def check_save():  # Check for save files and load the game if they're found
                 if chosen < 0:
                     continue
 
-            except (TypeError, ValueError):
-                try:
-                    chosen = chosen.lower()
-                except AttributeError:
-                    continue
+            except ValueError:
+                chosen = chosen.lower()
 
                 if chosen == "create new":
                     print('-'*25)
@@ -704,7 +678,7 @@ def check_save():  # Check for save files and load the game if they're found
                     print('-'*25)
                 return
 
-            except (IOError, ValueError):
+            except (OSError, ValueError):
                 logging.exception('Error loading game:')
                 input('There was an error loading your game (Press Enter/Return) ')
                 print('-'*25)
@@ -715,10 +689,7 @@ def save_game():
     while True:
         y_n = input('Do you wish to save your progress? | Yes or No: ')
 
-        try:
-            y_n = y_n.lower()
-        except AttributeError:
-            continue
+        y_n = y_n.lower()
 
         if y_n.startswith('y'):
             print('Saving...')
@@ -752,7 +723,7 @@ def save_game():
                 print('Save successful.')
                 return
 
-            except (IOError, ValueError):
+            except (OSError, ValueError):
                 logging.exception('Error saving game:')
                 input('There was an error saving your game (Press Enter/Return)')
 
@@ -814,10 +785,7 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
     while True:
         choice = input('[P]lay Game  |  [C]redits  | [E]xit  |  Input letter: ')
 
-        try:
-            choice = choice.lower()
-        except AttributeError:
-            continue
+        choice = choice.lower()
 
         if choice.startswith('p'):
             return

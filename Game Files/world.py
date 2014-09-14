@@ -76,12 +76,12 @@ def movement_system():
 [P]layer, [T]ools, [R]est: '.format(position['y'], position['v'],
                                     position['x'], position['h'],
                                     position['reg']))
-            try:
-                direction = direction.lower()
-            except AttributeError:
-                continue
+
+            direction = direction.lower()
+
             if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
                 sounds.foot_steps.play()
+
                 if direction.startswith('n'):
                     if position['y'] < 125:
                         position['y'] += 1
@@ -137,10 +137,7 @@ def movement_system():
                     decision = input(
                         'View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
 
-                    try:
-                        decision = decision.lower()
-                    except AttributeError:
-                        continue
+                    decision = decision.lower()
 
                     if decision.startswith('i'):
                         print('-'*25)
