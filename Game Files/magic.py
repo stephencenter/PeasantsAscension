@@ -290,11 +290,11 @@ a_evade = Buff('Adept Evade',
                7, 11, 5, "Evasion")
 
 spells = [
-    w_flame, lef_blad, in_spark, bub_splsh, min_heal,
+    w_flame, lef_blad, in_spark, bub_splsh, mud_toss, min_heal,
     m_quick, m_evade, m_defend, m_shield, m_stren, m_power,
-    f_blaze, gra_gren, pwr_jolt, wtr_blast, adv_heal,
+    f_blaze, gra_gren, pwr_jolt, wtr_blast, rock_slam, adv_heal,
     a_stren, a_power, a_defend, a_shield, a_quick, a_evade,
-    g_infer, vin_strm, sp_storm, tsunami, div_heal
+    g_infer, vin_strm, sp_storm, tsunami, earthquake, div_heal
 ]
 
 
