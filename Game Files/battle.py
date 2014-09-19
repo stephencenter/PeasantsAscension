@@ -189,8 +189,9 @@ def player_turn(var, dodge, move):
     global monster
 
     while True:
-        print('\n-Player Turn-') if move != '2' else ''
         # "2" refers to magic, which will print this later
+        if move != '2':
+            print('\n-Player Turn-') if move != '2' else ''
 
         if move == '1':
 
@@ -325,7 +326,6 @@ def after_battle(is_boss):  # Assess the results of the battle
                 # ...and exp
                 experience = monster.experience
 
-
                 # Check to see if the boss does anything special at death
                 monster.upon_defeating()
 
@@ -341,8 +341,8 @@ def after_battle(is_boss):  # Assess the results of the battle
             sounds.item_pickup.play()
             input(' | Press Enter/Return ')
 
+            # If the monster has items, give them to the player
             if monster.items:
-                # If the monster has items, give them to the player
                 cat = monster.items.cat
                 inv_system.inventory[cat].append(_c(monster.items))
 
@@ -353,8 +353,8 @@ def after_battle(is_boss):  # Assess the results of the battle
                 sounds.item_pickup.play()
                 input(' | Press Enter/Return ')
 
-            player.level_up()
             # Check to see if the player gained any levels
+            player.level_up()
 
             pygame.mixer.music.load(position['reg_music'])
             pygame.mixer.music.play(-1)
@@ -363,8 +363,8 @@ def after_battle(is_boss):  # Assess the results of the battle
 
             return
 
+        # If the battle is a tie, the player wins
         elif player.hp <= 0 and monster.hp <= 0:
-            # If the battle is a tie, the player wins
             player.hp = 1
 
 

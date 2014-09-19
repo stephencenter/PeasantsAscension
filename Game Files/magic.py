@@ -157,6 +157,7 @@ class Buff(Spell):
             print('-Player Turn-')
             print('Using the power of {0}, your {1} increases temporarily by {2}!'.format(
                 self.name, self.stat, self.incre))
+
             if self.stat == 'Defense':
                 battle.temp_stats['dfns'] += self.incre
             elif self.stat == 'Magic Defense':
@@ -169,6 +170,7 @@ class Buff(Spell):
                 battle.temp_stats['attk'] += self.incre
             elif self.stat == 'Magic Attack':
                 battle.temp_stats['m_attk'] += self.incre
+
             return True
 
         else:
@@ -176,6 +178,9 @@ class Buff(Spell):
             return False
 
 
+# -- Attacks -- #
+
+# Fire
 w_flame = Damaging('Weak Flame',
                    "Summon a weak fireball to destroy your foes.",
                    3, 1, 6, "fire")
@@ -186,6 +191,7 @@ g_infer = Damaging('Grand Inferno',
                    "Unleash a monstrous blaze destroy your foes.",
                    18, 23, 23, "fire")
 
+# Electricity
 in_spark = Damaging('Inferior Spark',
                     "Summon a weak spark to destroy your foes.",
                     3, 2, 6, "electric")
@@ -196,6 +202,7 @@ sp_storm = Damaging('Superior Storm',
                     "Unleash a devastating lightning storm to destroy your foes.",
                     19, 22, 23, "electric")
 
+# Grass
 lef_blad = Damaging('Leaf Blade',
                     "Summon a weak blade of grass to destroy your foes.",
                     3, 1, 5, "grass")
@@ -206,6 +213,7 @@ vin_strm = Damaging('Vine Storm',
                     "Unleash a frenzy of powerful vines to destroy your foes.",
                     19, 24, 23, "grass")
 
+# Water
 bub_splsh = Damaging('Bubble Splash',
                      "Summon a small wave of bubbles to destroy your foes.",
                      3, 2, 5, "water")
@@ -213,9 +221,21 @@ wtr_blast = Damaging('Water Blast',
                      "Summon a large burst of water to destroy your foes.",
                      10, 12, 13, "water")
 tsunami = Damaging('Tsunami',
-                   "Unleash a terrifying wrath  of waves upon your foes.",
+                   "Unleash a terrifying barrage of waves upon your foes.",
                    19, 24, 23, "water")
 
+# Earth
+mud_toss = Damaging('Mud Toss',
+                    "Summon a small ball of mud to throw at your foes.",
+                    3, 4, 6, "earth")
+rock_slam = Damaging('Rock Slam',
+                     "Crush your enemies with a wall of solid rock.",
+                     10, 14, 14, "earth")
+earthquake = Damaging("Earthquake",
+                      "Wreck havoc on your enemies with a powerful earthquake.",
+                      19, 27, 24, "earth")
+
+# -- Healing -- #
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic.",
                    3, 1, 20)
@@ -226,6 +246,7 @@ div_heal = Healing('Divine Healing',
                    "Call upon the arcane arts to greatly restore your HP.",
                    25, 25, 125)
 
+# -- Buffs -- #
 m_quick = Buff('Minor Quickness',
                "Temporarily raise your speed by a small amount.",
                2, 4, 2, "Speed")
@@ -283,19 +304,23 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     # "None" element is neutral to all elements.
     element_list = ['fire', 'water', 'electric', 'earth',
                     'grass', 'wind', 'ice']
+
     if (p_elem == 'death' and m_elem == 'life') or (p_elem == 'life' and m_elem == 'death'):
         p_dmg *= 1.5
         m_dmg *= 1.5
         return [p_dmg, m_dmg]
+
     elif (p_elem == 'death' and m_elem == 'death') or (p_elem == 'life' and m_elem == 'life'):
         p_dmg /= 1.5
         m_dmg /= 1.5
         return [p_dmg, m_dmg]
+
     for x, y in enumerate(element_list):
         if p_elem == y:
             player = x
         if m_elem == y:
             monster = x
+
     try:
         if p_elem == element_list[monster + 1]:
             m_dmg /= 1.5
