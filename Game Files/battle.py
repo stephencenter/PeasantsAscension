@@ -64,11 +64,30 @@ def setup_vars():
     position = main.position
 
 
-def update_stats():  # Forces stats to return to normal when battle is finished
+def update_stats():
+    # Forces stats to return to normal when battle is finished
     global temp_stats
     temp_stats = {'attk': _c(player.attk), 'm_attk': _c(player.m_attk),
                   'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
-                  'spd': _c(player.spd), 'evad': _c(player.evad)}
+                  'spd': _c(player.spd), 'evad': _c(player.evad),
+                  'status_effect': 'none'}
+
+
+def check_status():
+    # Check the player for any status ailments
+    status = temp_stats['status_effect']
+
+    if status == 'poisoned':
+        pass  # Coming in next update!
+
+    elif status == 'sleeping':
+        pass  # Coming in next update!
+
+    elif status == 'silenced':
+        pass  # Coming in next update!
+
+    elif status == 'weak':
+        pass  # Coming in next update!
 
 
 def player_choice():
@@ -178,6 +197,8 @@ def battle_system(is_boss=False, ambush=False):
 
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
+
+        # check_status()
 
     else:
         if after_battle(is_boss) != 'dead':

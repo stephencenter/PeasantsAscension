@@ -344,6 +344,7 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
                     p_dmg /= 1.5
                 elif p_elem == 'water':
                     p_dmg *= 1.5
+
     return [int(p_dmg), int(m_dmg)]
 
 
