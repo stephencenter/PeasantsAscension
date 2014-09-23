@@ -66,16 +66,22 @@ class Consumable(Item):
         return self.name
 
     def use_item(self):
-        print('-'*25)
         global inventory
+
         item_setup_vars()
+        
+        print('-'*25)
+
         main.player.hp += self.heal
+
         if main.player.hp > main.misc_vars['hp_p']:
             main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
         main.player.mp += self.mana
+
         if main.player.mp > main.misc_vars['mp_p']:
             main.player.mp -= (main.player.mp - main.misc_vars['mp_p'])
         print('You consume the {0}'.format(self.name))
+
         for x, y in enumerate(inventory[self.cat]):
             if y.name == self.name:
                 inventory[self.cat].remove(y)
@@ -113,36 +119,47 @@ class Weapon(Item):
     def use_item(self):
         global equipped
         global inventory
+
         item_setup_vars()
+
         if main.player.class_ == self.class_ or self.class_ == 'none':
-            spam = copy.copy(self)
             # Creating a copy of the weapon ensures that
             # only one weapon can be equipped at a time.
+            spam = copy.copy(self)
+
             if isinstance(equipped['weapon'], Weapon):
                 old = copy.copy(equipped['weapon'])
                 old.equip = False
+
                 if old.type_ in ['melee', 'ranged']:
                     main.player.attk -= old.power
                 elif old.type_ == 'magic':
                     main.player.m_attk -= old.power
+
             equipped['weapon'] = spam
+
             if self.type_ in ['melee', 'ranged']:
                 main.player.attk += self.power
                 main.player.m_attk += int(math.ceil(self.power/3))
+
             elif self.type_ == 'magic':
                 main.player.m_attk += self.power
                 main.player.attk += int(math.ceil(self.power/3))
+
             for x, y in enumerate(inventory[self.cat]):
                 if self.name == y.name:
                     key = x
                     y.equip = True
                     break
+
             try:
                 inventory[self.cat][key] = old
             except NameError:
                 pass
+
             print('-'*25)
             print('You equip the {0}.'.format(str(self)))
+
         else:
             print('-'*25)
             print("You must be a {0} to equip this.".format(self.class_.title()))
@@ -165,37 +182,48 @@ class Armor(Item):
     def use_item(self):
         global equipped
         global inventory
+
         item_setup_vars()
+
         if main.player.class_ == self.class_ or self.class_ == 'none':
             fizz = copy.copy(self)  # A copy of the armor is created for the same
-            # reason as for weapons.
+                                    # reason as for weapons.
+
             if isinstance(equipped[self.part], Armor):
                 old = copy.copy(equipped[self.part])
                 old.equip = False
+
                 if old.type_ == 'melee':
                     main.player.dfns -= old.defense
                     main.player.m_dfns -= int(math.ceil(self.defense/3))
                 elif old.type_ == 'magic':
                     main.player.m_dfns -= old.defense
                     main.player.dfns -= int(math.ceil(self.defense/3))
+
             equipped[self.part] = fizz
+
             if self.type_ == 'melee':
                 main.player.dfns += self.defense
                 main.player.m_dfns += int(math.ceil(self.defense/3))
+
             elif self.type_ == 'magic':
                 main.player.m_dfns += self.defense
                 main.player.dfns += int(math.ceil(self.defense/3))
+
             for x, y in enumerate(inventory[self.cat]):
                 if self.name == y.name:
                     key = x
                     y.equip = True
                     break
+
             try:
                 inventory[self.cat][key] = old
             except NameError:
                 pass
+
             print('-'*25)
             print('You equip the {0}.'.format(str(self)))
+
         else:
             print('-'*25)
             print("You must be a {0} to equip this.".format(self.class_.title()))
@@ -208,13 +236,16 @@ class MagicCompass(Item):
 
     def use_item(self):
         from towns import town_list
+
         pos_towns = [tuple([town.name, round(math.hypot(town.x - main.position['x'],
                                                         town.y - main.position['y']))])
                      for town in town_list]
         distance = min(pos_towns, key=lambda x: x[1])
+
         print('-'*25)
         print('The closest town to you is {0} at ~{1} degrees away.'.format(
             distance[0], distance[1]))
+
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
@@ -227,13 +258,17 @@ class DiviningRod(Item):
         pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.position['x'],
                                                       gem.posy - main.position['y']))])
                     for gem in valuable_list if not gem.acquired]
+
         if not pos_gems:
             return print('You are unable to detect any gems.')
+
         distance = min(pos_gems, key=lambda x: x[1])
+
         print('-'*25)
         print('The closest gem to you is {0} {1} at ~{2} degrees away.'.format(
             'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
             else 'a', distance[0], distance[1]))
+
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
@@ -257,12 +292,14 @@ class Shovel(Item):
         print('-'*25)
         print('You begin to search using your shovel...')
         time.sleep(1)
+
         for gem in valuable_list:
             if (main.position['x'], main.position['y']) == (gem.posx, gem.posy):
                 gem.acquired = True
                 print('Using your shovel, you manage to uncover a {0}!'.format(gem.name))
                 inventory['misc'].append(gem)
                 return
+
         print('You were unable to uncover anything.')
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
@@ -645,6 +682,7 @@ def deserialize_gems(path):
 
     with open(path) as j:
         gems = json.load(j)
+
     for name in gems:
         for gem in valuable_list:
             if gem.name == name:
