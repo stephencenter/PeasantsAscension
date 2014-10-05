@@ -69,7 +69,7 @@ class Consumable(Item):
         global inventory
 
         item_setup_vars()
-        
+
         print('-'*25)
 
         main.player.hp += self.heal
@@ -552,7 +552,7 @@ en_myst_gar = Armor('Enhanced Mystical Garments',
 std_cwl = Armor('Studded Cowl',
                 'A soft leather cap studded with steel pieces (+6 Defense)',
                 145, 50, 6, 'melee', 'head', 'rogue')
-std_bdy = Armor('Studded Bodyarmor',
+std_bdy = Armor('Studded Body-armor',
                 'Soft leather body armor studded with steel pieces (+6 Defense)',
                 165, 60, 6, 'melee', 'body', 'rogue')
 std_leg = Armor('Studded Leggings',
@@ -562,7 +562,7 @@ std_leg = Armor('Studded Leggings',
 en_std_cwl = Armor('Enhanced Studded Cowl',
                    'An enhanced version of your typical Studded Hood (+10 Defense)',
                    260, 75, 10, 'melee', 'head', 'rogue')
-en_std_bdy = Armor('Enhanced Studded Bodyarmor',
+en_std_bdy = Armor('Enhanced Studded Body-armor',
                    'An enhanced version of your typical Studded Bodyarmor (+10 Defense)',
                    280, 85, 10, 'melee', 'body', 'rogue')
 en_std_leg = Armor('Enhanced Studded Leggings',

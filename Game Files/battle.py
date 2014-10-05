@@ -73,23 +73,6 @@ def update_stats():
                   'status_effect': 'none'}
 
 
-def check_status():
-    # Check the player for any status ailments
-    status = temp_stats['status_effect']
-
-    if status == 'poisoned':
-        pass  # Coming in next update!
-
-    elif status == 'sleeping':
-        pass  # Coming in next update!
-
-    elif status == 'silenced':
-        pass  # Coming in next update!
-
-    elif status == 'weak':
-        pass  # Coming in next update!
-
-
 def player_choice():
     while True:
         move = only_num(
@@ -131,8 +114,16 @@ def battle_system(is_boss=False, ambush=False):
         # First, display the Player and Monster's stats
         bat_stats()
 
-        # Second, get the player's decision on moves
-        move = player_choice()
+        # Check to see if the player is asleep
+        if temp_stats['status_effect'] == 'sleeping':
+            if not random.randint(0, 2):
+                print('You finally wake up!')
+                move = player_choice()
+            else:
+                print("You're too tired to do anything!")
+
+        else:
+            move = player_choice()
 
         # var is how much less/more the attacks will deal than normal.
         # This makes the battle less predictable and more interesting.
@@ -197,8 +188,6 @@ def battle_system(is_boss=False, ambush=False):
 
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
-
-        # check_status()
 
     else:
         if after_battle(is_boss) != 'dead':
