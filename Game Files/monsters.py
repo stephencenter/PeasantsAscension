@@ -133,6 +133,9 @@ class Monster:
             self.mp -= 5
             print('The {0} casts a healing spell!'.format(self.name))
 
+        elif not random.randint(0, 4):
+            self.give_status()
+
         elif self.attk >= self.m_attk:
             # Physical Attack
             self.monst_attk(var, dodge)
@@ -146,6 +149,7 @@ class Monster:
         elif self.m_attk >= self.attk and self.mp >= 2:
             # Magic Attack
             sounds.magic_attack.play()
+
             print('The {0} is attempting to cast a strange spell...'.format(self.name))
             time.sleep(0.75)
 
@@ -168,6 +172,21 @@ class Monster:
 
         else:
             self.monst_attk(var, dodge)
+
+    def give_status(self):
+        # Attempt to give the player a status ailment
+        status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weak']
+                                if x != battle.temp_stats['status_effect']])
+
+        print('The {0} is attempting to make you {1}...'.format(monster.name, status))
+        time.sleep(0.75)
+
+        if random.randint(0, 2):
+            print('You are now {0}!'.format(status))
+            battle.temp_stats['status_effect'] = status
+
+        else:
+            print('The {0} failed to make you {1}.'.format(monster.name, status))
 
     def monst_name(self):
         monster_type = {'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],
@@ -326,6 +345,9 @@ def tank_ai(var, dodge):
         self.m_dfns += random.randint(1, 2)
         print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
 
+    elif not random.randint(0, 4):
+        self.give_status()
+
     elif self.attk >= self.m_attk:
         # Physical Attack
         self.monst_attk(var, dodge)
@@ -333,19 +355,24 @@ def tank_ai(var, dodge):
     elif self.m_attk >= self.attk and self.mp >= 2:
         # Magic Attack
         sounds.magic_attack.play()
+
         print('The {0} is attempting to cast a strange spell...'.format(self.name))
         time.sleep(0.75)
+
         if dodge in range(battle.temp_stats['evad'], 250):
             dealt = magic.eval_element(
                 p_elem=battle.player.element,
                 m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
+
             player.hp -= dealt
             sounds.enemy_hit.play()
             print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
                 self.name, dealt))
+
         else:
             sounds.attack_miss.play()
             print("The spell misses you by a landslide!")
+
         self.mp -= 2
 
     else:
@@ -386,27 +413,37 @@ def fighter_ai(var, dodge):
     self = monster
     print('\n-Enemy Turn-')
 
-    if self.attk >= self.m_attk:
+    if not random.randint(0, 5):
+         self.give_status()
+
+    elif self.attk >= self.m_attk:
         # Physical Attack
         self.monst_attk(var, dodge)
 
     elif self.m_attk >= self.attk and self.mp >= 2:
         # Magic Attack
         sounds.magic_attack.play()
+
         print('The {0} is attempting to cast a strange spell...'.format(self.name))
         time.sleep(0.75)
+
         if dodge in range(battle.temp_stats['evad'], 250):
             dealt = magic.eval_element(
                 p_elem=battle.player.element,
                 m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
+
             player.hp -= dealt
             sounds.enemy_hit.play()
             print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
                 self.name, dealt))
+
         else:
             sounds.attack_miss.play()
             print("The spell misses you by a landslide!")
+
         self.mp -= 2
+
+
 
     elif self.hp <= int(misc_vars['hp_m']/5) and self.mp >= 5 and random.randint(0, 1):
         # Magic heal

@@ -111,16 +111,28 @@ def battle_system(is_boss=False, ambush=False):
 
     while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
 
-        # First, display the Player and Monster's stats
+        # Check to see if the player is poisoned
+        if temp_stats['status_effect'] == 'poisoned':
+            poison_damage = int(misc_vars['hp_p']/10)
+            print('You took poison damage! (-{0} HP)'.format(poison_damage))
+            player.hp -= poison_damage
+            if player.hp <= 0:
+                break
+
+        # Display the Player and Monster's stats
         bat_stats()
 
         # Check to see if the player is asleep
-        if temp_stats['status_effect'] == 'sleeping':
+        if temp_stats['status_effect'] == 'asleep':
             if not random.randint(0, 2):
                 print('You finally wake up!')
+                temp_stats['status_effect'] = 'none'
                 move = player_choice()
             else:
+                print('-Player Turn-')
                 print("You're too tired to do anything!")
+                input('\nPress Enter/Return')
+                move = ''
 
         else:
             move = player_choice()
@@ -167,7 +179,8 @@ def battle_system(is_boss=False, ambush=False):
             continue
 
         # The player goes first if they have a higher speed
-        elif temp_stats['spd'] > monster.spd or move == '2':
+        elif (temp_stats['spd'] > monster.spd or move == '2') \
+                and temp_stats['status_effect'] != 'asleep':
 
             if player_turn(var, dodge, move) and monster.hp > 0:
                 input('\nPress Enter/Return ')
@@ -183,8 +196,9 @@ def battle_system(is_boss=False, ambush=False):
             monster.enemy_turn(m_var, m_dodge)
 
             if player.hp > 0:
-                input('\nPress Enter/Return ')
-                player_turn(var, dodge, move)
+                if temp_stats['status_effect'] != 'asleep':
+                    input('\nPress Enter/Return ')
+                    player_turn(var, dodge, move)
 
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
