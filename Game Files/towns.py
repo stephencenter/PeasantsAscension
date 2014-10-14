@@ -527,9 +527,8 @@ are rumored to be masters of the arcane arts, and may be willing to train
 your magical abilities for a reasonable price. There is a general store, an
 inn, and several houses in this town.""", [npcs.wesley], -2, -6, inn_cost=2, pet_shop=True)
 
-town3 = Town('Overshire', """Overshire: A city in the northwestern region of th\
-e Forest.
-Overshire is the capitol of the Forest, and as such is very densely populated.
+town3 = Town('Overshire', """Overshire: A city in the northwestern region of the Forest.
+Overshire is the capital of Pythonia, and as such is very densely populated.
 The city is separated into three sectors: the upper-class inner portion, the
 lower-class outer portion, with the middle-class section situated in between.
 As an outsider, you are forbidden to enter the upper two, but are welcome to

@@ -178,7 +178,7 @@ class Monster:
         status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weak']
                                 if x != battle.temp_stats['status_effect']])
 
-        print('The {0} is attempting to make you {1}...'.format(monster.name, status))
+        print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
 
         if random.randint(0, 2):
@@ -186,7 +186,7 @@ class Monster:
             battle.temp_stats['status_effect'] = status
 
         else:
-            print('The {0} failed to make you {1}.'.format(monster.name, status))
+            print('The {0} failed to make you {1}.'.format(self.name, status))
 
     def monst_name(self):
         monster_type = {'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],
@@ -414,7 +414,7 @@ def fighter_ai(var, dodge):
     print('\n-Enemy Turn-')
 
     if not random.randint(0, 5):
-         self.give_status()
+        self.give_status()
 
     elif self.attk >= self.m_attk:
         # Physical Attack
@@ -442,8 +442,6 @@ def fighter_ai(var, dodge):
             print("The spell misses you by a landslide!")
 
         self.mp -= 2
-
-
 
     elif self.hp <= int(misc_vars['hp_m']/5) and self.mp >= 5 and random.randint(0, 1):
         # Magic heal
