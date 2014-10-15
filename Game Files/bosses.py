@@ -76,8 +76,10 @@ def check_bosses(x, y):
                     print('-'*25)
                     battle.battle_system(is_boss=True)
                     return True
+                
                 elif y_n.startswith('n'):
                     return True
+
                 else:
                     continue
     else:

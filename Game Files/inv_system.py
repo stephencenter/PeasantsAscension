@@ -377,8 +377,10 @@ def view_quests():
 
         elif choice.startswith('a'):  # Active Quest
             print('-'*25)
+
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
                         and not x.finished and x.started]
+
             if dialogue:
                 while fizz:
                     print('Active Quests: ')
@@ -390,14 +392,18 @@ def view_quests():
 
                     while True:
                         number = input('Input [#] (or type "back"): ')
+
                         try:
                             number = int(number) - 1
                         except ValueError:
+
                             if number.lower() in [
                                 'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
                             ]:
+
                                 fizz = False  # Break the loop twice
                                 break
+
                             else:
                                 continue
 
@@ -407,6 +413,7 @@ def view_quests():
                         quest = dialogue[number]
 
                         print('-'*25)
+
                         print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
                             quest.name, '\n     '.join([
                                 x for x in quest.desc]), quest.q_giver))
@@ -415,7 +422,9 @@ def view_quests():
                         break
             else:
                 print('You have no active quests!')
+
             print('-'*25)
+
         elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
             return
 
@@ -433,10 +442,13 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
         if y_n.startswith('y'):
             for num, i in enumerate(inventory[cat]):
                 if i.name == item.name:
+
                     inventory[cat].remove(inventory[cat][num])
                     main.misc_vars['gp'] += item.sell
+
                     print('You hand the shopkeep your {0} and recieve {1} GP.'.format(
                         item.name, item.sell))
+
                     return
 
         elif y_n.startswith('n'):
@@ -485,6 +497,7 @@ def tools_menu():  # Display a set of usable tools on the world map
                     ):
                         print('-'*25)
                     break
+
                 else:
                     continue
 

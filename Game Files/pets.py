@@ -4,6 +4,7 @@ import math
 import random
 import time
 import json
+import re
 
 import battle
 import sounds
@@ -12,6 +13,9 @@ if __name__ == "__main__":
     sys.exit()
 else:
     main = sys.modules["__main__"]
+
+# A regular expression that replaces all non-NSEW characters with ''
+only_nsew = lambda x: re.compile(r'[^n^s^e^w]').sub('', x)
 
 
 class Companion:
@@ -98,6 +102,59 @@ class Fighter(Companion):
             print('Your pet {0} is incapacitated, and is forced to rest!'.format(self.name))
             self.rt -= 1
 
+
+class Steed(Companion):
+    def __init__(self, name, desc, cost, distance, equip=False, level=1):
+        Companion.__init__(self, name, desc, cost, equip, level)
+        self.distance = distance
+
+    @staticmethod
+    def out_of_bounds():
+        print('-'*25)
+        print('You see an ocean in front of you and decide to stop.')
+        print('-'*25)
+
+    def use_ability(self, direction):
+        direction = only_nsew(direction)
+
+        if len(direction) > self.distance:
+            spam = self.distance
+        else:
+            spam = len(direction)
+
+        for x in direction[:spam]:
+            if x == 'n':
+                if main.position['y'] < 125:
+                    main.position['y'] += 1
+                else:
+                    Steed.out_of_bounds()
+                    return
+
+            elif x == 's':
+                if main.position['y'] > -125:
+                    main.position['y'] -= 1
+                else:
+                    Steed.out_of_bounds()
+                    return
+
+            elif x == 'w':
+                if main.position['x'] > -125:
+                    main.position['x'] -= 1
+                else:
+                    Steed.out_of_bounds()
+                    return
+
+            elif x == 'e':
+                if main.position['x'] < 125:
+                    main.position['x'] += 1
+                else:
+                    Steed.out_of_bounds()
+                    return
+
+        if len(direction) > self.distance:
+            print("Your {0} got tired, so you had to stop part-way.".format(self.name))
+            return
+
 # --Healing Pets--
 pet_cherub = Healer("Cherub",
                     "A sweet angel skilled in the way of weak-healing.", 150, 2, 10, 5, 2)
@@ -112,7 +169,12 @@ pet_viper = Fighter("Viper",
                     "Despite not being that big, this viper does pack quite a punch.",
                     400, 5, incap_chance=30)
 
-all_pets = [pet_cherub, pet_sapling, pet_wolf, pet_viper]
+# --Steed Pets--
+pet_horse = Steed("Horse",
+                  """A trusty horse. This horse allows you to enter up to 3 directions
+at a time instead of 1.""", 350, 3)
+
+all_pets = [pet_cherub, pet_sapling, pet_wolf, pet_viper, pet_horse]
 
 
 def serialize_pets(path):

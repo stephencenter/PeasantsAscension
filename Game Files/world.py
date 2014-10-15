@@ -26,6 +26,7 @@ import bosses
 import sounds
 import inv_system
 import magic
+import pets
 
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
@@ -81,34 +82,36 @@ def movement_system():
 
             if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
                 sounds.foot_steps.play()
+                if not isinstance(player.current_pet, pets.Steed):
+                    if direction.startswith('n'):
+                        if position['y'] < 125:
+                            position['y'] += 1
+                        else:
+                            out_of_bounds()
+                            continue
 
-                if direction.startswith('n'):
-                    if position['y'] < 125:
-                        position['y'] += 1
-                    else:
-                        out_of_bounds()
-                        continue
+                    elif direction.startswith('s'):
+                        if position['y'] > -125:
+                            position['y'] -= 1
+                        else:
+                            out_of_bounds()
+                            continue
 
-                elif direction.startswith('s'):
-                    if position['y'] > -125:
-                        position['y'] -= 1
-                    else:
-                        out_of_bounds()
-                        continue
+                    elif direction.startswith('w'):
+                        if position['x'] > -125:
+                            position['x'] -= 1
+                        else:
+                            out_of_bounds()
+                            continue
 
-                elif direction.startswith('w'):
-                    if position['x'] > -125:
-                        position['x'] -= 1
-                    else:
-                        out_of_bounds()
-                        continue
-
-                elif direction.startswith('e'):
-                    if position['x'] < 125:
-                        position['x'] += 1
-                    else:
-                        out_of_bounds()
-                        continue
+                    elif direction.startswith('e'):
+                        if position['x'] < 125:
+                            position['x'] += 1
+                        else:
+                            out_of_bounds()
+                            continue
+                else:
+                    player.current_pet.use_ability(direction)
 
                 position['avg'] = int(((abs(position['x'])) +
                                        (abs(position['y'])))/2)

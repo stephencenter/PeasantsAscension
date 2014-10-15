@@ -114,8 +114,11 @@ def battle_system(is_boss=False, ambush=False):
         # Check to see if the player is poisoned
         if temp_stats['status_effect'] == 'poisoned':
             poison_damage = int(misc_vars['hp_p']/10)
+
             print('You took poison damage! (-{0} HP)'.format(poison_damage))
+
             player.hp -= poison_damage
+
             if player.hp <= 0:
                 break
 
@@ -128,6 +131,7 @@ def battle_system(is_boss=False, ambush=False):
                 print('You finally wake up!')
                 temp_stats['status_effect'] = 'none'
                 move = player_choice()
+
             else:
                 print('-Player Turn-')
                 print("You're too tired to do anything!")
@@ -255,7 +259,10 @@ def player_turn(var, dodge, move):
         else:
             return False
 
-        if player.current_pet and monster.hp > 0:
+        if not isinstance(player.current_pet, pets.Steed) \
+                and player.current_pet \
+                and monster.hp > 0:
+
             input('\nPress Enter/Return')
             print("\n-Pet Turn-")
             player.current_pet.use_ability()
@@ -477,7 +484,7 @@ def bat_stats():
           misc_vars['mp_p'], player.lvl))
 
     # Pet Stats
-    pet = player.current_pet
+    pet = player.current_pet if not isinstance(player.current_pet, pets.Steed) else False
     if pet:
         if isinstance(player.current_pet, pets.Healer):
             print("{0}'s {1}: {2}/{3} MP LVL: {4}".format(

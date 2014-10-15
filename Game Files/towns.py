@@ -25,7 +25,6 @@ import npcs
 import items
 import pets
 
-
 if __name__ == "__main__":
     sys.exit()
 else:
@@ -381,7 +380,8 @@ GP). (Press enter/return).'.format(str(i), i.buy))
                 return
 
     def town_pet(self):
-        pet_list = [[pets.pet_wolf], [pets.pet_sapling, pets.pet_viper]][self.ps_level - 1]
+        pet_list = [[pets.pet_wolf],
+                    [pets.pet_sapling, pets.pet_viper, pets.pet_horse]][self.ps_level - 1]
 
         print('-'*25)
         print('Welcome, adventurer!')
