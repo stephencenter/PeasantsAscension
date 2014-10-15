@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d19a7f44-3ef1-4b67-8670-56343c3a2afb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/battle.py" afterPath="$PROJECT_DIR$/Game Files/battle.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/bosses.py" afterPath="$PROJECT_DIR$/Game Files/bosses.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/inv_system.py" afterPath="$PROJECT_DIR$/Game Files/inv_system.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/magic.py" afterPath="$PROJECT_DIR$/Game Files/magic.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/pets.py" afterPath="$PROJECT_DIR$/Game Files/pets.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/towns.py" afterPath="$PROJECT_DIR$/Game Files/towns.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/world.py" afterPath="$PROJECT_DIR$/Game Files/world.py" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Adventures in Pixels.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Arpanauts.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Chickens (going peck peck peck).ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\CopperNickel.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Digital Native.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Frontier.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Mayhem in the Village.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Mountain.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Power-Up.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Prologue.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Python_RM.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Terrible Tarantuloid.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\Through the Forest.ogg" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Stephen\Documents\Pythonius\Game Files\Music\We're all under the stars.ogg" afterPath="" />
     </list>
     <ignored path="Pythonius.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -87,10 +93,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="items.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="items.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/items.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.32885087" vertical-offset="16199" max-vertical-offset="18576">
+            <state vertical-scroll-proportion="0.0" vertical-offset="16199" max-vertical-offset="18576">
               <caret line="597" column="55" selection-start-line="597" selection-start-column="55" selection-end-line="597" selection-end-column="55" />
               <folding />
             </state>
@@ -109,11 +115,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="battle.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="battle.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="11584" max-vertical-offset="12225">
-              <caret line="486" column="89" selection-start-line="486" selection-start-column="89" selection-end-line="486" selection-end-column="89" />
+            <state vertical-scroll-proportion="2.0696378" vertical-offset="11332" max-vertical-offset="12225">
+              <caret line="498" column="0" selection-start-line="498" selection-start-column="0" selection-end-line="498" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -558,7 +564,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36648044" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849163" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.048044693" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.56089383" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -945,16 +951,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/pets.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4653" max-vertical-offset="6150">
-          <caret line="173" column="21" selection-start-line="173" selection-start-column="21" selection-end-line="173" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/towns.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="14856">
@@ -962,14 +958,6 @@
           <folding>
             <element signature="e#704#714#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="11584" max-vertical-offset="12225">
-          <caret line="486" column="89" selection-start-line="486" selection-start-column="89" selection-end-line="486" selection-end-column="89" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1011,8 +999,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/items.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.32885087" vertical-offset="16199" max-vertical-offset="18576">
+        <state vertical-scroll-proportion="0.0" vertical-offset="16199" max-vertical-offset="18576">
           <caret line="597" column="55" selection-start-line="597" selection-start-column="55" selection-end-line="597" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/pets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4653" max-vertical-offset="6150">
+          <caret line="173" column="21" selection-start-line="173" selection-start-column="21" selection-end-line="173" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.0696378" vertical-offset="11332" max-vertical-offset="12225">
+          <caret line="498" column="0" selection-start-line="498" selection-start-column="0" selection-end-line="498" selection-end-column="0" />
           <folding />
         </state>
       </provider>
