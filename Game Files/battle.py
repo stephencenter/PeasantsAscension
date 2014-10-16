@@ -111,17 +111,6 @@ def battle_system(is_boss=False, ambush=False):
 
     while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
 
-        # Check to see if the player is poisoned
-        if temp_stats['status_effect'] == 'poisoned':
-            poison_damage = int(misc_vars['hp_p']/10)
-
-            print('You took poison damage! (-{0} HP)'.format(poison_damage))
-
-            player.hp -= poison_damage
-
-            if player.hp <= 0:
-                break
-
         # Display the Player and Monster's stats
         bat_stats()
 
@@ -266,6 +255,27 @@ def player_turn(var, dodge, move):
             input('\nPress Enter/Return')
             print("\n-Pet Turn-")
             player.current_pet.use_ability()
+
+        # Check to see if the player is poisoned
+        if temp_stats['status_effect'] == 'poisoned':
+            if random.randint(0, 3):
+                poison_damage = int(misc_vars['hp_p']/10)
+
+                print('You took poison damage! (-{0} HP)'.format(poison_damage))
+
+                player.hp -= poison_damage
+
+                if player.hp <= 0:
+                    break
+            else:
+                print('You start to feel better!')
+                temp_stats['status_effect'] = 'none'
+
+        # Check to see if the player is silenced
+        elif temp_stats['status_effect'] == 'silenced':
+            if not random.randint(0, 3):
+                print('You find yourself able to speak again!')
+                temp_stats['status_effect'] = 'none'
 
         return True
 
@@ -478,21 +488,27 @@ def bat_stats():
     print('-'*25)
 
     # Player Stats
-    print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
+    print("{0}: {1}/{2} HP | {3}/{4} MP | LVL: {5} | STATUS: {6}".format(
           player.name, player.hp,
           misc_vars['hp_p'], player.mp,
-          misc_vars['mp_p'], player.lvl))
+          misc_vars['mp_p'], player.lvl,
+          temp_stats['status_effect'].title()))
 
     # Pet Stats
-    pet = player.current_pet if not isinstance(player.current_pet, pets.Steed) else False
+    pet = player.current_pet
     if pet:
-        if isinstance(player.current_pet, pets.Healer):
-            print("{0}'s {1}: {2}/{3} MP LVL: {4}".format(
+        if isinstance(pet, pets.Healer):
+            print("{0}'s {1}: {2}/{3} MP | LVL: {4}".format(
                 player.name, pet.name, pet.mana, pet.max_m, pet.level))
 
+        elif isinstance(pet, pets.Fighter):
+            print("{0}'s {1}: | STATUS:  {2} | LVL: {3}".format(
+                player.name, pet.name, 'Incapacitated' if pet.rt else 'Normal', pet.level))
+
     # Monster Stats
-    print('{0}: {1}/{2} HP | {3}/{4} MP  LVL: {5}'.format(
+    print("{0}: {1}/{2} HP | {3}/{4} MP | LVL: {5}".format(
           monster.name, monster.hp,
           misc_vars['hp_m'], monster.mp,
           misc_vars['mp_m'], monster.lvl))
+
     print('-'*25)
