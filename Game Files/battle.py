@@ -111,14 +111,22 @@ def battle_system(is_boss=False, ambush=False):
 
     while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
 
+        if temp_stats['status_effect'] == 'asleep':
+            is_woken_up = not random.randint(0, 2)
+        else:
+            is_woken_up = False
+
         # Display the Player and Monster's stats
-        bat_stats()
+        if not is_woken_up:
+            bat_stats()
 
         # Check to see if the player is asleep
         if temp_stats['status_effect'] == 'asleep':
-            if not random.randint(0, 2):
+            if is_woken_up:
+                print('\n-Player Turn-')
                 print('You finally wake up!')
                 temp_stats['status_effect'] = 'none'
+                bat_stats()
                 move = player_choice()
 
             else:
@@ -430,8 +438,6 @@ def run_away():
 
 def battle_inventory():
     # The player can use items from the "consum" category of their inventory during battles.
-    # In the future, there will be certain items you can use from the "misc"/"weapons" sections
-    # as well.
     while True:
         print('-'*25)
         print('Battle Inventory: \n      ' + '\n      '.join(
