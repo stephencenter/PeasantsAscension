@@ -76,7 +76,7 @@ def check_bosses(x, y):
                     print('-'*25)
                     battle.battle_system(is_boss=True)
                     return True
-                
+
                 elif y_n.startswith('n'):
                     return True
 
@@ -113,6 +113,10 @@ def setup_vars():
     misc_vars = main.misc_vars
 
 
+def unimportant_boss_ud():
+    pass
+
+
 # Boss: Master Slime -- Position: 0'N, 1'E
 master_slime = Boss('Master Slime', 45, 4, 8, 3, 5, 0, 3, 3, 5, 1, 0, [], 35, 35, active=False)
 
@@ -127,6 +131,8 @@ master_slime.upon_defeating = mastslim_ud
 
 # Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
 whisp_goblin = Boss('Whispering Goblin', 35, 10, 3, 6, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)
+
+whisp_goblin.upon_defeating = unimportant_boss_ud
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
 menac_phantom = Boss('Menacing Phantom', 60, 25, 2, 4, 12, 8, 5, 6, 9, -12,  8, [
@@ -172,6 +178,8 @@ cursed_spect.upon_defeating = cursspect_ud
 # Boss: Ent -- Position: 27'N, 15'E
 giant_ent = Boss('Giant Ent', 125, 35, 17, 12, 20, 20, 12, 3, 13, 15, 27, [items.enc_yw],
                  120, 120, active=True, element='grass')
+
+giant_ent.upon_defeating = unimportant_boss_ud
 
 boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarrant, cursed_spect, giant_ent]
 
