@@ -60,6 +60,7 @@ class Town:
     def town_choice(self):
         print('-'*25)
         print('Welcome to {0}!\n{1}'.format(self.name, '-'*25))
+
         while True:
             print("""What do you wish to do?
       [1] --> Town Desc
@@ -67,12 +68,15 @@ class Town:
       [3] --> People
       [4] --> Player Info
       [5] --> View Inventory""")
+
             while True:
                 choice = input('Input [#] (or type "exit"): ')
+
                 if choice == '1':
                     print('-'*25)
                     input(''.join([self.desc, '\n\nPress Enter/Return ']))
                     print('-'*25)
+
                 elif choice == '2':
                     print('-'*25)
                     if self.gen_store or self.inn:
@@ -80,26 +84,32 @@ class Town:
                     else:
                         print("There don't appear to be any unlocked buildings to enter.")
                     print('-'*25)
+
                 elif choice == '3':
                     print('-'*25)
                     self.speak_to_npcs()
                     print('-'*25)
+
                 elif choice == '4':
                     print('-'*25)
                     main.player.player_info()
                     print('-'*25)
+
                 elif choice == '5':
                     print('-'*25)
                     inv_system.pick_category()
                     print('-'*25)
-                elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+
+                elif choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     pygame.mixer.music.load(world.position['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
                     print('-'*25)
                     return
+
                 else:
                     continue
+
                 break
 
     def new_location(self, add=True):  # Translate the location of newly-found towns

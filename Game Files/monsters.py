@@ -126,14 +126,18 @@ class Monster:
         if self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
             # Magic heal
             sounds.magic_healing.play()
+
             heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
+
             if heal < 5:
                 heal = 5
+
             self.hp += heal
             self.mp -= 5
+
             print('The {0} casts a healing spell!'.format(self.name))
 
-        elif not random.randint(0, 4):
+        elif not random.randint(0, 4) and self.mp >= 2:
             self.give_status()
 
         elif self.attk >= self.m_attk:
@@ -177,7 +181,6 @@ class Monster:
         # Attempt to give the player a status ailment
         status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weak']
                                 if x != battle.temp_stats['status_effect']])
-
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
 
@@ -188,24 +191,43 @@ class Monster:
         else:
             print('The {0} failed to make you {1}.'.format(self.name, status))
 
+        self.mp -= 2
+
     def monst_name(self):
-        monster_type = {'Beach': ['Minor Kraken', 'Mutant Crab', 'Land Shark'],
-                        'Swamp': ['Bog Slime', 'Moss Ogre', 'Sludge Rat'],
-                        'Forest': ['Sprite', 'Goblin', 'Imp'],
-                        'Desert': ['Mummy', 'Sand Golem', 'Fire Ant'],
-                        'Tundra': ['Frost Bat', 'Minor Yeti', 'Arctic Wolf'],
-                        'Mountain': ['Troll', 'Rock Giant', 'Giant Worm'],
-                        'Graveyard': ['Ghoul', 'Skeleton', 'Zombie']
+        monster_type = {'Shore': ['Shell Mimic', 'Giant Crab', 'Naiad',
+                                  'Sea Serpent', 'Squid'],
+                        'Swamp': ['Bog Slime', 'Moss Ogre', 'Sludge Rat',
+                                  'Walking Venus', 'Vine Lizards'],
+                        'Forest': ['Goblin', 'Beetle', 'Sprite',
+                                   'Imp', 'Bat'],
+                        'Desert': ['Mummy', 'Sand Golem', 'Minubis',
+                                   'Fire Ant', 'Naga'],
+                        'Tundra': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge',
+                                   'Arctic Wolf', 'Frost Bat'],
+                        'Mountain': ['Troll', 'Rock Giant', 'Oread',
+                                     'Tengu', 'Giant Worm'],
+                        'Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
+                                      'Skeleton', 'Ghoul']
                         }
+
         self.name = random.choice(monster_type[position['reg']])
+
+        if self.name == monster_type[position['reg']][0]:
+            self.enemy_turn = fighter_ai
+            fighter_stats(self)
 
         if self.name == monster_type[position['reg']][1]:
             self.enemy_turn = tank_ai
             tank_stats(self)
 
         elif self.name == monster_type[position['reg']][2]:
-            self.enemy_turn = fighter_ai
-            fighter_stats(self)
+            # Mage AI -- Not yet implemented!
+            pass
+
+        elif (self.name == monster_type[position['reg']][3] or
+                self.name == monster_type[position['reg']][4]):
+            # Agile AI -- Not yet implemented!
+            pass
 
         modifiers = [
             'Slow', 'Fast',
@@ -215,6 +237,7 @@ class Monster:
             'Mystic', 'Foolish',
             'Strong', 'Weak', ''
         ]
+
         modifier = random.choice(modifiers)
 
         if modifier == 'Slow':  # Very-low speed, below-average speed
@@ -247,17 +270,23 @@ class Monster:
                 # High melee stats
                 self.attk += 2
                 self.dfns += 2
-            elif modifier == 'Weak':  # Low melee stats
+
+            elif modifier == 'Weak':
+                # Low melee stats
                 self.attk -= 2
                 self.dfns -= 2
+
             elif modifier == 'Mystic' and self.m_attk > self.attk and self.m_dfns > self.dfns:
                 # High magic stats
                 self.m_attk += 2
                 self.m_dfns += 2
                 self.mp += 3
-            elif modifier == 'Foolish':  # Low magic stats
+
+            elif modifier == 'Foolish':
+                # Low magic stats
                 self.m_attk -= 2
                 self.m_dfns -= 2
+
             else:
                 modifier = ''
 
@@ -332,11 +361,15 @@ def tank_ai(var, dodge):
     if self.hp <= int(misc_vars['hp_m']/3) and self.mp >= 5 and random.randint(0, 2):
         # Magic heal
         sounds.magic_healing.play()
+
         heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
+
         if heal < 5:
             heal = 5
+
         self.hp += heal
         self.mp -= 5
+
         print('The {0} casts a healing spell!'.format(self.name))
 
     elif int((self.dfns + self.m_dfns)/1.5) <= int(self.lvl/3):
@@ -345,7 +378,7 @@ def tank_ai(var, dodge):
         self.m_dfns += random.randint(1, 2)
         print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
 
-    elif not random.randint(0, 4):
+    elif not random.randint(0, 4) and self.mp >= 2:
         self.give_status()
 
     elif self.attk >= self.m_attk:
@@ -413,7 +446,7 @@ def fighter_ai(var, dodge):
     self = monster
     print('\n-Enemy Turn-')
 
-    if not random.randint(0, 5):
+    if not random.randint(0, 5) and self.mp >= 2:
         self.give_status()
 
     elif self.attk >= self.m_attk:
@@ -446,11 +479,14 @@ def fighter_ai(var, dodge):
     elif self.hp <= int(misc_vars['hp_m']/5) and self.mp >= 5 and random.randint(0, 1):
         # Magic heal
         sounds.magic_healing.play()
+
         heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
         if heal < 5:
             heal = 5
+
         self.hp += heal
         self.mp -= 5
+
         print('The {0} casts a healing spell!'.format(self.name))
 
     elif int((self.dfns + self.m_dfns)/1.5) <= int(self.lvl/5):
@@ -478,6 +514,7 @@ def setup_vars():
     global misc_vars
     global position
     global inventory
+
     player = main.player
     misc_vars = main.misc_vars
     position = main.position
