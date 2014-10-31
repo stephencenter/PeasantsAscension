@@ -179,8 +179,9 @@ class Monster:
 
     def give_status(self):
         # Attempt to give the player a status ailment
-        status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weak']
+        status = random.choice([x for x in ['asleep', 'poisoned', 'silenced']
                                 if x != battle.temp_stats['status_effect']])
+        
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
 
