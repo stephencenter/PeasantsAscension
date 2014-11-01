@@ -181,7 +181,7 @@ class Monster:
         # Attempt to give the player a status ailment
         status = random.choice([x for x in ['asleep', 'poisoned', 'silenced']
                                 if x != battle.temp_stats['status_effect']])
-        
+
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
 
@@ -297,12 +297,12 @@ class Monster:
             self.element = 'fire'
         elif position['reg'] == 'Mountain':
             self.element = 'earth'
-        elif position['reg'] == 'Beach':
-            self.element = 'electric'
-        elif position['reg'] == 'Forest':
-            self.element = 'grass'
-        elif position['reg'] == 'Swamp':
+        elif position['reg'] == 'Shore':
             self.element = 'water'
+        elif position['reg'] == 'Forest':
+            self.element = 'electric'
+        elif position['reg'] == 'Swamp':
+            self.element = 'grass'
         elif position['reg'] == 'Graveyard':
             self.element = 'death'
         else:
