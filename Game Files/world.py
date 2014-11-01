@@ -108,7 +108,13 @@ def movement_system():
                         if position['x'] < 125:
                             position['x'] += 1
                         else:
-                            out_of_bounds()
+                            # There is no water to the east of Pythonia. Instead, there
+                            # is a large-ish nation known as "Elysium".
+                            # (Map of the Arcadian Continent: http://tinyurl.com/map-of-arcadia)
+                            print('-'*25)
+                            print('You come across the border between Elysium and Pythonia.')
+                            print('Despite your pleading, the border guards will not let you pass.')
+                            print('-'*25)
                             continue
                 else:
                     player.current_pet.use_ability(direction)
