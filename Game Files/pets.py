@@ -148,7 +148,18 @@ class Steed(Companion):
                 if main.position['x'] < 125:
                     main.position['x'] += 1
                 else:
-                    Steed.out_of_bounds()
+                    if position['y'] >= 42:
+                        nation = 'Hillsbrad'
+                    elif position['y'] <= -42:
+                        nation = 'Maranon'
+                    else:
+                        nation = 'Elysium'
+
+                    print('-'*25)
+                    print('You come across the border between {0} and Pythonia.'.format(
+                        nation))
+                    print('Despite your pleading, the border guards will not let you pass.')
+                    print('-'*25)
                     return
 
         if len(direction) > self.distance:

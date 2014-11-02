@@ -109,13 +109,24 @@ def movement_system():
                             position['x'] += 1
                         else:
                             # There is no water to the east of Pythonia. Instead, there
-                            # is a large-ish nation known as "Elysium".
-                            # (Map of the Arcadian Continent: http://tinyurl.com/map-of-arcadia)
+                            # are three other nations named "Hillsbrad", "Elysium", and "Maranon"
+                            # (Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5)
+
+                            if position['y'] >= 42:
+                                nation = 'Hillsbrad'
+                            elif position['y'] <= -42:
+                                nation = 'Maranon'
+                            else:
+                                nation = 'Elysium'
+
                             print('-'*25)
-                            print('You come across the border between Elysium and Pythonia.')
+                            print('You come across the border between {0} and Pythonia.'.format(
+                                nation))
                             print('Despite your pleading, the border guards will not let you pass.')
                             print('-'*25)
+
                             continue
+
                 else:
                     player.current_pet.use_ability(direction)
 
@@ -211,7 +222,7 @@ def check_region():
         reg_music = 'Music/Digital Native.ogg'
 
     elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
-        region = 'Beach'
+        region = 'Shore'
         reg_music = "Music/We're all under the stars.ogg"
 
     if position['reg'] != region:
