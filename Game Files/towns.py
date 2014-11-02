@@ -539,10 +539,12 @@ inn, and several houses in this town.""", [npcs.wesley], -2, -6, inn_cost=2, pet
 
 town3 = Town('Overshire', """Overshire: A city in the northwestern region of the Forest.
 Overshire is the capital of Pythonia, and as such is very densely populated.
-The city is separated into three sectors: the upper-class inner portion, the
-lower-class outer portion, with the middle-class section situated in between.
-As an outsider, you are forbidden to enter the upper two, but are welcome to
-do as you wish in the lower.""", [npcs.stewson, npcs.jeffery], -11, 13, inn_cost=5, gs_level=2)
+The city is separated into three sectors: the upper-class inner portion
+consisting of castle surrounded by reinforced stone walls, a lower-class
+outer portion comprised of smalls buildings and huts, and a middle-class
+section situated in between. As an outsider, you are forbidden to enter the
+upper two, but are welcome to do as you wish in the lower.""",
+             [npcs.stewson, npcs.jeffery], -11, 13, inn_cost=5, gs_level=2)
 
 town4 = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing too special, although it's cheap
