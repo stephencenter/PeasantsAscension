@@ -6,7 +6,7 @@
         |___/
             
 PythoniusRPG -- Copyright 2013, 2014 Stephen Center
- -- v0.5.8 Alpha
+ -- v0.6 Alpha
 ----------------------------------------------------
 Legal Stuff:
 
@@ -61,6 +61,30 @@ How to play:
         Simply input the number in the brackets next to the 
         command you want to use.
 ----------------------------------------------------
+What exactly is the plot for this game?
+
+    Starting in v0.6.1, Pythonius has an actual plot! The full
+    backstory for the game can be read by selecting "Story"
+    from the title screen. It's a pretty stereotypical 
+    fantasy-RPG plotline, but I think it's kinda neat.
+    Basically, the objective of the game is to retrieve a magical
+    stone from the Mountains of Pythonia and then use it to
+    save the King's daughter.
+----------------------------------------------------
+Why is the game named "Pythonius"?
+
+    The game, as you most likely know, is programmed entirely in
+    using the Python Programming Language. The name of the game
+    is simply "Python" with the letters "ius" appended to it.
+    When I was first making the game, I imagined that Pythonius
+    would be some sort of main-character. In v0.6.1, I finally
+    decided that Pythonius was a war general who helped Pythonia
+    rebel against the oppressive Flygonian Empire. Pythonius IS
+    a character in the game, but this character is actually
+    the war general's son, King Pythonius II. A more in-depth
+    description of these events can be read by selecting
+    "Story" from the title screen.
+----------------------------------------------------
 What is the "Adventure Name"?
 
     When creating your character, the game will ask you to input
@@ -114,3 +138,6 @@ Music:
     
         Ben Landis - http://www.benlandis.com/
         Eric Skiff - http://ericskiff.com/
+    
+    These composers are very talented, and I'd highly recommend
+    you listen to more of their work!

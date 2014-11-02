@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.6 Alpha
-game_version = 'v0.6'
+# PythoniusRPG v0.6.1 Alpha
+game_version = 'v0.6.1'
 # Copyright 2013, 2014 Stephen Center
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -36,27 +36,6 @@ game_version = 'v0.6'
 #     email the error code to me. If you could provide a description of what
 #     you did to cause the bug, that'd be great. Contact information is near
 #     the top of the module.
-#-----------------------------------------------------------------------------#
-# Explanation of the number-based selection system:
-#
-#   The number-based selection system is a heavy improvement over the previous
-#   word-based selection system. Previously, when confronted with options, you
-#   had to type out the entire word (there were a few exceptions), unnecessarily
-#   wasting time. For example, when going to view your inventory, selecting an
-#   item looked like this:
-#       Item Category: Item 1, Item 2, Item 3, Item 4, etc... | Input item name:
-#
-#   This was very-much time consuming and gets tedious quickly. As such, I
-#   decided to improve it:
-#
-#       Item category:
-#             [1] Item 1
-#             [2] Item 2
-#             [3] Item 3
-#       Input [#]:
-#
-#   Not only does this save time, but it also looks much more visually
-#   appealing in my opinion. I felt the need to explain this, I don't know why.
 #-----------------------------------------------------------------------------#
 
 # Establish "player" as a global variable
@@ -95,7 +74,7 @@ import sounds
 import towns
 import logging
 
-# Log everything, and send it to stderr.
+# Log everything and send it to stderr.
 logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
 
 logging.debug("Game run")
@@ -414,8 +393,10 @@ Input letter: """)
             print('  Name: {0}'.format(self.current_pet))
             time.sleep(0.35)
             print('  Level: {0}'.format(self.current_pet.level))
+
         else:
             print('  (None)')
+
         print('-'*25)
         input('Press Enter/Return ')
 
@@ -640,6 +621,7 @@ def check_save():  # Check for save files and load the game if they're found
 
                 else:
                     continue
+
             try:
                 adventure_name = list(save_files)[chosen]
             except IndexError:
@@ -771,7 +753,7 @@ def title_screen():
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(music_vol)
 
-    print("""
+    print("""\
       ____        _   _                 _
      |  _ \\ _   _| |_| |__   ___  _ __ (_)_   _ ___
      | |_) | | | | __| '_ \\ / _ \\| '_ \\| | | | / __|
@@ -783,7 +765,7 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
 -----------------------------------------------------------""".format(game_version))
 
     while True:
-        choice = input('[P]lay Game  |  [C]redits  | [E]xit  |  Input letter: ')
+        choice = input('[P]lay Game | [C]redits | [S]tory | [E]xit  |  Input Letter: ')
 
         choice = choice.lower()
 
@@ -801,7 +783,30 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
             except FileNotFoundError:
                 print('The "Credits.txt" file could not be found.')
             except OSError:
+                logging.exception('Error loading Credits.txt:')
                 print('There was a problem opening "Credits.txt".')
+
+            print('-'*25)
+
+        elif choice.startswith('s'):
+            print('-'*25)
+            input('Press Enter/Return after each line to advance the text ')
+            print('-'*25)
+
+            try:
+                with open('../Pythonius Plot.txt') as f:
+                    for f.readline in f:
+                        if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
+                            input(''.join(f.readline.rstrip("\n").split(";")))
+                        else:
+                            print(''.join(f.readline.rstrip("\n").split(";")))
+
+            except FileNotFoundError:
+                print('The "Pythonius Plot.txt" file could not be found.')
+
+            except OSError:
+                logging.exception('Error loading Pythonius Plot.txt:')
+                print('There was an problem opening "Pythonius Plot.txt".')
 
             print('-'*25)
 
