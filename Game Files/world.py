@@ -12,6 +12,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+# ------------------------------------------------------------------------ #
+# Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
 
 import sys
 import random
@@ -62,6 +64,7 @@ def movement_system():
 
     while True:
         towns.search_towns(position['x'], position['y'])
+
         if position['x'] >= 0:
             position['h'] = "\u00b0E"
         else:
@@ -81,41 +84,77 @@ def movement_system():
             direction = direction.lower()
 
             if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
+
                 sounds.foot_steps.play()
+
                 if not isinstance(player.current_pet, pets.Steed):
+                    # The in-game map is square due to simplify things.
+                    # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
                     if direction.startswith('n'):
+
                         if position['y'] < 125:
                             position['y'] += 1
+
                         else:
-                            out_of_bounds()
+                            print('-'*25)
+
+                            if position['x'] <= 42:
+                                print('Off in the distance, you see what appears to be a large')
+                                print('island. According to your map, this island is known as')
+                                print('Durcuba. You probably shouldn\'t go there.')
+
+                            else:
+                                print('You come across the border between Hillsbrad and Pythonia.')
+                                print('Despite your pleading, the border guards will not let you \
+pass.')
+
+                            print('-'*25)
+
                             continue
 
                     elif direction.startswith('s'):
                         if position['y'] > -125:
                             position['y'] -= 1
+
                         else:
-                            out_of_bounds()
+                            print('-'*25)
+
+                            if position['x'] <= 42:
+                                print('You see a large island off in the distance. According to')
+                                print('your map, this island appears to be Thex! Unfortunately,')
+                                print("you don't have any way to cross the sea.")
+
+                            else:
+                                print('You come across the border between Maranon and Pythonia.')
+                                print('Despite your pleading, the border guards will not let you \
+pass.')
+                            print('-'*25)
+
                             continue
 
                     elif direction.startswith('w'):
                         if position['x'] > -125:
                             position['x'] -= 1
+
                         else:
-                            out_of_bounds()
+                            print('-'*25)
+                            print('Ahead of you is a seemingly endless ocean. \
+You cannot continue in this direction.')
+                            print('-'*25)
+
                             continue
 
                     elif direction.startswith('e'):
                         if position['x'] < 125:
                             position['x'] += 1
-                        else:
-                            # There is no water to the east of Pythonia. Instead, there
-                            # are three other nations named "Hillsbrad", "Elysium", and "Maranon"
-                            # (Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5)
 
+                        else:
                             if position['y'] >= 42:
                                 nation = 'Hillsbrad'
+
                             elif position['y'] <= -42:
                                 nation = 'Maranon'
+
                             else:
                                 nation = 'Elysium'
 
@@ -188,13 +227,8 @@ def movement_system():
                     print('-'*25)
 
 
-def out_of_bounds():
-    print('-'*25)
-    print('Ahead of you is a seemingly endless ocean. You cannot continue in this direction.')
-    print('-'*25)
-
-
 def check_region():
+    # Check the coordinates of the player and change the region to match.
     global position
     x, y = position['x'], position['y']
 
@@ -209,6 +243,7 @@ def check_region():
     elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
         region = 'Tundra'
         reg_music = 'Music/Arpanauts.ogg'
+
     elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
         region = 'Mountain'
         reg_music = 'Music/Mountain.ogg'
@@ -247,6 +282,8 @@ def check_region():
 
 
 def save_coords(x, y):
+    # Mark the player's coordinates when they change regions or visit towns.
+    # The player will return to these coordinates if they die.
     global position
     position['prev_town'][0], position['prev_town'][1] = x, y
 
@@ -258,6 +295,9 @@ def back_to_coords():
 
 
 def rest():
+    # Attempt to re-gain health on the world map. There is a chance to get ambushed by an enemy
+    # when doing this.
+
     setup_vars()
     print('-'*25)
 
@@ -273,6 +313,7 @@ def rest():
     player.hp += int(misc_vars['hp_p']/4)
     player.mp += int(misc_vars['mp_p']/4)
 
+    # Make sure that the player doesn't have more than the max HP/MP
     if player.hp > misc_vars['hp_p']:
         player.hp -= (player.hp - misc_vars['hp_p'])
     if player.mp > misc_vars['mp_p']:

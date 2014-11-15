@@ -794,7 +794,7 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
             print('-'*25)
 
             try:
-                with open('../Pythonius Plot.txt') as f:
+                with open('../pythonius_plot.txt') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
                             input(''.join(f.readline.rstrip("\n").split(";")))
@@ -802,7 +802,7 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center
                             print(''.join(f.readline.rstrip("\n").split(";")))
 
             except FileNotFoundError:
-                print('The "Pythonius Plot.txt" file could not be found.')
+                print('The "pythonius_plot.txt" file could not be found.')
 
             except OSError:
                 logging.exception('Error loading Pythonius Plot.txt:')
