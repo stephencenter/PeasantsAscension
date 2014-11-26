@@ -547,7 +547,7 @@ upper two, but are welcome to do as you wish in the lower.""",
              [npcs.stewson, npcs.jeffery], -11, 13, inn_cost=5, gs_level=2)
 
 town4 = Town('Charsulville', """Charsulville: A plain village in the south east
-region of the Forest. It is home to nothing too special, although it's cheap
+region of the Forest. It is home to nothing special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.joseph],
              19, -7, inn_cost=2, gs_level=2)
@@ -571,7 +571,13 @@ the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
 two towns, particularly between the village leaders.""", [npcs.krystal, npcs.frederick],
-             -11, -24, gs_level=2)
+             -12, -23, gs_level=2)
+
+town8 = Town('Parceon', """Parceon: A highly populated town renown for it's rich
+magical background. Parceon is home to the famous Sorcerers' Guild,
+a group of unbelievably skilled and wise mages. The head of the guild,
+Azura, lives in a large tower in the southwest side of the town.""",
+             [npcs.azura], 28, 24, gs_level=3)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
@@ -579,7 +585,7 @@ flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""", [npcs.alden],
                     -12, -26, inn=False, gen_store=False, pet_shop=True, ps_level=2)
 
-town_list = [town1, town2, town3, town4, town5, town6, town7, small_house1]
+town_list = [town1, town2, town3, town4, town5, town6, town7, town8, small_house1]
 
 
 def search_towns(pos_x, pos_y, enter=True):

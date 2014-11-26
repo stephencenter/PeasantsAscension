@@ -244,7 +244,7 @@ wesley = NPC('Wesley', [wesley_phrase_1])
 stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                  "Tundra in the northwest, Swamp in the southeast,",
                                  "Mountains in the northeast, and Desert in the southwest.",
-                                 "The Forest lies in the center, while the Beach surrounds them.",
+                                 "The Forest lies in the center, while the Shore surrounds them.",
                                  "There's a small region somewhere around here that is the",
                                  "cause of much worry and panic in this town: The Graveyard.",
                                  "Inside lies a dangerous aparrition, feared by all who have \
@@ -329,6 +329,27 @@ Charsulville."],
                         "much! You have no idea how much trouble you've saved me.",
                         "Here, take this as a reward."], active=True)
 
+joseph_phrase_3 = Conversation(["Hello again, young adventurer. Thanks for delievering that",
+                                "letter! Hmm? What was the letter about? 'Twas very important",
+                                "information from King Pythonius himself! Now that Philliard",
+                                "is in possession of the letter, I can tell you its contents.",
+                                "If case you don't know, there is a neigboring island-nation",
+                                "to the south of Pythonia called \"Thex\". Thex is home to the",
+                                "stealthiest and most deadly assassins in all of Arcadia, a",
+                                "fact that has been the cause of much tension between Pythonia",
+                                "and them. This unease has never really led to anything until",
+                                "now. And unfortunately, they made the first move. Celeste,",
+                                "King Pythonius's daughter, has been kidnapped and is being",
+                                "held hostage on their island! This is terrible news, and",
+                                "we are unable to do anything about it. Thex has placed a",
+                                "magical barrier around their island, and there is no way",
+                                "to break it. I've heard word about a possible solution.",
+                                "Supposedly, the head of the Sorcerer's Guild in Parceon has",
+                                "discovered something about an ancient prophecy related to this.",
+                                "You might want to go give him a visit if you want any more",
+                                "information. Parceon, if I recall correctly, is somewhere",
+                                "around 24\u00b0N, 28\u00b0E. Good luck on your adventures!"])
+
 
 def jphqst_us1():
     global philliard_phrase_1
@@ -346,8 +367,8 @@ def jphqst_us1():
 def jphqst_uc1():
     global joseph_phrase_1
     global joseph_phrase_2
-    joseph_phrase_1.active = True
     joseph_phrase_2.active = False
+    joseph_phrase_3.active = True
     print('-'*25)
     print("You've recieved a Magic Compass from Joseph.")
     print('It has been added to the "Misc" section of your inventory.')
@@ -357,7 +378,7 @@ def jphqst_uc1():
 joseph_quest_1.upon_starting = jphqst_us1
 joseph_quest_1.upon_completing = jphqst_uc1
 
-joseph = NPC('Joseph', [joseph_phrase_1, joseph_quest_1, joseph_phrase_2])
+joseph = NPC('Joseph', [joseph_phrase_1, joseph_quest_1, joseph_phrase_2, joseph_phrase_3])
 
 
 # Name: Seriph -- Town: Fort Sigil
@@ -597,6 +618,11 @@ alden_phrase_3 = Conversation(["Thanks again, hero. You've saved those towns",
 
 alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3])
 
+# Name: Azura -- Town: Parceon
+azura_phrase_1 = Conversation(["FILLER TEXT"], active=True)
+
+azura = NPC('Azura', [azura_phrase_1])
+
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
@@ -607,8 +633,9 @@ all_dialogue = [
     kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4,
     krystal_phrase_1, krystal_phrase_2, krystal_phrase_3, krystal_phrase_4,
     frederick_phrase_1, frederick_phrase_2, frederick_phrase_3,
-    joseph_phrase_1, joseph_phrase_2, joseph_quest_1,
-    alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3
+    joseph_phrase_1, joseph_phrase_2, joseph_phrase_3, joseph_quest_1,
+    alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
+    azura_phrase_1
 ]
 
 
