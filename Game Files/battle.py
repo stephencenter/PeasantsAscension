@@ -183,7 +183,7 @@ def battle_system(is_boss=False, ambush=False):
         elif (temp_stats['spd'] > monster.spd or move == '2') \
                 and temp_stats['status_effect'] != 'asleep':
 
-            if player_turn(var, dodge, move) and monster.hp > 0:
+            if move and player_turn(var, dodge, move) and monster.hp > 0:
                 input('\nPress Enter/Return ')
                 monster.enemy_turn(m_var, m_dodge)
 

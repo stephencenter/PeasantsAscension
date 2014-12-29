@@ -62,7 +62,7 @@ class NPC:
 
             # Dialogue is being modified, so we're iterating over a copy of it.
             for z in y:
-                input(self.name + ': "' + z + '" | Press enter/return ')
+                input(self.name + ': "' + z + '" | [ENTER] ')
 
             dialogue.remove(y)
             print('-'*25) if dialogue else ''
@@ -79,12 +79,10 @@ class NPC:
             elif isinstance(y, Quest) and y.finished:
                 y.completion()
 
-            else:
-
-                try:
-                    y.after_talking()
-                except AttributeError:
-                    pass
+            try:
+                y.after_talking()
+            except AttributeError:
+                pass
 
 
 class Conversation:
@@ -153,13 +151,16 @@ class Quest(Conversation):
 
     def completion(self):
         self.upon_completing()
+
         print("Quest Complete!")
         print("You've received {0} XP and {1} GP for completing this quest.".format(
             self.reward[0], self.reward[1]))
         input('Press Enter/Return')
+
         main.player.exp += self.reward[0]
         main.misc_vars['gp'] += self.reward[1]
         main.player.level_up()
+
         self.active = False
 
 
@@ -179,6 +180,7 @@ def pp2_at():
         if item.name == 'Message from Joseph':
             inv_system.inventory['q_items'].remove(item)
             break
+
     inv_system.inventory['q_items'].append(copy.copy(items.message_philliard))
     philliard_phrase_2.active = False
     philliard_phrase_1.active = True
@@ -314,6 +316,12 @@ joseph_phrase_1 = Conversation(['Greetings, young adventurer. Welcome to Charsul
                                 ], active=True)
 joseph_phrase_2 = Conversation(['Report back to me when you have delivered that letter.'])
 
+joseph_phrase_3 = Conversation(["I'd recommend that you give my friend Azura a visit at",
+                                "Parceon. That town is located somewhere around \
+24\u00b0N, 28\u00b0E",
+                                "if I'm remembering correctly."
+                                ])
+
 joseph_quest_1 = Quest(["Wait a second... are you who I think you are? I've recieved",
                         'word that a traveller from Nearton was heading',
                         "this way. Yes, that MUST be you they're talking",
@@ -327,28 +335,26 @@ Charsulville."],
                        'Joseph', [15, 25],
                        ["You have delivered the message? Thank you ever so",
                         "much! You have no idea how much trouble you've saved me.",
-                        "Here, take this as a reward."], active=True)
-
-joseph_phrase_3 = Conversation(["Hello again, young adventurer. Thanks for delievering that",
-                                "letter! Hmm? What was the letter about? 'Twas very important",
-                                "information from King Pythonius himself! Now that Philliard",
-                                "is in possession of the letter, I can tell you its contents.",
-                                "If case you don't know, there is a neigboring island-nation",
-                                "to the south of Pythonia called \"Thex\". Thex is home to the",
-                                "stealthiest and most deadly assassins in all of Arcadia, a",
-                                "fact that has been the cause of much tension between Pythonia",
-                                "and them. This unease has never really led to anything until",
-                                "now. And unfortunately, they made the first move. Celeste,",
-                                "King Pythonius's daughter, has been kidnapped and is being",
-                                "held hostage on their island! This is terrible news, and",
-                                "we are unable to do anything about it. Thex has placed a",
-                                "magical barrier around their island, and there is no way",
-                                "to break it. I've heard word about a possible solution.",
-                                "Supposedly, the head of the Sorcerer's Guild in Parceon has",
-                                "discovered something about an ancient prophecy related to this.",
-                                "You might want to go give him a visit if you want any more",
-                                "information. Parceon, if I recall correctly, is somewhere",
-                                "around 24\u00b0N, 28\u00b0E. Good luck on your adventures!"])
+                        "Hmm? What was the letter about, you ask? 'Twas very",
+                        "important information from King Pythonius II himself! Now",
+                        "that Philliard is in possession of the letter, I can tell",
+                        "you its contents. If case you don't know, there is a neighboring",
+                        "island-nation to the south of Pythonia called \"Thex\". Thex",
+                        "is home to the stealthiest and most deadly assassins in all of ",
+                        "Arcadia, a fact that has been the cause of much tension between",
+                        "Pythonia and them. This unease has never really led to anything",
+                        "until now. And unfortunately, they made the first move. Celeste,",
+                        "King Pythonius's daughter, has been kidnapped and is being",
+                        "held hostage on their island! This is terrible news, and",
+                        "we are unable to do anything about it. Thex has placed a",
+                        "magical barrier around their island, and there is no way",
+                        "to break it. I've heard word about a possible solution.",
+                        "Supposedly, the head of the Sorcerer's Guild in Parceon has",
+                        "discovered something about an ancient prophecy related to this.",
+                        "You might want to go give him a visit if you want any more",
+                        "information. Parceon, if I recall correctly, is somewhere",
+                        "around 24\u00b0N, 28\u00b0E. Good luck on your adventures!",
+                        "Oh, and take this as a reward!"], active=True)
 
 
 def jphqst_us1():

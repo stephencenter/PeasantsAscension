@@ -821,6 +821,9 @@ def main():
     if os.name == 'nt':  # Windows
         ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
 
+        # Set the window size to fit the text output and character dialogue.
+        os.system("mode con cols=100 lines=40")
+
     elif os.name == 'posix':  # Most Unix Devices
         sys.stdout.write("\x1b]2;Pythonius RPG {0}\x07".format(game_version))
 
