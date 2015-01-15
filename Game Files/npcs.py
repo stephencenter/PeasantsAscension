@@ -28,6 +28,31 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
+"""
+Info for reading this file:
+
+This file contains all data regarding the logic behind quests, NPCs, and conversations.
+Every NPC has at least one conversation, and most (but not all) have at least one quest.
+Because of the way that the game works, the person you visit to finish the quest is ALWAYS
+the same person who gave it to you in the first place (this is subject to change if I
+can find a way around this without breaking the already existing quests).
+
+The quests are divided into three categories: Main Questline, Side-story arcs, and side quests.
+The main questline consists of all quests required to finish the game (when a way to do so is
+implemented) and it generally all follows the same story-arc. Side-story arcs include
+side-storyline that spans multiple quests, such as the Graveyard storyline. Side quests are
+single-quest story arcs that have almost nothing to do with the main plot.
+
+Naming style:
+
+If an object name ends with "_ucX", where X is an integer, then it handles what happens
+    when a quest is completed.
+
+If an object name ends with "_usX", where X is an integer, then it handles what happens
+    when a quest is started.
+
+"""
+
 
 class NPC:
     def __init__(self, name, conversations):
@@ -163,8 +188,10 @@ class Quest(Conversation):
 
         self.active = False
 
+#----------------------------------------------------------------------------#
+# MAIN/STORYLINE QUESTS & NPCS
 
-# Name: Philliard -- Town: Nearton
+# -- Name: Philliard -- Town: Nearton
 philliard_phrase_1 = Conversation(["Hello, adventurer!",
                                    "Welcome to the Kingdom of Pythonia."], active=True)
 
@@ -175,7 +202,7 @@ philliard_phrase_2 = Conversation(["Greetings! Huh, what's this? You have a lett
 
 
 def pp2_at():
-    # Stands for "Philliard Phrase 2 -- After Talking"
+    # Stands for "Philliard Phrase II -- After Talking"
     for item in inv_system.inventory['q_items']:
         if item.name == 'Message from Joseph':
             inv_system.inventory['q_items'].remove(item)
@@ -191,127 +218,7 @@ philliard_phrase_2.after_talking = pp2_at
 
 philliard = NPC('Philliard', [philliard_phrase_1, philliard_phrase_2])
 
-
-# Name: Alfred -- Town: Nearton
-alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives south-east",
-                                "of this very town. I'd be careful around there if I were you."],
-                               active=True)
-alfred_phrase_2 = Conversation(["Come back here when you defeat the evil",
-                                "Master Slime. Good luck!"])
-
-alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"], repeat=True)
-
-alfred_quest_1 = Quest(["...Actually, now that I think about it, do you think you could possibly",
-                        "dispose of this vile creature? His location is 0\u00b0N, 1\u00b0E."],
-                       'A Slimy Specimen',
-                       ["Defeat the dreaded Master Slime at location 0\u00b0N, 1\u00b0E and then",
-                        "return to Alfred in Nearton."], 'Alfred', [30, 50],
-                       ["You defeated the evil Master Slime?!",
-                        "Amazing! Take this, adventurer, you've earned it."], active=True)
-
-
-def alfqst_us1():
-    # Stands for "Alfred Quest 1 -- Upon Starting
-    # Changes some of his dialogue options to reflect a quest beginning.
-    global alfred_phrase_1
-    global alfred_phrase_2
-    bosses.master_slime.active = True
-    alfred_phrase_1.active = False
-    alfred_phrase_2.active = True
-
-
-def alfqst_uc1():
-    # Stands for "Alfred Quest 1 -- Upon Completing
-    global alfred_phrase_3
-    alfred_phrase_3.active = True
-
-
-alfred_quest_1.upon_starting = alfqst_us1
-alfred_quest_1.upon_completing = alfqst_uc1
-
-alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
-                        alfred_quest_1, alfred_phrase_3])
-
-
-# Name: Wesley -- Town: Southford
-wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
-                                "to be stronger the farther from 0\u00b0N, 0\u00b0E that you \
-travel.",
-                                "However, monsters there also give better loot. Be careful."
-                                ], active=True)
-wesley = NPC('Wesley', [wesley_phrase_1])
-
-
-# Name: Stewson -- Town: Overshire
-stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
-                                 "Tundra in the northwest, Swamp in the southeast,",
-                                 "Mountains in the northeast, and Desert in the southwest.",
-                                 "The Forest lies in the center, while the Shore surrounds them.",
-                                 "There's a small region somewhere around here that is the",
-                                 "cause of much worry and panic in this town: The Graveyard.",
-                                 "Inside lies a dangerous aparrition, feared by all who have \
-seen it.",
-                                 ], active=True)
-
-stewson_phrase_2 = Conversation(["Please save us from this monsterous wraith!"])
-
-stewson_phrase_3 = Conversation(["Thank you again for your help, adventurer!"])
-
-stewson_quest_1 = Quest(["I wish someone would do something about this terrible",
-                         "ghost... Hey! You're a strong adventurer, perhaps you",
-                         "could defeat this phantom? It's at position 8\u00b0N, -12\u00b0W."],
-                        'The Shadowy Spirit',
-                        ["Defeat the feared Menacing Phantom at location",
-                         "8\u00b0N, -12\u00b0W and then return to Stewson in Overshire."],
-                        'Stewson', [50, 75],
-                        ["You... you actually defeated it?! Thank you ever so much!",
-                         "Take this, it is the least our town can do for your bravery."],
-                        active=True)
-
-
-def stwqst_us1():
-    global stewson_phrase_1
-    global stewson_phrase_2
-    bosses.menac_phantom.active = True
-    stewson_phrase_1.active = False
-    stewson_phrase_2.active = True
-
-
-def stwqst_uc1():
-    global stewson_phrase_3
-    global polmor_phrase_2
-    global polmor_quest_1
-
-    stewson_phrase_3.active = True
-    polmor_phrase_2.active = False
-    polmor_quest_1.active = True
-    print('-'*25)
-    input('You have recieved a Cherub pet! | Press Enter/Return ')
-    inv_system.inventory['pets'].append(pets.pet_cherub)
-    input('You now have experience defeating ghosts! | Press Enter/Return ')
-
-
-stewson_quest_1.upon_starting = stwqst_us1
-stewson_quest_1.upon_completing = stwqst_uc1
-
-stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
-
-# Name: Jeffery -- Town: Overshire
-jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",
-                                 "who was in need of a messenger. I think the town was somewhere",
-                                 "around -8\u00b0S, 20\u00b0E. Something like that."],
-                                active=True)
-
-jeffery = NPC('Jeffery', [jeffery_phrase_1])
-
-# Name: Ethos -- Town: Charsulville
-ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
-                               'in his inventory. If you get lost, check there.'], active=True)
-
-ethos = NPC('Ethos', [ethos_phrase_1])
-
-
-# Name: Joseph -- Town: Charsulville
+# -- Name: Joseph -- Town: Charsulville
 joseph_phrase_1 = Conversation(['Greetings, young adventurer. Welcome to Charsulville.'
                                 ], active=True)
 joseph_phrase_2 = Conversation(['Report back to me when you have delivered that letter.'])
@@ -358,6 +265,7 @@ Charsulville."],
 
 
 def jphqst_us1():
+    # Stands for "Joseph Quest I - Upon Starting
     global philliard_phrase_1
     global philliard_phrase_2
     global joseph_phrase_1
@@ -371,6 +279,7 @@ def jphqst_us1():
 
 
 def jphqst_uc1():
+    # Stands for "Joseph Quest I - Upon Completing
     global joseph_phrase_1
     global joseph_phrase_2
     joseph_phrase_2.active = False
@@ -386,8 +295,44 @@ joseph_quest_1.upon_completing = jphqst_uc1
 
 joseph = NPC('Joseph', [joseph_phrase_1, joseph_quest_1, joseph_phrase_2, joseph_phrase_3])
 
+# -- Name: Azura -- Town: Parceon
+azura_phrase_1 = Conversation(["Hello, I'm Azura, leader of this town and head of the",
+                               "Sorcerer's Guild. I'm quite busy right now, so please",
+                               "come back later if you wish to speak to me."], active=True)
 
-# Name: Seriph -- Town: Fort Sigil
+azura = NPC('Azura', [azura_phrase_1])
+
+#----------------------------------------------------------------------------#
+# STORY-STORY ARCS
+
+# -- Graveyard Story=arc:
+# --- Name: Stewson -- Town: Overshire
+stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
+                                 "Tundra in the northwest, Swamp in the southeast,",
+                                 "Mountains in the northeast, and Desert in the southwest.",
+                                 "The Forest lies in the center, while the Shore surrounds them.",
+                                 "There's a small region somewhere around here that is the",
+                                 "cause of much worry and panic in this town: The Graveyard.",
+                                 "Inside lies a dangerous aparrition, feared by all who have \
+seen it.",
+                                 ], active=True)
+
+stewson_phrase_2 = Conversation(["Please save us from this monsterous wraith!"])
+
+stewson_phrase_3 = Conversation(["Thank you again for your help, adventurer!"])
+
+stewson_quest_1 = Quest(["I wish someone would do something about this terrible",
+                         "ghost... Hey! You're a strong adventurer, perhaps you",
+                         "could defeat this phantom? It's at position 8\u00b0N, -12\u00b0W."],
+                        'The Shadowy Spirit',
+                        ["Defeat the feared Menacing Phantom at location",
+                         "8\u00b0N, -12\u00b0W and then return to Stewson in Overshire."],
+                        'Stewson', [50, 75],
+                        ["You... you actually defeated it?! Thank you ever so much!",
+                         "Take this, it is the least our town can do for your bravery."],
+                        active=True)
+
+# --- Name: Seriph -- Town: Fort Sigil
 seriph_phrase_1 = Conversation(['...You actually came to this town? And of your own',
                                 'free will, too?! I was going to say that you were either',
                                 'very brave or very stupid, but on second thought, the latter',
@@ -402,7 +347,7 @@ seriph_phrase_3 = Conversation(["I still can't believe that you killed the evil 
 
 seriph = NPC('Seriph', [seriph_phrase_1, seriph_phrase_2, seriph_phrase_3])
 
-# Name: Polmor -- Town: Fort Sigil
+# --- Name: Polmor -- Town: Fort Sigil
 polmor_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've been",
                                 "informed of the problems around here, so I'd recommend...",
                                 "Oh, what's that? You haven't? Well in that case, let me tell",
@@ -428,7 +373,7 @@ polmor_phrase_3 = Conversation(["Help us, young adventurer! You are the only one
 polmor_phrase_4 = Conversation(["Thanks again, hero! We are forever indebted to you!"])
 
 polmor_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
-                        "with fighting ghosts, do you? Wait, what's that? You've",
+                        "with fighting ghosts, do you? Wait, what's that? You",
                         "defeated the Phantom that was haunting the Overshire",
                         "Graveyard!? Well in that case, we may just have a chance!",
                         "Please help us, oh please!"], "The Curse of Fort Sigil",
@@ -469,7 +414,101 @@ polmor_quest_1.upon_completing = polqst_uc1
 polmor = NPC('Polmor', [polmor_phrase_1, polmor_phrase_2,
                         polmor_phrase_3, polmor_phrase_4, polmor_quest_1])
 
-# Name: Kyle -- Town: Tripton
+#----------------------------------------------------------------------------#
+# SIDEQUESTS
+
+# -- Name: Alfred -- Town: Nearton
+alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives south-east",
+                                "of this very town. I'd be careful around there if I were you."],
+                               active=True)
+alfred_phrase_2 = Conversation(["Come back here when you defeat the evil",
+                                "Master Slime. Good luck!"])
+
+alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"], repeat=True)
+
+alfred_quest_1 = Quest(["...Actually, now that I think about it, do you think you could possibly",
+                        "dispose of this vile creature? His location is 0\u00b0N, 1\u00b0E."],
+                       'A Slimy Specimen',
+                       ["Defeat the dreaded Master Slime at location 0\u00b0N, 1\u00b0E and then",
+                        "return to Alfred in Nearton."], 'Alfred', [30, 50],
+                       ["You defeated the evil Master Slime?!",
+                        "Amazing! Take this, adventurer, you've earned it."], active=True)
+
+
+def alfqst_us1():
+    # Stands for "Alfred Quest 1 -- Upon Starting
+    # Changes some of his dialogue options to reflect a quest beginning.
+    global alfred_phrase_1
+    global alfred_phrase_2
+    bosses.master_slime.active = True
+    alfred_phrase_1.active = False
+    alfred_phrase_2.active = True
+
+
+def alfqst_uc1():
+    # Stands for "Alfred Quest 1 -- Upon Completing
+    global alfred_phrase_3
+    alfred_phrase_3.active = True
+
+
+alfred_quest_1.upon_starting = alfqst_us1
+alfred_quest_1.upon_completing = alfqst_uc1
+
+alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
+                        alfred_quest_1, alfred_phrase_3])
+
+
+# -- Name: Wesley -- Town: Southford
+wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
+                                "to be stronger the farther from 0\u00b0N, 0\u00b0E that you \
+travel.",
+                                "However, monsters there also give better loot. Be careful."
+                                ], active=True)
+wesley = NPC('Wesley', [wesley_phrase_1])
+
+
+def stwqst_us1():
+    global stewson_phrase_1
+    global stewson_phrase_2
+    bosses.menac_phantom.active = True
+    stewson_phrase_1.active = False
+    stewson_phrase_2.active = True
+
+
+def stwqst_uc1():
+    global stewson_phrase_3
+    global polmor_phrase_2
+    global polmor_quest_1
+
+    stewson_phrase_3.active = True
+    polmor_phrase_2.active = False
+    polmor_quest_1.active = True
+    print('-'*25)
+    input('You have recieved a Cherub pet! | Press Enter/Return ')
+    inv_system.inventory['pets'].append(pets.pet_cherub)
+    input('You now have experience defeating ghosts! | Press Enter/Return ')
+
+
+stewson_quest_1.upon_starting = stwqst_us1
+stewson_quest_1.upon_completing = stwqst_uc1
+
+stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
+
+# -- VName: Jeffery -- Town: Overshire
+jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",
+                                 "who was in need of a messenger. I think the town was somewhere",
+                                 "around -8\u00b0S, 20\u00b0E. Something like that."],
+                                active=True)
+
+jeffery = NPC('Jeffery', [jeffery_phrase_1])
+
+# -- Name: Ethos -- Town: Charsulville
+ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
+                               'in his inventory. If you get lost, check there.'], active=True)
+
+ethos = NPC('Ethos', [ethos_phrase_1])
+
+# -- Name: Kyle -- Town: Tripton
 kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village Elder.",
                               "You aren't from Fallville, right? Good.",
                               "Those stupid Fallvillians need to get away from our",
@@ -508,7 +547,7 @@ kyle_phrase_4 = Conversation(["Welcome, adventurer, to the town of Tripton!"])
 kyle = NPC('Kyle', [kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4])
 
 
-# Name: Krystal -- Town: Fallville
+# -- Name: Krystal -- Town: Fallville
 krystal_phrase_1 = Conversation(["Hello, I am the Village Elder of Fallville. We don't take",
                                  "kindly to Triptonians around here, so tell us if",
                                  "you see any. What I don't understand is that the",
@@ -546,7 +585,7 @@ krystal = NPC('Krystal', [krystal_phrase_1, krystal_phrase_2,
                           krystal_phrase_3, krystal_phrase_4])
 
 
-# Name: Frederick -- Town: Fallville
+# -- Name: Frederick -- Town: Fallville
 frederick_phrase_1 = Conversation(["I hear that there is a wise sage that has taken up",
                                    "residence in a small cottage southwest of this town.",
                                    "I would go and talk to him, but I have things to do."],
@@ -560,7 +599,7 @@ frederick_phrase_3 = Conversation(["Thank heavens, the mighty beast has fallen."
 frederick = NPC('Frederick', [frederick_phrase_1, frederick_phrase_2, frederick_phrase_3])
 
 
-# Name: Alden -- Town: Small Cottage (1)
+# -- Name: Alden -- Town: Small Cottage (1)
 alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of the",
                        "confict going on between the villages of Fallville and",
                        "Tripton. I have an idea on how to settle this foul feud,",
@@ -623,12 +662,6 @@ alden_phrase_3 = Conversation(["Thanks again, hero. You've saved those towns",
                                "a lot of trouble."])
 
 alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3])
-
-# Name: Azura -- Town: Parceon
-azura_phrase_1 = Conversation(["FILLER TEXT"], active=True)
-
-azura = NPC('Azura', [azura_phrase_1])
-
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
