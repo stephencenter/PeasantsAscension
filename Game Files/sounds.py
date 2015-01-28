@@ -49,13 +49,17 @@ aim_weapon = Sound('Sound FX/aim_weapon.wav')
 # Attack Miss -- Played when attempting to attack and then failing
 attack_miss = Sound('Sound FX/attack_miss.wav')
 
-# Got Item -- Played when you receive an item, GP, or XP.
+# Got Item -- Played when you receive an item, GP, or XP
 item_pickup = Sound('Sound FX/item_pickup.wav')
+
+# Low Health -- Played when you have low (less than 20%) health remaining
+health_low = Sound('Sound FX/health_low.wav')
 
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
               'magic_healing', 'enemy_hit',
               'foot_steps', 'aim_weapon',
-              'attack_miss', 'item_pickup']:
+              'attack_miss', 'item_pickup',
+              'health_low']:
         globals()[x].set_volume(main.sound_vol)

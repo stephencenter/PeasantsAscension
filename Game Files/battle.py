@@ -91,7 +91,13 @@ def battle_system(is_boss=False, ambush=False):
         print('The legendary {0} has awoken!'.format(monster.name))
 
     else:
-        pygame.mixer.music.load('Music/Jumpshot.ogg')
+        if random.randint(0, 1):
+            song = 'Music/Jumpshot.ogg'
+
+        else:
+            song = 'Music/Ruari 8-bit Battle.ogg'
+
+        pygame.mixer.music.load(song)
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
 
@@ -110,6 +116,9 @@ def battle_system(is_boss=False, ambush=False):
     update_stats()
 
     while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
+        if player.hp <= 0.20*misc_vars["hp_p"]:
+            print("Warning: HP is low, heal as soon as possible!")
+            sounds.health_low.play()
 
         if temp_stats['status_effect'] == 'asleep':
             is_woken_up = not random.randint(0, 2)
@@ -122,9 +131,11 @@ def battle_system(is_boss=False, ambush=False):
 
         # Check to see if the player is asleep
         if temp_stats['status_effect'] == 'asleep':
+
             if is_woken_up:
                 print('\n-Player Turn-')
                 print('You finally wake up!')
+
                 temp_stats['status_effect'] = 'none'
                 bat_stats()
                 move = player_choice()
