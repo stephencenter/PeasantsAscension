@@ -26,6 +26,7 @@ import items
 import battle
 import sounds
 import magic
+import ascii_art
 
 
 if __name__ == "__main__":
@@ -59,6 +60,7 @@ class Monster:
         self.evad = evad  # Evasion
         self.lvl = lvl  # Level
         self.element = element  # Element
+        self.monster_name = ''
         self.items = ''
 
         num = random.randint(0, 5)
@@ -121,8 +123,11 @@ class Monster:
 
     def enemy_turn(self, var, dodge):
         # This is the Enemy's AI.
-
         print('\n-Enemy Turn-')
+        print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
+            self.monster_name
+        ))
+
         if self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
             # Magic heal
             sounds.magic_healing.play()
@@ -212,6 +217,7 @@ class Monster:
                         }
 
         self.name = random.choice(monster_type[position['reg']])
+        self.monster_name = copy.copy(self.name)
 
         if self.name == monster_type[position['reg']][0]:
             self.enemy_turn = fighter_ai
@@ -358,6 +364,9 @@ def tank_ai(var, dodge):
 
     self = monster
     print('\n-Enemy Turn-')
+    print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
+        self.monster_name
+    ))
 
     if self.hp <= int(misc_vars['hp_m']/3) and self.mp >= 5 and random.randint(0, 2):
         # Magic heal
@@ -446,6 +455,9 @@ def fighter_stats(self):
 def fighter_ai(var, dodge):
     self = monster
     print('\n-Enemy Turn-')
+    print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
+        self.monster_name
+    ))
 
     if not random.randint(0, 5) and self.mp >= 2:
         self.give_status()

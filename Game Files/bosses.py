@@ -46,6 +46,7 @@ class Boss(monsters.Monster):
         self.experience = experience
         self.active = active
         self.max_stats()
+        self.monster_name = copy.copy(self.name)
         self.hp = copy.copy(misc_vars['hp_m'])
         self.mp = copy.copy(misc_vars['mp_m'])
 

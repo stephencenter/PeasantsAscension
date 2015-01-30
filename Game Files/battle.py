@@ -29,6 +29,7 @@ import world
 import bosses
 import pets
 import sounds
+import ascii_art
 
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)
@@ -88,6 +89,8 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
+
+        print(ascii_art.monster_art[monster.monster_name] % '')
         print('The legendary {0} has awoken!'.format(monster.name))
 
     else:
@@ -100,6 +103,8 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.load(song)
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
+
+        print(ascii_art.monster_art[monster.monster_name] % '')
 
         if any(map(monster.name.startswith, vowels)):  # Remember to use proper grammar!
             a_an = 'An '
@@ -142,6 +147,7 @@ def battle_system(is_boss=False, ambush=False):
 
             else:
                 print('-Player Turn-')
+                print(ascii_art.player_art["Asleep"] % "{0} is asleep!".format(player.name))
                 print("You're too tired to do anything!")
                 input('\nPress Enter/Return')
                 move = ''
@@ -227,9 +233,11 @@ def player_turn(var, dodge, move):
     while True:
         # "2" refers to magic, which will print this later
         if move != '2':
-            print('\n-Player Turn-') if move != '2' else ''
+            print('\n-Player Turn-')
 
         if move == '1':
+            print(ascii_art.player_art[player.class_.title()] %
+                "{0} is making a move!\n".format(player.name))
 
             if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
                 sounds.sword_slash.play()
@@ -260,9 +268,17 @@ def player_turn(var, dodge, move):
                 return False
 
         elif move == '3':
+            print(ascii_art.player_art[player.class_.title()] %
+                "{0} is making a move!\n".format(player.name))
+
             print('You wait for your turn to end while you gather your strength.')
             player.hp += 2
             player.mp += 2
+
+            if player.hp > misc_vars['hp_p']:
+                player.hp -= (player.hp - misc_vars['hp_p'])
+            if player.mp > misc_vars['mp_p']:
+                player.mp -= (player.mp - misc_vars['mp_p'])
 
         else:
             return False

@@ -24,6 +24,7 @@ import monsters
 import battle
 import inv_system
 import sounds
+import ascii_art
 
 
 if __name__ == "__main__":
@@ -75,6 +76,8 @@ class Healing(Spell):
 
             if is_battle:
                 print('-Player Turn-')
+                print(ascii_art.player_art[main.player.class_.title()] %
+                    "{0} is making a move!\n".format(main.player.name))
 
             print('Using "{0}", you are healed by {1} HP!'.format(self.name, self.health))
             return True
@@ -112,6 +115,9 @@ class Damaging(Spell):
                 p_dmg=attk_pwr)[0]
 
             print('-Player Turn-')
+            print(ascii_art.player_art[main.player.class_.title()] %
+                "{0} is making a move!\n".format(main.player.name))
+
             if inv_system.equipped['weapon'].class_ == 'magic':
                 print('You begin to use your {0} to summon a powerful spell...'.format(
                     inv_system.equipped['weapon']))
@@ -152,9 +158,12 @@ class Buff(Spell):
 
     def use_magic(self):
         if main.player.mp >= self.mana:
-            print()
             Spell.use_mana(self)
-            print('-Player Turn-')
+
+            print('\n-Player Turn-')
+            print(ascii_art.player_art[main.player.class_.title()] %
+                "{0} is making a move!\n".format(main.player.name))
+
             print('Using the power of {0}, your {1} increases temporarily by {2}!'.format(
                 self.name, self.stat, self.incre))
 
