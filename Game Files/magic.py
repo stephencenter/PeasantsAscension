@@ -128,6 +128,10 @@ class Damaging(Spell):
             time.sleep(0.75)
 
             if dodge in range(monsters.monster.evad, 250):
+                if random.randint(0, 100) <= 7:
+                    print("It's a critical hit! 2x damage!")
+                    attk_pwr *= 2
+
                 sounds.enemy_hit.play()
                 print('Using the power of "{0}", you deal {1} damage to the {2}!'.format(
                     self.name, attk_pwr, monsters.monster.name))

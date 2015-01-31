@@ -156,6 +156,10 @@ class PlayerCharacter:  # The Player
         if phys_dealt < 1:
             phys_dealt = 1
 
+        if random.randint(1, 100) <= 7:
+            print("It's a critical hit! 2x damage!")
+            phys_dealt *= 2
+
         return phys_dealt
 
     def choose_name(self):
