@@ -397,10 +397,10 @@ en_ser_knf = Weapon('Enhanced Serated Knife',
                     'An enhanced version of your typical Serated Knife (+7 Attack)',
                     65, 25, 7, 'melee', 'assassin')
 
-stiletto = Weapon('Steletto',
+stiletto = Weapon('Stiletto',
                   'A long, cross-shaped knife perfect for "removing" your enemies (+10 Attack)',
                   175, 60, 10, 'melee', 'assassin')
-en_stiletto = Weapon('Enhanced Steletto',
+en_stiletto = Weapon('Enhanced Stiletto',
                      'An enhanced version of your typical Stiletto (+15 Attack)',
                      250, 75, 15, 'melee', 'assassin')
 
@@ -465,7 +465,7 @@ en_rnc_stf = Weapon('Enhanced Runic Staff',
 
 # Starting Armor (Useless)
 straw_hat = Armor('Straw Hat',
-                  "Other than keeping the sun out of your eyes, this doesn't do much.",
+                  "Other than keep the sun out of your eyes, this doesn't do much.",
                   0, 2, 0, 'melee', 'head', 'none')
 cotton_shirt = Armor('Cotton Shirt',
                      "It's barely even worth the material it's made of.",

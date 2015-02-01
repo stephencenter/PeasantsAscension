@@ -237,7 +237,7 @@ def player_turn(var, dodge, move):
 
         if move == '1':
             print(ascii_art.player_art[player.class_.title()] %
-                "{0} is making a move!\n".format(player.name))
+                  "{0} is making a move!\n".format(player.name))
 
             if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
                 sounds.sword_slash.play()
@@ -269,7 +269,7 @@ def player_turn(var, dodge, move):
 
         elif move == '3':
             print(ascii_art.player_art[player.class_.title()] %
-                "{0} is making a move!\n".format(player.name))
+                  "{0} is making a move!\n".format(player.name))
 
             print('You wait for your turn to end while you gather your strength.')
             player.hp += 2

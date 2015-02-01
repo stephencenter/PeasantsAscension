@@ -77,7 +77,7 @@ class Healing(Spell):
             if is_battle:
                 print('-Player Turn-')
                 print(ascii_art.player_art[main.player.class_.title()] %
-                    "{0} is making a move!\n".format(main.player.name))
+                      "{0} is making a move!\n".format(main.player.name))
 
             print('Using "{0}", you are healed by {1} HP!'.format(self.name, self.health))
             return True
@@ -116,7 +116,7 @@ class Damaging(Spell):
 
             print('-Player Turn-')
             print(ascii_art.player_art[main.player.class_.title()] %
-                "{0} is making a move!\n".format(main.player.name))
+                  "{0} is making a move!\n".format(main.player.name))
 
             if inv_system.equipped['weapon'].class_ == 'magic':
                 print('You begin to use your {0} to summon a powerful spell...'.format(
@@ -166,7 +166,7 @@ class Buff(Spell):
 
             print('\n-Player Turn-')
             print(ascii_art.player_art[main.player.class_.title()] %
-                "{0} is making a move!\n".format(main.player.name))
+                  "{0} is making a move!\n".format(main.player.name))
 
             print('Using the power of {0}, your {1} increases temporarily by {2}!'.format(
                 self.name, self.stat, self.incre))

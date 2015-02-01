@@ -16,7 +16,7 @@ MUSIC -- PART 1:
     His Sound Cloud: https://soundcloud.com/benlandis <--- Check it out!
     
   Eric Skiff, who composed:
-    Jumpshot----------------------> [Battle Theme]
+    Jumpshot----------------------> [Battle Theme 1]
     Prologue----------------------> [Title screen & Character Creation Themes]
     Arpanauts---------------------> [Tundra Region Theme]
     We're All Under the Stars-----> [Beach Region Theme]
@@ -24,6 +24,12 @@ MUSIC -- PART 1:
         
     His website: http://www.ericskiff.com/music/ <--- Check it out!
     His Sound Cloud: https://soundcloud.com/eric-skiff <--- Check it out!
+  
+  Ruari, who composed:
+    8-bit Battle Music------------> [Battle Theme 2]
+    
+    His website: https://twitter.com/Ruari_Odyssey <--- Check it out!
+    His Sound Cloud: https://soundcloud.com/ruari1 <--- Check it out!
 ------------------------------------------------------------------------------
 MUSIC -- PART 2
   In addition to those talented folks, this game also features music from 
@@ -48,6 +54,10 @@ SOUND FX:
   Sound FX were made by Gabriel Tucker and me using an open-source
   tool known as Bfxr: http://www.bfxr.net/
 ------------------------------------------------------------------------------
+ASCII ART:
+  All the ASCII art in the game was made by me using Notepad++ in about
+  five minutes. They're not meant to look good.
+------------------------------------------------------------------------------
 OTHER STUFF:
   Gabriel Tucker, who drew:
     pythonius_art_1.png
@@ -65,7 +75,7 @@ OTHER STUFF:
   
   I want to thank Gabriel Tucker in particular for putting up with me
   constantly talking about my game and asking him for suggestions/ideas.
-  He's a big fan of strategy games/RPGs and helped a TON, mostly by 
+  He's a big fan of strategy-games/RPGs and helped a TON, mostly by 
   complaining about my game and telling me why it sucks! It's the small things
   that count. :)
   

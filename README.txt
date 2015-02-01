@@ -6,7 +6,7 @@
         |___/
             
 PythoniusRPG -- Copyright 2013, 2014 Stephen Center
- -- v0.6 Alpha
+ -- v0.6.2 Alpha
 ----------------------------------------------------
 Legal Stuff:
 

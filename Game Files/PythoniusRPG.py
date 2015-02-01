@@ -540,7 +540,6 @@ def create_player():
         player.spd += 2
         inv_system.equipped['weapon'] = copy.copy(items.slg_sht)
 
-
     player.hp = copy.copy(misc_vars['hp_p'])
     player.mp = copy.copy(misc_vars['mp_p'])
     print('-'*25)
