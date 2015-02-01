@@ -53,8 +53,11 @@ gs_stock = [[i.s_potion, i.s_potion, i.m_potion,
             [i.oak_stf, i.en_oak_stf, i.arc_spb,
              i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],  # Mage Weapons
 
+            [i.ser_knf, i.en_ser_knf, i.stiletto,
+             i.en_stiletto, i.myth_sb, i.en_myth_sb],  # Assassin Weapons
+
             [i.sht_bow, i.en_sht_bow, i.lng_bow,
-             i.en_lng_bow, i.myth_sb, i.en_myth_sb],  # Rogue Weapons
+             i.en_lng_bow, i.ash_cbow, i.en_ash_cbow],  # Ranger Weapons
 
             [i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
              i.en_stl_hlm, i.ori_hlm],  # Warrior Armor -- Head
@@ -75,13 +78,13 @@ gs_stock = [[i.s_potion, i.s_potion, i.m_potion,
              i.en_myst_gar, i.elem_gar],  # Mage Armor -- Legs
 
             [i.lth_cap, i.en_lth_cap, i.std_cwl,
-             i.en_std_cwl, i.drg_cwl],  # Rogue Armor -- Head
+             i.en_std_cwl, i.drg_cwl],  # Assassin + Ranged Armor -- Head
 
             [i.lth_bdy, i.en_lth_bdy, i.std_bdy,
-             i.en_std_bdy, i.drg_bdy],  # Rogue Armor -- Body
+             i.en_std_bdy, i.drg_bdy],  # Assassin + Ranged Armor -- Body
 
             [i.lth_leg, i.en_lth_leg, i.std_leg,
-             i.en_std_leg, i.drg_leg]]  # Rogue Armor -- Legs
+             i.en_std_leg, i.drg_leg]]  # Assassin + Ranged Armor -- Legs
 
 gs_stock = list(gs_stock)
 i.item_setup_vars()

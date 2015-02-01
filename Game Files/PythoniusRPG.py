@@ -180,15 +180,15 @@ class PlayerCharacter:  # The Player
 
     def choose_class(self):
         while True:
-            class_ = input('{0}, which class would you like to train as? | \
-Warrior, Mage, or Rogue: '.format(self.name))
+            class_ = input('{0}, which class would you like to train as?\n\
+    Warrior, Mage, Assassin, or Ranger: '.format(self.name))
 
             class_ = class_.lower()
-            classes = ['warrior', 'mage', 'rogue']
+            classes = ['warrior', 'mage', 'assassin', 'ranger']
 
             spam = False
 
-            for x, y in enumerate(['w', 'm', 'r']):
+            for x, y in enumerate(['w', 'm', 'a', 'r']):
                 if class_.startswith(y):
                     class_ = classes[x]
                     spam = True
@@ -243,7 +243,7 @@ Warrior, Mage, or Rogue: '.format(self.name))
                     self.hp += random.randint(1, 2)
                     self.mp += random.randint(2, 3)
 
-                elif self.class_ == 'rogue':
+                elif self.class_ == 'assassin':
                     self.attk += random.randint(1, 3)
                     self.dfns += random.randint(1, 2)
                     self.m_attk += random.randint(0, 2)
@@ -252,6 +252,16 @@ Warrior, Mage, or Rogue: '.format(self.name))
                     self.evad += random.randint(1, 2)
                     self.hp += random.randint(2, 3)
                     self.mp += random.randint(1, 2)
+
+                elif self.class_ == 'ranger':
+                    self.attk += random.randint(2, 4)
+                    self.dfns += random.randint(0, 2)
+                    self.m_attk += random.randint(0, 2)
+                    self.m_dfns += random.randint(1, 2)
+                    self.spd += random.randint(2, 4)
+                    self.evad += random.randint(2, 3)
+                    self.hp += random.randint(1, 3)
+                    self.mp += random.randint(1, 3)
 
                 temp_ski += self.ext_ski
                 magic.new_spells()
@@ -513,7 +523,7 @@ def create_player():
         player.m_dfns += 2
         inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
 
-    elif player.class_ == "rogue":
+    elif player.class_ == "assassin":
         misc_vars['hp_p'] += 2
         misc_vars['mp_p'] += 1
         player.attk += 1
@@ -521,6 +531,15 @@ def create_player():
         player.spd += 3
         player.evad += 1
         inv_system.equipped['weapon'] = copy.copy(items.stn_dag)
+
+    elif player.class_ == "ranger":
+        misc_vars['mp_p'] += 2
+        player.attk += 3
+        player.m_dfns += 1
+        player.evad += 2
+        player.spd += 2
+        inv_system.equipped['weapon'] = copy.copy(items.slg_sht)
+
 
     player.hp = copy.copy(misc_vars['hp_p'])
     player.mp = copy.copy(misc_vars['mp_p'])

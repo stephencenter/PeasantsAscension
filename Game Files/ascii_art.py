@@ -17,7 +17,7 @@
 # art in the game is located.
 
 player_art = {
-    "Rogue":
+    "Ranger":
 """
                 / o'
                 |*-|>
@@ -38,6 +38,14 @@ player_art = {
                 `-|-
                  /_\\
                  ' '
+%s""",
+
+    "Assassin":
+"""
+                ,  O
+                 \-|-\\
+                   |  `
+                  / \\
 %s""",
 
     "Asleep":
