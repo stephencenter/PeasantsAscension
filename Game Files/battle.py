@@ -494,7 +494,7 @@ def battle_inventory():
             print('\n-Player Turn-')
             item.use_item()
             return True
-
+        
 
 # Makes sure that the player and monster never have negative stats,
 # and then display their stats after they're fixed

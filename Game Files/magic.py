@@ -128,7 +128,7 @@ class Damaging(Spell):
             time.sleep(0.75)
 
             if dodge in range(monsters.monster.evad, 250):
-                if random.randint(0, 100) <= 7:
+                if random.randint(0, 100) <= (14 if main.player.class_ == 'mage' else 7):
                     print("It's a critical hit! 2x damage!")
                     attk_pwr *= 2
 
