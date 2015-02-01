@@ -147,7 +147,7 @@ def battle_system(is_boss=False, ambush=False):
 
             else:
                 print('-Player Turn-')
-                print(ascii_art.player_art["Asleep"] % "{0} is asleep!".format(player.name))
+                print(ascii_art.player_art["Asleep"] % "{0} is asleep!\n ".format(player.name))
                 print("You're too tired to do anything!")
                 input('\nPress Enter/Return')
                 move = ''
@@ -450,21 +450,43 @@ def run_away():
     sounds.foot_steps.play()
     time.sleep(0.75)
 
-    # There's a 50% chance that running will fail. This is lowered/raised
-    # based on the player's evasion stat. If the player has an evasion stat
-    # of 120+, they always succeed.
-    if random.randint(1, 100) in range(50, (101 - int(player.evad/2))) and player.evad < 120:
-        print('Your attempt to escape failed!')
-        input("\nPress Enter/Return")
-        return False
+    if bool(player.spd > monster.spd) != bool(player.evad > monster.evad):  # 75% chance of success
+        if random.randint(0, 3):
+            print('You manage to escape from the {0}!'.format(monster.name))
+            return True
 
-    else:
-        print('You manage to escape from the {0}!'.format(monster.name))
-        return True
+        else:
+            print('Your attempt to escape failed!')
+            input("\nPress Enter/Return")
+            return False
+
+    elif player.spd > monster.spd and player.evad > monster.evad:  # 90% chance of success
+        if random.randint(0, 9):
+            print('You manage to escape from the {0}!'.format(monster.name))
+            return True
+
+        else:
+            print('Your attempt to escape failed!')
+            input("\nPress Enter/Return")
+            return False
+
+    else:  # 50% chance of success 
+        if random.randint(0, 1):
+            print('You manage to escape from the {0}!'.format(monster.name))
+            return True
+
+        else:
+            print('Your attempt to escape failed!')
+            input("\nPress Enter/Return")
+            return False
 
 
 def battle_inventory():
     # The player can use items from the "consum" category of their inventory during battles.
+    if not inv_system.inventory['consum']:
+        print('You have no battle-allowed items! The Consumable category is empty.')
+        return False
+
     while True:
         print('-'*25)
         print('Battle Inventory: \n      ' + '\n      '.join(
@@ -494,7 +516,7 @@ def battle_inventory():
             print('\n-Player Turn-')
             item.use_item()
             return True
-        
+
 
 # Makes sure that the player and monster never have negative stats,
 # and then display their stats after they're fixed
