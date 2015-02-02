@@ -132,19 +132,36 @@ class Weapon(Item):
                 old = copy.copy(equipped['weapon'])
                 old.equip = False
 
-                if old.type_ in ['melee', 'ranged']:
+                if old.type_ == 'melee':
                     main.player.attk -= old.power
+                    main.player.p_attk -= int(math.ceil(old.power/3))
+                    main.player.m_attk -= int(math.ceil(old.power/3))
+
                 elif old.type_ == 'magic':
                     main.player.m_attk -= old.power
+                    main.player.p_attk -= int(math.ceil(old.power/3))
+                    main.player.attk -= int(math.ceil(old.power/3))
+
+                elif old.type_ == 'ranged':
+                    main.player.p_attk -= old.power
+                    main.player.m_attk -= int(math.ceil(old.power/3))
+                    main.player.attk -= int(math.ceil(old.power/3))
 
             equipped['weapon'] = spam
 
-            if self.type_ in ['melee', 'ranged']:
+            if self.type_ == 'melee':
                 main.player.attk += self.power
+                main.player.p_attk += int(math.ceil(self.power/3))
+                main.player.m_attk += int(math.ceil(self.power/3))
+
+            elif self.type_ == 'ranged':
+                main.player.p_attk += self.power
+                main.player.attk += int(math.ceil(self.power/3))
                 main.player.m_attk += int(math.ceil(self.power/3))
 
             elif self.type_ == 'magic':
                 main.player.m_attk += self.power
+                main.player.p_attk += int(math.ceil(self.power/3))
                 main.player.attk += int(math.ceil(self.power/3))
 
             for x, y in enumerate(inventory[self.cat]):
@@ -202,8 +219,11 @@ class Armor(Item):
                 if old.type_ == 'melee':
                     main.player.dfns -= old.defense
                     main.player.m_dfns -= int(math.ceil(self.defense/3))
+                    main.player.p_dfns -= int(math.ceil(self.defense/1.5))
+
                 elif old.type_ == 'magic':
                     main.player.m_dfns -= old.defense
+                    main.player.p_dfns -= int(math.ceil(self.defense/1.5))
                     main.player.dfns -= int(math.ceil(self.defense/3))
 
             equipped[self.part] = fizz
