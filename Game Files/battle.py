@@ -69,18 +69,26 @@ def update_stats():
     # Forces stats to return to normal when battle is finished
     global temp_stats
     temp_stats = {'attk': _c(player.attk), 'm_attk': _c(player.m_attk),
+                  'p_attk': _c(player.p_attk), 'p_dfns': _c(player.p_dfns),
                   'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
                   'spd': _c(player.spd), 'evad': _c(player.evad),
                   'status_effect': 'none'}
 
 
 def player_choice():
+    print("""\
+      [1]: Attack
+      [2]: Use Magic
+      [3]: Class Ability
+      [4]: Use Items
+      [5]: Run""")
+
     while True:
-        move = only_num(
-            input('1: Attack; 2: Use Magic; 3: Wait; 4. Use Items; 5: Run | Input #(1-5): ')
-        )
+        move = only_num(input("Input [#]: "))
+
         if move.isdigit() and int(move) in range(1, 6):
-        # Only return if "move" refers to a valid move
+            # Only return if "move" refers to a valid move
+            print('-'*25)
             return move
 
 
@@ -470,7 +478,7 @@ def run_away():
             input("\nPress Enter/Return")
             return False
 
-    else:  # 50% chance of success 
+    else:  # 50% chance of success
         if random.randint(0, 1):
             print('You manage to escape from the {0}!'.format(monster.name))
             return True

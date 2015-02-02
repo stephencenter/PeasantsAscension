@@ -47,13 +47,15 @@ inventory = ''
 class Monster:
     # All monsters use this class. Bosses use a sub-class called
     # "Boss" (located in bosses.py) which inherits from this.
-    def __init__(self, name, hp, mp, attk, dfns, m_attk,
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk,
                  m_dfns, spd, evad, lvl, element='none'):
         self.name = name  # Name
         self.hp = hp  # Health
         self.mp = mp  # Mana
         self.attk = attk  # Attack
         self.dfns = dfns  # Defense
+        self.p_attk = p_attk  # Pierce Attack
+        self.p_dfns = p_dfns  # Pierce Defense
         self.m_attk = m_attk  # Magic Attack
         self.m_dfns = m_dfns  # Magic Defense
         self.spd = spd  # Speed
@@ -68,12 +70,19 @@ class Monster:
             self.items = random.choice(items.monster_drop(self.lvl))
 
     def monst_damage(self, var):
-        monst_dealt = int((self.attk/2) - (battle.temp_stats['dfns']/3) + (self.lvl/3) + var + 1)
+        if self.attk >= self.p_attk:
+            monst_dealt = int((self.attk/2) - (battle.temp_stats['dfns']/3) + (
+                self.lvl/3) + var + 1)
+            type_ = 'melee'
+        else:
+            monst_dealt = int((self.p_attk/2) - (battle.temp_stats['p_dfns']/3) + (
+                self.lvl/3) + var + 1)
+            type_ = 'range'
 
         if monst_dealt < 1:
             monst_dealt = 1
 
-        return monst_dealt
+        return monst_dealt, type_
 
     def monst_magic(self, var):
         monst_dealt = int((self.m_attk/2)
@@ -93,6 +102,8 @@ class Monster:
             self.mp += random.randint(1, 2)
             self.attk = random.randint(1, 3)
             self.dfns += random.randint(1, 2)
+            self.p_attk += random.randint(1, 3)
+            self.p_dfns += random.randint(1, 2)
             self.m_attk += random.randint(1, 3)
             self.m_dfns += random.randint(1, 2)
             self.spd += random.randint(1, 3)
@@ -103,19 +114,24 @@ class Monster:
 
     def monst_attk(self, var, dodge):
         sounds.sword_slash.play()
-        print('The {0} angrily begins to charge at you!'.format(self.name))
+        print('The {0} is getting ready to attack you!'.format(self.name))
         time.sleep(0.75)
 
         if dodge in range(player.evad, 250):
+            damage, type_ = self.monst_damage(var)
 
             dealt = magic.eval_element(
                 p_elem=battle.player.element,
-                m_elem=battle.monster.element, m_dmg=self.monst_damage(var))[1]
+                m_elem=battle.monster.element, m_dmg=damage)[1]
 
             player.hp -= dealt
             sounds.enemy_hit.play()
-
-            print('The {0} hits you, dealing {1} damage!'.format(self.name, dealt))
+            if type_ == 'ranged':
+                print('The {0} hits you with a ranged attack, dealing {1} damage!'.format(
+                    self.name, dealt))
+            else:
+                print('The {0} hits you with a melee attack, dealing {1} damage!'.format(
+                    self.name, dealt))
 
         else:
             sounds.attack_miss.play()
@@ -123,6 +139,9 @@ class Monster:
 
     def enemy_turn(self, var, dodge):
         # This is the Enemy's AI.
+        if player.spd >= monster.spd:
+            print('-'*25)
+
         print('\n-Enemy Turn-')
         print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
             self.monster_name
@@ -242,7 +261,8 @@ class Monster:
             'Nimble', 'Clumsy',
             'Armored', 'Broken',
             'Mystic', 'Foolish',
-            'Strong', 'Weak', ''
+            'Strong', 'Weak',
+            'Observant', 'Obtuse', ''
         ]
 
         modifier = random.choice(modifiers)
@@ -271,6 +291,12 @@ class Monster:
         elif modifier == 'Broken':  # Low defense stats
             self.dfns -= 2
             self.m_dfns -= 2
+        elif modifier == 'Observant':  # High ranged stats
+            self.p_attk += 2
+            self.p_dfns += 2
+        elif modifier == 'Obtuse':  # Low ranged stats
+            self.p_attk -= 2
+            self.p_dfns -= 2
 
         else:
             if modifier == 'Strong' and self.m_attk < self.attk and self.m_dfns < self.dfns:
@@ -517,7 +543,7 @@ def fighter_ai(var, dodge):
 def spawn_monster():
     global monster
     setup_vars()
-    monster = Monster('', random.randint(6, 8), random.randint(3, 4), 2, 1, 2, 1, 2, 1, 1)
+    monster = Monster('', random.randint(6, 8), random.randint(3, 4), 2, 1, 2, 1, 2, 1, 2, 1, 1)
     monster.monst_level()
     monster.monst_name()
 

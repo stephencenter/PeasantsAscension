@@ -43,7 +43,7 @@ player = ''
 
 # A dictionary containing miscellaneous variables made entirely of
 misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
-             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'luc': 1, 'gp': 20}
+             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'luc': 1, 'gp': 20}
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
@@ -124,14 +124,16 @@ sound_vol = 1.0
 
 
 class PlayerCharacter:  # The Player
-    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns,
-                 spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk,
+                 p_dfns, spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,
                  class_='', element='none'):
         self.name = name  # Name
         self.hp = hp  # Health
         self.mp = mp  # Mana Points
         self.attk = attk  # Attack
         self.dfns = dfns  # Defense
+        self.p_attk = p_attk  # Pierce Attack
+        self.p_dfns = p_dfns  # Pierce Defense
         self.m_attk = m_attk  # Magic Attack
         self.m_dfns = m_dfns  # Magic Defense
         self.spd = spd  # Speed
@@ -146,21 +148,25 @@ class PlayerCharacter:  # The Player
         self.current_pet = ''  # Current Pet
 
     def player_damage(self, var):  # The formula for the player dealing damage
-        phys_dealt = int((battle.temp_stats['attk']/2) -
-                         (battle.monster.dfns/2) + (self.lvl/3) + var + 1)
+        if inv_system.equipped['weapon'].type_ != 'ranged':
+            dam_dealt = int((battle.temp_stats['attk']/2) -
+                             (battle.monster.dfns/2) + (self.lvl/3) + var + 1)
 
-        phys_dealt = magic.eval_element(
+        else:
+            dam_dealt = int((battle.temp_stats['p_attk']/2) -
+                             (battle.monster.p_dfns/2) + (self.lvl/3) + var + 1)
+
+        dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
-            m_elem=battle.monster.element, p_dmg=phys_dealt)[0]
+            m_elem=battle.monster.element, p_dmg=dam_dealt)[0]
 
-        if phys_dealt < 1:
-            phys_dealt = 1
+        if dam_dealt < 1:
+            dam_dealt = 1
 
         if random.randint(1, 100) <= 7:
-            print("It's a critical hit! 2x damage!")
-            phys_dealt *= 2
+            dam_dealt *= 2
 
-        return phys_dealt
+        return dam_dealt
 
     def choose_name(self):
         while True:
@@ -224,6 +230,8 @@ class PlayerCharacter:  # The Player
                 print("You've advanced to level {0}!".format(self.lvl))
 
                 if self.class_ == 'warrior':
+                    self.p_attk += random.randint(0, 2)
+                    self.p_dfns += random.randint(1, 3)
                     self.attk += random.randint(1, 3)
                     self.dfns += random.randint(1, 3)
                     self.m_attk += random.randint(0, 2)
@@ -234,6 +242,8 @@ class PlayerCharacter:  # The Player
                     self.mp += random.randint(1, 2)
 
                 elif self.class_ == 'mage':
+                    self.p_attk += random.randint(0, 2)
+                    self.p_dfns += random.randint(0, 2)
                     self.attk += random.randint(0, 2)
                     self.dfns += random.randint(0, 2)
                     self.m_attk += random.randint(1, 3)
@@ -244,6 +254,8 @@ class PlayerCharacter:  # The Player
                     self.mp += random.randint(2, 3)
 
                 elif self.class_ == 'assassin':
+                    self.p_attk += random.randint(0, 2)
+                    self.p_dfns += random.randint(1, 2)
                     self.attk += random.randint(1, 3)
                     self.dfns += random.randint(1, 2)
                     self.m_attk += random.randint(0, 2)
@@ -254,7 +266,9 @@ class PlayerCharacter:  # The Player
                     self.mp += random.randint(1, 2)
 
                 elif self.class_ == 'ranger':
-                    self.attk += random.randint(2, 4)
+                    self.p_attk += random.randint(2, 4)
+                    self.p_dfns += random.randint(0, 2)
+                    self.attk += random.randint(1, 2)
                     self.dfns += random.randint(0, 2)
                     self.m_attk += random.randint(0, 2)
                     self.m_dfns += random.randint(1, 2)
@@ -291,12 +305,13 @@ class PlayerCharacter:  # The Player
     [S]trength -  Smash through enemies with higher attack and defense!
     [C]onstitution - Become a tank with higher defense stats and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
+    [P]erception - Eleminate your enemies with ease using higher pierce and evasion!
     [L]uck - Slightly improve ALL your stats, AND get more GP/XP!
 Input letter: """)
 
                 skill = skill.lower()
 
-                if any(map(skill.startswith, ['i', 's', 'c', 'd', 'l'])):
+                if any(map(skill.startswith, ['i', 's', 'c', 'd', 'p', 'l'])):
                     if skill.startswith('i'):
                         vis_skill = 'Intelligence'
                     elif skill.startswith('s'):
@@ -305,6 +320,8 @@ Input letter: """)
                         vis_skill = 'Constitution'
                     elif skill.startswith('d'):
                         vis_skill = 'Dexterity'
+                    elif skill.startswith('p'):
+                        vis_skill = 'Perception'
                     else:
                         vis_skill = 'Luck'
 
@@ -328,19 +345,30 @@ Input letter: """)
 
                         elif skill.startswith('s'):
                             self.attk += random.randint(1, 2)
+                            self.p_dfns += random.randint(0, 1)
                             self.dfns += random.randint(1, 2)
                             misc_vars['str'] += 1
 
                         elif skill.startswith('c'):
-                            self.hp += random.randint(4, 6)
+                            self.hp += random.randint(3, 5)
                             self.dfns += random.randint(0, 1)
+                            self.p_dfns += random.randint(0, 1)
                             self.m_dfns += random.randint(0, 1)
                             misc_vars['con'] += 1
 
                         elif skill.startswith('d'):
-                            self.spd += 2
+                            self.spd += 3
+                            self.p_attk += 1
                             self.evad += 1
                             misc_vars['dex'] += 1
+
+                        elif skill.startswith('p'):
+                            self.hp += 1
+                            self.p_attk += 2
+                            self.p_dfns += 2
+                            self.evad += random.randint(0, 2)
+                            misc_vars['per'] += 1
+
 
                         elif skill.startswith('l'):
                             self.hp += random.randint(0, 1)
@@ -348,13 +376,15 @@ Input letter: """)
                             if random.randint(0, 1):
                                 self.dfns += random.randint(0, 1)
                                 self.attk += random.randint(0, 1)
+                                self.p_attk += random.randint(0, 1)
                             else:
                                 self.m_dfns += random.randint(0, 1)
                                 self.m_attk += random.randint(0, 1)
+                                self.p_dfns += random.randint(0, 1)
                             if random.randint(0, 1):
                                 self.spd += random.randint(0, 1)
                                 self.evad += random.randint(0, 1)
-                            self.ext_gol += random.randint(0, 2)
+                            self.ext_gol += random.randint(0, 1)
                             self.ext_exp += random.randint(0, 1)
                             misc_vars['luc'] += 1
 
@@ -376,16 +406,15 @@ Input letter: """)
                 'HP: {0}/{1} | MP: {2}/{3}'.format(
                     self.hp, misc_vars['hp_p'],
                     self.mp, misc_vars['mp_p']),
-                'Attack: {0} | M. Attack: {1}'.format(
-                    self.attk, self.m_attk),
-                'Defense: {0} | M. Defense: {1}'.format(
-                    self.dfns, self.m_dfns),
+                'Attack: {0} | M. Attack: {1} | P. Attack {2}'.format(
+                    self.attk, self.m_attk, self.p_attk),
+                'Defense: {0} | M. Defense: {1} | P. Defense {2}'.format(
+                    self.dfns, self.m_dfns, self.p_dfns),
                 'Speed: {0} | Evasion: {1}'.format(
                     self.spd, self.evad),
-                'INT: {0} | STR: {1} | CON: {2} | DEX: {3} | LUC: {4}'.format(
-                    misc_vars['int'], misc_vars['str'],
-                    misc_vars['con'], misc_vars['dex'],
-                    misc_vars['luc']),
+                'INT: {0} | STR: {1} | CON: {2} | DEX: {3} | PER: {4} | LUC: {5}'.format(
+                    misc_vars['int'], misc_vars['str'], misc_vars['con'],
+                    misc_vars['dex'], misc_vars['per'], misc_vars['luc']),
                 'Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(
                     self.exp,
                     misc_vars['r_xp'],
@@ -495,7 +524,7 @@ def create_player():
     global player
     global misc_vars
 
-    player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
+    player = PlayerCharacter('', 15, 4, 3, 1, 3, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
 
     # Set the player's max HP and MP
     misc_vars['hp_p'] = copy.copy(player.hp)
@@ -511,6 +540,7 @@ def create_player():
         misc_vars['hp_p'] += 5
         misc_vars['mp_p'] -= 1
         player.dfns += 2
+        player.p_dfns += 1
         player.attk += 2
         player.spd -= 1
         player.evad -= 1
@@ -534,7 +564,7 @@ def create_player():
 
     elif player.class_ == "ranger":
         misc_vars['mp_p'] += 2
-        player.attk += 3
+        player.p_attk += 3
         player.m_dfns += 1
         player.evad += 2
         player.spd += 2
@@ -754,7 +784,7 @@ def deserialize_player(path):  # Load the JSON file and translate
     # it into a "PlayerCharacter" object
     global player
 
-    player = PlayerCharacter('', 15, 4, 4, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
+    player = PlayerCharacter('', 15, 4, 3, 1, 3, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
 
     with open(path, encoding='utf-8') as e:
         player_dict = json.load(e)
