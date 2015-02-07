@@ -55,11 +55,18 @@ item_pickup = Sound('Sound FX/item_pickup.wav')
 # Low Health -- Played when you have low (less than 20%) health remaining
 health_low = Sound('Sound FX/health_low.wav')
 
+# Poison Damage -- Played when the player or enemy take poison damage
+poison_damage = Sound('Sound FX/poison_damage.wav')
+
+# Use Buff Spell -- Played when the player or enemy use a buff spell
+buff_spell = Sound('Sound FX/buff_spell.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
               'magic_healing', 'enemy_hit',
               'foot_steps', 'aim_weapon',
               'attack_miss', 'item_pickup',
-              'health_low']:
+              'health_low', 'poison_damage',
+              'buff_spell']:
         globals()[x].set_volume(main.sound_vol)

@@ -170,6 +170,8 @@ class Monster:
 
         elif int((self.dfns + self.m_dfns)/2) <= int(self.lvl/3):
             # Defend
+            sounds.buff_spell.play()
+
             self.dfns += random.randint(1, 2)
             self.m_dfns += random.randint(1, 2)
             print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
@@ -224,13 +226,16 @@ class Monster:
         # Check whether the monster is poisoned or not.
         if battle.temp_stats['m_ispoisoned']:
             if random.randint(0, 9):  # 10% chance to recover per turn
+                time.sleep(0.5)
+                sounds.poison_damage.play()
+
                 poison_damage = int(math.ceil(misc_vars['hp_m']/10))
-
                 print('The {0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
-
                 self.hp -= poison_damage
 
             else:
+                time.sleep(0.5)
+                sounds.buff_spell.play()
                 print('The {0} recovered from the poison!'.format(self.name))
                 battle.temp_stats['m_ispoisoned'] = False
 
@@ -426,6 +431,8 @@ def tank_ai(var, dodge):
 
     elif int((self.dfns + self.m_dfns)/1.5) <= int(self.lvl/3):
         # Defend
+        sounds.buff_spell.play()
+
         self.dfns += random.randint(1, 2)
         self.m_dfns += random.randint(1, 2)
         print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
@@ -548,6 +555,8 @@ def fighter_ai(var, dodge):
 
     elif int((self.dfns + self.m_dfns)/1.5) <= int(self.lvl/5):
         # Defend
+        sounds.buff_spell.play()
+
         self.dfns += random.randint(1, 2)
         self.m_dfns += random.randint(1, 2)
         print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))

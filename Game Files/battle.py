@@ -139,21 +139,13 @@ def battle_system(is_boss=False, ambush=False):
             print("Warning: HP is low, heal as soon as possible!")
             sounds.health_low.play()
 
+        bat_stats()
+
         if temp_stats['status_effect'] == 'asleep':
-            is_woken_up = not random.randint(0, 2)
-        else:
-            is_woken_up = False
-
-        # Display the Player and Monster's stats
-        if not is_woken_up:
-            bat_stats()
-
-        # Check to see if the player is asleep
-        if temp_stats['status_effect'] == 'asleep':
-
-            if is_woken_up:
+            if not random.randint(0, 2):
+                sounds.buff_spell.play()
                 print('\n-Player Turn-')
-                print('You finally wake up!')
+                print('You start to regain conciousness!')
 
                 temp_stats['status_effect'] = 'none'
                 bat_stats()
@@ -165,7 +157,6 @@ def battle_system(is_boss=False, ambush=False):
                 print("You're too tired to do anything!")
                 input('\nPress Enter/Return')
                 move = ''
-
         else:
             move = player_choice()
 
@@ -297,23 +288,31 @@ def player_turn(var, dodge, move):
             player.current_pet.use_ability()
 
         # Check to see if the player is poisoned
-        if temp_stats['status_effect'] == 'poisoned':
+        if temp_stats['status_effect'] == 'poisoned' and monster.hp > 0:
             if random.randint(0, 3):
+                time.sleep(0.5)
+                sounds.poison_damage.play()
+
                 poison_damage = int(math.ceil(misc_vars['hp_p']/10))
-
                 print('You took poison damage! (-{0} HP)'.format(poison_damage))
-
                 player.hp -= poison_damage
 
                 if player.hp <= 0:
                     break
+
             else:
+                time.sleep(0.5)
+                sounds.buff_spell.play()
                 print('You start to feel better!')
                 temp_stats['status_effect'] = 'none'
 
         # Check to see if the player is silenced
         elif temp_stats['status_effect'] == 'silenced':
             if not random.randint(0, 3):
+
+                time.sleep(0.5)
+                sounds.buff_spell.play()
+
                 print('You find yourself able to speak again!')
                 temp_stats['status_effect'] = 'none'
 

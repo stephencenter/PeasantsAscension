@@ -171,6 +171,8 @@ class Buff(Spell):
             print('Using the power of {0}, your {1} increases temporarily by {2}!'.format(
                 self.name, self.stat, self.incre))
 
+            sounds.buff_spell.play()
+
             if self.stat == 'Defense':
                 battle.temp_stats['dfns'] += self.incre
             elif self.stat == 'Magic Defense':
