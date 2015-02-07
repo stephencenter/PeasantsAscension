@@ -46,6 +46,7 @@ position = ''
 
 vowels = 'AEIOU'
 temp_stats = ''
+ability_used = False
 
 if __name__ == "__main__":
     sys.exit()
@@ -72,7 +73,8 @@ def update_stats():
                   'p_attk': _c(player.p_attk), 'p_dfns': _c(player.p_dfns),
                   'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
                   'spd': _c(player.spd), 'evad': _c(player.evad),
-                  'status_effect': 'none'}
+                  'status_effect': 'none',
+                  'm_ispoisoned': False}
 
 
 def player_choice():
@@ -93,6 +95,8 @@ def player_choice():
 
 
 def battle_system(is_boss=False, ambush=False):
+    global ability_used
+
     if is_boss:  # Bosses have different battle music than normal enemies
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
@@ -127,6 +131,8 @@ def battle_system(is_boss=False, ambush=False):
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
     update_stats()
+
+    ability_used = False
 
     while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
         if player.hp <= 0.20*misc_vars["hp_p"]:
@@ -205,7 +211,7 @@ def battle_system(is_boss=False, ambush=False):
             continue
 
         # The player goes first if they have a higher speed
-        elif (temp_stats['spd'] > monster.spd or move == '2') \
+        elif (temp_stats['spd'] > monster.spd or move == '2' or move == '3') \
                 and temp_stats['status_effect'] != 'asleep':
 
             if move and player_turn(var, dodge, move) and monster.hp > 0:
@@ -276,17 +282,8 @@ def player_turn(var, dodge, move):
                 return False
 
         elif move == '3':
-            print(ascii_art.player_art[player.class_.title()] %
-                  "{0} is making a move!\n".format(player.name))
-
-            print('You wait for your turn to end while you gather your strength.')
-            player.hp += 2
-            player.mp += 2
-
-            if player.hp > misc_vars['hp_p']:
-                player.hp -= (player.hp - misc_vars['hp_p'])
-            if player.mp > misc_vars['mp_p']:
-                player.mp -= (player.mp - misc_vars['mp_p'])
+            if not class_ability():
+                return False
 
         else:
             return False
@@ -302,7 +299,7 @@ def player_turn(var, dodge, move):
         # Check to see if the player is poisoned
         if temp_stats['status_effect'] == 'poisoned':
             if random.randint(0, 3):
-                poison_damage = int(misc_vars['hp_p']/10)
+                poison_damage = int(math.ceil(misc_vars['hp_p']/10))
 
                 print('You took poison damage! (-{0} HP)'.format(poison_damage))
 
@@ -452,6 +449,92 @@ def after_battle(is_boss):  # Assess the results of the battle
             player.hp = 1
 
 
+def class_ability():
+    # Class abilities are special abilities only available to characters of certain classes.
+    # Their purpose is to help make the characters more diverse, as well as encourage more
+    # strategy being used.
+
+    global ability_used
+
+    if ability_used:
+        # You can only use your ability once per battle.
+        print('You feel drained, and are unable to call upon your class ability again.')
+        return False
+
+    else:
+        ability_used = True
+
+    print(ascii_art.player_art[player.class_.title()] %
+          "{0} is making a move!\n".format(player.name))
+
+    print("You use the knowledge you've gained to unleash your class ability!")
+
+    if player.class_ == 'ranger':
+        # The ranger class identifies their enemy and prints their stats.
+        # This is really useful for defeating bosses, which are often weak to
+        # certain types and elements of attacks.
+        print('As a Ranger, you identify your enemy and meditate!')
+        input("Press Enter/Return to view your enemy's stats ")
+
+        print('-'*25)
+        print("{0}'s STATS:".format(monster.name.upper()))
+
+        print("""Attack: {0} | M. Attack: {1} | P. Attack: {2} | Speed: {3}
+Defense: {4} | M. Defense: {5} | P. Defense: {6} | Evasion: {7}
+Element: {8} | Elemental Weakness: {9}""".format(
+            monster.attk, monster.m_attk, monster.p_attk, monster.spd,
+            monster.dfns, monster.m_dfns, monster.p_dfns, monster.evad,
+            monster.element.title(),
+            {'fire': 'Water',
+             'water': 'Electric',
+             'electric': 'Earth',
+             'earth': 'Grass',
+             'grass': 'Wind',
+             'wind': 'Ice',
+             'ice': 'Fire',
+             'none': 'None',
+             'life': 'Death',
+             'death': 'Life'}[monster.element]))
+
+        player.hp += 3
+        player.mp += 3
+
+        if player.hp > misc_vars['hp_p']:
+            player.hp -= (player.hp - misc_vars['hp_p'])
+        if player.mp > misc_vars['mp_p']:
+            player.mp -= (player.mp - misc_vars['mp_p'])
+
+        return True
+
+    elif player.class_ == 'warrior':
+        player.hp += 10
+        temp_stats['dfns'] += 3
+        temp_stats['m_dfns'] += 3
+        temp_stats['p_dfns'] += 3
+        print('As a Warrior, you channel your inner-strength and increase your defense greatly!')
+
+        if player.hp > misc_vars['hp_p']:
+            player.hp -= (player.hp - misc_vars['hp_p'])
+        if player.mp > misc_vars['mp_p']:
+            player.mp -= (player.mp - misc_vars['mp_p'])
+
+        return True
+
+    elif player.class_ == "mage":
+        player.mp = _c(misc_vars['mp_p'])
+        temp_stats['m_attk'] += 2
+        temp_stats['m_dfns'] += 2
+        print('As a Mage, you focus intently and sharply increase your magical prowess!')
+
+        return True
+
+    elif player.class_ == "assassin":
+        temp_stats['m_ispoisoned'] = True
+        print('As an Assassin, you discreetly inject poison into your enemy!')
+
+        return True
+
+
 def run_away():
     print('You start to run away from the {0}...'.format(monster.name))
 
@@ -496,7 +579,6 @@ def battle_inventory():
         return False
 
     while True:
-        print('-'*25)
         print('Battle Inventory: \n      ' + '\n      '.join(
               ['[' + str(x + 1) + '] ' + str(y)
               for x, y in enumerate(inv_system.inventory['consum'])]))

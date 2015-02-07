@@ -201,6 +201,8 @@ class Monster:
         else:
             self.monst_attk(var, dodge)
 
+        self.check_poison()
+
     def give_status(self):
         # Attempt to give the player a status ailment
         status = random.choice([x for x in ['asleep', 'poisoned', 'silenced']
@@ -217,6 +219,20 @@ class Monster:
             print('The {0} failed to make you {1}.'.format(self.name, status))
 
         self.mp -= 2
+
+    def check_poison(self):
+        # Check whether the monster is poisoned or not.
+        if battle.temp_stats['m_ispoisoned']:
+            if random.randint(0, 9):  # 10% chance to recover per turn
+                poison_damage = int(math.ceil(misc_vars['hp_m']/10))
+
+                print('The {0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
+
+                self.hp -= poison_damage
+
+            else:
+                print('The {0} recovered from the poison!'.format(self.name))
+                battle.temp_stats['m_ispoisoned'] = False
 
     def monst_name(self):
         monster_type = {'Shore': ['Shell Mimic', 'Giant Crab', 'Naiad',
@@ -447,6 +463,8 @@ def tank_ai(var, dodge):
     else:
         self.monst_attk(var, dodge)
 
+    self.check_poison()
+
 # -- Fighter AI --
 """
 Fighter AI is the opposite of the Tank AI. It has high attack and above-average
@@ -536,6 +554,8 @@ def fighter_ai(var, dodge):
 
     else:
         self.monst_attk(var, dodge)
+
+    self.check_poison()
 
 # End of Enemy AIs
 

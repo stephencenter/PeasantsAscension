@@ -164,6 +164,7 @@ class PlayerCharacter:  # The Player
             dam_dealt = 1
 
         if random.randint(1, 100) <= 7:
+            print("It's a critical hit! 2x damage!")
             dam_dealt *= 2
 
         return dam_dealt
