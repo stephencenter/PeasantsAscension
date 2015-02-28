@@ -165,8 +165,8 @@ def terrtarr_ud():
 terr_tarrant.upon_defeating = terrtarr_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
-cursed_spect = Boss('Cursed Spectre', 85, 30, 10, 10, 15, 15, 20, 20, 14, 10, 12, 3, 22, [], 100, 100,
-                    element='death')
+cursed_spect = Boss('Cursed Spectre', 85, 30, 10, 10, 15, 15, 20, 20, 14, 10, 12, 3, 22, [],
+                    100, 100, active=False, element='death')
 
 
 def cursspect_ud():

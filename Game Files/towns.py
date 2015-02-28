@@ -579,13 +579,49 @@ a group of unbelievably skilled and wise mages. The head of the guild,
 Azura, lives in a large tower in the southwest side of the town.""",
              [npcs.azura], 28, 24, gs_level=3)
 
+town9 = Town('Sardooth', """Sardooth: A ghost town. There has not been a single
+permanant inhabitant of this town for more than 75 years. It is completely
+run down, with most of the buildings having been destroyed in the Pythonian
+Revolution. While this town may seem interesting and historic, there is nothing
+of value here.""",
+             [], -25, 29, inn=False, gen_store=False)
+
+town10 = Town('Principalia', """Principalia: Principalia is the hometown of
+King Pythonius II. He still lives in the same small, stone-and-wood house
+that his father lived in before the war started, despite there being a
+castle made for him in the nation's capital, Overshire. A few things about
+the home have changed since Pythonius became king, however: There are now
+a half-dozen highly-trained guards outside his house, as well as six
+archer-towers arranged in a hexagonal shape around the building.""",
+              [], -44, 20)
+
+town11 = Town('Neo-Ekanmar', """Neo-Ekanmar: After Sugulat and his army overran
+Flygonia  and declared the Empire of D\u00fC Haven, refugees from the
+area escaped from the nation. Seeing as how most of the surrounding
+states were allied against Flygonia, the refugees had no choice but
+to run through Hillsbrad to Pythonia. They then established Neo-Ekanmar
+as their safe-haven. Pythonia has established a non-aggression pact with
+the refugees and gladly accept and protect them from danger.""",
+              [], 3, 39, gs_level=3)
+
+town12 = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
+home to dozens upon dozens of different animals and plantlife. Naturally,
+the majority population of Ravenstone consists of Druids and
+other nature-magicians. Ravenstone is also the home of the Druids'
+section of the Sorcerers' Guild. Vegetation grows on almost
+every building and statue in the town. When the population of
+the town is calculated, animals are counted as people. More than
+35% of the population are various species of animals.""",
+              [], -30, -39, gs_level=3, pet_shop=True)
+
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
 flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""", [npcs.alden],
                     -12, -26, inn=False, gen_store=False, pet_shop=True, ps_level=2)
 
-town_list = [town1, town2, town3, town4, town5, town6, town7, town8, small_house1]
+town_list = [town1, town2, town3, town4, town5, town6,
+             town7, town8, town9, town10, town11, town12, small_house1]
 
 
 def search_towns(pos_x, pos_y, enter=True):
