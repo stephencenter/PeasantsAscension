@@ -90,7 +90,8 @@ def player_choice():
 
         if move.isdigit() and int(move) in range(1, 6):
             # Only return if "move" refers to a valid move
-            print('-'*25)
+            if temp_stats['spd'] > monster.spd:
+                print('-'*25)
             return move
 
 
@@ -216,6 +217,7 @@ def battle_system(is_boss=False, ambush=False):
 
         # Otherwise, the monster will go first
         else:
+            print('-'*25)
             monster.enemy_turn(m_var, m_dodge)
 
             if player.hp > 0:
