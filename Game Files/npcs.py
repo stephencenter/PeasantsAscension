@@ -305,7 +305,7 @@ azura = NPC('Azura', [azura_phrase_1])
 #----------------------------------------------------------------------------#
 # STORY-STORY ARCS
 
-# -- Graveyard Story=arc:
+# -- Graveyard Story-arc:
 # --- Name: Stewson -- Town: Overshire
 stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                  "Tundra in the northwest, Swamp in the southeast,",
@@ -331,6 +331,34 @@ stewson_quest_1 = Quest(["I wish someone would do something about this terrible"
                         ["You... you actually defeated it?! Thank you ever so much!",
                          "Take this, it is the least our town can do for your bravery."],
                         active=True)
+
+
+def stwqst_us1():
+    global stewson_phrase_1
+    global stewson_phrase_2
+    bosses.menac_phantom.active = True
+    stewson_phrase_1.active = False
+    stewson_phrase_2.active = True
+
+
+def stwqst_uc1():
+    global stewson_phrase_3
+    global polmor_phrase_2
+    global polmor_quest_1
+
+    stewson_phrase_3.active = True
+    polmor_phrase_2.active = False
+    polmor_quest_1.active = True
+    print('-'*25)
+    input('You have recieved a Cherub pet! | Press Enter/Return ')
+    inv_system.inventory['pets'].append(pets.pet_cherub)
+    input('You now have experience defeating ghosts! | Press Enter/Return ')
+
+
+stewson_quest_1.upon_starting = stwqst_us1
+stewson_quest_1.upon_completing = stwqst_uc1
+
+stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
 
 # --- Name: Seriph -- Town: Fort Sigil
 seriph_phrase_1 = Conversation(['...You actually came to this town? And of your own',
@@ -464,35 +492,8 @@ wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters 
 travel.",
                                 "However, monsters there also give better loot. Be careful."
                                 ], active=True)
+
 wesley = NPC('Wesley', [wesley_phrase_1])
-
-
-def stwqst_us1():
-    global stewson_phrase_1
-    global stewson_phrase_2
-    bosses.menac_phantom.active = True
-    stewson_phrase_1.active = False
-    stewson_phrase_2.active = True
-
-
-def stwqst_uc1():
-    global stewson_phrase_3
-    global polmor_phrase_2
-    global polmor_quest_1
-
-    stewson_phrase_3.active = True
-    polmor_phrase_2.active = False
-    polmor_quest_1.active = True
-    print('-'*25)
-    input('You have recieved a Cherub pet! | Press Enter/Return ')
-    inv_system.inventory['pets'].append(pets.pet_cherub)
-    input('You now have experience defeating ghosts! | Press Enter/Return ')
-
-
-stewson_quest_1.upon_starting = stwqst_us1
-stewson_quest_1.upon_completing = stwqst_uc1
-
-stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1])
 
 # -- VName: Jeffery -- Town: Overshire
 jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",

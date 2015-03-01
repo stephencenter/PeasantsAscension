@@ -59,24 +59,7 @@ ASCII ART:
   five minutes. They're not meant to look good.
 ------------------------------------------------------------------------------
 OTHER STUFF:
-  Gabriel Tucker, who drew:
-    pythonius_art_1.png
     
-    His deviantArt: http://flygonjones.deviantart.com/ <--- Check it out!
-    His YouTube: http://tinyurl.com/flygon-jones <--- Check it out!
-    
-  Jacob Hall, who drew:
-    pythonius_art_2.png
-    
-    His YouTube : http://tinyurl.com/hitmanjake101 <--- Check it out!
-    
-  Both of these individuals also helped extensively by suggesting ideas and
-  finding bugs!
-  
-  I want to thank Gabriel Tucker in particular for putting up with me
-  constantly talking about my game and asking him for suggestions/ideas.
-  He's a big fan of strategy-games/RPGs and helped a TON, mostly by 
-  complaining about my game and telling me why it sucks! It's the small things
-  that count. :)
-  
-Thanks for playing this game!
+  Jacob Hall, who drew all of the artwork that is included with the game
+  (located in the Artwork Directory). He also was tremendously helpful
+  in regards to bug-testing and suggesting ideas. Thank you so much. :)

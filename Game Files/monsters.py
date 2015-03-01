@@ -65,10 +65,6 @@ class Monster:
         self.monster_name = ''
         self.items = ''
 
-        num = random.randint(0, 5)
-        if num == 4:
-            self.items = random.choice(items.monster_drop(self.lvl))
-
     def monst_damage(self, var):
         if self.attk >= self.p_attk:
             monst_dealt = int((self.attk/2) - (battle.temp_stats['dfns']/3) + (
@@ -111,6 +107,10 @@ class Monster:
 
         misc_vars['hp_m'] = self.hp
         misc_vars['mp_m'] = self.mp
+
+        num = random.randint(0, 4)  # 20% chance
+        if not num:
+            self.items = random.choice(items.monster_drop(self.lvl, self.monster_name))
 
     def monst_attk(self, var, dodge):
         sounds.sword_slash.play()
@@ -208,14 +208,14 @@ class Monster:
     def give_status(self):
         # Attempt to give the player a status ailment
         status = random.choice([x for x in ['asleep', 'poisoned', 'silenced']
-                                if x != battle.temp_stats['status_effect']])
+                                if x != battle.player.status_ail])
 
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
 
         if random.randint(0, 2):
             print('You are now {0}!'.format(status))
-            battle.temp_stats['status_effect'] = status
+            battle.player.status_ail = status
 
         else:
             print('The {0} failed to make you {1}.'.format(self.name, status))
@@ -573,8 +573,8 @@ def spawn_monster():
     global monster
     setup_vars()
     monster = Monster('', random.randint(6, 8), random.randint(3, 4), 2, 1, 2, 1, 2, 1, 2, 1, 1)
-    monster.monst_level()
     monster.monst_name()
+    monster.monst_level()
 
 
 def setup_vars():

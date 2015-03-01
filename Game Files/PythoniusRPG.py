@@ -60,6 +60,7 @@ import copy
 import configparser
 import ctypes
 import re
+import logging
 
 import pygame
 
@@ -72,7 +73,6 @@ import pets
 import items
 import sounds
 import towns
-import logging
 
 # Log everything and send it to stderr.
 logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
@@ -146,15 +146,16 @@ class PlayerCharacter:  # The Player
         self.class_ = class_  # Player Class
         self.element = element
         self.current_pet = ''  # Current Pet
+        self.status_ail = 'none'  # Current Status Ailment
 
     def player_damage(self, var):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
             dam_dealt = int((battle.temp_stats['attk']/2) -
-                             (battle.monster.dfns/2) + (self.lvl/3) + var + 1)
+                            (battle.monster.dfns/2) + (self.lvl/3) + var + 1)
 
         else:
             dam_dealt = int((battle.temp_stats['p_attk']/2) -
-                             (battle.monster.p_dfns/2) + (self.lvl/3) + var + 1)
+                            (battle.monster.p_dfns/2) + (self.lvl/3) + var + 1)
 
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
@@ -369,7 +370,6 @@ Input letter: """)
                             self.p_dfns += 2
                             self.evad += random.randint(0, 2)
                             misc_vars['per'] += 1
-
 
                         elif skill.startswith('l'):
                             self.hp += random.randint(0, 1)

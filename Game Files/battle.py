@@ -73,7 +73,6 @@ def update_stats():
                   'p_attk': _c(player.p_attk), 'p_dfns': _c(player.p_dfns),
                   'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
                   'spd': _c(player.spd), 'evad': _c(player.evad),
-                  'status_effect': 'none',
                   'm_ispoisoned': False}
 
 
@@ -142,13 +141,13 @@ def battle_system(is_boss=False, ambush=False):
 
         bat_stats()
 
-        if temp_stats['status_effect'] == 'asleep':
+        if player.status_ail == 'asleep':
             if not random.randint(0, 2):
                 sounds.buff_spell.play()
                 print('\n-Player Turn-')
                 print('You start to regain conciousness!')
 
-                temp_stats['status_effect'] = 'none'
+                player.status_ail = 'none'
                 bat_stats()
                 move = player_choice()
 
@@ -204,7 +203,7 @@ def battle_system(is_boss=False, ambush=False):
 
         # The player goes first if they have a higher speed
         elif (temp_stats['spd'] > monster.spd or move == '2' or move == '3') \
-                and temp_stats['status_effect'] != 'asleep':
+                and player.status_ail != 'asleep':
 
             if move and player_turn(var, dodge, move) and monster.hp > 0:
                 input('\nPress Enter/Return ')
@@ -221,7 +220,7 @@ def battle_system(is_boss=False, ambush=False):
             monster.enemy_turn(m_var, m_dodge)
 
             if player.hp > 0:
-                if temp_stats['status_effect'] != 'asleep':
+                if player.status_ail != 'asleep':
                     input('\nPress Enter/Return ')
                     player_turn(var, dodge, move)
 
@@ -290,7 +289,7 @@ def player_turn(var, dodge, move):
             player.current_pet.use_ability()
 
         # Check to see if the player is poisoned
-        if temp_stats['status_effect'] == 'poisoned' and monster.hp > 0:
+        if player.status_ail == 'poisoned' and monster.hp > 0:
             if random.randint(0, 3):
                 time.sleep(0.5)
                 sounds.poison_damage.play()
@@ -306,17 +305,17 @@ def player_turn(var, dodge, move):
                 time.sleep(0.5)
                 sounds.buff_spell.play()
                 print('You start to feel better!')
-                temp_stats['status_effect'] = 'none'
+                player.status_ail = 'none'
 
         # Check to see if the player is silenced
-        elif temp_stats['status_effect'] == 'silenced':
+        elif player.status_ail == 'silenced':
             if not random.randint(0, 3):
 
                 time.sleep(0.5)
                 sounds.buff_spell.play()
 
                 print('You find yourself able to speak again!')
-                temp_stats['status_effect'] = 'none'
+                player.status_ailstatus_effect = 'none'
 
         return True
 
@@ -638,7 +637,7 @@ def bat_stats():
           player.name, player.hp,
           misc_vars['hp_p'], player.mp,
           misc_vars['mp_p'], player.lvl,
-          temp_stats['status_effect'].title()))
+          player.status_ail.title()))
 
     # Pet Stats
     pet = player.current_pet

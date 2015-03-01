@@ -63,7 +63,7 @@ class Town:
 
         while True:
             print("""What do you wish to do?
-      [1] --> Town Desc
+      [1] --> Town Description
       [2] --> Buildings
       [3] --> People
       [4] --> Player Info
@@ -79,15 +79,23 @@ class Town:
 
                 elif choice == '2':
                     print('-'*25)
-                    if self.gen_store or self.inn:
+                    if self.gen_store or self.inn or self.pet_shop:
                         self.inside_town()
+
                     else:
                         print("There don't appear to be any unlocked buildings to enter.")
+
                     print('-'*25)
 
                 elif choice == '3':
                     print('-'*25)
-                    self.speak_to_npcs()
+
+                    if self.people:
+                        self.speak_to_npcs()
+
+                    else:
+                        print("There doesn't appear to be anyone to talk to.")
+
                     print('-'*25)
 
                 elif choice == '4':
@@ -227,8 +235,12 @@ class Town:
 
                     main.player.hp = copy.copy(main.misc_vars['hp_p'])
                     main.player.mp = copy.copy(main.misc_vars['mp_p'])
-
                     print('Your HP and MP have been fully restored. ')
+
+                    if main.player.status_ail != 'none':
+                        main.player.status_ail = 'none'
+                        print('You have been relieved of your status ailment. ')
+
                     print('-'*25)
 
                     main.save_game()

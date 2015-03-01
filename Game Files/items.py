@@ -331,6 +331,11 @@ class Shovel(Item):
             print('-'*25)
 
 
+class Misc(Item):
+    def __init__(self, name, desc, buy, sell, cat='misc'):
+        Item.__init__(self, name, desc, buy, sell, cat)
+
+
 def item_setup_vars():
     global inventory
     global equipped
@@ -713,13 +718,80 @@ shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and 
                 175, 56)
 
 
-def monster_drop(level):
-    if level in range(1, 13):
-        drops = [s_elixir, s_potion, m_potion, wdn_sht, cpr_swd, wiz_hat, bnz_hlm]
-    elif level in range(13, 26):
-        drops = [s_elixir, m_potion, m_elixir, arc_spb, wiz_rob, myst_gar, stl_cst]
-    else:
-        drops = [l_potion, l_elixir, x_potion, x_elixir, stl_hlm, elem_rob, bnz_spr]
+# Monster Drops
+shell_fragment = Misc('Shell Fragment', 'A broken fragment of a remarkable sea-shell.', 0, 5)
+crab_claw = Misc('Crab Claw', 'A reddish claw from a giant crab.', 0, 5)
+fairy_dust = Misc('Fairy Dust', 'Dust from a fairy. It has strange, magical properties.', 0, 5)
+serpent_scale = Misc('Serpent Scale', 'A rough scale from an unknown reptile.', 0, 5)
+slimey_residue = Misc('Slimey Residue', 'The slimey remains of a slimey monster.', 0, 5)
+ink_sack = Misc('Ink Sack', 'A small pouch full of an inky substance.', 0, 5)
+skeleton_bone = Misc('Skeleton Bone', 'The leg bone of a now-deceased creature.', 0, 5)
+monster_skull = Misc('Monster Skull', 'A broken skull from a strange creature.', 0, 5)
+plant_stalk = Misc('Plant Stalk', 'The decaying stalk of a large plant.', 0, 5)
+shirt_cloth = Misc('Cloth', 'A thick, torn cloth made out of an unknown fabric.', 0, 5)
+beetle_shell = Misc('Beetle Shell', 'A bluish shell from a large beetle.', 0, 5)
+wing_piece = Misc('Wing Piece', 'A piece of wing from a flying creature.', 0, 5)
+bat_fang = Misc('Fang', 'The sharp fang of a frightening creature.', 0, 5)
+animal_fur = Misc('Animal Fur', 'A furry clump of hair from a strange animal.', 0, 5)
+golem_rock = Misc('Rock', 'A small rock that seems to glow slightly.', 0, 5)
+burnt_ash = Misc('Ash', 'The ashy remains of a once-living creature.', 0, 5)
+antennae = Misc('Antennae', 'A pair of antennae from a massive insect.', 0, 5)
+ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.', 0, 5)
+chain_link = Misc('Chain links', 'A couple jointed link of chain made from steel.', 0, 5)
+
+
+def monster_drop(level, name):
+    monster_drop_list = {'Shell Mimic': [shell_fragment],
+                         'Giant Crab': [crab_claw],
+                         'Naiad': [fairy_dust],
+                         'Sea Serpent': [serpent_scale],
+                         'Squid': [ink_sack],
+                         'Bog Slime': [slimey_residue],
+                         'Moss Ogre': [skeleton_bone],
+                         'Sludge Rat': [monster_skull],
+                         'Walking Venus': [plant_stalk],
+                         'Vine Lizards': [serpent_scale],
+                         'Goblin': [shirt_cloth],
+                         'Beetle': [beetle_shell],
+                         'Sprite': [fairy_dust],
+                         'Imp': [wing_piece],
+                         'Bat': [bat_fang],
+                         'Mummy': [burnt_ash],
+                         'Sand Golem': [golem_rock],
+                         'Minubis': [animal_fur],
+                         'Fire Ant': [antennae],
+                         'Naga': [serpent_scale],
+                         'Ice Soldier': [chain_link],
+                         'Minor Yeti': [animal_fur],
+                         'Corrupt Thaumaturge': [shirt_cloth],
+                         'Arctic Wolf': [animal_fur],
+                         'Frost Bat': [bat_fang],
+                         'Troll': [monster_skull],
+                         'Rock Giant': [golem_rock],
+                         'Oread': [fairy_dust],
+                         'Tengu': [wing_piece],
+                         'Giant Worm': [bat_fang],
+                         'Zombie': [monster_skull],
+                         'Undead Warrior': [chain_link],
+                         'Necromancer': [shirt_cloth],
+                         'Skeleton': [skeleton_bone],
+                         'Ghoul': [ectoplasm]}
+
+    if level in range(1, 16):
+        drops = [s_elixir, s_potion, cpr_swd, wiz_hat, lth_bdy]
+
+    elif level in range(16, 27):
+        drops = [m_elixir, m_potion, lng_bow, myst_gar, stl_leg]
+
+    elif level in range(27, 38):
+        drops = [l_elixir, l_potion, rnc_stf, drg_leg, ori_hlm]
+
+    elif level > 37:
+        drops = [x_elixir, x_potion, en_myth_sb, ori_leg, elem_gar]
+
+    for x in range(4):
+        drops.extend(monster_drop_list[name])
+
     return drops
 
 
