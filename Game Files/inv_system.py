@@ -542,7 +542,11 @@ def deserialize_inv(path):
 
         for item in j_inventory[category]:
             if category == 'consum':
-                x = i.Consumable('', '', '', '')
+                if 'Potion of ' in item['name']:
+                    x = i.StatusPotion('', '', '', '')
+
+                else:
+                    x = i.Consumable('', '', '', '')
 
             elif category == 'weapon':
                 x = i.Weapon('', '', '', '', '', '', '')
@@ -566,6 +570,17 @@ def deserialize_inv(path):
                     item = i.magic_compass
                     norm_inv[category].append(item)
                     continue
+
+                elif item['name'] == 'Dowsing Rod':
+                    item = i.dowsing_rod
+                    norm_inv[category].append(item)
+                    continue
+
+                elif item['name'] == 'Shovel':
+                    item = i.shovel
+                    norm_inv[category].append(item)
+                    continue
+
                 else:
                     x = i.Item('', '', '', '')
             else:

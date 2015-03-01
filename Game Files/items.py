@@ -46,12 +46,6 @@ class Item:
     def __str__(self):
         return self.name
 
-    def use_item(self):
-        if 'Message' in self.name:
-            print("It would probably be best if you didn't read this.")
-        else:
-            print("You can't think of anything useful to do with this.")
-
 
 class Consumable(Item):
     # Items that restore you HP, MP, or both. All items of this class stacks
@@ -61,9 +55,6 @@ class Consumable(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.heal = heal
         self.mana = mana
-
-    def __str__(self):
-        return self.name
 
     def use_item(self):
         global inventory
@@ -113,9 +104,6 @@ class Weapon(Item):
             elif self.type_ == 'magic':
                 main.player.m_attk += self.power
                 main.player.attk += int(math.ceil(self.power/3))
-
-    def __str__(self):
-        return self.name
 
     def use_item(self):
         global equipped
@@ -331,9 +319,29 @@ class Shovel(Item):
             print('-'*25)
 
 
+class StatusPotion(Item):
+    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
+        self.status = status
+
+    def use_item(self):
+        if main.player.status == self.status:
+            print('You drink the {0} and feel much better.'.format(self.status))
+            main.player.status = 'none'
+
+        else:
+            print("Drinking this potion probably wouldn't do anything.")
+
+
 class Misc(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc'):
-        Item.__init__(self, name, desc, buy, sell, cat)
+    def __init__(self, name, desc, buy, sell, cat='misc', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
+
+    def use_item(self):
+        if 'Message' in self.name:
+            print("It would probably be best if you didn't read this.")
+        else:
+            print("You can't think of anything useful to do with this.")
 
 
 def item_setup_vars():
@@ -383,6 +391,17 @@ m_rejuv = Consumable('Refined Rejuvenation Potion',
 l_rejuv = Consumable('Mighty Rejuvenation Potion',
                      'A super powerful mixture that restores 100 HP and 100 MP when consumed.',
                      225, 80, heal=100, mana=100)
+
+# Potions - Status
+sleep_potion = StatusPotion('Potion of Waking Up',
+                            "Cures sleep. Don't ask how you're supposed to drink it while asleep.",
+                            25, 10, 'asleep')
+silence_potion = StatusPotion('Potion of Speaking',
+                              "Cures silence. One wonders how your supposed to talk to the seller.",
+                              25, 10, 'silenced')
+poison_potion = StatusPotion('Potion of Curing Disease',
+                             'Cures poison. Testing this potion proved to be difficult.',
+                             25, 10, 'poisoned')
 
 # Weapons -- Warrior
 wdn_sht = Weapon('Wooden Shortsword',
@@ -672,10 +691,10 @@ spect_wand = Weapon('Spectre Wand',
                     0, 225, 15, 'magic', 'mage', element='death')
 
 # Quest items
-message_joseph = Item('Message from Joseph',
+message_joseph = Misc('Message from Joseph',
                       'A neatly written message addressed from Joseph to Philliard.',
                       0, 0, cat='q_items', imp=True)
-message_philliard = Item('Message from Philliard',
+message_philliard = Misc('Message from Philliard',
                          'A neatly written message addressed from Philliard to Joseph.',
                          0, 0, cat='q_items', imp=True)
 
