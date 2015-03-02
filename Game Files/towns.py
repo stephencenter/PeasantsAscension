@@ -272,6 +272,7 @@ class Town:
             b_s = b_s.lower()
 
             if b_s.startswith('b'):
+                print('-'*25)
                 print("""Which category of items would you like to check out?
       [1] Potions
       [2] Weapons
@@ -310,7 +311,7 @@ class Town:
                 while fizz:
 
                     print('You have {0} GP'.format(main.misc_vars['gp']))
-                    print('''"Well, here's what I have in my stock: "''')
+                    print('"Well, here\'s what I have in my stock for that category: "')
 
                     for num, item in enumerate(stock[item_category]):
                         print(''.join(
