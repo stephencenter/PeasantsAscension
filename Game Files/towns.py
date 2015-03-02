@@ -254,34 +254,68 @@ class Town:
                 return
 
     def town_gen(self):  # Let the player purchase items from the General Store
-        stock = []  # A list containing objects the player can purchase
-        for item in inv_system.gs_stock:
-            stock.append(item[self.gs_level - 1])
+        stock = {}  # A dictionary containing objects the player can purchase
+        for category in inv_system.gs_stock:
+            stock[category] = []
+            for item_group in inv_system.gs_stock[category]:
+                stock[category].append(item_group[self.gs_level - 1])
 
-        if self.gs_level == 2:
-            stock.append(items.shovel)
-        elif self.gs_level == 4:
-            stock.append(items.divining_rod)
+        stock['Others'] = [items.shovel, items.divining_rod]
 
         print('-'*25)
         print('Merchant: "Welcome, Traveler!"')
 
         while True:
+            eggs = False
             b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ')
 
             b_s = b_s.lower()
 
             if b_s.startswith('b'):
-                print('-'*25)
-                fizz = True
-                while fizz:
-                    print('''"Well, here's what I have in my stock: "''')
+                print("""Which category of items would you like to check out?
+      [1] Potions
+      [2] Weapons
+      [3] Armor
+      [4] Other""")
+                while True:
+                    spam = input('Input [#] (or type "back"): ')
+                    if spam == '1':
+                        item_category = 'Potions'
 
-                    for num, item in enumerate(stock):
-                        print(''.join(
-                            ['   [', str(num + 1), '] ', str(item), ' --> ', str(item.buy), ' GP']))
+                    elif spam == '2':
+                        item_category = 'Weapons'
+
+                    elif spam == '3':
+                        item_category = 'Armor'
+
+                    elif spam == '4':
+                        item_category = 'Other'
+
+                    elif spam in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        eggs = True
+                        break
+
+                    else:
+                        continue
+
+                    print('-'*25)
+
+                    break
+
+                if eggs:
+                    continue
+
+                fizz = True
+
+                while fizz:
 
                     print('You have {0} GP'.format(main.misc_vars['gp']))
+                    print('''"Well, here's what I have in my stock: "''')
+
+                    for num, item in enumerate(stock[item_category]):
+                        print(''.join(
+                            ['      [', str(num + 1), '] ', str(item), ' --> ', str(item.buy),
+                             ' GP']))
 
                     while True:
                         purchase = input('Input [#] (or type "back"): ')
@@ -302,7 +336,7 @@ class Town:
                                 continue
 
                         try:
-                            i = stock[purchase]
+                            i = stock[item_category][purchase]
                         except IndexError:
                             continue
 
@@ -318,6 +352,7 @@ class Town:
 
                             if confirm.startswith('y'):
                                 if main.misc_vars['gp'] >= i.buy:
+
                                     inv_system.inventory[i.cat].append(i)
                                     main.misc_vars['gp'] -= i.buy
                                     print('-'*25)

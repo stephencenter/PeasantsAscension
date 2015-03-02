@@ -21,6 +21,7 @@ import json
 import time
 
 import inv_system
+import sounds
 
 
 if __name__ == "__main__":
@@ -64,6 +65,8 @@ class Consumable(Item):
         print('-'*25)
 
         main.player.hp += self.heal
+
+        sounds.magic_healing.play()
 
         if main.player.hp > main.misc_vars['hp_p']:
             main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
@@ -325,12 +328,25 @@ class StatusPotion(Item):
         self.status = status
 
     def use_item(self):
-        if main.player.status == self.status:
-            print('You drink the {0} and feel much better.'.format(self.status))
-            main.player.status = 'none'
+        global inventory
+
+        item_setup_vars()
+
+        print('-'*25)
+
+        if main.player.status_ail == self.status:
+            sounds.buff_spell.play()
+            print('You drink the {0} and feel much better.'.format(self.name))
+            main.player.status_ail = 'none'
+
+            for x, y in enumerate(inventory[self.cat]):
+                if y.name == self.name:
+                    inventory[self.cat].remove(y)
+                    break
 
         else:
             print("Drinking this potion probably wouldn't do anything.")
+            print('-'*25)
 
 
 class Misc(Item):

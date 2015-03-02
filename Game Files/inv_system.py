@@ -38,7 +38,7 @@ equipped = {'weapon': '', 'head': _c(i.straw_hat),
 # "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
 # what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
 
-gs_stock = [[i.s_potion, i.s_potion, i.m_potion,
+gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
              i.l_potion, i.l_potion, i.x_potion],  # Health Potions
 
             [i.s_elixir, i.s_elixir, i.m_elixir,
@@ -47,7 +47,17 @@ gs_stock = [[i.s_potion, i.s_potion, i.m_potion,
             [i.s_rejuv, i.s_rejuv, i.m_rejuv,
              i.m_rejuv, i.l_rejuv, i.l_rejuv],  # HP + MP Potions
 
-            [i.cpr_swd, i.en_cpr_swd, i.bnz_spr,
+            [i.poison_potion, i.poison_potion, i.poison_potion,
+             i.poison_potion, i.poison_potion],  # Poison Potion
+
+            [i.sleep_potion, i.sleep_potion, i.sleep_potion,
+             i.sleep_potion, i.sleep_potion],  # Sleep Potion
+
+            [i.silence_potion, i.silence_potion, i.silence_potion,
+             i.silence_potion, i.silence_potion]  # Silence Potion
+            ],
+
+            'Weapons': [[i.cpr_swd, i.en_cpr_swd, i.bnz_spr,
              i.en_bnz_spr, i.irn_axe, i.en_irn_axe],  # Warrior Weapons
 
             [i.oak_stf, i.en_oak_stf, i.arc_spb,
@@ -57,9 +67,10 @@ gs_stock = [[i.s_potion, i.s_potion, i.m_potion,
              i.en_stiletto, i.myth_sb, i.en_myth_sb],  # Assassin Weapons
 
             [i.sht_bow, i.en_sht_bow, i.lng_bow,
-             i.en_lng_bow, i.ash_cbow, i.en_ash_cbow],  # Ranger Weapons
+             i.en_lng_bow, i.ash_cbow, i.en_ash_cbow]  # Ranger Weapons
+            ],
 
-            [i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
+            'Armor': [[i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
              i.en_stl_hlm, i.ori_hlm],  # Warrior Armor -- Head
 
             [i.bnz_cst, i.en_bnz_cst, i.stl_cst,
@@ -84,9 +95,7 @@ gs_stock = [[i.s_potion, i.s_potion, i.m_potion,
              i.en_std_bdy, i.drg_bdy],  # Assassin + Ranged Armor -- Body
 
             [i.lth_leg, i.en_lth_leg, i.std_leg,
-             i.en_std_leg, i.drg_leg]]  # Assassin + Ranged Armor -- Legs
-
-gs_stock = list(gs_stock)
+             i.en_std_leg, i.drg_leg]]}  # Assassin + Ranged Armor -- Legs
 i.item_setup_vars()
 
 
@@ -543,7 +552,7 @@ def deserialize_inv(path):
         for item in j_inventory[category]:
             if category == 'consum':
                 if 'Potion of ' in item['name']:
-                    x = i.StatusPotion('', '', '', '')
+                    x = i.StatusPotion('', '', '', '', '')
 
                 else:
                     x = i.Consumable('', '', '', '')

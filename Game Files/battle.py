@@ -145,7 +145,7 @@ def battle_system(is_boss=False, ambush=False):
             if not random.randint(0, 2):
                 sounds.buff_spell.play()
                 print('\n-Player Turn-')
-                print('You start to regain conciousness!')
+                input('You start to regain conciousness! | Press enter/return ')
 
                 player.status_ail = 'none'
                 bat_stats()
@@ -304,7 +304,7 @@ def player_turn(var, dodge, move):
             else:
                 time.sleep(0.5)
                 sounds.buff_spell.play()
-                print('You start to feel better!')
+                input('You start to feel better! | Press enter/return ')
                 player.status_ail = 'none'
 
         # Check to see if the player is silenced
@@ -314,7 +314,7 @@ def player_turn(var, dodge, move):
                 time.sleep(0.5)
                 sounds.buff_spell.play()
 
-                print('You find yourself able to speak again!')
+                input('You find yourself able to speak again! | Press enter/return ')
                 player.status_ailstatus_effect = 'none'
 
         return True
