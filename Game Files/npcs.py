@@ -505,7 +505,8 @@ jeffery = NPC('Jeffery', [jeffery_phrase_1])
 
 # -- Name: Ethos -- Town: Charsulville
 ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
-                               'in his inventory. If you get lost, check there.'], active=True)
+                               'and powerful monsters in their inventory. If you get lost,',
+                               'check there.'], active=True)
 
 ethos = NPC('Ethos', [ethos_phrase_1])
 

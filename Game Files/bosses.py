@@ -21,6 +21,7 @@ import npcs
 import monsters
 import battle
 import items
+import inv_system
 
 
 if __name__ == "__main__":
@@ -58,14 +59,46 @@ class Boss(monsters.Monster):
         self.hp = copy.copy(misc_vars['hp_m'])
         self.mp = copy.copy(misc_vars['mp_m'])
 
+    def new_location(self, add=True):  # Translate the location of the boss
+        if self.pos_y >= 0:  # into a string, then add to inventory.
+            foo = "\u00b0N"
+        else:
+            foo = "\u00b0S"
+
+        if self.pos_x >= 0:
+            bar = "\u00b0E"
+        else:
+            bar = "\u00b0W"
+
+        spam = ''.join([self.name, "'s lair: ", str(self.pos_y), foo, ', ', str(self.pos_x), bar])
+        if add:
+            if spam not in inv_system.inventory['coord']:
+                inv_system.inventory['coord'].append(spam)
+                print('-'*25)
+                print("You quickly mark down the location of {0}'s lair.".format(self.name))
+
+        else:
+            return spam
+
 
 def check_bosses(x, y):
     for boss in boss_list:
         if [boss.pos_x, boss.pos_y] == [x, y] and boss.name not in defeated_bosses and boss.active:
             print('-'*25)
-            print('You feel the presence of an unknown entity...')
+
+            if boss.new_location(add=False) not in inv_system.inventory['coord']:
+                print('You feel the presence of an unknown entity...')
+
+            else:
+                print('You come across the lair of the {0}.'.format(boss.name))
+
             while True:
-                y_n = input('Do you wish to investigate? | Yes or No: ')
+
+                if boss.new_location(add=False) not in inv_system.inventory['coord']:
+                    y_n = input('Do you wish to investigate? | Yes or No: ')
+
+                else:
+                    y_n = input('Do you wish to confront the {0}? | Yes or No: '.format(boss.name))
 
                 y_n = y_n.lower()
 
@@ -74,6 +107,7 @@ def check_bosses(x, y):
                     monsters.setup_vars()
                     battle.setup_vars()
                     boss.max_stats()
+                    boss.new_location()
                     print('-'*25)
                     battle.battle_system(is_boss=True)
                     return True
