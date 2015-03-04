@@ -209,24 +209,24 @@ class Armor(Item):
 
                 if old.type_ == 'melee':
                     main.player.dfns -= old.defense
-                    main.player.m_dfns -= int(math.ceil(self.defense/3))
+                    main.player.m_dfns -= int(math.ceil(self.defense/2))
                     main.player.p_dfns -= int(math.ceil(self.defense/1.5))
 
                 elif old.type_ == 'magic':
                     main.player.m_dfns -= old.defense
                     main.player.p_dfns -= int(math.ceil(self.defense/1.5))
-                    main.player.dfns -= int(math.ceil(self.defense/3))
+                    main.player.dfns -= int(math.ceil(self.defense/2))
 
             equipped[self.part] = fizz
 
             if self.type_ == 'melee':
                 main.player.dfns += self.defense
-                main.player.m_dfns += int(math.ceil(self.defense/3))
+                main.player.m_dfns += int(math.ceil(self.defense/2))
                 main.player.p_dfns += int(math.ceil(self.defense/1.5))
 
             elif self.type_ == 'magic':
                 main.player.m_dfns += self.defense
-                main.player.dfns += int(math.ceil(self.defense/3))
+                main.player.dfns += int(math.ceil(self.defense/2))
                 main.player.p_dfns += int(math.ceil(self.defense/1.5))
 
             for x, y in enumerate(inventory[self.cat]):
