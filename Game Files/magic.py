@@ -54,6 +54,9 @@ class Spell:
         if main.player.mp < 0:
             main.player.mp = 0
 
+    def use_magic(self):
+        pass
+
 
 class Healing(Spell):
     # Healing spells are spells that restore your HP during battle
@@ -304,12 +307,41 @@ a_evade = Buff('Adept Evade',
                "Temporarily raise your evasion by a large amount.",
                7, 11, 5, "Evasion")
 
+# -- Other Spells -- #
+r_affliction = Spell('Relieve Affliction',
+                     'Cure yourself of all status ailments, such as poison.',
+                     4, 5)
+
+
+def relieve_affliction():
+    if main.player.mp >= self.mana and main.player.status_ail != 'none':
+        self.use_mana()
+
+        print('\n-Player Turn-')
+        print(ascii_art.player_art[main.player.class_.title()] %
+              "{0} is making a move!\n".format(main.player.name))
+
+        print('Using the power of {0}, you are cured of your afflictions!'.format(self.name))
+
+        main.player.status_ail = 'none'
+        sounds.buff_spell.play()
+
+        return True
+
+    else:
+        print(out_of_mana)
+        return False
+
+
+r_affliction.use_magic = relieve_affliction
+
 spells = [
     w_flame, lef_blad, in_spark, bub_splsh, mud_toss, min_heal,
     m_quick, m_evade, m_defend, m_shield, m_stren, m_power,
     f_blaze, gra_gren, pwr_jolt, wtr_blast, rock_slam, adv_heal,
     a_stren, a_power, a_defend, a_shield, a_quick, a_evade,
-    g_infer, vin_strm, sp_storm, tsunami, earthquake, div_heal
+    g_infer, vin_strm, sp_storm, tsunami, earthquake, div_heal,
+    r_affliction
 ]
 
 
@@ -529,10 +561,11 @@ def new_spells():
     for spell in spells:
         if isinstance(spell, Damaging):
             cat = 'Damaging'
-        elif isinstance(spell, Healing):
+        elif isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
             cat = 'Healing'
         elif isinstance(spell, Buff):
             cat = 'Buffs'
+
         if main.player.lvl >= spell.req_lvl:
             for x in spellbook[cat]:
                 if x.name == spell.name:

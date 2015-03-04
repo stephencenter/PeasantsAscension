@@ -222,10 +222,12 @@ class Armor(Item):
             if self.type_ == 'melee':
                 main.player.dfns += self.defense
                 main.player.m_dfns += int(math.ceil(self.defense/3))
+                main.player.p_dfns += int(math.ceil(self.defense/1.5))
 
             elif self.type_ == 'magic':
                 main.player.m_dfns += self.defense
                 main.player.dfns += int(math.ceil(self.defense/3))
+                main.player.p_dfns += int(math.ceil(self.defense/1.5))
 
             for x, y in enumerate(inventory[self.cat]):
                 if self.name == y.name:
@@ -412,7 +414,7 @@ l_rejuv = Consumable('Mighty Rejuvenation Potion',
 sleep_potion = StatusPotion('Potion of Waking Up',
                             "Cures sleep. Don't ask how you're supposed to drink it while asleep.",
                             25, 10, 'asleep')
-silence_potion = StatusPotion('Potion of Speaking',
+silence_potion = StatusPotion('Potion of Allowing Speech',
                               "Cures silence. One wonders how your supposed to talk to the seller.",
                               25, 10, 'silenced')
 poison_potion = StatusPotion('Potion of Curing Disease',
