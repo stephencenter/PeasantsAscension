@@ -153,7 +153,8 @@ def unimportant_boss_ud():
 
 
 # Boss: Master Slime -- Position: 0'N, 1'E
-master_slime = Boss('Master Slime', 45, 4, 8, 3, 4, 3, 5, 0, 3, 3, 5, 1, 0, [], 35, 35, active=False)
+master_slime = Boss('Master Slime', 45, 4, 8, 3, 4, 3, 5, 0, 3, 3, 5, 1, 0, [], 35, 35,
+                    active=False)
 
 
 def mastslim_ud():

@@ -644,12 +644,14 @@ archer-towers arranged in a hexagonal shape around the building.""",
               [], -44, 20)
 
 town11 = Town('Neo-Ekanmar', """Neo-Ekanmar: After Sugulat and his army overran
-Flygonia  and declared the Empire of D\u00fC Haven, refugees from the
+Flysconia  and declared the Empire of D\u00fC Haven, refugees from the
 area escaped from the nation. Seeing as how most of the surrounding
-states were allied against Flygonia, the refugees had no choice but
+states were allied against Flysconia, the refugees had no choice but
 to run through Hillsbrad to Pythonia. They then established Neo-Ekanmar
 as their safe-haven. Pythonia has established a non-aggression pact with
-the refugees and gladly accept and protect them from danger.""",
+the refugees and gladly accept and protect them from danger. Seeing as
+how the citizens are from Flysconia, approximately 90% of the population
+are reptilian creatures.""",
               [], 3, 39, gs_level=3)
 
 town12 = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
