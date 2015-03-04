@@ -49,6 +49,9 @@ class Spell:
         self.mana = mana
         self.req_lvl = req_lvl
 
+    def __str__(self):
+        return self.name
+
     def use_mana(self):
         main.player.mp -= self.mana
         if main.player.mp < 0:
@@ -67,7 +70,7 @@ class Healing(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic_healing(self, is_battle):
+    def use_magic(self, is_battle):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
@@ -313,20 +316,29 @@ r_affliction = Spell('Relieve Affliction',
                      4, 5)
 
 
-def relieve_affliction():
-    if main.player.mp >= self.mana and main.player.status_ail != 'none':
-        self.use_mana()
+def relieve_affliction(is_battle):
+    if main.player.mp >= r_affliction.mana:
+        if main.player.status_ail != 'none':
 
-        print('\n-Player Turn-')
-        print(ascii_art.player_art[main.player.class_.title()] %
-              "{0} is making a move!\n".format(main.player.name))
+            Spell.use_mana(r_affliction)
 
-        print('Using the power of {0}, you are cured of your afflictions!'.format(self.name))
+            if is_battle:
+                print('\n-Player Turn-')
+                print(ascii_art.player_art[main.player.class_.title()] %
+                      "{0} is making a move!\n".format(main.player.name))
 
-        main.player.status_ail = 'none'
-        sounds.buff_spell.play()
+            print('Using the power of {0}, you are cured of your afflictions!'.format(
+                r_affliction.name))
 
-        return True
+            main.player.status_ail = 'none'
+            sounds.buff_spell.play()
+
+            return True
+
+        else:
+            print("You don't have any status ailments.")
+
+            return False
 
     else:
         print(out_of_mana)
@@ -455,7 +467,7 @@ Input [#] (or type "exit"): """)
 
                     else:
                         if isinstance(spell, Healing):
-                            if spell.use_magic_healing(is_battle):
+                            if spell.use_magic(is_battle):
                                 return True
 
                         elif spell.use_magic():
@@ -499,7 +511,8 @@ def pick_spell(cat, var, dodge, is_battle):
                 spell.mana) + ' MP' for num, spell in enumerate(
                     spellbook[cat])]))
 
-        while True:
+        fizz = True
+        while fizz:
             spell = input('Input [#] (or type "back"): ')
 
             try:
@@ -524,8 +537,6 @@ def pick_spell(cat, var, dodge, is_battle):
 
             while True:
                 y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
-                if y_n == '':
-                    continue
 
                 y_n = y_n.lower()
 
@@ -536,12 +547,13 @@ def pick_spell(cat, var, dodge, is_battle):
 
                         if spell.use_magic(var, dodge):
                             return True
+
                         else:
                             return False
 
                     else:
-                        if isinstance(spell, Healing):
-                            if spell.use_magic_healing(is_battle):
+                        if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
+                            if spell.use_magic(is_battle):
                                 return True
 
                         elif spell.use_magic():
@@ -551,6 +563,8 @@ def pick_spell(cat, var, dodge, is_battle):
                             return False
 
                 elif y_n.startswith('n'):
+                    print('-'*25)
+                    fizz = False
                     break
 
 
@@ -582,7 +596,8 @@ def serialize_sb(path):
         j_spellbook[cat] = []
 
         for spell in spellbook[cat]:
-            j_spellbook[cat].append(spell.__dict__)
+            spell_dict = {key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'}
+            j_spellbook[cat].append(spell_dict)
 
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_spellbook, f, indent=4, separators=(', ', ': '))
@@ -591,17 +606,32 @@ def serialize_sb(path):
 def deserialize_sb(path):
     global spellbook
     norm_sb = {}
+
     with open(path, encoding='utf-8') as f:
         j_spellbook = json.load(f)
+
     for category in j_spellbook:
         norm_sb[category] = []
+
         for spell in j_spellbook[category]:
+
             if category == 'Damaging':
                 x = Damaging('', '', '', '', '', '')
+
             elif category == 'Healing':
+                if spell['name'] == 'Relieve Affliction':
+                    x = Spell('', '', '', '')
+                    x.__dict__ = spell
+                    x.use_magic = relieve_affliction
+                    norm_sb[category].append(x)
+                    continue
+
                 x = Healing('', '', '', '', '')
+
             elif category == 'Buffs':
                 x = Buff('', '', '', '', '', '')
+
             x.__dict__ = spell
             norm_sb[category].append(x)
+
     spellbook = norm_sb
