@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.6.2 Alpha
-game_version = 'v0.6.2'
+# PythoniusRPG v0.6.3 Alpha
+game_version = 'v0.6.3'
 # Copyright 2013, 2014 Stephen Center
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.

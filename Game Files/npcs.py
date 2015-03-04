@@ -86,8 +86,10 @@ class NPC:
         for y in dialogue[:]:
 
             # Dialogue is being modified, so we're iterating over a copy of it.
+            padding = len(max(y, key=len))
+
             for z in y:
-                input(self.name + ': "' + z + '" | [ENTER] ')
+                input(''.join([self.name.title(), ': ', z, ' '*(padding - len(z)), ' | [ENTER] ']))
 
             dialogue.remove(y)
             print('-'*25) if dialogue else ''
@@ -665,6 +667,36 @@ alden_phrase_3 = Conversation(["Thanks again, hero. You've saved those towns",
 
 alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3])
 
+
+# -- Name: F. Jones -- Town: Neo-Ekanmar
+f_jones_phrase_1 = Conversation(['Hello, adventurer! My name if Fly. I used to be the Emperor of',
+                                 'The Flysconian Empire, until that wrechted Pythonius messed',
+                                 'things up! His people revolted, and then his friend Sugulat',
+                                 'came in and overthrew us. He drove my people out of our lands,',
+                                 'and now this town is all we have left. Please, leave me be.'],
+                                active=True)
+
+f_jones = NPC('F. Jones', [f_jones_phrase_1])
+
+# -- Name: Stravi -- Town: Neo-Ekanmar
+stravi_phrase_1 = Conversation(['Please, forgive my husband, Fly. He is very emotionial about',
+                                "the whole revolution thing, I'd recommend just letting him be.",
+                                "Oh, and whatever you do, do NOT under any circumstances mention",
+                                'the word "chandelier". It makes him very upset for some reason.'],
+                               active=True)
+
+stravi = NPC('Stravi', [stravi_phrase_1])
+
+# -- Name: Sakura -- Town: Principalia
+sakura_phrase_1 = Conversation(['Hello, sir! What can Sakura do for you? Ah, you want to see the',
+                                'King? The King is currently in Overshire. Sakura cannot imagine',
+                                'that he is accepting visitors right now, though. Unless you have',
+                                'something really important to tell him, such as how to save his',
+                                "daughter, Sakura doesn't see you talking to him in your future."],
+                               active=True)
+
+sakura = NPC('Sakura', [sakura_phrase_1])
+
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
@@ -676,7 +708,7 @@ all_dialogue = [
     frederick_phrase_1, frederick_phrase_2, frederick_phrase_3,
     joseph_phrase_1, joseph_phrase_2, joseph_phrase_3, joseph_quest_1,
     alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
-    azura_phrase_1
+    azura_phrase_1, f_jones_phrase_1, stravi_phrase_1, sakura_phrase_1
 ]
 
 
