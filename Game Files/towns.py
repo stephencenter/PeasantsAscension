@@ -604,7 +604,7 @@ town5 = Town('Fort Sigil', """Fort Sigil: A small village in the northern region
 of the Forest. The citizens of this town have worked tremendously hard to
 convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
-visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.polmor],
+visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh],
              2, 22, gs_level=3)
 
 town6 = Town('Tripton', """Tripton: When the town of Tripton was being built,

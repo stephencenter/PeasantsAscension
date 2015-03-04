@@ -343,12 +343,12 @@ def stwqst_us1():
 
 def stwqst_uc1():
     global stewson_phrase_3
-    global polmor_phrase_2
-    global polmor_quest_1
+    global rivesh_phrase_2
+    global rivesh_quest_1
 
     stewson_phrase_3.active = True
-    polmor_phrase_2.active = False
-    polmor_quest_1.active = True
+    rivesh_phrase_2.active = False
+    rivesh_quest_1.active = True
     print('-'*25)
     input('You have recieved a Cherub pet! | Press Enter/Return ')
     inv_system.inventory['pets'].append(pets.pet_cherub)
@@ -375,8 +375,8 @@ seriph_phrase_3 = Conversation(["I still can't believe that you killed the evil 
 
 seriph = NPC('Seriph', [seriph_phrase_1, seriph_phrase_2, seriph_phrase_3])
 
-# --- Name: Polmor -- Town: Fort Sigil
-polmor_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've been",
+# --- Name: Rivesh -- Town: Fort Sigil
+rivesh_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've been",
                                 "informed of the problems around here, so I'd recommend...",
                                 "Oh, what's that? You haven't? Well in that case, let me tell",
                                 "you. A long time ago, a number of foolish adventurers,",
@@ -390,57 +390,57 @@ polmor_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've
                                 "now forcefully takes a victim from this town every 10 days",
                                 "and forbids its inhabitants from leaving!"], active=True)
 
-polmor_phrase_2 = Conversation(["Hey... I don't suppose that you have any experiecne",
+rivesh_phrase_2 = Conversation(["Hey... I don't suppose that you have any experiecne",
                                 "with fighting ghosts, do you? No? Ok then. If you find",
                                 "someone who has defeated a very menacing phantom before,",
                                 "please request that they come help us!"], active=True)
 
-polmor_phrase_3 = Conversation(["Help us, young adventurer! You are the only one",
+rivesh_phrase_3 = Conversation(["Help us, young adventurer! You are the only one",
                                 "who can save us from this terrible ghool!"])
 
-polmor_phrase_4 = Conversation(["Thanks again, hero! We are forever indebted to you!"])
+rivesh_phrase_4 = Conversation(["Thanks again, hero! We are forever indebted to you!"])
 
-polmor_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
+rivesh_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
                         "with fighting ghosts, do you? Wait, what's that? You",
                         "defeated the Phantom that was haunting the Overshire",
                         "Graveyard!? Well in that case, we may just have a chance!",
                         "Please help us, oh please!"], "The Curse of Fort Sigil",
                        ["Rid Fort Sigil of its curse by defeating the evil spirit at",
-                       "coordinates 22\u00b0N, 3\u00b0E."], "Polmor", [200, 200],
+                       "coordinates 22\u00b0N, 3\u00b0E."], "Rivesh", [200, 200],
                        ["Y-you defeated the evil spirit? Praise Guido's beard! We are",
                         "free of this curse! You are forever in our gratitude, young hero!"])
 
 
-def polqst_us1():
-    global polmor_phrase_1
-    global polmor_phrase_2
-    global polmor_phrase_3
+def rivqst_us1():
+    global rivesh_phrase_1
+    global rivesh_phrase_2
+    global rivesh_phrase_3
     global seriph_phrase_1
     global seriph_phrase_2
 
-    polmor_phrase_1.active = False
-    polmor_phrase_2.active = False
-    polmor_phrase_3.active = True
+    rivesh_phrase_1.active = False
+    rivesh_phrase_2.active = False
+    rivesh_phrase_3.active = True
     seriph_phrase_1.active = False
     seriph_phrase_2.active = True
     bosses.cursed_spect.active = True
 
 
-def polqst_uc1():
-    global polmor_phrase_4
+def rivqst_uc1():
+    global rivesh_phrase_4
     global seriph_phrase_2
     global seriph_phrase_3
 
-    polmor_phrase_4.active = True
+    rivesh_phrase_4.active = True
     seriph_phrase_2.active = False
     seriph_phrase_3.active = True
 
 
-polmor_quest_1.upon_starting = polqst_us1
-polmor_quest_1.upon_completing = polqst_uc1
+rivesh_quest_1.upon_starting = rivqst_us1
+rivesh_quest_1.upon_completing = rivqst_uc1
 
-polmor = NPC('Polmor', [polmor_phrase_1, polmor_phrase_2,
-                        polmor_phrase_3, polmor_phrase_4, polmor_quest_1])
+rivesh = NPC('Rivesh', [rivesh_phrase_1, rivesh_phrase_2,
+                        rivesh_phrase_3, rivesh_phrase_4, rivesh_quest_1])
 
 #----------------------------------------------------------------------------#
 # SIDEQUESTS
@@ -668,7 +668,7 @@ alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phras
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
-    polmor_phrase_1, polmor_phrase_2, polmor_phrase_3, polmor_phrase_4, polmor_quest_1,
+    rivesh_phrase_1, rivesh_phrase_2, rivesh_phrase_3, rivesh_phrase_4, rivesh_quest_1,
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
     kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4,
