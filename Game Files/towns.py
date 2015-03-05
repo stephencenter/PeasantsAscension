@@ -313,9 +313,11 @@ class Town:
                     print('You have {0} GP'.format(main.misc_vars['gp']))
                     print('"Well, here\'s what I have in my stock for that category: "')
 
+                    padding = len(max([item.name for item in stock[item_category]], key=len))
                     for num, item in enumerate(stock[item_category]):
                         print(''.join(
-                            ['      [', str(num + 1), '] ', str(item), ' --> ', str(item.buy),
+                            ['      [', str(num + 1), '] ', str(item), ' ',
+                             '-'*(padding - len(item.name)), '--> ', str(item.buy),
                              ' GP']))
 
                     while True:
