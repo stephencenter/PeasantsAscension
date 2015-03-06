@@ -207,7 +207,7 @@ class Monster:
 
     def give_status(self):
         # Attempt to give the player a status ailment
-        status = random.choice([x for x in ['asleep', 'poisoned', 'silenced']
+        status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened']
                                 if x != battle.player.status_ail])
 
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
@@ -216,6 +216,11 @@ class Monster:
         if random.randint(0, 2):
             print('You are now {0}!'.format(status))
             battle.player.status_ail = status
+
+            if status == 'weakened':
+                print(battle.temp_stats['attk'])
+                battle.temp_stats['attk'] /= 2
+                print(battle.temp_stats['attk'])
 
         else:
             print('The {0} failed to make you {1}.'.format(self.name, status))

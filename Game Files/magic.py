@@ -330,6 +330,9 @@ def relieve_affliction(is_battle):
             print('Using the power of {0}, you are cured of your afflictions!'.format(
                 r_affliction.name))
 
+            if main.player.status_ail == 'weakened':
+                battle.temp_stats['attk'] *= 2
+
             main.player.status_ail = 'none'
             sounds.buff_spell.play()
 
@@ -361,50 +364,28 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     # Fire < Water < Electricity < Earth < Grass < Wind < Ice < Fire
     # Life < Death and Death < Life
     # "None" element is neutral to all elements.
-    element_list = ['fire', 'water', 'electric', 'earth',
-                    'grass', 'wind', 'ice']
 
-    if (p_elem == 'death' and m_elem == 'life') or (p_elem == 'life' and m_elem == 'death'):
-        p_dmg *= 1.5
-        m_dmg *= 1.5
+    element_matchup = {  # element_matchup[key][0] is the element that key is weak to
+                         # element_matchup[key][1] is the element that key is resistant to
+        'fire': ['water', 'ice'],
+        'water': ['electric', 'fire'],
+        'electric': ['earth', 'water'],
+        'earth': ['grass', 'electric'],
+        'grass': ['wind', 'earth'],
+        'wind': ['ice', 'grass'],
+        'ice': ['fire', 'wind'],
+        'life': ['death', 'life'],
+        'death': ['life', 'death']
+    }
+
+    if p_elem == 'none' or m_elem == 'none':
         return [p_dmg, m_dmg]
 
-    elif (p_elem == 'death' and m_elem == 'death') or (p_elem == 'life' and m_elem == 'life'):
-        p_dmg /= 1.5
-        m_dmg /= 1.5
-        return [p_dmg, m_dmg]
+    if element_matchup[p_elem][0] == m_elem or p_elem == m_elem:
+        return [int(p_dmg/1.5), int(m_dmg/1.5)]
 
-    for x, y in enumerate(element_list):
-        if p_elem == y:
-            player = x
-        if m_elem == y:
-            monster = x
-
-    try:
-        if p_elem == element_list[monster + 1]:
-            m_dmg /= 1.5
-        elif p_elem == element_list[monster - 1]:
-            m_dmg *= 1.5
-    except (IndexError, NameError):
-        if p_elem != 'none':
-            if m_elem == 'ice':
-                m_dmg /= 1.5
-            elif m_elem == 'water':
-                m_dmg *= 1.5
-    finally:
-        try:
-            if m_elem == element_list[player + 1]:
-                p_dmg /= 1.5
-            elif m_elem == element_list[player - 1]:
-                p_dmg *= 1.5
-        except (IndexError, NameError):
-            if m_elem != 'none':
-                if p_elem == 'ice':
-                    p_dmg /= 1.5
-                elif p_elem == 'water':
-                    p_dmg *= 1.5
-
-    return [int(p_dmg), int(m_dmg)]
+    elif element_matchup[p_elem][1] == m_elem:
+        return [int(p_dmg*1.5), int(m_dmg*1.5)]
 
 
 spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []}

@@ -324,6 +324,13 @@ def after_battle(is_boss):  # Assess the results of the battle
     global player
 
     update_stats()  # Reset non-hp/mp stats to the way they were before battle
+
+    # Weakness only applies for one battle. This will hopefully change when I figure out how
+    # to implement a multi-battle version.
+    if player.status_ail == 'weakened':
+        print('You feel your strength coming back to you. You are no longer weakened.')
+        player.status_ail = 'none'
+
     print('-'*25)
 
     while True:
