@@ -365,6 +365,9 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     # Life < Death and Death < Life
     # "None" element is neutral to all elements.
 
+    p_elem = p_elem.lower()  # For backwards compatibility
+    m_elem = m_elem.lower()
+
     element_matchup = {  # element_matchup[key][0] is the element that key is weak to
                          # element_matchup[key][1] is the element that key is resistant to
         'fire': ['water', 'ice'],

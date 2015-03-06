@@ -166,12 +166,12 @@ def mastslim_ud():
 master_slime.upon_defeating = mastslim_ud
 
 # Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
-whisp_goblin = Boss('Whispering Goblin', 35, 10, 3, 6, 1, 1, 2, 5, 2, 2, 4, -2, 4, [], 25, 25)
+whisp_goblin = Boss('Whispering Goblin', 35, 10, 4, 6, 2, 1, 2, 6, 2, 2, 4, -2, 4, [], 25, 25)
 
 whisp_goblin.upon_defeating = unimportant_boss_ud
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
-menac_phantom = Boss('Menacing Phantom', 60, 25, 2, 7, 1, 7, 12, 3, 5, 6, 9, -12,  8, [
+menac_phantom = Boss('Menacing Phantom', 60, 25, 5, 10, 1, 10, 15, 5, 10, 10, 8, -12,  8, [
     items.spect_wand], 75, 75, active=False, element='death')
 
 
@@ -183,12 +183,12 @@ def menacphan_ud():
 
 menac_phantom.upon_defeating = menacphan_ud
 
-# Boss: Terrible Tarrantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
-terr_tarrant = Boss('Terrible Tarrantuloid', 100, 20, 15, 15, 10, 10, 5, 5, 18, 6, 11, -11, -23, [],
+# Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
+terr_tarant = Boss('Terrible Tarantuloid', 100, 20, 25, 25, 15, 15, 8, 8, 25, 12, 11, -11, -23, [],
                     100, 100)
 
 
-def terrtarr_ud():
+def terrtar_ud():
     npcs.krystal_phrase_2.active = False
     npcs.krystal_phrase_3.active = True
     npcs.kyle_phrase_2.active = False
@@ -197,10 +197,10 @@ def terrtarr_ud():
     npcs.alden_phrase_2.active = True
 
 
-terr_tarrant.upon_defeating = terrtarr_ud
+terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
-cursed_spect = Boss('Cursed Spectre', 85, 30, 10, 10, 15, 15, 20, 20, 14, 10, 12, 3, 22, [],
+cursed_spect = Boss('Cursed Spectre', 85, 35, 15, 20, 20, 20, 30, 20, 20, 15, 12, 3, 22, [],
                     100, 100, active=False, element='death')
 
 
@@ -217,6 +217,6 @@ giant_ent = Boss('Giant Ent', 125, 35, 17, 12, 15, 14, 20, 20, 12, 3, 13, 15, 27
 
 giant_ent.upon_defeating = unimportant_boss_ud
 
-boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarrant, cursed_spect, giant_ent]
+boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent]
 
 defeated_bosses = []  # Make sure you can only defeat the boss one time

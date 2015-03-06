@@ -183,6 +183,10 @@ def battle_system(is_boss=False, ambush=False):
             continue
 
         elif move == '5':
+            if player.status_ail == 'weakened':
+                print('You feel incredibly weakened, and are unable to run away.')
+
+                continue
 
             if run_away():  # Attempt to run.
                 # If it succeeds, end the battle without giving the player a reward
@@ -216,7 +220,9 @@ def battle_system(is_boss=False, ambush=False):
 
         # Otherwise, the monster will go first
         else:
-            print('-'*25)
+            if monster.spd < temp_stats['spd']:
+                print('-'*25)
+
             monster.enemy_turn(m_var, m_dodge)
 
             if player.hp > 0:

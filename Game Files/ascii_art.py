@@ -324,7 +324,7 @@ O0o"
 /_____\\
     %s""",
 
-    "Terrible Terrantuloid":
+    "Terrible Tarantuloid":
 """
 |   |
  \\o/

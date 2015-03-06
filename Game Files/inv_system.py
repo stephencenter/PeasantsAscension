@@ -96,6 +96,7 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
 
             [i.lth_leg, i.en_lth_leg, i.std_leg,
              i.en_std_leg, i.drg_leg]]}  # Assassin + Ranged Armor -- Legs
+
 i.item_setup_vars()
 
 

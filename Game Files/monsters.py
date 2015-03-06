@@ -218,9 +218,7 @@ class Monster:
             battle.player.status_ail = status
 
             if status == 'weakened':
-                print(battle.temp_stats['attk'])
                 battle.temp_stats['attk'] /= 2
-                print(battle.temp_stats['attk'])
 
         else:
             print('The {0} failed to make you {1}.'.format(self.name, status))

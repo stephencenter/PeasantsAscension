@@ -643,7 +643,7 @@ castle made for him in the nation's capital, Overshire. A few things about
 the home have changed since Pythonius became king, however: There are now
 a half-dozen highly-trained guards outside his house, as well as six
 archer-towers arranged in a hexagonal shape around the building.""",
-              [], -44, 20)
+              [npcs.sakura], -44, 20, gen_store=False, inn=False)
 
 town11 = Town('Neo-Ekanmar', """Neo-Ekanmar: After Sugulat and his army overran
 Flysconia  and declared the Empire of D\u00fC Haven, refugees from the
@@ -654,7 +654,7 @@ as their safe-haven. Pythonia has established a non-aggression pact with
 the refugees and gladly accept and protect them from danger. Seeing as
 how the citizens are from Flysconia, approximately 90% of the population
 are reptilian creatures.""",
-              [], 3, 39, gs_level=3)
+              [npcs.f_jones, npcs.stravi], 3, 39, gs_level=3)
 
 town12 = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
 home to dozens upon dozens of different animals and plantlife. Naturally,
@@ -664,7 +664,7 @@ section of the Sorcerers' Guild. Vegetation grows on almost
 every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""",
-              [], -30, -39, gs_level=3, pet_shop=True)
+              [], -30, -39, gs_level=3, pet_shop=True, ps_level=2)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his

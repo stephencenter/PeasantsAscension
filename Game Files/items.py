@@ -87,7 +87,7 @@ class Weapon(Item):
     # Certain weapons are planned to be infused with elements later on, which
     # will deal more/less damage to certain enemies.
     def __init__(self, name, desc, buy, sell, power, type_, class_,
-                 element='None', equip=False, cat='weapons', imp=False):
+                 element='none', equip=False, cat='weapons', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.power = power
         self.type_ = type_
