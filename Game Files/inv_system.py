@@ -531,6 +531,7 @@ def serialize_inv(path):
 
         for item in inventory[category]:
             if category != 'coord':
+                print(item.__dict__)
                 j_inventory[category].append(item.__dict__)
 
             else:
@@ -571,8 +572,9 @@ def deserialize_inv(path):
             elif category == 'pets':
                 for j in pets.all_pets:
                     for key in j_inventory['pets']:
-                        if j.name == key:
-                            norm_inventory['pets'].append(j)
+                        if j.name == key['name']:
+                            norm_inv['pets'].append(j)
+
                 continue
 
             elif category in ['misc', 'q_items']:

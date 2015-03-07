@@ -139,6 +139,9 @@ class Monster:
 
     def enemy_turn(self, var, dodge):
         # This is the Enemy's AI.
+
+        battle.temp_stats['turn_counter'] += 1
+
         if player.spd >= monster.spd:
             print('-'*25)
 
@@ -147,11 +150,29 @@ class Monster:
             self.monster_name
         ))
 
-        if self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
+        # Only do this on turns that are a multiple of 5 (or turn 1)
+        if (not battle.temp_stats['turn_counter'] % 5 or
+            battle.temp_stats['turn_counter'] == 1) \
+                and random.randint(0, 1) and self.mp > 2:
+
+            self.give_status()
+
+        elif battle.temp_stats['turn_counter'] <= 3 and random.randint(0, 1):
+            # Defend
+            sounds.buff_spell.play()
+
+            self.dfns += random.randint(2, 3)
+            self.m_dfns += random.randint(2, 3)
+            self.p_dfns += random.randint(2, 3)
+            print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(
+                self.name))
+
+        elif self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
             # Magic heal
             sounds.magic_healing.play()
 
-            heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
+            heal = math.ceil((self.m_attk + self.m_dfns)/2)
+            # Healing power is determined by magic stats
 
             if heal < 5:
                 heal = 5
@@ -161,22 +182,11 @@ class Monster:
 
             print('The {0} casts a healing spell!'.format(self.name))
 
-        elif not random.randint(0, 5) and self.mp >= 2:
-            self.give_status()
-
-        elif self.attk >= self.m_attk:
+        elif self.attk > self.m_attk:
             # Physical Attack
             self.monst_attk(var, dodge)
 
-        elif int((self.dfns + self.m_dfns)/2) <= int(self.lvl/3):
-            # Defend
-            sounds.buff_spell.play()
-
-            self.dfns += random.randint(1, 2)
-            self.m_dfns += random.randint(1, 2)
-            print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
-
-        elif self.m_attk >= self.attk and self.mp >= 2:
+        elif self.m_attk > self.attk and self.mp >= 2:
             # Magic Attack
             sounds.magic_attack.play()
 
@@ -207,21 +217,31 @@ class Monster:
 
     def give_status(self):
         # Attempt to give the player a status ailment
-        status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened']
-                                if x != battle.player.status_ail])
+
+        if random.randint(1, 5) < 3:
+            if player.class_ in ['warrior', 'assassin']:
+                status = 'weakened'
+
+            elif player.class_ in ['mage']:
+                status = 'silenced'
+
+            elif player.class_ in ['ranger']:
+                status = 'asleep'  # Placeholder until a new status effect is implemented
+        else:
+            status = random.choice(['asleep', 'poisoned'])
+
+        if status == battle.player.status_ail:
+            status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened']
+                                    if x != battle.player.status_ail])
 
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
 
-        if random.randint(0, 2):
-            print('You are now {0}!'.format(status))
-            battle.player.status_ail = status
+        print('You are now {0}!'.format(status))
+        battle.player.status_ail = status
 
-            if status == 'weakened':
-                battle.temp_stats['attk'] /= 2
-
-        else:
-            print('The {0} failed to make you {1}.'.format(self.name, status))
+        if status == 'weakened':
+            battle.temp_stats['attk'] /= 2
 
         self.mp -= 2
 
@@ -263,20 +283,18 @@ class Monster:
         self.monster_name = copy.copy(self.name)
 
         if self.name == monster_type[position['reg']][0]:
-            self.enemy_turn = fighter_ai
             fighter_stats(self)
 
         if self.name == monster_type[position['reg']][1]:
-            self.enemy_turn = tank_ai
             tank_stats(self)
 
         elif self.name == monster_type[position['reg']][2]:
-            # Mage AI -- Not yet implemented!
+            # Mage stats -- Not yet implemented!
             pass
 
         elif (self.name == monster_type[position['reg']][3] or
                 self.name == monster_type[position['reg']][4]):
-            # Agile AI -- Not yet implemented!
+            # Agile stats -- Not yet implemented!
             pass
 
         modifiers = [
@@ -370,9 +388,8 @@ class Monster:
 
 # -- Tank AI --
 """
-Tank AI is resistant to player attacks and has above-average HP.
-However, it lacks significantly in the damage-dealing department.
-It defends more often than normal enemies and heals frequently.
+Tanks are resistant to player attacks and has above-average HP.
+However, they lacks significantly in the damage-dealing department.
 They are slower than most enemies and have low evasion.
 
 """
@@ -382,24 +399,26 @@ def tank_stats(self):
     # Set Tank stats
     global misc_vars
 
-    self.hp *= 1.1
+    self.hp *= 1.2
     self.hp = math.ceil(self.hp)
     misc_vars['hp_m'] = copy.copy(self.hp)
 
     self.attk *= 0.8
     self.attk = math.ceil(self.attk)
-    if self.attk < 1:
-        self.attk = 1
+
+    self.p_attk *= 0.8
+    self.p_attk = math.ceil(self.p_attk)
 
     self.m_attk *= 0.8
     self.m_attk = math.ceil(self.m_attk)
-    if self.m_attk < 1:
-        self.m_attk = 1
 
-    self.dfns *= 1.1
+    self.dfns *= 1.2
     self.dfns = math.ceil(self.dfns)
 
-    self.m_dfns *= 1.1
+    self.p_dfns *= 1.2
+    self.p_dfns = math.ceil(self.p_dfns)
+
+    self.m_dfns *= 1.2
     self.m_dfns = math.ceil(self.m_dfns)
 
     self.spd *= 0.8
@@ -409,77 +428,11 @@ def tank_stats(self):
     self.evad = math.ceil(self.evad)
 
 
-def tank_ai(var, dodge):
-    # Enemy turn for Tank AI
-
-    self = monster
-    print('\n-Enemy Turn-')
-    print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
-        self.monster_name
-    ))
-
-    if self.hp <= int(misc_vars['hp_m']/3) and self.mp >= 5 and random.randint(0, 2):
-        # Magic heal
-        sounds.magic_healing.play()
-
-        heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
-
-        if heal < 5:
-            heal = 5
-
-        self.hp += heal
-        self.mp -= 5
-
-        print('The {0} casts a healing spell!'.format(self.name))
-
-    elif int((self.dfns + self.m_dfns)/1.5) <= int(self.lvl/3):
-        # Defend
-        sounds.buff_spell.play()
-
-        self.dfns += random.randint(1, 2)
-        self.m_dfns += random.randint(1, 2)
-        print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
-
-    elif not random.randint(0, 5) and self.mp >= 2:
-        self.give_status()
-
-    elif self.attk >= self.m_attk:
-        # Physical Attack
-        self.monst_attk(var, dodge)
-
-    elif self.m_attk >= self.attk and self.mp >= 2:
-        # Magic Attack
-        sounds.magic_attack.play()
-
-        print('The {0} is attempting to cast a strange spell...'.format(self.name))
-        time.sleep(0.75)
-
-        if dodge in range(battle.temp_stats['evad'], 250):
-            dealt = magic.eval_element(
-                p_elem=battle.player.element,
-                m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
-
-            player.hp -= dealt
-            sounds.enemy_hit.play()
-            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
-                self.name, dealt))
-
-        else:
-            sounds.attack_miss.play()
-            print("The spell misses you by a landslide!")
-
-        self.mp -= 2
-
-    else:
-        self.monst_attk(var, dodge)
-
-    self.check_poison()
-
 # -- Fighter AI --
 """
-Fighter AI is the opposite of the Tank AI. It has high attack and above-average
-magic attack, as well as above-average speed. However, it has below-average defense
-and magic defense. It rarely defends or heals. It has low health.
+Fighters are the opposite of Tanks. They have high attack and above-average
+magic attack, as well as above-average speed. However, they have below-average defense
+and magic defense. They have low health.
 
 """
 
@@ -493,83 +446,22 @@ def fighter_stats(self):
     self.attk *= 1.2
     self.attk = math.ceil(self.attk)
 
-    self.m_attk *= 1.1
+    self.p_attk *= 1.2
+
+    self.m_attk *= 1.2
     self.m_attk = math.ceil(self.m_attk)
 
     self.dfns *= 0.8
     self.dfns = math.ceil(self.dfns)
 
+    self.p_dfns *= 0.8
+    self.p_dfns = math.ceil(self.p_dfns)
+
     self.m_dfns *= 0.8
     self.m_dfns = math.ceil(self.m_dfns)
 
-    self.spd *= 1.1
+    self.spd *= 1.2
     self.spd = math.ceil(self.spd)
-
-
-def fighter_ai(var, dodge):
-    self = monster
-    print('\n-Enemy Turn-')
-    print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
-        self.monster_name
-    ))
-
-    if not random.randint(0, 5) and self.mp >= 2:
-        self.give_status()
-
-    elif self.attk >= self.m_attk:
-        # Physical Attack
-        self.monst_attk(var, dodge)
-
-    elif self.m_attk >= self.attk and self.mp >= 2:
-        # Magic Attack
-        sounds.magic_attack.play()
-
-        print('The {0} is attempting to cast a strange spell...'.format(self.name))
-        time.sleep(0.75)
-
-        if dodge in range(battle.temp_stats['evad'], 250):
-            dealt = magic.eval_element(
-                p_elem=battle.player.element,
-                m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
-
-            player.hp -= dealt
-            sounds.enemy_hit.play()
-            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
-                self.name, dealt))
-
-        else:
-            sounds.attack_miss.play()
-            print("The spell misses you by a landslide!")
-
-        self.mp -= 2
-
-    elif self.hp <= int(misc_vars['hp_m']/5) and self.mp >= 5 and random.randint(0, 1):
-        # Magic heal
-        sounds.magic_healing.play()
-
-        heal = int(((self.m_attk + self.m_dfns)/2) + self.lvl/2)
-        if heal < 5:
-            heal = 5
-
-        self.hp += heal
-        self.mp -= 5
-
-        print('The {0} casts a healing spell!'.format(self.name))
-
-    elif int((self.dfns + self.m_dfns)/1.5) <= int(self.lvl/5):
-        # Defend
-        sounds.buff_spell.play()
-
-        self.dfns += random.randint(1, 2)
-        self.m_dfns += random.randint(1, 2)
-        print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
-
-    else:
-        self.monst_attk(var, dodge)
-
-    self.check_poison()
-
-# End of Enemy AIs
 
 
 def spawn_monster():

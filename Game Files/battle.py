@@ -73,7 +73,7 @@ def update_stats():
                   'p_attk': _c(player.p_attk), 'p_dfns': _c(player.p_dfns),
                   'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
                   'spd': _c(player.spd), 'evad': _c(player.evad),
-                  'm_ispoisoned': False}
+                  'm_ispoisoned': False, 'turn_counter': 0}
 
 
 def player_choice():
