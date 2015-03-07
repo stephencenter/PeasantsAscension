@@ -335,6 +335,7 @@ Input letter: """)
                         if y_n.startswith('y'):
                             pass
                         elif y_n.startswith('n'):
+                            print('-'*25)
                             break
                         else:
                             continue

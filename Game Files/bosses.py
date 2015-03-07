@@ -22,7 +22,7 @@ import monsters
 import battle
 import items
 import inv_system
-
+import sounds
 
 if __name__ == "__main__":
     sys.exit()
@@ -85,6 +85,8 @@ def check_bosses(x, y):
     for boss in boss_list:
         if [boss.pos_x, boss.pos_y] == [x, y] and boss.name not in defeated_bosses and boss.active:
             print('-'*25)
+
+            sounds.item_pickup.play()
 
             if boss.new_location(add=False) not in inv_system.inventory['coord']:
                 print('You feel the presence of an unknown entity...')
@@ -185,7 +187,7 @@ menac_phantom.upon_defeating = menacphan_ud
 
 # Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
 terr_tarant = Boss('Terrible Tarantuloid', 100, 20, 25, 25, 15, 15, 8, 8, 25, 12, 11, -11, -23, [],
-                    100, 100)
+                   100, 100)
 
 
 def terrtar_ud():

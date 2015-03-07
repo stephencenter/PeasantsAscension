@@ -24,6 +24,7 @@ import world
 import npcs
 import items
 import pets
+import sounds
 
 if __name__ == "__main__":
     sys.exit()
@@ -685,6 +686,8 @@ def search_towns(pos_x, pos_y, enter=True):
 
             if enter:
                 print('-'*25)
+
+                sounds.item_pickup.play()
 
                 while True:
 

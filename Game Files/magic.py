@@ -395,8 +395,8 @@ spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []
 
 
 def pick_cat(var, dodge, is_battle=True):
-    if battle.temp_stats['status_effect'] == 'silenced':
-        print("You are silenced -- you can't use magic right now.")
+    if main.player.status_ail == 'silenced':
+        input("You find youself unable to say the spells! | Press enter/return ")
         return False
 
     while True:

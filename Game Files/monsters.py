@@ -161,7 +161,7 @@ class Monster:
 
             print('The {0} casts a healing spell!'.format(self.name))
 
-        elif not random.randint(0, 4) and self.mp >= 2:
+        elif not random.randint(0, 5) and self.mp >= 2:
             self.give_status()
 
         elif self.attk >= self.m_attk:
@@ -440,7 +440,7 @@ def tank_ai(var, dodge):
         self.m_dfns += random.randint(1, 2)
         print("The {0} assumes a more defensive stance! (+DEF, +M'DEF)".format(self.name))
 
-    elif not random.randint(0, 4) and self.mp >= 2:
+    elif not random.randint(0, 5) and self.mp >= 2:
         self.give_status()
 
     elif self.attk >= self.m_attk:

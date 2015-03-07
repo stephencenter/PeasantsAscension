@@ -321,7 +321,7 @@ def player_turn(var, dodge, move):
                 sounds.buff_spell.play()
 
                 input('You find yourself able to speak again! | Press enter/return ')
-                player.status_ailstatus_effect = 'none'
+                player.status_ail = 'none'
 
         return True
 
