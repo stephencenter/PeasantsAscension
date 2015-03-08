@@ -23,7 +23,6 @@ import time
 import inv_system
 import sounds
 
-
 if __name__ == "__main__":
     sys.exit()
 else:
@@ -254,7 +253,7 @@ class MagicCompass(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
 
     def use_item(self):
-        from towns import town_list
+        from towns import town_list, search_towns
 
         pos_towns = [tuple([town.name, round(math.hypot(town.x - main.position['x'],
                                                         town.y - main.position['y']))])
@@ -265,7 +264,7 @@ class MagicCompass(Item):
         print('The closest town to you is {0} at ~{1} degrees away.'.format(
             distance[0], distance[1]))
 
-        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+        if not search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
 
@@ -304,8 +303,8 @@ class Valuable(Item):
 
 
 class Shovel(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc'):
-        Item.__init__(self, name, desc, buy, sell, cat)
+    def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
 
     def use_item(self):
         print('-'*25)

@@ -31,6 +31,7 @@ else:
 
 inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'pets': [], 'misc': []}
+
 equipped = {'weapon': '', 'head': _c(i.straw_hat),
             'body': _c(i.cotton_shirt),
             'legs': _c(i.sunday_trousers)}
@@ -48,13 +49,13 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
              i.m_rejuv, i.l_rejuv, i.l_rejuv],  # HP + MP Potions
 
             [i.poison_potion, i.poison_potion, i.poison_potion,
-             i.poison_potion, i.poison_potion],  # Poison Potion
+             i.poison_potion, i.poison_potion, i.poison_potion],  # Poison Potion
 
             [i.sleep_potion, i.sleep_potion, i.sleep_potion,
-             i.sleep_potion, i.sleep_potion],  # Sleep Potion
+             i.sleep_potion, i.sleep_potion, i.sleep_potion],  # Sleep Potion
 
             [i.silence_potion, i.silence_potion, i.silence_potion,
-             i.silence_potion, i.silence_potion]  # Silence Potion
+             i.silence_potion, i.silence_potion, i.silence_potion]  # Silence Potion
             ],
 
             'Weapons': [[i.cpr_swd, i.en_cpr_swd, i.bnz_spr,
@@ -71,31 +72,37 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
             ],
 
             'Armor': [[i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
-             i.en_stl_hlm, i.ori_hlm],  # Warrior Armor -- Head
+             i.en_stl_hlm, i.ori_hlm, i.ori_hlm],  # Warrior Armor -- Head
 
             [i.bnz_cst, i.en_bnz_cst, i.stl_cst,
-             i.en_stl_cst, i.ori_cst],  # Warrior Armor -- Body
+             i.en_stl_cst, i.ori_cst, i.ori_cst],  # Warrior Armor -- Body
 
             [i.bnz_leg, i.en_bnz_leg, i.stl_leg,
-             i.en_stl_leg, i.ori_leg],  # Warrior Armor -- Legs
+             i.en_stl_leg, i.ori_leg, i.ori_leg],  # Warrior Armor -- Legs
 
             [i.wiz_hat, i.en_wiz_hat, i.myst_hat,
-             i.en_myst_hat, i.elem_hat],  # Mage Armor -- Head
+             i.en_myst_hat, i.elem_hat, i.elem_hat],  # Mage Armor -- Head
 
             [i.wiz_rob, i.en_wiz_rob, i.myst_rob,
-             i.en_myst_rob, i.elem_rob],  # Mage Armor -- Body
+             i.en_myst_rob, i.elem_rob, i.elem_rob],  # Mage Armor -- Body
 
             [i.wiz_gar, i.en_wiz_gar, i.myst_gar,
-             i.en_myst_gar, i.elem_gar],  # Mage Armor -- Legs
+             i.en_myst_gar, i.elem_gar, i.elem_gar],  # Mage Armor -- Legs
 
             [i.lth_cap, i.en_lth_cap, i.std_cwl,
-             i.en_std_cwl, i.drg_cwl],  # Assassin + Ranged Armor -- Head
+             i.en_std_cwl, i.drg_cwl, i.drg_cwl],  # Assassin + Ranged Armor -- Head
 
             [i.lth_bdy, i.en_lth_bdy, i.std_bdy,
-             i.en_std_bdy, i.drg_bdy],  # Assassin + Ranged Armor -- Body
+             i.en_std_bdy, i.drg_bdy, i.drg_bdy],  # Assassin + Ranged Armor -- Body
 
             [i.lth_leg, i.en_lth_leg, i.std_leg,
-             i.en_std_leg, i.drg_leg]]}  # Assassin + Ranged Armor -- Legs
+             i.en_std_leg, i.drg_leg,]],  # Assassin + Ranged Armor -- Legs
+
+            'Other': [[i.divining_rod, i.divining_rod, i.divining_rod,
+                       i.divining_rod, i.divining_rod, i.divining_rod],
+
+                      [i.shovel, i.shovel, i.shovel,
+                       i.shovel, i.shovel, i.shovel]]}
 
 i.item_setup_vars()
 
@@ -278,7 +285,7 @@ def pick_action(cat, item):
                 break
         else:
             use_equip = 'Use'
-        action = input("""What do you want to do with {0} {1}?'
+        action = input("""What do you want to do with {0} {1}?
       [1] {2}
       [2] Read Description
       [3] Drop
@@ -531,7 +538,6 @@ def serialize_inv(path):
 
         for item in inventory[category]:
             if category != 'coord':
-                print(item.__dict__)
                 j_inventory[category].append(item.__dict__)
 
             else:

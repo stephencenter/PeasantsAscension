@@ -22,7 +22,6 @@ import inv_system
 import pets
 import items
 
-
 if __name__ == "__main__":
     sys.exit()
 else:
@@ -260,7 +259,7 @@ Charsulville."],
                         "to break it. I've heard word about a possible solution.",
                         "Supposedly, the head of the Sorcerer's Guild in Parceon has",
                         "discovered something about an ancient prophecy related to this.",
-                        "You might want to go give him a visit if you want any more",
+                        "You might want to go give her a visit if you want any more",
                         "information. Parceon, if I recall correctly, is somewhere",
                         "around 24\u00b0N, 28\u00b0E. Good luck on your adventures!",
                         "Oh, and take this as a reward!"], active=True)
@@ -284,12 +283,22 @@ def jphqst_uc1():
     # Stands for "Joseph Quest I - Upon Completing
     global joseph_phrase_1
     global joseph_phrase_2
+    global azura_phrase_1
+    global azura_phrase_2
+
     joseph_phrase_2.active = False
     joseph_phrase_3.active = True
+
+    azura_phrase_1.active = False
+    azura_phrase_2.active = True
+
     print('-'*25)
     print("You've recieved a Magic Compass from Joseph.")
-    print('It has been added to the "Misc" section of your inventory.')
+    input('It has been added to the "Misc" section of your inventory. | Press enter/return ')
+    input('You write down the coordinates of Parceon. | Press enter/return ')
+
     inv_system.inventory['misc'].append(items.magic_compass)
+    towns.town8.new_location()
 
 
 joseph_quest_1.upon_starting = jphqst_us1
@@ -302,7 +311,41 @@ azura_phrase_1 = Conversation(["Hello, I'm Azura, leader of this town and head o
                                "Sorcerer's Guild. I'm quite busy right now, so please",
                                "come back later if you wish to speak to me."], active=True)
 
-azura = NPC('Azura', [azura_phrase_1])
+azura_phrase_2 = Conversation(["Hello, I'm Azura, leader of this town and head of the",
+                               "Sorcerer's Guild. I'm quite busy right now, so please",
+                               "come back later if you wish to speak to me... Oh, what's",
+                               "that? Joseph of Charsulville sent you? Well in that case,",
+                               "I suppose that I can take some time off from my duties to",
+                               "speak to you. What is it that you need? ...I see. I know of",
+                               "a way to rescue King Pythonius II's daughter, as Joseph probably",
+                               "told you. It's quite dangerous, however - none of the King's",
+                               "men have survived the journey. Looking at you, however, I",
+                               "see much potential. There is one problem, however: Our Kingdom",
+                               "has been infiltrated by the Thexus. I have no way of verifying",
+                               "whether or not you are one of them.",
+                               "Actually, now that I think about it, perhaps there IS a way...",
+                               "How about this: My father, Raidon, has been having some",
+                               "problems lately. If you go help him out, then you will have",
+                               "earned my trust. He lives in the town of Ambercreek, a village",
+                               "right along the border of the Forest and Mountain regions.",
+                               "The town is located at -7\u00b0S, -51\u00b0W. Good luck."])
+
+
+def ap1_at():
+    global azura_phrase_2
+    global azura_phrase_3
+
+    input('You write down the coordinates of Ambercreek. | Press enter/return ')
+    azura_phrase_2.active = False
+    azura_phrase_3.active = True
+
+
+azura_phrase_2.after_talking = ap1_at
+
+azura_phrase_3 = Conversation(["My father, Raidon, lives in the town if Ambercreek at",
+                               "-7\u00b0S, -51\u00b0W. Good luck!"])
+
+azura = NPC('Azura', [azura_phrase_1, azura_phrase_2, azura_phrase_3])
 
 #----------------------------------------------------------------------------#
 # STORY-STORY ARCS
@@ -708,7 +751,8 @@ all_dialogue = [
     frederick_phrase_1, frederick_phrase_2, frederick_phrase_3,
     joseph_phrase_1, joseph_phrase_2, joseph_phrase_3, joseph_quest_1,
     alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
-    azura_phrase_1, f_jones_phrase_1, stravi_phrase_1, sakura_phrase_1
+    azura_phrase_1, azura_phrase_2, azura_phrase_3, f_jones_phrase_1,
+    stravi_phrase_1, sakura_phrase_1
 ]
 
 
@@ -739,3 +783,5 @@ def deserialize_dialogue(path):
                         j_log[key][0], j_log[key][1], j_log[key][2], j_log[key][3]
                 else:
                     c.active, c.repeat = j_log[key][0], j_log[key][1]
+
+import towns
