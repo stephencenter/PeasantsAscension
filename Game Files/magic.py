@@ -390,6 +390,8 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     elif element_matchup[p_elem][1] == m_elem:
         return [int(p_dmg*1.5), int(m_dmg*1.5)]
 
+    return [p_dmg, m_dmg]
+
 
 spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []}
 
