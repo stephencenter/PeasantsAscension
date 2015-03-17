@@ -220,7 +220,7 @@ def battle_system(is_boss=False, ambush=False):
 
         # Otherwise, the monster will go first
         else:
-            if monster.spd < temp_stats['spd']:
+            if monster.spd < temp_stats['spd'] and player.status_ail != 'asleep':
                 print('-'*25)
 
             monster.enemy_turn(m_var, m_dodge)

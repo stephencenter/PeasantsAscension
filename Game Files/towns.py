@@ -667,6 +667,14 @@ the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""",
               [], -30, -39, gs_level=3, pet_shop=True, ps_level=2)
 
+town13 = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
+located in the Mountains. The D\u00fC Haven-Pythonia embassy can be found
+in the middle of this town surrounded by large stone walls and a few
+guard-towers. Sugulat, the Emperor of D\u00fC Haven, can often
+be found mining on the outskirts of town. A very troubled-looking old man is in
+the southwest portion of the town near a few smaller houses.""",
+              [npcs.raidon, npcs.sugulat], -51, -7, gs_level=4, inn_cost=15)
+
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
 flock in a small pasture behind the building. There doesn't appear
@@ -674,7 +682,7 @@ be any other people near here.""", [npcs.alden],
                     -12, -26, inn=False, gen_store=False, pet_shop=True, ps_level=2)
 
 town_list = [town1, town2, town3, town4, town5, town6,
-             town7, town8, town9, town10, town11, town12, small_house1]
+             town7, town8, town9, town10, town11, town12, town13, small_house1]
 
 
 def search_towns(pos_x, pos_y, enter=True):

@@ -347,6 +347,11 @@ azura_phrase_3 = Conversation(["My father, Raidon, lives in the town if Ambercre
 
 azura = NPC('Azura', [azura_phrase_1, azura_phrase_2, azura_phrase_3])
 
+# -- Name: Raidon -- Town: Ambercreek
+raidon_phrase_1 = Conversation(["FILLER TEXT"], active=True)
+
+raidon = NPC('Raidon', [raidon_phrase_1])
+
 #----------------------------------------------------------------------------#
 # STORY-STORY ARCS
 
@@ -530,31 +535,6 @@ alfred_quest_1.upon_completing = alfqst_uc1
 alfred = NPC('Alfred', [alfred_phrase_1, alfred_phrase_2,
                         alfred_quest_1, alfred_phrase_3])
 
-
-# -- Name: Wesley -- Town: Southford
-wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
-                                "to be stronger the farther from 0\u00b0N, 0\u00b0E that you \
-travel.",
-                                "However, monsters there also give better loot. Be careful."
-                                ], active=True)
-
-wesley = NPC('Wesley', [wesley_phrase_1])
-
-# -- VName: Jeffery -- Town: Overshire
-jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",
-                                 "who was in need of a messenger. I think the town was somewhere",
-                                 "around -8\u00b0S, 20\u00b0E. Something like that."],
-                                active=True)
-
-jeffery = NPC('Jeffery', [jeffery_phrase_1])
-
-# -- Name: Ethos -- Town: Charsulville
-ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
-                               'and powerful monsters in their inventory. If you get lost,',
-                               'check there.'], active=True)
-
-ethos = NPC('Ethos', [ethos_phrase_1])
-
 # -- Name: Kyle -- Town: Tripton
 kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village Elder.",
                               "You aren't from Fallville, right? Good.",
@@ -710,6 +690,32 @@ alden_phrase_3 = Conversation(["Thanks again, hero. You've saved those towns",
 
 alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3])
 
+#----------------------------------------------------------------------------#
+# UNIMPORTANT CHARACTERS
+
+# -- Name: Wesley -- Town: Southford
+wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
+                                "to be stronger the farther from 0\u00b0N, 0\u00b0E that you \
+travel.",
+                                "However, monsters there also give better loot. Be careful."
+                                ], active=True)
+
+wesley = NPC('Wesley', [wesley_phrase_1])
+
+# -- VName: Jeffery -- Town: Overshire
+jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",
+                                 "who was in need of a messenger. I think the town was somewhere",
+                                 "around -8\u00b0S, 20\u00b0E. Something like that."],
+                                active=True)
+
+jeffery = NPC('Jeffery', [jeffery_phrase_1])
+
+# -- Name: Ethos -- Town: Charsulville
+ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
+                               'and powerful monsters in their inventory. If you get lost,',
+                               'check there.'], active=True)
+
+ethos = NPC('Ethos', [ethos_phrase_1])
 
 # -- Name: F. Jones -- Town: Neo-Ekanmar
 f_jones_phrase_1 = Conversation(['Hello, adventurer! My name if Fly. I used to be the Emperor of',
@@ -740,6 +746,19 @@ sakura_phrase_1 = Conversation(['Hello, sir! What can Sakura do for you? Ah, you
 
 sakura = NPC('Sakura', [sakura_phrase_1])
 
+# -- Name: Sugulat -- Town: Ambercreek
+sugulat_phrase_1 = Conversation(['Greetings! My name is Sugulat, Emperor of D\u00fC Haven',
+                                 "and legendary digger of holes. Y'know, you look like",
+                                 "a nice guy. I'm going to tell you a little secret: If you",
+                                 "buy a shovel from the general store, you can dig up valuable",
+                                 "gems in certain places! They can be tricky to find, though,",
+                                 "so that's why I invented the Divining Rod! Simply use it,",
+                                 "and it will tell you the approximate distance between",
+                                 "you and the nearest gem. You can buy it at the general store."],
+                                active=True)
+
+sugulat = NPC('Sugulat', [sugulat_phrase_1])
+
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
@@ -752,7 +771,7 @@ all_dialogue = [
     joseph_phrase_1, joseph_phrase_2, joseph_phrase_3, joseph_quest_1,
     alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
     azura_phrase_1, azura_phrase_2, azura_phrase_3, f_jones_phrase_1,
-    stravi_phrase_1, sakura_phrase_1
+    stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1
 ]
 
 
