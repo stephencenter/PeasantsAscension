@@ -645,28 +645,63 @@ def bat_stats():
         monster.mp -= (monster.mp - misc_vars['mp_m'])
     print('-'*25)
 
+    pet = player.current_pet
+
+    # Sorry this section is kinda complicated. Basically, this calculates the length of certain
+    # strings to see how much padding (extra spaces) is needed to make things line up.
+    if pet:
+        first_padding = len(max([''.join([player.name, "'s ", pet.name]),
+                                 pet.name, monster.name], key=len))
+
+        second_padding = len(max(['{0}/{1} HP'.format(player.hp, misc_vars['hp_p']),
+                                  'LVL: {0}'.format(pet.level)
+                                  if isinstance(pet, pets.Fighter)
+                                  else '{{0}/{1}'.format(pet.mana, pet.max_m)
+                                  if isinstance(pet, pets.Healer)
+                                  else '',
+                                  '{0}/{1} HP'.format(monster.mp, misc_vars['mp_p'])], key=len))
+
+    else:
+        first_padding = len(max([player.name, monster.name], key=len))
+
+        second_padding = len(max(['{0}/{1} HP'.format(player.hp, misc_vars['hp_p']),
+                                  '{0}/{1} HP'.format(monster.mp, misc_vars['mp_p'])], key=len))
+
+    third_padding = len(max(['{0}/{1} MP'.format(player.mp, misc_vars['mp_p']),
+                             '{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])]))
+
+
     # Player Stats
-    print("{0}: {1}/{2} HP | {3}/{4} MP | LVL: {5} | STATUS: {6}".format(
+    print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
           player.name, player.hp,
           misc_vars['hp_p'], player.mp,
           misc_vars['mp_p'], player.lvl,
-          player.status_ail.title()))
-
-    # Pet Stats
-    pet = player.current_pet
-    if pet:
-        if isinstance(pet, pets.Healer):
-            print("{0}'s {1}: {2}/{3} MP | LVL: {4}".format(
-                player.name, pet.name, pet.mana, pet.max_m, pet.level))
-
-        elif isinstance(pet, pets.Fighter):
-            print("{0}'s {1}: | STATUS:  {2} | LVL: {3}".format(
-                player.name, pet.name, 'Incapacitated' if pet.rt else 'Normal', pet.level))
+          player.status_ail.title(),
+          pad1=' '*(first_padding - len(player.name)),
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(player.hp, misc_vars['hp_p']))),
+          pad3=' '*(third_padding - len('{0}/{1} MP'.format(player.mp, misc_vars['mp_p'])))))
 
     # Monster Stats
-    print("{0}: {1}/{2} HP | {3}/{4} MP | LVL: {5}".format(
+    print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
           monster.name, monster.hp,
           misc_vars['hp_m'], monster.mp,
-          misc_vars['mp_m'], monster.lvl))
+          misc_vars['mp_m'], monster.lvl,
+          pad1=' '*(first_padding - len(monster.name)),
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.mp, misc_vars['mp_p']))),
+          pad3=' '*(third_padding - len('{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])))))
+
+    # Pet Stats
+    if pet:
+        if isinstance(pet, pets.Healer):
+            print("{0}'s {1}{pad1} | {2}/{3} MP {pad2}| LVL: {4}".format(
+                player.name, pet.name, pet.mana, pet.max_m, pet.level,
+                pad1=' '*(first_padding - len(''.join([player.name, "'s ", pet.name]))),
+                pad2=' '*(second_padding - len('{{0}/{1}'.format(pet.mana, pet.max_m)))))
+
+        elif isinstance(pet, pets.Fighter):
+            print("{0}'s {1}{pad1} | LVL: {2} {pad2}| STATUS: {3}".format(
+                player.name, pet.name, pet.level, 'Incapacitated' if pet.rt else 'None',
+                pad1=' '*(first_padding - len(''.join([player.name, "'s ", pet.name]))),
+                pad2=' '*(second_padding - len('LVL: {0}'.format(pet.level)))))
 
     print('-'*25)

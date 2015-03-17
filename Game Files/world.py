@@ -264,7 +264,9 @@ def check_region():
         print('-'*25)
         print('You have left the {0} region and are now entering the {1} region.'.format(
             position['reg'], region))
-        print('-'*25)
+
+        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+            print('-'*25)
 
         position['reg'] = region
         position['reg_music'] = reg_music
