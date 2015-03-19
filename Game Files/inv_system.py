@@ -17,6 +17,7 @@ import sys
 import json
 import time
 import pets
+import math
 from copy import copy as _c
 
 import npcs
@@ -226,7 +227,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                     if not gs:
                         print(''.join([vis_cat + ': \n      ' + '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
-                                inventory[cat]) if not y.equip])]))
+                                inventory[cat])])]))
 
                     else:
                         print(vis_cat + ': \n      ' + '\n      '.join(
@@ -265,9 +266,9 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 try:
                     if cat in ['weapons', 'armor']:
                         if gs:
-                            item = [x for x in inventory[cat] if not x.equip and not x.imp][item]
+                            item = [x for x in inventory[cat] if not x.imp][item]
                         else:
-                            item = [x for x in inventory[cat] if not x.equip][item]
+                            item = [x for x in inventory[cat]][item]
 
                     else:
                         if gs:
@@ -296,8 +297,6 @@ def pick_action(cat, item):
 
             use_equip = 'Equip'
 
-            if item.equip:
-                break
         else:
             use_equip = 'Use'
         action = input("""What do you want to do with {0} {1}?
@@ -418,6 +417,33 @@ Input [#] (or type "back"): """.format(str(selected)))
 
                 if action == '1':
                     if not isinstance(selected, pets.Companion):
+                        if isinstance(selected, i.Weapon):
+                            if selected.type_ == 'melee':
+                                main.player.attk -= selected.power
+                                main.player.p_attk -= int(math.ceil(selected.power/3))
+                                main.player.m_attk -= int(math.ceil(selected.power/3))
+
+                            elif selected.type_ == 'magic':
+                                main.player.m_attk -= selected.power
+                                main.player.p_attk -= int(math.ceil(selected.power/3))
+                                main.player.attk -= int(math.ceil(selected.power/3))
+
+                            elif selected.type_ == 'ranged':
+                                main.player.p_attk -= selected.power
+                                main.player.m_attk -= int(math.ceil(selected.power/3))
+                                main.player.attk -= int(math.ceil(selected.power/3))
+
+                        elif isinstance(selected, i.Armor):
+                            if selected.type_ == 'melee':
+                                main.player.dfns -= selected.defense
+                                main.player.m_dfns -= int(math.ceil(selected.defense/2))
+                                main.player.p_dfns -= int(math.ceil(selected.defense/1.5))
+
+                            elif selected.type_ == 'magic':
+                                main.player.m_dfns -= selected.defense
+                                main.player.p_dfns -= int(math.ceil(selected.defense/1.5))
+                                main.player.dfns -= int(math.ceil(selected.defense/2))
+
                         equipped[key].equip = False
                         inventory[selected.cat].append(equipped[key])
                         equipped[key] = '(None)'

@@ -93,8 +93,10 @@ class Weapon(Item):
         self.class_ = class_
         self.equip = equip
         self.element = element
+
         if isinstance(self.class_, str):
             self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'''])
+
         else:
             self.desc = ' '.join([desc, '|', ' and '.join([
                 x.title() for x in self.class_]), 'ONLY'])
@@ -121,6 +123,8 @@ class Weapon(Item):
             if isinstance(equipped['weapon'], Weapon):
                 old = copy.copy(equipped['weapon'])
                 old.equip = False
+                inventory['weapons'].remove(self)
+                inventory['weapons'].append(old)
 
                 if old.type_ == 'melee':
                     main.player.attk -= old.power
@@ -205,16 +209,18 @@ class Armor(Item):
             if isinstance(equipped[self.part], Armor):
                 old = copy.copy(equipped[self.part])
                 old.equip = False
+                inventory['armor'].remove(self)
+                inventory['armor'].append(old)
 
                 if old.type_ == 'melee':
                     main.player.dfns -= old.defense
-                    main.player.m_dfns -= int(math.ceil(self.defense/2))
-                    main.player.p_dfns -= int(math.ceil(self.defense/1.5))
+                    main.player.m_dfns -= int(math.ceil(old.defense/2))
+                    main.player.p_dfns -= int(math.ceil(old.defense/1.5))
 
                 elif old.type_ == 'magic':
                     main.player.m_dfns -= old.defense
-                    main.player.p_dfns -= int(math.ceil(self.defense/1.5))
-                    main.player.dfns -= int(math.ceil(self.defense/2))
+                    main.player.p_dfns -= int(math.ceil(old.defense/1.5))
+                    main.player.dfns -= int(math.ceil(old.defense/2))
 
             equipped[self.part] = fizz
 
