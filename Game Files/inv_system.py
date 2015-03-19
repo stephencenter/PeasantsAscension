@@ -112,13 +112,14 @@ def pick_category():
     while True:
         print("""Categories:
       [1] Armor
-      [2] Consumables
-      [3] Weapons
-      [4] Quest Items
-      [5] Coordinates
-      [6] Pets
-      [7] Miscellaneous
-      [8] Quests""")
+      [2] Weapons
+      [3] Pets
+      [4] Equipped Items
+      [5] Consumables
+      [6] Coordinates
+      [7] Quest Items
+      [8] Quests
+      [9] Miscellaneous""")
         while True:
             cat = input('Input [#] (or type "exit"): ')
 
@@ -126,32 +127,38 @@ def pick_category():
 
             if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                 return
+
             elif cat == '1':
                 cat = 'armor'
                 vis_cat = 'Armor'
             elif cat == '2':
-                cat = 'consum'
-                vis_cat = 'Consumables'
-            elif cat == '3':
                 cat = 'weapons'
                 vis_cat = 'Weapons'
-            elif cat == '4':
-                cat = 'q_items'
-                vis_cat = 'Quest Items'
-            elif cat == '5':
-                cat = 'coord'
-                vis_cat = 'Coordinates'
-            elif cat == '6':
+            elif cat == '3':
                 cat = 'pets'
                 vis_cat = 'Pets'
+            elif cat == '4':
+                cat = 'equipped_items'
+                vis_cat = 'Equipped Items'
+            elif cat == '5':
+                cat = 'consum'
+                vis_cat = 'Consumables'
+            elif cat == '6':
+                cat = 'coord'
+                vis_cat = 'Coordinates'
             elif cat == '7':
-                cat = 'misc'
-                vis_cat = 'Miscellaneous'
+                cat = 'q_items'
+                vis_cat = 'Quest Items'
             elif cat == '8':
                 cat = 'quests'
                 vis_cat = 'Quests'
+            elif cat == '9':
+                cat = 'misc'
+                vis_cat = 'Miscellaneous'
+
             else:
                 continue
+
             if cat in inventory:
 
                 if inventory[cat]:
@@ -185,6 +192,10 @@ def pick_category():
                     print('-'*25)
                     break
 
+            elif cat == 'equipped_items':
+                pick_item(cat, vis_cat)
+                break
+
             if cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(
                     x, npcs.Quest) and x.started]:
                 pick_item(cat, vis_cat)
@@ -199,9 +210,13 @@ def pick_category():
 
 def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in your inventory
     # If "gs == True" that means that items are being sold, and not used.
-    while cat == 'quests' or inventory[cat]:
+    while cat in ['quests', 'equipped_items'] or inventory[cat]:
         if cat == 'quests':
             view_quests()
+            return
+
+        elif cat == 'equipped_items':
+            manage_equipped()
             return
 
         else:
@@ -209,14 +224,14 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 if [x for x in inventory[cat] if not x.equip]:
                     print('-'*25)
                     if not gs:
-                        print(vis_cat + ': \n      ' + '\n      '.join(
+                        print(''.join([vis_cat + ': \n      ' + '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
-                                inventory[cat]) if not y.equip]))
+                                inventory[cat]) if not y.equip])]))
 
                     else:
                         print(vis_cat + ': \n      ' + '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
-                             for x, y in enumerate(inventory[cat]) if not y.equip]))
+                             for x, y in enumerate(inventory[cat])]))
                 else:
                     return
 
@@ -341,6 +356,83 @@ Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else '
 
         elif action in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
             return
+
+
+def manage_equipped():
+    global equipped
+
+    spam = False
+
+    while True:
+        if not spam:
+            equipped_list = []
+            for key in equipped:
+                equipped_list.append(equipped[key])
+            equipped_list.append(main.player.current_pet)
+
+        print('-'*25)
+        print("""Equipped Items:
+      [1] {0}
+      [2] {1}
+      [3] {2}
+      [4] {3}
+      [5] {4}""".format(equipped_list[0], equipped_list[1],
+                          equipped_list[2], equipped_list[3], equipped_list[4]))
+        spam = True
+        while spam:
+            selected = input('Input [#] (or type "back"): ')
+            try:
+                selected = int(selected) - 1
+                if selected < 0:
+                    continue
+
+            except ValueError:
+                selected = selected.lower()
+
+                if selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    return
+
+                else:
+                    continue
+
+            try:
+                selected = equipped_list[selected]
+
+            except IndexError:
+                continue
+
+            if selected == '(None)':
+                print("You don't have anything equipped in that slot.")
+                continue
+
+            if isinstance(selected, i.Weapon):
+                key = 'weapon'
+            elif isinstance(selected, i.Armor):
+                key = selected.part
+
+            while True:
+                action = input("""What do you want to do with your {0}?
+      [1] Unequip
+      [2] Read Description
+Input [#] (or type "back"): """.format(str(selected)))
+
+                if action == '1':
+                    if not isinstance(selected, pets.Companion):
+                        equipped[key].equip = False
+                        inventory[selected.cat].append(equipped[key])
+                        equipped[key] = '(None)'
+
+                    else:
+                        main.player.current_pet.equip = False
+                        inventory[selected.cat].append(equipped[key])
+                        main.player.current_pet = '(None)'
+
+                    spam = False
+                    break
+
+                elif action == '2':
+                    print(selected.desc)
+
 
 
 def view_quests():
@@ -636,10 +728,12 @@ def deserialize_equip(path):
 
         elif category == 'weapon':
             x = i.Weapon('', '', '', '', '', '', '')
+            x.__dict__ = j_equipped[category]
 
         else:
             x = i.Armor('', '', '', '', '', '', '', '')
-        x.__dict__ = j_equipped[category]
+            x.__dict__ = j_equipped[category]
+
         norm_equip[category] = x
 
     equipped = norm_equip
