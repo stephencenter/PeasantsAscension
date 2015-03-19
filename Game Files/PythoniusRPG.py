@@ -183,6 +183,7 @@ class PlayerCharacter:  # The Player
 
                 if y_n.startswith('y'):
                     return self.name
+
                 elif y_n.startswith('n'):
                     break
 
@@ -212,6 +213,7 @@ class PlayerCharacter:  # The Player
 
                 if y_n.startswith('y'):
                     return class_
+
                 elif y_n.startswith('n'):
                     break
 
@@ -490,6 +492,11 @@ def set_adventure_name():
                     print()
                     break
 
+        elif len(choice) > 35 and len(new_choice) > 30:
+            print('The maximum Adventure Name size is 35 characters - sorry!]')
+
+            continue
+
         else:
             while True:
                 y_n = input('You wish for your adventure to be known as "{0}"? | Yes or No: '.
@@ -619,6 +626,7 @@ def check_save():  # Check for save files and load the game if they're found
 
     dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
     save_files = {}
+    menu_info = {}
 
     for directory in dirs:
 
@@ -641,6 +649,13 @@ def check_save():  # Check for save files and load the game if they're found
                 sav_position, sav_quests_dia,
                 sav_spellbook]]
 
+            try:
+                with open('/'.join(['Save Files', directory, "menu_info.txt"]),
+                          mode='r', encoding='utf-8') as f:
+                    menu_info[directory] = f.read()
+            except FileNotFoundError:
+                menu_info[directory] = "Unable to load preview info"
+
     time.sleep(0.25)
 
     if not save_files:
@@ -653,10 +668,14 @@ def check_save():  # Check for save files and load the game if they're found
     print('-'*25)
     print('Found {0} valid save file(s): '.format(len(save_files)))
 
+    padding = len(max([index for index in save_files], key=len))
+
     spam = True
     while spam:
         print('     ', '\n      '.join(
-            ['[' + str(num + 1) + '] ' + dir_name for num, dir_name in enumerate(save_files)]))
+            ['[' + str(num + 1) + '] ' + dir_name + ' '*(padding - len(dir_name)) +
+             ' | ' + menu_info[dir_name]
+             for num, dir_name in enumerate([key for key in sorted(save_files)])]))
 
         while True:
             chosen = input('Input [#] (or type "create new"): ')
@@ -677,14 +696,14 @@ def check_save():  # Check for save files and load the game if they're found
                     continue
 
             try:
-                adventure_name = list(save_files)[chosen]
+                adventure_name = sorted(save_files)[chosen]
             except IndexError:
                 continue
 
             format_save_names()
 
             print('-'*25)
-            print('Loading Save File: "{0}"...'.format(list(save_files)[chosen]))
+            print('Loading Save File: "{0}"...'.format(sorted(save_files)[chosen]))
             time.sleep(0.25)
 
             try:  # Attempt to open the save files and translate
@@ -707,6 +726,9 @@ def check_save():  # Check for save files and load the game if they're found
                 deserialize_player(sav_play_stats)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
+
+                if 'status_ail' not in player.__dict__:
+                    player.status_ail = 'none'
 
                 print('Load successful.')
 
@@ -755,6 +777,12 @@ def save_game():
                 serialize_player(sav_play_stats)
                 npcs.serialize_dialogue(sav_quests_dia)
                 magic.serialize_sb(sav_spellbook)
+
+                with open('/'.join([save_dir, adventure_name, 'menu_info.txt']),
+                          mode='w', encoding='utf-8') as f:
+                    f.write("{0} | LVL: {1} | Class: {2}".format(player.name,
+                                                                 player.lvl,
+                                                                 player.class_.title()))
 
                 print('Save successful.')
                 return
