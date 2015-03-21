@@ -651,7 +651,7 @@ def check_save():  # Check for save files and load the game if they're found
 
             try:
                 with open('/'.join(['Save Files', directory, "menu_info.txt"]),
-                          mode='r', encoding='utf-8') as f:
+                          encoding='utf-8') as f:
                     menu_info[directory] = f.read()
             except FileNotFoundError:
                 menu_info[directory] = "Unable to load preview info"

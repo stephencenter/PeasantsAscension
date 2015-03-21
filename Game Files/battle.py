@@ -670,7 +670,6 @@ def bat_stats():
     third_padding = len(max(['{0}/{1} MP'.format(player.mp, misc_vars['mp_p']),
                              '{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])]))
 
-
     # Player Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
           player.name, player.hp,

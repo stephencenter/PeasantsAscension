@@ -41,7 +41,7 @@ equipped = {'weapon': '', 'head': _c(i.straw_hat),
 # what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
 
 gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
-             i.l_potion, i.l_potion, i.x_potion],  # Health Potions
+            i.l_potion, i.l_potion, i.x_potion],  # Health Potions
 
             [i.s_elixir, i.s_elixir, i.m_elixir,
              i.l_elixir, i.l_elixir, i.x_elixir],  # Mana Potions
@@ -60,7 +60,7 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
             ],
 
             'Weapons': [[i.cpr_swd, i.en_cpr_swd, i.bnz_spr,
-             i.en_bnz_spr, i.irn_axe, i.en_irn_axe],  # Warrior Weapons
+            i.en_bnz_spr, i.irn_axe, i.en_irn_axe],  # Warrior Weapons
 
             [i.oak_stf, i.en_oak_stf, i.arc_spb,
              i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],  # Mage Weapons
@@ -73,7 +73,7 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
             ],
 
             'Armor': [[i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
-             i.en_stl_hlm, i.ori_hlm, i.ori_hlm],  # Warrior Armor -- Head
+            i.en_stl_hlm, i.ori_hlm, i.ori_hlm],  # Warrior Armor -- Head
 
             [i.bnz_cst, i.en_bnz_cst, i.stl_cst,
              i.en_stl_cst, i.ori_cst, i.ori_cst],  # Warrior Armor -- Body
@@ -97,7 +97,7 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
              i.en_std_bdy, i.drg_bdy, i.drg_bdy],  # Assassin + Ranged Armor -- Body
 
             [i.lth_leg, i.en_lth_leg, i.std_leg,
-             i.en_std_leg, i.drg_leg,]],  # Assassin + Ranged Armor -- Legs
+             i.en_std_leg, i.drg_leg]],  # Assassin + Ranged Armor -- Legs
 
             'Other': [[i.divining_rod, i.divining_rod, i.divining_rod,
                        i.divining_rod, i.divining_rod, i.divining_rod],
@@ -225,14 +225,14 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 if [x for x in inventory[cat] if not x.equip]:
                     print('-'*25)
                     if not gs:
-                        print(''.join([vis_cat + ': \n      ' + '\n      '.join(
+                        print(''.join([vis_cat, ': \n      ', '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
                                 inventory[cat])])]))
 
                     else:
-                        print(vis_cat + ': \n      ' + '\n      '.join(
+                        print(''.join([vis_cat, ':\n      ', '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
-                             for x, y in enumerate(inventory[cat])]))
+                             for x, y in enumerate(inventory[cat])])]))
                 else:
                     return
 
@@ -314,6 +314,7 @@ Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else '
 
             else:
                 item.use_item()
+                return
 
         elif action == '2':
             print('-'*25)
@@ -376,7 +377,7 @@ def manage_equipped():
       [3] {2}
       [4] {3}
       [5] {4}""".format(equipped_list[0], equipped_list[1],
-                          equipped_list[2], equipped_list[3], equipped_list[4]))
+                        equipped_list[2], equipped_list[3], equipped_list[4]))
         spam = True
         while spam:
             selected = input('Input [#] (or type "back"): ')
@@ -389,6 +390,7 @@ def manage_equipped():
                 selected = selected.lower()
 
                 if selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    print('-'*25)
                     return
 
                 else:
@@ -409,6 +411,7 @@ def manage_equipped():
             elif isinstance(selected, i.Armor):
                 key = selected.part
 
+            print('-'*25)
             while True:
                 action = input("""What do you want to do with your {0}?
       [1] Unequip
@@ -416,6 +419,17 @@ def manage_equipped():
 Input [#] (or type "back"): """.format(str(selected)))
 
                 if action == '1':
+                    if selected.name == 'Fists':
+                        print('-'*25)
+                        input("Removing those would be difficult without causing damage | \
+Press enter/return ")
+                        print('-'*25)
+
+                        continue
+
+                    print('-'*25)
+                    input('You unequip the {0} | Press enter/return '.format(selected.name))
+
                     if not isinstance(selected, pets.Companion):
                         if isinstance(selected, i.Weapon):
                             if selected.type_ == 'melee':
@@ -433,6 +447,9 @@ Input [#] (or type "back"): """.format(str(selected)))
                                 main.player.m_attk -= int(math.ceil(selected.power/3))
                                 main.player.attk -= int(math.ceil(selected.power/3))
 
+                            equipped[key].equip = False
+                            equipped[key] = i.fists
+
                         elif isinstance(selected, i.Armor):
                             if selected.type_ == 'melee':
                                 main.player.dfns -= selected.defense
@@ -444,9 +461,10 @@ Input [#] (or type "back"): """.format(str(selected)))
                                 main.player.p_dfns -= int(math.ceil(selected.defense/1.5))
                                 main.player.dfns -= int(math.ceil(selected.defense/2))
 
-                        equipped[key].equip = False
+                            equipped[key].equip = False
+                            equipped[key] = '(None)'
+
                         inventory[selected.cat].append(equipped[key])
-                        equipped[key] = '(None)'
 
                     else:
                         main.player.current_pet.equip = False
@@ -458,7 +476,6 @@ Input [#] (or type "back"): """.format(str(selected)))
 
                 elif action == '2':
                     print(selected.desc)
-
 
 
 def view_quests():
@@ -473,14 +490,16 @@ def view_quests():
             print('-'*25)
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
                         and x.finished]
+
             if dialogue:
                 while fizz:
                     print('Finished Quests: ')
-                    print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
-                                                   for num, x in
-                                                   enumerate([y for y in npcs.all_dialogue
-                                                              if isinstance(y, npcs.Quest)
-                                                              and y.finished])]))
+                    print('     ', '\n     '
+                                   ' '.join(['[' + str(num + 1) + '] ' + x.name
+                                            for num, x in
+                                            enumerate([y for y in npcs.all_dialogue
+                                                       if isinstance(y, npcs.Quest)
+                                                       and y.finished])]))
 
                     while True:
                         number = input('Input [#] (or type "back"): ')
@@ -581,7 +600,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
             for num, i in enumerate(inventory[cat]):
                 if i.name == item.name:
 
-                    inventory[cat].remove(inventory[cat][num])
+                    inventory[cat].remove(i)
                     main.misc_vars['gp'] += item.sell
 
                     print('You hand the shopkeep your {0} and recieve {1} GP.'.format(
@@ -683,7 +702,7 @@ def deserialize_inv(path):
                 else:
                     x = i.Consumable('', '', '', '')
 
-            elif category == 'weapon':
+            elif category == 'weapons':
                 x = i.Weapon('', '', '', '', '', '', '')
 
             elif category == 'armor':
@@ -721,6 +740,7 @@ def deserialize_inv(path):
                     x = i.Item('', '', '', '')
             else:
                 continue
+
             x.__dict__ = item
             norm_inv[category].append(x)
 

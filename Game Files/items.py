@@ -170,11 +170,12 @@ class Weapon(Item):
                 pass
 
             print('-'*25)
-            print('You equip the {0}.'.format(str(self)))
+            input('You equip the {0} | Press enter/return '.format(str(self)))
 
         else:
             print('-'*25)
-            print("You must be a {0} to equip this.".format(self.class_.title()))
+            input("You must be a {0} to equip this | Press enter/return ".format(
+                self.class_.title()))
 
 
 class Armor(Item):
@@ -246,11 +247,12 @@ class Armor(Item):
                 pass
 
             print('-'*25)
-            print('You equip the {0}.'.format(str(self)))
+            input('You equip the {0} | Press enter/return '.format(str(self)))
 
         else:
             print('-'*25)
-            print("You must be a {0} to equip this.".format(self.class_.title()))
+            input("You must be a {0} to equip this | Press enter/return ".format(
+                self.class_.title()))
             print('-'*25)
 
 
@@ -425,6 +427,12 @@ silence_potion = StatusPotion('Potion of Allowing Speech',
 poison_potion = StatusPotion('Potion of Curing Disease',
                              'Cures poison. Testing this potion proved to be difficult.',
                              25, 10, 'poisoned')
+
+# Fists
+fists = Weapon('Fists',
+               """Nothing beats good ol' fashioned hand-to-hand combat (+0 Attack)""",
+               0, 0, 0, 'melee', 'none')  # Fists exist to prevent bugs caused by not having any
+                                          # weapon equipped.
 
 # Weapons -- Warrior
 wdn_sht = Weapon('Wooden Shortsword',
