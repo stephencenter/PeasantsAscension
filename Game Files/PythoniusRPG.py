@@ -74,6 +74,15 @@ import items
 import sounds
 import towns
 
+# THIS IF FOR AUTOMATED BUG-TESTING!!
+# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
+# def test_input(string):
+#    spam = random.choice('0123456789ynxpsewrt')
+#    print(string, spam)
+#    return spam
+
+# input = test_input
+
 # Log everything and send it to stderr.
 logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
 

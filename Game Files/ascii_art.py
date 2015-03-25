@@ -60,7 +60,7 @@ player_art = {
 monster_art = {
     "Shell Mimic":
 """
-/-----\
+/-----\\
  o P o
 \-----/
         %s""",
@@ -80,7 +80,7 @@ monster_art = {
   / \\
         %s""",
 
-    "Sea Serpant":
+    "Sea Serpent":
 """
 \\   ___/^*
  \\_/

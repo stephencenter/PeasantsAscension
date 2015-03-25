@@ -18,12 +18,21 @@ import json
 import time
 import pets
 import math
+import random
 from copy import copy as _c
 
 import npcs
 import towns
 import items as i
 
+# THIS IF FOR AUTOMATED BUG-TESTING!!
+# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
+# def test_input(string):
+#    spam = random.choice('0123456789ynxpsewrt')
+#    print(string, spam)
+#    return spam
+
+# input = test_input
 
 if __name__ == "__main__":
     sys.exit()
