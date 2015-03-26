@@ -521,7 +521,7 @@ Press enter/return ".format(vis_cat))
                             print('You give the shopkeeper {0} GP.'.format(chosen_pet.cost))
 
                             chosen_pet.equip = True
-                            if main.player.current_pet:
+                            if main.player.current_pet != '(None)':
                                 main.player.current_pet.equip = False
                             inv_system.inventory['pets'].append(chosen_pet)
                             main.player.current_pet = chosen_pet

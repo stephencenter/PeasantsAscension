@@ -154,7 +154,7 @@ class PlayerCharacter:  # The Player
         self.ext_exp = ext_exp  # Extra Experience
         self.class_ = class_  # Player Class
         self.element = element
-        self.current_pet = ''  # Current Pet
+        self.current_pet = '(None)'  # Current Pet
         self.status_ail = 'none'  # Current Status Ailment
 
     def player_damage(self, var):  # The formula for the player dealing damage
@@ -445,7 +445,7 @@ Input letter: """)
             print(line)
             time.sleep(0.35)
 
-        if self.current_pet:
+        if self.current_pet != '(None)':
             print('  Name: {0}'.format(self.current_pet))
             time.sleep(0.35)
             print('  Level: {0}'.format(self.current_pet.level))

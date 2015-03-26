@@ -25,6 +25,7 @@ import sys
 
 # input = test_input
 
+
 class TSModeError(Exception):
     """
     Stands for "Text Scroll Mode Error"

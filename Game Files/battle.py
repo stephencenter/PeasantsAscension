@@ -295,7 +295,7 @@ def player_turn(var, dodge, move):
             return False
 
         if not isinstance(player.current_pet, pets.Steed) \
-                and player.current_pet \
+                and player.current_pet != '(None)' \
                 and monster.hp > 0:
 
             input('\nPress Enter/Return')
