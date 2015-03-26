@@ -5,8 +5,8 @@
  |_|    \__, |\__|_| |_|\___/|_| |_|_|\__,_|___/
         |___/
             
-PythoniusRPG -- Copyright 2013, 2014 Stephen Center
- -- v0.6.2 Alpha
+PythoniusRPG -- Programmed in Python by Stephen Center (RbwNjaFurret)
+ -- v0.6.3 Alpha
 ----------------------------------------------------
 Legal Stuff:
 
@@ -79,7 +79,7 @@ Why is the game named "Pythonius"?
     When I was first making the game, I imagined that Pythonius
     would be some sort of main-character. In v0.6.1, I finally
     decided that Pythonius was a war general who helped Pythonia
-    rebel against the oppressive Flygonian Empire. Pythonius IS
+    rebel against the oppressive Flysconian Empire. Pythonius IS
     a character in the game, but this character is actually
     the war general's son, King Pythonius II. A more in-depth
     description of these events can be read by selecting
@@ -90,7 +90,7 @@ What is the "Adventure Name"?
     When creating your character, the game will ask you to input
     an Adventure Name. The purpose of this is to give a name to the
     folder in which the save files are located. This is why there are
-    so many limitations to what you can name adventure, as certain 
+    so many limitations to what you can name adventures, as certain 
     symbols are not allowed as folder names on certain OSes. To prevent
     problems, the game only allows alphanumeric characters (A-Z, a-z, 0-9)
     as well as the underscore-character ( _ ) and the hyphen-character ( - ).
@@ -125,9 +125,9 @@ How to change the settings:
 Credits:
 
     Programmed by Stephen Center
-    Music by Eric Skiff and Ben Landis
-    Artwork by Gabriel Tucker & Jacob Hall
-    Sound FX by Stephen Center and Gabriel Tucker
+    Music by Eric Skiff, Ben Landis, and some others
+    Artwork by Jacob Hall
+    Sound FX by Stephen Center
     
     Full credits can be found in Credits.txt
 ----------------------------------------------------
