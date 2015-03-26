@@ -158,8 +158,8 @@ class Monster:
             self.monster_name
         ))
 
-        # Only do this on turns that are a multiple of 5 (or turn 1)
-        if (not battle.temp_stats['turn_counter'] % 5 or
+        # Only do this on turns that are a multiple of 4 (or turn 1)
+        if (not battle.temp_stats['turn_counter'] % 4 or
             battle.temp_stats['turn_counter'] == 1) \
                 and random.randint(0, 1) and self.mp > 2:
 

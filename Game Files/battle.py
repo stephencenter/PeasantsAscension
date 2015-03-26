@@ -657,7 +657,7 @@ def bat_stats():
 
     # Sorry this section is kinda complicated. Basically, this calculates the length of certain
     # strings to see how much padding (extra spaces) is needed to make things line up.
-    if pet:
+    if pet != '(None)':
         first_padding = len(max([''.join([player.name, "'s ", pet.name]),
                                  pet.name, monster.name], key=len))
 
