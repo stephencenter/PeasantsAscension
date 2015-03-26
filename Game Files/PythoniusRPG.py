@@ -809,7 +809,7 @@ def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
 
     for key in player.__dict__:
 
-        if (player.__dict__[key] != player.current_pet) or (not player.current_pet):
+        if (player.__dict__[key] != player.current_pet) or (player.current_pet == '(None)'):
             spam[key] = player.__dict__[key]
 
         else:

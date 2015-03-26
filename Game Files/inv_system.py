@@ -406,8 +406,9 @@ def manage_equipped():
                 continue
 
             if selected == '(None)':
+                print('-'*25)
                 print("You don't have anything equipped in that slot.")
-                continue
+                break
 
             if isinstance(selected, i.Weapon):
                 key = 'weapon'
