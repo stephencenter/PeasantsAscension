@@ -308,18 +308,23 @@ def pick_action(cat, item):
 
         else:
             use_equip = 'Use'
-        action = input("""What do you want to do with {0} {1}?
-      [1] {2}
+        action = input("""What do you want to do with your {0}?
+      [1] {1}
       [2] Read Description
       [3] Drop
-Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else 'this',
-                                       str(item), use_equip))
+Input [#] (or type "back"): """.format(str(item), use_equip))
 
         if action == '1':
             if isinstance(item, pets.Companion):
+                input('You equip the {0} | Press enter/return '.format(item.name))
                 item.equip = True
-                main.player.current_pet.equip = False
+
+                if isinstance(main.player.current_pet, pets.Companion):
+                    main.player.current_pet.equip = False
+
                 main.player.current_pet = item
+                inventory['pets'].remove(item)
+                return
 
             else:
                 item.use_item()
@@ -472,7 +477,7 @@ Press enter/return ")
 
                     else:
                         main.player.current_pet.equip = False
-                        inventory[selected.cat].append(equipped[key])
+                        inventory[selected.cat].append(main.player.current_pet)
                         main.player.current_pet = '(None)'
 
                     spam = False

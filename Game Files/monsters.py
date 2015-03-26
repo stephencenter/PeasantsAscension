@@ -274,7 +274,7 @@ class Monster:
         monster_type = {'Shore': ['Shell Mimic', 'Giant Crab', 'Naiad',
                                   'Sea Serpent', 'Squid'],
                         'Swamp': ['Bog Slime', 'Moss Ogre', 'Sludge Rat',
-                                  'Walking Venus', 'Vine Lizards'],
+                                  'Walking Venus', 'Vine Lizard'],
                         'Forest': ['Goblin', 'Beetle', 'Sprite',
                                    'Imp', 'Bat'],
                         'Desert': ['Mummy', 'Sand Golem', 'Minubis',

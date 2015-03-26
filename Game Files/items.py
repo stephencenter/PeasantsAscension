@@ -792,7 +792,7 @@ def monster_drop(level, name):
                          'Moss Ogre': [skeleton_bone],
                          'Sludge Rat': [monster_skull],
                          'Walking Venus': [plant_stalk],
-                         'Vine Lizards': [serpent_scale],
+                         'Vine Lizard': [serpent_scale],
                          'Goblin': [shirt_cloth],
                          'Beetle': [beetle_shell],
                          'Sprite': [fairy_dust],

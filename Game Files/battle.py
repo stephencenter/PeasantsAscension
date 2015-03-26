@@ -111,7 +111,7 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.set_volume(main.music_vol)
 
         print(ascii_art.monster_art[monster.monster_name] % '')
-        print('The legendary {0} has awoken!'.format(monster.name))
+        input('The legendary {0} has awoken! | Press enter/return '.format(monster.name))
 
     else:
         if random.randint(0, 1):
@@ -132,9 +132,11 @@ def battle_system(is_boss=False, ambush=False):
             a_an = 'A '
 
         if ambush:
-            print('{0}{1} ambushed you while you were resting!'.format(a_an, monster.name))
+            input('{0}{1} ambushed you while you were resting! | Press enter/return '.format(
+                a_an, monster.name))
         else:
-            print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monster.name))
+            input('{0}{1} suddenly appeared out of nowhere! | Press enter/return'.format(
+                a_an, monster.name))
 
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
@@ -162,8 +164,7 @@ def battle_system(is_boss=False, ambush=False):
             else:
                 print('-Player Turn-')
                 print(ascii_art.player_art["Asleep"] % "{0} is asleep!\n ".format(player.name))
-                print("You're too tired to do anything!")
-                input('\nPress Enter/Return')
+                input("You're too tired to do anything! | Press Enter/Return ")
                 move = ''
         else:
             move = player_choice()
@@ -192,7 +193,8 @@ def battle_system(is_boss=False, ambush=False):
 
         elif move == '5':
             if player.status_ail == 'weakened':
-                print('You feel incredibly weakened, and are unable to run away.')
+                input('You feel incredibly weakened and are unable to run away \
+| Press enter/return ')
 
                 continue
 
@@ -664,7 +666,7 @@ def bat_stats():
         second_padding = len(max(['{0}/{1} HP'.format(player.hp, misc_vars['hp_p']),
                                   'LVL: {0}'.format(pet.level)
                                   if isinstance(pet, pets.Fighter)
-                                  else '{{0}/{1}'.format(pet.mana, pet.max_m)
+                                  else '{0}/{1}'.format(pet.mana, pet.max_m)
                                   if isinstance(pet, pets.Healer)
                                   else '',
                                   '{0}/{1} HP'.format(monster.mp, misc_vars['mp_p'])], key=len))
@@ -703,7 +705,7 @@ def bat_stats():
             print("{0}'s {1}{pad1} | {2}/{3} MP {pad2}| LVL: {4}".format(
                 player.name, pet.name, pet.mana, pet.max_m, pet.level,
                 pad1=' '*(first_padding - len(''.join([player.name, "'s ", pet.name]))),
-                pad2=' '*(second_padding - len('{{0}/{1}'.format(pet.mana, pet.max_m)))))
+                pad2=' '*(second_padding - len('{0}/{1}'.format(pet.mana, pet.max_m)))))
 
         elif isinstance(pet, pets.Fighter):
             print("{0}'s {1}{pad1} | LVL: {2} {pad2}| STATUS: {3}".format(
