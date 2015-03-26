@@ -133,7 +133,8 @@ class Weapon(Item):
                 old = copy.copy(equipped['weapon'])
                 old.equip = False
                 inventory['weapons'].remove(self)
-                inventory['weapons'].append(old)
+                if old.name != 'Fists':
+                    inventory['weapons'].append(old)
 
                 if old.type_ == 'melee':
                     main.player.attk -= old.power
@@ -167,16 +168,7 @@ class Weapon(Item):
                 main.player.p_attk += int(math.ceil(self.power/3))
                 main.player.attk += int(math.ceil(self.power/3))
 
-            for x, y in enumerate(inventory[self.cat]):
-                if self.name == y.name:
-                    key = x
-                    y.equip = True
-                    break
-
-            try:
-                inventory[self.cat][key] = old
-            except NameError:
-                pass
+            self.equip = True
 
             print('-'*25)
             input('You equip the {0} | Press enter/return '.format(str(self)))
@@ -244,16 +236,7 @@ class Armor(Item):
                 main.player.dfns += int(math.ceil(self.defense/2))
                 main.player.p_dfns += int(math.ceil(self.defense/1.5))
 
-            for x, y in enumerate(inventory[self.cat]):
-                if self.name == y.name:
-                    key = x
-                    y.equip = True
-                    break
-
-            try:
-                inventory[self.cat][key] = old
-            except NameError:
-                pass
+            self.equip = True
 
             print('-'*25)
             input('You equip the {0} | Press enter/return '.format(str(self)))

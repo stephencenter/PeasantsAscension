@@ -436,14 +436,16 @@ GP). (Press enter/return).'.format(str(i), i.buy))
 
                                     else:
                                         print('-'*25)
-                                        print('The "{0}" category is empty...'.format(vis_cat))
+                                        input("You don't have any items in the \"{0}\" category |\
+Press enter/return ".format(vis_cat))
                                         print('-'*25)
 
                                 break
 
                             else:
                                 print('-'*25)
-                                print('The "{0}" category is empty...'.format(vis_cat))
+                                input("You don't have any items in the \"{0}\" category |\
+Press enter/return ".format(vis_cat))
                                 print('-'*25)
                                 break
 

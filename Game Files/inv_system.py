@@ -236,7 +236,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                     if not gs:
                         print(''.join([vis_cat, ': \n      ', '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
-                                inventory[cat])])]))
+                                item for item in inventory[cat] if not item.equip)])]))
 
                     else:
                         print(''.join([vis_cat, ':\n      ', '\n      '.join(
@@ -275,9 +275,9 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 try:
                     if cat in ['weapons', 'armor']:
                         if gs:
-                            item = [x for x in inventory[cat] if not x.imp][item]
+                            item = [x for x in inventory[cat] if not x.imp and not x.equip][item]
                         else:
-                            item = [x for x in inventory[cat]][item]
+                            item = [x for x in inventory[cat] if not x.equip][item]
 
                     else:
                         if gs:
@@ -345,15 +345,9 @@ Input [#] (or type "back"): """.format('these' if str(item).endswith('s') else '
                     y_n = y_n.lower()
 
                     if y_n.startswith('y'):
-                        print('You toss the {0} aside and continue on your journey.'.format(
+                        input('You toss the {0} aside and continue on your journey.'.format(
                             str(item)))
-
-                        for x, y in enumerate(inventory[cat]):
-                            if y.name == item.name:
-                                inventory[cat].remove(y)
-                                break
-
-                        time.sleep(1)
+                        inventory[cat].remove(item)
                         return
 
                     elif y_n.startswith('n'):
@@ -457,6 +451,7 @@ Press enter/return ")
                                 main.player.attk -= int(math.ceil(selected.power/3))
 
                             equipped[key].equip = False
+                            inventory[selected.cat].append(equipped[key])
                             equipped[key] = i.fists
 
                         elif isinstance(selected, i.Armor):
@@ -471,9 +466,8 @@ Press enter/return ")
                                 main.player.dfns -= int(math.ceil(selected.defense/2))
 
                             equipped[key].equip = False
+                            inventory[selected.cat].append(equipped[key])
                             equipped[key] = '(None)'
-
-                        inventory[selected.cat].append(equipped[key])
 
                     else:
                         main.player.current_pet.equip = False
@@ -485,6 +479,10 @@ Press enter/return ")
 
                 elif action == '2':
                     print(selected.desc)
+
+                elif action.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    spam = False
+                    break
 
 
 def view_quests():

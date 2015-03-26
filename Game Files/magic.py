@@ -406,93 +406,96 @@ spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []
 
 def pick_cat(var, dodge, is_battle=True):
     if main.player.status_ail == 'silenced':
-        input("You find youself unable to say the spells! | Press enter/return ")
+        input("You find youself unable to use spells! | Press enter/return ")
         return False
 
     while True:
         do_continue = False
-        cat = input("""Spellbook:
+        print("""Spellbook:
       [1] Damaging Spells
       [2] Buff Spells
       [3] Healing Spells
-      [4] Use Most Recent Spell
-Input [#] (or type "exit"): """)
+      [4] Use Most Recent Spell""")
+        spam = True
+        while spam:
+            cat = input('Input [#] (or type "exit"): ')
 
-        if cat == '1':
-            cat = 'Damaging'
+            if cat == '1':
+                cat = 'Damaging'
 
-        elif cat == '2':
-            cat = 'Buffs'
+            elif cat == '2':
+                cat = 'Buffs'
 
-        elif cat == '3':
-            cat = 'Healing'
+            elif cat == '3':
+                cat = 'Healing'
 
-        elif cat == '4':
-            spell = ''
+            elif cat == '4':
+                spell = ''
 
-            try:
-                for cat in spellbook:
-                    for x in spellbook[cat]:
-                        if x.name == main.misc_vars['prev_spell']:
-                            spell = x
-            except KeyError:
-                main.misc_vars['prev_spell'] = ""
+                try:
+                    for cat in spellbook:
+                        for x in spellbook[cat]:
+                            if x.name == main.misc_vars['prev_spell']:
+                                spell = x
+                except KeyError:
+                    main.misc_vars['prev_spell'] = ""
 
-            if not spell:
-                print('-'*25)
-                print('You have no previously used spells!')
-                print('-'*25)
-                continue
-
-            while True:
-                y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
-                if not y_n:
-                    continue
-
-                y_n = y_n.lower()
-
-                if y_n.startswith('y'):
-                    if isinstance(spell, Damaging):
-
-                        if spell.use_magic(var, dodge):
-                            return True
-                        else:
-                            return False
-
-                    else:
-                        if isinstance(spell, Healing):
-                            if spell.use_magic(is_battle):
-                                return True
-
-                        elif spell.use_magic():
-                            return True
-
-                        else:
-                            return False
-
-                elif y_n.startswith('n'):
+                if not spell:
                     print('-'*25)
-                    do_continue = True
+                    print('You have no previously used spells!')
+                    print('-'*25)
                     break
 
-        else:
-            if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                return False
+                while True:
+                    y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
+                    if not y_n:
+                        continue
+
+                    y_n = y_n.lower()
+
+                    if y_n.startswith('y'):
+                        if isinstance(spell, Damaging):
+
+                            if spell.use_magic(var, dodge):
+                                return True
+                            else:
+                                return False
+
+                        else:
+                            if isinstance(spell, Healing):
+                                if spell.use_magic(is_battle):
+                                    return True
+
+                            elif spell.use_magic():
+                                return True
+
+                            else:
+                                return False
+
+                    elif y_n.startswith('n'):
+                        print('-'*25)
+                        spam = False
+                        break
 
             else:
+                if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    return False
+
+                else:
+                    continue
+
+            if do_continue:
                 continue
 
-        if do_continue:
-            continue
+            if not spellbook[cat]:
+                print('-'*25)
+                print('You do not yet have any spells in the {0} category.'.format(cat))
+                print('-'*25)
+                continue
 
-        if not spellbook[cat]:
-            print('-'*25)
-            print('You do not yet have any spells in the {0} category.'.format(cat))
-            print('-'*25)
-            continue
-
-        if pick_spell(cat, var, dodge, is_battle):
-            return True
+            if pick_spell(cat, var, dodge, is_battle):
+                return True
+            break
 
 
 def pick_spell(cat, var, dodge, is_battle):
@@ -516,7 +519,9 @@ def pick_spell(cat, var, dodge, is_battle):
                 spell = spell.lower()
 
                 if spell in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    print('-'*25)
                     return False
+
                 else:
                     continue
 
