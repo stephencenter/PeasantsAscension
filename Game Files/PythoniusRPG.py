@@ -853,7 +853,7 @@ def title_screen():
         |___/
 PythoniusRPG {0} -- Programmed in Python by Stephen Center (RbwNjaFurret)
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
-Check [http://www.rbwnjafurret.com/pythoniusrpg/] periodically for updates!
+Check here often for updates: [http://www.rbwnjafurret.com/pythoniusrpg/]
 ------------------------------------------------------------------------------""".format(
         game_version))
 
