@@ -584,9 +584,12 @@ def new_spells():
                 if x.name == spell.name:
                     break
             else:
+                sounds.item_pickup.play()
                 spellbook[cat].append(spell)
                 print('You have learned "{0}", a new {1} spell!'.format(
                     str(spell), cat if not cat.endswith('s') else cat[0:len(cat) - 1]))
+
+                input('  Press enter/return ')
 
 
 def serialize_sb(path):

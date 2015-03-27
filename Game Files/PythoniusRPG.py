@@ -229,6 +229,7 @@ class PlayerCharacter:  # The Player
     def level_up(self):
         global misc_vars
         if self.exp >= misc_vars['r_xp']:
+            print()
             pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(music_vol)
@@ -239,6 +240,7 @@ class PlayerCharacter:  # The Player
             temp_ski = 0  # Temporary Skill Points
 
             while self.exp >= misc_vars['r_xp']:
+                sounds.item_pickup.play()
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
 

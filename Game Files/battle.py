@@ -111,7 +111,8 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.set_volume(main.music_vol)
 
         print(ascii_art.monster_art[monster.monster_name] % '')
-        input('The legendary {0} has awoken! | Press enter/return '.format(monster.name))
+        print('The legendary {0} has awoken!'.format(monster.name))
+        time.sleep(0.35)
 
     else:
         if random.randint(0, 1):
@@ -132,11 +133,14 @@ def battle_system(is_boss=False, ambush=False):
             a_an = 'A '
 
         if ambush:
-            input('{0}{1} ambushed you while you were resting! | Press enter/return '.format(
+            print('{0}{1} ambushed you while you were resting!'.format(
                 a_an, monster.name))
+            time.sleep(0.35)
+
         else:
-            input('{0}{1} suddenly appeared out of nowhere! | Press enter/return'.format(
+            print('{0}{1} suddenly appeared out of nowhere!'.format(
                 a_an, monster.name))
+            time.sleep(0.35)
 
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
