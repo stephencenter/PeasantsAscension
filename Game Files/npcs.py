@@ -712,7 +712,27 @@ travel.",
 
 wesley = NPC('Wesley', [wesley_phrase_1])
 
-# -- VName: Jeffery -- Town: Overshire
+# -- Name: Elisha -- Town: Southford
+elisha_phrase_1 = Conversation(["Not all towns have pet stores - ours is one of the few!",
+                                "From what I remember, Fallville and Ravenstone also have",
+                                "pet shops. I don't remember where Ravenstone is, but ",
+                                "Fallville is located at -23\u00b0S, -12\u00b0W."], active=True)
+
+elisha = NPC('Elisha', [elisha_phrase_1])
+
+# -- Name: Lazaro -- Town: Southford
+lazaro_phrase_1 = Conversation(["Greetings, adventurer from Nearton! How do I know who",
+                                "you are, you ask? Well, I am the oracle of Southford!",
+                                "His Divinity told me that you would be coming. He gave",
+                                "me a message:",
+                                "  \"Your position is saved whenever you cross region borders",
+                                "  or visit a town. If you die, you will return there!\"",
+                                "That's what He said. I do not understand His words, but",
+                                "I hope they serve their intened recipient well."], active=True)
+
+lazaro = NPC('Lazaro', [lazaro_phrase_1])
+
+# -- Name: Jeffery -- Town: Overshire
 jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far south-east of here",
                                  "who was in need of a messenger. I think the town was somewhere",
                                  "around -8\u00b0S, 20\u00b0E. Something like that."],
@@ -781,7 +801,8 @@ all_dialogue = [
     joseph_phrase_1, joseph_phrase_2, joseph_phrase_3, joseph_quest_1,
     alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
     azura_phrase_1, azura_phrase_2, azura_phrase_3, f_jones_phrase_1,
-    stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1
+    stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1,
+    elisha_phrase_1, lazaro_phrase_1
 ]
 
 

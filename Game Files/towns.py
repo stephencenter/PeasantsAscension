@@ -586,6 +586,8 @@ Press enter/return ".format(vis_cat))
 
 
 # List of Towns:
+
+# Nearton is the player's hometown.
 town1 = Town('Nearton', """Nearton: a small village in the central region of t\
 he Forest.
 It is in this very town where numerous brave adventurers have begun
@@ -593,12 +595,15 @@ their journey. Nearton has a general store, an inn, and a few small houses.
 An old man is standing near one of the houses, and appears to be very
 troubled about something.""", [npcs.philliard, npcs.alfred], 0, 1)
 
+# Southford is essentially the tutorial town. It's easy to find, and there are three NPCs
+# that all give helpful advice about the game.
 town2 = Town('Southford', """Southford: A fair-size town in the central-southe\
 rn region of the Forest.
-This town is well-known for its wise inhabitants. Some of the elders here
-are rumored to be masters of the arcane arts, and may be willing to train
-your magical abilities for a reasonable price. There is a general store, an
-inn, and several houses in this town.""", [npcs.wesley], -2, -6, inn_cost=2, pet_shop=True)
+Many of the residents of this town own pets, which can often be seen wandering the
+street. Pets can be bought at the pet-shop located in the north-east part of the
+town. The inhabitants of this town are known for being quite wise, and may
+provide you with helpful advice.""",
+             [npcs.wesley, npcs.elisha, npcs.lazaro], -2, -6, inn_cost=2, pet_shop=True)
 
 town3 = Town('Overshire', """Overshire: A city in the northwestern region of the Forest.
 Overshire is the capital of Pythonia, and as such is very densely populated.
@@ -634,7 +639,7 @@ the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
 two towns, particularly between the village leaders.""", [npcs.krystal, npcs.frederick],
-             -12, -23, gs_level=2)
+             -12, -23, gs_level=2, pet_shop=True)
 
 town8 = Town('Parceon', """Parceon: A highly populated town renown for it's rich
 magical background. Parceon is home to the famous Sorcerers' Guild,

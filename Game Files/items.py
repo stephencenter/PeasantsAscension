@@ -248,6 +248,28 @@ class Armor(Item):
             print('-'*25)
 
 
+# -- ACCESSORIES -- #
+class Accessory(Item):
+    # Base accessory class that all others inherit from
+    pass
+
+
+class ElementAccessory(Accessory):
+    # Gives the player an element used when taking damage
+    pass
+
+
+class ImmunityAccessory(Accessory):
+    # Grants the player immunity to a certain status ailment
+    pass
+
+
+class TradeOffAccessory(Accessory):
+    # Doubles one stat, but halves another
+    pass
+
+
+# -- TOOLS -- #
 class MagicCompass(Item):
     def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
