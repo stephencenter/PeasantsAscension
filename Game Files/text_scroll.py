@@ -15,6 +15,8 @@
 
 import time
 import sys
+import random
+import msvcrt
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -72,6 +74,9 @@ def text_scroll(string, mode="print", spacing=0.045):
 
             time.sleep(spacing)
 
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
     elif mode == "input":
         # Input mode prints all but the last character. The last character
         # is instead passed as the argument for the "input()" function,
@@ -87,6 +92,9 @@ def text_scroll(string, mode="print", spacing=0.045):
             print(char, end='')
             sys.stdout.flush()
             time.sleep(spacing)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
 
         return input(string[-1])
 

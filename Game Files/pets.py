@@ -20,6 +20,7 @@ import random
 import time
 import json
 import re
+import msvcrt
 
 import battle
 import sounds
@@ -112,6 +113,10 @@ class Fighter(Companion):
             print('Your pet {0} begins to attack...'.format(self.name))
             success = random.randint(1, 100)
             time.sleep(0.75)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
             sounds.enemy_hit.play()
 
             if success not in range(1, self.incap_chance + 1):

@@ -17,6 +17,7 @@ import sys
 import random
 import time
 import math
+import msvcrt
 import re
 from copy import copy as _c
 
@@ -114,6 +115,9 @@ def battle_system(is_boss=False, ambush=False):
         print('The legendary {0} has awoken!'.format(monster.name))
         time.sleep(0.35)
 
+        while msvcrt.kbhit():
+            msvcrt.getwch()
+
     else:
         if random.randint(0, 1):
             song = 'Music/Jumpshot.ogg'
@@ -137,10 +141,16 @@ def battle_system(is_boss=False, ambush=False):
                 a_an, monster.name))
             time.sleep(0.35)
 
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
         else:
             print('{0}{1} suddenly appeared out of nowhere!'.format(
                 a_an, monster.name))
             time.sleep(0.35)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
 
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
@@ -278,6 +288,9 @@ def player_turn(var, dodge, move):
 
             time.sleep(0.75)
 
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
             if dodge in range(monster.evad, 250):
                 dealt = player.player_damage(var)
                 monster.hp -= dealt
@@ -312,6 +325,10 @@ def player_turn(var, dodge, move):
         if player.status_ail == 'poisoned' and monster.hp > 0:
             if random.randint(0, 3):
                 time.sleep(0.5)
+
+                while msvcrt.kbhit():
+                    msvcrt.getwch()
+
                 sounds.poison_damage.play()
 
                 poison_damage = int(math.ceil(misc_vars['hp_p']/10))
@@ -323,6 +340,10 @@ def player_turn(var, dodge, move):
 
             else:
                 time.sleep(0.5)
+
+                while msvcrt.kbhit():
+                    msvcrt.getwch()
+
                 sounds.buff_spell.play()
                 input('You start to feel better! | Press enter/return ')
                 player.status_ail = 'none'
@@ -332,6 +353,10 @@ def player_turn(var, dodge, move):
             if not random.randint(0, 3):
 
                 time.sleep(0.5)
+
+                while msvcrt.kbhit():
+                    msvcrt.getwch()
+
                 sounds.buff_spell.play()
 
                 input('You find yourself able to speak again! | Press enter/return ')
@@ -567,6 +592,9 @@ def run_away():
 
     sounds.foot_steps.play()
     time.sleep(0.75)
+
+    while msvcrt.kbhit():
+        msvcrt.getwch()
 
     if bool(player.spd > monster.spd) != bool(player.evad > monster.evad):  # 75% chance of success
         if random.randint(0, 3):

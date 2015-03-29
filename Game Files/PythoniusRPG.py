@@ -61,6 +61,7 @@ import configparser
 import ctypes
 import re
 import logging
+import msvcrt
 
 import pygame
 
@@ -447,9 +448,17 @@ Input letter: """)
             print(line)
             time.sleep(0.35)
 
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
+
         if self.current_pet != '(None)':
             print('  Name: {0}'.format(self.current_pet))
             time.sleep(0.35)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
             print('  Level: {0}'.format(self.current_pet.level))
 
         else:
@@ -629,8 +638,16 @@ def check_save():  # Check for save files and load the game if they're found
 
     if not os.path.isdir(save_dir):
         time.sleep(0.25)
+
+        while msvcrt.kbhit():
+            msvcrt.getwch()
+
         print('No save files found. Starting new game...')
         time.sleep(0.35)
+
+        while msvcrt.kbhit():
+            msvcrt.getwch()
+
         print('-'*25)
         create_player()
         return
@@ -669,11 +686,19 @@ def check_save():  # Check for save files and load the game if they're found
 
     time.sleep(0.25)
 
+    while msvcrt.kbhit():
+        msvcrt.getwch()
+
     if not save_files:
         print('No save files found. Starting new game...')
         time.sleep(0.35)
+
+        while msvcrt.kbhit():
+            msvcrt.getwch()
+
         print('-'*25)
         create_player()
+
         return
 
     print('-'*25)
@@ -716,6 +741,9 @@ def check_save():  # Check for save files and load the game if they're found
             print('-'*25)
             print('Loading Save File: "{0}"...'.format(sorted(save_files)[chosen]))
             time.sleep(0.25)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
 
             try:  # Attempt to open the save files and translate
                 # them into objects/dictionaries
@@ -763,6 +791,9 @@ def save_game():
         if y_n.startswith('y'):
             print('Saving...')
             time.sleep(0.25)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
 
             # Check if the save directory already exists, and create it if it doesn't
             if not os.path.exists('/'.join([save_dir, adventure_name])):
@@ -875,8 +906,13 @@ Check here often for updates: [http://www.rbwnjafurret.com/pythoniusrpg/]
                     for f.readline in f:
                         print(''.join(f.readline.rstrip("\n").split(";")))
                         time.sleep(0.35)
+
+                    while msvcrt.kbhit():
+                        msvcrt.getwch()
+
             except FileNotFoundError:
                 print('The "Credits.txt" file could not be found.')
+
             except OSError:
                 logging.exception('Error loading Credits.txt:')
                 print('There was a problem opening "Credits.txt".')

@@ -18,6 +18,7 @@ import sys
 import time
 import math
 import copy
+import msvcrt
 
 import pygame
 
@@ -125,6 +126,9 @@ class Monster:
         print('The {0} is getting ready to attack you!'.format(self.name))
         time.sleep(0.75)
 
+        while msvcrt.kbhit():
+            msvcrt.getwch()
+
         if dodge in range(player.evad, 250):
             damage, type_ = self.monst_damage(var)
 
@@ -201,6 +205,9 @@ class Monster:
             print('The {0} is attempting to cast a strange spell...'.format(self.name))
             time.sleep(0.75)
 
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
             if dodge in range(battle.temp_stats['evad'], 250):
                 dealt = magic.eval_element(
                     p_elem=battle.player.element,
@@ -245,6 +252,9 @@ class Monster:
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
 
+        while msvcrt.kbhit():
+            msvcrt.getwch()
+
         print('You are now {0}!'.format(status))
         battle.player.status_ail = status
 
@@ -258,6 +268,10 @@ class Monster:
         if battle.temp_stats['m_ispoisoned']:
             if random.randint(0, 9):  # 10% chance to recover per turn
                 time.sleep(0.5)
+
+                while msvcrt.kbhit():
+                    msvcrt.getwch()
+
                 sounds.poison_damage.play()
 
                 poison_damage = int(math.ceil(misc_vars['hp_m']/10))
@@ -266,6 +280,10 @@ class Monster:
 
             else:
                 time.sleep(0.5)
+
+                while msvcrt.kbhit():
+                    msvcrt.getwch()
+
                 sounds.buff_spell.play()
                 print('The {0} recovered from the poison!'.format(self.name))
                 battle.temp_stats['m_ispoisoned'] = False

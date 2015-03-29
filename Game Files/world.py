@@ -18,7 +18,7 @@
 import sys
 import random
 import time
-
+import msvcrt
 import pygame
 
 import battle
@@ -320,6 +320,10 @@ def rest():
     print('You set up camp and begin to rest.')
 
     time.sleep(1)
+
+    while msvcrt.kbhit():
+        msvcrt.getwch()
+
     player.hp += int(misc_vars['hp_p']/4)
     player.mp += int(misc_vars['mp_p']/4)
 

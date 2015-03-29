@@ -19,6 +19,7 @@ import random
 import math
 import json
 import time
+import msvcrt
 
 import inv_system
 import sounds
@@ -332,6 +333,9 @@ class Shovel(Item):
         print('-'*25)
         print('You begin to search using your shovel...')
         time.sleep(1)
+
+        while msvcrt.kbhit():
+            msvcrt.getwch()
 
         for gem in valuable_list:
             if (main.position['x'], main.position['y']) == (gem.posx, gem.posy):

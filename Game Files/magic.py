@@ -17,6 +17,7 @@ import sys
 import json
 import random
 import time
+import msvcrt
 
 import pygame
 
@@ -140,6 +141,9 @@ class Damaging(Spell):
 
             sounds.magic_attack.play()
             time.sleep(0.75)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
 
             if dodge in range(monsters.monster.evad, 250):
                 if random.randint(0, 100) <= (14 if main.player.class_ == 'mage' else 7):

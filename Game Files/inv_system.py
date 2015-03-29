@@ -19,6 +19,7 @@ import time
 import pets
 import math
 import random
+import msvcrt
 from copy import copy as _c
 
 import npcs
@@ -332,8 +333,12 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
         elif action == '2':
             print('-'*25)
-            print(str(item) + ': ' + item.desc)
+            print(''.join([str(item), ': ', item.desc]))
             time.sleep(1)
+
+            while msvcrt.kbhit():
+                msvcrt.getwch()
+
             print('-'*25)
 
         elif action == '3':
@@ -358,6 +363,10 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                     elif y_n.startswith('n'):
                         print('You decide to keep the {0} with you.'.format(str(item)))
                         time.sleep(1)
+
+                        while msvcrt.kbhit():
+                            msvcrt.getwch()
+
                         break
 
             print('-'*25)

@@ -17,6 +17,7 @@ import sys
 import time
 import copy
 import random
+import msvcrt
 
 import pygame
 
@@ -241,6 +242,9 @@ class Town:
                     print('Sleeping...')
 
                     time.sleep(1)
+
+                    while msvcrt.kbhit():
+                        msvcrt.getwch()
 
                     main.misc_vars['gp'] -= self.inn_cost
 
