@@ -252,6 +252,7 @@ def battle_system(is_boss=False, ambush=False):
             if player.hp > 0:
                 if player.status_ail != 'asleep':
                     input('\nPress Enter/Return ')
+                    move = player_choice()
                     player_turn(var, dodge, move)
 
                 if monster.hp > 0:

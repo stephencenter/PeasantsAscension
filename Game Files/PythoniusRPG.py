@@ -438,6 +438,7 @@ Input letter: """)
 
                 '\n-Equipped Items-',
                 'Weapon: {0}'.format(inv_system.equipped['weapon']),
+                'Accessory: {0}'.format(inv_system.equipped['access']),
                 'Armor:',
                 '  Head: {0}'.format(inv_system.equipped['head']),
                 '  Body: {0}'.format(inv_system.equipped['body']),
@@ -767,7 +768,19 @@ def check_save():  # Check for save files and load the game if they're found
                 magic.deserialize_sb(sav_spellbook)
 
                 if 'status_ail' not in player.__dict__:
+                    print('Attemping to make save file compatible with v0.6.2...')
                     player.status_ail = 'none'
+                    print('Attempt successful!')
+
+                if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped:
+                    print('Attempting to make save file compatible with v0.6.4...')
+                    if 'access' not in inv_system.inventory:
+                        inv_system.inventory['access'] = []
+
+                    if 'access' not in inv_system.equipped:
+                        inv_system.equipped['access'] = '(None)'
+
+                    print('Attempt successful!')
 
                 print('Load successful.')
 

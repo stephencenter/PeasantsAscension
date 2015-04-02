@@ -292,7 +292,8 @@ class Town:
       [1] Potions
       [2] Weapons
       [3] Armor
-      [4] Other""")
+      [4] Accessories
+      [5] Other""")
                 while True:
                     spam = input('Input [#] (or type "back"): ')
                     if spam == '1':
@@ -305,6 +306,9 @@ class Town:
                         item_category = 'Armor'
 
                     elif spam == '4':
+                        item_category = 'Accessories'
+
+                    elif spam == '5':
                         item_category = 'Other'
 
                     elif spam in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
@@ -370,17 +374,17 @@ class Town:
 
                             if confirm.startswith('y'):
                                 if main.misc_vars['gp'] >= i.buy:
-
                                     inv_system.inventory[i.cat].append(i)
                                     main.misc_vars['gp'] -= i.buy
+
                                     print('-'*25)
                                     input('You purchase the {0} (-{1} \
-GP). (Press enter/return).'.format(str(i), i.buy))
+GP). (Press enter/return).'.format(i, i.buy))
                                     print('-'*25)
 
                                 else:
                                     input('"Hey, you don\'t even have enough GP for this \
-{0}!" (Press enter/return) '.format(str(i)))
+{0}!" (Press enter/return) '.format(i))
                                     print()
 
                                 break

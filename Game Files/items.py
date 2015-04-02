@@ -251,14 +251,43 @@ class Armor(Item):
 
 # -- ACCESSORIES -- #
 class Accessory(Item):
-    # Base accessory class that all others inherit from
-    pass
+    def __init__(self, name, desc, buy, sell, cat='access', imp=False, equip=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
+        self.equip = equip
 
 
 class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
-    pass
+    def __init__(self, name, desc, buy, sell, element, acc_type='elemental',
+                 cat='access', imp=False, equip=False):
+        Accessory.__init__(self, name, desc, buy, sell, cat, imp, equip)
+        self.element = element
+        self.acc_type = acc_type
 
+    def __str__(self):
+        return self.name
+
+    def use_item(self):
+        global equipped
+        global inventory
+
+        item_setup_vars()
+
+        spam = copy.copy(self)
+        if isinstance(equipped['access'], Accessory):
+            old = copy.copy(equipped['access'])
+            old.equip = False
+            inventory['access'].append(old)
+
+        inventory['access'].remove(self)
+        equipped['access'] = spam
+
+        self.equip = True
+        main.player.element = self.element
+
+        print('-'*25)
+        input('You equip the {0}. Your element is now set to {1} | Press enter/return '.format(
+            self.name, self.element))
 
 class ImmunityAccessory(Accessory):
     # Grants the player immunity to a certain status ailment
@@ -738,6 +767,19 @@ enc_yw = Weapon('Enchanted Yew Wand',
 spect_wand = Weapon('Spectre Wand',
                     'A ghastly wand made of an indescribable material (+15 Magic Attack, DEATH)',
                     0, 225, 15, 'magic', 'mage', element='death')
+
+# Accessories
+# -- Elemental Accessories
+water_amulet = ElementAccessory('Aquatic Amulet',
+                                'An amulet that imbues its wearer with the power of WATER',
+                                250, 75, 'Water')
+fire_amulet = ElementAccessory('Infernal Amulet',
+                               'An amulet that imbues its wearer with the power of FIRE',
+                               250, 75, 'Fire')
+earth_amulet = ElementAccessory('Ground Amulet',
+                                'An amulet that imbues its wearer with the power of EARTH',
+                                250, 75, 'Earth')
+
 
 # Quest items
 message_joseph = Misc('Message from Joseph',

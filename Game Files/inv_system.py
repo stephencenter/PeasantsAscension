@@ -41,11 +41,12 @@ else:
     main = sys.modules["__main__"]
 
 inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
-             'weapons': [], 'armor': [], 'pets': [], 'misc': []}
+             'weapons': [], 'armor': [], 'pets': [], 'misc': [], 'access': []}
 
 equipped = {'weapon': '', 'head': _c(i.straw_hat),
             'body': _c(i.cotton_shirt),
-            'legs': _c(i.sunday_trousers)}
+            'legs': _c(i.sunday_trousers),
+            'access': '(None)'}
 
 # "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
 # what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
@@ -109,6 +110,16 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
             [i.lth_leg, i.en_lth_leg, i.std_leg,
              i.en_std_leg, i.drg_leg]],  # Assassin + Ranged Armor -- Legs
 
+            'Accessories':
+                [[i.water_amulet, i.water_amulet, i.water_amulet,
+                  i.water_amulet, i.water_amulet, i.water_amulet],
+
+                 [i.fire_amulet, i.fire_amulet, i.fire_amulet,
+                  i.fire_amulet, i.fire_amulet, i.fire_amulet],
+
+                 [i.earth_amulet, i.earth_amulet, i.earth_amulet,
+                  i.earth_amulet, i.earth_amulet, i.earth_amulet]],
+
             'Other': [[i.divining_rod, i.divining_rod, i.divining_rod,
                        i.divining_rod, i.divining_rod, i.divining_rod],
 
@@ -125,12 +136,13 @@ def pick_category():
       [1] Armor
       [2] Weapons
       [3] Pets
-      [4] Equipped Items
-      [5] Consumables
-      [6] Coordinates
-      [7] Quest Items
-      [8] Quests
-      [9] Miscellaneous""")
+      [4] Accessories
+      [5] Equipped Items
+      [6] Consumables
+      [7] Coordinates
+      [8] Quest Items
+      [9] Quests
+      [10] Miscellaneous""")
         while True:
             cat = input('Input [#] (or type "exit"): ')
 
@@ -149,21 +161,24 @@ def pick_category():
                 cat = 'pets'
                 vis_cat = 'Pets'
             elif cat == '4':
+                cat = 'access'
+                vis_cat = 'Accessories'
+            elif cat == '5':
                 cat = 'equipped_items'
                 vis_cat = 'Equipped Items'
-            elif cat == '5':
+            elif cat == '6':
                 cat = 'consum'
                 vis_cat = 'Consumables'
-            elif cat == '6':
+            elif cat == '7':
                 cat = 'coord'
                 vis_cat = 'Coordinates'
-            elif cat == '7':
+            elif cat == '8':
                 cat = 'q_items'
                 vis_cat = 'Quest Items'
-            elif cat == '8':
+            elif cat == '9':
                 cat = 'quests'
                 vis_cat = 'Quests'
-            elif cat == '9':
+            elif cat == '10':
                 cat = 'misc'
                 vis_cat = 'Miscellaneous'
 
@@ -174,7 +189,7 @@ def pick_category():
 
                 if inventory[cat]:
 
-                    if cat not in ['coord', 'weapons', 'armor', 'pets']:
+                    if cat not in ['coord', 'weapons', 'armor', 'pets', 'access']:
                         pick_item(cat, vis_cat)
                         print('-'*25)
 
@@ -231,7 +246,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             return
 
         else:
-            if cat in ['armor', 'weapons', 'pets']:
+            if cat in ['armor', 'weapons', 'pets', 'access']:
                 if [x for x in inventory[cat] if not x.equip]:
                     print('-'*25)
                     if not gs:
@@ -274,7 +289,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                         continue
 
                 try:
-                    if cat in ['weapons', 'armor']:
+                    if cat in ['weapons', 'armor', 'access']:
                         if gs:
                             item = [x for x in inventory[cat] if not x.imp and not x.equip][item]
                         else:
@@ -285,6 +300,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                             item = [x for x in inventory[cat] if not x.imp][item]
                         else:
                             item = inventory[cat][item]
+
                 except IndexError:
                     continue
 
@@ -303,7 +319,8 @@ def pick_action(cat, item):
     while item in inventory[cat]:
         if (isinstance(item, i.Weapon)
             or isinstance(item, i.Armor)
-                or isinstance(item, pets.Companion)):
+            or isinstance(item, pets.Companion)
+                or isinstance(item, i.Accessory)):
 
             use_equip = 'Equip'
 
@@ -393,8 +410,9 @@ def manage_equipped():
       [2] {1}
       [3] {2}
       [4] {3}
-      [5] {4}""".format(equipped_list[0], equipped_list[1],
-                        equipped_list[2], equipped_list[3], equipped_list[4]))
+      [5] {4}
+      [6] {5}""".format(equipped_list[0], equipped_list[1],
+                        equipped_list[2], equipped_list[3], equipped_list[4], equipped_list[5]))
         spam = True
         while spam:
             selected = input('Input [#] (or type "back"): ')
@@ -426,6 +444,8 @@ def manage_equipped():
 
             if isinstance(selected, i.Weapon):
                 key = 'weapon'
+            elif isinstance(selected, i.Accessory):
+                key = 'access'
             elif isinstance(selected, i.Armor):
                 key = selected.part
 
@@ -484,6 +504,16 @@ Press enter/return ")
                             inventory[selected.cat].append(equipped[key])
                             equipped[key] = '(None)'
 
+                        elif isinstance(selected, i.Accessory):
+                            if isinstance(selected, i.ElementAccessory):
+                                main.player.element = 'None'
+                                print('You are no longer imbued with the {0} element.'.format(
+                                    selected.element))
+
+                            equipped[key].equip = False
+                            inventory[selected.cat].append(equipped[key])
+                            equipped[key] = '(None)'
+
                     else:
                         main.player.current_pet.equip = False
                         inventory[selected.cat].append(main.player.current_pet)
@@ -493,7 +523,9 @@ Press enter/return ")
                     break
 
                 elif action == '2':
+                    print('-'*25)
                     print(selected.desc)
+                    print('-'*25)
 
                 elif action.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     spam = False
@@ -730,6 +762,10 @@ def deserialize_inv(path):
             elif category == 'armor':
                 x = i.Armor('', '', '', '', '', '', '', '')
 
+            elif category == 'access':
+                if item['acc_type'] == 'elemental':
+                    x = i.ElementAccessory('', '', '', '', '')
+
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue
@@ -797,6 +833,11 @@ def deserialize_equip(path):
         elif category == 'weapon':
             x = i.Weapon('', '', '', '', '', '', '')
             x.__dict__ = j_equipped[category]
+
+        elif category == 'access':
+            if j_equipped[category]['acc_type'] == 'elemental':
+                x = i.ElementAccessory('', '', '', '', '')
+                x.__dict__ = j_equipped[category]
 
         else:
             x = i.Armor('', '', '', '', '', '', '', '')
