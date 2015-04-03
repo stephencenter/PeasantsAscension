@@ -181,12 +181,10 @@ def pick_category():
             elif cat == '10':
                 cat = 'misc'
                 vis_cat = 'Miscellaneous'
-
             else:
                 continue
 
             if cat in inventory:
-
                 if inventory[cat]:
 
                     if cat not in ['coord', 'weapons', 'armor', 'pets', 'access']:
@@ -246,32 +244,20 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             return
 
         else:
-            if cat in ['armor', 'weapons', 'pets', 'access']:
-                if [x for x in inventory[cat]]:
-                    print('-'*25)
-                    if not gs:
-                        print(''.join([vis_cat, ': \n      ', '\n      '.join(
-                            ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
-                                item for item in inventory[cat])])]))
-
-                    else:
-                        print(''.join([vis_cat, ':\n      ', '\n      '.join(
-                            ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
-                             for x, y in enumerate(inventory[cat])])]))
-                else:
-                    return
-
-            else:
+            if inventory[cat]:
                 print('-'*25)
                 if not gs:
-                    print(''.join([vis_cat, ': \n      ', '\n      '.join(
-                        ['[' + str(x + 1) + '] ' + str(y)
-                         for x, y in enumerate(inventory[cat])])]))
+                    print('{0}: \n      '.format(vis_cat), end='')
+                    print('\n      '.join(['[{0}] {1}'.format(x + 1, y)
+                                           for x, y in enumerate(inventory[cat])]))
 
                 else:
-                    print(''.join([vis_cat, ': \n      ', '\n      '.join(
-                        ['[' + str(x + 1) + '] ' + str(y) + ' --> ' + str(y.sell) + ' GP'
-                         for x, y in enumerate(inventory[cat]) if not y.imp])]))
+                    print('{0}: \n      '.format(vis_cat), end='')
+                    print('\n      '.join(
+                        ['[{0}] {1} --> {2} GP'.format(x + 1, y, y.sell)
+                         for x, y in enumerate(i for i in inventory[cat] if not i.imp)]))
+            else:
+                return
 
             while True:
                 item = input('Input [#] (or type "back"): ')
@@ -342,12 +328,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
         elif action == '2':
             print('-'*25)
-            print(''.join([str(item), ': ', item.desc]))
-            time.sleep(1)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
-
+            input(''.join([str(item), ': ', item.desc, ' | Press enter/return ']))
             print('-'*25)
 
         elif action == '3':

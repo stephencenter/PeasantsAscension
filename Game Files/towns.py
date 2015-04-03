@@ -457,8 +457,11 @@ Press enter/return ".format(vis_cat))
                 return
 
     def town_pet(self):
-        pet_list = [[pets.pet_wolf, pets.pet_horse],
-                    [pets.pet_sapling, pets.pet_viper, pets.pet_horse]][self.ps_level - 1]
+        pet_list = [[pets.pet_fox, pets.pet_horse],
+                    [pets.pet_sapling, pets.pet_viper, pets.pet_horse],
+                    [pets.pet_dove, pets.pet_wolf, pets.pet_camel]][self.ps_level - 1]
+
+        padding = len(max([x.name for x in pet_list], key=len))
 
         print('-'*25)
         print('Welcome, adventurer!')
@@ -467,9 +470,11 @@ Press enter/return ".format(vis_cat))
         spam = True
 
         while spam:
-            print("Here's what we have to offer:\n     ", "\n      ".join(
-                ['[' + str(num + 1) + '] ' + str(pet) + ' --> ' + str(pet.cost)
-                 for num, pet in enumerate(pet_list)]))
+            print("Here's what we have to offer:",
+                  ''.join(["\n      [{0}] {1} {2}--> {3}".format(
+                      num + 1, pet, ' '*(padding - len(pet.name)), pet.cost)
+                      for num, pet in enumerate(pet_list)]))
+
             print("You have {0} GP.".format(main.misc_vars['gp']))
 
             while True:

@@ -122,7 +122,11 @@ class Fighter(Companion):
             sounds.enemy_hit.play()
 
             if success not in range(1, self.incap_chance + 1):
-                damage = int(self.damage + self.level*1.5)
+                damage = math.ceil(self.damage*2 - monster.dfns/2)
+
+                if damage < 1:
+                    damage = 1
+
                 monster.hp -= damage
                 print('The attack succeeded and dealt {0} damage to the {1}'.format(
                     damage, monster.name))
@@ -152,10 +156,20 @@ class Steed(Companion):
     def use_ability(self, direction):
         direction = only_nsew(direction)
 
-        if len(direction) > self.distance:
-            spam = self.distance
+        maximum = self.distance
+
+        if position['reg'] == 'Desert':
+            if self.name == 'Camel':  # Camels are desert-faring animals, and so they can
+                maximum += 1          # move further in one turn while in the desert.
+
+            else:                     # Other animals, however, are not used to the desert.
+                maximum -= 1          # They are limited to one tile less than normal.
+
+        if len(direction) > maximum:
+            spam = maximum
         else:
             spam = len(direction)
+
 
         for x in direction[:spam]:
             if x == 'n':
@@ -197,25 +211,35 @@ class Steed(Companion):
                     print('-'*25)
                     return
 
-        if len(direction) > self.distance:
+        if len(direction) > maximum:
             print("Your {0} got tired, so you had to stop part-way.".format(self.name))
             return
 
 # --Healing Pets--
 pet_cherub = Healer("Cherub",
-                    "A sweet angel skilled in the way of weak-healing.", 150, 35, 2, 10, 5, 2)
+                    "A sweet angel skilled in the way of weak-healing (T1)", 150, 35, 2, 10, 5, 2)
 pet_sapling = Healer("Cherry Sapling",
-                     "A small cherry tree which, due to a magical spell, is skilled as a healer.",
+                     "A small cherry tree that emits a soothing aroma with strange properties (T2)",
                      350, 75, 5, 15, 6, 2)
+pet_dove = Healer("White Dove",
+                  "A lovely dove that has powerful healing abilities (T3)",
+                  750, 275, 10, 25, 5, 3)
 
 # --Fighting Pets--
-pet_wolf = Fighter("Wolf",
-                   "A fearsome but tame canine capable of low-level fighting power.", 200, 50, 2)
+pet_fox = Fighter("Fox",
+                  "A fearsome but tame canine capable of low-level fighting power (T1)",
+                  200, 50, 2)
 pet_viper = Fighter("Viper",
-                    "Despite not being that big, this viper does pack quite a punch.",
+                    "Despite not being that big, this viper does pack quite a punch (T2)",
                     400, 100, 5, incap_chance=30)
+pet_wolf = Fighter("Wolf",
+                   "A decently strong beast that will help you fight in battle (T3)",
+                   750, 275, 12, incap_turns=3, incap_chance=15)
 
 # --Steed Pets--
 pet_horse = Steed("Horse",
-                  """A trusty horse. This horse allows you to enter up to 3 directions
-at a time instead of 1.""", 350, 75, 3)
+                  "A trusty horse. It lets you move 3 tiles at a time instead of 1 (T1)",
+                  350, 75, 3)
+pet_camel = Steed("Camel",
+                  "A strong camel. It lets you move 4 tiles and fares well in the desert (T2)",
+                  750, 275, 4)
