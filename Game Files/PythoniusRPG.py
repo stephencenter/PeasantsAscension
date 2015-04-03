@@ -762,9 +762,12 @@ def check_save():  # Check for save files and load the game if they're found
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
 
-                if 'status_ail' not in player.__dict__:
+                if 'status_ail' not in player.__dict__ or 'per' not in misc_vars:
                     print('Attemping to make save file compatible with v0.6.2...')
-                    player.status_ail = 'none'
+                    if 'status_ail' not in player.__dict__:
+                        player.status_ail = 'none'
+                    if 'per' not in misc_vars:
+                        misc_vars['per'] = 1
                     print('Attempt successful!')
 
                 if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped\
