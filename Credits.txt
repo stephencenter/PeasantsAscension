@@ -3,30 +3,31 @@ also known as "RbwNjaFurret".
 ------------------------------------------------------------------------------
 MUSIC -- PART 1:
   Ben Landis, who composed:
-    Through the Forest------------> [Forest Overworld Theme]
-    Terrible Tarantuloid----------> [Boss-battle Theme]
-    Power-up----------------------> [Game-over Theme]
-    Adventure In Pixels-----------> [Level-up Theme]
-    Mountain----------------------> [Mountain Region Theme]
-    Chickens going peck peck peck-> [Town Theme]
-    Mayhem in the Village---------> [NPC Theme]
-    Frontier----------------------> [Graveyard Theme]
+    Through the Forest ------------> [Forest Region Theme]
+    Terrible Tarantuloid ----------> [Boss-battle Theme]
+    Power-up ----------------------> [Game-over Theme]
+    Adventure In Pixels -----------> [Level-up Theme]
+    Mountain ----------------------> [Mountain Region Theme]
+    Chickens going peck peck peck -> [Town Theme]
+    Mayhem in the Village ---------> [NPC Theme]
+    Frontier ----------------------> [Graveyard Theme]
         
     His website: http://www.benlandis.com/ <--- Check it out!
     His Sound Cloud: https://soundcloud.com/benlandis <--- Check it out!
     
   Eric Skiff, who composed:
-    Jumpshot----------------------> [Battle Theme 1]
-    Prologue----------------------> [Title screen & Character Creation Themes]
-    Arpanauts---------------------> [Tundra Region Theme]
-    We're All Under the Stars-----> [Beach Region Theme]
-    Digital Native----------------> [Swamp Region Theme]
+    Jumpshot ----------------------> [Battle Theme 1]
+    Prologue ----------------------> [Title screen & Character Creation Themes]
+    Arpanauts ---------------------> [Tundra Region Theme]
+    We're All Under the Stars -----> [Shore Region Theme]
+    Digital Native ----------------> [Swamp Region Theme]
+    Come and Find Me --------------> [Desert Region Theme]
         
     His website: http://www.ericskiff.com/music/ <--- Check it out!
     His Sound Cloud: https://soundcloud.com/eric-skiff <--- Check it out!
   
   Ruari, who composed:
-    8-bit Battle Music------------> [Battle Theme 2]
+    8-bit Battle Music ------------> [Battle Theme 2]
     
     His website: https://twitter.com/Ruari_Odyssey <--- Check it out!
     His Sound Cloud: https://soundcloud.com/ruari1 <--- Check it out!
@@ -48,7 +49,7 @@ MUSIC -- PART 2
         
             Edited to loop properly. Also, I upped the tempo up by 5%
             
-            [This song isn't being used yet, but it will be soon!]
+            [This song isn't being used yet, but it may be soon!]
 ------------------------------------------------------------------------------
 SOUND FX:
   Sound FX were made by Gabriel Tucker and me using an open-source

@@ -169,7 +169,6 @@ class Steed(Companion):
         else:
             spam = len(direction)
 
-
         for x in direction[:spam]:
             if x == 'n':
                 if main.position['y'] < 125:

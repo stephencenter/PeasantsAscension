@@ -265,6 +265,17 @@ earthquake = Damaging("Earthquake",
                       "Wreck havoc on your enemies with a powerful earthquake.",
                       19, 27, 24, "earth")
 
+# Ice
+icicle_dagger = Damaging('Icicle Dagger',
+                         "Hurl a volley of supercooled icicles at your enemies.",
+                         3, 4, 3, "ice")
+hail_storm = Damaging('Hailstorm',
+                      "Rain ice upon your enemies with unrelenting force!",
+                      10, 13, 15, 'ice')
+blizzard = Damaging('Blizzard',
+                    "Devastate your enemies with a terrifying flurry of ice and wind.",
+                    18, 26, 25, 'ice')
+
 # -- Healing -- #
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic.",
