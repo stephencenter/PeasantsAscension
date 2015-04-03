@@ -248,14 +248,20 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 print('-'*25)
                 if not gs:
                     print('{0}: \n      '.format(vis_cat), end='')
-                    print('\n      '.join(['[{0}] {1}'.format(x + 1, y)
-                                           for x, y in enumerate(inventory[cat])]))
+                    print('\n      '.join(
+                        ['[{0}] {1}'.format(x + 1, y)
+                         for x, y in enumerate(inventory[cat])]))
 
                 else:
+                    padding = len(max([i.name for i in inventory[cat] if not i.imp], key=len))
+                    ext_pad = len(str(len([i.name for i in inventory[cat] if not i.imp]) + 1))
+
                     print('{0}: \n      '.format(vis_cat), end='')
                     print('\n      '.join(
-                        ['[{0}] {1} --> {2} GP'.format(x + 1, y, y.sell)
-                         for x, y in enumerate(i for i in inventory[cat] if not i.imp)]))
+                        ['[{0}] {1} {2}--> {3} GP'.format(
+                            x + 1, y, '-'*(padding - len(y.name) + (ext_pad - len(str(x + 1)))),
+                            y.sell)
+                         for x, y in enumerate([i for i in inventory[cat] if not i.imp])]))
             else:
                 return
 
