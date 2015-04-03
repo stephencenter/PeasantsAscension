@@ -72,8 +72,7 @@ class NPC:
         # Print the NPC's dialogue to the player
         dialogue = []
         for w in self.conversations:
-            if w.active and not w.repeat:
-
+            if w.active:
                 try:
                     if not w.started:  # Quests
                         dialogue.append(w.sentences)
@@ -83,14 +82,6 @@ class NPC:
 
                 except AttributeError:  # Non-quests
                     dialogue.append(w.sentences)
-
-        else:
-            for x in self.conversations:
-
-                if x.active and x.repeat:
-                    dialogue.append(x.sentences)
-
-                    break
 
         for y in dialogue[:]:
 
@@ -122,24 +113,20 @@ class NPC:
 
 
 class Conversation:
-    def __init__(self, sentences, repeat=False, active=False):
+    def __init__(self, sentences, active=False):
         self.sentences = sentences
-        self.repeat = repeat  # True if the conversation is generic and unimportant
         self.active = active
 
     def __str__(self):
-        # Returns a unique string based on the content of the conversation.
-        # This is used as a dictionary key to save information about conversations.
-        try:
-            return ' | '.join([x[0:12] for x in self.sentences])
-        except IndexError:
-            return ' | '.join([x[::-1] for x in self.sentences])
+        for x in globals():
+            if globals()[x] == self:
+                return x
 
 
 class Quest(Conversation):
     def __init__(self, sentences, name, desc, q_giver, reward, end_dialogue,
-                 req_lvl=1, started=False, finished=False, repeat=False, active=False):
-        Conversation.__init__(self, sentences, repeat, active)
+                 req_lvl=1, started=False, finished=False, active=False):
+        Conversation.__init__(self, sentences, active)
         self.name = name  # The name of the quest
         self.desc = desc  # A brief summary of the goal of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
@@ -150,10 +137,9 @@ class Quest(Conversation):
         self.end_dialogue = end_dialogue  # What is printed when the quest is over
 
     def __str__(self):
-        try:
-            return ': '.join([self.q_giver, ' | '.join([x[0:6] for x in self.sentences])])
-        except IndexError:
-            return ': '.join([self.q_giver, ' | '.join([x[::-1] for x in self.sentences])])
+        for x in globals():
+            if globals()[x] == self:
+                return x
 
     def give_quest(self):
         print('-'*25)
@@ -512,7 +498,7 @@ alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives 
 alfred_phrase_2 = Conversation(["Come back here when you defeat the evil",
                                 "Master Slime. Good luck!"])
 
-alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"], repeat=True)
+alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"])
 
 alfred_quest_1 = Quest(["...Actually, now that I think about it, do you think you could possibly",
                         "dispose of this vile creature? His location is 0\u00b0N, 1\u00b0E."],
@@ -811,9 +797,9 @@ def serialize_dialogue(path):
 
     for c in all_dialogue:
         if isinstance(c, Quest):
-            json_dialogue[str(c)] = [c.active, c.repeat, c.started, c.finished]
+            json_dialogue[str(c)] = [c.active, c.started, c.finished]
         else:
-            json_dialogue[str(c)] = [c.active, c.repeat]
+            json_dialogue[str(c)] = [c.active]
 
     with open(path, encoding='utf-8', mode='w') as f:
         json.dump(json_dialogue, f, indent=4, separators=(', ', ': '))
@@ -829,9 +815,9 @@ def deserialize_dialogue(path):
         for c in all_dialogue[:]:
             if key == str(c):
                 if isinstance(c, Quest):
-                    c.active, c.repeat, c.started, c.finished = \
-                        j_log[key][0], j_log[key][1], j_log[key][2], j_log[key][3]
+                    c.active, c.started, c.finished = \
+                        j_log[key][0], j_log[key][1], j_log[key][2]
                 else:
-                    c.active, c.repeat = j_log[key][0], j_log[key][1]
+                    c.active = j_log[key][0],
 
 import towns
