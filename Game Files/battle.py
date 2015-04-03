@@ -38,7 +38,7 @@ import ascii_art
 #    spam = random.choice('0123456789ynxpsewrt')
 #    print(string, spam)
 #    return spam
-
+#
 # input = test_input
 
 pygame.mixer.pre_init(44100, -16, 2, 2048)

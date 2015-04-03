@@ -24,7 +24,7 @@ import msvcrt
 #    spam = random.choice('0123456789ynxpsewrt')
 #    print(string, spam)
 #    return spam
-
+#
 # input = test_input
 
 

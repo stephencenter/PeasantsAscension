@@ -16,6 +16,7 @@
 import sys
 import copy
 import json
+import random
 
 import npcs
 import monsters
@@ -30,7 +31,7 @@ import sounds
 #    spam = random.choice('0123456789ynxpsewrt')
 #    print(string, spam)
 #    return spam
-
+#
 # input = test_input
 
 if __name__ == "__main__":

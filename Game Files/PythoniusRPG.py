@@ -81,7 +81,7 @@ import towns
 #    spam = random.choice('0123456789ynxpsewrt')
 #    print(string, spam)
 #    return spam
-
+#
 # input = test_input
 
 # Log everything and send it to stderr.
@@ -414,51 +414,38 @@ Input letter: """)
         print('You are out of skill points.')
 
     def player_info(self):
-        for line in [  # Iterate through this list and print the formatted versions
-                "-{0}'s Stats-".format(self.name),
-                'Level: {0} | Class: {1} | Element: {2}'.format(
-                    self.lvl, self.class_.title(),
-                    self.element.title()),
-                'HP: {0}/{1} | MP: {2}/{3}'.format(
-                    self.hp, misc_vars['hp_p'],
-                    self.mp, misc_vars['mp_p']),
-                'Attack: {0} | M. Attack: {1} | P. Attack {2}'.format(
-                    self.attk, self.m_attk, self.p_attk),
-                'Defense: {0} | M. Defense: {1} | P. Defense {2}'.format(
-                    self.dfns, self.m_dfns, self.p_dfns),
-                'Speed: {0} | Evasion: {1}'.format(
-                    self.spd, self.evad),
-                'INT: {0} | STR: {1} | CON: {2} | DEX: {3} | PER: {4} | LUC: {5}'.format(
-                    misc_vars['int'], misc_vars['str'], misc_vars['con'],
-                    misc_vars['dex'], misc_vars['per'], misc_vars['luc']),
-                'Experience Pts: {0}/{1} | Gold Pieces: {2}'.format(
-                    self.exp,
-                    misc_vars['r_xp'],
-                    misc_vars['gp']),
+        print("""\
+-{0}'s Stats-
+Level: {1} | Class: {2} | Element: {3}
+HP: {4}/{5} | MP: {6}/{7}
+Attack: {8} | M. Attack: {9} | P. Attack {10}
+Defense: {11} | M. Defense: {12} | P. Defense {13}
+INT: {14} | STR: {15} | CON: {16} | DEX: {17} | PER: {18} | LUC: {19}
+Experience Pts: {20}/{21} | Gold Pieces: {22}
 
-                '\n-Equipped Items-',
-                'Weapon: {0}'.format(inv_system.equipped['weapon']),
-                'Accessory: {0}'.format(inv_system.equipped['access']),
-                'Armor:',
-                '  Head: {0}'.format(inv_system.equipped['head']),
-                '  Body: {0}'.format(inv_system.equipped['body']),
-                '  Legs: {0}'.format(inv_system.equipped['legs']),
+-Equipped Items-
+Weapon: {23}
+Accessory: {24}
+Armor:
+  Head: {25}
+  Body: {26}
+  Legs: {27}
 
-                '\n-Current pet-']:
-
-            print(line)
-            time.sleep(0.35)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
+-Current Pet-""".format(self.name,
+                        self.lvl, self.class_.title(), self.element,
+                        self.hp, misc_vars['hp_p'], self.mp, misc_vars['mp_p'],
+                        self.attk, self.m_attk, self.p_attk,
+                        self.dfns, self.m_dfns, self.p_dfns,
+                        misc_vars['int'], misc_vars['str'], misc_vars['con'],
+                        misc_vars['dex'], misc_vars['per'], misc_vars['luc'],
+                        self.exp, misc_vars['r_xp'], misc_vars['gp'],
+                        inv_system.equipped['weapon'], inv_system.equipped['access'],
+                        inv_system.equipped['head'], inv_system.equipped['body'],
+                        inv_system.equipped['legs']))
 
         if inv_system.equipped['pet'] != '(None)':
             print('  Name: {0}'.format(inv_system.equipped['pet']))
-            time.sleep(0.35)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
-
+            print('  Type: {0}'.format(inv_system.equipped['pet'].pet_type.title()))
             print('  Level: {0}'.format(inv_system.equipped['pet'].level))
 
         else:

@@ -35,7 +35,7 @@ import ascii_art
 #    spam = random.choice('0123456789ynxpsewrt')
 #    print(string, spam)
 #    return spam
-
+#
 # input = test_input
 
 if __name__ == "__main__":
@@ -84,7 +84,7 @@ class Monster:
 
         dealt = magic.eval_element(
             p_elem=battle.player.element,
-            m_elem=battle.monster.element, m_dmg=damage)[1]
+            m_elem=battle.monster.element, m_dmg=dealt)[1]
 
         if dealt < 1:
             dealt = 1
@@ -103,7 +103,7 @@ class Monster:
 
         if random.randint(1, 100) <= 7:
             print("It's a critical hit! 2x damage!")
-            dealt *= 2
+            monst_dealt *= 2
 
         return monst_dealt
 
@@ -140,14 +140,14 @@ class Monster:
         if dodge in range(player.evad, 250):
             damage, type_ = self.monst_damage(var)
 
-            player.hp -= dealt
+            player.hp -= damage
             sounds.enemy_hit.play()
             if type_ == 'ranged':
                 print('The {0} hits you with a ranged attack, dealing {1} damage!'.format(
-                    self.name, dealt))
+                    self.name, damage))
             else:
                 print('The {0} hits you with a melee attack, dealing {1} damage!'.format(
-                    self.name, dealt))
+                    self.name, damage))
 
         else:
             sounds.attack_miss.play()

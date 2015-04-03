@@ -32,7 +32,7 @@ import items as i
 #    spam = random.choice('0123456789ynxpsewrt')
 #    print(string, spam)
 #    return spam
-
+#
 # input = test_input
 
 if __name__ == "__main__":
@@ -760,8 +760,8 @@ def deserialize_inv(path):
                     norm_inv[category].append(item)
                     continue
 
-                elif item['name'] == 'Dowsing Rod':
-                    item = i.dowsing_rod
+                elif item['name'] == 'Divining Rod':
+                    item = i.divining_rod
                     norm_inv[category].append(item)
                     continue
 

@@ -30,7 +30,7 @@ import sounds
 #    spam = random.choice('0123456789ynxpsewrt')
 #    print(string, spam)
 #    return spam
-
+#
 # input = test_input
 
 if __name__ == "__main__":
@@ -335,6 +335,7 @@ class DiviningRod(Item):
 
     @staticmethod
     def use_item():
+        from towns import search_towns
         pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.position['x'],
                                                       gem.posy - main.position['y']))])
                     for gem in valuable_list if not gem.acquired]
@@ -349,7 +350,7 @@ class DiviningRod(Item):
             'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
             else 'a', distance[0], distance[1]))
 
-        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+        if not search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
 
@@ -359,6 +360,7 @@ class Shovel(Item):
 
     @staticmethod
     def use_item():
+        from towns import search_towns
         print('-'*25)
         print('You begin to search using your shovel...')
         time.sleep(1)
@@ -374,7 +376,7 @@ class Shovel(Item):
                 return
 
         print('You were unable to uncover anything.')
-        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+        if not search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
 
