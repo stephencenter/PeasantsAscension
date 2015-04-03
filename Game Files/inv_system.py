@@ -46,7 +46,8 @@ inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord':
 equipped = {'weapon': '', 'head': _c(i.straw_hat),
             'body': _c(i.cotton_shirt),
             'legs': _c(i.sunday_trousers),
-            'access': '(None)'}
+            'access': '(None)',
+            'pet': '(None)'}
 
 # "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
 # what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
@@ -328,7 +329,10 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
             if isinstance(item, pets.Companion):
                 input('You equip the {0} | Press enter/return '.format(item.name))
 
-                main.player.current_pet = item
+                if isinstance(equipped['pet'], pets.Companion):
+                    inventory['pets'].append(equipped['pet'])
+
+                equipped['pet'] = item
                 inventory['pets'].remove(item)
                 return
 
@@ -390,7 +394,7 @@ def manage_equipped():
             equipped_list = []
             for key in equipped:
                 equipped_list.append(equipped[key])
-            equipped_list.append(main.player.current_pet)
+            equipped_list.append(equipped['pet'])
 
         print('-'*25)
         print("""Equipped Items:
@@ -500,8 +504,8 @@ Press enter/return ")
                             equipped[key] = '(None)'
 
                     else:
-                        inventory[selected.cat].append(main.player.current_pet)
-                        main.player.current_pet = '(None)'
+                        inventory[selected.cat].append(equipped['pet'])
+                        equipped['pet'] = '(None)'
 
                     spam = False
                     break
@@ -750,16 +754,19 @@ def deserialize_inv(path):
                 if item['acc_type'] == 'elemental':
                     x = i.ElementAccessory('', '', '', '', '')
 
+            elif category == 'pets':
+
+                if item['pet_type'] == 'fighter':
+                    x = pets.Fighter('', '', '', '', '')
+
+                elif item['pet_type'] == 'healer':
+                    x = pets.Healer('', '', '', '', '', '', '', '')
+
+                elif item['pet_type'] == 'steed':
+                    x = pets.Steed('', '', '', '', '')
+
             elif category == 'coord':
                 norm_inv[category].append(item)
-                continue
-
-            elif category == 'pets':
-                for j in pets.all_pets:
-                    for key in j_inventory['pets']:
-                        if j.name == key['name']:
-                            norm_inv['pets'].append(j)
-
                 continue
 
             elif category in ['misc', 'q_items']:
@@ -816,17 +823,25 @@ def deserialize_equip(path):
 
         elif category == 'weapon':
             x = i.Weapon('', '', '', '', '', '', '')
-            x.__dict__ = j_equipped[category]
 
         elif category == 'access':
             if j_equipped[category]['acc_type'] == 'elemental':
                 x = i.ElementAccessory('', '', '', '', '')
-                x.__dict__ = j_equipped[category]
+
+        elif category == 'pet':
+            if j_equipped[category]['pet_type'] == 'fighter':
+                x = pets.Fighter('', '', '', '', '')
+
+            elif j_equipped[category]['pet_type'] == 'healer':
+                x = pets.Healer('', '', '', '', '', '', '', '')
+
+            elif j_equipped[category]['pet_type'] == 'steed':
+                x = pets.Steed('', '', '', '', '')
 
         else:
             x = i.Armor('', '', '', '', '', '', '', '')
-            x.__dict__ = j_equipped[category]
 
+        x.__dict__ = j_equipped[category]
         norm_equip[category] = x
 
     equipped = norm_equip

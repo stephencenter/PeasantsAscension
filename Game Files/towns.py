@@ -405,7 +405,8 @@ GP). (Press enter/return).'.format(i, i.buy))
       [2] Consumables
       [3] Weapons
       [4] Accessories
-      [5] Miscellaneous""")
+      [5] Pets
+      [6] Miscellaneous""")
                     while True:
                         cat = input('Input [#] (or type "back"): ')
 
@@ -428,6 +429,9 @@ GP). (Press enter/return).'.format(i, i.buy))
                             cat = 'access'
                             vis_cat = 'Accessories'
                         elif cat == '5':
+                            cat = 'pets'
+                            vis_cat = 'Pets'
+                        elif cat == '6':
                             cat = 'misc'
                             vis_cat = 'Miscellaneous'
                         else:
@@ -453,7 +457,7 @@ Press enter/return ".format(vis_cat))
                 return
 
     def town_pet(self):
-        pet_list = [[pets.pet_wolf],
+        pet_list = [[pets.pet_wolf, pets.pet_horse],
                     [pets.pet_sapling, pets.pet_viper, pets.pet_horse]][self.ps_level - 1]
 
         print('-'*25)
@@ -463,7 +467,7 @@ Press enter/return ".format(vis_cat))
         spam = True
 
         while spam:
-            print("Here's what we have to offer:\n     ", "\n     ".join(
+            print("Here's what we have to offer:\n     ", "\n      ".join(
                 ['[' + str(num + 1) + '] ' + str(pet) + ' --> ' + str(pet.cost)
                  for num, pet in enumerate(pet_list)]))
             print("You have {0} GP.".format(main.misc_vars['gp']))
@@ -491,23 +495,11 @@ Press enter/return ".format(vis_cat))
                 except IndexError:
                     continue
 
-                if chosen_pet in inv_system.inventory['pets']:
-                    # Players can't have more than one of each pet. This is to prevent
-                    # the player from getting confused as to which pet is which.
-
-                    print('-'*25)
-                    print("Hey, you already have a {0}! We aren't allowed to give you two.".format(
-                        chosen_pet))
-                    input("(Press Enter/Return to continue)")
-                    print('-'*25)
-                    break
-
                 print('-'*25)
                 print('{0}: {1}'.format(chosen_pet, chosen_pet.desc))
                 print('-'*25)
 
-                fizz = True
-                while fizz:
+                while True:
                     y_n = input(
                         "You want this {0}? That would cost you {1} GP. | Yes or No: ".format(
                         chosen_pet, chosen_pet.cost))
@@ -519,10 +511,9 @@ Press enter/return ".format(vis_cat))
                             print('-'*25)
                             print("You received a {0} pet!".format(chosen_pet))
                             print('You give the shopkeeper {0} GP.'.format(chosen_pet.cost))
-
-                            inv_system.inventory['pets'].append(chosen_pet)
-                            main.player.current_pet = chosen_pet
                             main.misc_vars['gp'] -= chosen_pet.cost
+
+                            inv_system.inventory['pets'].append(copy.copy(chosen_pet))
 
                             print('-'*25)
 
@@ -531,11 +522,11 @@ Press enter/return ".format(vis_cat))
                             print("Hey, come on! You don't even have enough money for this!")
                             print('-'*25)
 
-                        fizz = False
+                        break
 
                     elif y_n.startswith('n'):
                         print('-'*25)
-                        fizz = False
+                        break
 
                 break
 

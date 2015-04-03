@@ -95,7 +95,7 @@ def movement_system():
 
                 sounds.foot_steps.play()
 
-                if not isinstance(player.current_pet, pets.Steed):
+                if not isinstance(inv_system.equipped['pet'], pets.Steed):
                     # The in-game map is square due to simplify things.
                     # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
                     if direction.startswith('n'):
@@ -175,7 +175,7 @@ You cannot continue in this direction.')
                             continue
 
                 else:
-                    player.current_pet.use_ability(direction)
+                    inv_system.equipped['pet'].use_ability(direction)
 
                 position['avg'] = int(((abs(position['x'])) +
                                        (abs(position['y'])))/2)

@@ -206,11 +206,6 @@ def battle_system(is_boss=False, ambush=False):
             continue
 
         elif move == '5':
-            if player.status_ail == 'weakened':
-                input('You feel incredibly weakened and are unable to run away \
-| Press enter/return ')
-
-                continue
 
             if run_away():  # Attempt to run.
                 # If it succeeds, end the battle without giving the player a reward
@@ -314,13 +309,13 @@ def player_turn(var, dodge, move):
         else:
             return False
 
-        if not isinstance(player.current_pet, pets.Steed) \
-                and player.current_pet != '(None)' \
+        if not isinstance(inv_system.equipped['pet'], pets.Steed) \
+                and inv_system.equipped['pet'] != '(None)' \
                 and monster.hp > 0:
 
             input('\nPress Enter/Return')
             print("\n-Pet Turn-")
-            player.current_pet.use_ability()
+            inv_system.equipped['pet'].use_ability()
 
         # Check to see if the player is poisoned
         if player.status_ail == 'poisoned' and monster.hp > 0:
@@ -370,12 +365,6 @@ def after_battle(is_boss):  # Assess the results of the battle
     global player
 
     update_stats()  # Reset non-hp/mp stats to the way they were before battle
-
-    # Weakness only applies for one battle. This will hopefully change when I figure out how
-    # to implement a multi-battle version.
-    if player.status_ail == 'weakened':
-        print('You feel your strength coming back to you. You are no longer weakened.')
-        player.status_ail = 'none'
 
     print('-'*25)
 
@@ -688,7 +677,7 @@ def bat_stats():
         monster.mp -= (monster.mp - misc_vars['mp_m'])
     print('-'*25)
 
-    pet = player.current_pet
+    pet = inv_system.equipped['pet']
 
     # Sorry this section is kinda complicated. Basically, this calculates the length of certain
     # strings to see how much padding (extra spaces) is needed to make things line up.

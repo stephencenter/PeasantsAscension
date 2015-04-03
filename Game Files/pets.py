@@ -45,9 +45,10 @@ only_nsew = lambda x: re.compile(r'[^n^s^e^w]').sub('', x)
 
 class Companion:
     # A basic pet class
-    def __init__(self, name, desc, cost, cat='pets', level=1, imp=False):
+    def __init__(self, name, desc, cost, sell, cat='pets', level=1, imp=False):
         self.name = name
         self.cost = cost
+        self.sell = sell
         self.desc = desc
         self.cat = cat
         self.level = level
@@ -59,14 +60,15 @@ class Companion:
 
 class Healer(Companion):
     # Healers have mana, and heal the player each turn if they have enough mana.
-    def __init__(self, name, desc, cost, power, mana,
-                 req_mana, mana_per_turn, cat='pets', level=1, imp=False):
-        Companion.__init__(self, name, desc, cost, cat, level, imp)
+    def __init__(self, name, desc, cost, sell, power, mana,
+                 req_mana, mana_per_turn, cat='pets', level=1, imp=False, pet_type='healer'):
+        Companion.__init__(self, name, desc, cost, sell, cat, level, imp)
         self.power = power
         self.mana = mana
         self.rm = req_mana
         self.mpt = mana_per_turn
         self.max_m = copy.copy(mana)
+        self.pet_type = pet_type
 
     def __str__(self):
         return self.name
@@ -93,13 +95,14 @@ class Healer(Companion):
 class Fighter(Companion):
     # Fighters deal damage to the enemy but can sometimes mess up.
 
-    def __init__(self, name, desc, cost, damage, cat='pets',
-                 level=1, incap_turns=2, incap_chance=25, rt=0, imp=False):
-        Companion.__init__(self, name, desc, cost, cat, level, imp)
+    def __init__(self, name, desc, cost, sell, damage, cat='pets',
+                 level=1, incap_turns=2, incap_chance=25, rt=0, imp=False, pet_type='fighter'):
+        Companion.__init__(self, name, desc, cost, sell, cat, level, imp)
         self.damage = damage  # How much damage it deals per turn
         self.incap_turns = incap_turns  # How long the pet is incapacitated for
         self.incap_chance = incap_chance  # Chance of pet incapacitating itself
         self.rt = rt  # Amount of turns remaining until not-incapacitated
+        self.pet_type = pet_type
 
     def __str__(self):
         return self.name
@@ -134,9 +137,11 @@ class Fighter(Companion):
 
 
 class Steed(Companion):
-    def __init__(self, name, desc, cost, distance, cat='pets', level=1, imp=False):
-        Companion.__init__(self, name, desc, cost, cat, level, imp)
+    def __init__(self, name, desc, cost, sell, distance, cat='pets',
+                 level=1, imp=False, pet_type='steed'):
+        Companion.__init__(self, name, desc, cost, sell, cat, level, imp)
         self.distance = distance
+        self.pet_type = pet_type
 
     @staticmethod
     def out_of_bounds():
@@ -198,43 +203,19 @@ class Steed(Companion):
 
 # --Healing Pets--
 pet_cherub = Healer("Cherub",
-                    "A sweet angel skilled in the way of weak-healing.", 150, 2, 10, 5, 2)
+                    "A sweet angel skilled in the way of weak-healing.", 150, 35, 2, 10, 5, 2)
 pet_sapling = Healer("Cherry Sapling",
                      "A small cherry tree which, due to a magical spell, is skilled as a healer.",
-                     350, 5, 15, 6, 2)
+                     350, 75, 5, 15, 6, 2)
 
 # --Fighting Pets--
 pet_wolf = Fighter("Wolf",
-                   "A fearsome but tame canine capable of low-level fighting power.", 200, 2)
+                   "A fearsome but tame canine capable of low-level fighting power.", 200, 50, 2)
 pet_viper = Fighter("Viper",
                     "Despite not being that big, this viper does pack quite a punch.",
-                    400, 5, incap_chance=30)
+                    400, 100, 5, incap_chance=30)
 
 # --Steed Pets--
 pet_horse = Steed("Horse",
                   """A trusty horse. This horse allows you to enter up to 3 directions
-at a time instead of 1.""", 350, 3)
-
-all_pets = [pet_cherub, pet_sapling, pet_wolf, pet_viper, pet_horse]
-
-
-def serialize_pets(path):
-    j_all_pets = {}
-
-    for pet in all_pets:
-        j_all_pets[pet.name] = pet.__dict__
-
-    with open(path, mode="w",  encoding='utf-8') as f:
-        json.dump(j_all_pets, f, indent=4, separators=(', ', ': '))
-
-
-def deserialize_pets(path):
-    global all_pets
-
-    with open(path, encoding='utf-8') as f:
-        j_all_pets = json.load(f)
-
-    for pet in all_pets:
-        for key in j_all_pets:
-            if pet.name == key:
-                pet.__dict__ = j_all_pets[key]
+at a time instead of 1.""", 350, 75, 3)

@@ -76,26 +76,34 @@ class Monster:
 
     def monst_damage(self, var):
         if self.attk >= self.p_attk:
-            monst_dealt = int((self.attk/2) - (battle.temp_stats['dfns']/3) + (
-                self.lvl/3) + var + 1)
+            dealt = math.ceil(self.attk/2 - battle.temp_stats['dfns']/2) + var
             type_ = 'melee'
         else:
-            monst_dealt = int((self.p_attk/2) - (battle.temp_stats['p_dfns']/3) + (
-                self.lvl/3) + var + 1)
+            dealt = math.ceil(self.p_attk/2 - battle.temp_stats['p_dfns']/2) + var
             type_ = 'range'
 
-        if monst_dealt < 1:
-            monst_dealt = 1
+        dealt = magic.eval_element(
+            p_elem=battle.player.element,
+            m_elem=battle.monster.element, m_dmg=damage)[1]
 
-        return monst_dealt, type_
+        if dealt < 1:
+            dealt = 1
+
+        if random.randint(1, 100) <= 7:
+            print("It's a critical hit! 2x damage!")
+            dealt *= 2
+
+        return dealt, type_
 
     def monst_magic(self, var):
-        monst_dealt = int((self.m_attk/2)
-                          - (battle.temp_stats['m_dfns']/3)
-                          + (self.lvl/3) + var + 1)
+        monst_dealt = math.ceil(self.m_attk/2 - battle.temp_stats['m_dfns']/2) + var
 
         if monst_dealt < 1:
             monst_dealt = 1
+
+        if random.randint(1, 100) <= 7:
+            print("It's a critical hit! 2x damage!")
+            dealt *= 2
 
         return monst_dealt
 
@@ -131,10 +139,6 @@ class Monster:
 
         if dodge in range(player.evad, 250):
             damage, type_ = self.monst_damage(var)
-
-            dealt = magic.eval_element(
-                p_elem=battle.player.element,
-                m_elem=battle.monster.element, m_dmg=damage)[1]
 
             player.hp -= dealt
             sounds.enemy_hit.play()
@@ -257,9 +261,6 @@ class Monster:
 
         print('You are now {0}!'.format(status))
         battle.player.status_ail = status
-
-        if status == 'weakened':
-            battle.temp_stats['attk'] /= 2
 
         self.mp -= 2
 

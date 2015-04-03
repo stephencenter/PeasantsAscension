@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.6.3 Alpha
-game_version = 'v0.6.3'
+# PythoniusRPG v0.6.4 Alpha
+game_version = 'v0.6.4'
 # Copyright 2013, 2014 Stephen Center
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
@@ -109,8 +109,6 @@ sav_misc_boss_info = 'Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc B
 
 sav_misc_vars = 'Save Files/{CHARACTER_NAME}/misc_vars.json'  # Misc Variables
 
-sav_pet_info = 'Save Files/{CHARACTER_NAME}/pet_info.json'  # Pet Information
-
 sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'  # Player Stats
 
 sav_position = 'Save Files/{CHARACTER_NAME}/position.json'  # Position
@@ -155,17 +153,14 @@ class PlayerCharacter:  # The Player
         self.ext_exp = ext_exp  # Extra Experience
         self.class_ = class_  # Player Class
         self.element = element
-        self.current_pet = '(None)'  # Current Pet
         self.status_ail = 'none'  # Current Status Ailment
 
     def player_damage(self, var):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
-            dam_dealt = int((battle.temp_stats['attk']/2) -
-                            (battle.monster.dfns/2) + (self.lvl/3) + var + 1)
+            dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/2)) + var
 
         else:
-            dam_dealt = int((battle.temp_stats['p_attk']/2) -
-                            (battle.monster.p_dfns/2) + (self.lvl/3) + var + 1)
+            dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/2)) + var
 
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
@@ -177,6 +172,11 @@ class PlayerCharacter:  # The Player
         if random.randint(1, 100) <= 7:
             print("It's a critical hit! 2x damage!")
             dam_dealt *= 2
+
+        if self.status_ail == 'weakened':
+            dam_dealt /= 2
+            dam_dealt = math.ceil(dam_dealt)
+            print('You deal less damage because of your weakened state.')
 
         return dam_dealt
 
@@ -452,14 +452,14 @@ Input letter: """)
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-        if self.current_pet != '(None)':
-            print('  Name: {0}'.format(self.current_pet))
+        if inv_system.equipped['pet'] != '(None)':
+            print('  Name: {0}'.format(inv_system.equipped['pet']))
             time.sleep(0.35)
 
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-            print('  Level: {0}'.format(self.current_pet.level))
+            print('  Level: {0}'.format(inv_system.equipped['pet'].level))
 
         else:
             print('  (None)')
@@ -541,9 +541,8 @@ def format_save_names():
     for x in sorted(['sav_acquired_gems', 'sav_def_bosses',
                      'sav_equip_items', 'sav_inventory',
                      'sav_misc_boss_info', 'sav_misc_vars',
-                     'sav_pet_info', 'sav_play_stats',
-                     'sav_position', 'sav_quests_dia',
-                     'sav_spellbook'], key=str.lower):
+                     'sav_play_stats', 'sav_position',
+                     'sav_quests_dia', 'sav_spellbook'], key=str.lower):
 
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
@@ -664,18 +663,16 @@ def check_save():  # Check for save files and load the game if they're found
                 sav_acquired_gems, sav_def_bosses,
                 sav_equip_items, sav_inventory,
                 sav_misc_boss_info, sav_misc_vars,
-                sav_pet_info, sav_play_stats,
-                sav_position, sav_quests_dia,
-                sav_spellbook]])):
+                sav_play_stats, sav_position,
+                sav_quests_dia, sav_spellbook]])):
 
             # ...then set the dictionary key equal to the newly-formatted save file names
             save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in [
                 sav_acquired_gems, sav_def_bosses,
                 sav_equip_items, sav_inventory,
                 sav_misc_boss_info, sav_misc_vars,
-                sav_pet_info, sav_play_stats,
-                sav_position, sav_quests_dia,
-                sav_spellbook]]
+                sav_play_stats, sav_position,
+                sav_quests_dia, sav_spellbook]]
 
             try:
                 with open('/'.join(['Save Files', directory, "menu_info.txt"]),
@@ -761,7 +758,6 @@ def check_save():  # Check for save files and load the game if they're found
                 inv_system.deserialize_equip(sav_equip_items)
                 inv_system.deserialize_inv(sav_inventory)
                 bosses.deserialize_bosses(sav_misc_boss_info)
-                pets.deserialize_pets(sav_pet_info)
                 deserialize_player(sav_play_stats)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
@@ -771,13 +767,17 @@ def check_save():  # Check for save files and load the game if they're found
                     player.status_ail = 'none'
                     print('Attempt successful!')
 
-                if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped:
+                if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped\
+                        or 'pet' not in inv_system.equipped:
                     print('Attempting to make save file compatible with v0.6.4...')
                     if 'access' not in inv_system.inventory:
                         inv_system.inventory['access'] = []
 
                     if 'access' not in inv_system.equipped:
                         inv_system.equipped['access'] = '(None)'
+
+                    if 'pet' not in inv_system.equipped:
+                        inv_system.equipped['pet'] = '(None)'
 
                     print('Attempt successful!')
 
@@ -827,7 +827,6 @@ def save_game():
                 inv_system.serialize_equip(sav_equip_items)
                 inv_system.serialize_inv(sav_inventory)
                 bosses.serialize_bosses(sav_misc_boss_info)
-                pets.serialize_pets(sav_pet_info)
                 serialize_player(sav_play_stats)
                 npcs.serialize_dialogue(sav_quests_dia)
                 magic.serialize_sb(sav_spellbook)
@@ -850,18 +849,8 @@ def save_game():
 
 
 def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
-    spam = {}
-
-    for key in player.__dict__:
-
-        if (player.__dict__[key] != player.current_pet) or (player.current_pet == '(None)'):
-            spam[key] = player.__dict__[key]
-
-        else:
-            spam[key] = [player.__dict__[key].name, player.__dict__[key].level]
-
     with open(path, mode='w', encoding='utf-8') as e:
-        json.dump(spam, e, indent=4, separators=(', ', ': '))
+        json.dump(player.__dict__, e, indent=4, separators=(', ', ': '))
 
 
 def deserialize_player(path):  # Load the JSON file and translate
@@ -872,14 +861,6 @@ def deserialize_player(path):  # Load the JSON file and translate
 
     with open(path, encoding='utf-8') as e:
         player_dict = json.load(e)
-
-    if player_dict['current_pet']:
-
-            for pet in pets.all_pets:
-                if pet.name == player_dict['current_pet'][0]:
-                    pet.level = player_dict['current_pet'][1]
-                    player_dict['current_pet'] = pet
-                    break
 
     player.__dict__ = player_dict
 
