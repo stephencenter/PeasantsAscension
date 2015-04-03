@@ -158,7 +158,7 @@ class Steed(Companion):
 
         maximum = self.distance
 
-        if position['reg'] == 'Desert':
+        if main.position['reg'] == 'Desert':
             if self.name == 'Camel':  # Camels are desert-faring animals, and so they can
                 maximum += 1          # move further in one turn while in the desert.
 
