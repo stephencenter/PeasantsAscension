@@ -66,9 +66,6 @@ class Spell:
         if main.player.mp < 0:
             main.player.mp = 0
 
-    def use_magic(self):
-        pass
-
 
 class Healing(Spell):
     # Healing spells are spells that restore your HP during battle

@@ -452,7 +452,6 @@ Input letter: """)
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-
         if self.current_pet != '(None)':
             print('  Name: {0}'.format(self.current_pet))
             time.sleep(0.35)

@@ -110,15 +110,14 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
             [i.lth_leg, i.en_lth_leg, i.std_leg,
              i.en_std_leg, i.drg_leg]],  # Assassin + Ranged Armor -- Legs
 
-            'Accessories':
-                [[i.water_amulet, i.water_amulet, i.water_amulet,
-                  i.water_amulet, i.water_amulet, i.water_amulet],
+            'Accessories': [[i.water_amulet, i.water_amulet, i.water_amulet,
+                             i.water_amulet, i.water_amulet, i.water_amulet],
 
-                 [i.fire_amulet, i.fire_amulet, i.fire_amulet,
-                  i.fire_amulet, i.fire_amulet, i.fire_amulet],
+                            [i.fire_amulet, i.fire_amulet, i.fire_amulet,
+                             i.fire_amulet, i.fire_amulet, i.fire_amulet],
 
-                 [i.earth_amulet, i.earth_amulet, i.earth_amulet,
-                  i.earth_amulet, i.earth_amulet, i.earth_amulet]],
+                            [i.earth_amulet, i.earth_amulet, i.earth_amulet,
+                             i.earth_amulet, i.earth_amulet, i.earth_amulet]],
 
             'Other': [[i.divining_rod, i.divining_rod, i.divining_rod,
                        i.divining_rod, i.divining_rod, i.divining_rod],

@@ -91,6 +91,33 @@ class Consumable(Item):
                 break
 
 
+class StatusPotion(Item):
+    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp)
+        self.status = status
+
+    def use_item(self):
+        global inventory
+
+        item_setup_vars()
+
+        print('-'*25)
+
+        if main.player.status_ail == self.status:
+            sounds.buff_spell.play()
+            print('You drink the {0} and feel much better.'.format(self.name))
+            main.player.status_ail = 'none'
+
+            for x, y in enumerate(inventory[self.cat]):
+                if y.name == self.name:
+                    inventory[self.cat].remove(y)
+                    break
+
+        else:
+            print("Drinking this potion probably wouldn't do anything.")
+            print('-'*25)
+
+
 class Weapon(Item):
     # Items that increase your attack, magic attack, or both when equipped.
     # Certain weapons are planned to be infused with elements later on, which
@@ -289,6 +316,7 @@ class ElementAccessory(Accessory):
         input('You equip the {0}. Your element is now set to {1} | Press enter/return '.format(
             self.name, self.element))
 
+
 class ImmunityAccessory(Accessory):
     # Grants the player immunity to a certain status ailment
     pass
@@ -304,7 +332,8 @@ class MagicCompass(Item):
     def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
 
-    def use_item(self):
+    @staticmethod
+    def use_item():
         from towns import town_list, search_towns
 
         pos_towns = [tuple([town.name, round(math.hypot(town.x - main.position['x'],
@@ -324,7 +353,8 @@ class DiviningRod(Item):
     def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
 
-    def use_item(self):
+    @staticmethod
+    def use_item():
         pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.position['x'],
                                                       gem.posy - main.position['y']))])
                     for gem in valuable_list if not gem.acquired]
@@ -343,22 +373,12 @@ class DiviningRod(Item):
             print('-'*25)
 
 
-class Valuable(Item):
-    def __init__(self, name, desc, buy, sell, posx, posy, acquired=False, cat='misc', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
-        self.posx = posx
-        self.posy = posy
-        self.acquired = acquired
-
-    def use_item(self):
-        print('You admire the {0}. It looks very valuable.'.format(self.name))
-
-
 class Shovel(Item):
     def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
 
-    def use_item(self):
+    @staticmethod
+    def use_item():
         print('-'*25)
         print('You begin to search using your shovel...')
         time.sleep(1)
@@ -378,31 +398,15 @@ class Shovel(Item):
             print('-'*25)
 
 
-class StatusPotion(Item):
-    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False):
+class Valuable(Item):
+    def __init__(self, name, desc, buy, sell, posx, posy, acquired=False, cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
-        self.status = status
+        self.posx = posx
+        self.posy = posy
+        self.acquired = acquired
 
     def use_item(self):
-        global inventory
-
-        item_setup_vars()
-
-        print('-'*25)
-
-        if main.player.status_ail == self.status:
-            sounds.buff_spell.play()
-            print('You drink the {0} and feel much better.'.format(self.name))
-            main.player.status_ail = 'none'
-
-            for x, y in enumerate(inventory[self.cat]):
-                if y.name == self.name:
-                    inventory[self.cat].remove(y)
-                    break
-
-        else:
-            print("Drinking this potion probably wouldn't do anything.")
-            print('-'*25)
+        print('You admire the {0}. It looks very valuable.'.format(self.name))
 
 
 class Misc(Item):
