@@ -199,7 +199,7 @@ def pick_category():
                         print('-'*25)
 
                     else:
-                        if [x for x in inventory[cat] if not x.equip]:
+                        if [x for x in inventory[cat]]:
                             pick_item(cat, vis_cat)
                             print('-'*25)
 
@@ -246,12 +246,12 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
 
         else:
             if cat in ['armor', 'weapons', 'pets', 'access']:
-                if [x for x in inventory[cat] if not x.equip]:
+                if [x for x in inventory[cat]]:
                     print('-'*25)
                     if not gs:
                         print(''.join([vis_cat, ': \n      ', '\n      '.join(
                             ['[' + str(x + 1) + '] ' + str(y) for x, y in enumerate(
-                                item for item in inventory[cat] if not item.equip)])]))
+                                item for item in inventory[cat])])]))
 
                     else:
                         print(''.join([vis_cat, ':\n      ', '\n      '.join(
@@ -288,17 +288,10 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                         continue
 
                 try:
-                    if cat in ['weapons', 'armor', 'access']:
-                        if gs:
-                            item = [x for x in inventory[cat] if not x.imp and not x.equip][item]
-                        else:
-                            item = [x for x in inventory[cat] if not x.equip][item]
-
+                    if gs:
+                        item = [x for x in inventory[cat] if not x.imp][item]
                     else:
-                        if gs:
-                            item = [x for x in inventory[cat] if not x.imp][item]
-                        else:
-                            item = inventory[cat][item]
+                        item = inventory[cat][item]
 
                 except IndexError:
                     continue
@@ -334,10 +327,6 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
         if action == '1':
             if isinstance(item, pets.Companion):
                 input('You equip the {0} | Press enter/return '.format(item.name))
-                item.equip = True
-
-                if isinstance(main.player.current_pet, pets.Companion):
-                    main.player.current_pet.equip = False
 
                 main.player.current_pet = item
                 inventory['pets'].remove(item)
@@ -484,7 +473,6 @@ Press enter/return ")
                                 main.player.m_attk -= int(math.ceil(selected.power/3))
                                 main.player.attk -= int(math.ceil(selected.power/3))
 
-                            equipped[key].equip = False
                             inventory[selected.cat].append(equipped[key])
                             equipped[key] = i.fists
 
@@ -499,7 +487,6 @@ Press enter/return ")
                                 main.player.p_dfns -= int(math.ceil(selected.defense/1.5))
                                 main.player.dfns -= int(math.ceil(selected.defense/2))
 
-                            equipped[key].equip = False
                             inventory[selected.cat].append(equipped[key])
                             equipped[key] = '(None)'
 
@@ -509,12 +496,10 @@ Press enter/return ")
                                 print('You are no longer imbued with the {0} element.'.format(
                                     selected.element))
 
-                            equipped[key].equip = False
                             inventory[selected.cat].append(equipped[key])
                             equipped[key] = '(None)'
 
                     else:
-                        main.player.current_pet.equip = False
                         inventory[selected.cat].append(main.player.current_pet)
                         main.player.current_pet = '(None)'
 

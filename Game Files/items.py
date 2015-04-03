@@ -123,12 +123,11 @@ class Weapon(Item):
     # Certain weapons are planned to be infused with elements later on, which
     # will deal more/less damage to certain enemies.
     def __init__(self, name, desc, buy, sell, power, type_, class_,
-                 element='none', equip=False, cat='weapons', imp=False):
+                 element='none', cat='weapons', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.power = power
         self.type_ = type_
         self.class_ = class_
-        self.equip = equip
         self.element = element
 
         if isinstance(self.class_, str):
@@ -137,14 +136,6 @@ class Weapon(Item):
         else:
             self.desc = ' '.join([desc, '|', ' and '.join([
                 x.title() for x in self.class_]), 'ONLY'])
-
-        if self.equip:
-            if self.type_ == 'melee':
-                main.player.attk += self.power
-                main.player.m_attk += int(math.ceil(self.power/3))
-            elif self.type_ == 'magic':
-                main.player.m_attk += self.power
-                main.player.attk += int(math.ceil(self.power/3))
 
     def use_item(self):
         global equipped
@@ -159,7 +150,6 @@ class Weapon(Item):
 
             if isinstance(equipped['weapon'], Weapon):
                 old = copy.copy(equipped['weapon'])
-                old.equip = False
                 inventory['weapons'].remove(self)
                 if old.name != 'Fists':
                     inventory['weapons'].append(old)
@@ -196,8 +186,6 @@ class Weapon(Item):
                 main.player.p_attk += int(math.ceil(self.power/3))
                 main.player.attk += int(math.ceil(self.power/3))
 
-            self.equip = True
-
             print('-'*25)
             input('You equip the {0} | Press enter/return '.format(str(self)))
 
@@ -209,13 +197,12 @@ class Weapon(Item):
 
 class Armor(Item):
     def __init__(self, name, desc, buy, sell, defense, type_, part,
-                 class_, equip=False, cat='armor', imp=False):
+                 class_, cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
         self.defense = defense
         self.type_ = type_
         self.part = part
         self.class_ = class_
-        self.equip = equip
         if self.class_ != 'none':
             if isinstance(self.class_, str):
                 self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'''])
@@ -238,7 +225,6 @@ class Armor(Item):
 
             if isinstance(equipped[self.part], Armor):
                 old = copy.copy(equipped[self.part])
-                old.equip = False
                 inventory['armor'].remove(self)
                 inventory['armor'].append(old)
 
@@ -264,8 +250,6 @@ class Armor(Item):
                 main.player.dfns += int(math.ceil(self.defense/2))
                 main.player.p_dfns += int(math.ceil(self.defense/1.5))
 
-            self.equip = True
-
             print('-'*25)
             input('You equip the {0} | Press enter/return '.format(str(self)))
 
@@ -278,16 +262,15 @@ class Armor(Item):
 
 # -- ACCESSORIES -- #
 class Accessory(Item):
-    def __init__(self, name, desc, buy, sell, cat='access', imp=False, equip=False):
+    def __init__(self, name, desc, buy, sell, cat='access', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
-        self.equip = equip
 
 
 class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
     def __init__(self, name, desc, buy, sell, element, acc_type='elemental',
-                 cat='access', imp=False, equip=False):
-        Accessory.__init__(self, name, desc, buy, sell, cat, imp, equip)
+                 cat='access', imp=False):
+        Accessory.__init__(self, name, desc, buy, sell, cat, imp)
         self.element = element
         self.acc_type = acc_type
 
@@ -303,13 +286,10 @@ class ElementAccessory(Accessory):
         spam = copy.copy(self)
         if isinstance(equipped['access'], Accessory):
             old = copy.copy(equipped['access'])
-            old.equip = False
             inventory['access'].append(old)
 
         inventory['access'].remove(self)
         equipped['access'] = spam
-
-        self.equip = True
         main.player.element = self.element
 
         print('-'*25)

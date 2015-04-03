@@ -404,7 +404,8 @@ GP). (Press enter/return).'.format(i, i.buy))
       [1] Armor
       [2] Consumables
       [3] Weapons
-      [4] Miscellaneous""")
+      [4] Accessories
+      [5] Miscellaneous""")
                     while True:
                         cat = input('Input [#] (or type "back"): ')
 
@@ -424,6 +425,9 @@ GP). (Press enter/return).'.format(i, i.buy))
                             cat = 'weapons'
                             vis_cat = 'Weapons'
                         elif cat == '4':
+                            cat = 'access'
+                            vis_cat = 'Accessories'
+                        elif cat == '5':
                             cat = 'misc'
                             vis_cat = 'Miscellaneous'
                         else:
@@ -432,21 +436,8 @@ GP). (Press enter/return).'.format(i, i.buy))
                         if cat in inv_system.inventory:
 
                             if inv_system.inventory[cat]:
-
-                                if cat not in ['weapons', 'armor']:
-                                    inv_system.pick_item(cat, vis_cat, gs=True)
-                                    print('-'*25)
-
-                                else:
-                                    if [x for x in inv_system.inventory[cat] if not x.equip]:
-                                        inv_system.pick_item(cat, vis_cat, gs=True)
-                                        print('-'*25)
-
-                                    else:
-                                        print('-'*25)
-                                        input("You don't have any items in the \"{0}\" category |\
-Press enter/return ".format(vis_cat))
-                                        print('-'*25)
+                                inv_system.pick_item(cat, vis_cat, gs=True)
+                                print('-'*25)
 
                                 break
 
@@ -455,6 +446,7 @@ Press enter/return ".format(vis_cat))
                                 input("You don't have any items in the \"{0}\" category |\
 Press enter/return ".format(vis_cat))
                                 print('-'*25)
+
                                 break
 
             elif b_s in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
@@ -528,9 +520,6 @@ Press enter/return ".format(vis_cat))
                             print("You received a {0} pet!".format(chosen_pet))
                             print('You give the shopkeeper {0} GP.'.format(chosen_pet.cost))
 
-                            chosen_pet.equip = True
-                            if main.player.current_pet != '(None)':
-                                main.player.current_pet.equip = False
                             inv_system.inventory['pets'].append(chosen_pet)
                             main.player.current_pet = chosen_pet
                             main.misc_vars['gp'] -= chosen_pet.cost

@@ -45,12 +45,11 @@ only_nsew = lambda x: re.compile(r'[^n^s^e^w]').sub('', x)
 
 class Companion:
     # A basic pet class
-    def __init__(self, name, desc, cost, cat='pets', equip=False, level=1, imp=False):
+    def __init__(self, name, desc, cost, cat='pets', level=1, imp=False):
         self.name = name
         self.cost = cost
         self.desc = desc
         self.cat = cat
-        self.equip = equip
         self.level = level
         self.imp = imp
 
@@ -61,8 +60,8 @@ class Companion:
 class Healer(Companion):
     # Healers have mana, and heal the player each turn if they have enough mana.
     def __init__(self, name, desc, cost, power, mana,
-                 req_mana, mana_per_turn, cat='pets', equip=False, level=1, imp=False):
-        Companion.__init__(self, name, desc, cost, cat, equip, level, imp)
+                 req_mana, mana_per_turn, cat='pets', level=1, imp=False):
+        Companion.__init__(self, name, desc, cost, cat, level, imp)
         self.power = power
         self.mana = mana
         self.rm = req_mana
@@ -95,8 +94,8 @@ class Fighter(Companion):
     # Fighters deal damage to the enemy but can sometimes mess up.
 
     def __init__(self, name, desc, cost, damage, cat='pets',
-                 equip=False, level=1, incap_turns=2, incap_chance=25, rt=0, imp=False):
-        Companion.__init__(self, name, desc, cost, cat, equip, level, imp)
+                 level=1, incap_turns=2, incap_chance=25, rt=0, imp=False):
+        Companion.__init__(self, name, desc, cost, cat, level, imp)
         self.damage = damage  # How much damage it deals per turn
         self.incap_turns = incap_turns  # How long the pet is incapacitated for
         self.incap_chance = incap_chance  # Chance of pet incapacitating itself
@@ -135,8 +134,8 @@ class Fighter(Companion):
 
 
 class Steed(Companion):
-    def __init__(self, name, desc, cost, distance, cat='pets', equip=False, level=1, imp=False):
-        Companion.__init__(self, name, desc, cost, cat, equip, level, imp)
+    def __init__(self, name, desc, cost, distance, cat='pets', level=1, imp=False):
+        Companion.__init__(self, name, desc, cost, cat, level, imp)
         self.distance = distance
 
     @staticmethod
