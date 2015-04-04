@@ -78,9 +78,9 @@ def setup_vars():
 def update_stats():
     # Forces stats to return to normal when battle is finished
     global temp_stats
-    temp_stats = {'attk': _c(player.attk), 'm_attk': _c(player.m_attk),
+    temp_stats = {'attk': _c(player.attk), 'dfns': _c(player.dfns),
                   'p_attk': _c(player.p_attk), 'p_dfns': _c(player.p_dfns),
-                  'dfns': _c(player.dfns), 'm_dfns': _c(player.m_dfns),
+                  'm_attk': _c(player.m_attk), 'm_dfns': _c(player.m_dfns),
                   'spd': _c(player.spd), 'evad': _c(player.evad),
                   'm_ispoisoned': False, 'turn_counter': 0}
 
@@ -624,8 +624,8 @@ def battle_inventory():
         return False
 
     while True:
-        print('Battle Inventory: \n      ' + '\n      '.join(
-              ['[' + str(x + 1) + '] ' + str(y)
+        print('Battle Inventory: \n      ', end='')
+        print('\n      '.join(['[{0}] {1}'.format(x + 1, y)
               for x, y in enumerate(inv_system.inventory['consum'])]))
 
         while True:
@@ -649,7 +649,14 @@ def battle_inventory():
                 continue
 
             print('\n-Player Turn-')
-            item.use_item()
+
+            if isinstance(item, inv_system.i.StatusPotion):
+                if item.status != player.status_ail:
+                    print('You are not {0} - you have no reason to drink that.'.format(item.status))
+                    print()
+                    break
+
+            item.use_item(is_battle=True)
             return True
 
 

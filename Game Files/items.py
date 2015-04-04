@@ -23,6 +23,7 @@ import msvcrt
 
 import inv_system
 import sounds
+import ascii_art
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -66,12 +67,17 @@ class Consumable(Item):
         self.heal = heal
         self.mana = mana
 
-    def use_item(self):
+    def use_item(self, is_battle=False):
         global inventory
 
         item_setup_vars()
 
-        print('-'*25)
+        if is_battle:
+            print(ascii_art.player_art[main.player.class_.title()] %
+                  "{0} is making a move!\n".format(main.player.name))
+
+        else:
+            print('-'*25)
 
         main.player.hp += self.heal
 
@@ -101,7 +107,12 @@ class StatusPotion(Item):
 
         item_setup_vars()
 
-        print('-'*25)
+        if is_battle:
+            print(ascii_art.player_art[main.player.class_.title()] %
+                  "{0} is making a move!\n".format(main.player.name))
+
+        else:
+            print('-'*25)
 
         if main.player.status_ail == self.status:
             sounds.buff_spell.play()

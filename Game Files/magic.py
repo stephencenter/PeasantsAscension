@@ -183,23 +183,11 @@ class Buff(Spell):
             print(ascii_art.player_art[main.player.class_.title()] %
                   "{0} is making a move!\n".format(main.player.name))
 
-            print('Using the power of {0}, your {1} increases temporarily by {2}!'.format(
-                self.name, self.stat, self.incre))
+            print('You raise your stats using the power of {0}!'.format(self.name))
 
             sounds.buff_spell.play()
 
-            if self.stat == 'Defense':
-                battle.temp_stats['dfns'] += self.incre
-            elif self.stat == 'Magic Defense':
-                battle.temp_stats['m_dfns'] += self.incre
-            elif self.stat == 'Speed':
-                battle.temp_stats['spd'] += self.incre
-            elif self.stat == 'Evasion':
-                battle.temp_stats['evad'] += self.incre
-            elif self.stat == 'Attack':
-                battle.temp_stats['attk'] += self.incre
-            elif self.stat == 'Magic Attack':
-                battle.temp_stats['m_attk'] += self.incre
+            battle.temp_stats[self.stat] += self.incre
 
             return True
 
@@ -290,45 +278,57 @@ div_heal = Healing('Divine Healing',
 # -- Buffs -- #
 m_quick = Buff('Minor Quickness',
                "Temporarily raise your speed by a small amount.",
-               2, 4, 2, "Speed")
+               2, 4, 2, "spd")
 m_evade = Buff('Minor Evade',
                "Temporarily raise your evasion by a small amount.",
-               2, 4, 2, "Evasion")
+               2, 4, 2, "evad")
 
 m_defend = Buff('Minor Defend',
                 "Temporarily raise your defense by a small amount.",
-                2, 5, 2, "Defense")
+                2, 5, 2, "dfns")
 m_shield = Buff('Minor Shield',
                 "Temporarily raise your magic defense by a small amount.",
-                2, 5, 2, "Magic Defense")
+                2, 5, 2, "m_dfns")
+m_block = Buff('Minor Block',
+               "Temporarily raise your pierce defense by a small amount.",
+               2, 5, 2, "p_dfns")
 
 m_stren = Buff('Minor Strengthen',
                "Temporarily raise your attack by a small amount.",
-               2, 6, 2, "Attack")
+               2, 6, 2, "attk")
 m_power = Buff('Minor Empower',
                "Temporarily raise your magic attack by a small amount.",
-               2, 6, 2, "Magic Attack")
+               2, 6, 2, "m_attk")
+m_aim = Buff('Minor Aim',
+             "Temporarily raise your pierce attack by a small amount.",
+             2, 6, 2, "p_attk")
 
 a_defend = Buff('Adept Defend',
                 "Temporarily raise your defense by a large amount.",
-                7, 12, 5, "Defense")
+                7, 15, 6, "dfns")
 a_shield = Buff('Adept Shield',
                 "Temporarily raise your magic defense by a large amount.",
-                7, 12, 5, "Magic Defense")
+                7, 15, 6, "m_dfns")
+a_block = Buff('Adept Block',
+               "Temporarily raise your pierce defense by a large amount.",
+               7, 15, 5, "p_dfns")
 
 a_stren = Buff('Adept Strengthen',
                "Temporarily raise your attack by a large amount.",
-               7, 10, 5, "Attack")
+               7, 14, 6, "attk")
 a_power = Buff('Adept Empower',
                "Temporarily raise your magic attack by a large amount.",
-               7, 10, 5, "Magic Attack")
+               7, 14, 6, "m_attk")
+a_aim = Buff('Adept Aim',
+             "Temporarily raise your pierce attack by a large amount.",
+             7, 14, 6, "p_attk")
 
 a_quick = Buff('Adept Quickness',
                "Temporarily raise your speed by a large amount.",
-               7, 11, 5, "Speed")
+               7, 13, 5, "spd")
 a_evade = Buff('Adept Evade',
                "Temporarily raise your evasion by a large amount.",
-               7, 11, 5, "Evasion")
+               7, 13, 5, "evad")
 
 # -- Other Spells -- #
 r_affliction = Spell('Relieve Affliction',
@@ -376,7 +376,8 @@ spells = [
     f_blaze, gra_gren, pwr_jolt, wtr_blast, rock_slam, adv_heal,
     a_stren, a_power, a_defend, a_shield, a_quick, a_evade,
     g_infer, vin_strm, sp_storm, tsunami, earthquake, div_heal,
-    r_affliction
+    r_affliction, icicle_dagger, hail_storm, blizzard,
+    a_aim, a_block
 ]
 
 
