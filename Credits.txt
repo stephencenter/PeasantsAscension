@@ -40,16 +40,16 @@ MUSIC -- PART 2
  
   Songs from FMA:
     Composed by RoleMusic (http://freemusicarchive.org/music/Rolemusic/):
-        Python --> http://tinyurl.com/python-by-rolemusic --> [Battle-over]
-    
+        Python --> http://tinyurl.com/python-by-rolemusic
+		
             Edited to loop properly. Ending portion removed
+			End-battle music
    
     Composed by UncleBibby (http://freemusicarchive.org/music/UncleBibby/):
         CopperNickle --> http://tinyurl.com/coppernickle-by-unclebibby
   
             Edited to loop properly. Also, I upped the tempo up by 5%
- 
-            [This song isn't being used yet, but it may be soon!]
+            Plot music
 ------------------------------------------------------------------------------
 SOUND FX:
   Sound FX were made by Flygon_Jones and me using an open-source

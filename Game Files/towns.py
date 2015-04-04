@@ -665,7 +665,7 @@ as their safe-haven. Pythonia has established a non-aggression pact with
 the refugees and gladly accept and protect them from danger. Seeing as
 how the citizens are from Flysconia, approximately 90% of the population
 are reptilian creatures.""",
-              [npcs.f_jones, npcs.stravi], 3, 39, gs_level=3)
+              [npcs.f_jones, npcs.stravi, npcs.caesar], 3, 39, gs_level=3)
 
 town12 = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
 home to dozens upon dozens of different animals and plantlife. Naturally,
@@ -685,14 +685,23 @@ be found mining on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
               [npcs.raidon, npcs.sugulat], -51, -7, gs_level=4, inn_cost=15)
 
+town14 = Town('Whistumn', """Whistumn: An ancient city situated on the border
+between the desert and the forest. The inhabitants of this town are known
+for their skepticism and reasoning. Many of them are scientists and are
+skilled mathematicians and engineers. This town has an ongoing rivalry with
+the town of Parceon because of their magical background, but this appears
+to be mostly one-sided. A saddened-looking woman and her husband are sitting
+on the steps of the general store.""",
+              [], 52, 12, gs_level=4, inn_cost=13, pet_shop=True, ps_level=3)
+
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
 flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""", [npcs.alden],
                     -12, -26, inn=False, gen_store=False, pet_shop=True, ps_level=2)
 
-town_list = [town1, town2, town3, town4, town5, town6,
-             town7, town8, town9, town10, town11, town12, town13, small_house1]
+town_list = [town1, town2, town3, town4, town5, town6, town7,
+             town8, town9, town10, town11, town12, town13, town14, small_house1]
 
 
 def search_towns(pos_x, pos_y, enter=True):

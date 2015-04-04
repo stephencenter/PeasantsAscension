@@ -737,8 +737,9 @@ ethos = NPC('Ethos', [ethos_phrase_1])
 f_jones_phrase_1 = Conversation(['Hello, adventurer! My name if Fly. I used to be the Emperor of',
                                  'The Flysconian Empire, until that wrechted Pythonius messed',
                                  'things up! His people revolted, and then his friend Sugulat',
-                                 'came in and overthrew us. He drove my people out of our lands,',
-                                 'and now this town is all we have left. Please, leave me be.'],
+                                 'came in and overthrew us. Sugulat drove my people out of our'
+                                 'lands and now this town is all we have left. \
+Please, leave me be.'],
                                 active=True)
 
 f_jones = NPC('F. Jones', [f_jones_phrase_1])
@@ -751,6 +752,13 @@ stravi_phrase_1 = Conversation(['Please, forgive my husband, Fly. He is very emo
                                active=True)
 
 stravi = NPC('Stravi', [stravi_phrase_1])
+
+# -- Name: Caesar -- Town: Neo-Ekanmar
+caesar_phrase_1 = Conversation(["*Caesar, Fly's pet strawberry dragon, runs away and hides behind",
+                                'his owner before you get a chance to converse with him.*'],
+                               active=True)
+
+caesar = NPC('Caesar', [caesar_phrase_1])
 
 # -- Name: Sakura -- Town: Principalia
 sakura_phrase_1 = Conversation(['Hello, sir! What can Sakura do for you? Ah, you want to see the',
@@ -775,6 +783,8 @@ sugulat_phrase_1 = Conversation(['Greetings! My name is Sugulat, Emperor of D\u0
 
 sugulat = NPC('Sugulat', [sugulat_phrase_1])
 
+# -- Name: Serena -- Town:
+
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,
@@ -788,7 +798,7 @@ all_dialogue = [
     alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
     azura_phrase_1, azura_phrase_2, azura_phrase_3, f_jones_phrase_1,
     stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1,
-    elisha_phrase_1, lazaro_phrase_1
+    elisha_phrase_1, lazaro_phrase_1, caesar_phrase_1
 ]
 
 
