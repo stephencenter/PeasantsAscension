@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # PythoniusRPG v0.6.4 Alpha
 game_version = 'v0.6.4'
-# Copyright 2013, 2014 Stephen Center
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
 #
@@ -22,7 +21,7 @@ game_version = 'v0.6.4'
 # And Eric Skiff: http://ericskiff.com/music/
 #-----------------------------------------------------------------------------#
 # Contact me via Twitter (@RbwNjaFurret) or email (ninjafurret@gmail.com)
-# for questions/feedback.
+# for questions/feedback. My website is http://rbwnjafurret.com/
 #-----------------------------------------------------------------------------#
 # Notes for people reading this code:
 #  1. print('-'*25) <-- This line appears constantly in my code. It's purpose
@@ -855,12 +854,7 @@ def deserialize_player(path):  # Load the JSON file and translate
     player.__dict__ = player_dict
 
 
-def title_screen():
-    pygame.mixer.music.load('Music/Prologue.ogg')
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(music_vol)
-
-    print("""\
+title_logo = """\
  ____          _    _                    _              ____   ___     ____
 |  _ \  _   _ | |_ | |__    ___   _ __  (_) _   _  ___ |  _ \ |  _ \  / ___|
 | |_) || | | || __|| '_ \  / _ \ | '_ \ | || | | |/ __|| |_) || |_) || |  _
@@ -871,7 +865,15 @@ PythoniusRPG {0} -- Programmed in Python by Stephen Center (RbwNjaFurret)
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.rbwnjafurret.com/pythoniusrpg/]
 ------------------------------------------------------------------------------""".format(
-        game_version))
+    game_version)
+
+
+def title_screen():
+    pygame.mixer.music.load('Music/Prologue.ogg')
+    pygame.mixer.music.play(-1)
+    pygame.mixer.music.set_volume(music_vol)
+
+    print(title_logo)
 
     while True:
         choice = input('[P]lay Game | [C]redits | [S]tory | [E]xit  |  Input Letter: ')
@@ -885,10 +887,28 @@ Check here often for updates: [http://www.rbwnjafurret.com/pythoniusrpg/]
             print('-'*25)
 
             try:
+                pygame.mixer.music.load('Music/Credits Music for an 8-bit RPG.ogg')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(music_vol)
                 with open('../Credits.txt') as f:
-                    for f.readline in f:
+                    for number, f.readline in enumerate(f):
                         print(''.join(f.readline.rstrip("\n").split(";")))
-                        time.sleep(0.35)
+                        time.sleep([0.8, 1, 1, 1, 1, 1, 0.5, 0.5, 1, 1,
+                                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                    1, 1, 1, 0.5, 0.5, 1.25, 0.5, 0.5, 1, 0.5,
+                                    0.5, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+                                    0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+                                    0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
+                                    0.5, 0.5, 0.5, 0.5][number])
+
+                    time.sleep(3)
+                    pygame.mixer.music.stop()
+                    time.sleep(0.5)
+
+                    pygame.mixer.music.load('Music/Prologue.ogg')
+                    pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(music_vol)
 
                     while msvcrt.kbhit():
                         msvcrt.getwch()
@@ -900,7 +920,7 @@ Check here often for updates: [http://www.rbwnjafurret.com/pythoniusrpg/]
                 logging.exception('Error loading Credits.txt:')
                 print('There was a problem opening "Credits.txt".')
 
-            print('-'*25)
+            print(title_logo)
 
         elif choice.startswith('s'):
             print('-'*25)

@@ -57,10 +57,18 @@ SOUND FX:
 ------------------------------------------------------------------------------
 ASCII ART:
   All the ASCII art in the game was made by me using Notepad++ in about
-  five minutes. They're not meant to look good.
+  five minutes. They're not meant to look good, they're meant to simply
+  get the point across.
 ------------------------------------------------------------------------------
 OTHER STUFF:
     
   Jacob Hall, who drew all of the artwork that is included with the game
   (located in the Artwork Directory). He also was tremendously helpful
   in regards to bug-testing and suggesting ideas. Thank you so much. :)
+  
+  In addition to his drawing, I also used the freeware software known as
+  paint.NET (http://getpaint.net/) to edit, outline, and color the drawings. 
+------------------------------------------------------------------------------
+MOST IMPORTANTLY:
+  
+  THANK YOU FOR PLAYING! :D
