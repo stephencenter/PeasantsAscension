@@ -893,7 +893,7 @@ def title_screen():
                 with open('../Credits.txt') as f:
                     for number, f.readline in enumerate(f):
                         print(''.join(f.readline.rstrip("\n").split(";")))
-                        time.sleep([0.8, 1, 1, 1, 1, 1, 0.5, 0.5, 1, 1,
+                        time.sleep([1, 1, 1, 1, 1, 1, 0.5, 0.5, 1, 1,
                                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                     1, 1, 1, 0.5, 0.5, 1.25, 0.5, 0.5, 1, 0.5,
