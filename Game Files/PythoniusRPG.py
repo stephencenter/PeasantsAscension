@@ -692,8 +692,9 @@ def check_save():  # Check for save files and load the game if they're found
     spam = True
     while spam:
         print('     ', '\n      '.join(
-            ['[' + str(num + 1) + '] ' + dir_name + ' '*(padding - len(dir_name)) +
-             ' | ' + menu_info[dir_name]
+            ['[{0}] {1}{2} | {3}'.format(num + 1, dir_name,
+                                         ' '*(padding - len(dir_name)),
+                                         menu_info[dir_name])
              for num, dir_name in enumerate([key for key in sorted(save_files)])]))
 
         while True:
@@ -778,7 +779,7 @@ def check_save():  # Check for save files and load the game if they're found
 
             except (OSError, ValueError):
                 logging.exception('Error loading game:')
-                input('There was an error loading your game (Press Enter/Return) ')
+                input('There was an error loading your game | Press Enter/Return ')
                 print('-'*25)
                 break
 
@@ -893,18 +894,16 @@ def title_screen():
                 with open('../Credits.txt') as f:
                     for number, f.readline in enumerate(f):
                         print(''.join(f.readline.rstrip("\n").split(";")))
-                        time.sleep([1, 1, 1, 1, 1, 1, 0.5, 0.5, 1, 1,
+                        time.sleep([0.75, 1.25, 0.75, 1.25, 1, 1, 0.5, 0.5, 1, 1,
                                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                    1, 1, 1, 0.5, 0.5, 1.25, 0.5, 0.5, 1, 0.5,
+                                    1, 1, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5,
                                     0.5, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
                                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
                                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
                                     0.5, 0.5, 0.5, 0.5][number])
 
                     time.sleep(3)
-                    pygame.mixer.music.stop()
-                    time.sleep(0.5)
 
                     pygame.mixer.music.load('Music/Prologue.ogg')
                     pygame.mixer.music.play(-1)
@@ -928,12 +927,20 @@ def title_screen():
             print('-'*25)
 
             try:
-                with open('../pythonius_plot.txt') as f:
+                pygame.mixer.music.load('Music/CopperNickel.ogg')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(music_vol)
+
+                with open('../pythonius_plot.txt', encoding='utf-8') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
                             input(''.join(f.readline.rstrip("\n").split(";")))
                         else:
                             print(''.join(f.readline.rstrip("\n").split(";")))
+
+                pygame.mixer.music.load('Music/Prologue.ogg')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(music_vol)
 
             except FileNotFoundError:
                 print('The "pythonius_plot.txt" file could not be found.')
