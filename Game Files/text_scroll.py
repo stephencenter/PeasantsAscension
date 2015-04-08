@@ -28,56 +28,46 @@ import msvcrt
 # input = test_input
 
 
-class TSModeError(Exception):
-    """
-    Stands for "Text Scroll Mode Error"
-
-    Raised if an invalid value for "mode" is chosen in "text_scroll()"
-
-    """
-    def __init__(self, expression):
-        self.expression = expression
-
-
-def text_scroll(string, mode="print", spacing=0.045):
+def text_scroll(string, spacing=0.025):
     """
     This function causes individual characters of a string to
     only be printed one at a time with "spacing" seconds in between.
-    If "mode == "print", then it prints all characters. If
-    mode == "input", then it will print all but the last
+    If using text_scroll(), then it prints all characters. If
+    using input_ts(), then it will print all but the last
     character, which will then be run through the input
     function instead.
 
-    "mode" has two valid values: "print" and "input". Any other mode
-    will raise a ModeError.
-
     For "spacing", any positive number (including zero) is valid. Anything
-    else will cause the "time.time()" function to raise a ValueError or
+    else will cause the "time.sleep()" function to raise a ValueError or
     a TypeError depending on what value is used.
 
     Examples:
 
-    spam = text_scroll('Please type anything you want and then press enter: ', mode="input")
+    spam = input_ts('Please type anything you want and then press enter: ')
     text_scroll('You entered "{0}". That\'s sort of interesting, I suppose...'.format(spam))
 
     """
 
-    if mode == "print":
-        string = ''.join([string, "\n"])  # Make sure to print a newline afterwards all other
-                                          # characters have been printed.
-        for char in string:
-            print(char, end='')  # end='' prevents print() from printing a newline
-                                 # after each character
+    if string == '-'*25:
+        print(string)
+        return
 
-            sys.stdout.flush()  # Prevent "print" from waiting until the loop is
-                                # completed to print() "char"
+    string = ''.join([string, "\n"])  # Make sure to print a newline afterwards all other
+                                      # characters have been printed.
+    for char in string:
+        print(char, end='')  # end='' prevents print() from printing a newline
+                             # after each character
 
+        sys.stdout.flush()  # Prevent "print" from waiting until the loop is
+                            # completed to print() "char"
+
+        if char != ' ':
             time.sleep(spacing)
 
-            while msvcrt.kbhit():
-                msvcrt.getwch()
+        while msvcrt.kbhit():
+            msvcrt.getwch()
 
-    elif mode == "input":
+def input_ts(string, spacing=0.025):
         # Input mode prints all but the last character. The last character
         # is instead passed as the argument for the "input()" function,
         # the result of which is returned.
@@ -91,12 +81,11 @@ def text_scroll(string, mode="print", spacing=0.045):
         for char in string[:-1]:  # Select all but the last character
             print(char, end='')
             sys.stdout.flush()
-            time.sleep(spacing)
+
+            if char != ' ':
+                time.sleep(spacing)
 
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
         return input(string[-1])
-
-    else:
-        raise TSModeError('Invalid value for mode: "{0}"'.format(mode))

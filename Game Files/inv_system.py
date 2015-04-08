@@ -24,7 +24,6 @@ from copy import copy as _c
 
 import npcs
 import towns
-import text_scroll
 import items as i
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
@@ -657,14 +656,16 @@ def tools_menu():  # Display a set of usable tools on the world map
 
     if not available_tools:
         print('You have no available tools to use...')
+
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
+
         return
 
     while spam:
-        print(''.join(['Tools', ': \n      ', '\n      '.join(
-            ['[' + str(x + 1) + '] ' + str(y)
-             for x, y in enumerate(available_tools)])]))
+        print('Tools: \n      ')
+        print('\n      '.join(['[{0}] {1}'.format(x + 1, y)
+             for x, y in enumerate(available_tools)]))
 
         while True:
             tool = input('Input [#] (or type "exit"): ')

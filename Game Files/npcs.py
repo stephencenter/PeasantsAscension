@@ -22,6 +22,7 @@ import bosses
 import inv_system
 import pets
 import items
+import text_scroll
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -62,6 +63,14 @@ If an object name ends with "_usX", where X is an integer, then it handles what 
 
 """
 
+def setup_vars():
+    global print
+    global input
+
+    if main.text_scroll:
+        print = text_scroll.text_scroll
+        input = text_scroll.input_ts
+
 
 class NPC:
     def __init__(self, name, conversations):
@@ -69,6 +78,8 @@ class NPC:
         self.conversations = conversations
 
     def speak(self):
+        setup_vars()
+
         # Print the NPC's dialogue to the player
         dialogue = []
         for w in self.conversations:
@@ -837,6 +848,6 @@ def deserialize_dialogue(path):
                     c.active, c.started, c.finished = \
                         j_log[key][0], j_log[key][1], j_log[key][2]
                 else:
-                    c.active = j_log[key][0],
+                    c.active = j_log[key][0]
 
 import towns

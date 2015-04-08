@@ -126,8 +126,10 @@ sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'  # Spellbook
 # cause the file to become corrupted if it is done incorrectly, so backup your
 # files before doing so.
 
-music_vol = 1.0
-sound_vol = 1.0
+music_vol = 1.0  # The volume of the game, on a scale from 0 (muted) to 1.0 (loudest)
+sound_vol = 1.0  # These values can be changed in settings.cfg file
+
+text_scroll = True
 
 
 class PlayerCharacter:  # The Player
@@ -594,7 +596,7 @@ def create_player():
     print('-'*25)
 
 
-def set_saves():
+def change_settings():
     config = configparser.ConfigParser()
 
     if os.path.isfile("../settings.cfg"):
@@ -603,15 +605,11 @@ def set_saves():
         for x in config['save_files']:
             globals()[x] = config['save_files'][x]
 
-
-def set_volume():
-    config = configparser.ConfigParser()
-
-    if os.path.isfile("../settings.cfg"):
-        config.read("../settings.cfg")
-
         for x in config['volume_levels']:
             globals()[x] = float(config['volume_levels'][x])/100
+
+        for x in config['text_scroll']:
+            globals()[x] = config['text_scroll'][x]
 
         sounds.change_volume()
 
@@ -979,8 +977,8 @@ def main():
     elif os.name == 'posix':  # Most Unix Devices
         sys.stdout.write("\x1b]2;Pythonius RPG {0}\x07".format(game_version))
 
-    set_saves()  # Set the save file locations
-    set_volume()  # Set the sound & music volume
+    change_settings()  # Set the save file locations
+    change_settings()  # Set the sound & music volume
 
     title_screen()
     check_save()  # Check for save files...
