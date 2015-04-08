@@ -119,16 +119,6 @@ def battle_system(is_boss=False, ambush=False):
             msvcrt.getwch()
 
     else:
-        if random.randint(0, 1):
-            song = 'Music/Jumpshot.ogg'
-
-        else:
-            song = 'Music/Ruari 8-bit Battle.ogg'
-
-        pygame.mixer.music.load(song)
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(main.music_vol)
-
         print(ascii_art.monster_art[monster.monster_name] % '')
 
         if any(map(monster.name.startswith, vowels)):  # Remember to use proper grammar!
@@ -139,7 +129,10 @@ def battle_system(is_boss=False, ambush=False):
         if ambush:
             print('{0}{1} ambushed you while you were resting!'.format(
                 a_an, monster.name))
-            time.sleep(0.35)
+            pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
+            pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(main.music_vol)
+            time.sleep(1)
 
             while msvcrt.kbhit():
                 msvcrt.getwch()
@@ -147,7 +140,10 @@ def battle_system(is_boss=False, ambush=False):
         else:
             print('{0}{1} suddenly appeared out of nowhere!'.format(
                 a_an, monster.name))
-            time.sleep(0.35)
+            pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
+            pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(main.music_vol)
+            time.sleep(1)
 
             while msvcrt.kbhit():
                 msvcrt.getwch()
@@ -288,11 +284,11 @@ def player_turn(var, dodge, move):
                 msvcrt.getwch()
 
             if dodge in range(monster.evad, 250):
-                dealt = player.player_damage(var)
-                monster.hp -= dealt
+                dam_dealt = player.player_damage(var)
+                monster.hp -= dam_dealt
                 sounds.enemy_hit.play()
                 print('Your attack connects with the {0}, dealing {1} damage!'.format(
-                    monster.name, dealt))
+                    monster.name, dam_dealt))
 
             else:
                 sounds.attack_miss.play()
@@ -433,7 +429,7 @@ def after_battle(is_boss):  # Assess the results of the battle
 
                 if gold <= 0:
                     gold = random.randint(1, 2)
-                experience = int(math.ceil((monster.lvl + 1.5 + player.ext_exp)/1.75))
+                experience = int(math.ceil((monster.lvl*1.5 + player.ext_exp)/1.25))
 
                 if experience <= 0:
                     experience = random.randint(1, 2)

@@ -783,7 +783,15 @@ sugulat_phrase_1 = Conversation(['Greetings! My name is Sugulat, Emperor of D\u0
 
 sugulat = NPC('Sugulat', [sugulat_phrase_1])
 
-# -- Name: Serena -- Town:
+# -- Name: Serena -- Town: Whistumn
+serena_phrase_1 = Conversation('FILLER TEXT', active=True)
+
+serena = NPC('Serena', [serena_phrase_1])
+
+# -- Name: Polmor -- Town: Whistumn
+polmor_phrase_1 = Conversation('FILLER TEXT', active=True)
+
+polmor = NPC('Polmor', [polmor_phrase_1])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
@@ -798,7 +806,8 @@ all_dialogue = [
     alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
     azura_phrase_1, azura_phrase_2, azura_phrase_3, f_jones_phrase_1,
     stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1,
-    elisha_phrase_1, lazaro_phrase_1, caesar_phrase_1
+    elisha_phrase_1, lazaro_phrase_1, caesar_phrase_1, polmor_phrase_1,
+    serena_phrase_1
 ]
 
 

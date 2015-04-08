@@ -76,24 +76,24 @@ class Monster:
 
     def monst_damage(self, var):
         if self.attk >= self.p_attk:
-            dealt = math.ceil(self.attk/2 - battle.temp_stats['dfns']/2) + var
+            dam_dealt = math.ceil(self.attk/2 - battle.temp_stats['dfns']/2) + var
             type_ = 'melee'
         else:
-            dealt = math.ceil(self.p_attk/2 - battle.temp_stats['p_dfns']/2) + var
+            dam_dealt = math.ceil(self.p_attk/2 - battle.temp_stats['p_dfns']/2) + var
             type_ = 'range'
 
-        dealt = magic.eval_element(
+        dam_dealt = magic.eval_element(
             p_elem=battle.player.element,
-            m_elem=battle.monster.element, m_dmg=dealt)[1]
+            m_elem=battle.monster.element, m_dmg=dam_dealt)[1]
 
-        if dealt < 1:
-            dealt = 1
+        if dam_dealt < 1:
+            dam_dealt = 1
 
         if random.randint(1, 100) <= 7:
             print("It's a critical hit! 2x damage!")
-            dealt *= 2
+            dam_dealt *= 2
 
-        return dealt, type_
+        return dam_dealt, type_
 
     def monst_magic(self, var):
         monst_dealt = math.ceil(self.m_attk/2 - battle.temp_stats['m_dfns']/2) + var
@@ -213,15 +213,15 @@ class Monster:
                 msvcrt.getwch()
 
             if dodge in range(battle.temp_stats['evad'], 250):
-                dealt = magic.eval_element(
+                dam_dealt = magic.eval_element(
                     p_elem=battle.player.element,
                     m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
 
-                player.hp -= dealt
+                player.hp -= dam_dealt
                 sounds.enemy_hit.play()
 
                 print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
-                    self.name, dealt))
+                    self.name, dam_dealt))
 
             else:
                 sounds.attack_miss.play()
@@ -238,19 +238,27 @@ class Monster:
         # Attempt to give the player a status ailment
 
         if random.randint(1, 5) < 3:
-            if player.class_ in ['warrior', 'assassin']:
-                status = 'weakened'
+            if player.class_ == 'warrior':
+                status = 'weakened'  # Severely lowers melee attack
 
-            elif player.class_ in ['mage']:
-                status = 'silenced'
+            elif player.class_ == 'mage':
+                status = 'silenced'  # Makes the use of magic impossible, except for spells
+                                     # that cure status (such as silence)
 
-            elif player.class_ in ['ranger']:
-                status = 'asleep'  # Placeholder until a new status effect is implemented
+            elif player.class_ == 'ranger':
+                status = 'blinded'  # Severely lowers pierce attack
+
+            elif player.class_ == 'assassin':
+                status = 'paralyzed'  # Severely lowers speed and evasion
+
         else:
-            status = random.choice(['asleep', 'poisoned'])
+            status = random.choice(['asleep',  # Skips the players turn until they wake up
+                                    'poisoned'  # The player takes damage each turn until cured
+            ])
 
         if status == battle.player.status_ail:
-            status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened']
+            status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened',
+                                                'blinded', 'paralyzed']
                                     if x != battle.player.status_ail])
 
         print('The {0} is attempting to make you {1}...'.format(self.name, status))

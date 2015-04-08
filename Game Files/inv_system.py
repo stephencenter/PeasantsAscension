@@ -24,6 +24,7 @@ from copy import copy as _c
 
 import npcs
 import towns
+import text_scroll
 import items as i
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!

@@ -42,7 +42,7 @@ player = ''
 
 # A dictionary containing miscellaneous variables made entirely of
 misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
-             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'luc': 1, 'gp': 20}
+             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20}
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
@@ -157,9 +157,19 @@ class PlayerCharacter:  # The Player
     def player_damage(self, var):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
             dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/2)) + var
+            if self.status_ail == 'weakened':
+                dam_dealt /= 2
+                dam_dealt = math.ceil(dam_dealt)
+                print('You deal less damage because of your weakened state.')
 
         else:
             dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/2)) + var
+            dam_dealt *= 2
+            if self.status_ail == 'blinded':
+                dam_dealt /= 2
+                dam_dealt = math.ceil(dam_dealt)
+                print('You deal less damage because your eyesight made aiming difficult.')
+
 
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
@@ -170,12 +180,6 @@ class PlayerCharacter:  # The Player
 
         if random.randint(1, 100) <= 7:
             print("It's a critical hit! 2x damage!")
-            dam_dealt *= 2
-
-        if self.status_ail == 'weakened':
-            dam_dealt /= 2
-            dam_dealt = math.ceil(dam_dealt)
-            print('You deal less damage because of your weakened state.')
 
         return dam_dealt
 
@@ -237,12 +241,17 @@ class PlayerCharacter:  # The Player
             self.hp = misc_vars['hp_p']
             self.mp = misc_vars['mp_p']
 
-            temp_ski = 0  # Temporary Skill Points
+            rem_points = 0  # Remaining Skill Points
+            extra_points = 0  # The number of extra skill points the player will receive
 
             while self.exp >= misc_vars['r_xp']:
                 sounds.item_pickup.play()
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
+
+                rem_points += 1
+                extra_points += self.ext_ski
+                magic.new_spells()
 
                 if self.class_ == 'warrior':
                     self.p_attk += random.randint(0, 2)
@@ -292,13 +301,11 @@ class PlayerCharacter:  # The Player
                     self.hp += random.randint(1, 3)
                     self.mp += random.randint(1, 3)
 
-                temp_ski += self.ext_ski
-                magic.new_spells()
                 self.exp -= misc_vars['r_xp']
                 misc_vars['r_xp'] = int((math.pow(self.lvl*2, 2) - 1.2*self.lvl))
 
             print('-'*25)
-            self.skill_points(temp_ski)
+            self.skill_points(rem_points, extra_points)
 
             misc_vars['hp_p'] = self.hp
             misc_vars['mp_p'] = self.mp
@@ -307,26 +314,31 @@ class PlayerCharacter:  # The Player
             save_game()
             return
 
-    def skill_points(self, temp_ski):
+    def skill_points(self, rem_points, extra_points):
         global misc_vars
 
-        while temp_ski > 0:
-            print('You have {0} skill point{1} left to spend.'.format(
-                temp_ski, 's' if temp_ski > 1 else ''))
+        if extra_points:
+            print('Your great fortune has granted you {0} additional skill points!'.format(
+                extra_points))
+            rem_points += extra_points
 
-            while temp_ski > 0:
+        while rem_points > 0:
+            print('You have {0} skill point{1} left to spend.'.format(
+                rem_points, 's' if rem_points > 1 else ''))
+
+            while rem_points > 0:
                 skill = input("""Choose a skill to advance:
     [I]ntelligence - Use powerful magic with higher magic stats and MP!
     [S]trength -  Smash through enemies with higher attack and defense!
     [C]onstitution - Become a tank with higher defense stats and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
     [P]erception - Eleminate your enemies with ease using higher pierce and evasion!
-    [L]uck - Slightly improve ALL your stats, AND get more GP/XP!
+    [F]ortune - Increase your luck in hopes of getting more GP, XP, and skill points!
 Input letter: """)
 
                 skill = skill.lower()
 
-                if any(map(skill.startswith, ['i', 's', 'c', 'd', 'p', 'l'])):
+                if any(map(skill.startswith, ['i', 's', 'c', 'd', 'p', 'f'])):
                     if skill.startswith('i'):
                         vis_skill = 'Intelligence'
                     elif skill.startswith('s'):
@@ -338,7 +350,7 @@ Input letter: """)
                     elif skill.startswith('p'):
                         vis_skill = 'Perception'
                     else:
-                        vis_skill = 'Luck'
+                        vis_skill = 'Fortune'
 
                     while True:
                         y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
@@ -385,29 +397,22 @@ Input letter: """)
                             self.evad += random.randint(0, 2)
                             misc_vars['per'] += 1
 
-                        elif skill.startswith('l'):
+                        elif skill.startswith('f'):
                             self.hp += random.randint(0, 1)
                             self.mp += random.randint(0, 1)
                             if random.randint(0, 1):
-                                self.dfns += random.randint(0, 1)
-                                self.attk += random.randint(0, 1)
-                                self.p_attk += random.randint(0, 1)
-                            else:
-                                self.m_dfns += random.randint(0, 1)
-                                self.m_attk += random.randint(0, 1)
-                                self.p_dfns += random.randint(0, 1)
-                            if random.randint(0, 1):
-                                self.spd += random.randint(0, 1)
-                                self.evad += random.randint(0, 1)
-                            self.ext_gol += random.randint(0, 1)
-                            self.ext_exp += random.randint(0, 1)
-                            misc_vars['luc'] += 1
+                                self.ext_ski += (0, 1)
+
+                            self.ext_gol += random.randint(0, 2)
+                            self.ext_exp += random.randint(0, 2)
+
+                            misc_vars['for'] += 1
 
                         else:
                             continue
 
                         print('Your {0} has increased!'.format(vis_skill))
-                        temp_ski -= 1
+                        rem_points -= 1
                         break
         print()
         print('You are out of skill points.')
@@ -419,7 +424,7 @@ Level: {1} | Class: {2} | Element: {3}
 HP: {4}/{5} | MP: {6}/{7}
 Attack: {8} | M. Attack: {9} | P. Attack {10}
 Defense: {11} | M. Defense: {12} | P. Defense {13}
-INT: {14} | STR: {15} | CON: {16} | DEX: {17} | PER: {18} | LUC: {19}
+INT: {14} | STR: {15} | CON: {16} | DEX: {17} | PER: {18} | FOR: {19}
 Experience Pts: {20}/{21} | Gold Pieces: {22}
 
 -Equipped Items-
@@ -436,7 +441,7 @@ Armor:
                         self.attk, self.m_attk, self.p_attk,
                         self.dfns, self.m_dfns, self.p_dfns,
                         misc_vars['int'], misc_vars['str'], misc_vars['con'],
-                        misc_vars['dex'], misc_vars['per'], misc_vars['luc'],
+                        misc_vars['dex'], misc_vars['per'], misc_vars['for'],
                         self.exp, misc_vars['r_xp'], misc_vars['gp'],
                         inv_system.equipped['weapon'], inv_system.equipped['access'],
                         inv_system.equipped['head'], inv_system.equipped['body'],
@@ -757,8 +762,10 @@ def check_save():  # Check for save files and load the game if they're found
                         misc_vars['per'] = 1
                     print('Attempt successful!')
 
-                if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped\
-                        or 'pet' not in inv_system.equipped:
+                if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped \
+                        or 'pet' not in inv_system.equipped \
+                        or('luc' in misc_vars and 'for' not in misc_vars):
+
                     print('Attempting to make save file compatible with v0.6.4...')
                     if 'access' not in inv_system.inventory:
                         inv_system.inventory['access'] = []
@@ -768,6 +775,10 @@ def check_save():  # Check for save files and load the game if they're found
 
                     if 'pet' not in inv_system.equipped:
                         inv_system.equipped['pet'] = '(None)'
+
+                    if 'luc' in misc_vars and 'for' not in misc_vars:
+                        misc_vars['for'] = misc_vars['luc']
+                        del misc_vars['luc']
 
                     print('Attempt successful!')
 
