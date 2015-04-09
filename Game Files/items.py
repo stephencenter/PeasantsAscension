@@ -844,7 +844,7 @@ golem_rock = Misc('Rock', 'A small rock that seems to glow slightly.', 0, 5)
 burnt_ash = Misc('Ash', 'The ashy remains of a once-living creature.', 0, 5)
 antennae = Misc('Antennae', 'A pair of antennae from a massive insect.', 0, 5)
 ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.', 0, 5)
-chain_link = Misc('Chain links', 'A couple jointed link of chain made from steel.', 0, 5)
+chain_link = Misc('Chain links', 'A couple joined links of chain made from steel.', 0, 5)
 
 
 def monster_drop(level, name):

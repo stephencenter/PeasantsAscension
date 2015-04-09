@@ -77,6 +77,9 @@ class NPC:
         self.name = name
         self.conversations = conversations
 
+    def __str__(self):
+        return self.name
+
     def speak(self):
         setup_vars()
 

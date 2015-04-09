@@ -334,7 +334,7 @@ class Town:
 
                     padding = len(max([item.name for item in stock[item_category]], key=len))
                     print('-'*25, '\n', item_category, ':\n      ', end='', sep='')
-                    print('\n      '.join(['[{0}] {1} {2} --> {3} GP'.format(
+                    print('\n      '.join(['[{0}] {1} {2}--> {3} GP'.format(
                         num + 1, item, '-'*(padding - len(item.name)), item.sell)
                         for num, item in enumerate(stock[item_category])]))
 
@@ -537,7 +537,7 @@ Press enter/return ".format(vis_cat))
     def speak_to_npcs(self):
         while True:
             print('NPCs:\n     ', '\n      '.join(
-                ["[" + str(x + 1) + "] " + npc.name for x, npc in enumerate(self.people)]))
+                ['[{0}] {1}'.format(x + 1, npc) for x, npc in enumerate(self.people)]))
 
             while True:
                 npc = input('Input [#] (or type "exit"): ')
