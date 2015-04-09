@@ -333,11 +333,10 @@ class Town:
                     print('"Well, here\'s what I have in my stock for that category: "')
 
                     padding = len(max([item.name for item in stock[item_category]], key=len))
-                    for num, item in enumerate(stock[item_category]):
-                        print(''.join(
-                            ['      [', str(num + 1), '] ', str(item), ' ',
-                             '-'*(padding - len(item.name)), '--> ', str(item.buy),
-                             ' GP']))
+                    print('-'*25, '\n', item_category, ':\n      ', end='', sep='')
+                    print('\n      '.join(['[{0}] {1} {2} --> {3} GP'.format(
+                        num + 1, item, '-'*(padding - len(item.name)), item.sell)
+                        for num, item in enumerate(stock[item_category])]))
 
                     while True:
                         purchase = input('Input [#] (or type "back"): ')
@@ -692,7 +691,8 @@ skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
 on the steps of the general store.""",
-              [], 52, 12, gs_level=4, inn_cost=13, pet_shop=True, ps_level=3)
+              [npcs.polmor, npcs.serena], 52, 12, gs_level=4,
+              inn_cost=13, pet_shop=True, ps_level=3)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his

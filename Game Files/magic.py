@@ -475,7 +475,7 @@ def pick_cat(var, dodge, is_battle=True):
                                 return False
 
                         else:
-                            if isinstance(spell, Healing):
+                            if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
                                 if spell.use_magic(is_battle):
                                     return True
 
@@ -516,10 +516,10 @@ def pick_spell(cat, var, dodge, is_battle):
 
     while True:
 
-        print(cat + ' Spells: \n      ' + '\n      '.join(
-            ['[' + str((num + 1)) + '] ' + spell.name + ' --> ' + str(
-                spell.mana) + ' MP' for num, spell in enumerate(
-                    spellbook[cat])]))
+        print(''.join([cat, ' Spells: \n      ']))
+        print('\n      '.join(
+            ['[{0}] {1} --> {2} MP'.format(num + 1, spell, spell.mana)
+             for num, spell in enumerate(spellbook[cat])]))
 
         fizz = True
         while fizz:

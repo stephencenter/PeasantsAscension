@@ -568,7 +568,7 @@ def view_quests():
             if dialogue:
                 while fizz:
                     print('Active Quests: ')
-                    print('     ', '\n     '.join(['[' + str(num + 1) + '] ' + x.name
+                    print('     ', '\n     '.join(['[{0}] {1}'.format(num + 1, spell)
                                                    for num, x in
                                                    enumerate([y for y in npcs.all_dialogue
                                                               if isinstance(y, npcs.Quest)
