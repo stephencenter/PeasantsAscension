@@ -359,8 +359,9 @@ def relieve_affliction(is_battle):
             return True
 
         else:
+            print('-'*25)
             print("You don't have any status ailments.")
-
+            print('-'*25)
             return False
 
     else:
@@ -418,9 +419,27 @@ spellbook = {'Healing': [min_heal], 'Damaging': [w_flame, lef_blad], 'Buffs': []
 
 
 def pick_cat(var, dodge, is_battle=True):
-    if main.player.status_ail == 'silenced':
+    if main.player.status_ail == 'silenced' \
+            and 'Relieve Affliction' not in [x.name for x in spellbook['Healing']]:
         input("You find youself unable to use spells! | Press enter/return ")
         return False
+
+    elif main.player.status_ail == 'silenced':
+        print('The only spell you can use without talking is "Relieve Affliction".')
+        while True:
+            y_n = input('Use Revlieve Affliction? | Yes or No ')
+
+            y_n = y_n.lower()
+
+            if y_n.startswith('y'):
+                if relieve_affliction(is_battle):
+                    main.misc_vars['prev_spell'] = 'Relieve Affliction'
+                    return True
+                else:
+                    return False
+
+            elif y_n.startswith('n'):
+                return False
 
     while True:
         do_continue = False
@@ -460,9 +479,7 @@ def pick_cat(var, dodge, is_battle=True):
                     break
 
                 while True:
-                    y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
-                    if not y_n:
-                        continue
+                    y_n = input('Use {0}? | Yes or No: '.format(spell))
 
                     y_n = y_n.lower()
 
@@ -486,7 +503,6 @@ def pick_cat(var, dodge, is_battle=True):
                                 return False
 
                     elif y_n.startswith('n'):
-                        print('-'*25)
                         spam = False
                         break
 
@@ -516,7 +532,7 @@ def pick_spell(cat, var, dodge, is_battle):
 
     while True:
 
-        print(''.join([cat, ' Spells: \n      ']))
+        print(''.join([cat, ' Spells: \n      ']), end='')
         print('\n      '.join(
             ['[{0}] {1} --> {2} MP'.format(num + 1, spell, spell.mana)
              for num, spell in enumerate(spellbook[cat])]))

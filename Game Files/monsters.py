@@ -137,7 +137,7 @@ class Monster:
         while msvcrt.kbhit():
             msvcrt.getwch()
 
-        if dodge in range(player.evad, 250):
+        if dodge in range(player.evad, 512):
             damage, type_ = self.monst_damage(var)
 
             player.hp -= damage
@@ -212,7 +212,7 @@ class Monster:
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-            if dodge in range(battle.temp_stats['evad'], 250):
+            if dodge in range(battle.temp_stats['evad'], 512):
                 dam_dealt = magic.eval_element(
                     p_elem=battle.player.element,
                     m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
@@ -505,7 +505,8 @@ def spawn_monster():
     monster = Monster('', random.randint(6, 8), random.randint(3, 4), 2, 1, 2, 1, 2, 1, 2, 1, 1)
     monster.monst_name()
     monster.monst_level()
-
+    if monster.evad > 256:
+        monster.evad = 256
 
 def setup_vars():
     global player

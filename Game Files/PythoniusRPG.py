@@ -403,7 +403,7 @@ Input letter: """)
                             self.hp += random.randint(0, 1)
                             self.mp += random.randint(0, 1)
                             if random.randint(0, 1):
-                                self.ext_ski += (0, 1)
+                                self.ext_ski += random.randint(0, 1)
 
                             self.ext_gol += random.randint(0, 2)
                             self.ext_exp += random.randint(0, 2)

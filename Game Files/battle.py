@@ -187,8 +187,8 @@ def battle_system(is_boss=False, ambush=False):
         m_var = random.randint(-1, 1)
 
         # If dodge is in a certain range, the attack will miss
-        dodge = random.randint(0, 250)
-        m_dodge = random.randint(0, 250)
+        dodge = random.randint(0, 512)
+        m_dodge = random.randint(0, 512)
 
         if move == '4':  # Use the Battle Inventory
 
@@ -283,7 +283,7 @@ def player_turn(var, dodge, move):
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-            if dodge in range(monster.evad, 250):
+            if dodge in range(monster.evad, 512):
                 dam_dealt = player.player_damage(var)
                 monster.hp -= dam_dealt
                 sounds.enemy_hit.play()
