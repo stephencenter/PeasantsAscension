@@ -425,11 +425,12 @@ def after_battle(is_boss):  # Assess the results of the battle
                 print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
 
                 # Enemies drop gold/exp based on the player/monster's levels
-                gold = int(random.randint(2, 3)*monster.lvl - player.lvl)
+                gold = math.ceil(random.randint(2, 3)*monster.lvl - player.lvl) + player.ext_gol
 
                 if gold <= 0:
                     gold = random.randint(1, 2)
-                experience = int(math.ceil((monster.lvl*1.5 + player.ext_exp)/1.25))
+
+                experience = math.ceil((monster.lvl*1.5 + player.ext_exp)/1.25)
 
                 if experience <= 0:
                     experience = random.randint(1, 2)

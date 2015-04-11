@@ -776,6 +776,24 @@ fire_amulet = ElementAccessory('Infernal Amulet',
 earth_amulet = ElementAccessory('Ground Amulet',
                                 'An amulet that imbues its wearer with the power of EARTH',
                                 250, 75, 'Earth')
+electric_amulet = ElementAccessory('Galvanic Amulet',
+                                   'An amulet that imbues its wearer with the power of ELECTRICITY',
+                                   250, 75, 'Electric')
+wind_amulet = ElementAccessory('Tempestuous Amulet',
+                               'An amulet that imbues its wearer with the power of WIND',
+                               250, 75, 'Wind')
+grass_amulet = ElementAccessory('Verdant Amulet',
+                                'An amulet that imbues its wearer with the power of GRASS',
+                                250, 75, 'Grass')
+ice_amulet = ElementAccessory('Glacial Amulet',
+                              'An amulet that imbues its wearer with the power of ICE',
+                              250, 75, 'Ice')
+life_amulet = ElementAccessory('Living Amulet',
+                               'An amulet that imbues its wearer with the power of LIFE',
+                               250, 75, 'Life')
+death_amulet = ElementAccessory('Necrotic Amulet',
+                                'An amulet that imbues its wearer with the power of DEATH',
+                                250, 75, 'Death')
 
 
 # Quest items

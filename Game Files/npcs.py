@@ -797,15 +797,41 @@ sugulat_phrase_1 = Conversation(['Greetings! My name is Sugulat, Emperor of D\u0
 
 sugulat = NPC('Sugulat', [sugulat_phrase_1])
 
-# -- Name: Serena -- Town: Whistumn
-serena_phrase_1 = Conversation('FILLER TEXT', active=True)
-
-serena = NPC('Serena', [serena_phrase_1])
-
 # -- Name: Polmor -- Town: Whistumn
-polmor_phrase_1 = Conversation('FILLER TEXT', active=True)
+polmor_phrase_1 = Conversation(['Our poor daughter! Serena and I have been working on a cure, but',
+                                'we cannot find anyone stup-I mean brave enough to gather the',
+                                'resources we need. All is lost if we cannot get the ingredients.'],
+                               active=True)
+
+polmor_quest_1 = Quest(["Wait a minute... I am so stupid! According to my calculations, you",
+                        'are the legendary adventurer of Nearton! Yes, it must be you!',
+                        'Please, adventurer, help our daughter! The only way to get the',
+                        'ingredients is to defeat several monsters and collect their remains.',
+                        "You're the only one who can save her!"],
+                       "Fight Against the Blight",
+                       ["Collect three Fairy Dust, two Serpent Scales, and one Bat Fang",
+                        "by defeating monsters, then return to Polmor in Whistumn."],
+                       "Polmor", [450, 450],
+                       ["Hello again, friend... Wait, what?! You obtained the items we",
+                        "needed? You are our savior! We owe our lives to you, you are",
+                        "truely a hero! *He walks over to his wife, and the two begin",
+                        "mixing the ingredients to make the cure for Hatchnuk's Blight*",
+                        "At last, we have the cure! Let us not waste time. *The two administer",
+                        "the medicine to their daughter, and she immediately begins ",
+                        "feeling better.* Oh joy of joys! Our daughter is healed! How can we",
+                        "ever repay you, oh noble adventurer and vanquisher of the Blight?",
+                        "Here, take this. It is the absolute least that we can do."])
 
 polmor = NPC('Polmor', [polmor_phrase_1])
+
+# -- Name: Serena -- Town: Whistumn
+serena_phrase_1 = Conversation(["Oh, woe is me! My daughter has fallen ill from a terrible",
+                                """disease! They call it "Hatchnuk's Blight", and it is""",
+                                "very deadly. Oh, what am I to do? *sobs uncontrollably*"],
+                               active=True)
+
+
+serena = NPC('Serena', [serena_phrase_1])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
