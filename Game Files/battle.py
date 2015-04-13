@@ -583,35 +583,30 @@ def run_away():
     while msvcrt.kbhit():
         msvcrt.getwch()
 
-    if bool(player.spd > monster.spd) != bool(player.evad > monster.evad):  # 75% chance of success
-        if random.randint(0, 3):
-            print('You manage to escape from the {0}!'.format(monster.name))
-            return True
+    if player.status_ail == 'paralyzed':
+        # 25% chance of success
+        chance = 25
 
-        else:
-            print('Your attempt to escape failed!')
-            input("\nPress Enter/Return")
-            return False
+    elif bool(player.spd > monster.spd) != bool(player.evad > monster.evad):
+        # 75% chance of success
+        chance = 75
 
-    elif player.spd > monster.spd and player.evad > monster.evad:  # 90% chance of success
-        if random.randint(0, 9):
-            print('You manage to escape from the {0}!'.format(monster.name))
-            return True
+    elif player.spd > monster.spd and player.evad > monster.evad:
+        # 90% chance of success
+        chance = 90
 
-        else:
-            print('Your attempt to escape failed!')
-            input("\nPress Enter/Return")
-            return False
+    else:
+        # 50% chance of success
+        chance = 50
 
-    else:  # 50% chance of success
-        if random.randint(0, 1):
-            print('You manage to escape from the {0}!'.format(monster.name))
-            return True
+    if random.randint(0, 100) <= chance:
+        print('You manage to escape from the {0}!'.format(monster.name))
+        return True
 
-        else:
-            print('Your attempt to escape failed!')
-            input("\nPress Enter/Return")
-            return False
+    else:
+        print('Your attempt to escape failed!')
+        input("\nPress Enter/Return")
+        return False
 
 
 def battle_inventory():

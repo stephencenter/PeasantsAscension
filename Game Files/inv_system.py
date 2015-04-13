@@ -118,25 +118,25 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
                              i.fire_amulet, i.fire_amulet, i.fire_amulet],
 
                             [i.earth_amulet, i.earth_amulet, i.earth_amulet,
-                             i.earth_amulet, i.earth_amulet, i.earth_amulet]
+                             i.earth_amulet, i.earth_amulet, i.earth_amulet],
 
-                            [electric_amulet, electric_amulet, electric_amulet,
-                             electric_amulet, electric_amulet, electric_amulet],
+                            [i.electric_amulet, i.electric_amulet, i.electric_amulet,
+                             i.electric_amulet, i.electric_amulet, i.electric_amulet],
 
-                            [wind_amulet, wind_amulet, wind_amulet,
-                             wind_amulet, wind_amulet, wind_amulet],
+                            [i.wind_amulet, i.wind_amulet, i.wind_amulet,
+                             i.wind_amulet, i.wind_amulet, i.wind_amulet],
 
-                            [grass_amulet, grass_amulet, grass_amulet,
-                             grass_amulet, grass_amulet, grass_amulet],
+                            [i.grass_amulet, i.grass_amulet, i.grass_amulet,
+                             i.grass_amulet, i.grass_amulet, i.grass_amulet],
 
-                            [ice_amulet, ice_amulet, ice_amulet,
-                             ice_amulet, ice_amulet, ice_amulet],
+                            [i.ice_amulet, i.ice_amulet, i.ice_amulet,
+                             i.ice_amulet, i.ice_amulet, i.ice_amulet],
 
-                            [life_amulet, life_amulet, life_amulet,
-                             life_amulet, life_amulet, life_amulet],
+                            [i.life_amulet, i.life_amulet, i.life_amulet,
+                             i.life_amulet, i.life_amulet, i.life_amulet],
 
-                            [death_amulet, death_amulet, death_amulet,
-                             death_amulet, death_amulet, death_amulet]],
+                            [i.death_amulet, i.death_amulet, i.death_amulet,
+                             i.death_amulet, i.death_amulet, i.death_amulet]],
 
             'Other': [[i.divining_rod, i.divining_rod, i.divining_rod,
                        i.divining_rod, i.divining_rod, i.divining_rod],
