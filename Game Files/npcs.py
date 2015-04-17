@@ -700,6 +700,121 @@ alden_phrase_3 = Conversation(["Thanks again, hero. You've saved those towns",
 
 alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3])
 
+# -- Name: Polmor -- Town: Whistumn
+polmor_phrase_1 = Conversation(['Our poor daughter! Serena and I have been working on a cure, but',
+                                'we cannot find anyone stup-I mean brave enough to gather the',
+                                'resources we need. All is lost if we cannot get the ingredients.'],
+                               active=True)
+
+polmor_quest_1 = Quest(["Wait a minute... I am so stupid! According to my calculations, you",
+                        'are the legendary adventurer of Nearton! Yes, it must be you!',
+                        'Please, adventurer, help our daughter! The only way to get the',
+                        'ingredients is to defeat several monsters and collect their remains.',
+                        "You're the only one who can save her!"],
+                       "Fight Against the Blight",
+                       ["Collect three Fairy Dust, two Serpent Scales, and one Bat Fang",
+                        "by defeating monsters, then return to Polmor in Whistumn."],
+                       "Polmor", [450, 450],
+                       ["...Wait, what?! You obtained the items we needed? ",
+                        "You are our savior! We owe our lives to you, you are",
+                        "truely a hero! *He walks over to his wife, and the two begin",
+                        "mixing the ingredients to make the cure for Hatchnuk's Blight*",
+                        "At last, we have the cure! Let us not waste time. *The two administer",
+                        "the medicine to their daughter, and she immediately begins ",
+                        "feeling better.* Oh joy of joys! Our daughter is healed! How can we",
+                        "ever repay you, oh noble adventurer and vanquisher of the Blight?",
+                        "Here, take this. It is the absolute least that we can do."], active=True)
+
+
+def polqst_us1():
+    global serena_phrase_2
+    global serena_phrase_1
+    global polmor_phrase_2
+    global polmor_phrase_1
+
+    serena_phrase_1.active = False
+    serena_phrase_2.active = True
+    polmor_phrase_1.active = False
+    polmor_phrase_2.active = True
+
+
+def polqst_uc1():
+    global serena_phrase_2
+    global ser_pol_phrase_3
+    global polmor_phrase_2
+
+    ser_pol_phrase_3.active = True
+    serena_phrase_2.active = False
+    polmor_phrase_2.active = False
+    polmor_quest_1.active = False
+
+    print('-'*25)
+    print('Serena and Polmor will now heal you for free if you visit them!')
+
+
+polmor_quest_1.upon_starting = polqst_us1
+polmor_quest_1.upon_completing = polqst_uc1
+
+polmor_phrase_2 = Conversation(['Please, return once you have obtained one Bat Fang,',
+                                'two Serpent Scales, and three Fairy Dust. You must',
+                                'save our daughter!'])
+
+
+def polmor_p2_at():
+    # Check the player's inventory for the objects necessary to finish the quest.
+    total_bf = 0
+    total_ss = 0
+    total_fd = 0
+    for item in inv_system.inventory['misc']:
+        if item.name == 'Bat Fang':
+            total_bf += 1
+
+        elif item.name == 'Serpent Scale':
+            total_ss += 1
+
+        elif item.name == 'Fairy Dust':
+            total_fd += 1
+
+    if total_bf >= 1 and total_ss >= 2 and total_fd >= 3:
+        while total_bf > 0 or total_ss > 0 or total_fd > 0:
+
+            # Iterate over a copy to prevent problems
+            for item in inv_system.inventory['misc'][:]:
+                if item.name == 'Bat Fang' and total_bf > 0:
+                    inv_system.inventory['misc'].remove(item)
+                    total_bf -= 1
+
+                elif item.name == 'Serpent Scale':
+                    inv_system.inventory['misc'].remove(item)
+                    total_ss -= 1
+
+                elif item.name == 'Fairy Dust':
+                    inv_system.inventory['misc'].remove(item)
+                    total_fd -= 1
+
+        polmor_quest_1.finished = True
+        print('-'*25)
+        polmor.speak()
+
+
+polmor_phrase_2.after_talking = polmor_p2_at
+
+ser_pol_phrase_3 = Conversation(['You are our heroes! Here, allow us to treat your wounds.'])
+
+
+def ser_pol_p3_at():
+    main.player.hp += (main.misc_vars['hp_p'] - main.player.hp)
+    main.player.mp += (main.misc_vars['mp_p'] - main.player.mp)
+    main.player.status_ail = 'none'
+    print('-'*25)
+    print('Polmor and Serena get to work on fixing up your wounds.')
+    print('Your HP and MP have been fully replenished, and your status ailment has been cured.')
+
+
+ser_pol_phrase_3.after_talking = ser_pol_p3_at
+
+polmor = NPC('Polmor', [polmor_phrase_1, polmor_quest_1, polmor_phrase_2, ser_pol_phrase_3])
+
 #----------------------------------------------------------------------------#
 # UNIMPORTANT CHARACTERS
 
@@ -796,108 +911,6 @@ sugulat_phrase_1 = Conversation(['Greetings! My name is Sugulat, Emperor of D\u0
                                 active=True)
 
 sugulat = NPC('Sugulat', [sugulat_phrase_1])
-
-# -- Name: Polmor -- Town: Whistumn
-polmor_phrase_1 = Conversation(['Our poor daughter! Serena and I have been working on a cure, but',
-                                'we cannot find anyone stup-I mean brave enough to gather the',
-                                'resources we need. All is lost if we cannot get the ingredients.'],
-                               active=True)
-
-polmor_quest_1 = Quest(["Wait a minute... I am so stupid! According to my calculations, you",
-                        'are the legendary adventurer of Nearton! Yes, it must be you!',
-                        'Please, adventurer, help our daughter! The only way to get the',
-                        'ingredients is to defeat several monsters and collect their remains.',
-                        "You're the only one who can save her!"],
-                       "Fight Against the Blight",
-                       ["Collect three Fairy Dust, two Serpent Scales, and one Bat Fang",
-                        "by defeating monsters, then return to Polmor in Whistumn."],
-                       "Polmor", [450, 450],
-                       ["...Wait, what?! You obtained the items we needed? ",
-                        "You are our savior! We owe our lives to you, you are",
-                        "truely a hero! *He walks over to his wife, and the two begin",
-                        "mixing the ingredients to make the cure for Hatchnuk's Blight*",
-                        "At last, we have the cure! Let us not waste time. *The two administer",
-                        "the medicine to their daughter, and she immediately begins ",
-                        "feeling better.* Oh joy of joys! Our daughter is healed! How can we",
-                        "ever repay you, oh noble adventurer and vanquisher of the Blight?",
-                        "Here, take this. It is the absolute least that we can do."], active=True)
-
-
-def polqst_us1():
-    global serena_phrase_2
-    global serena_phrase_1
-    global polmor_phrase_2
-    global polmor_phrase_1
-
-    serena_phrase_1.active = False
-    serena_phrase_2.active = True
-    polmor_phrase_1.active = False
-    polmor_phrase_2.active = True
-
-
-def polqst_uc1():
-    global serena_phrase_2
-    global ser_pol_phrase_3
-    global polmor_phrase_2
-
-    ser_pol_phrase_3.active = True
-    serena_phrase_2.active = False
-    polmor_phrase_2.active = False
-
-    print('-'*25)
-    print('Serena and Polmor will now heal you for free if you visit them!')
-
-
-polmor_quest_1.upon_starting = polqst_us1
-polmor_quest_1.upon_completing = polqst_uc1
-
-polmor_phrase_2 = Conversation(['Please, return once you have obtained one Bat Fang,',
-                                'two Serpent Scales, and three Fairy Dust. You must',
-                                'save our daughter!'])
-
-
-def polmor_p2_at():
-    # Check the player's inventory for the objects necessary to finish the quest.
-    total_bf = 0
-    total_ss = 0
-    total_fd = 0
-    for item in inv_system.inventory['misc']:
-        if item.name == 'Bat Fang':
-            total_bf += 1
-
-        elif item.name == 'Serpent Scale':
-            total_ss += 1
-
-        elif item.name == 'Fairy Dust':
-            total_fd += 1
-
-    if total_bf >= 1 and total_ss >= 2 and total_fd >= 3:
-        while total_bf > 0 or total_ss > 0 or total_fd > 0:
-
-            # Iterate over a copy to prevent problems
-            for item in inv_system.inventory['misc'][:]:
-                if item.name == 'Bat Fang' and total_bf > 0:
-                    inv_system.inventory['misc'].remove(item)
-                    total_bf -= 1
-
-                elif item.name == 'Serpent Scale':
-                    inv_system.inventory['misc'].remove(item)
-                    total_ss -= 1
-
-                elif item.name == 'Fairy Dust':
-                    inv_system.inventory['misc'].remove(item)
-                    total_fd -= 1
-
-        polmor_quest_1.finished = True
-        print('-'*25)
-        polmor.speak()
-
-
-polmor_phrase_2.after_talking = polmor_p2_at
-
-ser_pol_phrase_3 = Conversation(['You are our heroes! Here, allow us to treat your wounds.'])
-
-polmor = NPC('Polmor', [polmor_phrase_1, polmor_quest_1, polmor_phrase_2, ser_pol_phrase_3])
 
 # -- Name: Serena -- Town: Whistumn
 serena_phrase_1 = Conversation(["Oh, woe is me! My daughter has fallen ill from a terrible",
