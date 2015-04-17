@@ -264,6 +264,17 @@ blizzard = Damaging('Blizzard',
                     "Devastate your enemies with a terrifying flurry of ice and wind.",
                     18, 26, 25, 'ice')
 
+# Wind
+m_gust = Damaging('Minor Gust',
+                  "Batter your enemies with powerful gusts and winds!",
+                  3, 4, 3, "wind")
+microburst = Damaging('Microburst',
+                      "Decimate your foes with a powerful blast of wind!",
+                      10, 13, 15, "wind")
+cyclone = Damaging('Cyclone',
+                   "Demolish all that stand in your path with a terrifying tornado!",
+                   18, 26, 25, "wind")
+
 # -- Healing -- #
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic.",
@@ -372,13 +383,20 @@ def relieve_affliction(is_battle):
 r_affliction.use_magic = relieve_affliction
 
 spells = [
-    w_flame, lef_blad, in_spark, bub_splsh, mud_toss, min_heal,
-    m_quick, m_evade, m_defend, m_shield, m_stren, m_power,
-    f_blaze, gra_gren, pwr_jolt, wtr_blast, rock_slam, adv_heal,
-    a_stren, a_power, a_defend, a_shield, a_quick, a_evade,
-    g_infer, vin_strm, sp_storm, tsunami, earthquake, div_heal,
-    r_affliction, icicle_dagger, hail_storm, blizzard,
-    a_aim, a_block
+    min_heal, adv_heal, div_heal,
+
+    w_flame, f_blaze, g_infer,            # Fire Spells
+    lef_blad, gra_gren, vin_strm,         # Grass Spells
+    in_spark, pwr_jolt, sp_storm,         # Electric Spells
+    bub_splsh, wtr_blast, tsunami,        # Water Spells
+    mud_toss, rock_slam, earthquake,      # Earth Spells
+    icicle_dagger, hail_storm, blizzard,  # Ice Spells
+    m_gust, microburst, cyclone,          # Wind Spells
+
+    m_quick, m_evade, m_defend, m_shield, m_stren, m_power, m_aim, m_block,
+    a_quick, a_evade, a_defend, a_shield, a_stren, a_power, a_aim, a_block,
+
+    r_affliction
 ]
 
 
