@@ -129,7 +129,7 @@ sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'  # Spellbook
 music_vol = 1.0  # The volume of the game, on a scale from 0 (muted) to 1.0 (loudest)
 sound_vol = 1.0  # These values can be changed in settings.cfg file
 
-text_scroll = True
+do_text_scroll = False
 
 
 class PlayerCharacter:  # The Player
@@ -608,8 +608,11 @@ def change_settings():
         for x in config['volume_levels']:
             globals()[x] = float(config['volume_levels'][x])/100
 
-        for x in config['text_scroll']:
-            globals()[x] = config['text_scroll'][x]
+        for x in config['do_text_scroll']:
+            if config['do_text_scroll'][x] in ['False', 'True']:
+                globals()[x] = eval(config['do_text_scroll'][x])
+            else:
+                globals()[x] = True
 
         sounds.change_volume()
 
@@ -977,8 +980,7 @@ def main():
     elif os.name == 'posix':  # Most Unix Devices
         sys.stdout.write("\x1b]2;Pythonius RPG {0}\x07".format(game_version))
 
-    change_settings()  # Set the save file locations
-    change_settings()  # Set the sound & music volume
+    change_settings()
 
     title_screen()
     check_save()  # Check for save files...

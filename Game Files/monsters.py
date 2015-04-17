@@ -237,7 +237,7 @@ class Monster:
     def give_status(self):
         # Attempt to give the player a status ailment
 
-        if random.randint(1, 5) < 3:
+        if random.randint(1, 6) < 4:
             if player.class_ == 'warrior':
                 status = 'weakened'  # Severely lowers melee attack
 

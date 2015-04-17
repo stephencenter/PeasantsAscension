@@ -67,7 +67,7 @@ def setup_vars():
     global print
     global input
 
-    if main.text_scroll:
+    if main.do_text_scroll:
         print = text_scroll.text_scroll
         input = text_scroll.input_ts
 
@@ -212,7 +212,7 @@ philliard_phrase_2 = Conversation(["Greetings! Huh, what's this? You have a lett
                                    "bring him this message. Best of luck, traveller!"])
 
 
-def pp2_at():
+def philliard_p2_at():
     # Stands for "Philliard Phrase II -- After Talking"
     for item in inv_system.inventory['q_items']:
         if item.name == 'Message from Joseph':
@@ -225,7 +225,7 @@ def pp2_at():
     joseph_quest_1.finished = True
 
 
-philliard_phrase_2.after_talking = pp2_at
+philliard_phrase_2.after_talking = philliard_p2_at
 
 philliard = NPC('Philliard', [philliard_phrase_1, philliard_phrase_2])
 
@@ -341,7 +341,7 @@ azura_phrase_2 = Conversation(["Hello, I'm Azura, leader of this town and head o
                                "The town is located at -7\u00b0S, -51\u00b0W. Good luck."])
 
 
-def ap1_at():
+def azura_p1_at():
     global azura_phrase_2
     global azura_phrase_3
 
@@ -350,7 +350,7 @@ def ap1_at():
     azura_phrase_3.active = True
 
 
-azura_phrase_2.after_talking = ap1_at
+azura_phrase_2.after_talking = azura_p1_at
 
 azura_phrase_3 = Conversation(["My father, Raidon, lives in the town if Ambercreek at",
                                "-7\u00b0S, -51\u00b0W. Good luck!"])
@@ -600,7 +600,7 @@ krystal_phrase_3 = Conversation(["What, the monster is dead? Thank goodness!",
                                  "should think about negotiating peace..."])
 
 
-def krys_p3_at():
+def krystal_p3_at():
     # Stands for "Krystal Phrase 3: After Talking"
     global krystal_phrase_3
     global krystal_phrase_4
@@ -614,7 +614,7 @@ def krys_p3_at():
         alden_phrase_2.active = False
 
 
-krystal_phrase_3.after_talking = krys_p3_at
+krystal_phrase_3.after_talking = krystal_p3_at
 
 krystal_phrase_4 = Conversation(["Greetings, hero! Welcome to Fallville."])
 
@@ -812,17 +812,92 @@ polmor_quest_1 = Quest(["Wait a minute... I am so stupid! According to my calcul
                        ["Collect three Fairy Dust, two Serpent Scales, and one Bat Fang",
                         "by defeating monsters, then return to Polmor in Whistumn."],
                        "Polmor", [450, 450],
-                       ["Hello again, friend... Wait, what?! You obtained the items we",
-                        "needed? You are our savior! We owe our lives to you, you are",
+                       ["...Wait, what?! You obtained the items we needed? ",
+                        "You are our savior! We owe our lives to you, you are",
                         "truely a hero! *He walks over to his wife, and the two begin",
                         "mixing the ingredients to make the cure for Hatchnuk's Blight*",
                         "At last, we have the cure! Let us not waste time. *The two administer",
                         "the medicine to their daughter, and she immediately begins ",
                         "feeling better.* Oh joy of joys! Our daughter is healed! How can we",
                         "ever repay you, oh noble adventurer and vanquisher of the Blight?",
-                        "Here, take this. It is the absolute least that we can do."])
+                        "Here, take this. It is the absolute least that we can do."], active=True)
 
-polmor = NPC('Polmor', [polmor_phrase_1])
+
+def polqst_us1():
+    global serena_phrase_2
+    global serena_phrase_1
+    global polmor_phrase_2
+    global polmor_phrase_1
+
+    serena_phrase_1.active = False
+    serena_phrase_2.active = True
+    polmor_phrase_1.active = False
+    polmor_phrase_2.active = True
+
+
+def polqst_uc1():
+    global serena_phrase_2
+    global ser_pol_phrase_3
+    global polmor_phrase_2
+
+    ser_pol_phrase_3.active = True
+    serena_phrase_2.active = False
+    polmor_phrase_2.active = False
+
+    print('-'*25)
+    print('Serena and Polmor will now heal you for free if you visit them!')
+
+
+polmor_quest_1.upon_starting = polqst_us1
+polmor_quest_1.upon_completing = polqst_uc1
+
+polmor_phrase_2 = Conversation(['Please, return once you have obtained one Bat Fang,',
+                                'two Serpent Scales, and three Fairy Dust. You must',
+                                'save our daughter!'])
+
+
+def polmor_p2_at():
+    # Check the player's inventory for the objects necessary to finish the quest.
+    total_bf = 0
+    total_ss = 0
+    total_fd = 0
+    for item in inv_system.inventory['misc']:
+        if item.name == 'Bat Fang':
+            total_bf += 1
+
+        elif item.name == 'Serpent Scale':
+            total_ss += 1
+
+        elif item.name == 'Fairy Dust':
+            total_fd += 1
+
+    if total_bf >= 1 and total_ss >= 2 and total_fd >= 3:
+        while total_bf > 0 or total_ss > 0 or total_fd > 0:
+
+            # Iterate over a copy to prevent problems
+            for item in inv_system.inventory['misc'][:]:
+                if item.name == 'Bat Fang' and total_bf > 0:
+                    inv_system.inventory['misc'].remove(item)
+                    total_bf -= 1
+
+                elif item.name == 'Serpent Scale':
+                    inv_system.inventory['misc'].remove(item)
+                    total_ss -= 1
+
+                elif item.name == 'Fairy Dust':
+                    inv_system.inventory['misc'].remove(item)
+                    total_fd -= 1
+
+        polmor_quest_1.finished = True
+        print('-'*25)
+        polmor.speak()
+
+
+polmor_phrase_2.after_talking = polmor_p2_at
+
+ser_pol_phrase_3 = Conversation(['You are our heroes! Here, allow us to treat your wounds.'])
+
+polmor = NPC('Polmor', [polmor_phrase_1, polmor_quest_1, polmor_phrase_2, ser_pol_phrase_3])
 
 # -- Name: Serena -- Town: Whistumn
 serena_phrase_1 = Conversation(["Oh, woe is me! My daughter has fallen ill from a terrible",
@@ -830,8 +905,10 @@ serena_phrase_1 = Conversation(["Oh, woe is me! My daughter has fallen ill from 
                                 "very deadly. Oh, what am I to do? *sobs uncontrollably*"],
                                active=True)
 
+serena_phrase_2 = Conversation(['You are a good man, trying to help our daughter! Good',
+                                'luck on your quest!'])
 
-serena = NPC('Serena', [serena_phrase_1])
+serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, ser_pol_phrase_3])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
@@ -847,7 +924,8 @@ all_dialogue = [
     azura_phrase_1, azura_phrase_2, azura_phrase_3, f_jones_phrase_1,
     stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1,
     elisha_phrase_1, lazaro_phrase_1, caesar_phrase_1, polmor_phrase_1,
-    serena_phrase_1
+    serena_phrase_1, serena_phrase_2, ser_pol_phrase_3, polmor_quest_1,
+    polmor_phrase_2
 ]
 
 
