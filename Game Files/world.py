@@ -217,8 +217,11 @@ You cannot continue in this direction.')
                         print('-'*25)
 
                     elif decision.startswith('m'):
-                        magic.pick_spell('Healing', 0, 0, False)
-                        print('-'*25)
+                        if magic.spellbook['Healing']:
+                            magic.pick_spell('Healing', 0, 0, False)
+                        else:
+                            print('-'*25)
+                            print('You have no overworld-allowed spells available.')
 
                     elif decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         print('-'*25)

@@ -47,8 +47,7 @@ pygame.mixer.init()
 # This is the message that is printed if you attempt to use magic
 # without the required amount of mana.
 out_of_mana = """-------------------------
-You don't have enough mana to cast that spell!
--------------------------"""
+You don't have enough mana to cast that spell!"""
 
 
 class Spell:
@@ -142,7 +141,7 @@ class Damaging(Spell):
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-            if dodge in range(monsters.monster.evad, 250):
+            if dodge in range(monsters.monster.evad, 1024):
                 if random.randint(0, 100) <= (14 if main.player.class_ == 'mage' else 7):
                     print("It's a critical hit! 2x damage!")
                     attk_pwr *= 2

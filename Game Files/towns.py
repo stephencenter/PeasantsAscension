@@ -335,7 +335,7 @@ class Town:
                     padding = len(max([item.name for item in stock[item_category]], key=len))
                     print('-'*25, '\n', item_category, ':\n      ', end='', sep='')
                     print('\n      '.join(['[{0}] {1} {2}--> {3} GP'.format(
-                        num + 1, item, '-'*(padding - len(item.name)), item.sell)
+                        num + 1, item, '-'*(padding - len(item.name)), item.buy)
                         for num, item in enumerate(stock[item_category])]))
 
                     while True:
@@ -580,7 +580,7 @@ Press enter/return ".format(vis_cat))
 # List of Towns:
 
 # Nearton is the player's hometown.
-town1 = Town('Nearton', """Nearton: a small village in the central region of t\
+town1 = Town('Nearton', """Nearton: A small village in the central region of t\
 he Forest.
 It is in this very town where numerous brave adventurers have begun
 their journey. Nearton has a general store, an inn, and a few small houses.

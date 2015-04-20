@@ -392,6 +392,8 @@ def after_battle(is_boss):  # Assess the results of the battle
                     player.hp = int(misc_vars['hp_p']/1.5)
                     player.mp = int(misc_vars['mp_p']/1.5)
 
+                    player.status_ail = "none"
+
                     pygame.mixer.music.load(position['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
