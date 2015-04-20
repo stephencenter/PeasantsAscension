@@ -546,7 +546,7 @@ def create_player():
     global player
     global misc_vars
 
-    player = PlayerCharacter('', 15, 4, 3, 1, 3, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
+    player = PlayerCharacter('', 15, 4, 3, 1, 3, 1, 3, 1, 3, 1, 1, 0, 0, 0, 0)
 
     # Set the player's max HP and MP
     misc_vars['hp_p'] = copy.copy(player.hp)

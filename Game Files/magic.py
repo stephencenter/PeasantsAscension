@@ -255,7 +255,7 @@ tsunami = Damaging('Tsunami',
 # Earth
 mud_toss = Damaging('Mud Toss',
                     "Summon a small ball of mud to throw at your foes. (Weak)",
-                    3, 3, 5, "earth")
+                    3, 4, 5, "earth")
 rock_slam = Damaging('Rock Slam',
                      "Crush your enemies with a wall of solid rock. (Moderate)",
                      10, 13, 14, "earth")
