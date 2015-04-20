@@ -186,8 +186,8 @@ You cannot continue in this direction.')
                            ):
 
                     # If none of the previous statements return True, then a battle can occur.
-                    # There is a 1 in 8 chance for a battle to occur (12.5%)
-                    is_battle = not random.randint(0, 7)
+                    # There is a 1 in 7 chance for a battle to occur (14.2857...%)
+                    is_battle = not random.randint(0, 6)
 
                     if is_battle:
                         print('-'*25)

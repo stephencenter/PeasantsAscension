@@ -76,10 +76,10 @@ class Monster:
 
     def monst_damage(self, var):
         if self.attk >= self.p_attk:
-            dam_dealt = math.ceil(self.attk/2 - battle.temp_stats['dfns']/2) + var
+            dam_dealt = math.ceil(self.attk - battle.temp_stats['dfns']/2) + var
             type_ = 'melee'
         else:
-            dam_dealt = math.ceil(self.p_attk/2 - battle.temp_stats['p_dfns']/2) + var
+            dam_dealt = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2) + var
             type_ = 'range'
 
         dam_dealt = magic.eval_element(
@@ -96,7 +96,7 @@ class Monster:
         return dam_dealt, type_
 
     def monst_magic(self, var):
-        monst_dealt = math.ceil(self.m_attk/2 - battle.temp_stats['m_dfns']/2) + var
+        monst_dealt = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2) + var
 
         if monst_dealt < 1:
             monst_dealt = 1
@@ -177,9 +177,9 @@ class Monster:
             # Defend
             sounds.buff_spell.play()
 
-            self.dfns += random.randint(2, 3)
-            self.m_dfns += random.randint(2, 3)
-            self.p_dfns += random.randint(2, 3)
+            self.dfns += random.randint(3, 5)
+            self.m_dfns += random.randint(3, 5)
+            self.p_dfns += random.randint(3, 5)
             print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(
                 self.name))
 
@@ -187,7 +187,7 @@ class Monster:
             # Magic heal
             sounds.magic_healing.play()
 
-            heal = math.ceil((self.m_attk + self.m_dfns)/2)
+            heal = math.ceil((self.m_attk + self.m_dfns)/1.75)
             # Healing power is determined by magic stats
 
             if heal < 5:
@@ -345,60 +345,72 @@ class Monster:
         modifier = random.choice(modifiers)
 
         if modifier == 'Slow':  # Very-low speed, below-average speed
-            self.spd -= 3
-            self.evad -= 1
+            self.spd -= 4
+            self.evad -= 2
         elif modifier == 'Fast':  # Very-high speed, above-average speed
-            self.spd += 3
-            self.evad += 1
+            self.spd += 4
+            self.evad += 2
         elif modifier == 'Nimble':  # Very-high evasion, above-average speed
-            self.evad += 3
-            self.spd += 1
+            self.evad += 4
+            self.spd += 2
         elif modifier == 'Clumsy':  # Very-low evasion, below-average speed
-            self.evad -= 3
-            self.spd -= 1
+            self.evad -= 4
+            self.spd -= 2
         elif modifier == 'Powerful':  # High attack stats
-            self.attk += 2
-            self.m_attk += 2
+            self.attk += 3
+            self.m_attk += 3
         elif modifier == 'Ineffective':  # Low attack stats
-            self.attk -= 2
-            self.m_attk -= 2
+            self.attk -= 3
+            self.m_attk -= 3
         elif modifier == 'Armored':  # High defense stats
-            self.dfns += 2
-            self.m_dfns += 2
+            self.dfns += 3
+            self.m_dfns += 3
         elif modifier == 'Broken':  # Low defense stats
-            self.dfns -= 2
-            self.m_dfns -= 2
+            self.dfns -= 3
+            self.m_dfns -= 3
         elif modifier == 'Observant':  # High ranged stats
-            self.p_attk += 2
-            self.p_dfns += 2
+            self.p_attk += 3
+            self.p_dfns += 3
         elif modifier == 'Obtuse':  # Low ranged stats
-            self.p_attk -= 2
-            self.p_dfns -= 2
+            self.p_attk -= 3
+            self.p_dfns -= 3
 
         else:
             if modifier == 'Strong' and self.m_attk < self.attk and self.m_dfns < self.dfns:
                 # High melee stats
-                self.attk += 2
-                self.dfns += 2
+                self.attk += 3
+                self.dfns += 3
 
             elif modifier == 'Weak':
                 # Low melee stats
-                self.attk -= 2
-                self.dfns -= 2
+                self.attk -= 3
+                self.dfns -= 3
 
             elif modifier == 'Mystic' and self.m_attk > self.attk and self.m_dfns > self.dfns:
                 # High magic stats
-                self.m_attk += 2
-                self.m_dfns += 2
-                self.mp += 3
+                self.m_attk += 3
+                self.m_dfns += 3
+                self.mp += 5
 
             elif modifier == 'Foolish':
                 # Low magic stats
-                self.m_attk -= 2
-                self.m_dfns -= 2
+                self.m_attk -= 3
+                self.m_dfns -= 3
 
             else:
                 modifier = ''
+
+        # Adjust for problems that may happen with enemy stats
+        for stat in ['self.attk', 'self.dfns',
+                     'self.p_attk', 'self.p_dfns',
+                     'self.m_attk', 'self.m_dfns',
+                     'self.spd', 'self.evad'
+                     ]:
+            if eval(stat) < 1:  # Enemy stats cannot be lower than one
+                exec("{0} = 1".format(stat))
+
+            elif isinstance(eval(stat), float):  # Enemy stats must be integers
+                exec("{0} = math.ceil({0})".format(stat))
 
         if position['reg'] == 'Tundra':
             self.element = 'ice'
