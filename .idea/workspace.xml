@@ -145,8 +145,8 @@
       <file leaf-file-name="magic.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/magic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.81649244" vertical-offset="10097" max-vertical-offset="18738">
-              <caret line="412" column="48" selection-start-line="412" selection-start-column="48" selection-end-line="412" selection-end-column="48" />
+            <state vertical-scroll-proportion="-1.0383276" vertical-offset="9453" max-vertical-offset="18927">
+              <caret line="329" column="21" selection-start-line="329" selection-start-column="21" selection-end-line="329" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -997,8 +997,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/magic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.81649244" vertical-offset="10097" max-vertical-offset="18738">
-          <caret line="412" column="48" selection-start-line="412" selection-start-column="48" selection-end-line="412" selection-end-column="48" />
+        <state vertical-scroll-proportion="-1.0383276" vertical-offset="9453" max-vertical-offset="18927">
+          <caret line="329" column="21" selection-start-line="329" selection-start-column="21" selection-end-line="329" selection-end-column="21" />
           <folding />
         </state>
       </provider>

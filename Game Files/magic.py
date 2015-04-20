@@ -212,29 +212,18 @@ magic_blast = Damaging('Magical Blast',
 # Fire
 w_flame = Damaging('Weak Flame',
                    "Summon a weak fireball to destroy your foes. (Weak)",
-                   3, 1, 6, "fire")
+                   3, 2, 6, "fire")
 f_blaze = Damaging('Fierce Blaze',
                    "Summon a powerful flame to destroy your foes. (Moderate)",
-                   10, 11, 13, "fire")
+                   10, 12, 13, "fire")
 g_infer = Damaging('Grand Inferno',
                    "Unleash a monstrous blaze destroy your foes. (Strong)",
-                   18, 23, 23, "fire")
-
-# Electricity
-in_spark = Damaging('Inferior Spark',
-                    "Summon a weak spark to destroy your foes. (Weak)",
-                    3, 2, 6, "electric")
-pwr_jolt = Damaging('Powerful Jolt',
-                    "Summon a powerful jolt of energy to destroy your foes. (Moderate)",
-                    10, 10, 13, "electric")
-sp_storm = Damaging('Superior Storm',
-                    "Unleash a devastating lightning storm to destroy your foes. (Strong)",
-                    19, 22, 23, "electric")
+                   18, 24, 23, "fire")
 
 # Grass
 lef_blad = Damaging('Leaf Blade',
                     "Summon a weak blade of grass to destroy your foes. (Weak)",
-                    3, 1, 5, "grass")
+                    3, 2, 5, "grass")
 gra_gren = Damaging('Grass Grenade',
                     "Summon a small explosion to destroy your foes. (Moderate)",
                     10, 12, 13, "grass")
@@ -242,27 +231,38 @@ vin_strm = Damaging('Vine Storm',
                     "Unleash a frenzy of powerful vines to destroy your foes. (Strong)",
                     19, 24, 23, "grass")
 
+# Electricity
+in_spark = Damaging('Inferior Spark',
+                    "Summon a weak spark to destroy your foes. (Weak)",
+                    3, 3, 6, "electric")
+pwr_jolt = Damaging('Powerful Jolt',
+                    "Summon a powerful jolt of energy to destroy your foes. (Moderate)",
+                    10, 13, 13, "electric")
+sp_storm = Damaging('Superior Storm',
+                    "Unleash a devastating lightning storm to destroy your foes. (Strong)",
+                    19, 25, 23, "electric")
+
 # Water
 bub_splsh = Damaging('Bubble Splash',
                      "Summon a small wave of bubbles to destroy your foes. (Weak)",
-                     3, 2, 5, "water")
+                     3, 3, 5, "water")
 wtr_blast = Damaging('Water Blast',
                      "Summon a large burst of water to destroy your foes. (Moderate)",
-                     10, 12, 13, "water")
+                     10, 13, 13, "water")
 tsunami = Damaging('Tsunami',
                    "Unleash a terrifying barrage of waves upon your foes. (Strong)",
-                   19, 24, 23, "water")
+                   19, 25, 23, "water")
 
 # Earth
 mud_toss = Damaging('Mud Toss',
                     "Summon a small ball of mud to throw at your foes. (Weak)",
-                    3, 4, 6, "earth")
+                    3, 3, 6, "earth")
 rock_slam = Damaging('Rock Slam',
                      "Crush your enemies with a wall of solid rock. (Moderate)",
-                     10, 14, 14, "earth")
+                     10, 13, 14, "earth")
 earthquake = Damaging("Earthquake",
                       "Wreck havoc on your enemies with a powerful earthquake. (Strong)",
-                      19, 27, 24, "earth")
+                      19, 25, 24, "earth")
 
 # Ice
 icicle_dagger = Damaging('Icicle Dagger',
@@ -270,7 +270,7 @@ icicle_dagger = Damaging('Icicle Dagger',
                          3, 4, 3, "ice")
 hail_storm = Damaging('Hailstorm',
                       "Rain ice upon your enemies with unrelenting force! (Moderate)",
-                      10, 13, 15, 'ice')
+                      10, 14, 15, 'ice')
 blizzard = Damaging('Blizzard',
                     "Devastate your enemies with a terrifying flurry of ice and wind. (Strong)",
                     18, 26, 25, 'ice')
@@ -281,7 +281,7 @@ m_gust = Damaging('Minor Gust',
                   3, 4, 3, "wind")
 microburst = Damaging('Microburst',
                       "Decimate your foes with a powerful blast of wind! (Moderate)",
-                      10, 13, 15, "wind")
+                      10, 14, 15, "wind")
 cyclone = Damaging('Cyclone',
                    "Demolish all that stand in your path with a terrifying tornado! (Strong)",
                    18, 26, 25, "wind")
@@ -298,59 +298,66 @@ div_heal = Healing('Divine Healing',
                    25, 25, 125)
 
 # -- Buffs -- #
+
+# Movement Buffs
 m_quick = Buff('Minor Quickness',
                "Temporarily raise your speed by a small amount. (Weak)",
-               2, 4, 2, "spd")
+               2, 1, 2, "spd")
 m_evade = Buff('Minor Evade',
                "Temporarily raise your evasion by a small amount. (Weak)",
-               2, 4, 2, "evad")
+               2, 1, 2, "evad")
 
+a_quick = Buff('Adept Quickness',
+               "Temporarily raise your speed by a large amount. (Moderate)",
+               7, 10, 5, "spd")
+a_evade = Buff('Adept Evade',
+               "Temporarily raise your evasion by a large amount. (Moderate)",
+               7, 10, 5, "evad")
+
+# Defense Buffs
 m_defend = Buff('Minor Defend',
                 "Temporarily raise your defense by a small amount. (Weak)",
-                2, 5, 2, "dfns")
+                2, 3, 2, "dfns")
 m_shield = Buff('Minor Shield',
                 "Temporarily raise your magic defense by a small amount. (Weak)",
-                2, 5, 2, "m_dfns")
-m_block = Buff('Minor Block',
-               "Temporarily raise your pierce defense by a small amount. (Weak)",
-               2, 5, 2, "p_dfns")
+                2, 3, 2, "m_dfns")
 
+a_defend = Buff('Adept Defend',
+                "Temporarily raise your defense by a large amount. (Moderate)",
+                7, 13, 6, "dfns")
+a_shield = Buff('Adept Shield',
+                "Temporarily raise your magic defense by a large amount. (Moderate)",
+                7, 13, 6, "m_dfns")
+
+# Attack Buffs
 m_stren = Buff('Minor Strengthen',
                "Temporarily raise your attack by a small amount. (Weak)",
                2, 6, 2, "attk")
 m_power = Buff('Minor Empower',
                "Temporarily raise your magic attack by a small amount. (Weak)",
                2, 6, 2, "m_attk")
-m_aim = Buff('Minor Aim',
-             "Temporarily raise your pierce attack by a small amount. (Weak)",
-             2, 6, 2, "p_attk")
-
-a_defend = Buff('Adept Defend',
-                "Temporarily raise your defense by a large amount. (Moderate)",
-                7, 15, 6, "dfns")
-a_shield = Buff('Adept Shield',
-                "Temporarily raise your magic defense by a large amount. (Moderate)",
-                7, 15, 6, "m_dfns")
-a_block = Buff('Adept Block',
-               "Temporarily raise your pierce defense by a large amount. (Moderate)",
-               7, 15, 5, "p_dfns")
 
 a_stren = Buff('Adept Strengthen',
                "Temporarily raise your attack by a large amount. (Moderate)",
-               7, 14, 6, "attk")
+               7, 16, 6, "attk")
 a_power = Buff('Adept Empower',
                "Temporarily raise your magic attack by a large amount. (Moderate)",
-               7, 14, 6, "m_attk")
+               7, 16, 6, "m_attk")
+
+# Pierce Buffs
+m_block = Buff('Minor Block',
+               "Temporarily raise your pierce defense by a small amount. (Weak)",
+               2, 7, 2, "p_dfns")
+m_aim = Buff('Minor Aim',
+             "Temporarily raise your pierce attack by a small amount. (Weak)",
+             2, 7, 2, "p_attk")
+
+a_block = Buff('Adept Block',
+               "Temporarily raise your pierce defense by a large amount. (Moderate)",
+               7, 17, 5, "p_dfns")
 a_aim = Buff('Adept Aim',
              "Temporarily raise your pierce attack by a large amount. (Moderate)",
-             7, 14, 6, "p_attk")
-
-a_quick = Buff('Adept Quickness',
-               "Temporarily raise your speed by a large amount. (Moderate)",
-               7, 13, 5, "spd")
-a_evade = Buff('Adept Evade',
-               "Temporarily raise your evasion by a large amount. (Moderate)",
-               7, 13, 5, "evad")
+             7, 17, 6, "p_attk")
 
 # -- Other Spells -- #
 r_affliction = Spell('Relieve Affliction',
