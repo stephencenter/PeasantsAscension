@@ -289,6 +289,29 @@ cyclone = Damaging('Cyclone',
                    "Demolish all that stand in your path with a terrifying tornado! (Strong)",
                    23, 26, 24, "wind")
 
+# Life
+purify = Damaging('Purify',
+                  "Call upon His Divinity to cast out evil creatures! (Weak)",
+                  3, 5, 5, "life")
+smite = Damaging('Holy Smite',
+                 "Strike down unholy beings using His Divinity's power! (Moderate)",
+                 11, 15, 14, "life")
+moonbeam = Damaging('Moonbeam',
+                    "Utterly destroy evil creatures with holy rays from the moon! (Strong)",
+                    23, 27, 24, "life")
+
+
+# Death
+curse = Damaging('Evil Curse',
+                 "Call upon His Wickedness to harm holy creatures! (Weak)",
+                 3, 5, 5, "death")
+desecration = Damaging('Desecration',
+                       "Cast out holy spirits with an evil aura! (Moderate)",
+                       11, 15, 14, "death")
+unholy_rend = Damaging('Unholy Rend',
+                       "Anniahlate holy creatures with a searing blow! (Strong)",
+                       23, 27, 24, "death")
+
 # -- Healing -- #
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic. (Weak)",
@@ -414,6 +437,8 @@ spells = [
     mud_toss, rock_slam, earthquake,       # Earth Spells (Level 4, 14, 26)
     icicle_dagger, hail_storm, blizzard,   # Ice Spells (Level 4, 14, 26)
     m_gust, microburst, cyclone,           # Wind Spells (Level 4, 14, 26)
+    purify, smite, moonbeam,               # Life Spells (Level 5, 15, 27)
+    curse, desecration, unholy_rend,       # Death Spells (Level 5, 15, 27)
 
     m_quick, m_evade, a_quick, a_evade,       # Movement Spells (Level 1, 10)
     m_defend, m_shield, a_defend, a_shield,   # Defense Spells (Level 3, 13)
