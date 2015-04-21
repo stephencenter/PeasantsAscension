@@ -17,6 +17,7 @@ import sys
 import json
 import random
 import time
+import math
 import msvcrt
 
 import pygame

@@ -863,10 +863,10 @@ ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town co
 ethos = NPC('Ethos', [ethos_phrase_1])
 
 # -- Name: F. Jones -- Town: Neo-Ekanmar
-f_jones_phrase_1 = Conversation(['Hello, adventurer! My name if Fly. I used to be the Emperor of',
+f_jones_phrase_1 = Conversation(['Hello, adventurer! My name is Fly. I used to be the Emperor of',
                                  'The Flysconian Empire, until that wrechted Pythonius messed',
                                  'things up! His people revolted, and then his friend Sugulat',
-                                 'came in and overthrew us. Sugulat drove my people out of our'
+                                 'came in and overthrew us. Sugulat drove my people out of our',
                                  'lands and now this town is all we have left. \
 Please, leave me be.'],
                                 active=True)
