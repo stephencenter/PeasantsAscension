@@ -44,13 +44,13 @@ misc_vars = ''
 
 class Boss(monsters.Monster):
     def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad,
-                 lvl, pos_x, pos_y, item, gold, experience,
+                 lvl, pos_x, pos_y, items, gold, experience,
                  active=True, element='none'):
         monsters.Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk,
                                   m_dfns, spd, evad, lvl, element)
         self.pos_x = pos_x
         self.pos_y = pos_y
-        self.item = item
+        self.items = items
         self.per_hp = copy.copy(self.hp)
         self.per_mp = copy.copy(self.mp)
         self.gold = gold
@@ -165,7 +165,16 @@ def unimportant_boss_ud():
 
 
 # Boss: Master Slime -- Position: 0'N, 1'E
-master_slime = Boss('Master Slime', 45, 4, 8, 3, 4, 3, 5, 0, 3, 3, 5, 1, 0, [], 35, 35,
+master_slime = Boss('Master Slime',
+                    45, 4,
+                    8, 3,
+                    4, 3,
+                    5, 0,
+                    3, 3,
+                    5,
+                    1, 0,
+                    [],
+                    35, 35,
                     active=False)
 
 
@@ -178,13 +187,31 @@ def mastslim_ud():
 master_slime.upon_defeating = mastslim_ud
 
 # Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
-whisp_goblin = Boss('Whispering Goblin', 35, 10, 4, 6, 2, 1, 2, 6, 2, 2, 4, -2, 4, [], 25, 25)
+whisp_goblin = Boss('Whispering Goblin',
+                    35, 10,
+                    4, 6,
+                    2, 1,
+                    2, 6,
+                    2, 2,
+                    4,
+                    -2, 4,
+                    [],
+                    25, 25)
 
 whisp_goblin.upon_defeating = unimportant_boss_ud
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
-menac_phantom = Boss('Menacing Phantom', 60, 25, 5, 10, 1, 10, 15, 5, 10, 10, 8, -12,  8, [
-    items.spect_wand], 75, 75, active=False, element='death')
+menac_phantom = Boss('Menacing Phantom',
+                     60, 25,
+                     5, 10,
+                     1, 10,
+                     15, 5,
+                     10, 10,
+                     8,
+                     -12,  8,
+                     [],
+                     75, 75,
+                     active=False, element='death')
 
 
 def menacphan_ud():
@@ -196,8 +223,16 @@ def menacphan_ud():
 menac_phantom.upon_defeating = menacphan_ud
 
 # Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
-terr_tarant = Boss('Terrible Tarantuloid', 100, 20, 25, 25, 15, 15, 8, 8, 25, 12, 11, -11, -23, [],
-                   100, 100)
+terr_tarant = Boss('Terrible Tarantuloid',
+                   100, 20,   # 100 Health, 20 Mana
+                   25, 25,    # 25 Attack, 25 Defense
+                   15, 15,    # 15 Pierce Attack, 15 Pierce Defense
+                   8, 8,      # 8 Magic Attack, 8 Magic Defense
+                   25, 12,    # 25 Speed, 12 Evasion
+                   11,        # Level 11
+                   -11, -23,  # Located at -23'S, -11'W
+                   [],        # Drops no items
+                   100, 100)  # Drops 100 XP and 100 GP
 
 
 def terrtar_ud():
@@ -212,8 +247,17 @@ def terrtar_ud():
 terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
-cursed_spect = Boss('Cursed Spectre', 85, 35, 15, 20, 20, 20, 30, 20, 20, 15, 12, 3, 22, [],
-                    100, 100, active=False, element='death')
+cursed_spect = Boss('Cursed Spectre',
+                    85, 35,
+                    15, 20,
+                    20, 20,
+                    30, 20,
+                    20, 15,
+                    12,
+                    3, 22,
+                    [items.spect_wand],
+                    100, 100,
+                    active=False, element='death')
 
 
 def cursspect_ud():
@@ -224,8 +268,17 @@ def cursspect_ud():
 cursed_spect.upon_defeating = cursspect_ud
 
 # Boss: Ent -- Position: 27'N, 15'E
-giant_ent = Boss('Giant Ent', 125, 35, 17, 12, 15, 14, 20, 20, 12, 3, 13, 15, 27, [items.enc_yw],
-                 120, 120, active=True, element='grass')
+giant_ent = Boss('Giant Ent',
+                 125, 35,
+                 17, 12,
+                 15, 14,
+                 20, 20,
+                 12, 3,
+                 13,
+                 15, 27,
+                 [items.enc_yw],
+                 120, 120,
+                 active=True, element='grass')
 
 giant_ent.upon_defeating = unimportant_boss_ud
 

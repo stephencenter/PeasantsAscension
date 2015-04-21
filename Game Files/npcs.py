@@ -873,7 +873,7 @@ Please, leave me be.'],
 
 f_jones = NPC('F. Jones', [f_jones_phrase_1])
 
-# -- Name: Stravi -- Town: Neo-Ekanmar
+# -- Name: Stravi -- Town: New Ekanmar
 stravi_phrase_1 = Conversation(['Please, forgive my husband, Fly. He is very emotionial about',
                                 "the whole revolution thing, I'd recommend just letting him be.",
                                 "Oh, and whatever you do, do NOT under any circumstances mention",
@@ -882,7 +882,7 @@ stravi_phrase_1 = Conversation(['Please, forgive my husband, Fly. He is very emo
 
 stravi = NPC('Stravi', [stravi_phrase_1])
 
-# -- Name: Caesar -- Town: Neo-Ekanmar
+# -- Name: Caesar -- Town: New Ekanmar
 caesar_phrase_1 = Conversation(["*Caesar, Fly's pet strawberry dragon, runs away and hides behind",
                                 'his owner before you get a chance to converse with him.*'],
                                active=True)

@@ -72,7 +72,8 @@ class Monster:
         self.lvl = lvl  # Level
         self.element = element  # Element
         self.monster_name = ''
-        self.items = ''
+        if not isinstance(self, bosses.boss):
+            self.items = ''
 
     def monst_damage(self, var):
         if self.attk >= self.p_attk:

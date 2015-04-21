@@ -215,13 +215,13 @@ class Steed(Companion):
 
 # --Healing Pets--
 pet_cherub = Healer("Cherub",
-                    "A sweet angel skilled in the way of weak-healing (T1)", 150, 35, 2, 10, 5, 2)
+                    "A sweet angel skilled in the way of weak-healing (T1)", 150, 35, 2, 10, 5, 3)
 pet_sapling = Healer("Cherry Sapling",
                      "A small cherry tree that emits a soothing aroma with strange properties (T2)",
-                     350, 75, 5, 15, 6, 2)
+                     350, 75, 5, 15, 5, 4)
 pet_dove = Healer("White Dove",
                   "A lovely dove that has powerful healing abilities (T3)",
-                  750, 275, 10, 25, 5, 3)
+                  750, 275, 10, 25, 4, 7)
 
 # --Fighting Pets--
 pet_fox = Fighter("Fox",
