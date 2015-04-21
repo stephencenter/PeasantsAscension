@@ -117,7 +117,7 @@ class Damaging(Spell):
             Spell.use_mana(self)
 
             # Determine the power of the attack
-            attk_pwr = math.ceil(self.damage + (battle.temp_stats['m_attk']/3) -
+            attk_pwr = math.ceil(self.damage + (battle.temp_stats['m_attk']/2.5) -
                            (battle.monster.m_dfns/1.5) + var)
 
             # Evaluate the element of the attack and the enemy
@@ -328,62 +328,62 @@ div_heal = Healing('Divine Healing',
 # Movement Buffs
 m_quick = Buff('Minor Quickness',
                "Temporarily raise your speed by a small amount. (Weak)",
-               3, 1, 3, "spd")
+               3, 1, 5, "spd")
 m_evade = Buff('Minor Evade',
                "Temporarily raise your evasion by a small amount. (Weak)",
-               3, 1, 3, "evad")
+               3, 1, 5, "evad")
 
 a_quick = Buff('Adept Quickness',
                "Temporarily raise your speed by a large amount. (Moderate)",
-               6, 10, 8, "spd")
+               6, 10, 12, "spd")
 a_evade = Buff('Adept Evade',
                "Temporarily raise your evasion by a large amount. (Moderate)",
-               6, 10, 8, "evad")
+               6, 10, 12, "evad")
 
 # Defense Buffs
 m_defend = Buff('Minor Defend',
                 "Temporarily raise your defense by a small amount. (Weak)",
-                3, 3, 3, "dfns")
+                3, 3, 5, "dfns")
 m_shield = Buff('Minor Shield',
                 "Temporarily raise your magic defense by a small amount. (Weak)",
-                3, 3, 3, "m_dfns")
+                3, 3, 5, "m_dfns")
 
 a_defend = Buff('Adept Defend',
                 "Temporarily raise your defense by a large amount. (Moderate)",
-                6, 13, 8, "dfns")
+                6, 13, 12, "dfns")
 a_shield = Buff('Adept Shield',
                 "Temporarily raise your magic defense by a large amount. (Moderate)",
-                6, 13, 8, "m_dfns")
+                6, 13, 12, "m_dfns")
 
 # Attack Buffs
 m_stren = Buff('Minor Strengthen',
                "Temporarily raise your attack by a small amount. (Weak)",
-               3, 6, 3, "attk")
+               3, 6, 5, "attk")
 m_power = Buff('Minor Empower',
                "Temporarily raise your magic attack by a small amount. (Weak)",
-               3, 6, 3, "m_attk")
+               3, 6, 5, "m_attk")
 
 a_stren = Buff('Adept Strengthen',
                "Temporarily raise your attack by a large amount. (Moderate)",
-               6, 16, 8, "attk")
+               6, 16, 12, "attk")
 a_power = Buff('Adept Empower',
                "Temporarily raise your magic attack by a large amount. (Moderate)",
-               6, 16, 8, "m_attk")
+               6, 16, 12, "m_attk")
 
 # Pierce Buffs
 m_block = Buff('Minor Block',
                "Temporarily raise your pierce defense by a small amount. (Weak)",
-               3, 7, 3, "p_dfns")
+               3, 7, 5, "p_dfns")
 m_aim = Buff('Minor Aim',
              "Temporarily raise your pierce attack by a small amount. (Weak)",
-             3, 7, 3, "p_attk")
+             3, 7, 5, "p_attk")
 
 a_block = Buff('Adept Block',
                "Temporarily raise your pierce defense by a large amount. (Moderate)",
-               6, 17, 8, "p_dfns")
+               6, 17, 12, "p_dfns")
 a_aim = Buff('Adept Aim',
              "Temporarily raise your pierce attack by a large amount. (Moderate)",
-             6, 17, 8, "p_attk")
+             6, 17, 12, "p_attk")
 
 # -- Other Spells -- #
 r_affliction = Spell('Relieve Affliction',
@@ -477,7 +477,12 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
         return [int(p_dmg/1.5), int(m_dmg/1.5)]
 
     elif element_matchup[p_elem][1] == m_elem:
-        return [int(p_dmg*1.5), int(m_dmg*1.5)]
+        spam = [int(p_dmg*1.5), int(m_dmg*1.5)]
+
+        if spam <= 1:
+            spam = 2
+
+        return spam
 
     return [p_dmg, m_dmg]
 

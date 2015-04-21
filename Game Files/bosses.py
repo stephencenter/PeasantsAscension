@@ -195,7 +195,7 @@ whisp_goblin = Boss('Whispering Goblin',
                     2, 2,
                     4,
                     -2, 4,
-                    [],
+                    None,
                     25, 25)
 
 whisp_goblin.upon_defeating = unimportant_boss_ud
@@ -208,8 +208,8 @@ menac_phantom = Boss('Menacing Phantom',
                      15, 5,
                      10, 10,
                      8,
-                     -12,  8,
-                     [],
+                     12, 8,
+                     None,
                      75, 75,
                      active=False, element='death')
 
@@ -231,7 +231,7 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    25, 12,    # 25 Speed, 12 Evasion
                    11,        # Level 11
                    -11, -23,  # Located at -23'S, -11'W
-                   [],        # Drops no items
+                   None,        # Drops no items
                    100, 100)  # Drops 100 XP and 100 GP
 
 
@@ -255,14 +255,14 @@ cursed_spect = Boss('Cursed Spectre',
                     20, 15,
                     12,
                     3, 22,
-                    [items.spect_wand],
+                    items.spect_wand,
                     100, 100,
                     active=False, element='death')
 
 
 def cursspect_ud():
-    npcs.polmor_phrase_3.active = False
-    npcs.polmor_quest_1.finished = True
+    npcs.rivesh_phrase_3.active = False
+    npcs.rivesh_quest_1.finished = True
 
 
 cursed_spect.upon_defeating = cursspect_ud
@@ -276,7 +276,7 @@ giant_ent = Boss('Giant Ent',
                  12, 3,
                  13,
                  15, 27,
-                 [items.enc_yw],
+                 items.enc_yw,
                  120, 120,
                  active=True, element='grass')
 

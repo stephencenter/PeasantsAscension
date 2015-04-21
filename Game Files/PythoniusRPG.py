@@ -969,18 +969,46 @@ def title_screen():
             sys.exit()
 
 
+def set_prompt_properties():
+    ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
+
+    # Set the window size to fit the text output and character dialogue.
+    user32 = ctypes.windll.user32
+    screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+
+    lf_facesize = 32
+    std_output_handle = -11
+
+    class COORD(ctypes.Structure):
+        _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
+
+    class CONSOLE_FONT_INFOEX(ctypes.Structure):
+        _fields_ = [("cbSize", ctypes.c_ulong),
+                    ("nFont", ctypes.c_ulong),
+                    ("dwFontSize", COORD),
+                    ("FontFamily", ctypes.c_uint),
+                    ("FontWeight", ctypes.c_uint),
+                    ("FaceName", ctypes.c_wchar * lf_facesize)]
+
+    font = CONSOLE_FONT_INFOEX()
+    font.cbSize = ctypes.sizeof(CONSOLE_FONT_INFOEX)
+    font.nFont = 12
+    font.dwFontSize.X = 12 if screensize[0] < 1920 else 15
+    font.dwFontSize.Y = 24 if screensize[1] < 1080 else 30
+    font.FontFamily = 54
+    font.FontWeight = 400
+    font.FaceName = "Lucida Console"
+
+    handle = ctypes.windll.kernel32.GetStdHandle(std_output_handle)
+    ctypes.windll.kernel32.SetCurrentConsoleFontEx(
+            handle, ctypes.c_long(False), ctypes.pointer(font))
+
+    os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/10),
+                                                   math.ceil(screensize[1]/20)))
+
+
 def main():
-    # Set the console title to be "PythoniusRPG [game version]"
-
-    if os.name == 'nt':  # Windows
-        ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
-
-        # Set the window size to fit the text output and character dialogue.
-        os.system("mode con cols=100 lines=40")
-
-    elif os.name == 'posix':  # Most Unix Devices
-        sys.stdout.write("\x1b]2;Pythonius RPG {0}\x07".format(game_version))
-
+    set_prompt_properties()
     change_settings()
 
     title_screen()
