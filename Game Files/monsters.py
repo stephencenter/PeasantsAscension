@@ -113,11 +113,11 @@ class Monster:
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 6)
             self.mp += random.randint(1, 2)
-            self.attk = random.randint(1, 3)
+            self.attk = random.randint(2, 4)
             self.dfns += random.randint(1, 2)
-            self.p_attk += random.randint(1, 3)
+            self.p_attk += random.randint(2, 4)
             self.p_dfns += random.randint(1, 2)
-            self.m_attk += random.randint(1, 3)
+            self.m_attk += random.randint(2, 4)
             self.m_dfns += random.randint(1, 2)
             self.spd += random.randint(1, 3)
             self.evad += random.randint(0, 1)
@@ -359,15 +359,19 @@ class Monster:
         elif modifier == 'Powerful':  # High attack stats
             self.attk += 3
             self.m_attk += 3
+            self.p_attk += 3
         elif modifier == 'Ineffective':  # Low attack stats
             self.attk -= 3
             self.m_attk -= 3
+            self.p_attk -= 3
         elif modifier == 'Armored':  # High defense stats
             self.dfns += 3
             self.m_dfns += 3
+            self.p_dfns += 3
         elif modifier == 'Broken':  # Low defense stats
             self.dfns -= 3
             self.m_dfns -= 3
+            self.p_dfns -= 3
         elif modifier == 'Observant':  # High ranged stats
             self.p_attk += 3
             self.p_dfns += 3

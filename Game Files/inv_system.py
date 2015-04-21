@@ -271,7 +271,11 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                          for x, y in enumerate(inventory[cat])]))
 
                 else:
-                    padding = len(max([i.name for i in inventory[cat] if not i.imp], key=len))
+                    try:
+                        padding = len(max([i.name for i in inventory[cat] if not i.imp], key=len))
+                    except ValueError:
+                        padding = 1
+
                     ext_pad = len(str(len([i.name for i in inventory[cat] if not i.imp]) + 1))
 
                     print('{0}: \n      '.format(vis_cat), end='')
@@ -586,7 +590,7 @@ def view_quests():
             if dialogue:
                 while fizz:
                     print('Active Quests: ')
-                    print('     ', '\n     '.join(['[{0}] {1}'.format(num + 1, spell)
+                    print('     ', '\n     '.join(['[{0}] {1}'.format(num + 1, x)
                                                    for num, x in
                                                    enumerate([y for y in npcs.all_dialogue
                                                               if isinstance(y, npcs.Quest)

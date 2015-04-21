@@ -554,7 +554,7 @@ ash_cbow = Weapon('Ashen Crossbow',
                   325, 115, 19, 'ranged', 'ranger')
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
                      'An enhanced version of your typical Ashen Crossbow (+25 Pierce)',
-                     325, 115, 19, 'ranged', 'ranger')
+                     420, 135, 25, 'ranged', 'ranger')
 
 # Weapons -- Mage
 mag_twg = Weapon('Magical Twig',
@@ -809,7 +809,7 @@ pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for
                      0, 150, 119, -121)
     # Alternate Description: Impossible to read, but will sell for money nonetheless
 
-ruby_gem = Valuable('Ruby', 'A valuable ruby. Could be sold for quite a bit.',
+ruby_gem = Valuable('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
                     0, 150, -62, -84)  # better_than_perl=True
 
 sapphire_gem = Valuable('Sapphire',

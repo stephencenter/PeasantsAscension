@@ -116,14 +116,17 @@ class Damaging(Spell):
             Spell.use_mana(self)
 
             # Determine the power of the attack
-            attk_pwr = int(self.damage + (battle.temp_stats['m_attk']/3) -
-                           (battle.monster.m_dfns/2) + var)
+            attk_pwr = math.ceil(self.damage + (battle.temp_stats['m_attk']/3) -
+                           (battle.monster.m_dfns/1.5) + var)
 
             # Evaluate the element of the attack and the enemy
             attk_pwr = eval_element(
                 p_elem=self.element,
                 m_elem=monsters.monster.element,
                 p_dmg=attk_pwr)[0]
+
+            if attk_pwr < 1:
+                attk_pwr = 1
 
             print('-Player Turn-')
             print(ascii_art.player_art[main.player.class_.title()] %
@@ -542,6 +545,7 @@ def pick_cat(var, dodge, is_battle=True):
 
                     elif y_n.startswith('n'):
                         spam = False
+                        do_continue = True
                         break
 
             else:
@@ -569,10 +573,12 @@ def pick_spell(cat, var, dodge, is_battle):
     print('-'*25)
 
     while True:
+        padding = len(max([spell.name for spell in spellbook[cat]], key=len))
 
         print(''.join([cat, ' Spells: \n      ']), end='')
         print('\n      '.join(
-            ['[{0}] {1} --> {2} MP'.format(num + 1, spell, spell.mana)
+            ['[{0}] {1} --{2}> {3} MP'.format(num + 1, spell, '-'*(padding - len(spell.name)),
+                                              spell.mana)
              for num, spell in enumerate(spellbook[cat])]))
 
         fizz = True

@@ -655,7 +655,7 @@ a half-dozen highly-trained guards outside his house, as well as six
 archer-towers arranged in a hexagonal shape around the building.""",
               [npcs.sakura], -44, 20, gen_store=False, inn=False)
 
-town11 = Town('Neo-Ekanmar', """Neo-Ekanmar: After Sugulat and his army overran
+town11 = Town('New Ekanmar', """Neo-Ekanmar: After Sugulat and his army overran
 Flysconia  and declared the Empire of D\u00fC Haven, refugees from the
 area escaped from the nation. Seeing as how most of the surrounding
 states were allied against Flysconia, the refugees had no choice but

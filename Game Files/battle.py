@@ -562,7 +562,11 @@ Element: {8} | Elemental Weakness: {9}""".format(
         return True
 
     elif player.class_ == "mage":
-        player.mp = _c(misc_vars['mp_p'])
+        player.mp += _c(misc_vars['mp_p'])/2
+
+        if player.mp > misc_vars['mp_p']:
+            player.mp = _c(misc_vars['mp_p'])
+
         temp_stats['m_attk'] += 2
         temp_stats['m_dfns'] += 2
         print('As a Mage, you focus intently and sharply increase your magical prowess!')
