@@ -1,12 +1,12 @@
-  ____        _   _                 _
- |  _ \ _   _| |_| |__   ___  _ __ (_)_   _ ___
- | |_) | | | | __| '_ \ / _ \| '_ \| | | | / __|
- |  __/| |_| | |_| | | | (_) | | | | | |_| \__ \
- |_|    \__, |\__|_| |_|\___/|_| |_|_|\__,_|___/
+ ____          _    _                    _              ____   ___     ____
+|  _ \  _   _ | |_ | |__    ___   _ __  (_) _   _  ___ |  _ \ |  _ \  / ___|
+| |_) || | | || __|| '_ \  / _ \ | '_ \ | || | | |/ __|| |_) || |_) || |  _
+|  __/ | |_| || |_ | | | || (_) || | | || || |_| |\__ \|  _ < |  __/ | |_| |
+|_|     \__, | \__||_| |_| \___/ |_| |_||_| \__,_||___/|_| \_\|_|     \____|
         |___/
             
 PythoniusRPG -- Programmed in Python by Stephen Center (RbwNjaFurret)
- -- v0.6.3 Alpha
+ -- v0.6.4 Alpha
 ----------------------------------------------------
 Legal Stuff:
 
@@ -124,10 +124,11 @@ How to change the settings:
 ----------------------------------------------------
 Credits:
 
-    Programmed by Stephen Center
+    Programmed by RbwNjaFurret
+	Ideas & Bug-testing by Starkiller106024, Flygon_Jones, and WaVe Vex
     Music by Eric Skiff, Ben Landis, and some others
-    Artwork by Jacob Hall
-    Sound FX by Stephen Center
+    Artwork by WaVe Vex
+    Sound FX by RbwNjaFurret and Flygon_Jones
     
     Full credits can be found in Credits.txt
 ----------------------------------------------------

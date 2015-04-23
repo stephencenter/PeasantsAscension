@@ -16,7 +16,6 @@ MUSIC -- PART 1:
     His Sound Cloud: https://soundcloud.com/benlandis <--- Check it out!
  
   Eric Skiff, who composed:
-    Jumpshot ----------------------> [Battle Theme 1]
     Prologue ----------------------> [Title screen & Character Creation Themes]
     Arpanauts ---------------------> [Tundra Region Theme]
     We're All Under the Stars -----> [Shore Region Theme]
@@ -27,7 +26,7 @@ MUSIC -- PART 1:
     His Sound Cloud: https://soundcloud.com/eric-skiff <--- Check it out!
  
   Ruari, who composed:
-    8-bit Battle Music ------------> [Battle Theme 2]
+    8-bit Battle Music ------------> [Battle Theme]
  
     His website: https://twitter.com/Ruari_Odyssey <--- Check it out!
     His Sound Cloud: https://soundcloud.com/ruari1 <--- Check it out!
@@ -55,19 +54,20 @@ SOUND FX:
   Sound FX were made by Flygon_Jones and me using an open-source
   tool known as Bfxr: http://www.bfxr.net/
 ------------------------------------------------------------------------------
-ASCII ART:
-  All the ASCII art in the game was made by me using Notepad++ in about
-  five minutes. They're not meant to look good, they're meant to simply
-  get the point across.
+INSPIRATION:
+  My game draws a lot of ideas and inspiration from classic RPGs such as Final
+  Fantasy, Diablo, and D&D. The storyline was made up for an RP that Starkiller,
+  Flygon_Jones and I do, and many of the characters and locations from said RP
+  can be found in the game (such as F. Jones, Caesar, and Stravi, as well as Sakura,
+  Serena and Polmor).
 ------------------------------------------------------------------------------
 OTHER STUFF:
- 
-  Jacob Hall, who drew all of the artwork that is included with the game
-  (located in the Artwork Directory). He also was tremendously helpful
-  in regards to bug-testing and suggesting ideas. Thank you so much. :)
- 
-  In addition to his drawing, I also used the freeware software known as
-  paint.NET (http://getpaint.net/) to edit, outline, and color the drawings. 
+  My three righthand men: Starkiller106024, Flygon_Jones, and WaVe Vex. They
+  all did a little bit of bug testing - especially Starkiller, who spent numerous
+  hours messing around and found dozens and dozens of bugs that are now fixed!
+  Flygon_Jones provided countless ideas which have made it into the game, and
+  WaVe Vex drew all the artwork located in the "Artwork" directory.
+  I cannot possibly thank these people enough - they were a tremendous help! :)
 ------------------------------------------------------------------------------
 MOST IMPORTANTLY:
  
