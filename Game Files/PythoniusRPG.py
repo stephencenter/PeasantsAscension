@@ -381,7 +381,7 @@ Input letter: """)
                             misc_vars['str'] += 1
 
                         elif skill.startswith('c'):
-                            self.hp += random.randint(3, 5)
+                            self.hp += random.randint(4, 6)
                             self.dfns += random.randint(0, 1)
                             self.p_dfns += random.randint(0, 1)
                             self.m_dfns += random.randint(0, 1)
@@ -979,32 +979,36 @@ def set_prompt_properties():
     lf_facesize = 32
     std_output_handle = -11
 
-    class COORD(ctypes.Structure):
+    class Coord(ctypes.Structure):
         _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
 
-    class CONSOLE_FONT_INFOEX(ctypes.Structure):
+    class ConsoleFontInfo(ctypes.Structure):
         _fields_ = [("cbSize", ctypes.c_ulong),
                     ("nFont", ctypes.c_ulong),
-                    ("dwFontSize", COORD),
+                    ("dwFontSize", Coord),
                     ("FontFamily", ctypes.c_uint),
                     ("FontWeight", ctypes.c_uint),
                     ("FaceName", ctypes.c_wchar * lf_facesize)]
 
-    font = CONSOLE_FONT_INFOEX()
-    font.cbSize = ctypes.sizeof(CONSOLE_FONT_INFOEX)
+    font = ConsoleFontInfo()
+    font.cbSize = ctypes.sizeof(ConsoleFontInfo)
     font.nFont = 12
-    font.dwFontSize.X = 12 if screensize[0] < 1920 else 15
-    font.dwFontSize.Y = 24 if screensize[1] < 1080 else 30
+
+    font.dwFontSize.X = 8 if screensize[0] < 1024 else 10 \
+        if screensize[0] < 1280 else 12 if screensize[0] < 1920 else 15
+    font.dwFontSize.Y = 14 if screensize[0] < 1024 else 18 \
+        if screensize[0] < 1280 else 22 if screensize[1] < 1080 else 28
+
     font.FontFamily = 54
     font.FontWeight = 400
     font.FaceName = "Lucida Console"
 
     handle = ctypes.windll.kernel32.GetStdHandle(std_output_handle)
     ctypes.windll.kernel32.SetCurrentConsoleFontEx(
-            handle, ctypes.c_long(False), ctypes.pointer(font))
+        handle, ctypes.c_long(False), ctypes.pointer(font))
 
-    os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/10),
-                                                   math.ceil(screensize[1]/20)))
+    os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/10 - 2),
+                                                   math.ceil(screensize[1]/20 - 2)))
 
 
 def main():

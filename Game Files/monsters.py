@@ -78,10 +78,10 @@ class Monster:
 
     def monst_damage(self, var):
         if self.attk >= self.p_attk:
-            dam_dealt = math.ceil(self.attk - battle.temp_stats['dfns']/1.5) + var
+            dam_dealt = math.ceil(self.attk - battle.temp_stats['dfns']/2) + var
             type_ = 'melee'
         else:
-            dam_dealt = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/1.5) + var
+            dam_dealt = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2) + var
             type_ = 'range'
 
         dam_dealt = magic.eval_element(
@@ -98,7 +98,7 @@ class Monster:
         return dam_dealt, type_
 
     def monst_magic(self, var):
-        monst_dealt = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/1.5) + var
+        monst_dealt = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2) + var
 
         if monst_dealt < 1:
             monst_dealt = 1

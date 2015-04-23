@@ -567,8 +567,10 @@ Element: {8} | Elemental Weakness: {9}""".format(
         if player.mp > misc_vars['mp_p']:
             player.mp = _c(misc_vars['mp_p'])
 
-        temp_stats['m_attk'] += 2
-        temp_stats['m_dfns'] += 2
+        player.mp = int(player.mp)
+
+        temp_stats['m_attk'] += 5
+        temp_stats['m_dfns'] += 5
         print('As a Mage, you focus intently and sharply increase your magical prowess!')
 
         return True

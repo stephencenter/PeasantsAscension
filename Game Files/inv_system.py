@@ -685,7 +685,7 @@ def tools_menu():  # Display a set of usable tools on the world map
         return
 
     while spam:
-        print('Tools: \n      ')
+        print('Tools: \n      ', end='')
         print('\n      '.join(['[{0}] {1}'.format(x + 1, y)
              for x, y in enumerate(available_tools)]))
 

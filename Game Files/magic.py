@@ -479,8 +479,8 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     elif element_matchup[p_elem][1] == m_elem:
         spam = [int(p_dmg*1.5), int(m_dmg*1.5)]
 
-        if spam <= 1:
-            spam = 2
+        if spam[0] <= 1:
+            spam[0] = 2
 
         return spam
 
