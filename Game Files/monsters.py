@@ -76,13 +76,11 @@ class Monster:
         if not isinstance(self, bosses.Boss):
             self.items = ''
 
-    def monst_damage(self, var):
-        if self.attk >= self.p_attk:
+    def monst_damage(self, var, mode):
+        if mode == 'melee':
             dam_dealt = math.ceil(self.attk - battle.temp_stats['dfns']/2) + var
-            type_ = 'melee'
         else:
             dam_dealt = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2) + var
-            type_ = 'range'
 
         dam_dealt = magic.eval_element(
             p_elem=battle.player.element,
@@ -95,7 +93,7 @@ class Monster:
             print("It's a critical hit! 2x damage!")
             dam_dealt *= 2
 
-        return dam_dealt, type_
+        return dam_dealt
 
     def monst_magic(self, var):
         monst_dealt = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2) + var
@@ -111,18 +109,18 @@ class Monster:
 
     def monst_level(self):
         global misc_vars
-        self.lvl = int((1/3)*abs(1.4*position['avg'] - 1)) + 1
+        self.lvl = int((1/3)*abs(10/5.65*position['avg'] - 1)) + 2
         for x in range(1, self.lvl):
-            self.hp += random.randint(4, 6)
-            self.mp += random.randint(1, 2)
+            self.hp += random.randint(4, 7)
+            self.mp += random.randint(2, 3)
             self.attk = random.randint(2, 4)
-            self.dfns += random.randint(1, 2)
+            self.dfns += random.randint(2, 3)
             self.p_attk += random.randint(2, 4)
-            self.p_dfns += random.randint(1, 2)
+            self.p_dfns += random.randint(2, 3)
             self.m_attk += random.randint(2, 4)
-            self.m_dfns += random.randint(1, 2)
-            self.spd += random.randint(1, 3)
-            self.evad += random.randint(0, 1)
+            self.m_dfns += random.randint(2, 3)
+            self.spd += random.randint(2, 4)
+            self.evad += random.randint(1, 2)
 
         misc_vars['hp_m'] = self.hp
         misc_vars['mp_m'] = self.mp
@@ -131,7 +129,7 @@ class Monster:
         if not num:
             self.items = random.choice(items.monster_drop(self.lvl, self.monster_name))
 
-    def monst_attk(self, var, dodge):
+    def monst_attk(self, var, dodge, mode):
         sounds.sword_slash.play()
         print('The {0} is getting ready to attack you!'.format(self.name))
         time.sleep(0.75)
@@ -140,11 +138,11 @@ class Monster:
             msvcrt.getwch()
 
         if dodge in range(player.evad, 512):
-            damage, type_ = self.monst_damage(var)
+            damage = self.monst_damage(var, mode)
 
             player.hp -= damage
             sounds.enemy_hit.play()
-            if type_ == 'ranged':
+            if mode == 'pierce':
                 print('The {0} hits you with a ranged attack, dealing {1} damage!'.format(
                     self.name, damage))
             else:
@@ -159,6 +157,12 @@ class Monster:
         # This is the Enemy's AI.
 
         battle.temp_stats['turn_counter'] += 1
+
+        possible_p_dam = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2) + var
+        possible_m_dam = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2) + var
+        possible_a_dam = math.ceil(self.attk - battle.temp_stats['dfns']/2) + var
+
+        most_effective = max([possible_p_dam, possible_m_dam, possible_a_dam])
 
         if player.spd >= monster.spd:
             print('-'*25)
@@ -200,9 +204,12 @@ class Monster:
 
             print('The {0} casts a healing spell!'.format(self.name))
 
-        elif self.attk > self.m_attk:
-            # Physical Attack
-            self.monst_attk(var, dodge)
+        elif most_effective in [possible_p_dam, possible_a_dam]:
+            # Non-magic Attack
+            if most_effective == possible_p_dam:
+                self.monst_attk(var, dodge, 'pierce')
+            else:
+                self.most_attk(var, dodge, 'melee')
 
         elif self.m_attk > self.attk and self.mp >= 2:
             # Magic Attack

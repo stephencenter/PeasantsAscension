@@ -85,7 +85,7 @@ def update_stats():
                   'm_ispoisoned': False, 'turn_counter': 0}
 
 
-def player_choice():
+def player_choice(actual_speed):
     print("""\
       [1]: Attack
       [2]: Use Magic
@@ -98,7 +98,7 @@ def player_choice():
 
         if move.isdigit() and int(move) in range(1, 6):
             # Only return if "move" refers to a valid move
-            if temp_stats['spd'] > monster.spd:
+            if actual_speed > monster.spd:
                 print('-'*25)
             return move
 
@@ -161,6 +161,9 @@ def battle_system(is_boss=False, ambush=False):
 
         bat_stats()
 
+        actual_speed = math.floor(temp_stats['spd']/2) \
+            if player.status_ail == 'paralyzed' else temp_stats['spd']
+
         if player.status_ail == 'asleep':
             if not random.randint(0, 2):
                 sounds.buff_spell.play()
@@ -169,7 +172,7 @@ def battle_system(is_boss=False, ambush=False):
 
                 player.status_ail = 'none'
                 bat_stats()
-                move = player_choice()
+                move = player_choice(actual_speed)
 
             else:
                 print('-Player Turn-')
@@ -177,7 +180,7 @@ def battle_system(is_boss=False, ambush=False):
                 input("You're too tired to do anything! | Press Enter/Return ")
                 move = ''
         else:
-            move = player_choice()
+            move = player_choice(actual_speed)
 
         # var is how much less/more the attacks will deal than normal.
         # This makes the battle less predictable and more interesting.
@@ -221,7 +224,7 @@ def battle_system(is_boss=False, ambush=False):
             continue
 
         # The player goes first if they have a higher speed
-        elif (temp_stats['spd'] > monster.spd or move == '2' or move == '3') \
+        elif (actual_speed > monster.spd or move == '2' or move == '3') \
                 and player.status_ail != 'asleep':
 
             if move and player_turn(var, dodge, move) and monster.hp > 0:
@@ -235,15 +238,18 @@ def battle_system(is_boss=False, ambush=False):
 
         # Otherwise, the monster will go first
         else:
-            if monster.spd < temp_stats['spd'] and player.status_ail != 'asleep':
+            if monster.spd < actual_speed and player.status_ail != 'asleep':
                 print('-'*25)
-
+            is_asleep = 'asleep' if player.status_ail == 'asleep' else False
             monster.enemy_turn(m_var, m_dodge)
 
             if player.hp > 0:
                 if player.status_ail != 'asleep':
                     input('\nPress Enter/Return ')
-                    move = player_choice()
+
+                    if is_asleep:
+                        move = player_choice(actual_speed)
+
                     player_turn(var, dodge, move)
 
                 if monster.hp > 0:
