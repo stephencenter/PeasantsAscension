@@ -47,7 +47,7 @@ misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
             'reg_music': 'Music/Through the Forest.ogg',
-            'h': '', 'v': '', 'prev_town': [0, 0]}
+            'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False}
 
 import sys
 import os
@@ -780,6 +780,12 @@ def check_save():  # Check for save files and load the game if they're found
                     if 'luc' in misc_vars and 'for' not in misc_vars:
                         misc_vars['for'] = misc_vars['luc']
                         del misc_vars['luc']
+
+                    print('Attempt successful!')
+
+                if 'is_aethus' not in position:
+                    print('Attempting to make save file compatible with v0.6.5...')
+                    position['is_aethus'] = False
 
                     print('Attempt successful!')
 

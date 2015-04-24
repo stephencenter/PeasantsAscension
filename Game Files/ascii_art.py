@@ -355,9 +355,51 @@ O0o"
   |oo|
   |~~|
   /vv\\
-"""}
+""",
 
+    "Alicorn":
+    """
+         ,
+  ~~\\ ">
+ [===]'
+/    |
+        %s""",
 
+    "Harpy":
+    """
+   O
+/}-|-{\\
+  / \\
+
+        %s""",
+
+    "Wraith":
+    """
+ (O)
+~/ \\~
+ | |
+  V
+        %s""",
+    "Flying Serpent":
+    """
+    /''>
+ /}-| |-{\\
+/  ^| |^  \\
+    | |
+   _/ /
+  <__/
+        %s""",
+
+    "Griffin":
+    """
+  ~~\\ ">
+ [===]'
+/    |
+        %s""",
+
+}
+
+# Sprites used for items (not yet implemented!)
 item_sprites = {
     "Potions": """
  _ _
@@ -373,6 +415,5 @@ item_sprites = {
 """,
     "Knives": """
 -|==>
-""",
-
+"""
 }

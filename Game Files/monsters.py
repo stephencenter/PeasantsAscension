@@ -109,16 +109,23 @@ class Monster:
 
     def monst_level(self):
         global misc_vars
-        self.lvl = int((1/3)*abs(10/5.65*position['avg'] - 1)) + 2
+        self.lvl = int((1/3)*abs(10/5.65*position['avg'] - 1)) + 1
+
+        if self.lvl < 1:
+            self.lvl = 1
+
+        if position['reg'] == 'Aethus':
+            self.lvl += 15
+
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 7)
             self.mp += random.randint(2, 3)
             self.attk = random.randint(2, 4)
-            self.dfns += random.randint(2, 3)
+            self.dfns += random.randint(1, 3)
             self.p_attk += random.randint(2, 4)
-            self.p_dfns += random.randint(2, 3)
+            self.p_dfns += random.randint(1, 3)
             self.m_attk += random.randint(2, 4)
-            self.m_dfns += random.randint(2, 3)
+            self.m_dfns += random.randint(1, 3)
             self.spd += random.randint(2, 4)
             self.evad += random.randint(1, 2)
 
@@ -320,7 +327,9 @@ class Monster:
                         'Mountain': ['Troll', 'Rock Giant', 'Oread',
                                      'Tengu', 'Giant Worm'],
                         'Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
-                                      'Skeleton', 'Ghoul']
+                                      'Skeleton', 'Ghoul'],
+                        'Aethus': ['Harpy', 'Flying Serpent', 'Wraith',
+                                   'Alicorn', 'Griffin']
                         }
 
         self.name = random.choice(monster_type[position['reg']])
@@ -439,6 +448,8 @@ class Monster:
             self.element = 'grass'
         elif position['reg'] == 'Graveyard':
             self.element = 'death'
+        elif position['reg'] == 'Aethus':
+            self.element = 'wind'
         else:
             self.element = 'none'
 

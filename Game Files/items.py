@@ -325,6 +325,10 @@ class MagicCompass(Item):
 
     @staticmethod
     def use_item():
+        if position['reg'] == 'Aethus':
+            print('Something about this place makes your compass needle spin wildly.')
+            return
+
         from towns import town_list, search_towns
 
         pos_towns = [tuple([town.name, round(math.hypot(town.x - main.position['x'],
@@ -346,6 +350,10 @@ class DiviningRod(Item):
 
     @staticmethod
     def use_item():
+        if position['reg'] == 'Aethus':
+            print("Your divining rod doesn't seem to be working properly up here.")
+            return
+
         from towns import search_towns
         pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.position['x'],
                                                       gem.posy - main.position['y']))])
@@ -371,6 +379,10 @@ class Shovel(Item):
 
     @staticmethod
     def use_item():
+        if position['reg'] == 'Aethus':
+            print('The soil up here is much too tough to be broken up using a shovel.')
+            return
+
         from towns import search_towns
         print('-'*25)
         print('You begin to search using your shovel...')
@@ -863,6 +875,7 @@ burnt_ash = Misc('Ash', 'The ashy remains of a once-living creature.', 0, 5)
 antennae = Misc('Antennae', 'A pair of antennae from a massive insect.', 0, 5)
 ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.', 0, 5)
 chain_link = Misc('Chain links', 'A couple joined links of chain made from steel.', 0, 5)
+unicorn_horn = Misc('Unicorn Horn', 'A tough and shiny horn from a mythical creature.', 0, 5)
 
 
 def monster_drop(level, name):
@@ -900,7 +913,12 @@ def monster_drop(level, name):
                          'Undead Warrior': [chain_link],
                          'Necromancer': [shirt_cloth],
                          'Skeleton': [skeleton_bone],
-                         'Ghoul': [ectoplasm]}
+                         'Ghoul': [ectoplasm],
+                         'Alicorn': [unicorn_horn],
+                         'Wraith': [ectoplasm],
+                         'Griffin': [animal_fur],
+                         'Flying Serpent': [serpent_scale],
+                         'Harpy': [wing_piece]}
 
     if level in range(1, 16):
         drops = [s_elixir, s_potion, cpr_swd, wiz_hat, lth_bdy]

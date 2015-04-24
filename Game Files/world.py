@@ -100,11 +100,19 @@ def movement_system():
                     # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
                     if direction.startswith('n'):
 
-                        if position['y'] < 125:
+                        if position['y'] < 125 if not position['is_aethus'] else 50:
                             position['y'] += 1
 
                         else:
                             print('-'*25)
+
+                            if position['is_aethus']:  # Aethus is a floating island in the sky
+                                print("""\
+Continuing to walk in that direction would cause you to fall to your death.
+It's probably in your best interests that you not do that.
+-------------------------""")
+
+                                continue
 
                             if position['x'] <= 42:
                                 print('Off in the distance, you see what appears to be a large')
@@ -121,11 +129,19 @@ pass.')
                             continue
 
                     elif direction.startswith('s'):
-                        if position['y'] > -125:
+                        if position['y'] > -125 if not position['is_aethus'] else -50:
                             position['y'] -= 1
 
                         else:
                             print('-'*25)
+
+                            if position['is_aethus']:  # Aethus is a floating island in the sky
+                                print("""\
+Continuing to walk in that direction would cause you to fall to your death.
+It's probably in your best interests that you not do that.
+-------------------------""")
+
+                                continue
 
                             if position['x'] <= 42:
                                 print('You see a large island off in the distance. According to')
@@ -141,11 +157,20 @@ pass.')
                             continue
 
                     elif direction.startswith('w'):
-                        if position['x'] > -125:
+                        if position['x'] > -125 if not position['is_aethus'] else -50:
                             position['x'] -= 1
 
                         else:
                             print('-'*25)
+
+                            if position['is_aethus']:  # Aethus is a floating island in the sky
+                                print("""\
+Continuing to walk in that direction would cause you to fall to your death.
+It's probably in your best interests that you not do that.
+-------------------------""")
+
+                                continue
+
                             print('Ahead of you is a seemingly endless ocean. \
 You cannot continue in this direction.')
                             print('-'*25)
@@ -153,10 +178,20 @@ You cannot continue in this direction.')
                             continue
 
                     elif direction.startswith('e'):
-                        if position['x'] < 125:
+                        if position['x'] < 125 if not position['is_aethus'] else 50:
                             position['x'] += 1
 
                         else:
+                            print('-'*25)
+
+                            if position['is_aethus']:  # Aethus is a floating island in the sky
+                                print("""\
+Continuing to walk in that direction would cause you to fall to your death.
+It's probably in your best interests that you not do that.
+-------------------------""")
+
+                                continue
+
                             if position['y'] >= 42:
                                 nation = 'Hillsbrad'
 
@@ -166,7 +201,6 @@ You cannot continue in this direction.')
                             else:
                                 nation = 'Elysium'
 
-                            print('-'*25)
                             print('You come across the border between {0} and Pythonia.'.format(
                                 nation))
                             print('Despite your pleading, the border guards will not let you pass.')
@@ -242,34 +276,38 @@ def check_region():
     # Check the coordinates of the player and change the region to match.
     global position
     x, y = position['x'], position['y']
+    if position['is_aethus']:
+        region = 'Aethus'
+        reg_music = 'Music/Island of Peace.ogg'
 
-    if x in range(-15, -9) and y in range(5, 11):  # Micro-region in the North-west of the Forest
-        region = 'Graveyard'
-        reg_music = 'Music/Frontier.ogg'
+    else:
+        if x in range(-15, -9) and y in range(5, 11):  # Micro-region in the Forest
+            region = 'Graveyard'
+            reg_music = 'Music/Frontier.ogg'
 
-    elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
-        region = 'Forest'
-        reg_music = 'Music/Through the Forest.ogg'
+        elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
+            region = 'Forest'
+            reg_music = 'Music/Through the Forest.ogg'
 
-    elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
-        region = 'Mountain'
-        reg_music = 'Music/Mountain.ogg'
+        elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
+            region = 'Mountain'
+            reg_music = 'Music/Mountain.ogg'
 
-    elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
-        region = 'Tundra'
-        reg_music = 'Music/Arpanauts.ogg'
+        elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
+            region = 'Tundra'
+            reg_music = 'Music/Arpanauts.ogg'
 
-    elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
-        region = 'Desert'
-        reg_music = 'Music/Come and Find Me.ogg'
+        elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
+            region = 'Desert'
+            reg_music = 'Music/Come and Find Me.ogg'
 
-    elif x in range(0, 116) and y in range(-115, 1):  # Southeast of World
-        region = 'Swamp'
-        reg_music = 'Music/Digital Native.ogg'
+        elif x in range(0, 116) and y in range(-115, 1):  # Southeast of World
+            region = 'Swamp'
+            reg_music = 'Music/Digital Native.ogg'
 
-    elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
-        region = 'Shore'
-        reg_music = "Music/We're all under the stars.ogg"
+        elif abs(x) in range(116, 126) or abs(y) in range(116, 126):  # Edges of World
+            region = 'Shore'
+            reg_music = "Music/We're all under the stars.ogg"
 
     if position['reg'] != region:
         print('-'*25)

@@ -26,6 +26,7 @@ import world
 import npcs
 import items
 import pets
+import text_scroll
 import sounds
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
@@ -700,14 +701,89 @@ flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""", [npcs.alden],
                     -12, -26, inn=False, gen_store=False, pet_shop=True, ps_level=2)
 
+
+class StairwayToAethus(Town):
+    def __init__(self, name, desc, people, x, y, inn=False, inn_cost=0,
+                 gen_store=False, gs_level=1, pet_shop=False, ps_level=1):
+        Town.__init__(self, name, desc, people, x, y, inn, inn_cost,
+                      gen_store, gs_level, pet_shop, ps_level)
+
+    def town_choice(self):
+        pygame.mixer.music.load('Music/CopperNickel.ogg')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(main.music_vol)
+
+        function = text_scroll.text_scroll if main.do_text_scroll else print
+
+        function("""
+As you enter the town of New Babylon, you notice something rather odd. Not
+a single door in this town is open or unlocked, including those of the shops
+and other businesses. No sign of life can be seen for miles. The entire city
+seems almost... frozen. Something near the center of the town catches your
+eye - a large, golden staircase with a sign on it that reads "Stairway to Aethus".
+The staircase seems to go on for quite a while, but you can faintly see a large
+island floating up in the sky. Perhaps something is up there!""")
+        print('-'*25)
+        while True:
+            choice = input("Climb the stairs? | Yes or No: ")
+            if choice.lower().startswith('y'):
+                print('-'*25)
+                input('You begin to climb the staircase | Press enter/return ')
+                sounds.foot_steps.play()
+                print('Climbing...')
+                time.sleep(1)
+                sounds.foot_steps.play()
+                print('Climbing...')
+                time.sleep(1)
+                sounds.foot_steps.play()
+                print('Climbing...')
+                time.sleep(1)
+                sounds.foot_steps.play()
+                print('Still climbing...')
+                time.sleep(1)
+
+                input("After several hours of climbing the staircase, \
+you finally arrive at the top | Press enter/return ")
+
+                main.position['x'] = 0
+                main.position['y'] = 0
+                main.position['is_aethus'] = True
+                main.position['reg'] = 'Aethus'
+                main.position['avg'] = 0
+
+                main.position['reg_music'] = 'Music/Island of Peace.ogg'
+                world.save_coords(0, 0)
+
+                print('-'*25)
+                print('You have left the Tundra region and are now entering the Aethus.')
+                print('-'*25)
+
+                pygame.mixer.music.load(main.position['reg_music'])
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
+
+                return
+
+            elif choice.lower().startswith('n'):
+                return
+
+to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
+
+class StairwayFromAethus(town):
+
 town_list = [town1, town2, town3, town4, town5, town6, town7,
-             town8, town9, town10, town11, town12, town13, town14, small_house1]
+             town8, town9, town10, town11, town12, town13, town14,
+             small_house1, to_aethus]
+
+aethus_towns = []
 
 
 def search_towns(pos_x, pos_y, enter=True):
     # Check to see if there is a
     # town where the player is located
-    for town in town_list:
+
+    available_towns = town_list if not main.position['is_aethus'] else aethus_towns
+    for town in available_towns:
 
         if town.x == pos_x and town.y == pos_y:
 
