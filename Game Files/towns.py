@@ -713,9 +713,11 @@ class StairwayToAethus(Town):
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
 
+        print('-'*25)
+
         function = text_scroll.text_scroll if main.do_text_scroll else print
 
-        function("""
+        function("""\
 As you enter the town of New Babylon, you notice something rather odd. Not
 a single door in this town is open or unlocked, including those of the shops
 and other businesses. No sign of life can be seen for miles. The entire city
@@ -769,13 +771,72 @@ you finally arrive at the top | Press enter/return ")
 
 to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
 
-class StairwayFromAethus(town):
+
+class StairwayFromAethus(Town):
+    def __init__(self, name, desc, people, x, y, inn=False, inn_cost=0,
+                 gen_store=False, gs_level=1, pet_shop=False, ps_level=1):
+        Town.__init__(self, name, desc, people, x, y, inn, inn_cost,
+                      gen_store, gs_level, pet_shop, ps_level)
+
+    def town_choice(self):
+        pygame.mixer.music.load('Music/CopperNickel.ogg')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(main.music_vol)
+
+        print('-'*25)
+
+        function = text_scroll.text_scroll if main.do_text_scroll else print
+
+        function("""You come across the place that you entered Aethus from. It looks remarkably
+similar to the town of New Babylon from the mainland. Everything is frozen in place,
+and no people are anywhere to be seen. The staircase you came up in is in the middle of town,
+and seeing it evokes bad memories of walking up five miles of stairs. Luckily for you,
+you notice a zipline-like structure that would be much easier and faster to use.""")
+        while True:
+            choice = input("Go down the zipline? | Yes or No: ")
+
+            if choice.lower().startswith('y'):
+                print('-'*25)
+                input('You strap yourself to the zipline using a harness | Press enter/return ')
+                sounds.foot_steps.play()
+                print('Zipping...')
+                time.sleep(1)
+                sounds.foot_steps.play()
+                print('Zipping...')
+                time.sleep(1)
+                input("Amazing, that was much faster! | Press enter/return ")
+
+                main.position['x'] = -84
+                main.position['y'] = -84
+                main.position['is_aethus'] = False
+                main.position['reg'] = 'Tundra'
+                main.position['avg'] = -84
+
+                main.position['reg_music'] = 'Music/Arpanauts.ogg'
+                world.save_coords(-84, -84)
+
+                print('-'*25)
+                print('You have left the Aethus and are now entering the Tundra region.')
+                print('-'*25)
+
+                pygame.mixer.music.load(main.position['reg_music'])
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
+
+                return
+
+            elif choice.lower().startswith('n'):
+                return
+
+
+to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
+
 
 town_list = [town1, town2, town3, town4, town5, town6, town7,
              town8, town9, town10, town11, town12, town13, town14,
              small_house1, to_aethus]
 
-aethus_towns = []
+aethus_towns = [to_mainland]
 
 
 def search_towns(pos_x, pos_y, enter=True):
