@@ -67,6 +67,7 @@ def text_scroll(string, spacing=0.025):
         while msvcrt.kbhit():
             msvcrt.getwch()
 
+
 def input_ts(string, spacing=0.025):
         # Input mode prints all but the last character. The last character
         # is instead passed as the argument for the "input()" function,

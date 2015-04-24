@@ -172,7 +172,6 @@ class PlayerCharacter:  # The Player
                 dam_dealt = math.ceil(dam_dealt)
                 print('You deal less damage because your eyesight made aiming difficult.')
 
-
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
             m_elem=battle.monster.element, p_dmg=dam_dealt)[0]

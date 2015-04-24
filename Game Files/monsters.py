@@ -256,7 +256,7 @@ class Monster:
         else:
             status = random.choice(['asleep',  # Skips the players turn until they wake up
                                     'poisoned'  # The player takes damage each turn until cured
-            ])
+                                    ])
 
         if status == battle.player.status_ail:
             status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened',
@@ -525,6 +525,7 @@ def spawn_monster():
     monster.monst_level()
     if monster.evad > 256:
         monster.evad = 256
+
 
 def setup_vars():
     global player

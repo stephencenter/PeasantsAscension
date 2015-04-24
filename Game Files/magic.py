@@ -118,7 +118,7 @@ class Damaging(Spell):
 
             # Determine the power of the attack
             attk_pwr = math.ceil(self.damage + (battle.temp_stats['m_attk']/2.5) -
-                           (battle.monster.m_dfns/1.5) + var)
+                                 (battle.monster.m_dfns/1.5) + var)
 
             # Evaluate the element of the attack and the enemy
             attk_pwr = eval_element(

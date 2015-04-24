@@ -63,6 +63,7 @@ If an object name ends with "_usX", where X is an integer, then it handles what 
 
 """
 
+
 def setup_vars():
     global print
     global input
