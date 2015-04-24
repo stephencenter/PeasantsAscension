@@ -682,7 +682,7 @@ in the middle of this town surrounded by large stone walls and a few
 guard-towers. Sugulat, the Emperor of D\u00fC Haven, can often
 be found mining on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
-              [npcs.raidon, npcs.sugulat], -51, -7, gs_level=4, inn_cost=15)
+              [npcs.raidon, npcs.sugulat], -51, 7, gs_level=4, inn_cost=15)
 
 town14 = Town('Whistumn', """Whistumn: An ancient city situated on the border
 between the desert and the forest. The inhabitants of this town are known

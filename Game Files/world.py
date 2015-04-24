@@ -252,12 +252,12 @@ def check_region():
         reg_music = 'Music/Through the Forest.ogg'
 
     elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
-        region = 'Tundra'
-        reg_music = 'Music/Arpanauts.ogg'
-
-    elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
         region = 'Mountain'
         reg_music = 'Music/Mountain.ogg'
+
+    elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
+        region = 'Tundra'
+        reg_music = 'Music/Arpanauts.ogg'
 
     elif x in range(0, 116) and y in range(0, 116):  # Northeast of world
         region = 'Desert'
