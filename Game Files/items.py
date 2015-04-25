@@ -325,8 +325,10 @@ class MagicCompass(Item):
 
     @staticmethod
     def use_item():
-        if position['reg'] == 'Aethus':
+        if main.position['reg'] == 'Aethus':
+            print('-'*25)
             print('Something about this place makes your compass needle spin wildly.')
+            print('-'*25)
             return
 
         from towns import town_list, search_towns
@@ -350,8 +352,10 @@ class DiviningRod(Item):
 
     @staticmethod
     def use_item():
-        if position['reg'] == 'Aethus':
+        if main.position['reg'] == 'Aethus':
+            print('-'*25)
             print("Your divining rod doesn't seem to be working properly up here.")
+            print('-'*25)
             return
 
         from towns import search_towns
@@ -379,8 +383,10 @@ class Shovel(Item):
 
     @staticmethod
     def use_item():
-        if position['reg'] == 'Aethus':
+        if main.position['reg'] == 'Aethus':
+            print('-'*25)
             print('The soil up here is much too tough to be broken up using a shovel.')
+            print('-'*25)
             return
 
         from towns import search_towns
