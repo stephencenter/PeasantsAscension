@@ -401,19 +401,24 @@ O0o"
 
 # Sprites used for items (not yet implemented!)
 item_sprites = {
-    "Potions": """
+    "Potions":
+        """
  _ _
  | |
 /   \\
 | P |
 \\___/
 """,
-    "Bows": """
+
+    "Bows":
+        """
   ______
  /      \\
 /~~~~~~~~\\
 """,
-    "Knives": """
+
+    "Knives":
+        """
 -|==>
 """
 }

@@ -924,6 +924,31 @@ serena_phrase_2 = Conversation(['You are a good man, trying to help our daughter
 
 serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, ser_pol_phrase_3])
 
+# -- Name: Matti -- Town: Lantonum
+matti_phrase_1 = Conversation(["*You try to talk to the woman in the bar, but she is too",
+                              'busy listening to music on her "iSound" to notice you.',
+                              'Suddenly, a peasant walks up behind her, screams "Witch!!",',
+                              'grabs the iSound, and smashes it to bits on the floor. He',
+                              'then proceeds to set it on fire and bury the ashes in the dirt',
+                              'behind the bar.*'], active=True)
+
+matti_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
+                       "iSound MP3 player a witch - this is the fifth one I've gone through",
+                       "this week! The company that makes them only sells them in Elysium, because",
+                       "nobody in Pythonia could tell an MP3 player from a brick if their life",
+                       "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
+                       "train town near the border of Pythonia and Elysium, and buy me a new",
+                       "iSound, I will reward you greatly. Remember: iSounds have watermelons",
+                       "on the back. If you get one with a grapefruit, then you're just paying",
+                       "a lot of money for a cheap knockoff brand. And definitely stay away",
+                       "from papaya phones. Can you do that for me?"],
+                      'iSounds Good',
+                      ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
+                       "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E."],
+                      "Matti", [1250, 1250],
+                      ["Thanks, man! This latest version is supposed to be",
+                       "peasant-proof, so let's hope that works!"], active=True)
+
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
     wesley_phrase_1, seriph_phrase_1,

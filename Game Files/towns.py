@@ -831,7 +831,6 @@ you notice a zipline-like structure that would be much easier and faster to use.
 
 to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
 
-
 town_list = [town1, town2, town3, town4, town5, town6, town7,
              town8, town9, town10, town11, town12, town13, town14,
              small_house1, to_aethus]
