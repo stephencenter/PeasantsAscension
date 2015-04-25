@@ -675,7 +675,7 @@ section of the Sorcerers' Guild. Vegetation grows on almost
 every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""",
-              [], -30, -39, gs_level=3, pet_shop=True, ps_level=2)
+              [npcs.strathius], -30, -39, gs_level=3, pet_shop=True, ps_level=2)
 
 town13 = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
 located in the Mountains. The D\u00fC Haven-Pythonia embassy can be found
@@ -694,6 +694,16 @@ to be mostly one-sided. A saddened-looking woman and her husband are sitting
 on the steps of the general store.""",
               [npcs.polmor, npcs.serena], 52, 12, gs_level=4,
               inn_cost=13, pet_shop=True, ps_level=3)
+
+town15 = Town("Hatchnuk", "FILLER TEXT", [], 63, 17, gs_level=4, inn_cost=10)
+
+town16 = Town("Cesura", "FILLER TEXT", [], 58, 123, gs_level=5, inn_cost=25)
+
+town17 = Town("Sanguion", "FILLER TEXT", [], 96, 67, gs_level=5, inn_cost=18,
+              pet_shop=True, ps_level=2)
+
+town18 = Town("Lamtonum", "FILLER TEXT", [npcs.matti],
+              72, 69, gs_level=4, pet_shop=True, ps_level=3)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
@@ -833,6 +843,7 @@ to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
 
 town_list = [town1, town2, town3, town4, town5, town6, town7,
              town8, town9, town10, town11, town12, town13, town14,
+             town15, town16, town17, town18,
              small_house1, to_aethus]
 
 aethus_towns = [to_mainland]

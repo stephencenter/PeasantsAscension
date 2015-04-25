@@ -900,6 +900,24 @@ sakura_phrase_1 = Conversation(['Hello, sir! What can Sakura do for you? Ah, you
 
 sakura = NPC('Sakura', [sakura_phrase_1])
 
+# -- Name: Strathius -- Town: Ravenstone
+strathius_phrase_1 = Conversation(["Greetings, man! I'm like, Strathius, and I'm a druid.",
+                                   "I'm one with like, nature. I'm gonna give you some helpful",
+                                   "advice, man. Monsters can give you these like, things, called"
+                                   "\"Status Ailments\" which like, totally harsh your style brah.",
+                                   "Sleepiness causes you to be totally immobilized for a few",
+                                   "turns. Paralyzation makes you totally slow for a while.",
+                                   "Weakness makes you like a total softy, and you don't deal",
+                                   "much damage man. Poison is mega-harsh, man. It makes you",
+                                   "take a little bit of damage each, like, turn. Not cool.",
+                                   "Blindness is also totally whack - it makes you aim",
+                                   "like a total nut, and you miss a lot. Silence is bad news",
+                                   "more mages 'cuz it means you can't use magic for a bit.",
+                                   "Always keep a stash of items to cure these sicknesses, or ",
+                                   "simply like, use the spell you get a level 5."], active=True)
+
+strathius = NPC("Strathius", [strathius_phrase_1])
+
 # -- Name: Sugulat -- Town: Ambercreek
 sugulat_phrase_1 = Conversation(['Greetings! My name is Sugulat, Emperor of D\u00fC Haven',
                                  "and legendary digger of holes. Y'know, you look like",
@@ -948,6 +966,8 @@ matti_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep cal
                       "Matti", [1250, 1250],
                       ["Thanks, man! This latest version is supposed to be",
                        "peasant-proof, so let's hope that works!"], active=True)
+
+matti = NPC('Matti', [matti_phrase_1, matti_quest_1])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
