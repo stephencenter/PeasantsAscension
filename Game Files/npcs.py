@@ -908,13 +908,13 @@ strathius_phrase_1 = Conversation(["Greetings, man! I'm like, Strathius, and I'm
                                    "Sleepiness causes you to be totally immobilized for a few",
                                    "turns. Paralyzation makes you totally slow for a while.",
                                    "Weakness makes you like a total softy, and you don't deal",
-                                   "much damage man. Poison is mega-harsh, man. It makes you",
+                                   "much damage man. Poison is mega-harsh, dude. It makes you",
                                    "take a little bit of damage each, like, turn. Not cool.",
                                    "Blindness is also totally whack - it makes you aim",
                                    "like a total nut, and you miss a lot. Silence is bad news",
-                                   "more mages 'cuz it means you can't use magic for a bit.",
+                                   "for mages 'cuz it means you can't use magic for a bit.",
                                    "Always keep a stash of items to cure these sicknesses, or ",
-                                   "simply like, use the spell you get a level 5."], active=True)
+                                   "simply like, use the spell you get at level 5."], active=True)
 
 strathius = NPC("Strathius", [strathius_phrase_1])
 
@@ -943,9 +943,9 @@ serena_phrase_2 = Conversation(['You are a good man, trying to help our daughter
 serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, ser_pol_phrase_3])
 
 # -- Name: Matti -- Town: Lantonum
-matti_phrase_1 = Conversation(["*You try to talk to the woman in the bar, but she is too",
-                              'busy listening to music on her "iSound" to notice you.',
-                              'Suddenly, a peasant walks up behind her, screams "Witch!!",',
+matti_phrase_1 = Conversation(["*You try to talk to the man in the bar, but he is too",
+                              'busy listening to music on his "iSound" to notice you.',
+                              'Suddenly, a peasant walks up behind him, screams "Witch!!",',
                               'grabs the iSound, and smashes it to bits on the floor. He',
                               'then proceeds to set it on fire and bury the ashes in the dirt',
                               'behind the bar.*'], active=True)
@@ -962,12 +962,13 @@ matti_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep cal
                        "from papaya phones. Can you do that for me?"],
                       'iSounds Good',
                       ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
-                       "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E."],
-                      "Matti", [1250, 1250],
+                       "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E. Return to Matthew",
+                       "at Lantonum when you are finished."],
+                      "Matthew", [1250, 1250],
                       ["Thanks, man! This latest version is supposed to be",
                        "peasant-proof, so let's hope that works!"], active=True)
 
-matti = NPC('Matti', [matti_phrase_1, matti_quest_1])
+matthew = NPC('Matthew', [matthew_phrase_1, matthew_quest_1])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
@@ -984,7 +985,7 @@ all_dialogue = [
     stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1,
     elisha_phrase_1, lazaro_phrase_1, caesar_phrase_1, polmor_phrase_1,
     serena_phrase_1, serena_phrase_2, ser_pol_phrase_3, polmor_quest_1,
-    polmor_phrase_2
+    polmor_phrase_2, matthew_phrase_1, matthew_quest_1, strathius_phrase_1
 ]
 
 
