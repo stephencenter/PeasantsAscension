@@ -647,13 +647,18 @@ Revolution. While this town may seem interesting and historic, there is nothing
 of value here.""",
              [], -25, 29, inn=False, gen_store=False)
 
-town10 = Town('Principalia', """Principalia: Principalia is the hometown of
-King Pythonius II. He still lives in the same small, stone-and-wood house
-that his father lived in before the war started, despite there being a
-castle made for him in the nation's capital, Overshire. A few things about
-the home have changed since Pythonius became king, however: There are now
-a half-dozen highly-trained guards outside his house, as well as six
-archer-towers arranged in a hexagonal shape around the building.""",
+town10 = Town('Principalia', """Principalia: Principalia is the home of
+King Pythonius II. The main attraction here is the Pytheror Building, a
+medium-large cottage that the original King Pythonius I had lived in
+centuries ago. Every Monarch to date has decided to instead live in
+the Overshire Castle, with the exception of the current monarch,
+Pythonius. Pythonius II has changed several things since his ancestor
+lived here, however. The cottage now has access to running water,
+and the cottage is surrounded by a ring of 12 archer towers, each with
+2 crossbowmen and one archer at the top. Each tower is about
+100 yards from the cottage. In addition, there are numerous guards
+standing watch all around the building. One guard happens to catch
+your attention - probably because she just screamed "HALT!" at you.""",
               [npcs.sakura], -44, 20, gen_store=False, inn=False)
 
 town11 = Town('New Ekanmar', """New Ekanmar: The home of the Flyscorian Embassy in
@@ -696,7 +701,13 @@ on the steps of the general store.""",
 
 town15 = Town("Hatchnuk", "FILLER TEXT", [], 63, 17, gs_level=4, inn_cost=10)
 
-town16 = Town("Cesura", "FILLER TEXT", [], 58, 123, gs_level=5, inn_cost=25)
+town16 = Town("Cesura", """Cesura: A town of great historical significance.
+This town was named after King Cesura I, the war general during the Pythonian Civil War
+who helped to reunite the nation's six regions. Cesura was built on top of the site
+of the Battle of Parchak, the definitive battle in the Civil War that Cesura used
+to help the Central Forest win. There is a large monument to the King in the middle of
+town, with the words "Here's to prosperity" written on a plaque at its feet.""",
+              [], 58, 123, gs_level=5, inn_cost=25)
 
 town17 = Town("Sanguion", "FILLER TEXT", [], 96, 67, gs_level=5, inn_cost=18,
               pet_shop=True, ps_level=2)

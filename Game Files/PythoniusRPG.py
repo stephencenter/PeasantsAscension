@@ -895,7 +895,7 @@ def title_screen():
     print(title_logo)
 
     while True:
-        choice = input('[P]lay Game | [C]redits | [S]tory | [E]xit  |  Input Letter: ')
+        choice = input('[P]lay Game | [C]redits | [S]tory | [L]ore | [E]xit  |  Input Letter: ')
 
         choice = choice.lower()
 
@@ -964,8 +964,38 @@ def title_screen():
                 print('The "pythonius_plot.txt" file could not be found.')
 
             except OSError:
-                logging.exception('Error loading Pythonius Plot.txt:')
-                print('There was an problem opening "Pythonius Plot.txt".')
+                logging.exception('Error loading pythonius_plot.txt:')
+                print('There was an problem opening "pythonius_plot.txt".')
+
+            print('-'*25)
+
+        elif choice.startswith('l'):
+            print('-'*25)
+            input('Press Enter/Return after each line to advance the text ')
+            print('-'*25)
+
+            try:
+                pygame.mixer.music.load('Music/CopperNickel.ogg')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(music_vol)
+
+                with open('../pythonius_lore.txt', encoding='utf-8') as f:
+                    for f.readline in f:
+                        if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
+                            input(''.join(f.readline.rstrip("\n").split(";")))
+                        else:
+                            print(''.join(f.readline.rstrip("\n").split(";")))
+
+                pygame.mixer.music.load('Music/Prologue.ogg')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(music_vol)
+
+            except FileNotFoundError:
+                print('The "pythonius_lore.txt" file could not be found.')
+
+            except OSError:
+                logging.exception('Error loading pythonius_lore.txt:')
+                print('There was an problem opening "pythonius_lore.txt".')
 
             print('-'*25)
 

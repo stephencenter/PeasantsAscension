@@ -49,17 +49,17 @@ MUSIC -- PART 2
   
             Edited to loop properly. Also, I upped the tempo up by 5%
             Plot music
+  
+  A kind man on YouTube/Twitter named "Majestic Mastermind" allowed me to use his 
+  song called "Island of Peace" as the background music for the Aethus region!
+  
+	Link to "Island of Peace": https://www.youtube.com/watch?v=tD1hbsNt2Mo
+	Link to his Twitter page: https://twitter.com/majestic8390
+	Link to his SoundCloud page: https://soundcloud.com/majestic8390
 ------------------------------------------------------------------------------
 SOUND FX:
   Sound FX were made by Flygon_Jones and me using an open-source
   tool known as Bfxr: http://www.bfxr.net/
-------------------------------------------------------------------------------
-INSPIRATION:
-  My game draws a lot of ideas and inspiration from classic RPGs such as Final
-  Fantasy, Diablo, and D&D. The storyline was made up for an RP that Starkiller,
-  Flygon_Jones and I do, and many of the characters and locations from said RP
-  can be found in the game (such as F. Jones, Caesar, and Stravi, as well as Sakura,
-  Serena and Polmor).
 ------------------------------------------------------------------------------
 OTHER STUFF:
   My three righthand men: Starkiller106024, Flygon_Jones, and WaVe Vex. They

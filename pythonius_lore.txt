@@ -1,159 +1,159 @@
-    PythoniusRPG takes place on Earth in an alternate reality in the year 1407 A.D.
+  PythoniusRPG takes place on Earth in an alternate reality in the year 1407 A.D.
 In this reality, an eighth continent exists known as Arcadia, located in the southern
 Pacific Ocean. This continent was a safe-haven for non-human intelligent life, as it
 was the only place in the world that contained nations that didn't persecute them.
 
 Races found in Pythonia:
-	Elves (68%)
-	Dwarves (18%)
-	Gnomes (6%)
-	Flyscors (5%)
-	Avali (2%)
-	Humans (1%)
+  Elves (68%)
+  Dwarves (18%)
+  Gnomes (6%)
+  Flyscors (5%)
+  Avali (2%)
+  Humans (1%)
 
 Regions of Pythonia:
-	The regions of Pythonia are named after the geography of the areas. While the
-	Monarchy of Pythonia has given each region an official title, the inhabitants of these
-	areas generally just refer to them using the names of their biomes.
+  The regions of Pythonia are named after the geography of the areas. While the
+  Monarchy of Pythonia has given each region an official title, the inhabitants of these
+  areas generally just refer to them using the names of their biomes.
 
-	Colloquial terms for the regions:
-		-The Overshire Graveyard --> The Graveyard
-		-The Pythonian Coastline --> The Shore
-		-The Terrius Mt. Range ----> The Mountains
-		-The Arcadian Desert ------> The Desert
-		-The Central Forest -------> The Forest
-		-The Bogthorn Marsh -------> The Swamp
-		-The Glacian Plains -------> The Tundra
+  Colloquial terms for the regions:
+	-The Overshire Graveyard --> The Graveyard
+	-The Pythonian Coastline --> The Shore
+	-The Terrius Mt. Range ----> The Mountains
+	-The Arcadian Desert ------> The Desert
+	-The Central Forest -------> The Forest
+	-The Bogthorn Marsh -------> The Swamp
+	-The Glacian Plains -------> The Tundra
 
 Pythonia has had many Monarchs over the years.
 
 List of Monarchs w/ their period of reign:
-	-King Pythonius I --> 451 A.D. to 516 A.D.
-	-King Tapret I -----> 516 A.D. to 573 A.D.
-	-Queen Victoria I --> 573 A.D. to 654 A.D.
-	-King Lazarus I ----> 654 A.D. to 718 A.D.
-	
-	From 718 A.D. to 892 A.D., Pythonia had no monarch. The various lords and ladies of
-	each region handled things themselves, but eventually tension between the regions
-	began rising, culminating in the Pythonian Civil War from 893 to 901 A.D.
-	Cesura, a brave paladin from the Central Forest, took command of the CF Army and 
-	used his excellent leadership skills to reunite the Kingdom. After the war, he
-	declared his hometown of Overshire as the capital of the Kingdom, and was elected
-	as the new king. He was the first king to have not been a direct descendant of 
-	Pythonius. His rule was marked by a transition to a more democratic government,
-	and all monarchs were from here on elected by the people instead of being chosen
-	by birthright.
-	
-	-King Cesura I -----> 901 A.D. to 956 A.D.
-	-Queen Thanatrum I -> 956 A.D. to 958 A.D.
-	
-	Queen Thanatrum had the shortest reign of any Pythonian monarch. Merely a single year
-	into her rule, she became sick with a strange disease. This disease was later identified
-	and named "Hatchnuk's Blight" after the town that she was visiting when she contracted
-	the illness. She, along with 35% of the Arcadian population, died from this horrible
-	disease. Nowadays, this disease has been mostly eradicated except for one particularly 
-	deadly and incurable strain which can only be found in the town of Hatchnuk.
-	
-	-King Pyravia I ----> 958 A.D. to 983 A.D.
-	-King Tapret II ----> 983 A.D. to 1052 A.D.
-	
-	King Tapret II's rule was marked with incredible advancements in mathematics and 
-	technology. He personally invested thousands of PP into helping introduce things
-	that his predecessors had been neglecting, including running water, aqueducts, 
-	sewer systems, and using brick/cobblestone roads instead of dirt/gravel. These are
-	things that had been in use for several decades in most of the rest of Arcadia, but had
-	failed to make it into Pythonia until King Tapret II funded it. As a result of his
-	contributions, he is generally viewed as one of the best monarchs the nation had
-	ever had, along with King Pythonius I and King Cesura I.
-	
-	-Queen Aristol I ---> 1052 A.D. to 1143 A.D.
-	
-	Queen Aristol I has the honor of being one of the longest reigning monarchs of Pythonia.
-	Prior to her rule, the small island of Thex was a colony of Pythonia. Queen Aristol I
-	allowed her subjects in the colony to vote on whether or not they wanted to become
-	an independent nation. Thex had already been somewhat autonomous, and was generally not
-	required to pay taxes to the Monarchy. The Thexians voted almost unanimously for the
-	formation of a new nation, and Queen Aristol I transferred rule of the island to 
-	King Thexus VII, a direct ancestor of the man that the island was named after.
-	
-	-King Pyravia II ---> 1143 A.D. to 1213 A.D.
-	-King Harthis I ----> 1213 A.D. to 1290 A.D.
-	-Queen Victoria II -> 1290 A.D. to 1351 A.D.
-	-Queen Aristol II --> 1351 A.D. to 1403 A.D.
-	-King Pythonius II -> 1403 A.D. to present (current as of 1407 A.D., the time of writing this)
-	
-	King Pythonius II is the current monarch of Pythonia. He is the first monarch to share his
-	name with the famous war general, and is in fact a direct descendant of the original Pythonius.
+  -King Pythonius I --> 451 A.D. to 516 A.D.
+  -King Tapret I -----> 516 A.D. to 573 A.D.
+  -Queen Victoria I --> 573 A.D. to 654 A.D.
+  -King Lazarus I ----> 654 A.D. to 718 A.D.
+
+  From 718 A.D. to 892 A.D., Pythonia had no monarch. The various lords and ladies of
+  each region handled things themselves, but eventually tension between the regions
+  began rising, culminating in the Pythonian Civil War from 893 to 901 A.D.
+  Cesura, a brave paladin from the Central Forest, took command of the CF Army and 
+  used his excellent leadership skills to reunite the Kingdom. After the war, he
+  declared his hometown of Overshire as the capital of the Kingdom, and was elected
+  as the new king. He was the first king to have not been a direct descendant of 
+  Pythonius. His rule was marked by a transition to a more democratic government,
+  and all monarchs were from here on elected by the people instead of being chosen
+  by birthright.
+
+  -King Cesura I -----> 901 A.D. to 956 A.D.
+  -Queen Thanatrum I -> 956 A.D. to 958 A.D.
+
+  Queen Thanatrum had the shortest reign of any Pythonian monarch. Merely a single year
+  into her rule, she became sick with a strange disease. This disease was later identified
+  and named "Hatchnuk's Blight" after the town that she was visiting when she contracted
+  the illness. She, along with 35% of the Arcadian population, died from this horrible
+  disease. Nowadays, this disease has been mostly eradicated except for one particularly 
+  deadly and incurable strain which can only be found in the town of Hatchnuk.
+
+  -King Pyravia I ----> 958 A.D. to 983 A.D.
+  -King Tapret II ----> 983 A.D. to 1052 A.D.
+
+  King Tapret II's rule was marked with incredible advancements in mathematics and 
+  technology. He personally invested thousands of PP into helping introduce things
+  that his predecessors had been neglecting, including running water, aqueducts, 
+  sewer systems, and using brick/cobblestone roads instead of dirt/gravel. These are
+  things that had been in use for several decades in most of the rest of Arcadia, but had
+  failed to make it into Pythonia until King Tapret II funded it. As a result of his
+  contributions, he is generally viewed as one of the best monarchs the nation had
+  ever had, along with King Pythonius I and King Cesura I.
+
+  -Queen Aristol I ---> 1052 A.D. to 1143 A.D.
+
+  Queen Aristol I has the honor of being one of the longest reigning monarchs of Pythonia.
+  Prior to her rule, the small island of Thex was a colony of Pythonia. Queen Aristol I
+  allowed her subjects in the colony to vote on whether or not they wanted to become
+  an independent nation. Thex had already been somewhat autonomous, and was generally not
+  required to pay taxes to the Monarchy. The Thexians voted almost unanimously for the
+  formation of a new nation, and Queen Aristol I transferred rule of the island to 
+  King Thexus VII, a direct ancestor of the man that the island was named after.
+
+  -King Pyravia II ---> 1143 A.D. to 1213 A.D.
+  -King Harthis I ----> 1213 A.D. to 1290 A.D.
+  -Queen Victoria II -> 1290 A.D. to 1351 A.D.
+  -Queen Aristol II --> 1351 A.D. to 1403 A.D.
+  -King Pythonius II -> 1403 A.D. to present (current as of 1407 A.D., the time of writing this)
+
+  King Pythonius II is the current monarch of Pythonia. He is the first monarch to share his
+  name with the famous war general, and is in fact a direct descendant of the original Pythonius.
 	
 Pythonian Langauge:	
-	The official language of Pythonia is "Pythic" (pronounced pih-thick), a dialect of the Dai'ic 
-	language used in Flyscoria. The two languages are nearly indistinguishable when spoken apart from
-	minor pronunciation differences, but the two utilize entire different alphabets. The Pythic
-	language uses the Elysian alphabet used in much of southern Arcadia, while Dai'ic uses the Latin
-	alphabet that is standard in the northern countries of Arcadia.
+  The official language of Pythonia is "Pythic" (pronounced pih-thick), a dialect of the Dai'ic 
+  language used in Flyscoria. The two languages are nearly indistinguishable when spoken apart from
+  minor pronunciation differences, but the two utilize entire different alphabets. The Pythic
+  language uses the Elysian alphabet used in much of southern Arcadia, while Dai'ic uses the Latin
+  alphabet that is standard in the northern countries of Arcadia.
+
+  The language breakup of the nation is as follows:
+	(Natives refer to citizens born in the country who are above the age of 12)
 	
-	The language breakup of the nation is as follows:
-		(Natives refer to citizens born in the country who are above the age of 12)
-		
-		78% of natives speak Pythic as their first language*
-		12% of natives speak Dai'ic as their first language*
-		6% of natives speak English as their first language
-		3% of natives speak French as their first language
-		1% of natives speak some other language
-		
-		*People who are able to understand spoken Pythic can almost always understand spoken Dai'ic, and
-		vice versa. These percentages shown are based on which alphabet people claim to have been 
-		taught first (or at all).
+	78% of natives speak Pythic as their first language
+	12% of natives speak Dai'ic as their first language
+	6% of natives speak English as their first language
+	3% of natives speak French as their first language
+	1% of natives speak some other language
+	
+	People who are able to understand spoken Pythic can almost always understand spoken Dai'ic, and
+	vice versa. These percentages shown are based on which alphabet people claim to have been 
+	taught first (or at all).
 		
 Currency System:
-	The official curreny of Pythonia is called the "Pythonian Plated". 
+  The official curreny of Pythonia is called the "Pythonian Plated". 
+
+  There are four different valued plated coins:
+	Copper Plated (abbreviated as "CP")
+	Silver Plated (abbreviated as "SP"), which is worth 12 CP
+	Gold Plated (abbreviated as "GP"), which is worth 12 SP or 144 CP
+	Platinum Plated (abbreviated as "PtP"), which is worth 12 GP or 144 SP or 1728 CP
+	Durasteel Plated (abbreviated as "DsP"), which is worth 12 PtP or 144 GP or 1728 SP or 20736 CP
 	
-	There are four different valued plated coins:
-		Copper Plated (abbreviated as "CP")
-		Silver Plated (abbreviated as "SP"), which is worth 12 CP
-		Gold Plated (abbreviated as "GP"), which is worth 12 SP or 144 CP
-		Platinum Plated (abbreviated as "PtP"), which is worth 12 GP or 144 SP or 1728 CP
-		Durasteel Plated (abbreviated as "DsP"), which is worth 12 PtP or 144 GP or 1728 SP or 20736 CP
-		
-		In terms of modern day USD, a modern day CP is valued at around $0.0075, an SP is $0.09,
-		a GP is $1.08, a PtP is $12.96, and a DsP is $155.52.
-		
-	When used on its own, Plated generally refers to the Gold Plated, as it is the one used most commonly
-	in everyday transactions. The PtP and SP are also fairly common, but most merchants price their
-	goods using exclusively GP.
+	In terms of modern day USD, a modern day CP is valued at around $0.0075, an SP is $0.09,
+	a GP is $1.08, a PtP is $12.96, and a DsP is $155.52.
 	
-	Notice that the currency is called "plated", and not "pieces". All Pythonian coins are actually just
-	brass coins that have been plated with their respective metals. This serves three main purposes:
-		1. The cost to produce them is much lower, as acquiring brass and a small amount of gold is much
-		   less expensive than acquiring a large amount of gold.
-		2. The only coin that can be melted down and sold for more than the coin is valued at is the copper
-		   coin. All the other coins were assigned values that are much higher than their actual worth.
-		   This prevents people from melting down the currency to attempt to make a profit.
-		3. Brass is slightly lighter than silver, and is much lighter than gold, platinum and durasteel.
-		   Using metal-coated brass makes carrying money take far less effort.
+  When used on its own, Plated generally refers to the Gold Plated, as it is the one used most commonly
+  in everyday transactions. The PtP and SP are also fairly common, but most merchants price their
+  goods using exclusively GP.
+	
+  Notice that the currency is called "plated", and not "pieces". All Pythonian coins are actually just
+  brass coins that have been plated with their respective metals. This serves three main purposes:
+	1. The cost to produce them is much lower, as acquiring brass and a small amount of gold is much
+	   less expensive than acquiring a large amount of gold.
+	2. The only coin that can be melted down and sold for more than the coin is valued at is the copper
+	   coin. All the other coins were assigned values that are much higher than their actual worth.
+	   This prevents people from melting down the currency to attempt to make a profit.
+	3. Brass is slightly lighter than silver, and is much lighter than gold, platinum and durasteel.
+	   Using metal-coated brass makes carrying money take far less effort.
 
 Religion in Pythonia:
-	While Pythonia has no official religion, a majority (around 76%) of citizens are members
-	of a religion called "Divinity". People in this religion believe in two greater beings,
-	one called His Divinity, who represents health, honesty, and charity, and another called
-	His Wickedness, who represents pain, suffering, and evil. Members of the religion are referred
-	to as Divinites, and devote their time to understanding the relationship between the two gods.
-	Unlike most other religions, His Wickedness is not necessarily viewed as negative, and Divinites
-	urge people to find a balance between the oppressive good of His Divinity and the destructive
-	evil of His Wickedness. Divinites are very accepting of magic, with a majority of them capable
-	of using it themselves. They specifically specialize in the magic of Life and Death, and use
-	them to keep balance in the world.
+  While Pythonia has no official religion, a majority (around 76%) of citizens are members
+  of a religion called "Divinity". People in this religion believe in two greater beings,
+  one called His Divinity, who represents health, honesty, and charity, and another called
+  His Wickedness, who represents pain, suffering, and evil. Members of the religion are referred
+  to as Divinites, and devote their time to understanding the relationship between the two gods.
+  Unlike most other religions, His Wickedness is not necessarily viewed as negative, and Divinites
+  urge people to find a balance between the oppressive good of His Divinity and the destructive
+  evil of His Wickedness. Divinites are very accepting of magic, with a majority of them capable
+  of using it themselves. They specifically specialize in the magic of Life and Death, and use
+  them to keep balance in the world.
 	
 Facts about Pythonia
-	Fact #1: Name origin
-		The Kingdom was founded in 451 A.D. Prior to this, when Pythonia was under Flyscorian rule as a
-		colony, its name was "Arbranok", the Dai'ic/Pythic word for "many regions". This was in reference
-		to the 32 regions that the colony had at the time, many more than any other nation had (albeit, 
-		these regions were quite small, many times smaller than the ones that exist today). When the nation
-		declared independence, Arbranok renamed itself to "Pythonia", which comes from the Pythic/Dai'ic 
-		word "Pythenor", meaning "prosperity". King Pythonius's name also comes from this word.
-	
-	Fact #2: Region numbers
-		Pythonia originally had 32 different regions. These regions were named after the lord/lady of 
-		the Flyscorian Empire that had rule of the land. In 462 A.D., these 32 were consolidated into 
-		only 6 different regions based on the geographical similarities certain ones had.
+  Fact #1: Name origin
+	The Kingdom was founded in 451 A.D. Prior to this, when Pythonia was under Flyscorian rule as a
+	colony, its name was "Arbranok", the Dai'ic/Pythic word for "many regions". This was in reference
+	to the 32 regions that the colony had at the time, many more than any other nation had (albeit, 
+	these regions were quite small, many times smaller than the ones that exist today). When the nation
+	declared independence, Arbranok renamed itself to "Pythonia", which comes from the Pythic/Dai'ic 
+	word "Pythenor", meaning "prosperity". King Pythonius's name also comes from this word.
+
+  Fact #2: Region numbers
+	Pythonia originally had 32 different regions. These regions were named after the lord/lady of 
+	the Flyscorian Empire that had rule of the land. In 462 A.D., these 32 were consolidated into 
+	only 6 different regions based on the geographical similarities certain ones had.

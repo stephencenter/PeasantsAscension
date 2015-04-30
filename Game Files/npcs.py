@@ -891,11 +891,12 @@ caesar_phrase_1 = Conversation(["*Caesar, Fly's pet strawberry dragon, runs away
 caesar = NPC('Caesar', [caesar_phrase_1])
 
 # -- Name: Sakura -- Town: Principalia
-sakura_phrase_1 = Conversation(['Hello, sir! What can Sakura do for you? Ah, you want to see the',
-                                'King? The King is currently in Overshire. Sakura cannot imagine',
+sakura_phrase_1 = Conversation(['HALT! State your business! Ah, you want to see the King, do you?',
+                                'Well, the King is currently in Overshire. Sakura cannot imagine',
                                 'that he is accepting visitors right now, though. Unless you have',
                                 'something really important to tell him, such as how to save his',
-                                "daughter, Sakura doesn't see you talking to him in your future."],
+                                "daughter, Sakura doesn't see you talking to him in your future.",
+                                "Now get out of here, Sakura is busy!"],
                                active=True)
 
 sakura = NPC('Sakura', [sakura_phrase_1])
