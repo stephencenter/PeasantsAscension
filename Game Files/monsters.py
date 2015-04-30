@@ -434,7 +434,7 @@ class Monster:
             elif isinstance(eval(stat), float):  # Enemy stats must be integers
                 exec("{0} = math.ceil({0})".format(stat))
 
-        if position['reg'] == 'Glacia':
+        if position['reg'] == 'Glacian Plains':
             self.element = 'ice'
         elif position['reg'] == 'Arcadian Desert':
             self.element = 'fire'
@@ -444,7 +444,7 @@ class Monster:
             self.element = 'water'
         elif position['reg'] == 'Central Forest':
             self.element = 'electric'
-        elif position['reg'] == 'Bogthorn':
+        elif position['reg'] == 'Bogthorn Marsh':
             self.element = 'grass'
         elif position['reg'] == 'Overshire Graveyard':
             self.element = 'death'

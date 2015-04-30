@@ -1,7 +1,104 @@
     PythoniusRPG takes place on Earth in an alternate reality. In this reality, an
 eight continent exists known as Arcadia, located in the southern Pacific Ocean.
 This continent was a safe-haven for non-human intelligent life, as it was the only
-place in the world that contained nations that didn't persecute them. Among these
-intelligent life-forms are Flyscors, a bipedal reptilian species capable of flight
-which inhabit the nations of Flyscoria; elves and dwarves, which mainly 
-occupy Pythonia, Elysium, and Chin'tor; and 
+place in the world that contained nations that didn't persecute them. 
+
+Races found in Arcadia:
+	-Flyscors: Bipedal reptilians capable of flight that inhabit Flyscoria
+	-Elves and Dwarves: Humanoids that mainly occupy Pythonia, Elysium, and Chin'tor
+	-Avalis: Humanoid creatures that are one third reptile, bird, and mammal, and can
+found in small numbers all across Arcadia
+	-Nagas: Half-humanoid half-serpent creatures. While many of these creatures are
+seemingly unintelligent and hostile, a great number of them are quite the opposite.
+They are native to Tao and Crystal Coast.
+	-Gnomes: Humanoids of smaller stature that are often skilled in magic. They
+make up the vast majority of the population of Montopeme.
+	-Orcs: Unintelligent brutes with large physical prowess. They are humanoids, and can
+be found in large numbers in Hillsbrad and Moroland.
+	-Humans: You already know what these are, hopefully. They are generally only found
+in the nations of Maranon and Durcuba.
+	-Halflings: Very short humanoids with impressive agility. They are native to the
+island of Thex.
+
+The regions of Pythonia are named after the geography of the areas. While the
+Monarchy of Pythonia has given each region an official title, the inhabitants of these
+areas generally just refer to them using the names of their biomes.
+
+Colloquial terms for the regions:
+	-The Overshire Graveyard --> The Graveyard
+	-The Pythonian Coastline --> The Shore
+	-The Terrius Mt. Range ----> The Mountains
+	-The Arcadian Desert ------> The Desert
+	-The Central Forest -------> The Forest
+	-The Bogthorn Marsh -------> The Swamp
+	-The Glacian Plains -------> The Tundra
+
+
+Pythonia has had many Monarchs over the years.
+
+List of Monarchs w/ their period of reign:
+	-King Pythonius I --> 451 A.D. to 516 A.D.
+	-King Tapret I -----> 516 A.D. to 573 A.D.
+	-Queen Victoria I --> 573 A.D. to 654 A.D.
+	-King Lazarus I ----> 654 A.D. to 718 A.D.
+	
+	From 718 A.D. to 892 A.D., Pythonia had no monarch. The various lords and ladies of
+	each region handled things themselves, but eventually tension between the regions
+	began rising, culminating in the Pythonian Civil War from 893 to 901 A.D.
+	Cesura, a brave paladin from the Central Forest, took command of the CF Army and 
+	used his excellent leadership skills to reunite the Kingdom. After the war, he
+	declared his hometown of Overshire as the capital of the Kingdom, and was elected
+	as the new king. He was the first king to have not been a direct descendant of 
+	Pythonius. His rule was marked by a transition to a more democratic government,
+	and all monarchs were from here on elected by the people instead of being chosen
+	by birthright.
+	
+	-King Cesura I -----> 901 A.D. to 956 A.D.
+	-Queen Thanatrum I -> 956 A.D. to 958 A.D.
+	
+	Queen Thanatrum had the shortest reign of any Pythonian monarch. Merely a single year
+	into her rule, she became sick with a strange disease. This disease was later identified
+	and named "Hatchnuk's Blight" after the town that she was visiting when she contracted
+	the illness. She, along with 35% of the Arcadian population, died from this horrible
+	disease. Nowadays, this disease has been mostly eradicated except for one particularly 
+	deadly and incurable strain which can only be found in the town of Hatchnuk.
+	
+	-King Pyravia I ----> 958 A.D. to 983 A.D.
+	-King Tapret II ----> 983 A.D. to 1052 A.D.
+	
+	King Tapret II's rule was marked with incredible advancements in mathematics and 
+	technology. He personally invested thousands of PP into helping introduce things
+	that his predecessors had been neglecting, including running water, aqueducts, 
+	sewer systems, and using brick/cobblestone roads instead of dirt/gravel. These are
+	things that had been in use for several decades in most of the rest of Arcadia, but had
+	failed to make it into Pythonia until King Tapret II funded it. As a result of his
+	contributions, he is generally viewed as one of the best monarchs the nation had
+	ever had, along with King Pythonius I and King Cesura I.
+	
+	-Queen Aristol I ---> 1052 A.D. to 1143 A.D.
+	
+	Queen Aristol I has the honor of being one of the longest reigning monarchs of Pythonia.
+	Prior to her rule, the small island of Thex was a colony of Pythonia. Queen Aristol I
+	allowed her subjects in the colony to vote on whether or not they wanted to become
+	an independent nation. Thex had already been somewhat autonomous, and was generally not
+	required to pay taxes to the Monarchy. The Thexians voted almost unanimously for the
+	formation of a new nation, and Queen Aristol I transferred rule of the island to 
+	King Thexus VII, a direct ancestor of the man that the island was named after.
+	
+	-King Pyravia II ---> 1143 A.D. to 1213 A.D.
+	-King Harthis I ----> 1213 A.D. to 1290 A.D.
+	-Queen Victoria II -> 1290 A.D. to 1351 A.D.
+	-Queen Aristol II --> 1351 A.D. to 1403 A.D.
+	-King Pythonius II -> 1403 A.D. to present (current as of 1407 A.D., the time of writing this)
+	
+	King Pythonius II is the current monarch of Pythonia. He is the first monarch to share his
+	name with the famous war general, and is in fact a direct descendant of the original Pythonius.
+	
+Pythonian Langauge
+	
+	The official language of Pythonia is "Pythic" (pronounced pih-thick), a dialect of the Dai'ic 
+	language used in Flyscoria. The two languages are nearly indistinguishable when spoken apart from
+	minor pronunciation differences, but the two utilize entire different alphabets. The Pythic
+	language uses the Elysian alphabet used in much of southern Arcadia, while Dai'ic uses the Latin
+	alphabet that is standard in the northern countries of Arcadia.
+	
