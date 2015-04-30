@@ -1,0 +1,7 @@
+    PythoniusRPG takes place on Earth in an alternate reality. In this reality, an
+eight continent exists known as Arcadia, located in the southern Pacific Ocean.
+This continent was a safe-haven for non-human intelligent life, as it was the only
+place in the world that contained nations that didn't persecute them. Among these
+intelligent life-forms are Flyscors, a bipedal reptilian species capable of flight
+which inhabit the nations of Flyscoria; elves and dwarves, which mainly 
+occupy Pythonia, Elysium, and Chin'tor; and 

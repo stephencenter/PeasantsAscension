@@ -2,28 +2,30 @@ PYTHONIUS PLOT:
     
     Pythonius takes place in the Kingdom of Pythonia, a nation located on
 the continent of Arcadia. Prior to the events of this game, Pythonia was a
-colony of the Flysconian Empire, which at the time had rule over much of the
+colony of the Flyscorian Empire, which at the time had rule over much of the
 continent, including Hillsbrad, Moroland and Durcuba. The Pythonians, led
 by war-general Pythonius, helped spark a revolution against Flysconia. After
 a harsh 3-year-long war, the Pythonians eventually prevailed and had its
 independence officially recognized by all of the other nations of Arcadia.
-The Flysconian Empire, plagued by economic turmoil caused by the loss of four
-of its most prosperous colonies, eventually fell, with the Kingdom of Flysconia
-being declared in its place. This Kingdom was severely weakened, however, and
-was eventually overran by General Sugulat. The Empire of Dü Haven was then
-instated.
+The Flyscorian Empire fell, but was reinstated as the Kingdom of Flyscoria.
+Fly Jones, the King of Flyscoria, had become good friends with Pythonius and
+the two formed a strong alliance, securing their places as the two superpowers 
+of the Arcadian continent.
 
-    After these series of wars, Pythonius was promptly instated as the new king of 
-Pythonia. For the span of several decades, the Kingdom of Pythonia was a prosperous 
-and powerful nation. Forty years after the fall of the Flysconian Empire, Pythonius
-died. His son, Pythonius II took his place as the new king. Then, disaster struck.
-Unbeknownst to him, a neighboring island-nation named "Thex" had been plotting a
-major attack on his Kingdom. To do this, Thex organized a large group of spies
+    This powerful alliance continued for several centuries. The immortality
+that Fly Jones possessed allowed him to continue to rule to this day, but Pythonius
+was not so lucky. Forty years after the fall of the Flyscorian Empire, Pythonius
+died. A line of powerful, intelligent, and fair kings and queens took his place.
+In 1403 A.D., Queen Aristol died after 50 years as reigning monarch. Her son, 
+Pythonius II took her place as the new king, and was the first one to share 
+Pythonius's name. It was not long, however, until disaster stuck the kingdom. 
+Unbeknownst to the King, a neighboring island-nation named "Thex" had been plotting 
+a major attack on his Kingdom. To do this, Thex organized a large group of spies
 known as the "Thexus" and sent them to Pythonia to scout the land. Pythonia's army 
-quickly put a stop to this, but the spies still managed to do one thing that Pythonia
-would have a hard time recovering from: They took King Pythonius II's daughter 
-hostage. Pythonius was furious, and assembled a massive army to recover 
-his beloved daughter.
+quickly put a stop to this, but the invaders still managed to do one thing that 
+Pythonia would have a hard time recovering from: They took King Pythonius II's 
+daughter hostage. Pythonius was furious and immediately assembled a massive army 
+to recover his beloved daughter and defeat the Thexian enemy.
 
     Despite having plenty of man-power, the Pythonians were stopped dead in
 their tracks. A magical shield had been placed over the island of Thex,
@@ -31,12 +33,12 @@ destroying any chance of a possible incursion. Local mages and historians
 attempted to identify the source of the magic and came to the conclusion
 that the shield was coming from a large vein of Magestite that had recently
 been uncovered along the coast of Thex. Magestite possessed magical properties
-that the Thex had used to their advantage. All seemed lost until the Headmaster
+that the Thexians had used to their advantage. All seemed lost until the Headmaster
 of the Sorcerers' Guild mentioned a possible solution: Legend has it that
 a powerful hero/heroine from the town of Nearton would come to defeat
-Pythonia's enemies. The hero/heroine would present him/herself to
-the King at a time when everything seemed hopeless, and would be holding a
-magical stone guarded by a Dragon in the mountains of Pythonia.
+Pythonia's enemies. That person would present themself to the King at a 
+time when everything seemed hopeless, and would be holding a magical stone guarded 
+by a terrifying monster in the Mountains of Pythonia.
 
     You are this hero. Find the stone and talk to the king.
-Save the King's daughter!
+Save Pythonius's daughter and defeat the Thexians!

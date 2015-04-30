@@ -314,20 +314,20 @@ class Monster:
                 battle.temp_stats['m_ispoisoned'] = False
 
     def monst_name(self):
-        monster_type = {'Shore': ['Shell Mimic', 'Giant Crab', 'Naiad',
-                                  'Sea Serpent', 'Squid'],
-                        'Swamp': ['Bog Slime', 'Moss Ogre', 'Sludge Rat',
-                                  'Walking Venus', 'Vine Lizard'],
-                        'Forest': ['Goblin', 'Beetle', 'Sprite',
-                                   'Imp', 'Bat'],
-                        'Desert': ['Mummy', 'Sand Golem', 'Minubis',
-                                   'Fire Ant', 'Naga'],
-                        'Tundra': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge',
+        monster_type = {'Pythonian Coastline': ['Shell Mimic', 'Giant Crab', 'Naiad',
+                                                'Sea Serpent', 'Squid'],
+                        'Bogthorn': ['Bog Slime', 'Moss Ogre', 'Sludge Rat',
+                                     'Walking Venus', 'Vine Lizard'],
+                        'Central Forest': ['Goblin', 'Beetle', 'Sprite',
+                                           'Imp', 'Bat'],
+                        'Arcadian Desert': ['Mummy', 'Sand Golem', 'Minubis',
+                                            'Fire Ant', 'Naga'],
+                        'Glacia': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge',
                                    'Arctic Wolf', 'Frost Bat'],
-                        'Mountain': ['Troll', 'Rock Giant', 'Oread',
-                                     'Tengu', 'Giant Worm'],
-                        'Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
-                                      'Skeleton', 'Ghoul'],
+                        'Terrius Mt. Range': ['Troll', 'Rock Giant', 'Oread',
+                                              'Tengu', 'Giant Worm'],
+                        'Overhire Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
+                                               'Skeleton', 'Ghoul'],
                         'Aethus': ['Harpy', 'Flying Serpent', 'Wraith',
                                    'Alicorn', 'Griffin']
                         }
@@ -434,19 +434,19 @@ class Monster:
             elif isinstance(eval(stat), float):  # Enemy stats must be integers
                 exec("{0} = math.ceil({0})".format(stat))
 
-        if position['reg'] == 'Tundra':
+        if position['reg'] == 'Glacia':
             self.element = 'ice'
-        elif position['reg'] == 'Desert':
+        elif position['reg'] == 'Arcadian Desert':
             self.element = 'fire'
-        elif position['reg'] == 'Mountain':
+        elif position['reg'] == 'Terrius Mt. Range':
             self.element = 'earth'
-        elif position['reg'] == 'Shore':
+        elif position['reg'] == 'Pythonian Coastline':
             self.element = 'water'
-        elif position['reg'] == 'Forest':
+        elif position['reg'] == 'Central Forest':
             self.element = 'electric'
-        elif position['reg'] == 'Swamp':
+        elif position['reg'] == 'Bogthorn':
             self.element = 'grass'
-        elif position['reg'] == 'Graveyard':
+        elif position['reg'] == 'Overshire Graveyard':
             self.element = 'death'
         elif position['reg'] == 'Aethus':
             self.element = 'wind'

@@ -656,15 +656,14 @@ a half-dozen highly-trained guards outside his house, as well as six
 archer-towers arranged in a hexagonal shape around the building.""",
               [npcs.sakura], -44, 20, gen_store=False, inn=False)
 
-town11 = Town('New Ekanmar', """New Ekanmar: After Sugulat and his army overran
-Flysconia  and declared the Empire of D\u00fC Haven, refugees from the
-area escaped from the nation. Seeing as how most of the surrounding
-states were allied against Flysconia, the refugees had no choice but
-to run through Hillsbrad to Pythonia. They then established New Ekanmar
-as their safe-haven. Pythonia has established a non-aggression pact with
-the refugees and gladly accept and protect them from danger. Seeing as
-how the citizens are from Flysconia, approximately 90% of the population
-are reptilian creatures.""",
+town11 = Town('New Ekanmar', """New Ekanmar: The home of the Flyscorian Embassy in
+Pythonia. Prior to the Pythonian Revolution, this town was the location of
+a large portion of Flyscoria's troops in Pythonia. The Pythonians drove much of
+them out, but a large number of them defected to the Pythonian side and stayed.
+After the war, the citizens gave up their weapons and became a peaceful town.
+The vast majority of the inhabitants of this town are, naturally, Flyscors.
+It seems that the Flyscorian Royal Family is visiting here - perhaps you can
+talk with them for a bit.""",
               [npcs.f_jones, npcs.stravi, npcs.caesar], 3, 39, gs_level=3)
 
 town12 = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
@@ -678,16 +677,16 @@ the town is calculated, animals are counted as people. More than
               [npcs.strathius], -30, -39, gs_level=3, pet_shop=True, ps_level=2)
 
 town13 = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
-located in the Mountains. The D\u00fC Haven-Pythonia embassy can be found
+located in the Terrius Mt. Range. The Chin'toric embassy can be found
 in the middle of this town surrounded by large stone walls and a few
-guard-towers. Sugulat, the Emperor of D\u00fC Haven, can often
-be found mining on the outskirts of town. A very troubled-looking old man is in
+guard-towers. Sugulat, the King of Chin'tor, can often be found mining
+on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
               [npcs.raidon, npcs.sugulat], -51, 7, gs_level=4, inn_cost=15)
 
 town14 = Town('Whistumn', """Whistumn: An ancient city situated on the border
-between the desert and the forest. The inhabitants of this town are known
-for their skepticism and reasoning. Many of them are scientists and are
+between the Arcadian Desert and the Central Forest. The inhabitants of this town
+are known for their skepticism and reasoning. Many of them are scientists and are
 skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
@@ -702,7 +701,7 @@ town16 = Town("Cesura", "FILLER TEXT", [], 58, 123, gs_level=5, inn_cost=25)
 town17 = Town("Sanguion", "FILLER TEXT", [], 96, 67, gs_level=5, inn_cost=18,
               pet_shop=True, ps_level=2)
 
-town18 = Town("Lamtonum", "FILLER TEXT", [npcs.matti],
+town18 = Town("Lamtonum", "FILLER TEXT", [npcs.matthew],
               72, 69, gs_level=4, pet_shop=True, ps_level=3)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,

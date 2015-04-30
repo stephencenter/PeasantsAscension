@@ -282,31 +282,31 @@ def check_region():
 
     else:
         if x in range(-15, -9) and y in range(5, 11):  # Micro-region in the Forest
-            region = 'Graveyard'
+            region = 'Overshire Graveyard'
             reg_music = 'Music/Frontier.ogg'
 
         elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
-            region = 'Forest'
+            region = 'Central Forest'
             reg_music = 'Music/Through the Forest.ogg'
 
         elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
-            region = 'Mountain'
+            region = 'Terrius Mt. Range'
             reg_music = 'Music/Mountain.ogg'
 
         elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
-            region = 'Tundra'
+            region = 'Glacia'
             reg_music = 'Music/Arpanauts.ogg'
 
         elif x in range(0, 126) and y in range(0, 126):  # Northeast of world
-            region = 'Desert'
+            region = 'Arcadian Desert'
             reg_music = 'Music/Come and Find Me.ogg'
 
         elif x in range(0, 126) and y in range(-115, 1):  # Southeast of World
-            region = 'Swamp'
+            region = 'Bogthorn'
             reg_music = 'Music/Digital Native.ogg'
 
         elif -1*abs(x) in range(-125, -115) or -1*abs(y) in range(-126, -115):  # Edges of World
-            region = 'Shore'
+            region = 'Pythonian Coastline'
             reg_music = "Music/We're all under the stars.ogg"
 
     if position['reg'] != region:

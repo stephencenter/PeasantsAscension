@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.6.4 Alpha
-game_version = 'v0.6.4'
+# PythoniusRPG v0.6.5 Alpha
+game_version = 'v0.6.5'
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
 #

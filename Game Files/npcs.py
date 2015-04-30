@@ -863,22 +863,22 @@ ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town co
 
 ethos = NPC('Ethos', [ethos_phrase_1])
 
-# -- Name: F. Jones -- Town: Neo-Ekanmar
-f_jones_phrase_1 = Conversation(['Hello, adventurer! My name is Fly. I used to be the Emperor of',
-                                 'The Flysconian Empire, until that wrechted Pythonius messed',
-                                 'things up! His people revolted, and then his friend Sugulat',
-                                 'came in and overthrew us. Sugulat drove my people out of our',
-                                 'lands and now this town is all we have left. \
-Please, leave me be.'],
+# -- Name: F. Jones -- Town: New Ekanmar
+f_jones_phrase_1 = Conversation(['Hello, adventurer! My name is Fly, ruler of the',
+                                 "Kingdom of Flyscoria. I'm quite busy right now, please come",
+                                 "back later if you wish to speak to me."],
                                 active=True)
 
 f_jones = NPC('F. Jones', [f_jones_phrase_1])
 
 # -- Name: Stravi -- Town: New Ekanmar
-stravi_phrase_1 = Conversation(['Please, forgive my husband, Fly. He is very emotionial about',
-                                "the whole revolution thing, I'd recommend just letting him be.",
-                                "Oh, and whatever you do, do NOT under any circumstances mention",
-                                'the word "chandelier". It makes him very upset for some reason.'],
+stravi_phrase_1 = Conversation(["Greetings, young traveller. I am Stravi, Queen of Flyscoria. My"
+                                "husband and I are on important business relating to the recent",
+                                "kidnapping of King Pythonius II's daughter, Celeste. Please",
+                                "return in a few weeks if you wish to speak to Fly and me.",
+                                "Oh, and whatever you do, do not under ANY circumstances mention",
+                                'the word "chandelier" to my husband. It makes him very ',
+                                'upset for some reason.'],
                                active=True)
 
 stravi = NPC('Stravi', [stravi_phrase_1])
@@ -919,7 +919,7 @@ strathius_phrase_1 = Conversation(["Greetings, man! I'm like, Strathius, and I'm
 strathius = NPC("Strathius", [strathius_phrase_1])
 
 # -- Name: Sugulat -- Town: Ambercreek
-sugulat_phrase_1 = Conversation(['Greetings! My name is Sugulat, Emperor of D\u00fC Haven',
+sugulat_phrase_1 = Conversation(["Greetings! My name is Sugulat, Emperor of Chin'tor",
                                  "and legendary digger of holes. Y'know, you look like",
                                  "a nice guy. I'm going to tell you a little secret: If you",
                                  "buy a shovel from the general store, you can dig up valuable",
@@ -943,30 +943,30 @@ serena_phrase_2 = Conversation(['You are a good man, trying to help our daughter
 serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, ser_pol_phrase_3])
 
 # -- Name: Matti -- Town: Lantonum
-matti_phrase_1 = Conversation(["*You try to talk to the man in the bar, but he is too",
-                              'busy listening to music on his "iSound" to notice you.',
-                              'Suddenly, a peasant walks up behind him, screams "Witch!!",',
-                              'grabs the iSound, and smashes it to bits on the floor. He',
-                              'then proceeds to set it on fire and bury the ashes in the dirt',
-                              'behind the bar.*'], active=True)
+matthew_phrase_1 = Conversation(["*You try to talk to the man in the bar, but he is too",
+                                 'busy listening to music on his "iSound" to notice you.',
+                                 'Suddenly, a peasant walks up behind him, screams "Witch!!",',
+                                 'grabs the iSound, and smashes it to bits on the floor. He',
+                                 'then proceeds to set it on fire and bury the ashes in the dirt',
+                                 'behind the bar.*'], active=True)
 
-matti_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
-                       "iSound MP3 player a witch - this is the fifth one I've gone through",
-                       "this week! The company that makes them only sells them in Elysium, because",
-                       "nobody in Pythonia could tell an MP3 player from a brick if their life",
-                       "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
-                       "train town near the border of Pythonia and Elysium, and buy me a new",
-                       "iSound, I will reward you greatly. Remember: iSounds have watermelons",
-                       "on the back. If you get one with a grapefruit, then you're just paying",
-                       "a lot of money for a cheap knockoff brand. And definitely stay away",
-                       "from papaya phones. Can you do that for me?"],
-                      'iSounds Good',
-                      ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
-                       "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E. Return to Matthew",
-                       "at Lantonum when you are finished."],
-                      "Matthew", [1250, 1250],
-                      ["Thanks, man! This latest version is supposed to be",
-                       "peasant-proof, so let's hope that works!"], active=True)
+matthew_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
+                         "iSound MP3 player a witch - this is the fifth one I've gone through",
+                         "this week! The company that makes them only sells them in Elysium, as",
+                         "nobody in Pythonia could tell an MP3 player from a brick if their life",
+                         "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
+                         "train town near the border of Pythonia and Elysium, and buy me a new",
+                         "iSound, I will reward you greatly. Remember: iSounds have watermelons",
+                         "on the back. If you get one with a grapefruit, then you're just paying",
+                         "a lot of money for a cheap knockoff brand. And definitely stay away",
+                         "from papaya phones. Can you do that for me?"],
+                        'iSounds Good',
+                        ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
+                         "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E. Return to Matthew",
+                         "at Lantonum when you are finished."],
+                        "Matthew", [1250, 1250],
+                        ["Thanks, man! This latest version is supposed to be",
+                         "peasant-proof, so let's hope that works!"], active=True)
 
 matthew = NPC('Matthew', [matthew_phrase_1, matthew_quest_1])
 
