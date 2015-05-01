@@ -1060,6 +1060,10 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
 
     try:  # Run the game
         main()
-    except Exception:  # If an exception is raised and not caught, log the error message.
+    except Exception as e:  # If an exception is raised and not caught, log the error message.
         logging.exception('Got exception of main handler:')
+        pygame.mixer.music.stop()
+        print("ERROR ENCOUNTERED!! Send this error message to RbwNjaFurret:")
+        print(e)
+        input()
         raise

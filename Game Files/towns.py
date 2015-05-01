@@ -49,7 +49,7 @@ pygame.mixer.init()
 
 class Town:
     def __init__(self, name, desc, people, x, y, inn=True, inn_cost=0,
-                 gen_store=True, gs_level=1, pet_shop=False, ps_level=1):
+                 gen_store=True, gs_level=1, pet_shop=False, ps_level=1, wtrmelon_store=False):
 
         self.name = name  # The town's name (i.e. New York City)
         self.desc = desc  # A brief description of the town
@@ -69,6 +69,9 @@ class Town:
         self.pet_shop = pet_shop  # If True, the town contains a Pet Shop
         self.ps_level = ps_level  # The higher this value, the better te pets the shop will
                                   # allow you to purchase.
+
+        self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest.
+                                                # Definitely not a blatant ripoff of Apple Inc...
 
     def town_choice(self):
         print('-'*25)
@@ -92,7 +95,7 @@ class Town:
 
                 elif choice == '2':
                     print('-'*25)
-                    if self.gen_store or self.inn or self.pet_shop:
+                    if self.gen_store or self.inn or self.pet_shop or self.wtrmelon_store:
                         self.inside_town()
 
                     else:
@@ -157,6 +160,7 @@ class Town:
         gen_words = ['g']
         inn_words = ['i']
         pet_words = ['p']
+        watermelon_words = ['w']
         buildings = []
         while True:
             spam = False
@@ -194,6 +198,11 @@ class Town:
                 buildings.extend(gen_words)
                 buildings.extend(pet_words)
 
+            elif self.wtrmelon_store:
+                print('There is a... [W]atermelon store? Why is there a store \
+specifically for one fruit?')
+                buildings = watermelon_words
+
             if buildings:
                 while not spam:
                     selected = input(
@@ -210,6 +219,8 @@ class Town:
                             self.town_gen()
                         elif selected.startswith('i'):
                             self.town_inn()
+                        elif selected.startswith('w'):
+                            self.watermelon()
                         else:
                             self.town_pet()
 
@@ -223,6 +234,107 @@ class Town:
 
                     elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
+
+    @staticmethod
+    def watermelon():
+        # Admittedly, this was just an excuse to be able to complain about how much I dislike
+        # Apple Inc.
+        print('-'*25)
+        for sentence in [
+            'Greetings, sir! Welcome to the Watermelon Inc. Store! We sell the latest',
+            'Watermelon brand products, including the iSheet, the uPhone, and our most',
+            'popular: the iSound! The latest one is our thinest yet, at slightly less',
+            'than a micrometer thick! What purpose does that serve, you ask? No clue,',
+            'I just sell the stuff. So, what will it be?'
+            ]:  # They focus to much on the thickness and size of the phones, and not enough
+                # on important things like battery life, reliability, and computing power.
+            input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
+        print('-'*25)
+
+        print('You understood absolutely none of what he said, but you get the feeling')
+        input('that he wants you to buy something. | Press enter/return ')
+        print('-'*25)
+
+        while True:  # That's right, I used scientific notation. That's how serious I am.
+            print('You have {0} GP'.format(main.misc_vars['gp']))
+            print("""\
+      [1] iSheet ---------> 6.5 x 10^96 GP
+      [2] uPhone ---------> 6.4 x 10^93 GP
+      [3] iSound ---------> 250 GP
+      [4] wePad ----------> 7.8 x 10^93 GP
+      [5] iListen --------> 6.2 x 10^94 GP
+      [6] Watermelon TV --> 4.6 x 10^93 GP
+      [7] iPrunes --------> 9.5 x 10^87 GP
+      [8] Papaya Phone ---> 10 GP""")
+            spam = True
+            while spam:
+                choice = input('Input [#] (or type "exit") ')
+
+                try:
+                    choice = int(choice)
+                except ValueError:
+                    if choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        return
+
+                if choice in range(1, 3) or choice in range(4, 8):  # They're expensive...
+                    print('-'*25)
+                    input('Salesman: \
+Yeah right, as if you actually have that much money | [ENTER] ')
+                    print('-'*25)
+                    break
+
+                elif choice == 8:
+                    # ALL the apps have DRM, and it's difficult to bypass
+                    # their rules and download apps from places
+                    # other than the appstore
+
+                    print('-'*25)
+                    input("Salesman: Ha, that was a joke! Those phones don't have DRM, \
+we'd never sell that! | [ENTER] ")
+                    print('-'*25)
+
+                    break
+
+                elif choice == 3:
+                    print('-'*25)
+                    for sentence in [
+                        "Are you sure you want to buy an iSound? It's expensive, and all",
+                        "of the apps we make for it will be incompatible within a year."
+                        ]:  # I bought an iPod 4th gen and pretty much every app was
+                            # incompatible with it within a year. That's just stupid.
+                        input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
+
+                    while True:
+                        y_n = input("Do you want to buy an iSound for 250 GP? | Yes or No: ")
+
+                        if y_n.lower().startswith("y") and main.misc_vars['gp'] >= 250:
+                            print('-'*25)
+                            input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
+                            input('It has been added to the Quest Items page of your inventory | \
+[ENTER] ')
+                            print('-'*25)
+                            input('Saleman: Thank you for your time, and especially for \
+your money! | [ENTER] ')
+
+                            main.misc_vars['gp'] -= 250
+                            inv_system.inventory['q_items'].append(copy.copy(items.iSound))
+                            spam = False
+                            print('-'*25)
+
+                            break
+
+                        elif y_n.lower().startswith("y") and main.miscvars['gp'] < 250:
+                            # The "cheap" iPhone 5C is still kinda stupidly expensive
+                            print('-'*25)
+                            input('Hey, you don\'t even have enough money for our "cheap" \
+model! | [ENTER]')
+                            print('-'*25)
+                            break
+
+                        elif y_n.lower().startswith("n"):
+                            spam = False
+                            print('-'*25)
+                            break
 
     def town_inn(self):
         print('-'*25)
@@ -699,20 +811,42 @@ on the steps of the general store.""",
               [npcs.polmor, npcs.serena], 52, 12, gs_level=4,
               inn_cost=13, pet_shop=True, ps_level=3)
 
-town15 = Town("Hatchnuk", "FILLER TEXT", [], 63, 17, gs_level=4, inn_cost=10)
+town15 = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Pythonia
+that still has cases of "Hatchnuk's Blight", a plauge-like disease that
+killed hundreds of thousands of people during the 10th and 11th centuries.
+Something about the strand that infects Hatchnuk seems to make it completely
+incurable, as the disease has been running rampant for the past four centuries.
+The economy of Hatchnuk has entirely collapsed, as the risk of spreading disease
+is far too great for people to be walking out in the open doing business together.
+As a result, there are no buildings that you are able to enter, and no people to talk
+to. The only people who are around to speak to are the guards, but their plague-doctor-esque
+apparel and stern looks make it clear that they are not in the mood for chit-chat.""",
+              [], 63, 17, gen_store=False, inn=False)
 
 town16 = Town("Cesura", """Cesura: A town of great historical significance.
 This town was named after King Cesura I, the war general during the Pythonian Civil War
 who helped to reunite the nation's six regions. Cesura was built on top of the site
 of the Battle of Parchak, the definitive battle in the Civil War that Cesura used
 to help the Central Forest win. There is a large monument to the King in the middle of
-town, with the words "Here's to prosperity" written on a plaque at its feet.""",
-              [], 58, 123, gs_level=5, inn_cost=25)
+town, with the words "Here's to prosperity" written on a plaque at its feet.
+An interesting thing to note is that Cesura is the only town that has a train
+station. Construction of the town of Cesura was outsourced to Elysium, who is
+the most technologically advanced civilization on the planet by far, having
+developed and perfected the Steam Engine and later the Train before the year
+1300 A.D.""",
+              [], 58, 123, gen_store=False, inn=False, wtrmelon_store=True)
 
-town17 = Town("Sanguion", "FILLER TEXT", [], 96, 67, gs_level=5, inn_cost=18,
+town17 = Town("Sanguion", """Sanguion: Sanguion is a save-haven for vampires. Vampires
+are feared throughout Pythonia, so this fairly unknown town is the only place they
+can go without being persecuted. The vampires in this town are peacful, and
+actually refuse to drink the blood of intelligent lifeforms. As a matter of fact,
+non-vampires who are afraid of vampires are actually more of a threat to civilization
+than the actual vampires are! They look very friendly, although a few of them do look
+quite scared for some reason. Perhaps you should investigate.""",
+              [], -96, -67, gs_level=5, inn_cost=18,
               pet_shop=True, ps_level=2)
 
-town18 = Town("Lamtonum", "FILLER TEXT", [npcs.matthew],
+town18 = Town("Lamtonum", "Lantonum: FILLER TEXT", [npcs.matthew],
               72, 69, gs_level=4, pet_shop=True, ps_level=3)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,

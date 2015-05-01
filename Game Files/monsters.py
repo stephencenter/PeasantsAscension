@@ -78,9 +78,9 @@ class Monster:
 
     def monst_damage(self, var, mode):
         if mode == 'melee':
-            dam_dealt = math.ceil(self.attk - battle.temp_stats['dfns']/2) + var
+            dam_dealt = math.ceil(self.attk - battle.temp_stats['dfns']/1.75) + var
         else:
-            dam_dealt = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2) + var
+            dam_dealt = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/1.75) + var
 
         dam_dealt = magic.eval_element(
             p_elem=battle.player.element,
