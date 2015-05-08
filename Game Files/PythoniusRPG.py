@@ -426,22 +426,24 @@ Level: {1} | Class: {2} | Element: {3}
 HP: {4}/{5} | MP: {6}/{7}
 Attack: {8} | M. Attack: {9} | P. Attack {10}
 Defense: {11} | M. Defense: {12} | P. Defense {13}
-INT: {14} | STR: {15} | CON: {16} | DEX: {17} | PER: {18} | FOR: {19}
-Experience Pts: {20}/{21} | Gold Pieces: {22}
+Speed: {14} | Evasion: {15}
+INT: {16} | STR: {17} | CON: {18} | DEX: {19} | PER: {20} | FOR: {21}
+Experience Pts: {22}/{23} | Gold Pieces: {24}
 
 -Equipped Items-
-Weapon: {23}
-Accessory: {24}
+Weapon: {25}
+Accessory: {26}
 Armor:
-  Head: {25}
-  Body: {26}
-  Legs: {27}
+  Head: {27}
+  Body: {28}
+  Legs: {29}
 
 -Current Pet-""".format(self.name,
                         self.lvl, self.class_.title(), self.element,
                         self.hp, misc_vars['hp_p'], self.mp, misc_vars['mp_p'],
                         self.attk, self.m_attk, self.p_attk,
                         self.dfns, self.m_dfns, self.p_dfns,
+                        self.spd, self.evad,
                         misc_vars['int'], misc_vars['str'], misc_vars['con'],
                         misc_vars['dex'], misc_vars['per'], misc_vars['for'],
                         self.exp, misc_vars['r_xp'], misc_vars['gp'],

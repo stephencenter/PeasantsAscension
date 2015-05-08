@@ -545,10 +545,10 @@ def view_quests():
             if dialogue:
                 while fizz:
                     print('Finished Quests:\n      ', end='')
-                    print(' '.join(['[{0}] {1}'.format(num + 1, x.name)
-                                    for num, x in enumerate([y for y in npcs.all_dialogue
-                                                             if isinstance(y, npcs.Quest)
-                                                             and y.finished])]))
+                    print('\n      '.join(['[{0}] {1}'.format(num + 1, x.name)
+                                           for num, x in enumerate([
+                                           y for y in npcs.all_dialogue
+                                           if isinstance(y, npcs.Quest) and y.finished])]))
 
                     while True:
                         number = input('Input [#] (or type "back"): ')

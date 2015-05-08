@@ -104,7 +104,11 @@ class NPC:
             padding = len(max(y, key=len))
 
             for z in y:
-                input(''.join([self.name.title(), ': ', z, ' '*(padding - len(z)), ' | [ENTER] ']))
+                if z != '-'*25:
+                    input(''.join([self.name.title(), ': ', z, ' '*(padding - len(z)),
+                                   ' | [ENTER] ']))
+                else:
+                    print(z)
 
             dialogue.remove(y)
             print('-'*25) if dialogue else ''
@@ -816,6 +820,114 @@ ser_pol_phrase_3.after_talking = ser_pol_p3_at
 
 polmor = NPC('Polmor', [polmor_phrase_1, polmor_quest_1, polmor_phrase_2, ser_pol_phrase_3])
 
+# -- Name: Matti -- Town: Lantonum
+matthew_phrase_1 = Conversation(["*You try to talk to the man in the bar, but he is too",
+                                 'busy listening to music on his "iSound" to notice you.',
+                                 'Suddenly, a peasant walks up behind him, screams "Witch!!",',
+                                 'grabs the iSound, and smashes it to bits on the floor. He',
+                                 'then proceeds to set it on fire and bury the ashes in the dirt',
+                                 'behind the bar.*'], active=True)
+
+matthew_phrase_2 = Conversation(["Hello, friend! Have you gotten me a new iSound yet?"])
+
+matthew_phrase_3 = Conversation(["No? That's okay. Just pick one up for me when you",
+                                 "get the chance. You can purchase them at the town",
+                                 "of Cesura, located at 123\u00b0N, 58\u00b0E."])
+
+matthew_phrase_4 = Conversation(["You have? Wonderful! *He takes the iSound from your",
+                                 "hand and pulls out 1250 GP*"])
+
+def mattqst_us1():
+    global matthew_phrase_1
+    global matthew_phrase_2
+
+    matthew_phrase_1.active = False
+    matthew_phrase_2.active = True
+
+
+def mattqst_uc1():
+    global matthew_phrase_5
+    global matthew_quest_1
+    matthew_phrase_5.active = True
+    matthew_quest_1.active = False
+
+
+def matthew_p2_at():
+    global matthew_phrase_3
+    global matthew_phrase_4
+    global matthew_phrase_2
+
+    matthew_phrase_2.active = False
+
+    for i in inv_system.inventory['q_items']:
+        if i.name == "iSound":
+            matthew_phrase_4.active = True
+            inv_system.inventory['q_items'].remove(i)
+            break
+
+    else:
+        matthew_phrase_3.active = True
+
+    matthew.speak()
+
+
+def matthew_p3_at():
+    global matthew_phrase_3
+    matthew_phrase_3.active = False
+
+
+def matthew_p4_at():
+    global matthew_quest_1
+    global matthew_phrase_4
+
+    matthew_quest_1.finished = True
+    matthew_phrase_4.active = False
+
+    matthew.speak()
+
+
+matthew_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
+                         "iSound MP3 player a witch - this is the fifth one I've gone through",
+                         "this week! The company that makes them only sells them in Elysium, as",
+                         "nobody in Pythonia could tell an MP3 player from a brick if their life",
+                         "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
+                         "train town near the border of Pythonia and Elysium, and buy me a new",
+                         "iSound, I will reward you greatly. Remember: iSounds have watermelons",
+                         "on the back. If you get one with a grapefruit, then you're just paying",
+                         "a lot of money for a cheap knockoff brand. And definitely stay away",
+                         "from papaya phones. Can you do that for me?"],
+                        'iSounds Good',
+                        ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
+                         "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E. Return to Matthew",
+                         "at Lantonum when you are finished."],
+                        "Matthew", [1250, 1250],
+                        ["Thanks, man! This latest version is supposed to be",
+                         "peasant-proof, so let's hope tha- *His statement is cut off",
+                         "as a local serf runs up and tackles him, pries the iSound",
+                         "from his hands, tosses it into a bucket of water, observes",
+                         'that it does not float, screams "WITCH", and then rushes',
+                         "over to the blacksmith's shop and throws the device into",
+                         "the forge. A bloody fight ensues, as the blacksmith attacks",
+                         'the serf for "defiling his forge with the blood of a witch".',
+                         'The serf is killed, and the town guards rush over and arrest',
+                         'the blacksmith for murdering the innocent but idiotic serf.',
+                         'You and Matthew look each other in the eyes, he hands you the',
+                         "money, and you both leave the scene without speaking another",
+                         "word.",
+                         '-'*25], active=True)
+
+matthew_phrase_5 = Conversation(["...",
+                                 "*He looks quite depressed.*"])
+
+matthew_quest_1.upon_starting = mattqst_us1
+matthew_quest_1.upon_completing = mattqst_uc1
+matthew_phrase_2.after_talking = matthew_p2_at
+matthew_phrase_3.after_talking = matthew_p3_at
+matthew_phrase_4.after_talking = matthew_p4_at
+
+matthew = NPC('Matthew', [matthew_phrase_1, matthew_quest_1, matthew_phrase_2,
+                          matthew_phrase_3, matthew_phrase_4, matthew_phrase_5])
+
 #----------------------------------------------------------------------------#
 # UNIMPORTANT CHARACTERS
 
@@ -943,33 +1055,10 @@ serena_phrase_2 = Conversation(['You are a good man, trying to help our daughter
 
 serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, ser_pol_phrase_3])
 
-# -- Name: Matti -- Town: Lantonum
-matthew_phrase_1 = Conversation(["*You try to talk to the man in the bar, but he is too",
-                                 'busy listening to music on his "iSound" to notice you.',
-                                 'Suddenly, a peasant walks up behind him, screams "Witch!!",',
-                                 'grabs the iSound, and smashes it to bits on the floor. He',
-                                 'then proceeds to set it on fire and bury the ashes in the dirt',
-                                 'behind the bar.*'], active=True)
-
-matthew_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
-                         "iSound MP3 player a witch - this is the fifth one I've gone through",
-                         "this week! The company that makes them only sells them in Elysium, as",
-                         "nobody in Pythonia could tell an MP3 player from a brick if their life",
-                         "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
-                         "train town near the border of Pythonia and Elysium, and buy me a new",
-                         "iSound, I will reward you greatly. Remember: iSounds have watermelons",
-                         "on the back. If you get one with a grapefruit, then you're just paying",
-                         "a lot of money for a cheap knockoff brand. And definitely stay away",
-                         "from papaya phones. Can you do that for me?"],
-                        'iSounds Good',
-                        ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
-                         "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E. Return to Matthew",
-                         "at Lantonum when you are finished."],
-                        "Matthew", [1250, 1250],
-                        ["Thanks, man! This latest version is supposed to be",
-                         "peasant-proof, so let's hope that works!"], active=True)
-
-matthew = NPC('Matthew', [matthew_phrase_1, matthew_quest_1])
+# Planned NPCs
+bamdeliit = NPC('Bamdeliit', [])
+pime = NPC('Pime', [])
+ariver = NPC('Ariver', [])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
@@ -986,7 +1075,8 @@ all_dialogue = [
     stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1,
     elisha_phrase_1, lazaro_phrase_1, caesar_phrase_1, polmor_phrase_1,
     serena_phrase_1, serena_phrase_2, ser_pol_phrase_3, polmor_quest_1,
-    polmor_phrase_2, matthew_phrase_1, matthew_quest_1, strathius_phrase_1
+    polmor_phrase_2, matthew_phrase_1, matthew_quest_1, strathius_phrase_1,
+    matthew_phrase_2, matthew_phrase_3, matthew_phrase_4, matthew_phrase_5
 ]
 
 

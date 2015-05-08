@@ -813,7 +813,6 @@ death_amulet = ElementAccessory('Necrotic Amulet',
                                 'An amulet that imbues its wearer with the power of DEATH',
                                 250, 75, 'Death')
 
-
 # Quest items
 message_joseph = Misc('Message from Joseph',
                       'A neatly written message addressed from Joseph to Philliard.',
@@ -821,9 +820,13 @@ message_joseph = Misc('Message from Joseph',
 message_philliard = Misc('Message from Philliard',
                          'A neatly written message addressed from Philliard to Joseph.',
                          0, 0, cat='q_items', imp=True)
+
+# Alternate description: Pythonia has no internet access, no electricity, and no radio. \
+# What's the point of having this again?
 iSound = Misc('iSound',
-              "Pythonia has no internet access, no electricity, and no radio. \
-What's the point of this again?", 250, 75, cat='q_items', imp=False)
+              "You cannot even begin to imagine how one would go about operating this device.",
+              250, 75, cat='q_items', imp=False)
+
 
 # Gems & Valuables
 pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',

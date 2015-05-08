@@ -846,7 +846,12 @@ quite scared for some reason. Perhaps you should investigate.""",
               [], -96, -67, gs_level=5, inn_cost=18,
               pet_shop=True, ps_level=2)
 
-town18 = Town("Lamtonum", "Lantonum: FILLER TEXT", [npcs.matthew],
+town18 = Town("Lamtonum", """"Lantonum: Lantonum is a small town that has the best
+forge in all of Arcadia. Nearly 2/3s of all citizens of this town are
+experienced blacksmiths, and 90% of all ores and minerals mined
+in Chin'tor or Ambercreek are brought here. It is one of the wealthiest
+cities in all of the desert region due to its Mythril, Magestite, and
+Necrite exports.""", [npcs.matthew],
               72, 69, gs_level=4, pet_shop=True, ps_level=3)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
