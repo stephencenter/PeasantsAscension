@@ -1055,18 +1055,15 @@ def copy_error(text):
     # I removed a large portion of it due to it being unnessesary, and changed the variable names
     # to match my naming conventions.
 
-    gmem_ddeshare = 0x2000
-    cf_unicodetext = 13
     d = ctypes.windll
     d.user32.OpenClipboard(None)
     d.user32.EmptyClipboard()
-    hcd = d.kernel32.GlobalAlloc(gmem_ddeshare, len(text.encode('utf-16-le')) + 2)
+    hcd = d.kernel32.GlobalAlloc(0x2000, len(text.encode('utf-16-le')) + 2)
     pch_data = d.kernel32.GlobalLock(hcd)
     ctypes.cdll.msvcrt.wcscpy(ctypes.c_wchar_p(pch_data), text)
     d.kernel32.GlobalUnlock(hcd)
-    d.user32.SetClipboardData(cf_unicodetext, hcd)
+    d.user32.SetClipboardData(13, hcd)
     d.user32.CloseClipboard()
-
 
 
 def main():
