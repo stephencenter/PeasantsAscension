@@ -61,6 +61,7 @@ import ctypes
 import re
 import logging
 import msvcrt
+import traceback
 
 import pygame
 
@@ -1048,10 +1049,31 @@ def set_prompt_properties():
                                                    math.ceil(screensize[1]/20 - 2)))
 
 
+def copy_error(text):
+    # This is a modified verstion of Albert Sweigart's "Pyperclip" module.
+    # It is licensed under the BSD (link: http://opensource.org/licenses/BSD-2-Clause)
+    # I removed a large portion of it due to it being unnessesary, and changed the variable names
+    # to match my naming conventions.
+
+    from subprocess import call, Popen, PIPE
+
+    gmem_ddeshare = 0x2000
+    cf_unicodetext = 13
+    d = ctypes.windll
+    d.user32.OpenClipboard(None)
+    d.user32.EmptyClipboard()
+    hcd = d.kernel32.GlobalAlloc(gmem_ddeshare, len(text.encode('utf-16-le')) + 2)
+    pch_data = d.kernel32.GlobalLock(hcd)
+    ctypes.cdll.msvcrt.wcscpy(ctypes.c_wchar_p(pch_data), text)
+    d.kernel32.GlobalUnlock(hcd)
+    d.user32.SetClipboardData(cf_unicodetext, hcd)
+    d.user32.CloseClipboard()
+
+
+
 def main():
     set_prompt_properties()
     change_settings()
-
     title_screen()
     check_save()  # Check for save files...
     world.movement_system()  # ...and then start the game
@@ -1062,10 +1084,24 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
 
     try:  # Run the game
         main()
+
     except Exception as e:  # If an exception is raised and not caught, log the error message.
         logging.exception('Got exception of main handler:')
         pygame.mixer.music.stop()
-        print("ERROR ENCOUNTERED!! Send this error message to RbwNjaFurret:")
-        print(e)
-        input()
-        raise
+        print(traceback.format_exc())
+        print('''PythoniusRPG encountered an error and crashed! The error message above should
+be sent immediately to RbwNjaFurret (ninjafurret@gmail.com) to make sure the bug gets fixed.
+The error message can be immediately copied to your clipboard if you wish.''')
+
+        while True:
+            print('-'*25)
+            x = input('Type in "copy" to copy to your clipboard, or simply press enter to exit.')
+            if x.lower() == "copy":
+                copy_error(traceback.format_exc())
+                print('The error message has been copied to your clipboard.')
+                input('Press enter/return to exit ')
+
+                raise
+
+            elif x.lower() == '':
+                raise
