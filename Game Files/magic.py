@@ -564,6 +564,7 @@ def pick_cat(var, dodge, is_battle=True):
                                 return False
 
                         else:
+                            # noinspection PyArgumentList
                             if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
                                 if spell.use_magic(is_battle):
                                     return True
@@ -655,6 +656,7 @@ def pick_spell(cat, var, dodge, is_battle):
                             return False
 
                     else:
+                        # noinspection PyArgumentList
                         if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
                             if spell.use_magic(is_battle):
                                 return True

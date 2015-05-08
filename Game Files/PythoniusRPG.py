@@ -860,8 +860,8 @@ def save_game():
 
 
 def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
-    with open(path, mode='w', encoding='utf-8') as e:
-        json.dump(player.__dict__, e, indent=4, separators=(', ', ': '))
+    with open(path, mode='w', encoding='utf-8') as f:
+        json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
 
 
 def deserialize_player(path):  # Load the JSON file and translate
@@ -870,8 +870,8 @@ def deserialize_player(path):  # Load the JSON file and translate
 
     player = PlayerCharacter('', 15, 4, 3, 1, 3, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
 
-    with open(path, encoding='utf-8') as e:
-        player_dict = json.load(e)
+    with open(path, encoding='utf-8') as f:
+        player_dict = json.load(f)
 
     player.__dict__ = player_dict
 
@@ -1090,8 +1090,8 @@ The error message can be immediately copied to your clipboard if you wish.''')
         print('-'*25)
 
         while True:
-            x = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ')
-            if x.lower() == "copy":
+            c = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ')
+            if c.lower() == "copy":
                 copy_error(traceback.format_exc())
                 print('-'*25)
                 print('The error message has been copied to your clipboard.')
@@ -1099,5 +1099,5 @@ The error message can be immediately copied to your clipboard if you wish.''')
 
                 raise
 
-            elif x.lower() == '':
+            elif c.lower() == '':
                 raise

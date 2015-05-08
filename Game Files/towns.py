@@ -246,8 +246,11 @@ specifically for one fruit?')
             'popular: the iSound! The latest one is our thinest yet, at slightly less',
             'than a micrometer thick! What purpose does that serve, you ask? No clue,',
             'I just sell the stuff. So, what will it be?'
-            ]:  # They focus to much on the thickness and size of the phones, and not enough
-                # on important things like battery life, reliability, and computing power.
+        ]:  # They focus to much on the thickness and size of the phones, and not enough
+            # on important things like battery life, reliability, and computing power.
+            # I would personally pay quite a bit for an iPhone that has the same processing
+            # power as the iPhone 6, but with 2-3 times the battery life.
+
             input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
         print('-'*25)
 
@@ -300,7 +303,7 @@ we'd never sell that! | [ENTER] ")
                     for sentence in [
                         "Are you sure you want to buy an iSound? It's expensive, and all",
                         "of the apps we make for it will be incompatible within a year."
-                        ]:  # I bought an iPod 4th gen and pretty much every app was
+                    ]:      # I bought an iPod 4th gen and pretty much every app was
                             # incompatible with it within a year. That's just stupid.
                         input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
 

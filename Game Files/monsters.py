@@ -246,7 +246,10 @@ class Monster:
             self.mp -= 2
 
         else:
-            self.monst_attk(var, dodge)
+            if most_effective == possible_p_dam:
+                self.monst_attk(var, dodge, 'pierce')
+            else:
+                self.most_attk(var, dodge, 'melee')
 
         self.check_poison()
 
