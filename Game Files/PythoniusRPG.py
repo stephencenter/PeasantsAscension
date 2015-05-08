@@ -1055,8 +1055,6 @@ def copy_error(text):
     # I removed a large portion of it due to it being unnessesary, and changed the variable names
     # to match my naming conventions.
 
-    from subprocess import call, Popen, PIPE
-
     gmem_ddeshare = 0x2000
     cf_unicodetext = 13
     d = ctypes.windll
@@ -1092,12 +1090,13 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
         print('''PythoniusRPG encountered an error and crashed! The error message above should
 be sent immediately to RbwNjaFurret (ninjafurret@gmail.com) to make sure the bug gets fixed.
 The error message can be immediately copied to your clipboard if you wish.''')
+        print('-'*25)
 
         while True:
-            print('-'*25)
-            x = input('Type in "copy" to copy to your clipboard, or simply press enter to exit.')
+            x = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ')
             if x.lower() == "copy":
                 copy_error(traceback.format_exc())
+                print('-'*25)
                 print('The error message has been copied to your clipboard.')
                 input('Press enter/return to exit ')
 

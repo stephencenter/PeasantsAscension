@@ -9,7 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d19a7f44-3ef1-4b67-8670-56343c3a2afb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/PythoniusRPG.py" afterPath="$PROJECT_DIR$/Game Files/PythoniusRPG.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Pythonius.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -145,8 +144,8 @@
       <file leaf-file-name="PythoniusRPG.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.6289308" vertical-offset="22875" max-vertical-offset="23352">
-              <caret line="1075" column="21" selection-start-line="1075" selection-start-column="21" selection-end-line="1075" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.4716981" vertical-offset="22308" max-vertical-offset="23331">
+              <caret line="1073" column="21" selection-start-line="1073" selection-start-column="21" selection-end-line="1073" selection-end-column="21" />
               <folding>
                 <element signature="e#2628#2638#0" expanded="true" />
               </folding>
@@ -1034,8 +1033,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.6289308" vertical-offset="22875" max-vertical-offset="23352">
-          <caret line="1075" column="21" selection-start-line="1075" selection-start-column="21" selection-end-line="1075" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.4716981" vertical-offset="22308" max-vertical-offset="23331">
+          <caret line="1073" column="21" selection-start-line="1073" selection-start-column="21" selection-end-line="1073" selection-end-column="21" />
           <folding>
             <element signature="e#2628#2638#0" expanded="true" />
           </folding>
