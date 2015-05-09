@@ -322,17 +322,22 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
 
 def pick_action(cat, item):
     global inventory
-    print('-'*25)
+
+    # Loop while the item is in the inventory
     while item in inventory[cat]:
         if (isinstance(item, i.Weapon)
             or isinstance(item, i.Armor)
             or isinstance(item, pets.Companion)
                 or isinstance(item, i.Accessory)):
 
+            # You equip weapons/armor/companions/accessories
             use_equip = 'Equip'
 
         else:
+            # You use other items
             use_equip = 'Use'
+
+        print('-'*25)
         action = input("""What do you want to do with your {0}?
       [1] {1}
       [2] Read Description
@@ -340,6 +345,8 @@ def pick_action(cat, item):
 Input [#] (or type "back"): """.format(str(item), use_equip))
 
         if action == '1':
+            # Pets do not have a ".use_item()" method, so they have to be equipped
+            # manually.
             if isinstance(item, pets.Companion):
                 input('You equip the {0} | Press enter/return '.format(item.name))
 
@@ -352,12 +359,14 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
             else:
                 item.use_item()
-                return
+                if item not in inventory[cat]:
+                    return
 
         elif action == '2':
+            # Display the item description
             print('-'*25)
-            input(''.join([str(item), ': ', item.desc, ' | Press enter/return ']))
-            print('-'*25)
+            print('-{0}-'.format(str(item).upper()))
+            input('"{0}" | [ENTER] '.format(item.desc))
 
         elif action == '3':
             print('-'*25)
@@ -795,7 +804,7 @@ def deserialize_inv(path):
                     continue
 
                 else:
-                    x = i.Item('', '', '', '')
+                    x = i.Misc('', '', '', '')
             else:
                 continue
 

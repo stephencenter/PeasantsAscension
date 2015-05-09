@@ -682,6 +682,7 @@ def check_save():  # Check for save files and load the game if they're found
         msvcrt.getwch()
 
     if not save_files:
+        # If there are no found save files, then have the player make a new character
         print('No save files found. Starting new game...')
         time.sleep(0.35)
 
@@ -696,10 +697,14 @@ def check_save():  # Check for save files and load the game if they're found
     print('-'*25)
     print('Found {0} valid save file(s): '.format(len(save_files)))
 
+    # padding is a number that the game uses to determine how much whitespace is needed
+    # to make certain visual elements line up on the screen.
     padding = len(max([index for index in save_files], key=len))
 
     spam = True
     while spam:
+        # Print information about each save file and allow the player to choose which
+        # file to open
         print('     ', '\n      '.join(
             ['[{0}] {1}{2} | {3}'.format(num + 1, dir_name,
                                          ' '*(padding - len(dir_name)),
@@ -709,14 +714,14 @@ def check_save():  # Check for save files and load the game if they're found
         while True:
             chosen = input('Input [#] (or type "create new"): ')
             try:
-                chosen = int(chosen) - 1
+                chosen = int(chosen) - 1  # Account for the fact that list indices start at 0
                 if chosen < 0:
                     continue
 
             except ValueError:
                 chosen = chosen.lower()
 
-                if chosen == "create new":
+                if chosen == "create new":  # Let the player create a new save file
                     print('-'*25)
                     create_player()
                     return
@@ -725,7 +730,8 @@ def check_save():  # Check for save files and load the game if they're found
                     continue
 
             try:
-                adventure_name = sorted(save_files)[chosen]
+                adventure_name = sorted(save_files)[chosen]  # Sort the save file names
+                                                             # in alphanumerical order
             except IndexError:
                 continue
 
@@ -739,7 +745,7 @@ def check_save():  # Check for save files and load the game if they're found
                 msvcrt.getwch()
 
             try:  # Attempt to open the save files and translate
-                # them into objects/dictionaries
+                  # them into objects/dictionaries
 
                 with open(sav_def_bosses, encoding='utf-8') as f:
                     bosses.defeated_bosses = list(json.load(f))
@@ -758,6 +764,7 @@ def check_save():  # Check for save files and load the game if they're found
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
 
+                # Make the save file compatible with v0.6.2
                 if 'status_ail' not in player.__dict__ or 'per' not in misc_vars:
                     print('Attemping to make save file compatible with v0.6.2...')
                     if 'status_ail' not in player.__dict__:
@@ -766,6 +773,7 @@ def check_save():  # Check for save files and load the game if they're found
                         misc_vars['per'] = 1
                     print('Attempt successful!')
 
+                # Make the save file compatible with v0.6.4
                 if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped \
                         or 'pet' not in inv_system.equipped \
                         or('luc' in misc_vars and 'for' not in misc_vars):
@@ -786,6 +794,7 @@ def check_save():  # Check for save files and load the game if they're found
 
                     print('Attempt successful!')
 
+                # Make the save file compatible with v0.6.5
                 if 'is_aethus' not in position:
                     print('Attempting to make save file compatible with v0.6.5...')
                     position['is_aethus'] = False
@@ -876,6 +885,7 @@ def deserialize_player(path):  # Load the JSON file and translate
     player.__dict__ = player_dict
 
 
+# This is the logo that's displayed on the titlescreen
 title_logo = """\
  ____          _    _                    _              ____   ___     ____
 |  _ \  _   _ | |_ | |__    ___   _ __  (_) _   _  ___ |  _ \ |  _ \  / ___|
@@ -898,6 +908,7 @@ def title_screen():
     print(title_logo)
 
     while True:
+        # Give the user a choice of keys to press to do specific actions
         choice = input('[P]lay Game | [C]redits | [S]tory | [L]ore | [E]xit  |  Input Letter: ')
 
         choice = choice.lower()
@@ -912,6 +923,11 @@ def title_screen():
                 pygame.mixer.music.load('Music/Credits Music for an 8-bit RPG.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
+
+                # Display the credits one line at a time with specific lengths
+                # of time in between each line.
+                # These periods of time line up with the music that should be playing
+                # at the specific time.
                 with open('../Credits.txt') as f:
                     for number, f.readline in enumerate(f):
                         print(''.join(f.readline.rstrip("\n").split(";")))
@@ -934,15 +950,19 @@ def title_screen():
                         msvcrt.getwch()
 
             except FileNotFoundError:
+                # Display this is the Credits.txt file couldn't be found
                 print('The "Credits.txt" file could not be found.')
 
             except OSError:
+                # If there is a problem opening the Credits.txt file, but it does exist,
+                # display this message and log the error
                 logging.exception('Error loading Credits.txt:')
                 print('There was a problem opening "Credits.txt".')
 
             print(title_logo)
 
         elif choice.startswith('s'):
+            # Display the storyline of the game
             print('-'*25)
             input('Press Enter/Return after each line to advance the text ')
             print('-'*25)
@@ -952,6 +972,8 @@ def title_screen():
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
 
+                # Display each line one at a time, and require the pressing of enter
+                # on lines that aren't solely whitespace
                 with open('../pythonius_plot.txt', encoding='utf-8') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
@@ -964,15 +986,19 @@ def title_screen():
                 pygame.mixer.music.set_volume(music_vol)
 
             except FileNotFoundError:
+                # Display this is the pythonius_plot.txt file couldn't be found
                 print('The "pythonius_plot.txt" file could not be found.')
 
             except OSError:
+                # If there is a problem opening the pythonius_plot.txt file, but it does exist,
+                # display this message and log the error
                 logging.exception('Error loading pythonius_plot.txt:')
                 print('There was an problem opening "pythonius_plot.txt".')
 
             print('-'*25)
 
         elif choice.startswith('l'):
+            # Display side-story lore and the history of Pythonia
             print('-'*25)
             input('Press Enter/Return after each line to advance the text ')
             print('-'*25)
@@ -982,6 +1008,8 @@ def title_screen():
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
 
+                # Display each line one at a time, and require the pressing of enter
+                # on lines that aren't solely whitespace
                 with open('../pythonius_lore.txt', encoding='utf-8') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
@@ -1067,18 +1095,22 @@ def copy_error(text):
 
 
 def main():
-    set_prompt_properties()
-    change_settings()
-    title_screen()
-    check_save()  # Check for save files...
-    world.movement_system()  # ...and then start the game
+    # main() handles all the setup for the game, and includes the main game loop.
+    # Everything happens in this function in one way or another.
+
+    set_prompt_properties()  # Set the CMD size and whatnot...
+    change_settings()  # ...set the volume and save file settings...
+    title_screen()  # ...display the titlescreen...
+    check_save()  # ...check for save files...
+    world.movement_system()  # ...and then start the game.
 
 
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
 
-    try:  # Run the game
-        main()
+    try:  # Run the game.
+        main()  # Yes, this is a try...except statement that includes functions that span
+                # over 8000 lines, but it's necessary for error logging.
 
     except Exception as e:  # If an exception is raised and not caught, log the error message.
         logging.exception('Got exception of main handler:')
@@ -1089,6 +1121,8 @@ be sent immediately to RbwNjaFurret (ninjafurret@gmail.com) to make sure the bug
 The error message can be immediately copied to your clipboard if you wish.''')
         print('-'*25)
 
+        # The player is given the option to copy it instead of just being forced, because
+        # I personally hate programs that overwrite your clipboard without permission.
         while True:
             c = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ')
             if c.lower() == "copy":

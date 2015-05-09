@@ -425,10 +425,13 @@ class Misc(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp)
 
     def use_item(self):
+        print('-'*25)
         if 'Message' in self.name:
-            print("It would probably be best if you didn't read this.")
+            input("""The envelop is designed in a way that makes tampering easily noticable.
+It's probably best not to try to open it and read the letter. | [ENTER] """)
+
         else:
-            print("You can't think of anything useful to do with this.")
+            input("You can't think of anything useful to do with this. | [ENTER] ")
 
 
 def item_setup_vars():
@@ -815,17 +818,18 @@ death_amulet = ElementAccessory('Necrotic Amulet',
 
 # Quest items
 message_joseph = Misc('Message from Joseph',
-                      'A neatly written message addressed from Joseph to Philliard.',
+                      'A neatly written message addressed to Philliard.',
                       0, 0, cat='q_items', imp=True)
 message_philliard = Misc('Message from Philliard',
-                         'A neatly written message addressed from Philliard to Joseph.',
+                         'A neatly written message addressed to Joseph.',
                          0, 0, cat='q_items', imp=True)
 
-# Alternate description: Pythonia has no internet access, no electricity, and no radio. \
-# What's the point of having this again?
+
 iSound = Misc('iSound',
-              "You cannot even begin to imagine how one would go about operating this device.",
+              "You can't even begin to imagine how one would go about using this.",
               250, 75, cat='q_items', imp=False)
+    # Alternate description: Pythonia has no internet access, no electricity, and no radio.
+    # What's the point of having this again?
 
 
 # Gems & Valuables
