@@ -320,7 +320,7 @@ class Monster:
         monster_type = {'Pythonian Coastline': ['Shell Mimic', 'Giant Crab', 'Naiad',
                                                 'Sea Serpent', 'Squid'],
                         'Bogthorn': ['Bog Slime', 'Moss Ogre', 'Sludge Rat',
-                                     'Walking Venus', 'Vine Lizard'],
+                                     'Vine Lizard', 'Walking Venus'],
                         'Central Forest': ['Goblin', 'Beetle', 'Sprite',
                                            'Imp', 'Bat'],
                         'Arcadian Desert': ['Mummy', 'Sand Golem', 'Minubis',
@@ -331,8 +331,8 @@ class Monster:
                                               'Tengu', 'Giant Worm'],
                         'Overhire Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
                                                'Skeleton', 'Ghoul'],
-                        'Aethus': ['Harpy', 'Flying Serpent', 'Wraith',
-                                   'Alicorn', 'Griffin']
+                        'Aethus': ['Alicorn', 'Griffin', 'Wraith',
+                                   'Harpy', 'Flying Serpent']
                         }
 
         self.name = random.choice(monster_type[position['reg']])
@@ -345,13 +345,13 @@ class Monster:
             tank_stats(self)
 
         elif self.name == monster_type[position['reg']][2]:
-            # Mage stats -- Not yet implemented!
-            pass
+            magic_stats(self)
 
-        elif (self.name == monster_type[position['reg']][3] or
-                self.name == monster_type[position['reg']][4]):
-            # Agile stats -- Not yet implemented!
-            pass
+        elif self.name == monster_type[position['reg']][3]:
+            agile_stats(self)
+
+        elif self.name == monster_type[position['reg']][4]:
+            ranger_stats(self)
 
         modifiers = [
             'Slow', 'Fast',
@@ -458,9 +458,9 @@ class Monster:
 
         self.name = ' '.join([modifier, self.name]) if modifier else self.name
 
-# Enemy AIs:
+# Enemy Stat Classes:
 
-# -- Tank AI --
+# -- Tank Stats --
 """
 Tanks are resistant to player attacks and has above-average HP.
 However, they lacks significantly in the damage-dealing department.
@@ -473,7 +473,7 @@ def tank_stats(self):
     # Set Tank stats
     global misc_vars
 
-    self.hp *= 1.2
+    self.hp *= 1.3
     self.hp = math.ceil(self.hp)
     misc_vars['hp_m'] = copy.copy(self.hp)
 
@@ -486,13 +486,13 @@ def tank_stats(self):
     self.m_attk *= 0.8
     self.m_attk = math.ceil(self.m_attk)
 
-    self.dfns *= 1.2
+    self.dfns *= 1.3
     self.dfns = math.ceil(self.dfns)
 
-    self.p_dfns *= 1.2
+    self.p_dfns *= 1.3
     self.p_dfns = math.ceil(self.p_dfns)
 
-    self.m_dfns *= 1.2
+    self.m_dfns *= 1.3
     self.m_dfns = math.ceil(self.m_dfns)
 
     self.spd *= 0.8
@@ -502,7 +502,7 @@ def tank_stats(self):
     self.evad = math.ceil(self.evad)
 
 
-# -- Fighter AI --
+# -- Fighter Stats --
 """
 Fighters are the opposite of Tanks. They have high attack and above-average
 magic attack, as well as above-average speed. However, they have below-average defense
@@ -512,7 +512,7 @@ and magic defense. They have low health.
 
 
 def fighter_stats(self):
-    # Set stats for Fighter AI
+    # Set stats for Fighter-class monsters
     self.hp *= 0.8
     self.hp = math.ceil(self.hp)
     misc_vars['hp_m'] = copy.copy(self.hp)
@@ -521,14 +521,15 @@ def fighter_stats(self):
     self.attk = math.ceil(self.attk)
 
     self.p_attk *= 1.2
+    self.p_attk = math.ceil(self.p_attk)
 
     self.m_attk *= 1.2
     self.m_attk = math.ceil(self.m_attk)
 
-    self.dfns *= 0.8
+    self.dfns *= 0.9
     self.dfns = math.ceil(self.dfns)
 
-    self.p_dfns *= 0.8
+    self.p_dfns *= 0.9
     self.p_dfns = math.ceil(self.p_dfns)
 
     self.m_dfns *= 0.8
@@ -536,6 +537,78 @@ def fighter_stats(self):
 
     self.spd *= 1.2
     self.spd = math.ceil(self.spd)
+
+
+def magic_stats(self):
+    # Set stats for Mage-class monsters
+    self.mp *= 1.2
+    self.mp = math.ceil(self.mp)
+    misc_vars['mp_m'] = copy.copy(self.mp)
+
+    self.attk *= 0.9
+    self.attk = math.ceil(self.attk)
+
+    self.p_attk *= 0.8
+    self.p_attk = math.ceil(self.p_attk)
+
+    self.m_attk *= 1.2
+    self.m_attk = math.ceil(self.m_attk)
+
+    self.dfns *= 0.9
+    self.dfns = math.ceil(self.dfns)
+
+    self.p_dfns *= 0.9
+    self.p_dfns = math.ceil(self.p_dfns)
+
+    self.m_dfns *= 1.2
+    self.m_dfns = math.ceil(self.m_dfns)
+
+
+def agile_stats(self):
+    # Set stats for Rogue-class monsters
+
+    self.dfns *= 0.8
+    self.dfns = math.ceil(self.dfns)
+
+    self.p_dfns *= 0.9
+    self.p_dfns = math.ceil(self.p_dfns)
+
+    self.m_dfns *= 0.8
+    self.m_dfns = math.ceil(self.m_dfns)
+
+    self.spd *= 1.3
+    self.spd = math.ceil(self.spd)
+
+    self.evad *= 1.3
+    self.evad = math.ceil(self.evad)
+
+
+def ranger_stats(self):
+    # Set stats for Ranger-class monsters
+    self.hp *= 0.8
+    self.hp = math.ceil(self.hp)
+    misc_vars['hp_m'] = copy.copy(self.hp)
+
+    self.attk *= 0.9
+    self.attk = math.ceil(self.attk)
+
+    self.p_attk *= 1.2
+    self.p_attk = math.ceil(self.p_attk)
+
+    self.m_attk *= 0.9
+    self.m_attk = math.ceil(self.m_attk)
+
+    self.dfns *= 0.8
+    self.dfns = math.ceil(self.dfns)
+
+    self.p_dfns *= 1.2
+    self.p_dfns = math.ceil(self.p_dfns)
+
+    self.spd *= 1.2
+    self.spd = math.ceil(self.spd)
+
+    self.evad *= 1.2
+    self.evad = math.ceil(self.evad)
 
 
 def spawn_monster():
