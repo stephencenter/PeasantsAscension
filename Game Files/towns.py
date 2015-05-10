@@ -28,6 +28,7 @@ import items
 import pets
 import text_scroll
 import sounds
+import ascii_art
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -478,8 +479,11 @@ model! | [ENTER]')
                             continue
 
                         print('-'*25)
-                        print(i.desc)
+                        print('-{0}-'.format(str(i).upper()))
+                        print(ascii_art.item_sprites[i.ascart])
+                        print('"{0}"'.format(i.desc))
                         print('-'*25)
+
                         while True:
                             confirm = input(
                                 "\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(

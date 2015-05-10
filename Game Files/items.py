@@ -63,7 +63,7 @@ class Consumable(Item):
     # Items that restore you HP, MP, or both. All items of this class stacks
     # in the players inventory to increase organization.
     def __init__(self, name, desc, buy, sell,
-                 cat='consum', imp=False, heal=0, mana=0, ascart='Potions'):
+                 cat='consum', imp=False, heal=0, mana=0, ascart='Potion'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.heal = heal
         self.mana = mana
@@ -99,7 +99,7 @@ class Consumable(Item):
 
 
 class StatusPotion(Item):
-    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False, ascart='Potions'):
+    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False, ascart='Potion'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.status = status
 

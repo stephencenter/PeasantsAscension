@@ -23,6 +23,7 @@ import msvcrt
 from copy import copy as _c
 
 import npcs
+import ascii_art
 import towns
 import items as i
 
@@ -366,7 +367,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
             # Display the item description
             print('-'*25)
             print('-{0}-'.format(str(item).upper()))
-            # print(item.ascart)
+            print(ascii_art.item_sprites[item.ascart])
             input('"{0}" | [ENTER] '.format(item.desc))
 
         elif action == '3':
