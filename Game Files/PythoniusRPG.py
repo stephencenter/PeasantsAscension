@@ -1038,12 +1038,9 @@ def title_screen():
 def set_prompt_properties():
     ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
 
-    # Set the window size to fit the text output and character dialogue.
-    user32 = ctypes.windll.user32
-    screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-
-    lf_facesize = 32
-    std_output_handle = -11
+    # Calculate the screen size of the player
+    screensize = ctypes.windll.user32.GetSystemMetrics(0),\
+                 ctypes.windll.user32.GetSystemMetrics(1)
 
     class Coord(ctypes.Structure):
         _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
@@ -1054,12 +1051,13 @@ def set_prompt_properties():
                     ("dwFontSize", Coord),
                     ("FontFamily", ctypes.c_uint),
                     ("FontWeight", ctypes.c_uint),
-                    ("FaceName", ctypes.c_wchar * lf_facesize)]
+                    ("FaceName", ctypes.c_wchar*32)]
 
     font = ConsoleFontInfo()
     font.cbSize = ctypes.sizeof(ConsoleFontInfo)
     font.nFont = 12
 
+    # Adjust for screen sizes
     font.dwFontSize.X = 8 if screensize[0] < 1024 else 10 \
         if screensize[0] < 1280 else 12 if screensize[0] < 1920 else 15
     font.dwFontSize.Y = 14 if screensize[0] < 1024 else 18 \
@@ -1069,10 +1067,11 @@ def set_prompt_properties():
     font.FontWeight = 400
     font.FaceName = "Lucida Console"
 
-    handle = ctypes.windll.kernel32.GetStdHandle(std_output_handle)
+    handle = ctypes.windll.kernel32.GetStdHandle(-11)
     ctypes.windll.kernel32.SetCurrentConsoleFontEx(
         handle, ctypes.c_long(False), ctypes.pointer(font))
 
+    # Set the CMD window size
     os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/10 - 2),
                                                    math.ceil(screensize[1]/20 - 2)))
 
