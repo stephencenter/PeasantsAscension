@@ -837,7 +837,7 @@ station. Construction of the town of Cesura was outsourced to Elysium, who is
 the most technologically advanced civilization on the planet by far, having
 developed and perfected the Steam Engine and later the Train before the year
 1300 A.D.""",
-              [], 58, 123, gen_store=False, inn=False, wtrmelon_store=True)
+              [npcs.pime, npcs.ariver], 58, 123, gen_store=False, inn=False, wtrmelon_store=True)
 
 town17 = Town("Sanguion", """Sanguion: Sanguion is a save-haven for vampires. Vampires
 are feared throughout Pythonia, so this fairly unknown town is the only place they

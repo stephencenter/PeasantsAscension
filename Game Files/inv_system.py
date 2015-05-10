@@ -71,8 +71,8 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
              i.silence_potion, i.silence_potion, i.silence_potion]  # Silence Potion
             ],
 
-            'Weapons': [[i.cpr_swd, i.en_cpr_swd, i.bnz_spr,
-            i.en_bnz_spr, i.irn_axe, i.en_irn_axe],  # Warrior Weapons
+            'Weapons': [[i.bnz_swd, i.en_bnz_swd, i.stl_spr,
+            i.en_stl_spr, i.durs_axe, i.en_durs_axe],  # Warrior Weapons
 
             [i.oak_stf, i.en_oak_stf, i.arc_spb,
              i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],  # Mage Weapons
@@ -366,6 +366,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
             # Display the item description
             print('-'*25)
             print('-{0}-'.format(str(item).upper()))
+            # print(item.ascart)
             input('"{0}" | [ENTER] '.format(item.desc))
 
         elif action == '3':
@@ -763,10 +764,10 @@ def deserialize_inv(path):
                     x = i.Consumable('', '', '', '')
 
             elif category == 'weapons':
-                x = i.Weapon('', '', '', '', '', '', '')
+                x = i.Weapon('', '', '', '', '', '', '', '')
 
             elif category == 'armor':
-                x = i.Armor('', '', '', '', '', '', '', '')
+                x = i.Armor('', '', '', '', '', '', '', '', '')
 
             elif category == 'access':
                 if item['acc_type'] == 'elemental':
@@ -808,7 +809,17 @@ def deserialize_inv(path):
             else:
                 continue
 
-            x.__dict__ = item
+            if (not isinstance(x, i.Armor)
+                and not isinstance(x, i.Weapon)
+                    and not isinstance(x, pets.Companion)):
+
+                item_art = x.ascart
+                x.__dict__ = item
+                x.ascart = item_art
+
+            else:
+                x.__dict__ = item
+
             norm_inv[category].append(x)
 
     inventory = norm_inv
@@ -840,7 +851,7 @@ def deserialize_equip(path):
             continue
 
         elif category == 'weapon':
-            x = i.Weapon('', '', '', '', '', '', '')
+            x = i.Weapon('', '', '', '', '', '', '', '')
 
         elif category == 'access':
             if j_equipped[category]['acc_type'] == 'elemental':
@@ -857,7 +868,7 @@ def deserialize_equip(path):
                 x = pets.Steed('', '', '', '', '')
 
         else:
-            x = i.Armor('', '', '', '', '', '', '', '')
+            x = i.Armor('', '', '', '', '', '', '', '', '')
 
         x.__dict__ = j_equipped[category]
         norm_equip[category] = x

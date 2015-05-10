@@ -46,13 +46,14 @@ equipped = ''
 class Item:
     # The basic item class. Items are stored in the "inventory" dictionary. All
     # item-subclasses inherit from this class.
-    def __init__(self, name, desc, buy, sell, cat='', imp=False):
+    def __init__(self, name, desc, buy, sell, cat='', imp=False, ascart='Misc'):
         self.name = name
         self.desc = desc
         self.buy = buy
         self.sell = sell  # How much money you will get from selling it
         self.cat = cat  # Ensures that items go into the correct inventory slot
         self.imp = imp
+        self.ascart = ascart
 
     def __str__(self):
         return self.name
@@ -62,8 +63,8 @@ class Consumable(Item):
     # Items that restore you HP, MP, or both. All items of this class stacks
     # in the players inventory to increase organization.
     def __init__(self, name, desc, buy, sell,
-                 cat='consum', imp=False, heal=0, mana=0):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+                 cat='consum', imp=False, heal=0, mana=0, ascart='Potions'):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.heal = heal
         self.mana = mana
 
@@ -98,8 +99,8 @@ class Consumable(Item):
 
 
 class StatusPotion(Item):
-    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False, ascart='Potions'):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.status = status
 
     def use_item(self):
@@ -133,9 +134,9 @@ class Weapon(Item):
     # Items that increase your attack, magic attack, or both when equipped.
     # Certain weapons are planned to be infused with elements later on, which
     # will deal more/less damage to certain enemies.
-    def __init__(self, name, desc, buy, sell, power, type_, class_,
+    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart,
                  element='none', cat='weapons', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.power = power
         self.type_ = type_
         self.class_ = class_
@@ -208,12 +209,13 @@ class Weapon(Item):
 
 class Armor(Item):
     def __init__(self, name, desc, buy, sell, defense, type_, part,
-                 class_, cat='armor', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+                 class_, ascart, cat='armor', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.defense = defense
         self.type_ = type_
         self.part = part
         self.class_ = class_
+
         if self.class_ != 'none':
             if isinstance(self.class_, str):
                 self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'''])
@@ -273,15 +275,15 @@ class Armor(Item):
 
 # -- ACCESSORIES -- #
 class Accessory(Item):
-    def __init__(self, name, desc, buy, sell, cat='access', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+    def __init__(self, name, desc, buy, sell, ascart, cat='access', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
 
 class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
-    def __init__(self, name, desc, buy, sell, element, acc_type='elemental',
+    def __init__(self, name, desc, buy, sell, element, ascart='Amulet', acc_type='elemental',
                  cat='access', imp=False):
-        Accessory.__init__(self, name, desc, buy, sell, cat, imp)
+        Accessory.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.element = element
         self.acc_type = acc_type
 
@@ -320,8 +322,8 @@ class TradeOffAccessory(Accessory):
 
 # -- TOOLS -- #
 class MagicCompass(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+    def __init__(self, name, desc, buy, sell, ascart='Compass', cat='misc', imp=True):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
     def use_item():
@@ -347,8 +349,8 @@ class MagicCompass(Item):
 
 
 class DiviningRod(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+    def __init__(self, name, desc, buy, sell, ascart='Div Rod', cat='misc', imp=True):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
     def use_item():
@@ -378,8 +380,8 @@ class DiviningRod(Item):
 
 
 class Shovel(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc', imp=True):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+    def __init__(self, name, desc, buy, sell, ascart='Shovel', cat='misc', imp=True):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
     def use_item():
@@ -410,8 +412,9 @@ class Shovel(Item):
 
 
 class Valuable(Item):
-    def __init__(self, name, desc, buy, sell, posx, posy, acquired=False, cat='misc', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+    def __init__(self, name, desc, buy, sell, posx, posy, ascart='Gem',
+                 acquired=False, cat='misc', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.posx = posx
         self.posy = posy
         self.acquired = acquired
@@ -421,8 +424,8 @@ class Valuable(Item):
 
 
 class Misc(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp)
+    def __init__(self, name, desc, buy, sell, ascart='Misc', cat='misc', imp=False):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     def use_item(self):
         print('-'*25)
@@ -496,295 +499,296 @@ poison_potion = StatusPotion('Potion of Curing Disease',
 # Fists
 fists = Weapon('Fists',
                """Nothing beats good ol' fashioned hand-to-hand combat (+0 Attack)""",
-               0, 0, 0, 'melee', 'none')  # Fists exist to prevent bugs caused by not having any
-                                          # weapon equipped.
+               0, 0, 0, 'melee', 'none', 'Fists')
+               # Fists exist to prevent bugs caused by not having any
+               # weapon equipped.
 
-# Weapons -- Warrior
+# Weapons -- Warrior+
 wdn_sht = Weapon('Wooden Shortsword',
                  'A small sword carved from an oak branch (+3 Attack)',
-                 10, 5, 3, 'melee', 'warrior')
+                 10, 5, 3, 'melee', 'warrior', 'Short Sword')
 
-cpr_swd = Weapon('Copper Sword',
-                 'A light yet sturdy sword smelted from copper ore (+5 Attack)',
-                 45, 15, 5, 'melee', 'warrior')
-en_cpr_swd = Weapon('Enhanced Copper Sword',
-                    'An enhanced version of your typical Copper Sword (+7 Attack)',
-                    65, 25, 7, 'melee', 'warrior')
+bnz_swd = Weapon('Bronze Sword',
+                 'A light yet sturdy sword smelted from a bronze alloy (+5 Attack)',
+                 45, 15, 5, 'melee', 'warrior', 'Sword')
+en_bnz_swd = Weapon('Enhanced Bronze Sword',
+                    'An enhanced version of your typical Bronze Sword (+7 Attack)',
+                    65, 25, 7, 'melee', 'warrior', 'Sword')
 
-bnz_spr = Weapon('Bronze Spear',
-                 'A fair-sized spear smelted from a bronze alloy (+10 Attack)',
-                 175, 60, 10, 'melee', 'warrior')
-en_bnz_spr = Weapon('Enhanced Bronze Spear',
-                    'An enhanced version of your typical Bronze Spear (+15 Attack)',
-                    250, 75, 15, 'melee', 'warrior')
+stl_spr = Weapon('Steel Spear',
+                 'A fair-sized spear crafted from well made steel (+10 Attack)',
+                 175, 60, 10, 'melee', 'warrior', 'Spear')
+en_stl_spr = Weapon('Enhanced Steel Spear',
+                    'An enhanced version of your typical Steel Spear (+15 Attack)',
+                    250, 75, 15, 'melee', 'warrior', 'Spear')
 
-irn_axe = Weapon('Iron Battleaxe',
-                 'A powerful battleaxe smelted from iron ore (+19 Attack)',
-                 325, 110, 19, 'melee', 'warrior')
-en_irn_axe = Weapon('Enhanced Iron Battleaxe',
-                    'An enhanced version of your typical Iron Battleaxe (+25 Attack)',
-                    420, 135, 25, 'melee', 'warrior')
+durs_axe = Weapon('Durasteel Battleaxe',
+                  'A heavy and powerful axe made with high quality durasteel ore (+19 Attack)',
+                  325, 110, 19, 'melee', 'warrior', 'Axe')
+en_durs_axe = Weapon('Enhanced Durasteel Battleaxe',
+                     'An enhanced version of your typical Durasteel Battleaxe (+25 Attack)',
+                     420, 135, 25, 'melee', 'warrior', 'Axe')
 
 # Weapons -- Assassin
 stn_dag = Weapon('Stone Dagger',
                  'A crude yet effective knife carved from a light stone (+3 Attack)',
-                 10, 5, 3, 'melee', 'assassin')
+                 10, 5, 3, 'melee', 'assassin', 'Dagger')
 
 ser_knf = Weapon('Serated Knife',
                  'A durable knife made of iron, with one side made jagged (+5 Attack)',
-                 45, 15, 5, 'melee', 'assassin')
+                 45, 15, 5, 'melee', 'assassin', 'Dagger')
 en_ser_knf = Weapon('Enhanced Serated Knife',
                     'An enhanced version of your typical Serated Knife (+7 Attack)',
-                    65, 25, 7, 'melee', 'assassin')
+                    65, 25, 7, 'melee', 'assassin', 'Dagger')
 
 stiletto = Weapon('Stiletto',
                   'A long, cross-shaped knife perfect for "removing" your enemies (+10 Attack)',
-                  175, 60, 10, 'melee', 'assassin')
+                  175, 60, 10, 'melee', 'assassin', 'Stiletto')
 en_stiletto = Weapon('Enhanced Stiletto',
                      'An enhanced version of your typical Stiletto (+15 Attack)',
-                     250, 75, 15, 'melee', 'assassin')
+                     250, 75, 15, 'melee', 'assassin', 'Stiletto')
 
 myth_sb = Weapon('Mythril Shortblade',
                  'A knife made of a rare and powerful material (+19 Attack)',
-                 325, 115, 19, 'melee', 'assassin')
+                 325, 115, 19, 'melee', 'assassin', 'Short Sword')
 en_myth_sb = Weapon('Enhanced Mythril Shortblade',
                     'An enhanced version of your typical Mythril Shortblade (+25 Attack)',
-                    420, 135, 25, 'melee', 'assassin')
+                    420, 135, 25, 'melee', 'assassin', 'Short Sword')
 
 # Weapons -- Ranger
 slg_sht = Weapon('Sling Shot',
                  'A weapon that could scare even the mightiest of tin-cans (+3 Pierce)',
-                 10, 5, 3, 'ranged', 'ranger')
+                 10, 5, 3, 'ranged', 'ranger', 'Sling Shot')
 
 sht_bow = Weapon('Short Bow',
                  "A bow of great craftsmanship. It's kinda small, though (+5 Pierce)",
-                 45, 15, 5, 'ranged', 'ranger')
+                 45, 15, 5, 'ranged', 'ranger', 'Bow')
 en_sht_bow = Weapon('Enhanced Short Bow',
                     " An enhanced version of your typical Short Bow (+7 Pierce)",
-                    65, 25, 7, 'ranged', 'ranger')
+                    65, 25, 7, 'ranged', 'ranger', 'Bow')
 
 lng_bow = Weapon('Long Bow',
                  'A much more impressive bow capable of accuracy at long distances (+10 Pierce)',
-                 175, 60, 10, 'ranged', 'ranger')
+                 175, 60, 10, 'ranged', 'ranger', 'Bow')
 en_lng_bow = Weapon('Enhanced Long Bow',
                     'An enhanced version of your typical Long Bow (+15 Pierce)',
-                    250, 75, 15, 'ranged', 'ranger')
+                    250, 75, 15, 'ranged', 'ranger', 'Bow')
 
 ash_cbow = Weapon('Ashen Crossbow',
                   'A beautifully-crafted crossbow made fromt the wood of an ash tree. (+19 Pierce)',
-                  325, 115, 19, 'ranged', 'ranger')
+                  325, 115, 19, 'ranged', 'ranger', 'Crossbow')
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
                      'An enhanced version of your typical Ashen Crossbow (+25 Pierce)',
-                     420, 135, 25, 'ranged', 'ranger')
+                     420, 135, 25, 'ranged', 'ranger', 'Crossbow')
 
 # Weapons -- Mage
 mag_twg = Weapon('Magical Twig',
                  'A small stick with basic magical properties (+3 Magic Attack)',
-                 10, 5, 3, 'magic', 'mage')
+                 10, 5, 3, 'magic', 'mage', 'Twig')
 
 oak_stf = Weapon('Oak Staff',
                  'A wooden staff imbued with weak magical abilities (+5 Magic Attack)',
-                 45, 15, 5, 'magic', 'mage')
+                 45, 15, 5, 'magic', 'mage', 'Staff')
 en_oak_stf = Weapon('Enhanced Oak Staff',
                     'An enhanced version of your typical Oak Staff (+7 Magic Attack)',
-                    65, 25, 7, 'magic', 'mage')
+                    65, 25, 7, 'magic', 'mage', 'Staff')
 
 arc_spb = Weapon('Arcane Spellbook',
                  'An intermediate spellbook for combat purposes (+10 Magic Attack)',
-                 175, 60, 10, 'magic', 'mage')
+                 175, 60, 10, 'magic', 'mage', 'Book')
 en_arc_spb = Weapon('Enhanced Arcane Spellbook',
                     'An enhanced version of your typical Arcane Spellbook (+15 Magic Attack)',
-                    250, 75, 15, 'magic', 'mage')
+                    250, 75, 15, 'magic', 'mage', 'Book')
 
 rnc_stf = Weapon('Runic Staff',
                  'A powerful staff enchanted with ancient magic (+19 Magic Attack)',
-                 325, 115, 19, 'magic', 'mage')
+                 325, 115, 19, 'magic', 'mage', 'Staff')
 en_rnc_stf = Weapon('Enhanced Runic Staff',
                     'An enhanced version of your typical Runic Staff (+25 Magic Attack',
-                    420, 135, 25, 'magic', 'mage')
+                    420, 135, 25, 'magic', 'mage', 'Staff')
 
 # Starting Armor (Useless)
 straw_hat = Armor('Straw Hat',
                   "Other than keep the sun out of your eyes, this doesn't do much.",
-                  0, 2, 0, 'melee', 'head', 'none')
+                  0, 2, 0, 'melee', 'head', 'none', 'Hat')
 cotton_shirt = Armor('Cotton Shirt',
                      "It's barely even worth the material it's made of.",
-                     0, 2, 0, 'melee', 'body', 'none')
+                     0, 2, 0, 'melee', 'body', 'none', 'Shirt')
 sunday_trousers = Armor('Sunday Trousers',
                         "At least they look nice... Wait, isn't it Thursday?",
-                        0, 2, 0, 'melee', 'legs', 'none')
+                        0, 2, 0, 'melee', 'legs', 'none', 'Pants')
 
 # Armor -- Warrior -- Weak
 bnz_hlm = Armor('Bronze Helmet',
                 'A simple helmet crafted from bronze (+1 Defense)',
-                20, 8, 1, 'melee', 'head', 'warrior')
+                20, 8, 1, 'melee', 'head', 'warrior', 'Helmet')
 bnz_cst = Armor('Bronze Chestpiece',
                 'Simple chest armor crafted from bronze (+2 Defense)',
-                30, 12, 2, 'melee', 'body', 'warrior')
+                30, 12, 2, 'melee', 'body', 'warrior', 'Shirt')
 bnz_leg = Armor('Bronze Leggings',
                 'Simple leg armor crafted from bronze (+1 Defense)',
-                25, 10, 1, 'melee', 'legs', 'warrior')
+                25, 10, 1, 'melee', 'legs', 'warrior', 'Pants')
 
 en_bnz_hlm = Armor('Enhanced Bronze Helmet',
                    'An enhanced version of your typical Bronze Helmet (+3 Defense)',
-                   60, 25, 3, 'melee', 'head', 'warrior')
+                   60, 25, 3, 'melee', 'head', 'warrior', 'Helmet')
 en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
                    'An enhanced version of your typical Bronze Chestpiece (+4 Defense)',
-                   70, 35, 4, 'melee', 'body', 'warrior')
+                   70, 35, 4, 'melee', 'body', 'warrior', 'Shirt')
 en_bnz_leg = Armor('Enhanced Bronze Leggings',
                    'An enhanced version of your typical Bronze Leggings (+3 Defense)',
-                   65, 30, 3, 'melee', 'legs', 'warrior')
+                   65, 30, 3, 'melee', 'legs', 'warrior', 'Pants')
 
 # Armor -- Mage -- Weak
 wiz_hat = Armor('Wizard Hat',
                 'A silk hat woven with magic thread (+1 Magic Defense)',
-                20, 8, 1, 'magic', 'head', 'mage')
+                20, 8, 1, 'magic', 'head', 'mage', 'Wizard Hat')
 wiz_rob = Armor('Wizard Robe',
                 'A silk robe woven with magic thread (+2 Magic Defense)',
-                30, 12, 2, 'magic', 'body', 'mage')
+                30, 12, 2, 'magic', 'body', 'mage', 'Robe')
 wiz_gar = Armor('Wizard Garments',
                 'Silk garments woven with magic thread (+1 Magic Defense)',
-                25, 10, 1, 'magic', 'legs', 'mage')
+                25, 10, 1, 'magic', 'legs', 'mage', 'Robe Pants')
 
 en_wiz_hat = Armor('Enhanced Wizard Hat',
                    'An enhanced version of your typical Wizard Hat (+3 Magic Defense)',
-                   60, 25, 3, 'magic', 'head', 'mage')
+                   60, 25, 3, 'magic', 'head', 'mage', 'Wizard Hat')
 en_wiz_rob = Armor('Enhanced Wizard Robe',
                    'An enhanced version of your typical Wizard Robe (+4 Magic Defense)',
-                   70, 35, 4, 'magic', 'body', 'mage')
+                   70, 35, 4, 'magic', 'body', 'mage', 'Robe')
 en_wiz_gar = Armor('Enhanced Wizard Garments',
                    'An enhanced version of your typical Wizard Garments (+3 Magic Defense)',
-                   65, 30, 3, 'magic', 'legs', 'mage')
+                   65, 30, 3, 'magic', 'legs', 'mage', 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Weak
 lth_cap = Armor('Leather Cap',
                 'A simple leather cap providing equally simple protection (+1 Defense)',
-                20, 8, 1, 'melee', 'head', ['assassin', 'ranger'])
+                20, 8, 1, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 lth_bdy = Armor('Leather Bodyarmor',
                 'Simple body armor providing equally simple protection (+1 Defense)',
-                30, 12, 1, 'melee', 'body', ['assassin', 'ranger'])
+                30, 12, 1, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 lth_leg = Armor('Leather Leggings',
                 'Simple leggings providing equally simple protection (+1 Defense)',
-                25, 10, 1, 'melee', 'legs', ['assassin', 'ranger'])
+                25, 10, 1, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 en_lth_cap = Armor('Enhanced Leather Cap',
                    'An enhanced version of your typical Leather Cap (+3 Defense)',
-                   60, 25, 3, 'melee', 'head', ['assassin', 'ranger'])
+                   60, 25, 3, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 en_lth_bdy = Armor('Enhanced Leather Bodyarmor',
                    'An enhanced version of your typical Leather Bodyarmor (+3 Defense)',
-                   70, 35, 3, 'melee', 'body', ['assassin', 'ranger'])
+                   70, 35, 3, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 en_lth_leg = Armor('Enhanced Leather Leggings',
                    'An enhanced version of your typical Leather Leggings (+3 Defense)',
-                   65, 30, 3, 'melee', 'legs', ['assassin', 'ranger'])
+                   65, 30, 3, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 # Armor -- Warrior -- Mid
 stl_hlm = Armor('Steel Helmet',
                 'A decent helmet created from a solid metal (+6 Defense)',
-                145, 50, 6, 'melee', 'head', 'warrior')
+                145, 50, 6, 'melee', 'head', 'warrior', 'Helmet')
 stl_cst = Armor('Steel Chestpiece',
                 'Decent body armor made from a solid metal (+7 Defense)',
-                165, 60, 7, 'melee', 'body', 'warrior')
+                165, 60, 7, 'melee', 'body', 'warrior', 'Shirt')
 stl_leg = Armor('Steel Leggings',
                 'Decent leggings made from a solid metal (+6 Defense)',
-                155, 55, 6, 'melee', 'legs', 'warrior')
+                155, 55, 6, 'melee', 'legs', 'warrior', 'Pants')
 
 en_stl_hlm = Armor('Enhanced Steel Helmet',
                    'An enhanced version of your typical Steel Helmet (+10 Defense)',
-                   260, 75, 10, 'melee', 'head', 'warrior')
+                   260, 75, 10, 'melee', 'head', 'warrior', 'Helmet')
 en_stl_cst = Armor('Enhanced Steel Chestpiece',
                    'An enhanced version of your typical Steel Chestpiece (+11 Defense)',
-                   280, 85, 11, 'melee', 'body', 'warrior')
+                   280, 85, 11, 'melee', 'body', 'warrior', 'Shirt')
 en_stl_leg = Armor('Enhanced Steel Leggings',
                    'An enhanced version of your typical Steel Leggings (+10 Defense)',
-                   270, 80, 10, 'melee', 'legs', 'warrior')
+                   270, 80, 10, 'melee', 'legs', 'warrior', 'Pants')
 
 
 # Armor -- Mage -- Mid
 myst_hat = Armor('Mystical Hood',
                  'A mysterious hood with strange symbols sewn into it (+6 Magic Defense)',
-                 145, 50, 6, 'magic', 'head', 'mage')
+                 145, 50, 6, 'magic', 'head', 'mage', 'Wizard Hat')
 myst_rob = Armor('Mystical Robe',
                  'A mysterious robe with strange symbols sewn into it (+7 Magic Defense)',
-                 165, 60, 7, 'magic', 'body', 'mage')
+                 165, 60, 7, 'magic', 'body', 'mage', 'Robe')
 myst_gar = Armor('Mystical Garments',
                  'Mysterious garments with strange symbols sewn into it (+6 Magic Defense)',
-                 155, 55, 6, 'magic', 'legs', 'mage')
+                 155, 55, 6, 'magic', 'legs', 'mage', 'Robe Pants')
 
 en_myst_hat = Armor('Enhanced Mystical Hood',
                     'An enhanced version of your typical Mystical Hood (+10 Magic Defense)',
-                    260, 75, 10, 'magic', 'head', 'mage')
+                    260, 75, 10, 'magic', 'head', 'mage', 'Wizard Hat')
 en_myst_rob = Armor('Enhanced Mystical Robe',
                     'An enhanced version of your typical Mystical Robe (+11 Magic Defense)',
-                    280, 85, 11, 'magic', 'body', 'mage')
+                    280, 85, 11, 'magic', 'body', 'mage', 'Robe')
 en_myst_gar = Armor('Enhanced Mystical Garments',
                     'An enhanced version of your typical Mystical Garments (+10 Magic Defense)',
-                    270, 80, 10, 'magic', 'legs', 'mage')
+                    270, 80, 10, 'magic', 'legs', 'mage', 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Mid
 std_cwl = Armor('Studded Cowl',
                 'A soft leather cap studded with steel pieces (+6 Defense)',
-                145, 50, 6, 'melee', 'head', ['assassin', 'ranger'])
+                145, 50, 6, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 std_bdy = Armor('Studded Body-armor',
                 'Soft leather body armor studded with steel pieces (+6 Defense)',
-                165, 60, 6, 'melee', 'body', ['assassin', 'ranger'])
+                165, 60, 6, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 std_leg = Armor('Studded Leggings',
                 'Soft leather leggings studded with steel pieces (+6 Defense)',
-                155, 55, 6, 'melee', 'legs', ['assassin', 'ranger'])
+                155, 55, 6, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 en_std_cwl = Armor('Enhanced Studded Cowl',
                    'An enhanced version of your typical Studded Hood (+10 Defense)',
-                   260, 75, 10, 'melee', 'head', ['assassin', 'ranger'])
+                   260, 75, 10, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 en_std_bdy = Armor('Enhanced Studded Body-armor',
                    'An enhanced version of your typical Studded Bodyarmor (+10 Defense)',
-                   280, 85, 10, 'melee', 'body', ['assassin', 'ranger'])
+                   280, 85, 10, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 en_std_leg = Armor('Enhanced Studded Leggings',
                    'An enhanced version of your typical Studded Leggings (+10 Defense)',
-                   270, 80, 10, 'melee', 'legs', ['assassin', 'ranger'])
+                   270, 80, 10, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 
 # Armor -- Warrior -- Pow
 ori_hlm = Armor('Orichalcum Helmet',
                 'A strong helmet smelted from rare mountain copper  (+14 Defense)',
-                320, 110, 14, 'melee', 'head', 'warrior')
+                320, 110, 14, 'melee', 'head', 'warrior', 'Helmet')
 ori_cst = Armor('Orichalcum Chestplate',
                 'Strong chest armor smelted from rare mountain copper  (+15 Defense)',
-                340, 120, 15, 'melee', 'body', 'warrior')
+                340, 120, 15, 'melee', 'body', 'warrior', 'Shirt')
 ori_leg = Armor('Orichalcum Leggings',
                 'Strong leg armor smelted from rare mountain copper (+14 Defense)',
-                330, 115, 14, 'melee', 'legs', 'warrior')
+                330, 115, 14, 'melee', 'legs', 'warrior', 'Pants')
 
 # Armor -- Mage -- Pow
 elem_hat = Armor('Elemental Hat',
                  'A leather hat enchanted with elemental power (+14 Magic Defense)',
-                 320, 110, 14, 'magic', 'head', 'mage')
+                 320, 110, 14, 'magic', 'head', 'mage', 'Wizard Hat')
 elem_rob = Armor('Elemental Robe',
                  'A leather robe enchanted with elemental power (+15 Magic Defense)',
-                 340, 120, 15, 'magic', 'body', 'mage')
+                 340, 120, 15, 'magic', 'body', 'mage', 'Robe')
 elem_gar = Armor('Elemental Garments',
                  'Leather garments enchanted with elemental power (+14 Magic Defense).',
-                 330, 115, 14, 'magic', 'legs', 'mage')
+                 330, 115, 14, 'magic', 'legs', 'mage', 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Pow
 drg_cwl = Armor('Dragonhide Cowl',
                 'A tough hood crafted from high-quality dragonskin (+14 Defense)',
-                320, 110, 14, 'melee', 'head', ['assassin', 'ranger'])
+                320, 110, 14, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 drg_bdy = Armor('Dragonhide Bodyarmor',
                 'Tough bodyarmor crafted from high-quality dragonskin (+14 Defense)',
-                340, 120, 14, 'melee', 'body', ['assassin', 'ranger'])
+                340, 120, 14, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 drg_leg = Armor('Dragonhide Leggings',
                 'Tough leggings crafted from high-quality dragonskin (+14 Defense)',
-                330, 115, 14, 'melee', 'legs', ['assassin', 'ranger'])
+                330, 115, 14, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 # Unique Drops -- Weapons
 ice_blade = Weapon('Blade of Frost',
                    'A stunning blade enchanted with the power of ice (+16 Attack, ICE)',
-                   0, 225, 16, 'melee', 'warrior', element='ice')
+                   0, 225, 16, 'melee', 'warrior', 'Sword', element='ice')
 enc_yw = Weapon('Enchanted Yew Wand',
                 'A yewen wand of remarkable craftsmanship (+16 Magic Attack, GRASS)',
-                0, 225, 16, 'magic', 'mage', element='grass')
+                0, 225, 16, 'magic', 'mage', 'Twig', element='grass')
 spect_wand = Weapon('Spectre Wand',
                     'A ghastly wand made of an indescribable material (+15 Magic Attack, DEATH)',
-                    0, 225, 15, 'magic', 'mage', element='death')
+                    0, 225, 15, 'magic', 'mage', 'Wand', element='death')
 
 # Accessories
 # -- Elemental Accessories

@@ -1072,8 +1072,8 @@ def set_prompt_properties():
         handle, ctypes.c_long(False), ctypes.pointer(font))
 
     # Set the CMD window size
-    os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/10 - 2),
-                                                   math.ceil(screensize[1]/20 - 2)))
+    os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/font.dwFontSize.X - 2),
+                                                   math.ceil(screensize[1]/font.dwFontSize.Y - 2)))
 
 
 def copy_error(text):
