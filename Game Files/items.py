@@ -283,7 +283,7 @@ class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
     def __init__(self, name, desc, buy, sell, element, ascart='Amulet', acc_type='elemental',
                  cat='access', imp=False):
-        Accessory.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+        Accessory.__init__(self, name, desc, buy, sell, ascart, cat, imp)
         self.element = element
         self.acc_type = acc_type
 
