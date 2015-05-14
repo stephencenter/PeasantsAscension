@@ -941,7 +941,7 @@ def monster_drop(level, name):
                          'Harpy': [wing_piece]}
 
     if level in range(1, 16):
-        drops = [s_elixir, s_potion, cpr_swd, wiz_hat, lth_bdy]
+        drops = [s_elixir, s_potion, bnz_swd, wiz_hat, lth_bdy]
 
     elif level in range(16, 27):
         drops = [m_elixir, m_potion, lng_bow, myst_gar, stl_leg]

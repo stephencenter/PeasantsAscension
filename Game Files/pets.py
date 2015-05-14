@@ -23,6 +23,7 @@ import msvcrt
 
 import battle
 import sounds
+import ascii_art
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -39,7 +40,7 @@ else:
     main = sys.modules["__main__"]
 
 # A regular expression that replaces all non-NSEW characters with ''
-only_nsew = lambda x: re.compile(r'[^n^s^e^w]').sub('', x)
+only_nsew = lambda x: re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', x)
 
 
 class Companion:
@@ -153,65 +154,78 @@ class Steed(Companion):
         print('-'*25)
 
     def use_ability(self, direction):
+        letters = 'abcdefghijklmnopqrstuvwxyz'
+        numbers = '1234567890'
+
         direction = only_nsew(direction)
 
-        maximum = self.distance
+        chosen_list = []
 
-        if main.position['reg'] == 'Desert':
-            if self.name == 'Camel':  # Camels are desert-faring animals, and so they can
-                maximum += 1          # move further in one turn while in the desert.
+        if len(direction) > 1:
+            curstring = direction[0]
 
-            else:                     # Other animals, however, are not used to the desert.
-                maximum -= 1          # They are limited to one tile less than normal.
+            for char in direction[1:]:
+                if any(map(curstring.startswith, ''.join([letters, letters.upper()]))):
+                    if char.isalpha():
+                        curstring = ''.join([curstring, char])
 
-        if len(direction) > maximum:
-            spam = maximum
-        else:
-            spam = len(direction)
-
-        for x in direction[:spam]:
-            if x == 'n':
-                if main.position['y'] < 125:
-                    main.position['y'] += 1
-                else:
-                    Steed.out_of_bounds()
-                    return
-
-            elif x == 's':
-                if main.position['y'] > -125:
-                    main.position['y'] -= 1
-                else:
-                    Steed.out_of_bounds()
-                    return
-
-            elif x == 'w':
-                if main.position['x'] > -125:
-                    main.position['x'] -= 1
-                else:
-                    Steed.out_of_bounds()
-                    return
-
-            elif x == 'e':
-                if main.position['x'] < 125:
-                    main.position['x'] += 1
-                else:
-                    if position['y'] >= 42:
-                        nation = 'Hillsbrad'
-                    elif position['y'] <= -42:
-                        nation = 'Maranon'
                     else:
-                        nation = 'Elysium'
+                        chosen_list.append(curstring)
+                        curstring = char
 
-                    print('-'*25)
-                    print('You come across the border between {0} and Pythonia.'.format(
-                        nation))
-                    print('Despite your pleading, the border guards will not let you pass.')
-                    print('-'*25)
-                    return
+                elif any(map(curstring.startswith, numbers)):
+                    if char.isnumeric():
+                        curstring = ''.join([curstring, char])
 
-        if len(direction) > maximum:
-            print("Your {0} got tired, so you had to stop part-way.".format(self.name))
-            return
+                    else:
+                        chosen_list.append(curstring)
+                        curstring = char
+
+            chosen_list.append(curstring)
+
+        # for x in direction[:spam]:
+        #     if x == 'n':
+        #         if main.position['y'] < 125:
+        #             main.position['y'] += 1
+        #         else:
+        #             Steed.out_of_bounds()
+        #             return
+        #
+        #     elif x == 's':
+        #         if main.position['y'] > -125:
+        #             main.position['y'] -= 1
+        #         else:
+        #             Steed.out_of_bounds()
+        #             return
+        #
+        #     elif x == 'w':
+        #         if main.position['x'] > -125:
+        #             main.position['x'] -= 1
+        #         else:
+        #             Steed.out_of_bounds()
+        #             return
+        #
+        #     elif x == 'e':
+        #         if main.position['x'] < 125:
+        #             main.position['x'] += 1
+        #         else:
+        #             if position['y'] >= 42:
+        #                 nation = 'Hillsbrad'
+        #             elif position['y'] <= -42:
+        #                 nation = 'Maranon'
+        #             else:
+        #                 nation = 'Elysium'
+        #
+        #             print('-'*25)
+        #             print('You come across the border between {0} and Pythonia.'.format(
+        #                 nation))
+        #             print('Despite your pleading, the border guards will not let you pass.')
+        #             print('-'*25)
+        #             return
+        #
+        # if len(direction) > maximum:
+        #     print("Your {0} got tired, so you had to stop part-way.".format(self.name))
+        #     return
 
 # --Healing Pets--
 pet_cherub = Healer("Cherub",

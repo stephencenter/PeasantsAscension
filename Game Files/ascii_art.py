@@ -419,17 +419,33 @@ item_sprites = {
 
     "Dagger":
         """
-    -|==>
+      /\\
+      ||
+     _||_
+      ||
 """,
 
     "Short Sword":
         """
-    -|===>
+          /|
+         //
+        //
+       //
+    \_//_/
+     //
 """,
 
     "Sword":
         """
-    --|======>
+            /|
+           //
+          //
+         //
+        //
+       //
+    \_//_/
+     //
+
 """,
 
     "Fists":
@@ -642,5 +658,30 @@ item_sprites = {
     ||
     ||
     ||
+""",
+
+    "Healer Pet":
+        """
+       _
+     _| |_
+    |_PET_|
+      |_|
+""",
+
+    "Fighter Pet":
+        """
+      |
+      | PET
+    <-|-----<<
+      |
+      |
+""",
+
+    "Steed Pet":  # This is supposed to be a map showing increased speed towards areas
+        """
+    |~~~~~~~~~|
+    |  >>> x  |
+    |   PET   |
+    |~~~~~~~~~|
 """
 }
