@@ -782,9 +782,6 @@ def deserialize_inv(path):
                 elif item['pet_type'] == 'healer':
                     x = pets.Healer('', '', '', '', '', '', '', '')
 
-                elif item['pet_type'] == 'steed':
-                    x = pets.Steed('', '', '', '', '')
-
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue
@@ -864,9 +861,6 @@ def deserialize_equip(path):
 
             elif j_equipped[category]['pet_type'] == 'healer':
                 x = pets.Healer('', '', '', '', '', '', '', '')
-
-            elif j_equipped[category]['pet_type'] == 'steed':
-                x = pets.Steed('', '', '', '', '')
 
         else:
             x = i.Armor('', '', '', '', '', '', '', '', '')

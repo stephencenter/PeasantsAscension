@@ -20,6 +20,7 @@ import math
 import json
 import time
 import msvcrt
+import re
 
 import inv_system
 import sounds
@@ -41,6 +42,9 @@ else:
 
 inventory = ''
 equipped = ''
+
+# A regular expression that replaces all non-NSEW characters with ''
+only_nsew = lambda x: re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', x)
 
 
 class Item:
@@ -410,6 +414,149 @@ class Shovel(Item):
         if not search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
+
+class InsaneSpeedBoots(Item):
+    def __init__(self, name, desc, buy, sell, cat, imp, ascart):
+        # This is the item you get for beating the game. It allows immediate travelling
+        # to any location on the map. It's basically an insanely OP version of the
+        # Map of Fast Travelling.
+
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+
+    def use_item(self):
+        letters = 'abcdefghijklmnopqrstuvwxyz'
+        numbers = '1234567890'
+
+        direction = only_nsew(direction)
+
+        chosen_list = []
+
+        if len(direction) > 1:
+            curstring = direction[0]
+
+            for char in direction[1:]:
+                if any(map(curstring.startswith, ''.join([letters, letters.upper()]))):
+                    if char.isalpha():
+                        curstring = ''.join([curstring, char])
+
+                    else:
+                        chosen_list.append(curstring)
+                        curstring = char
+
+                elif any(map(curstring.startswith, numbers)):
+                    if char.isnumeric():
+                        curstring = ''.join([curstring, char])
+
+                    else:
+                        chosen_list.append(curstring)
+                        curstring = char
+
+            chosen_list.append(curstring)
+
+            if chosen_list[0].isalpha():
+                all_directions = chosen_list[::2]
+                all_magnitudes = chosen_list[1::2]
+                while len(all_directions) > len(all_magnitudes):
+                    all_magnitudes.append('1')
+
+            elif chosen_list[0].isnumeric():
+                all_magnitudes = chosen_list[::2]
+                all_directions = chosen_list[1::2]
+                if len(all_magnitudes) > len(all_directions):
+                    all_magnitudes.remove(all_magnitudes[-1])
+
+            all_directions = [spam[0] for spam in all_directions]
+            all_magnitudes = [int(spam) for spam in all_magnitudes]
+
+            all_vectors = list(zip(all_directions, all_magnitudes))
+
+            new_position = [main.position['x'], main.position['y']]
+
+            for vector in all_vectors:
+                if vector[0] == 'n':
+                    new_position[1] += vector[1]
+
+                    if new_position[1] > 125:
+                        new_position[1] = 125
+
+                if vector[0] == 's':
+                    new_position[1] -= vector[1]
+
+                    if new_position[1] < -125:
+                        new_position[1] = -125
+
+                if vector[0] == 'w':
+                    new_position[0] -= vector[1]
+
+                    if new_position[0] < -125:
+                        new_position[0] = -125
+
+                if vector[0] == 'e':
+                    new_position[0] += vector[1]
+
+                    if new_position[0] > 125:
+                        new_position[0] = 125
+
+            dt_vertical = str(new_position[1] - main.position['y'])
+            dt_horizontal = str(new_position[0] - main.position['x'])
+
+            if int(dt_vertical) > 0:
+                vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 North"])
+                verdir = '\u00b0N'
+            elif int(dt_vertical) < 0:
+                vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 South"])
+                verdir = '\u00b0S'
+            else:
+                vert_message = ''
+
+            if int(dt_horizontal) > 0:
+                horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 East"])
+                hordir = '\u00b0E'
+            elif int(dt_horizontal) < 0:
+                horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 West"])
+                hordir = '\u00b0W'
+
+            else:
+                horiz_message = ''
+
+            if horiz_message and vert_message:
+                vert_message = ''.join([vert_message, ", "])
+
+            if not (horiz_message or vert_message):
+                print('-'*25)
+                print('-Fast Travel Menu-')
+                print("You walk quickly in a small circle, arriving precisely where you started.")
+
+                return False
+
+            print('-'*25)
+            print('-Fast Travel Menu-')
+            print('Your input has been interpretted as {0}{1}.'.format(vert_message, horiz_message))
+            print('Travelling in that direction will take you to {0}{1}, {2}{3}.'.format(
+                new_position[1], verdir, new_position[0], hordir
+            ))
+
+            while True:
+                y_n = input('Confirm fast travel? | Yes or No: ')
+                y_n = y_n.lower()
+
+                if y_n.startswith('y'):
+                    print('Fast travelling in...')
+                    print('3')
+                    time.sleep(1)
+                    print('2')
+                    time.sleep(1)
+                    print('1')
+                    time.sleep(1)
+                    print('You arrived at your destination for the most part in one piece.')
+
+                    main.position['x'] = new_position[0]
+                    main.position['y'] = new_position[1]
+
+                    return
+
+                elif y_n.startswith('n'):
+                    return
 
 class Valuable(Item):
     def __init__(self, name, desc, buy, sell, posx, posy, ascart='Gem',

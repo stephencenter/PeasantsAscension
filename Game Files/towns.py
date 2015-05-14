@@ -576,9 +576,9 @@ Press enter/return ".format(vis_cat))
                 return
 
     def town_pet(self):
-        pet_list = [[pets.pet_fox, pets.pet_horse],
-                    [pets.pet_sapling, pets.pet_viper, pets.pet_horse],
-                    [pets.pet_dove, pets.pet_wolf, pets.pet_camel]][self.ps_level - 1]
+        pet_list = [[pets.pet_fox],
+                    [pets.pet_sapling, pets.pet_viper],
+                    [pets.pet_dove, pets.pet_wolf]][self.ps_level - 1]
 
         padding = len(max([x.name for x in pet_list], key=len))
 

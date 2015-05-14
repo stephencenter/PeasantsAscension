@@ -91,126 +91,120 @@ def movement_system():
 
             direction = direction.lower()
 
-            if any(map(direction.startswith, ['n', 's', 'w', 'e',
-                                              '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])):
+            if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
 
                 sounds.foot_steps.play()
+                # The in-game map is square due to simplify things.
+                # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
+                if direction.startswith('n'):
 
-                if not isinstance(inv_system.equipped['pet'], pets.Steed):
-                    # The in-game map is square due to simplify things.
-                    # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
-                    if direction.startswith('n'):
+                    if position['y'] < 125 if not position['is_aethus'] else 50:
+                        position['y'] += 1
 
-                        if position['y'] < 125 if not position['is_aethus'] else 50:
-                            position['y'] += 1
+                    else:
+                        print('-'*25)
 
-                        else:
-                            print('-'*25)
-
-                            if position['is_aethus']:  # Aethus is a floating island in the sky
-                                print("""\
+                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                            print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
 -------------------------""")
-
-                                continue
-
-                            if position['x'] <= 42:
-                                print('Off in the distance, you see what appears to be a large')
-                                print('island. According to your map, this island is known as')
-                                print('Durcuba. You probably shouldn\'t go there.')
-
-                            else:
-                                print('You come across the border between Hillsbrad and Pythonia.')
-                                print('Despite your pleading, the border guards will not let you \
-pass.')
-
-                            print('-'*25)
 
                             continue
 
-                    elif direction.startswith('s'):
-                        if position['y'] > -125 if not position['is_aethus'] else -50:
-                            position['y'] -= 1
+                        if position['x'] <= 42:
+                            print('Off in the distance, you see what appears to be a large')
+                            print('island. According to your map, this island is known as')
+                            print('Durcuba. You probably shouldn\'t go there.')
 
                         else:
-                            print('-'*25)
+                            print('You come across the border between Hillsbrad and Pythonia.')
+                            print('Despite your pleading, the border guards will not let you \
+pass.')
 
-                            if position['is_aethus']:  # Aethus is a floating island in the sky
-                                print("""\
+                        print('-'*25)
+
+                        continue
+
+                elif direction.startswith('s'):
+                    if position['y'] > -125 if not position['is_aethus'] else -50:
+                        position['y'] -= 1
+
+                    else:
+                        print('-'*25)
+
+                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                            print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
 -------------------------""")
-
-                                continue
-
-                            if position['x'] <= 42:
-                                print('You see a large island off in the distance. According to')
-                                print('your map, this island appears to be Thex! Unfortunately,')
-                                print("you don't have any way to cross the sea.")
-
-                            else:
-                                print('You come across the border between Maranon and Pythonia.')
-                                print('Despite your pleading, the border guards will not let you \
-pass.')
-                            print('-'*25)
 
                             continue
 
-                    elif direction.startswith('w'):
-                        if position['x'] > -125 if not position['is_aethus'] else -50:
-                            position['x'] -= 1
+                        if position['x'] <= 42:
+                            print('You see a large island off in the distance. According to')
+                            print('your map, this island appears to be Thex! Unfortunately,')
+                            print("you don't have any way to cross the sea.")
 
                         else:
-                            print('-'*25)
+                            print('You come across the border between Maranon and Pythonia.')
+                            print('Despite your pleading, the border guards will not let you \
+pass.')
+                        print('-'*25)
 
-                            if position['is_aethus']:  # Aethus is a floating island in the sky
-                                print("""\
+                        continue
+
+                elif direction.startswith('w'):
+                    if position['x'] > -125 if not position['is_aethus'] else -50:
+                        position['x'] -= 1
+
+                    else:
+                        print('-'*25)
+
+                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                            print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
 -------------------------""")
 
-                                continue
+                            continue
 
-                            print('Ahead of you is a seemingly endless ocean. \
+                        print('Ahead of you is a seemingly endless ocean. \
 You cannot continue in this direction.')
-                            print('-'*25)
+                        print('-'*25)
 
-                            continue
+                        continue
 
-                    elif direction.startswith('e'):
-                        if position['x'] < 125 if not position['is_aethus'] else 50:
-                            position['x'] += 1
+                elif direction.startswith('e'):
+                    if position['x'] < 125 if not position['is_aethus'] else 50:
+                        position['x'] += 1
 
-                        else:
-                            print('-'*25)
+                    else:
+                        print('-'*25)
 
-                            if position['is_aethus']:  # Aethus is a floating island in the sky
-                                print("""\
+                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                            print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
 -------------------------""")
 
-                                continue
-
-                            if position['y'] >= 42:
-                                nation = 'Hillsbrad'
-
-                            elif position['y'] <= -42:
-                                nation = 'Maranon'
-
-                            else:
-                                nation = 'Elysium'
-
-                            print('You come across the border between {0} and Pythonia.'.format(
-                                nation))
-                            print('Despite your pleading, the border guards will not let you pass.')
-                            print('-'*25)
-
                             continue
 
-                else:
-                    inv_system.equipped['pet'].use_ability(direction)
+                        if position['y'] >= 42:
+                            nation = 'Hillsbrad'
+
+                        elif position['y'] <= -42:
+                            nation = 'Maranon'
+
+                        else:
+                            nation = 'Elysium'
+
+                        print('You come across the border between {0} and Pythonia.'.format(
+                            nation))
+                        print('Despite your pleading, the border guards will not let you pass.')
+                        print('-'*25)
+
+                        continue
 
                 position['avg'] = int(((abs(position['x'])) +
                                        (abs(position['y'])))/2)
