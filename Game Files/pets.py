@@ -183,49 +183,75 @@ class Steed(Companion):
 
             chosen_list.append(curstring)
 
-        # for x in direction[:spam]:
-        #     if x == 'n':
-        #         if main.position['y'] < 125:
-        #             main.position['y'] += 1
-        #         else:
-        #             Steed.out_of_bounds()
-        #             return
-        #
-        #     elif x == 's':
-        #         if main.position['y'] > -125:
-        #             main.position['y'] -= 1
-        #         else:
-        #             Steed.out_of_bounds()
-        #             return
-        #
-        #     elif x == 'w':
-        #         if main.position['x'] > -125:
-        #             main.position['x'] -= 1
-        #         else:
-        #             Steed.out_of_bounds()
-        #             return
-        #
-        #     elif x == 'e':
-        #         if main.position['x'] < 125:
-        #             main.position['x'] += 1
-        #         else:
-        #             if position['y'] >= 42:
-        #                 nation = 'Hillsbrad'
-        #             elif position['y'] <= -42:
-        #                 nation = 'Maranon'
-        #             else:
-        #                 nation = 'Elysium'
-        #
-        #             print('-'*25)
-        #             print('You come across the border between {0} and Pythonia.'.format(
-        #                 nation))
-        #             print('Despite your pleading, the border guards will not let you pass.')
-        #             print('-'*25)
-        #             return
-        #
-        # if len(direction) > maximum:
-        #     print("Your {0} got tired, so you had to stop part-way.".format(self.name))
-        #     return
+            if chosen_list[0].isalpha():
+                all_directions = chosen_list[::2]
+                all_magnitudes = chosen_list[1::2]
+                while len(all_directions) > len(all_magnitudes):
+                    all_magnitudes.append('1')
+
+            elif chosen_list[0].isnumeric():
+                all_magnitudes = chosen_list[::2]
+                all_directions = chosen_list[1::2]
+                if len(all_magnitudes) > len(all_directions):
+                    all_magnitudes.remove(all_magnitudes[-1])
+
+            all_directions = [spam[0] for spam in all_directions]
+            all_magnitudes = [int(spam) for spam in all_magnitudes]
+
+            all_vectors = list(zip(all_directions, all_magnitudes))
+
+            new_position = [main.position['x'], main.position['y']]
+
+            for vector in all_vectors:
+                if vector[0] == 'n':
+                    new_position[1] += vector[1]
+
+                    if new_position[1] > 125:
+                        new_position[1] = 125
+
+                if vector[0] == 's':
+                    new_position[1] -= vector[1]
+
+                    if new_position[1] < -125:
+                        new_position[1] = -125
+
+                if vector[0] == 'w':
+                    new_position[0] -= vector[1]
+
+                    if new_position[0] < -125:
+                        new_position[0] = -125
+
+                if vector[0] == 'e':
+                    new_position[0] += vector[1]
+
+                    if new_position[0] > 125:
+                        new_position[0] = 125
+
+            dt_vertical = str(new_position[1] - main.position['y'])
+            dt_horizontal = str(new_position[0] - main.position['x'])
+
+            if int(dt_vertical) > 0:
+                vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 North"])
+            elif int(dt_vertical) < 0:
+                vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 South"])
+            else:
+                vert_message = ''
+
+            if int(dt_horizontal) > 0:
+                horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 East"])
+            elif int(dt_horizontal) < 0:
+                horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 West"])
+            else:
+                horiz_message = ''
+
+            if horiz_message and vert_message:
+                vert_message = ''.join([vert_message, ", "])
+
+            print('-'*25)
+            print('-Fast Travel Menu-')
+            print('You input has been interpretted as {0}{1}.'.format(vert_message, horiz_message))
+            input('Confirm fast travel? | Yes or No: ')
+            
 
 # --Healing Pets--
 pet_cherub = Healer("Cherub",

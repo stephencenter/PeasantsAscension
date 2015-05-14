@@ -91,7 +91,8 @@ def movement_system():
 
             direction = direction.lower()
 
-            if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
+            if any(map(direction.startswith, ['n', 's', 'w', 'e',
+                                              '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'])):
 
                 sounds.foot_steps.play()
 
