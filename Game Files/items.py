@@ -45,6 +45,7 @@ equipped = ''
 
 # A regular expression that replaces all non-NSEW characters with ''
 only_nsew = lambda x: re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', x)
+visited_towns = ['Lantonum', 'Nearton', 'Southford', 'Overshire', 'Ambercreek']
 
 
 class Item:
@@ -558,6 +559,34 @@ class InsaneSpeedBoots(Item):
                 elif y_n.startswith('n'):
                     return
 
+
+class TownTeleporter(Item):
+    def __init__(self, name, desc, buy, sell, cat, imp, ascart):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+
+    def use_item(self):
+        if main.position['is_aethus']:
+            town_list = towns.aethus_towns
+        else:
+            town_list = towns.town_list
+
+        available = []
+
+        for town in town_list:
+            for visited in visited_towns:
+                if town.name == visited:
+                    available.append((town.name, town.x, town.y))
+
+        if not available:
+            print('You can only fast travel to towns you have visited. You have not visited any')
+            print('towns yet, and therefore cannot fast travel. How did you get this map?')
+
+            return
+
+        available = sorted(available, key=lambda x: x[0].name)
+        print(available)
+
+
 class Valuable(Item):
     def __init__(self, name, desc, buy, sell, posx, posy, ascart='Gem',
                  acquired=False, cat='misc', imp=False):
@@ -975,7 +1004,6 @@ message_philliard = Misc('Message from Philliard',
                          'A neatly written message addressed to Joseph.',
                          0, 0, cat='q_items', imp=True)
 
-
 iSound = Misc('iSound',
               "You can't even begin to imagine how one would go about using this.",
               250, 75, cat='q_items', imp=False)
@@ -1021,6 +1049,9 @@ divining_rod = DiviningRod('Divining Rod',
 shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.',
                 175, 56)
 
+map_of_fast_travel = TownTeleporer('Map of Fast Travel',
+                                   'Allows quick travelling to previously visited towns.',
+                                   575, 190)
 
 # Monster Drops
 shell_fragment = Misc('Shell Fragment', 'A broken fragment of a remarkable sea-shell.', 0, 5)

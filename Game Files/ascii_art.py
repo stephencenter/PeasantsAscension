@@ -660,6 +660,14 @@ item_sprites = {
     ||
 """,
 
+    "Map":
+        """
+    |~~~~~~~~~|
+    |  >>> x  |
+    |   PET   |
+    |~~~~~~~~~|
+""",
+
     "Healer Pet":
         """
        _
@@ -675,13 +683,5 @@ item_sprites = {
     <-|-----<<
       |
       |
-""",
-
-    "Steed Pet":  # This is supposed to be a map showing increased speed towards areas
-        """
-    |~~~~~~~~~|
-    |  >>> x  |
-    |   PET   |
-    |~~~~~~~~~|
 """
 }
