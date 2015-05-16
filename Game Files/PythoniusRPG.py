@@ -45,7 +45,7 @@ misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
              'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20}
 
 # A dictionary containing all information related to the player's position
-position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Forest',
+position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
             'reg_music': 'Music/Through the Forest.ogg',
             'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False}
 
@@ -116,6 +116,8 @@ sav_position = 'Save Files/{CHARACTER_NAME}/position.json'  # Position
 sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'  # Quests & Dialogue
 
 sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'  # Spellbook
+
+sav_prevtowns = 'Save Files/{CHARACTER_NAME}/prevtowns.json' # Previously visited towns
 
 # NOTE 1: The save file locations can be changed in the file "settings.cfg".
 
@@ -649,25 +651,29 @@ def check_save():  # Check for save files and load the game if they're found
     dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
     save_files = {}
     menu_info = {}
+    save_file_list = [
+                sav_acquired_gems, sav_def_bosses,
+                sav_equip_items, sav_inventory,
+                sav_misc_boss_info, sav_misc_vars,
+                sav_play_stats, sav_position,
+                sav_quests_dia, sav_spellbook,
+                sav_prevtowns
+    ]
 
     for directory in dirs:
+        if not os.path.isfile(sav_prevtowns.format(CHARACTER_NAME=directory))\
+                and all([os.path.isfile(file.format(CHARACTER_NAME=directory))
+                         for file in save_file_list[:-1]]):
+
+                with open(sav_prevtowns.format(CHARACTER_NAME=directory),
+                          mode='w', encoding='utf-8') as f:
+                    json.dump(items.visited_towns, f, indent=4, separators=(', ', ': '))
 
         # If all save-file components exist...
-        if all(map(os.path.isfile, [
-            x.format(CHARACTER_NAME=directory) for x in [
-                sav_acquired_gems, sav_def_bosses,
-                sav_equip_items, sav_inventory,
-                sav_misc_boss_info, sav_misc_vars,
-                sav_play_stats, sav_position,
-                sav_quests_dia, sav_spellbook]])):
+        if all(map(os.path.isfile, [x.format(CHARACTER_NAME=directory) for x in save_file_list])):
 
             # ...then set the dictionary key equal to the newly-formatted save file names
-            save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in [
-                sav_acquired_gems, sav_def_bosses,
-                sav_equip_items, sav_inventory,
-                sav_misc_boss_info, sav_misc_vars,
-                sav_play_stats, sav_position,
-                sav_quests_dia, sav_spellbook]]
+            save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in save_file_list]
 
             try:
                 with open('/'.join(['Save Files', directory, "menu_info.txt"]),
@@ -675,6 +681,9 @@ def check_save():  # Check for save files and load the game if they're found
                     menu_info[directory] = f.read()
             except FileNotFoundError:
                 menu_info[directory] = "Unable to load preview info"
+
+
+
 
     time.sleep(0.25)
 
@@ -842,6 +851,9 @@ def save_game():
 
                 with open(sav_position, mode='w', encoding='utf-8') as f:
                     json.dump(position, f, indent=4, separators=(', ', ': '))
+
+                with open(sav_prevtowns, mode='w', encoding='utf-8') as f:
+                    json.dump(items.visited_towns, f, indent=4, separators=(', ', ': '))
 
                 items.serialize_gems(sav_acquired_gems)
                 inv_system.serialize_equip(sav_equip_items)

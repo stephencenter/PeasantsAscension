@@ -25,6 +25,8 @@ import re
 import inv_system
 import sounds
 import ascii_art
+import world
+
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -45,7 +47,7 @@ equipped = ''
 
 # A regular expression that replaces all non-NSEW characters with ''
 only_nsew = lambda x: re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', x)
-visited_towns = ['Lantonum', 'Nearton', 'Southford', 'Overshire', 'Ambercreek']
+visited_towns = []
 
 
 class Item:
@@ -417,7 +419,7 @@ class Shovel(Item):
 
 
 class InsaneSpeedBoots(Item):
-    def __init__(self, name, desc, buy, sell, cat, imp, ascart):
+    def __init__(self, name, desc, buy, sell, cat='misc', imp=False, ascart='Misc'):
         # This is the item you get for beating the game. It allows immediate travelling
         # to any location on the map. It's basically an insanely OP version of the
         # Map of Fast Travelling.
@@ -561,31 +563,79 @@ class InsaneSpeedBoots(Item):
 
 
 class TownTeleporter(Item):
-    def __init__(self, name, desc, buy, sell, cat, imp, ascart):
+
+    def __init__(self, name, desc, buy, sell, imp=False, cat='misc', ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    def use_item(self):
-        if main.position['is_aethus']:
-            town_list = towns.aethus_towns
+    @staticmethod
+    def use_item():
+        from towns import town_list, aethus_towns, search_towns
+
+        print('-'*25)
+
+        if not main.position['is_aethus']:
+            town_list = town_list
         else:
-            town_list = towns.town_list
+            town_list = aethus_towns
 
         available = []
 
         for town in town_list:
             for visited in visited_towns:
                 if town.name == visited:
-                    available.append((town.name, town.x, town.y))
+                    available.append((town.name,
+                                      town.x, "\u00b0E" if town.x >= 0 else "\u00b0W",
+                                      town.y, "\u00b0N" if town.y >= 1 else "\u00b0S"))
 
         if not available:
-            print('You can only fast travel to towns you have visited. You have not visited any')
-            print('towns yet, and therefore cannot fast travel. How did you get this map?')
-
+            print('You have not visited any towns yet, thus the map fails to respond.')
             return
 
-        available = sorted(available, key=lambda x: x[0].name)
-        print(available)
+        available = sorted(available, key=lambda x: x[0])
 
+        print("Avilable Towns:\n      ", sep='', end='')
+        print("\n      ".join(["[{0}] {1}: {2}, {3}".format(num + 1, town[0],
+                                                           ''.join([str(town[3]), town[4]]),
+                                                           ''.join([str(town[1]), town[2]]))
+                              for num, town in enumerate(available)]))
+        while True:
+            chosen = input('Input [#] (or type "exit"): ')
+
+            try:
+                chosen = int(chosen) - 1
+
+            except ValueError:
+                if chosen.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    return
+
+            try:
+                chosen_town = available[chosen]
+            except IndexError:
+                continue
+
+            while True:
+                y_n = input('Fast travel to {0}, located at {1}{2}, {3}{4}? | Yes or No: '.format(
+                    chosen_town[0], chosen_town[3], chosen_town[4], chosen_town[1], chosen_town[2]
+                ))
+
+                if y_n.lower().startswith('y'):
+                    print('You wave your hand over the map and then blow into it, and you suddenly')
+                    print('feel a rush of air around you. You go unconcious for a few seconds, and')
+                    print('upon waking find yourself exactly where you intended to go.')
+                    input('Press enter/return ')
+
+                    main.position['x'] = chosen_town[1]
+                    main.position['y'] = chosen_town[3]
+                    main.position['h'] = chosen_town[2]
+                    main.position['v'] = chosen_town[4]
+
+                    world.check_region()
+                    search_towns(main.position['x'], main.position['y'])
+                    return
+
+
+                elif y_n.lower().startswith('n'):
+                    break
 
 class Valuable(Item):
     def __init__(self, name, desc, buy, sell, posx, posy, ascart='Gem',
@@ -1049,9 +1099,13 @@ divining_rod = DiviningRod('Divining Rod',
 shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.',
                 175, 56)
 
-map_of_fast_travel = TownTeleporer('Map of Fast Travel',
-                                   'Allows quick travelling to previously visited towns.',
-                                   575, 190)
+map_of_fast_travel = TownTeleporter('Map of Fast Travel',
+                                    'Allows quick travelling to previously visited towns.',
+                                    575, 190)
+
+boots_of_insane_speed = InsaneSpeedBoots('Boots of Insane Speed',
+                                         'Allows insanely fast travel to any point on the map.',
+                                         10000, 3750)
 
 # Monster Drops
 shell_fragment = Misc('Shell Fragment', 'A broken fragment of a remarkable sea-shell.', 0, 5)

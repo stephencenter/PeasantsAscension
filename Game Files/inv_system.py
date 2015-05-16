@@ -143,7 +143,10 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
                        i.divining_rod, i.divining_rod, i.divining_rod],
 
                       [i.shovel, i.shovel, i.shovel,
-                       i.shovel, i.shovel, i.shovel]]}
+                       i.shovel, i.shovel, i.shovel],
+
+                      [i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel,
+                       i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel]]}
 
 i.item_setup_vars()
 
@@ -673,7 +676,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
 
 
 def tools_menu():  # Display a set of usable tools on the world map
-    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass']
+    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel']
     available_tools = []
     spam = True
 
@@ -799,6 +802,11 @@ def deserialize_inv(path):
 
                 elif item['name'] == 'Shovel':
                     item = i.shovel
+                    norm_inv[category].append(item)
+                    continue
+
+                elif item['name'] == 'Map of Fast Travel':
+                    item = i.map_of_fast_travel
                     norm_inv[category].append(item)
                     continue
 

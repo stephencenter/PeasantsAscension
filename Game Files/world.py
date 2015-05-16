@@ -306,7 +306,7 @@ def check_region():
 
     if position['reg'] != region:
         print('-'*25)
-        print('You have left the {0} region and are now entering the {1} region.'.format(
+        print('You have left the {0} and are now entering the {1}.'.format(
             position['reg'], region))
 
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
