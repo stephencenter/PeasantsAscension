@@ -420,9 +420,9 @@ class Shovel(Item):
 
 class InsaneSpeedBoots(Item):
     def __init__(self, name, desc, buy, sell, cat='misc', imp=False, ascart='Misc'):
-        # This is the item you get for beating the game. It allows immediate travelling
-        # to any location on the map. It's basically an insanely OP version of the
-        # Map of Fast Travelling.
+        # This item is the most expensive purchasable object in the game.
+        # It allows immediate travelling to any location on the map.
+        # It's basically an insanely OP version of the Map of Fast Travelling.
 
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
