@@ -427,139 +427,184 @@ class InsaneSpeedBoots(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     def use_item(self):
+        from towns import search_towns
+
         letters = 'abcdefghijklmnopqrstuvwxyz'
         numbers = '1234567890'
 
-        direction = only_nsew(direction)
+        print('-'*25)
+        print('-Fast Travel Menu-')
+        while True:
+            direction = input("Enter a direction (N, S, E, W) followed by a number: ")
+            direction = direction.lower()
 
-        chosen_list = []
+            direction = only_nsew(direction)
 
-        if len(direction) > 1:
-            curstring = direction[0]
+            chosen_list = []
 
-            for char in direction[1:]:
-                if any(map(curstring.startswith, ''.join([letters, letters.upper()]))):
-                    if char.isalpha():
-                        curstring = ''.join([curstring, char])
+            if len(direction) > 1:
+                curstring = direction[0]
 
-                    else:
-                        chosen_list.append(curstring)
-                        curstring = char
+                for char in direction[1:]:
+                    if any(map(curstring.startswith, ''.join([letters, letters.upper()]))):
+                        if char.isalpha():
+                            curstring = ''.join([curstring, char])
 
-                elif any(map(curstring.startswith, numbers)):
-                    if char.isnumeric():
-                        curstring = ''.join([curstring, char])
+                        else:
+                            chosen_list.append(curstring)
+                            curstring = char
 
-                    else:
-                        chosen_list.append(curstring)
-                        curstring = char
+                    elif any(map(curstring.startswith, numbers)):
+                        if char.isnumeric():
+                            curstring = ''.join([curstring, char])
 
-            chosen_list.append(curstring)
+                        else:
+                            chosen_list.append(curstring)
+                            curstring = char
 
-            if chosen_list[0].isalpha():
-                all_directions = chosen_list[::2]
-                all_magnitudes = chosen_list[1::2]
-                while len(all_directions) > len(all_magnitudes):
-                    all_magnitudes.append('1')
+                chosen_list.append(curstring)
 
-            elif chosen_list[0].isnumeric():
-                all_magnitudes = chosen_list[::2]
-                all_directions = chosen_list[1::2]
-                if len(all_magnitudes) > len(all_directions):
-                    all_magnitudes.remove(all_magnitudes[-1])
+                if chosen_list[0].isalpha():
+                    all_directions = chosen_list[::2]
+                    all_magnitudes = chosen_list[1::2]
+                    while len(all_directions) > len(all_magnitudes):
+                        all_magnitudes.append('1')
 
-            all_directions = [spam[0] for spam in all_directions]
-            all_magnitudes = [int(spam) for spam in all_magnitudes]
+                elif chosen_list[0].isnumeric():
+                    all_magnitudes = chosen_list[::2]
+                    all_directions = chosen_list[1::2]
+                    if len(all_magnitudes) > len(all_directions):
+                        all_magnitudes.remove(all_magnitudes[-1])
 
-            all_vectors = list(zip(all_directions, all_magnitudes))
+                all_directions = [spam[0] for spam in all_directions]
+                all_magnitudes = [int(spam) for spam in all_magnitudes]
 
-            new_position = [main.position['x'], main.position['y']]
+                all_vectors = list(zip(all_directions, all_magnitudes))
 
-            for vector in all_vectors:
-                if vector[0] == 'n':
-                    new_position[1] += vector[1]
+                new_position = [main.position['x'], main.position['y']]
 
-                    if new_position[1] > 125:
-                        new_position[1] = 125
+                for vector in all_vectors:
+                    if vector[0] == 'n':
+                        new_position[1] += vector[1]
 
-                if vector[0] == 's':
-                    new_position[1] -= vector[1]
+                        if new_position[1] > 125:
+                            new_position[1] = 125
 
-                    if new_position[1] < -125:
-                        new_position[1] = -125
+                    if vector[0] == 's':
+                        new_position[1] -= vector[1]
 
-                if vector[0] == 'w':
-                    new_position[0] -= vector[1]
+                        if new_position[1] < -125:
+                            new_position[1] = -125
 
-                    if new_position[0] < -125:
-                        new_position[0] = -125
+                    if vector[0] == 'w':
+                        new_position[0] -= vector[1]
 
-                if vector[0] == 'e':
-                    new_position[0] += vector[1]
+                        if new_position[0] < -125:
+                            new_position[0] = -125
 
-                    if new_position[0] > 125:
-                        new_position[0] = 125
+                    if vector[0] == 'e':
+                        new_position[0] += vector[1]
 
-            dt_vertical = str(new_position[1] - main.position['y'])
-            dt_horizontal = str(new_position[0] - main.position['x'])
+                        if new_position[0] > 125:
+                            new_position[0] = 125
 
-            if int(dt_vertical) > 0:
-                vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 North"])
-                verdir = '\u00b0N'
-            elif int(dt_vertical) < 0:
-                vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 South"])
-                verdir = '\u00b0S'
-            else:
-                vert_message = ''
+                dt_vertical = str(new_position[1] - main.position['y'])
+                dt_horizontal = str(new_position[0] - main.position['x'])
 
-            if int(dt_horizontal) > 0:
-                horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 East"])
-                hordir = '\u00b0E'
-            elif int(dt_horizontal) < 0:
-                horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 West"])
-                hordir = '\u00b0W'
+                if int(dt_vertical) > 0:
+                    vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 North"])
+                    dir_ = 'north'
+                elif int(dt_vertical) < 0:
+                    vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 South"])
+                    dir_ = 'south'
+                else:
+                    vert_message = ''
 
-            else:
-                horiz_message = ''
+                if int(dt_horizontal) > 0:
+                    horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 East"])
+                    dir_ = 'east'
+                elif int(dt_horizontal) < 0:
+                    horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 West"])
+                    dir_ = 'west'
+                else:
+                    horiz_message = ''
 
-            if horiz_message and vert_message:
-                vert_message = ''.join([vert_message, ", "])
+                if new_position[1] >= 0:
+                    verdir = '\u00b0N'
+                else:
+                    verdir = '\u00b0S'
 
-            if not (horiz_message or vert_message):
-                print('-'*25)
-                print('-Fast Travel Menu-')
-                print("You walk quickly in a small circle, arriving precisely where you started.")
+                if new_position[0] >= 0:
+                    hordir = '\u00b0E'
+                else:
+                    hordir = '\u00b0W'
 
-                return False
+                if horiz_message and vert_message:
+                    vert_message = ''.join([vert_message, ", "])
 
-            print('-'*25)
-            print('-Fast Travel Menu-')
-            print('Your input has been interpretted as {0}{1}.'.format(vert_message, horiz_message))
-            print('Travelling in that direction will take you to {0}{1}, {2}{3}.'.format(
-                new_position[1], verdir, new_position[0], hordir
-            ))
+                if not (horiz_message or vert_message):
+                    print("\nYou walk quickly in a small circle, arriving precisely where you \
+started.")
+                    input('Press enter/return ')
 
-            while True:
-                y_n = input('Confirm fast travel? | Yes or No: ')
-                y_n = y_n.lower()
+                    return
 
-                if y_n.startswith('y'):
-                    print('Fast travelling in...')
-                    print('3')
-                    time.sleep(1)
-                    print('2')
-                    time.sleep(1)
-                    print('1')
-                    time.sleep(1)
-                    print('You arrived at your destination for the most part in one piece.')
+                elif ((abs(int(dt_horizontal)) == 1 and abs(int(dt_vertical)) == 0)
+                        or (abs(int(dt_horizontal)) == 0 and abs(int(dt_vertical)) == 1)):
+
+                    print('\nUsing the nearly unlimited magical power of these expensive and rare')
+                    print('boots, you heriocally and valiantly take a single step {0}ward.'.format(
+                        dir_
+                    ))
+                    input('Press enter/return ')
 
                     main.position['x'] = new_position[0]
                     main.position['y'] = new_position[1]
+                    main.position['v'] = verdir
+                    main.position['h'] = hordir
+
+                    if not world.check_region():
+                        print('-'*25)
 
                     return
 
-                elif y_n.startswith('n'):
-                    return
+
+                print('-'*25)
+                print('Your input has been interpretted as {0}{1}.'.format(vert_message,
+                                                                           horiz_message))
+                print('Travelling in that direction will take you to {0}{1}, {2}{3}.'.format(
+                    new_position[1], verdir, new_position[0], hordir
+                ))
+                while True:
+                    y_n = input('Confirm fast travel? | Yes or No: ')
+                    y_n = y_n.lower()
+
+                    if y_n.startswith('y'):
+                        print('-'*25)
+                        print('Fast travelling in...')
+                        print('3')
+                        time.sleep(1)
+                        print('2')
+                        time.sleep(1)
+                        print('1')
+                        time.sleep(1)
+                        print('You arrived at your destination for the most part in one piece.')
+                        input('Press enter/return ')
+
+                        main.position['x'] = new_position[0]
+                        main.position['y'] = new_position[1]
+                        main.position['v'] = verdir
+                        main.position['h'] = hordir
+
+                        if not world.check_region():
+                            print('-'*25)
+
+                        search_towns(main.position['x'], main.position['y'])
+
+                        return
+
+                    elif y_n.startswith('n'):
+                        return
 
 
 class TownTeleporter(Item):
@@ -633,9 +678,9 @@ class TownTeleporter(Item):
                     search_towns(main.position['x'], main.position['y'])
                     return
 
-
                 elif y_n.lower().startswith('n'):
                     break
+
 
 class Valuable(Item):
     def __init__(self, name, desc, buy, sell, posx, posy, ascart='Gem',

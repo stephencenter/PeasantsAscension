@@ -540,7 +540,8 @@ def format_save_names():
                      'sav_equip_items', 'sav_inventory',
                      'sav_misc_boss_info', 'sav_misc_vars',
                      'sav_play_stats', 'sav_position',
-                     'sav_quests_dia', 'sav_spellbook'], key=str.lower):
+                     'sav_quests_dia', 'sav_spellbook',
+                     'sav_prevtowns'], key=str.lower):
 
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])

@@ -42,7 +42,8 @@ else:
     main = sys.modules["__main__"]
 
 inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
-             'weapons': [], 'armor': [], 'pets': [], 'misc': [], 'access': []}
+             'weapons': [], 'armor': [], 'pets': [], 'misc': [],
+             'access': []}
 
 equipped = {'weapon': '', 'head': _c(i.straw_hat),
             'body': _c(i.cotton_shirt),
@@ -146,7 +147,10 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
                        i.shovel, i.shovel, i.shovel],
 
                       [i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel,
-                       i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel]]}
+                       i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel],
+
+                      [i.boots_of_insane_speed, i.boots_of_insane_speed, i.boots_of_insane_speed,
+                       i.boots_of_insane_speed, i.boots_of_insane_speed, i.boots_of_insane_speed]]}
 
 i.item_setup_vars()
 
@@ -676,7 +680,8 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
 
 
 def tools_menu():  # Display a set of usable tools on the world map
-    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel']
+    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel',
+                  'Boots of Insane Speed']
     available_tools = []
     spam = True
 
@@ -729,7 +734,7 @@ def tools_menu():  # Display a set of usable tools on the world map
             tool = available_tools[tool]
             tool.use_item()
 
-            break
+            return
 
 
 def serialize_inv(path):
@@ -807,6 +812,11 @@ def deserialize_inv(path):
 
                 elif item['name'] == 'Map of Fast Travel':
                     item = i.map_of_fast_travel
+                    norm_inv[category].append(item)
+                    continue
+
+                elif item['name'] == 'Boots of Insane Speed':
+                    item = i.boots_of_insane_speed
                     norm_inv[category].append(item)
                     continue
 
