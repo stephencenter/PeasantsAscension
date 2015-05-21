@@ -1056,8 +1056,19 @@ serena_phrase_2 = Conversation(['You are a good man, trying to help our daughter
 
 serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, ser_pol_phrase_3])
 
-# Planned NPCs
-bamdeliit = NPC('Bamdeliit', [])
+# -- Name: Bamdeliit -- Town: Cesura
+bamdeliit_phrase_1 = Conversation(["Hello, sir! I'm Bamdeliit, the head engineer of Cesura!",
+                                   "I'm a native Elysian, and have only been here for around",
+                                   "a year, so I'm pretty new to this place! Most of my",
+                                   "time is spent making sure that these trains run properly.",
+                                   'By the way, do you know what "witch" means? Pythic isn\'t my',
+                                   'first language, and the townsfolk keep calling me that when',
+                                   'I turn on the trains. Witch is a good thing, right?'
+                                   ], active=True)
+
+bamdeliit = NPC('Bamdeliit', [bamdeliit_phrase_1])
+
+
 pime = NPC('Pime', [])
 ariver = NPC('Ariver', [])
 
