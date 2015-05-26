@@ -195,6 +195,10 @@ class PlayerCharacter:  # The Player
             if not ''.join(self.name.split()):
                 continue
 
+            alphanumeric = lambda x: re.sub(r'[|]', '', x)
+
+            self.name = alphanumeric(self.name)
+
             while True:
                 y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
                 y_n = y_n.lower()
@@ -203,6 +207,7 @@ class PlayerCharacter:  # The Player
                     return self.name
 
                 elif y_n.startswith('n'):
+                    print()
                     break
 
     def choose_class(self):

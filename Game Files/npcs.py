@@ -1069,26 +1069,72 @@ bamdeliit_phrase_1 = Conversation(["Hello, sir! I'm Bamdeliit, the head engineer
 bamdeliit = NPC('Bamdeliit', [bamdeliit_phrase_1])
 
 
-pime = NPC('Pime', [])
-ariver = NPC('Ariver', [])
+pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quick, come inside,",
+                              "it's not been safe to stay out here for the past few weeks.",
+                              "*Pime ushers you into a tavern filled with people whom he seems",
+                              "to be quite friendly with. They likewise are quite kind to you.*",
+                              "My name is Pime. I am the chief of this town, and the head of",
+                              "Sanguion's militia. As I'm sure you know, me, and all the other"
+                              "people in this inn, are vampires. Do not be alarmed! We only feast",
+                              "on wild animals and vampire hunters. You are completely safe, as",
+                              "long as you are not a hunter, that is. As of late, a new group",
+                              'of vampire hunters named the "Anti-blood Squad". Not only do these',
+                              "terrorists have an extrordinarily uncreative name, but they've",
+                              "also been capturing our friends and family and are torturing,",
+                              "ransoming, and even killing them! We vampires are not harmful to",
+                              "society, and do not deserve this kind of treatment! Our loved",
+                              "ones are dying to those monsters, and we don't have anywhere",
+                              "near enough manpower to put a stop to it! What are we to do?!",
+                              ], active=True)
+
+pime = NPC('Pime', [pime_phrase_1])
+
+ariver_phrase_1 = Conversation(["*Ariver mistakes you for a vampire hunter and runs quickly",
+                                "into his house, locking the doors, shutting the windows, and",
+                                "closing the blinds.*"], active=True)
+
+ariver = NPC('Ariver', [ariver_phrase_1])
 
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
-    wesley_phrase_1, seriph_phrase_1,
+
     rivesh_phrase_1, rivesh_phrase_2, rivesh_phrase_3, rivesh_phrase_4, rivesh_quest_1,
+
     alfred_phrase_1, alfred_phrase_2, alfred_phrase_3, alfred_quest_1,
+
     stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, stewson_quest_1,
+
     kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4,
+
     krystal_phrase_1, krystal_phrase_2, krystal_phrase_3, krystal_phrase_4,
+
     frederick_phrase_1, frederick_phrase_2, frederick_phrase_3,
+
     joseph_phrase_1, joseph_phrase_2, joseph_phrase_3, joseph_quest_1,
+
     alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3,
-    azura_phrase_1, azura_phrase_2, azura_phrase_3, f_jones_phrase_1,
-    stravi_phrase_1, sakura_phrase_1, sugulat_phrase_1, raidon_phrase_1,
-    elisha_phrase_1, lazaro_phrase_1, caesar_phrase_1, polmor_phrase_1,
-    serena_phrase_1, serena_phrase_2, ser_pol_phrase_3, polmor_quest_1,
-    polmor_phrase_2, matthew_phrase_1, matthew_quest_1, strathius_phrase_1,
-    matthew_phrase_2, matthew_phrase_3, matthew_phrase_4, matthew_phrase_5
+
+    azura_phrase_1, azura_phrase_2, azura_phrase_3,
+
+    polmor_phrase_1, polmor_phrase_2, polmor_quest_1, ser_pol_phrase_3,
+    serena_phrase_1, serena_phrase_2,
+
+    matthew_phrase_1, matthew_quest_1, matthew_phrase_2,
+    matthew_phrase_3, matthew_phrase_4, matthew_phrase_5,
+
+    f_jones_phrase_1,
+    stravi_phrase_1,
+    sakura_phrase_1,
+    sugulat_phrase_1,
+    raidon_phrase_1,
+    elisha_phrase_1,
+    lazaro_phrase_1,
+    caesar_phrase_1,
+    wesley_phrase_1,
+    seriph_phrase_1,
+    strathius_phrase_1,
+    pime_phrase_1,
+    ariver_phrase_1
 ]
 
 

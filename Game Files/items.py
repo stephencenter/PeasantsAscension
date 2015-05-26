@@ -419,7 +419,7 @@ class Shovel(Item):
 
 
 class InsaneSpeedBoots(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc', imp=False, ascart='Misc'):
+    def __init__(self, name, desc, buy, sell, cat='misc', imp=False, ascart='Boots'):
         # This item is the most expensive purchasable object in the game.
         # It allows immediate travelling to any location on the map.
         # It's basically an insanely OP version of the Map of Fast Travelling.

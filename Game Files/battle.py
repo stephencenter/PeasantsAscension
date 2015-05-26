@@ -311,10 +311,7 @@ def player_turn(var, dodge, move):
         else:
             return False
 
-        if not isinstance(inv_system.equipped['pet'], pets.Steed) \
-                and inv_system.equipped['pet'] != '(None)' \
-                and monster.hp > 0:
-
+        if inv_system.equipped['pet'] != '(None)' and monster.hp > 0:
             input('\nPress Enter/Return')
             print("\n-Pet Turn-")
             inv_system.equipped['pet'].use_ability()
