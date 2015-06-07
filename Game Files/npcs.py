@@ -1091,7 +1091,10 @@ pime = NPC('Pime', [pime_phrase_1])
 
 ariver_phrase_1 = Conversation(["*Ariver mistakes you for a vampire hunter and runs quickly",
                                 "into his house, locking the doors, shutting the windows, and",
-                                "closing the blinds.*"], active=True)
+                                "closing the blinds. As you begin walking away, scratching your",
+                                "head in confusion, you see him look out the window and walk",
+                                "back outside, having determined you are not a threat at the",
+                                "moment.*"], active=True)
 
 ariver = NPC('Ariver', [ariver_phrase_1])
 

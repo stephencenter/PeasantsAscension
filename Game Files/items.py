@@ -1054,12 +1054,33 @@ drg_leg = Armor('Dragonhide Leggings',
 ice_blade = Weapon('Blade of Frost',
                    'A stunning blade enchanted with the power of ice (+16 Attack, ICE)',
                    0, 225, 16, 'melee', 'warrior', 'Sword', element='ice')
+
 enc_yw = Weapon('Enchanted Yew Wand',
                 'A yewen wand of remarkable craftsmanship (+16 Magic Attack, GRASS)',
                 0, 225, 16, 'magic', 'mage', 'Twig', element='grass')
+
 spect_wand = Weapon('Spectre Wand',
                     'A ghastly wand made of an indescribable material (+15 Magic Attack, DEATH)',
                     0, 225, 15, 'magic', 'mage', 'Wand', element='death')
+
+muramasa = Weapon('Blade of Muramasa',
+                  'A blade crafted by the great Muramasa (+25 Attack, DEATH)',
+                  0, 500, 25, 'melee', ['warrior', 'assassin'], 'Sword', element='death')
+
+masamune = Weapon('Blade of Masamune',
+                  'A blade crafted by the great Masamune (+25 Attack, LIFE)',
+                  0, 500, 25, 'melee', ['warrior', 'assassin'], 'Sword', element='life')
+
+wind_bow = Weapon('Bow of Echoes',
+                  'A finely made bow that harnesses the power of wind (+22 Pierce Attack, WIND)',
+                  0, 450, 22, 'ranged', 'ranger', 'Bow', element='wind')
+
+lightning_dagger = Weapon('Lightning Dagger',
+                          'A blade in the shape of a lightning bolt. A powerful current \n\
+flows through the edge (+22 Attack, ELECTRIC)',
+                          0, 450, 22, 'melee', 'assassin', 'Dagger', element='electric')
+
+
 
 # Accessories
 # -- Elemental Accessories

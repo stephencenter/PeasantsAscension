@@ -282,6 +282,10 @@ giant_ent = Boss('Giant Ent',
 
 giant_ent.upon_defeating = unimportant_boss_ud
 
+# vampire_hunter = Boss('Vampire Hunter',
+
+# theonimbus = Boss('Theonimbus',
+
 boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent]
 
 defeated_bosses = []  # Make sure you can only defeat the boss one time
