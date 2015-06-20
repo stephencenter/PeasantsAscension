@@ -215,7 +215,7 @@ It's probably in your best interests that you not do that.
                            ):
 
                     # If none of the previous statements return True, then a battle can occur.
-                    # There is a 1 in 7 chance for a battle to occur (14.2857...%)
+                    # There is a 1 in 7 chance for a battle to occur (14.285714...%)
                     is_battle = not random.randint(0, 6)
 
                     if is_battle:

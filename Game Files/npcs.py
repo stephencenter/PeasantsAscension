@@ -144,13 +144,12 @@ class Conversation:
 
 class Quest(Conversation):
     def __init__(self, sentences, name, desc, q_giver, reward, end_dialogue,
-                 req_lvl=1, started=False, finished=False, active=False):
+                 started=False, finished=False, active=False):
         Conversation.__init__(self, sentences, active)
         self.name = name  # The name of the quest
         self.desc = desc  # A brief summary of the goal of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
         self.reward = reward  # A list [experience, gold] of your reward for the quest
-        self.req_lvl = req_lvl  # The level that you must be at to begin the quest
         self.started = started  # is True if the quest has been started, false otherwise
         self.finished = finished  # is True if the quest is complete, false otherwise
         self.end_dialogue = end_dialogue  # What is printed when the quest is over
@@ -164,10 +163,6 @@ class Quest(Conversation):
         print('-'*25)
         print(''.join([self.name, ': \n  ', '\n  '.join([x for x in self.desc])]))
         print('-'*25)
-
-        if self.req_lvl > main.player.lvl:
-            print('You are not a high enough level to begin the quest "{0}".\
-(Must be level {1})'.format(self.name, self.req_lvl))
 
         print('{0} is offering you the quest, "{1}".'.format(self.q_giver, self.name))
 
@@ -1087,7 +1082,42 @@ pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quic
                               "near enough manpower to put a stop to it! What are we to do?!",
                               ], active=True)
 
-pime = NPC('Pime', [pime_phrase_1])
+
+def pime_p1_at():
+    global pime_phrase_2
+    global pime_quest_1
+    global pime_phrase_1
+
+    if main.player.lvl >= 10:
+        pime_quest_1.active = True
+        pime_phrase_1.active = False
+        pime_phrase_2.active = False
+
+    else:
+        pime_phrase_2.active = True
+
+
+pime_phrase_1.after_talking = pime_p1_at
+
+pime_phrase_2 = Conversation(["Perhaps you could... nevermind, we need a more experienced",
+                              "individual to help us with our plight. Come back later.",
+                              "*Pime needs someone who is at least level 10. Go level up a bit!"])
+
+pime_quest_1 = Quest(["Hey - you look like quite the seasoned adventurer. Maybe you could help",
+                      "us! I hope this isn't too much to ask, but could you possibly defeat",
+                      "this dreaded vampire hunter for us? He's causing us so much pain, we need",
+                      "someone to get rid of him."],
+                     "The Hated Hunter",
+                     ["Defeat Typhen, the head of the Anti-blood Squad, as well as his lackeys.",
+                      "Their base is supposedly located at -68\u00b0S, -93\u00b0W, then return",
+                      "to Pime at Sanguion."], "Pime",
+                     [1000, 1000],
+                     ["Di... did you really defeat them? Amazing! You have saved us so much",
+                      "trouble! Those horrendous villians shall not hurt our tribe anymore!",
+                      "*He looks overjoyed, and gives you a great big hug. One wonders why",
+                      "the hunters attacked these people in the first place.*"])
+
+pime = NPC('Pime', [pime_phrase_1, pime_phrase_2, pime_quest_1])
 
 ariver_phrase_1 = Conversation(["*Ariver mistakes you for a vampire hunter and runs quickly",
                                 "into his house, locking the doors, shutting the windows, and",
@@ -1125,6 +1155,8 @@ all_dialogue = [
     matthew_phrase_1, matthew_quest_1, matthew_phrase_2,
     matthew_phrase_3, matthew_phrase_4, matthew_phrase_5,
 
+    pime_phrase_1, pime_quest_1, pime_phrase_2,
+
     f_jones_phrase_1,
     stravi_phrase_1,
     sakura_phrase_1,
@@ -1136,7 +1168,6 @@ all_dialogue = [
     wesley_phrase_1,
     seriph_phrase_1,
     strathius_phrase_1,
-    pime_phrase_1,
     ariver_phrase_1
 ]
 

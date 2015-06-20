@@ -631,3 +631,8 @@ def setup_vars():
     misc_vars = main.misc_vars
     position = main.position
     inventory = inv_system.inventory
+
+flying_attack_msg = "attempts to nose-dive straight into you!"
+biting_attack_msg = "readies its fangs and tries to bite you!"
+charging_attack_msg = "puts all its weight into trying to charge you!"
+slashing_attack_msg = "reveals its claws and prepares to slash you!"

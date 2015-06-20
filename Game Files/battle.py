@@ -154,7 +154,11 @@ def battle_system(is_boss=False, ambush=False):
 
     ability_used = False
 
-    while player.hp > 0 and monster.hp > 0:  # Continue the battle until someone dies
+    while not ((player.hp <= 0) or  # Continue the battle until one of a few conditions are met
+               (not is_boss and monster.hp <= 0) or
+               (is_boss and (not monster.multiphase or monster.curr_phase == monster.multiphase)
+                and monster.hp <= 0)):
+
         if player.hp <= 0.20*misc_vars["hp_p"]:
             print("Warning: HP is low, heal as soon as possible!")
             sounds.health_low.play()

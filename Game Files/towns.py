@@ -1052,3 +1052,11 @@ Do you want to visit it? | Yes or No: '.format(town.name))
 
     else:
         return False
+
+# import math
+#
+# for x_town in town_list:
+#     x = abs(x_town.x)
+#     y = abs(x_town.y)
+#     pos = (x + y)/2
+#     print(x_town.name, math.ceil(pos/(125/8)), x_town.gs_level)

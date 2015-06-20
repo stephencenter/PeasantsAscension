@@ -45,7 +45,7 @@ misc_vars = ''
 class Boss(monsters.Monster):
     def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad,
                  lvl, pos_x, pos_y, items, gold, experience,
-                 active=True, element='none'):
+                 active=True, element='none', multiphase=0, currphase=1):
         monsters.Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk,
                                   m_dfns, spd, evad, lvl, element)
         self.pos_x = pos_x
@@ -60,6 +60,8 @@ class Boss(monsters.Monster):
         self.monster_name = copy.copy(self.name)
         self.hp = copy.copy(misc_vars['hp_m'])
         self.mp = copy.copy(misc_vars['mp_m'])
+        self.multiphase = multiphase
+        self.currphase = currphase
 
     def max_stats(self):
         global misc_vars
@@ -231,7 +233,7 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    25, 12,    # 25 Speed, 12 Evasion
                    11,        # Level 11
                    -11, -23,  # Located at -23'S, -11'W
-                   None,        # Drops no items
+                   None,      # Drops no items
                    100, 100)  # Drops 100 XP and 100 GP
 
 
@@ -248,16 +250,17 @@ terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
 cursed_spect = Boss('Cursed Spectre',
-                    85, 35,
-                    15, 20,
-                    20, 20,
-                    30, 20,
-                    20, 15,
-                    12,
-                    3, 22,
-                    items.spect_wand,
-                    100, 100,
-                    active=False, element='death')
+                    85, 35,            # 85 Health, 35 Mana
+                    15, 20,            # 15 Attack, 20 Defense
+                    20, 20,            # 20 Pierce Attack, 20 Pierce Defense
+                    30, 20,            # 30 Magic Attack, 20 Magic Defense
+                    20, 15,            # 20 Speed, 15 Evasion
+                    12,                # Level 12
+                    3, 22,             # Located at 22'N, 3'E
+                    items.spect_wand,  # Drops a spectre wand
+                    100, 100,          # Drops 100 XP and 100 GP
+                    element='death',   # Death Element
+                    active=False)
 
 
 def cursspect_ud():
@@ -282,7 +285,53 @@ giant_ent = Boss('Giant Ent',
 
 giant_ent.upon_defeating = unimportant_boss_ud
 
-# vampire_hunter = Boss('Vampire Hunter',
+# Boss: Anti-blood Squad -- Position: -68'S, -93'W
+anti_blood_squad = Boss('Hunter Lackey #1',
+                        50, 15,
+                        15, 30,
+                        35, 35,
+                        10, 20,
+                        30, 25,
+                        15,
+                        -93, -68,
+                        None,
+                        100, 100,
+                        active=False,
+                        multiphase=3)
+
+
+def antibloodsquad_et(self, var, dodge):
+    if self.name == "Hunter Lackey #1" and self.hp <= 0:
+        self.currphase += 1
+
+        self.name = "Hunter Lackey #2"
+        self.hp = 50
+        self.mp = 15
+
+    elif self.name == "Hunter Lackey #2" and self.hp <= 0:
+        self.currphase += 1
+
+        self.name = "Typhen the Vampire Hunter"
+        self.hp = 100
+        main.misc_vars['hp_m'] = 100
+        self.mp = 30
+        main.misc_vars['mp_m'] = 30
+        self.attk += 5
+        self.dfns += 5
+        self.p_attk += 10
+        self.p_dfns += 5
+        self.m_attk -= 5
+        self.m_dfns -= 10
+
+        self.level = 20
+        self.experience = 250
+        self.gold = 250
+
+        self.items = items.wind_bow
+
+    monsters.Monster.enemy_turn(self, var, dodge)
+
+anti_blood_squad.enemy_turn = antibloodsquad_et
 
 # theonimbus = Boss('Theonimbus',
 
