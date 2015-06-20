@@ -19,9 +19,9 @@
 player_art = {
     "Ranger":
     """
-                / o'
+                /  o'
                 |*-|>
-                \\/ \\
+                \\ / \\
 %s""",
 
     "Warrior":
@@ -397,6 +397,27 @@ O0o"
 /    |
         %s""",
 
+    "Hunter Lackey #1":
+    """
+"o> \\
+<|-*|-
+/ \ /
+        %s""",
+
+    "Hunter Lackey #2":
+    """
+
+"o> \\
+<|-*|-
+/ \ /
+        %s""",
+
+    "Typhen the Vampire Hunter":
+    """
+  "o> \\
+ /-|-*|
+' / \ /
+        %s"""
 }
 
 # Sprites used for items (not yet implemented!)

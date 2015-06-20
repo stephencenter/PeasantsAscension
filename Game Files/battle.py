@@ -156,7 +156,7 @@ def battle_system(is_boss=False, ambush=False):
 
     while not ((player.hp <= 0) or  # Continue the battle until one of a few conditions are met
                (not is_boss and monster.hp <= 0) or
-               (is_boss and (not monster.multiphase or monster.curr_phase == monster.multiphase)
+               (is_boss and (not monster.multiphase or monster.currphase == monster.multiphase)
                 and monster.hp <= 0)):
 
         if player.hp <= 0.20*misc_vars["hp_p"]:
@@ -231,7 +231,7 @@ def battle_system(is_boss=False, ambush=False):
         elif (actual_speed > monster.spd or move == '2' or move == '3') \
                 and player.status_ail != 'asleep':
 
-            if move and player_turn(var, dodge, move) and monster.hp > 0:
+            if move and player_turn(var, dodge, move, is_boss) and monster.hp > 0:
                 input('\nPress Enter/Return ')
                 monster.enemy_turn(m_var, m_dodge)
 
@@ -254,7 +254,7 @@ def battle_system(is_boss=False, ambush=False):
                     if is_asleep:
                         move = player_choice(actual_speed)
 
-                    player_turn(var, dodge, move)
+                    player_turn(var, dodge, move, is_boss)
 
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
@@ -264,7 +264,7 @@ def battle_system(is_boss=False, ambush=False):
             print('-'*25)
 
 
-def player_turn(var, dodge, move):
+def player_turn(var, dodge, move, is_boss):
     global player
     global monster
 
@@ -360,6 +360,9 @@ def player_turn(var, dodge, move):
 
                 input('You find yourself able to speak again! | Press enter/return ')
                 player.status_ail = 'none'
+
+        if is_boss and monster.multiphase and monster.hp <= 0:
+            monster.enemy_turn(var, dodge)
 
         return True
 

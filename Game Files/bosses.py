@@ -287,51 +287,77 @@ giant_ent.upon_defeating = unimportant_boss_ud
 
 # Boss: Anti-blood Squad -- Position: -68'S, -93'W
 anti_blood_squad = Boss('Hunter Lackey #1',
-                        50, 15,
-                        15, 30,
-                        35, 35,
-                        10, 20,
-                        30, 25,
+                        75, 20,
+                        30, 35,
+                        55, 50,
+                        25, 25,
+                        40, 45,
                         15,
                         -93, -68,
                         None,
-                        100, 100,
+                        200, 200,
                         active=False,
                         multiphase=3)
 
 
-def antibloodsquad_et(self, var, dodge):
-    if self.name == "Hunter Lackey #1" and self.hp <= 0:
-        self.currphase += 1
+def antibloodsquad_et(var, dodge):
+    if monsters.monster.name == "Hunter Lackey #1" and monsters.monster.hp <= 0:
+        monsters.monster.currphase += 1
+        print('The first lackey falls dead, and the second one takes her place!')
 
-        self.name = "Hunter Lackey #2"
-        self.hp = 50
-        self.mp = 15
+        monsters.monster.name = "Hunter Lackey #2"
+        monsters.monster.monster_name = "Hunter Lackey #2"
+        monsters.monster.hp = 75
+        monsters.monster.mp = 20
+        battle.temp_stats['m_ispoisoned'] = False
 
-    elif self.name == "Hunter Lackey #2" and self.hp <= 0:
-        self.currphase += 1
+        return
 
-        self.name = "Typhen the Vampire Hunter"
-        self.hp = 100
-        main.misc_vars['hp_m'] = 100
-        self.mp = 30
-        main.misc_vars['mp_m'] = 30
-        self.attk += 5
-        self.dfns += 5
-        self.p_attk += 10
-        self.p_dfns += 5
-        self.m_attk -= 5
-        self.m_dfns -= 10
+    elif monsters.monster.name == "Hunter Lackey #2" and monsters.monster.hp <= 0:
+        monsters.monster.currphase += 1
+        print('Seeing that his guards have fallen, Typhen is forced to defend himself!')
 
-        self.level = 20
-        self.experience = 250
-        self.gold = 250
+        monsters.monster.name = "Typhen the Vampire Hunter"
+        monsters.monster.monster_name = "Typhen the Vampire Hunter"
 
-        self.items = items.wind_bow
+        monsters.monster.hp = 200
+        main.misc_vars['hp_m'] = 200
 
-    monsters.Monster.enemy_turn(self, var, dodge)
+        monsters.monster.mp = 50
+        main.misc_vars['mp_m'] = 50
+
+        monsters.monster.attk += 15
+        monsters.monster.dfns += 15
+        monsters.monster.p_attk += 20
+        monsters.monster.p_dfns += 15
+        monsters.monster.m_attk -= 5
+        monsters.monster.m_dfns -= 10
+        monsters.monster.spd += 10
+        monsters.monster.evad += 5
+
+        monsters.monster.level = 25
+        monsters.monster.experience = 1000
+        monsters.monster.gold = 1000
+
+        monsters.monster.items = items.wind_bow
+        battle.temp_stats['m_ispoisoned'] = False
+
+        return
+
+    elif monsters.monster.hp <= 0:
+        return
+
+    monsters.Monster.enemy_turn(anti_blood_squad, var, dodge)
 
 anti_blood_squad.enemy_turn = antibloodsquad_et
+
+
+def absquad_ud():
+    npcs.pime_phrase_3.active = False
+    npcs.pime_quest_1.finished = True
+
+anti_blood_squad.upon_defeating = absquad_ud
+
 
 # theonimbus = Boss('Theonimbus',
 

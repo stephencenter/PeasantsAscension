@@ -109,7 +109,7 @@ class Monster:
 
     def monst_level(self):
         global misc_vars
-        self.lvl = int((1/3)*abs(10/5.65*position['avg'] - 1)) + 1
+        self.lvl = int((1/3)*abs(0.8*position['avg'] - 1)) + 1
 
         if self.lvl < 1:
             self.lvl = 1
@@ -253,6 +253,10 @@ class Monster:
 
         self.check_poison()
 
+
+        if isinstance(self, bosses.Boss) and self.multiphase and self.hp <= 0:
+            self.enemy_turn(var, dodge)
+
     def give_status(self):
         # Attempt to give the player a status ailment
 
@@ -325,8 +329,8 @@ class Monster:
                                            'Imp', 'Bat'],
                         'Arcadian Desert': ['Mummy', 'Sand Golem', 'Minubis',
                                             'Fire Ant', 'Naga'],
-                        'Glacia': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge',
-                                   'Arctic Wolf', 'Frost Bat'],
+                        'Glacian Plains': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge',
+                                           'Arctic Wolf', 'Frost Bat'],
                         'Terrius Mt. Range': ['Troll', 'Rock Giant', 'Oread',
                                               'Tengu', 'Giant Worm'],
                         'Overhire Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',

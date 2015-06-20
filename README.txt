@@ -157,4 +157,4 @@ As of v0.6.5, there are:
 	8 Regions
 	6 Pets
 	40 Different Monster Varieties
-	73202 (!!) Tiles To Explore
+	6 Gems

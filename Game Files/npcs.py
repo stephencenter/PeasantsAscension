@@ -930,7 +930,7 @@ pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quic
                               "*Pime ushers you into a tavern filled with people whom he seems",
                               "to be quite friendly with. They likewise are quite kind to you.*",
                               "My name is Pime. I am the chief of this town, and the head of",
-                              "Sanguion's militia. As I'm sure you know, me, and all the other"
+                              "Sanguion's militia. As I'm sure you know, me, and all the other",
                               "people in this inn, are vampires. Do not be alarmed! We only feast",
                               "on wild animals and vampire hunters. You are completely safe, as",
                               "long as you are not a hunter, that is. As of late, a new group",
@@ -980,11 +980,19 @@ pime_quest_1 = Quest(["Hey - you look like quite the seasoned adventurer. Maybe 
 
 
 def pimeqst_us1():
-    pass
+    global pime_phrase_1
+    global pime_phrase_3
 
+    pime_phrase_1.active = False
+    pime_phrase_3.active = True
+    bosses.anti_blood_squad.active = True
 
 def pimeqst_uc1():
-    pass
+    global pime_quest_1
+    global pime_phrase_4
+
+    pime_quest_1.active = False
+    pime_phrase_4.active = True
 
 
 pime_quest_1.upon_starting = pimeqst_us1
