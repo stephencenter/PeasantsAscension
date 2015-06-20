@@ -335,6 +335,7 @@ anti_blood_squad.enemy_turn = antibloodsquad_et
 
 # theonimbus = Boss('Theonimbus',
 
-boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent]
+boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent,
+             anti_blood_squad]
 
 defeated_bosses = []  # Make sure you can only defeat the boss one time

@@ -6,7 +6,7 @@
         |___/
             
 PythoniusRPG -- Programmed in Python by Stephen Center (RbwNjaFurret)
- -- v0.6.4 Alpha
+ -- v0.6.5 Alpha
 ----------------------------------------------------
 Legal Stuff:
 
@@ -142,3 +142,19 @@ Music:
     
     These composers are very talented, and I'd highly recommend
     you listen to more of their work!
+----------------------------------------------------
+As of v0.6.5, there are:
+    26 NPCs
+    8 Quests
+    66 Unique Conversations
+    18 Towns
+    1 Cottage
+    2 Staircases
+    7 Bosses
+    141 Items
+	4 Player Classes
+	50 Spells
+	8 Regions
+	6 Pets
+	40 Different Monster Varieties
+	73202 (!!) Tiles To Explore

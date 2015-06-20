@@ -924,6 +924,80 @@ matthew_phrase_4.after_talking = matthew_p4_at
 matthew = NPC('Matthew', [matthew_phrase_1, matthew_quest_1, matthew_phrase_2,
                           matthew_phrase_3, matthew_phrase_4, matthew_phrase_5])
 
+# -- Name: Pime -- Town: Sanguion
+pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quick, come inside,",
+                              "it's not been safe to stay out here for the past few weeks.",
+                              "*Pime ushers you into a tavern filled with people whom he seems",
+                              "to be quite friendly with. They likewise are quite kind to you.*",
+                              "My name is Pime. I am the chief of this town, and the head of",
+                              "Sanguion's militia. As I'm sure you know, me, and all the other"
+                              "people in this inn, are vampires. Do not be alarmed! We only feast",
+                              "on wild animals and vampire hunters. You are completely safe, as",
+                              "long as you are not a hunter, that is. As of late, a new group",
+                              'of vampire hunters named the "Anti-blood Squad". Not only do these',
+                              "terrorists have an extrordinarily uncreative name, but they've",
+                              "also been capturing our friends and family and are torturing,",
+                              "ransoming, and even killing them! We vampires are not harmful to",
+                              "society, and do not deserve this kind of treatment! Our loved",
+                              "ones are dying to those monsters, and we don't have anywhere",
+                              "near enough manpower to put a stop to it! What are we to do?!",
+                              ], active=True)
+
+
+def pime_p1_at():
+    global pime_phrase_2
+    global pime_quest_1
+    global pime_phrase_1
+
+    if main.player.lvl >= 10:
+        pime_quest_1.active = True
+        pime_phrase_1.active = False
+        pime_phrase_2.active = False
+
+    else:
+        pime_phrase_2.active = True
+
+
+pime_phrase_1.after_talking = pime_p1_at
+
+pime_phrase_2 = Conversation(["Perhaps you could... nevermind, we need a more experienced",
+                              "individual to help us with our plight. Come back later.",
+                              "*Pime needs someone who is at least level 10. Go level up a bit!"])
+
+pime_quest_1 = Quest(["Hey - you look like quite the seasoned adventurer. Maybe you could help",
+                      "us! I hope this isn't too much to ask, but could you possibly defeat",
+                      "this dreaded vampire hunter for us? He's causing us so much pain, we need",
+                      "someone to get rid of him."],
+                     "The Hated Hunter",
+                     ["Defeat Typhen, the head of the Anti-blood Squad, as well as his lackeys.",
+                      "Their base is supposedly located at -68\u00b0S, -93\u00b0W, then return",
+                      "to Pime at Sanguion."], "Pime",
+                     [1000, 1000],
+                     ["Di... did you really defeat them? Amazing! You have saved us so much",
+                      "trouble! Those horrendous villians shall not hurt our tribe anymore!",
+                      "*He looks overjoyed, and gives you a great big hug. One wonders why",
+                      "the hunters attacked these people in the first place.*"])
+
+
+def pimeqst_us1():
+    pass
+
+
+def pimeqst_uc1():
+    pass
+
+
+pime_quest_1.upon_starting = pimeqst_us1
+pime_quest_1.upon_completing = pimeqst_uc1
+
+pime_phrase_3 = Conversation(["Please deal with those blasted vampire hunters! Their hideout",
+                              "is located at -68\u00b0S, -93\u00b0W."])
+
+pime_phrase_4 = Conversation(["Thank you every so much for ridding us of those vile",
+                              "terrorists! You are forever in our gratitude!"])
+
+pime = NPC('Pime', [pime_phrase_1, pime_phrase_2, pime_quest_1, pime_phrase_3, pime_phrase_4])
+
 #----------------------------------------------------------------------------#
 # UNIMPORTANT CHARACTERS
 
@@ -1063,62 +1137,7 @@ bamdeliit_phrase_1 = Conversation(["Hello, sir! I'm Bamdeliit, the head engineer
 
 bamdeliit = NPC('Bamdeliit', [bamdeliit_phrase_1])
 
-
-pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quick, come inside,",
-                              "it's not been safe to stay out here for the past few weeks.",
-                              "*Pime ushers you into a tavern filled with people whom he seems",
-                              "to be quite friendly with. They likewise are quite kind to you.*",
-                              "My name is Pime. I am the chief of this town, and the head of",
-                              "Sanguion's militia. As I'm sure you know, me, and all the other"
-                              "people in this inn, are vampires. Do not be alarmed! We only feast",
-                              "on wild animals and vampire hunters. You are completely safe, as",
-                              "long as you are not a hunter, that is. As of late, a new group",
-                              'of vampire hunters named the "Anti-blood Squad". Not only do these',
-                              "terrorists have an extrordinarily uncreative name, but they've",
-                              "also been capturing our friends and family and are torturing,",
-                              "ransoming, and even killing them! We vampires are not harmful to",
-                              "society, and do not deserve this kind of treatment! Our loved",
-                              "ones are dying to those monsters, and we don't have anywhere",
-                              "near enough manpower to put a stop to it! What are we to do?!",
-                              ], active=True)
-
-
-def pime_p1_at():
-    global pime_phrase_2
-    global pime_quest_1
-    global pime_phrase_1
-
-    if main.player.lvl >= 10:
-        pime_quest_1.active = True
-        pime_phrase_1.active = False
-        pime_phrase_2.active = False
-
-    else:
-        pime_phrase_2.active = True
-
-
-pime_phrase_1.after_talking = pime_p1_at
-
-pime_phrase_2 = Conversation(["Perhaps you could... nevermind, we need a more experienced",
-                              "individual to help us with our plight. Come back later.",
-                              "*Pime needs someone who is at least level 10. Go level up a bit!"])
-
-pime_quest_1 = Quest(["Hey - you look like quite the seasoned adventurer. Maybe you could help",
-                      "us! I hope this isn't too much to ask, but could you possibly defeat",
-                      "this dreaded vampire hunter for us? He's causing us so much pain, we need",
-                      "someone to get rid of him."],
-                     "The Hated Hunter",
-                     ["Defeat Typhen, the head of the Anti-blood Squad, as well as his lackeys.",
-                      "Their base is supposedly located at -68\u00b0S, -93\u00b0W, then return",
-                      "to Pime at Sanguion."], "Pime",
-                     [1000, 1000],
-                     ["Di... did you really defeat them? Amazing! You have saved us so much",
-                      "trouble! Those horrendous villians shall not hurt our tribe anymore!",
-                      "*He looks overjoyed, and gives you a great big hug. One wonders why",
-                      "the hunters attacked these people in the first place.*"])
-
-pime = NPC('Pime', [pime_phrase_1, pime_phrase_2, pime_quest_1])
-
+# -- Name: Ariver -- Town: Sanguion
 ariver_phrase_1 = Conversation(["*Ariver mistakes you for a vampire hunter and runs quickly",
                                 "into his house, locking the doors, shutting the windows, and",
                                 "closing the blinds. As you begin walking away, scratching your",
@@ -1155,7 +1174,7 @@ all_dialogue = [
     matthew_phrase_1, matthew_quest_1, matthew_phrase_2,
     matthew_phrase_3, matthew_phrase_4, matthew_phrase_5,
 
-    pime_phrase_1, pime_quest_1, pime_phrase_2,
+    pime_phrase_1, pime_quest_1, pime_phrase_2, pime_phrase_3, pime_phrase_4,
 
     f_jones_phrase_1,
     stravi_phrase_1,
