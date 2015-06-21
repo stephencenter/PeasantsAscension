@@ -568,7 +568,7 @@ GP). (Press enter/return).'.format(i, i.buy))
 
                             else:
                                 print('-'*25)
-                                input("You don't have any items in the \"{0}\" category |\
+                                input("You don't have any items in the \"{0}\" category | \
 Press enter/return ".format(vis_cat))
                                 print('-'*25)
 
@@ -578,9 +578,10 @@ Press enter/return ".format(vis_cat))
                 return
 
     def town_pet(self):
-        pet_list = [[pets.pet_fox],
+        pet_list = [[pets.pet_fox, pets.pet_cherub],
                     [pets.pet_sapling, pets.pet_viper],
-                    [pets.pet_dove, pets.pet_wolf]][self.ps_level - 1]
+                    [pets.pet_dove, pets.pet_wolf],
+                    [pets.pet_dragon, pets.pet_doe]][self.ps_level - 1]
 
         padding = len(max([x.name for x in pet_list], key=len))
 
@@ -742,10 +743,10 @@ visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh],
              2, 22, gs_level=3)
 
 town6 = Town('Tripton', """Tripton: When the town of Tripton was being built,
-  the people working on the project failed to notice that another town,
-  Fallville, just so happened to be located mere meters away from the
-  new town's borders. This has led to a bit of a rivalry between the
-  two towns, particularly between the village leaders.""", [npcs.kyle],
+the people working on the project failed to notice that another town,
+Fallville, just so happened to be located mere meters away from the
+new town's borders. This has led to a bit of a rivalry between the
+two towns, particularly between the village leaders.""", [npcs.kyle],
              -10, -24, inn_cost=3, gs_level=3)
 
 town7 = Town('Fallville', """Fallville: When the town of Tripton was being built,
@@ -996,15 +997,22 @@ you notice a zipline-like structure that would be much easier and faster to use.
             elif choice.lower().startswith('n'):
                 return
 
-
-to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
-
 town_list = [town1, town2, town3, town4, town5, town6, town7,
              town8, town9, town10, town11, town12, town13, town14,
              town15, town16, town17, town18,
              small_house1, to_aethus]
 
-aethus_towns = [to_mainland]
+town19 = Town("Valenfall", """Not much is known about the ancient city of Valenfall.
+It's inhabitants claim that it was lifted up from the mainland several millenia ago
+by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
+all of the surrounding land of Aethus around it. Valenfall is deeply intertwined with
+nature, and houses a petshop that sells rather... "unusual" pets.
+""", [npcs.fitzgerald], 5, 12, inn_cost=2, gs_level=4, pet_shop=True, ps_level=4)
+
+to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
+
+
+aethus_towns = [to_mainland, town19]
 
 
 def search_towns(pos_x, pos_y, enter=True):

@@ -987,6 +987,7 @@ def pimeqst_us1():
     pime_phrase_3.active = True
     bosses.anti_blood_squad.active = True
 
+
 def pimeqst_uc1():
     global pime_quest_1
     global pime_phrase_4
@@ -1155,6 +1156,15 @@ ariver_phrase_1 = Conversation(["*Ariver mistakes you for a vampire hunter and r
 
 ariver = NPC('Ariver', [ariver_phrase_1])
 
+# -- Name: Fitzgerald -- Town: Valenfall
+fitz_phrase_1 = Conversation(["*hic* Pay no attention to the behind behind the curtain!",
+                              "*The man appears to be quite drunk. You also notice a",
+                              "distinct lack of any curtain nearby.* *hic* Drop that, you",
+                              "thief! Give me back my penny-loafers! *You slowly walk away",
+                              "from the raving drunk.*"], active=True)
+
+fitzgerald = NPC("Fitzgerald the Drunk", [fitz_phrase_1])
+
 all_dialogue = [
     philliard_phrase_1, philliard_phrase_2,
 
@@ -1195,7 +1205,8 @@ all_dialogue = [
     wesley_phrase_1,
     seriph_phrase_1,
     strathius_phrase_1,
-    ariver_phrase_1
+    ariver_phrase_1,
+    fitz_phrase_1
 ]
 
 

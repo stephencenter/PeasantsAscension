@@ -94,12 +94,17 @@ def player_choice(actual_speed):
       [5]: Run""")
 
     while True:
-        move = only_num(input("Input [#]: "))
+        # Only return if "move" refers to a valid move
+        move = input("Input [#]: ")
+        if move != "q":
+            move = only_num(move)
 
-        if move.isdigit() and int(move) in range(1, 6):
-            # Only return if "move" refers to a valid move
+        if move.isdigit() and int(move) in range(1, 6) or \
+                (move == 'q' and player.name == "Flygon Jones"):
+
             if actual_speed > monster.spd:
                 print('-'*25)
+
             return move
 
 
@@ -273,7 +278,7 @@ def player_turn(var, dodge, move, is_boss):
         if move != '2':
             print('\n-Player Turn-')
 
-        if move == '1':
+        if move == '1' or move == 'q':
             print(ascii_art.player_art[player.class_.title()] %
                   "{0} is making a move!\n".format(player.name))
 
@@ -348,7 +353,7 @@ def player_turn(var, dodge, move, is_boss):
                 player.status_ail = 'none'
 
         # Check to see if the player is silenced
-        elif player.status_ail == 'silenced':
+        elif player.status_ail != 'none' and player.status_ail != 'asleep' :
             if not random.randint(0, 3):
 
                 time.sleep(0.5)
@@ -358,7 +363,7 @@ def player_turn(var, dodge, move, is_boss):
 
                 sounds.buff_spell.play()
 
-                input('You find yourself able to speak again! | Press enter/return ')
+                input('Your afflictions have worn off! | Press enter/return ')
                 player.status_ail = 'none'
 
         if is_boss and monster.multiphase and monster.hp <= 0:

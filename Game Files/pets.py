@@ -146,6 +146,9 @@ pet_sapling = Healer("Cherry Sapling",
 pet_dove = Healer("White Dove",
                   "A lovely dove that has powerful healing abilities (T3)",
                   750, 275, 10, 25, 4, 7)
+pet_doe = Healer("Holy Doe",
+                 "A beautiful deer that is enchanted with powerful healing magic (T4)",
+                 2000, 750, 20, 40, 3, 6)
 
 # --Fighting Pets--
 pet_fox = Fighter("Fox",
@@ -157,3 +160,9 @@ pet_viper = Fighter("Viper",
 pet_wolf = Fighter("Wolf",
                    "A decently strong beast that will help you fight in battle (T3)",
                    750, 275, 12, incap_turns=3, incap_chance=15)
+pet_dragon = Fighter("Dragon",
+                     "A massive and powerful dragon that uses his flames to attack (T4)",
+                     2000, 750, 25, incap_turns=4)
+pet_ost = Fighter("Ostrich",
+                  "A large and ferocious avian that kicks its prey with the force of an ox (T5)",
+                  9001, 3500, 50, incap_turns=1, incap_chance=45)

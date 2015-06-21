@@ -774,7 +774,7 @@ fists = Weapon('Fists',
                # Fists exist to prevent bugs caused by not having any
                # weapon equipped.
 
-# Weapons -- Warrior+
+# Weapons -- Warrior
 wdn_sht = Weapon('Wooden Shortsword',
                  'A small sword carved from an oak branch (+3 Attack)',
                  10, 5, 3, 'melee', 'warrior', 'Short Sword')
@@ -896,7 +896,7 @@ bnz_hlm = Armor('Bronze Helmet',
 bnz_cst = Armor('Bronze Chestpiece',
                 'Simple chest armor crafted from bronze (+2 Defense)',
                 30, 12, 2, 'melee', 'body', 'warrior', 'Shirt')
-bnz_leg = Armor('Bronze Leggings',
+bnz_leg = Armor('Bronze Greaves',
                 'Simple leg armor crafted from bronze (+1 Defense)',
                 25, 10, 1, 'melee', 'legs', 'warrior', 'Pants')
 
@@ -906,8 +906,8 @@ en_bnz_hlm = Armor('Enhanced Bronze Helmet',
 en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
                    'An enhanced version of your typical Bronze Chestpiece (+4 Defense)',
                    70, 35, 4, 'melee', 'body', 'warrior', 'Shirt')
-en_bnz_leg = Armor('Enhanced Bronze Leggings',
-                   'An enhanced version of your typical Bronze Leggings (+3 Defense)',
+en_bnz_leg = Armor('Enhanced Bronze Greaves',
+                   'An enhanced version of your typical Bronze Greaves (+3 Defense)',
                    65, 30, 3, 'melee', 'legs', 'warrior', 'Pants')
 
 # Armor -- Mage -- Weak
@@ -959,8 +959,8 @@ stl_hlm = Armor('Steel Helmet',
 stl_cst = Armor('Steel Chestpiece',
                 'Decent body armor made from a solid metal (+7 Defense)',
                 165, 60, 7, 'melee', 'body', 'warrior', 'Shirt')
-stl_leg = Armor('Steel Leggings',
-                'Decent leggings made from a solid metal (+6 Defense)',
+stl_leg = Armor('Steel Greaves',
+                'Decent greaves made from a solid metal (+6 Defense)',
                 155, 55, 6, 'melee', 'legs', 'warrior', 'Pants')
 
 en_stl_hlm = Armor('Enhanced Steel Helmet',
@@ -970,7 +970,7 @@ en_stl_cst = Armor('Enhanced Steel Chestpiece',
                    'An enhanced version of your typical Steel Chestpiece (+11 Defense)',
                    280, 85, 11, 'melee', 'body', 'warrior', 'Shirt')
 en_stl_leg = Armor('Enhanced Steel Leggings',
-                   'An enhanced version of your typical Steel Leggings (+10 Defense)',
+                   'An enhanced version of your typical Steel Greaves (+10 Defense)',
                    270, 80, 10, 'melee', 'legs', 'warrior', 'Pants')
 
 
@@ -1024,7 +1024,7 @@ ori_hlm = Armor('Orichalcum Helmet',
 ori_cst = Armor('Orichalcum Chestplate',
                 'Strong chest armor smelted from rare mountain copper  (+15 Defense)',
                 340, 120, 15, 'melee', 'body', 'warrior', 'Shirt')
-ori_leg = Armor('Orichalcum Leggings',
+ori_leg = Armor('Orichalcum Greaves',
                 'Strong leg armor smelted from rare mountain copper (+14 Defense)',
                 330, 115, 14, 'melee', 'legs', 'warrior', 'Pants')
 
@@ -1129,26 +1129,26 @@ iSound = Misc('iSound',
 
 # Gems & Valuables
 pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
-                     0, 150, 119, -121)
+                     0, 175, 119, -121)
     # Alternate Description: Impossible to read, but will sell for money nonetheless
 
 ruby_gem = Valuable('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
-                    0, 150, -62, -84)  # better_than_perl=True
+                    0, 175, -62, -84)  # better_than_perl=True
 
 sapphire_gem = Valuable('Sapphire',
                         'A valuable sapphire. This could probably be sold for quite a bit.',
-                        0, 150, -78, 102)
+                        0, 175, -78, 102)
 
 emerald_gem = Valuable('Emerald',
                        'A valuable emerald. This could probably be sold for quite a bit.',
-                       0, 150, 26, -13)
+                       0, 175, 26, -13)
 
 citrine_gem = Valuable('Citrine',
                        'A valuable citrine. This could probably be sold for quite a bit.',
-                       0, 150, 53, 92)
+                       0, 175, 53, 92)
 
 jade_gem = Valuable('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
-                    0, 150, 99, -107)
+                    0, 175, 99, -107)
 
 valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem]
 
@@ -1194,7 +1194,7 @@ antennae = Misc('Antennae', 'A pair of antennae from a massive insect.', 0, 5)
 ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.', 0, 5)
 chain_link = Misc('Chain links', 'A couple joined links of chain made from steel.', 0, 5)
 unicorn_horn = Misc('Unicorn Horn', 'A tough and shiny horn from a mythical creature.', 0, 5)
-
+calculus_homework = Misc('Calculus Homework', 'A load of random symbols and gibberish', 0, 10)
 
 def monster_drop(level, name):
     monster_drop_list = {'Shell Mimic': [shell_fragment],
@@ -1236,7 +1236,8 @@ def monster_drop(level, name):
                          'Wraith': [ectoplasm],
                          'Griffin': [animal_fur],
                          'Flying Serpent': [serpent_scale],
-                         'Harpy': [wing_piece]}
+                         'Harpy': [wing_piece],
+                         'Calculator': [calculus_homework]}
 
     if level in range(1, 16):
         drops = [s_elixir, s_potion, bnz_swd, wiz_hat, lth_bdy]

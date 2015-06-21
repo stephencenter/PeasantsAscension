@@ -161,14 +161,14 @@ class PlayerCharacter:  # The Player
 
     def player_damage(self, var):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
-            dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/2)) + var
+            dam_dealt = math.ceil(battle.temp_stats['attk']/1.5 - (battle.monster.dfns/2)) + var
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
                 print('You deal less damage because of your weakened state.')
 
         else:
-            dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/2)) + var
+            dam_dealt = math.ceil(battle.temp_stats['p_attk']/1.5 - (battle.monster.p_dfns/2)) + var
             dam_dealt *= 2
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
@@ -199,7 +199,14 @@ class PlayerCharacter:  # The Player
 
             self.name = alphanumeric(self.name)
 
+            if self.name == "Flygon Jones":
+                print('Ah, Flygon Jones! My dear friend, it is good to see you again!')
+                input('Press enter/return ')
+
+                return self.name
+
             while True:
+
                 y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
                 y_n = y_n.lower()
 
@@ -227,6 +234,12 @@ class PlayerCharacter:  # The Player
 
             if not spam:
                 continue
+
+            if self.name == "Flygon Jones":
+                print("You wish to be a {0}? Good choice, dear friend!".format(class_.title()))
+                input('Press enter/return ')
+
+                return class_
 
             while True:
                 y_n = input('You wish to be of the {0} class? | Yes or No: '.format(
@@ -259,15 +272,15 @@ class PlayerCharacter:  # The Player
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
 
-                rem_points += 1
+                rem_points += 10
                 extra_points += self.ext_ski
                 magic.new_spells()
 
                 if self.class_ == 'warrior':
                     self.p_attk += random.randint(0, 2)
                     self.p_dfns += random.randint(1, 3)
-                    self.attk += random.randint(1, 3)
-                    self.dfns += random.randint(1, 3)
+                    self.attk += random.randint(2, 4)
+                    self.dfns += random.randint(2, 3)
                     self.m_attk += random.randint(0, 2)
                     self.m_dfns += random.randint(0, 2)
                     self.spd += random.randint(1, 2)
@@ -278,7 +291,7 @@ class PlayerCharacter:  # The Player
                 elif self.class_ == 'mage':
                     self.p_attk += random.randint(0, 2)
                     self.p_dfns += random.randint(0, 2)
-                    self.attk += random.randint(0, 2)
+                    self.attk += random.randint(0, 1)
                     self.dfns += random.randint(0, 2)
                     self.m_attk += random.randint(1, 3)
                     self.m_dfns += random.randint(1, 3)
@@ -336,8 +349,7 @@ class PlayerCharacter:  # The Player
             print('You have {0} skill point{1} left to spend.'.format(
                 rem_points, 's' if rem_points > 1 else ''))
 
-            while rem_points > 0:
-                skill = input("""Choose a skill to advance:
+            skill = input("""Choose a skill to advance:
     [I]ntelligence - Use powerful magic with higher magic stats and MP!
     [S]trength -  Smash through enemies with higher attack and defense!
     [C]onstitution - Become a tank with higher defense stats and HP!
@@ -346,84 +358,99 @@ class PlayerCharacter:  # The Player
     [F]ortune - Increase your luck in hopes of getting more GP, XP, and skill points!
 Input letter: """)
 
-                skill = skill.lower()
+            skill = skill.lower()
 
-                if any(map(skill.startswith, ['i', 's', 'c', 'd', 'p', 'f'])):
-                    if skill.startswith('i'):
-                        vis_skill = 'Intelligence'
-                    elif skill.startswith('s'):
-                        vis_skill = 'Strength'
-                    elif skill.startswith('c'):
-                        vis_skill = 'Constitution'
-                    elif skill.startswith('d'):
-                        vis_skill = 'Dexterity'
-                    elif skill.startswith('p'):
-                        vis_skill = 'Perception'
-                    else:
-                        vis_skill = 'Fortune'
+            if any(map(skill.startswith, ['i', 's', 'c', 'd', 'p', 'f'])):
+                if skill.startswith('i'):
+                    act_skill = 'int'
+                    vis_skill = 'Intelligence'
 
-                    while True:
-                        y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
+                elif skill.startswith('s'):
+                    act_skill = 'str'
+                    vis_skill = 'Strength'
 
-                        y_n = y_n.lower()
+                elif skill.startswith('c'):
+                    act_skill = 'con'
+                    vis_skill = 'Constitution'
 
-                        if y_n.startswith('y'):
-                            pass
-                        elif y_n.startswith('n'):
-                            print('-'*25)
-                            break
-                        else:
-                            continue
+                elif skill.startswith('d'):
+                    act_skill = 'dex'
+                    vis_skill = 'Dexterity'
 
-                        if skill.startswith('i'):
-                            self.m_dfns += random.randint(1, 2)
-                            self.m_attk += random.randint(1, 2)
-                            self.mp += random.randint(3, 5)
-                            misc_vars['int'] += 1
+                elif skill.startswith('p'):
+                    act_skill = 'per'
+                    vis_skill = 'Perception'
 
-                        elif skill.startswith('s'):
-                            self.attk += random.randint(1, 2)
-                            self.p_dfns += random.randint(0, 1)
-                            self.dfns += random.randint(1, 2)
-                            misc_vars['str'] += 1
+                else:
+                    act_skill = 'for'
+                    vis_skill = 'Fortune'
 
-                        elif skill.startswith('c'):
-                            self.hp += random.randint(4, 6)
-                            self.dfns += random.randint(0, 1)
-                            self.p_dfns += random.randint(0, 1)
-                            self.m_dfns += random.randint(0, 1)
-                            misc_vars['con'] += 1
+                print('-'*25)
+                print('Current {0}: {1}'.format(vis_skill, misc_vars[act_skill]))
+                while True:
+                    y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
 
-                        elif skill.startswith('d'):
-                            self.spd += 3
-                            self.p_attk += 1
-                            self.evad += 1
-                            misc_vars['dex'] += 1
+                    y_n = y_n.lower()
 
-                        elif skill.startswith('p'):
-                            self.hp += 1
-                            self.p_attk += 2
-                            self.p_dfns += 2
-                            self.evad += random.randint(0, 2)
-                            misc_vars['per'] += 1
+                    if y_n.startswith('y'):
+                        pass
+                    elif y_n.startswith('n'):
+                        print('-'*25)
 
-                        elif skill.startswith('f'):
-                            self.hp += random.randint(0, 1)
-                            self.mp += random.randint(0, 1)
-                            if random.randint(0, 1):
-                                self.ext_ski += random.randint(0, 1)
-
-                            self.ext_gol += random.randint(0, 2)
-                            self.ext_exp += random.randint(0, 2)
-
-                            misc_vars['for'] += 1
-
-                        else:
-                            continue
-
-                        print('Your {0} has increased!'.format(vis_skill))
-                        rem_points -= 1
                         break
+
+                    else:
+                        continue
+
+                    if skill.startswith('i'):
+                        self.m_dfns += 1
+                        self.m_attk += 1
+                        self.mp += 2
+                        misc_vars['int'] += 1
+
+                    elif skill.startswith('s'):
+                        self.attk += 1
+                        self.p_dfns += random.randint(0, 1)
+                        self.dfns += 1
+                        misc_vars['str'] += 1
+
+                    elif skill.startswith('c'):
+                        self.hp += 1
+                        self.dfns += random.randint(0, 1)
+                        self.p_dfns += random.randint(0, 1)
+                        self.m_dfns += random.randint(0, 1)
+                        misc_vars['con'] += 1
+
+                    elif skill.startswith('d'):
+                        self.spd += 1
+                        self.p_attk += random.randint(0, 1)
+                        self.evad += 1
+                        misc_vars['dex'] += 1
+
+                    elif skill.startswith('p'):
+                        self.p_attk += 1
+                        self.p_dfns += 1
+                        self.evad += random.randint(0, 1)
+                        misc_vars['per'] += 1
+
+                    elif skill.startswith('f'):
+                        self.ext_ski += 1
+                        self.ext_gol += 1
+                        self.ext_exp += 1
+                        misc_vars['for'] += 1
+
+
+                    else:
+                        continue
+
+                    print('-'*25)
+                    print('Your {0} has increased!'.format(vis_skill))
+
+                    rem_points -= 1
+
+                    print('-'*25) if rem_points else ''
+
+                    break
         print()
         print('You are out of skill points.')
 
@@ -530,6 +557,18 @@ def set_adventure_name():
                 if y_n.startswith("y"):
                     adventure_name = choice
                     format_save_names()
+
+                    if player.name == "Flygon Jones":
+                        print()
+                        print("Since you're my friend, I'm going to give you a small gift: An")
+                        print("additional 50 GP to use on your travels, \
+as well as an extra potion!")
+
+                        input('Press enter/return ')
+
+                        inv_system.inventory['consum'].append(items.s_potion)
+                        misc_vars['gp'] += 50
+
                     return
 
                 elif y_n.startswith("n"):

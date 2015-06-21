@@ -360,8 +360,8 @@ def rest():
     while msvcrt.kbhit():
         msvcrt.getwch()
 
-    player.hp += int(misc_vars['hp_p']/4)
-    player.mp += int(misc_vars['mp_p']/4)
+    player.hp += int(misc_vars['hp_p']/3)
+    player.mp += int(misc_vars['mp_p']/3)
 
     # Make sure that the player doesn't have more than the max HP/MP
     if player.hp > misc_vars['hp_p']:

@@ -210,7 +210,7 @@ menac_phantom = Boss('Menacing Phantom',
                      15, 5,
                      10, 10,
                      8,
-                     12, 8,
+                     -12, 8,
                      None,
                      75, 75,
                      active=False, element='death')

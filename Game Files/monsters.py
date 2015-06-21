@@ -53,6 +53,8 @@ position = ''
 misc_vars = ''
 inventory = ''
 
+is_defending = False
+
 
 class Monster:
     # All monsters use this class. Bosses use a sub-class called
@@ -109,7 +111,7 @@ class Monster:
 
     def monst_level(self):
         global misc_vars
-        self.lvl = int((1/3)*abs(0.8*position['avg'] - 1)) + 1
+        self.lvl = int((1/3)*abs(position['avg'] - 1)) + 1
 
         if self.lvl < 1:
             self.lvl = 1
@@ -162,6 +164,14 @@ class Monster:
 
     def enemy_turn(self, var, dodge):
         # This is the Enemy's AI.
+        global is_defending
+
+        if is_defending:
+            is_defending = False
+
+            self.dfns -= 10
+            self.m_dfns -= 10
+            self.p_dfns -= 10
 
         battle.temp_stats['turn_counter'] += 1
 
@@ -186,15 +196,17 @@ class Monster:
 
             self.give_status()
 
-        elif battle.temp_stats['turn_counter'] <= 3 and random.randint(0, 1):
+        elif not random.randint(0, 4):
             # Defend
             sounds.buff_spell.play()
 
-            self.dfns += random.randint(3, 5)
-            self.m_dfns += random.randint(3, 5)
-            self.p_dfns += random.randint(3, 5)
+            self.dfns += 10
+            self.m_dfns += 10
+            self.p_dfns += 10
             print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(
                 self.name))
+
+            is_defending = True
 
         elif self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
             # Magic heal
@@ -216,7 +228,7 @@ class Monster:
             if most_effective == possible_p_dam:
                 self.monst_attk(var, dodge, 'pierce')
             else:
-                self.most_attk(var, dodge, 'melee')
+                self.monst_attk(var, dodge, 'melee')
 
         elif self.m_attk > self.attk and self.mp >= 2:
             # Magic Attack
@@ -249,7 +261,7 @@ class Monster:
             if most_effective == possible_p_dam:
                 self.monst_attk(var, dodge, 'pierce')
             else:
-                self.most_attk(var, dodge, 'melee')
+                self.monst_attk(var, dodge, 'melee')
 
         self.check_poison()
 
@@ -290,8 +302,12 @@ class Monster:
         while msvcrt.kbhit():
             msvcrt.getwch()
 
-        print('You are now {0}!'.format(status))
-        battle.player.status_ail = status
+        if random.randint(0, 1):
+            print('You are now {0}!'.format(status))
+            battle.player.status_ail = status
+
+        else:
+            print('The {0} failed to make you {1}!'.format(monster.monster_name, status))
 
         self.mp -= 2
 
@@ -325,16 +341,16 @@ class Monster:
                                                 'Sea Serpent', 'Squid'],
                         'Bogthorn': ['Bog Slime', 'Moss Ogre', 'Sludge Rat',
                                      'Vine Lizard', 'Walking Venus'],
-                        'Central Forest': ['Goblin', 'Beetle', 'Sprite',
-                                           'Imp', 'Bat'],
+                        'Central Forest': ['Goblin', 'Beetle' if main.player.name != "Flygon Jones"
+                                           else "Calculator", 'Sprite', 'Imp', 'Bat'],
                         'Arcadian Desert': ['Mummy', 'Sand Golem', 'Minubis',
                                             'Fire Ant', 'Naga'],
                         'Glacian Plains': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge',
                                            'Arctic Wolf', 'Frost Bat'],
                         'Terrius Mt. Range': ['Troll', 'Rock Giant', 'Oread',
                                               'Tengu', 'Giant Worm'],
-                        'Overhire Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
-                                               'Skeleton', 'Ghoul'],
+                        'Overshire Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
+                                                'Skeleton', 'Ghoul'],
                         'Aethus': ['Alicorn', 'Griffin', 'Wraith',
                                    'Harpy', 'Flying Serpent']
                         }
