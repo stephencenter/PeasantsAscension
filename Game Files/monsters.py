@@ -337,25 +337,39 @@ class Monster:
                 battle.temp_stats['m_ispoisoned'] = False
 
     def monst_name(self):
-        monster_type = {'Pythonian Coastline': ['Shell Mimic', 'Giant Crab', 'Naiad',
-                                                'Sea Serpent', 'Squid'],
-                        'Bogthorn': ['Bog Slime', 'Moss Ogre', 'Sludge Rat',
-                                     'Vine Lizard', 'Walking Venus'],
-                        'Central Forest': ['Goblin', 'Beetle' if main.player.name != "Flygon Jones"
-                                           else "Calculator", 'Sprite', 'Imp', 'Bat'],
-                        'Arcadian Desert': ['Mummy', 'Sand Golem', 'Minubis',
-                                            'Fire Ant', 'Naga'],
-                        'Glacian Plains': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge',
-                                           'Arctic Wolf', 'Frost Bat'],
-                        'Terrius Mt. Range': ['Troll', 'Rock Giant', 'Oread',
-                                              'Tengu', 'Giant Worm'],
-                        'Overshire Graveyard': ['Zombie', 'Undead Warrior', 'Necromancer',
-                                                'Skeleton', 'Ghoul'],
+        monster_type = {'Pythonian Coastline': ['Shell Mimic', 'Giant Crab',
+                                                'Naiad', 'Sea Serpent', 'Squid'],
+
+                        'Bogthorn': ['Bog Slime', 'Moss Ogre',
+                                     'Walking Venus', 'Vine Lizard', 'Sludge Rat'],
+
+                        'Central Forest': ['Goblin', 'Beetle'
+                        if main.player.name != "Flygon Jones" else "Calculator",
+                                           'Sprite', 'Imp', 'Bat'],
+
+                        'Arcadian Desert': ['Mummy', 'Sand Golem',
+                                            'Minubis', 'Fire Ant', 'Naga'],
+
+                        'Glacian Plains': ['Ice Soldier', 'Minor Yeti',
+                                           'Corrupt Thaumaturge', 'Arctic Wolf', 'Frost Bat'],
+
+                        'Terrius Mt. Range': ['Troll', 'Rock Giant',
+                                              'Oread', 'Tengu', 'Giant Worm'],
+
+                        'Overshire Graveyard': ['Zombie', 'Undead Warrior',
+                                                'Necromancer', 'Skeleton', 'Ghoul'],
+
                         'Aethus': ['Alicorn', 'Griffin', 'Wraith',
                                    'Harpy', 'Flying Serpent']
                         }
 
-        self.name = random.choice(monster_type[position['reg']])
+        chosen = random.randint(0, 4)
+
+        self.name = monster_type[position['reg']][chosen]
+
+        if chosen == 2:
+            self.enemy_turn = non_magic_ai
+
         self.monster_name = copy.copy(self.name)
 
         if self.name == monster_type[position['reg']][0]:
@@ -630,6 +644,71 @@ def ranger_stats(self):
     self.evad *= 1.2
     self.evad = math.ceil(self.evad)
 
+
+def non_magic_ai(var, dodge):
+        # This is the Enemy's AI.
+        global is_defending
+        global monster
+
+        if is_defending:
+            is_defending = False
+
+            monster.dfns -= 10
+            monster.m_dfns -= 10
+            monster.p_dfns -= 10
+
+        battle.temp_stats['turn_counter'] += 1
+
+        possible_p_dam = math.ceil(monster.p_attk - battle.temp_stats['p_dfns']/2) + var
+        possible_a_dam = math.ceil(monster.attk - battle.temp_stats['dfns']/2) + var
+
+        most_effective = max([possible_p_dam, possible_m_dam, possible_a_dam])
+
+        if player.spd >= monster.spd:
+            print('-'*25)
+
+        print('\n-Enemy Turn-')
+        print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
+            monster.monster_name
+        ))
+
+        # Only do this on turns that are a multiple of 4 (or turn 1)
+        if (not battle.temp_stats['turn_counter'] % 4 or
+            battle.temp_stats['turn_counter'] == 1) \
+                and random.randint(0, 1) and monster.mp > 2:
+
+            monster.give_status()
+
+        elif not random.randint(0, 4):
+            # Defend
+            sounds.buff_spell.play()
+
+            monster.dfns += 10
+            monster.m_dfns += 10
+            monster.p_dfns += 10
+            print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(
+                monster.name))
+
+            is_defending = True
+
+        elif most_effective in [possible_p_dam, possible_a_dam]:
+            # Non-magic Attack
+            if most_effective == possible_p_dam:
+                monster.monst_attk(var, dodge, 'pierce')
+            else:
+                monster.monst_attk(var, dodge, 'melee')
+
+        else:
+            if most_effective == possible_p_dam:
+                monster.monst_attk(var, dodge, 'pierce')
+            else:
+                monster.monst_attk(var, dodge, 'melee')
+
+        self.check_poison()
+
+
+        if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
+            monster.enemy_turn(var, dodge)
 
 def spawn_monster():
     global monster

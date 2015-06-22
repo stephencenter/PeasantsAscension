@@ -780,7 +780,7 @@ def polmor_p2_at():
 
             # Iterate over a copy to prevent problems
             for item in inv_system.inventory['misc'][:]:
-                if item.name == 'Bat Fang' and total_bf > 0:
+                if item.name == 'Fang' and total_bf > 0:
                     inv_system.inventory['misc'].remove(item)
                     total_bf -= 1
 

@@ -72,12 +72,17 @@ class Healer(Companion):
 
     def use_ability(self):
         # Heal!
-        if self.mana >= self.rm:  # If the pet has enough mana...
+        if self.mana >= self.rm and main.player.hp == main.misc_vars['hp_p']:
+            print('Your pet {0} senses that you are healthy and waits patiently.'.format(self.name))
+
+        elif self.mana >= self.rm:  # If the pet has enough mana...
             heal = int(math.ceil((self.level + self.power)*1.5))  # ...heal the player
             main.player.hp += heal
             self.mana -= self.rm
+
             print("Your pet {0} is using its ability to heal you! (+{1} HP)".format(
                 self.name, heal))
+
             sounds.magic_healing.play()
 
         else:  # The pet rests and restores mana if it doesn't have enough mana

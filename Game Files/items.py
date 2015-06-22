@@ -47,7 +47,7 @@ equipped = ''
 
 # A regular expression that replaces all non-NSEW characters with ''
 only_nsew = lambda x: re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', x)
-visited_towns = []
+visited_towns = main.misc_vars['visited_towns']
 
 
 class Item:
@@ -407,10 +407,13 @@ class Shovel(Item):
             msvcrt.getwch()
 
         for gem in valuable_list:
-            if (main.position['x'], main.position['y']) == (gem.posx, gem.posy):
+            if (main.position['x'], main.position['y']) == (gem.posx, gem.posy) \
+                    and not gem.acquired:
+
                 gem.acquired = True
                 print('Using your shovel, you manage to uncover a {0}!'.format(gem.name))
                 inventory['misc'].append(gem)
+
                 return
 
         print('You were unable to uncover anything.')
@@ -1150,7 +1153,42 @@ citrine_gem = Valuable('Citrine',
 jade_gem = Valuable('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
                     0, 175, 99, -107)
 
-valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem]
+opal_gem = Valuable('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
+                    0, 175, 25, 67)
+
+onyx_gem = Valuable('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
+                    0, 175, 76, -100)
+
+diamond_gem = Valuable('Diamond', 'A valuable diamond. This could probably be sold for quite a \
+bit.',
+                                  0, 175, -12, 124)
+
+amethyst_gem = Valuable('Amethyst', 'A valuable amethyst. This could probably be sold for quite a \
+bit.',
+                                    0, 175, -12, -5)
+
+topaz_gem = Valuable('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
+                              0, 175, 0, 0)
+
+garnet_gem = Valuable('Garnet', 'A valuable garnet. This could probably be sold for quite a bit.',
+                                0, 175, 11, -101)
+
+quartz_gem = Valuable('Quartz', 'A valuable quartz. This could probably be sold for quite a bit.',
+                                0, 175, 114, 52)
+
+zircon_gem = Valuable('Zircon', 'A valuable zircon. This could probably be sold for quite a bit.',
+                                0, 175, -108, 100)
+
+agate_gem = Valuable('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
+                              0, 175, 0, -114)
+
+aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could probably be sold \
+for quite a bit.',
+                          0, 175, 109, -13)
+
+valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem,
+                 opal_gem, onyx_gem, diamond_gem, amethyst_gem, topaz_gem, garnet_gem,
+                 quartz_gem, zircon_gem, agate_gem, aquamarine_gem]
 
 # Tools
 magic_compass = MagicCompass(
@@ -1178,7 +1216,7 @@ shell_fragment = Misc('Shell Fragment', 'A broken fragment of a remarkable sea-s
 crab_claw = Misc('Crab Claw', 'A reddish claw from a giant crab.', 0, 5)
 fairy_dust = Misc('Fairy Dust', 'Dust from a fairy. It has strange, magical properties.', 0, 5)
 serpent_scale = Misc('Serpent Scale', 'A rough scale from an unknown reptile.', 0, 5)
-slimey_residue = Misc('Slimey Residue', 'The slimey remains of a slimey monster.', 0, 5)
+slimey_residue = Misc('Slimy Residue', 'The slimy remains of a slimy monster.', 0, 5)
 ink_sack = Misc('Ink Sack', 'A small pouch full of an inky substance.', 0, 5)
 skeleton_bone = Misc('Skeleton Bone', 'The leg bone of a now-deceased creature.', 0, 5)
 monster_skull = Misc('Monster Skull', 'A broken skull from a strange creature.', 0, 5)
@@ -1195,6 +1233,7 @@ ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.',
 chain_link = Misc('Chain links', 'A couple joined links of chain made from steel.', 0, 5)
 unicorn_horn = Misc('Unicorn Horn', 'A tough and shiny horn from a mythical creature.', 0, 5)
 calculus_homework = Misc('Calculus Homework', 'A load of random symbols and gibberish', 0, 10)
+
 
 def monster_drop(level, name):
     monster_drop_list = {'Shell Mimic': [shell_fragment],
@@ -1273,3 +1312,10 @@ def deserialize_gems(path):
         for gem in valuable_list:
             if gem.name == name:
                 gem.acquired = True
+
+# total = 0
+# for x in copy.copy(globals()):
+#     if isinstance(globals()[x], Item):
+#         total += 1
+#
+# print(total)

@@ -926,7 +926,7 @@ you finally arrive at the top | Press enter/return ")
                 world.save_coords(0, 0)
 
                 print('-'*25)
-                print('You have left the Tundra region and are now entering the Aethus.')
+                print('You have left the Glacian Plains region and are now entering the Aethus.')
                 print('-'*25)
 
                 pygame.mixer.music.load(main.position['reg_music'])

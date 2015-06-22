@@ -42,7 +42,8 @@ player = ''
 
 # A dictionary containing miscellaneous variables made entirely of
 misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
-             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20}
+             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20,
+             'visited_towns': []}
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
@@ -849,9 +850,14 @@ def check_save():  # Check for save files and load the game if they're found
                     print('Attempt successful!')
 
                 # Make the save file compatible with v0.6.5
-                if 'is_aethus' not in position:
+                if 'is_aethus' not in position or 'visited_towns' not in misc_vars:
                     print('Attempting to make save file compatible with v0.6.5...')
-                    position['is_aethus'] = False
+
+                    if 'is_aethus' not in position:
+                        position['is_aethus'] = False
+
+                    elif 'visited_towns' not in misc_vars:
+                        misc_vars['visited_towns'] = []
 
                     print('Attempt successful!')
 

@@ -31,6 +31,7 @@ import bosses
 import pets
 import sounds
 import ascii_art
+import items
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -552,8 +553,8 @@ Element: {8} | Elemental Weakness: {9}""".format(
              'life': 'Death',
              'death': 'Life'}[monster.element]))
 
-        player.hp += 3
-        player.mp += 3
+        player.hp += 8
+        player.mp += 8
 
         if player.hp > misc_vars['hp_p']:
             player.hp -= (player.hp - misc_vars['hp_p'])
@@ -563,11 +564,11 @@ Element: {8} | Elemental Weakness: {9}""".format(
         return True
 
     elif player.class_ == 'warrior':
-        player.hp += 10
-        temp_stats['dfns'] += 3
-        temp_stats['m_dfns'] += 3
-        temp_stats['p_dfns'] += 3
-        print('As a Warrior, you channel your inner-strength and increase your defense greatly!')
+        player.hp += 20
+        temp_stats['dfns'] += 10
+        temp_stats['m_dfns'] += 10
+        temp_stats['p_dfns'] += 10
+        print('As a Warrior, you channel your inner-strength and restore health and defense!')
 
         if player.hp > misc_vars['hp_p']:
             player.hp -= (player.hp - misc_vars['hp_p'])
@@ -640,8 +641,10 @@ def battle_inventory():
 
     while True:
         print('Battle Inventory: \n      ', end='')
-        print('\n      '.join(['[{0}] {1}'.format(x + 1, y)
-              for x, y in enumerate(inv_system.inventory['consum'])]))
+        print('\n      '.join(['[{0}] {1} {2}'.format(x + 1, y, '| Item Power: ' + str(
+            max(y.heal, y.mana)) if isinstance(y, items.Consumable) else '')
+
+            for x, y in enumerate(inv_system.inventory['consum'])]))
 
         while True:
             item = input('Input [#] (or type "cancel"): ')

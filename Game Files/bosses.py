@@ -204,11 +204,11 @@ whisp_goblin.upon_defeating = unimportant_boss_ud
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
 menac_phantom = Boss('Menacing Phantom',
-                     60, 25,
-                     5, 10,
-                     1, 10,
-                     15, 5,
-                     10, 10,
+                     75, 25,
+                     10, 20,
+                     5, 20,
+                     20, 15,
+                     15, 15,
                      8,
                      -12, 8,
                      None,
@@ -250,15 +250,15 @@ terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
 cursed_spect = Boss('Cursed Spectre',
-                    85, 35,            # 85 Health, 35 Mana
-                    15, 20,            # 15 Attack, 20 Defense
-                    20, 20,            # 20 Pierce Attack, 20 Pierce Defense
-                    30, 20,            # 30 Magic Attack, 20 Magic Defense
-                    20, 15,            # 20 Speed, 15 Evasion
+                    100, 50,            # 85 Health, 35 Mana
+                    20, 35,            # 15 Attack, 20 Defense
+                    30, 25,            # 20 Pierce Attack, 20 Pierce Defense
+                    45, 15,            # 30 Magic Attack, 20 Magic Defense
+                    25, 20,            # 20 Speed, 15 Evasion
                     12,                # Level 12
                     3, 22,             # Located at 22'N, 3'E
                     items.spect_wand,  # Drops a spectre wand
-                    100, 100,          # Drops 100 XP and 100 GP
+                    250, 250,          # Drops 100 XP and 100 GP
                     element='death',   # Death Element
                     active=False)
 
