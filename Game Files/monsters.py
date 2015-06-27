@@ -341,11 +341,11 @@ class Monster:
                                                 'Naiad', 'Sea Serpent', 'Squid'],
 
                         'Bogthorn': ['Bog Slime', 'Moss Ogre',
-                                     'Walking Venus', 'Vine Lizard', 'Sludge Rat'],
+                                     "Will-o'-the-wisp", 'Vine Lizard', 'Sludge Rat'],
 
                         'Central Forest': ['Goblin', 'Beetle'
                         if main.player.name != "Flygon Jones" else "Calculator",
-                                           'Sprite', 'Imp', 'Bat'],
+                                           'Spriggan', 'Imp', 'Bat'],
 
                         'Arcadian Desert': ['Mummy', 'Sand Golem',
                                             'Minubis', 'Fire Ant', 'Naga'],

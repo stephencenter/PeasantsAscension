@@ -895,44 +895,44 @@ sunday_trousers = Armor('Sunday Trousers',
 # Armor -- Warrior -- Weak
 bnz_hlm = Armor('Bronze Helmet',
                 'A simple helmet crafted from bronze (+1 Defense)',
-                20, 8, 1, 'melee', 'head', 'warrior', 'Helmet')
+                20, 8, 1, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 bnz_cst = Armor('Bronze Chestpiece',
                 'Simple chest armor crafted from bronze (+2 Defense)',
-                30, 12, 2, 'melee', 'body', 'warrior', 'Shirt')
+                30, 12, 2, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 bnz_leg = Armor('Bronze Greaves',
                 'Simple leg armor crafted from bronze (+1 Defense)',
-                25, 10, 1, 'melee', 'legs', 'warrior', 'Pants')
+                25, 10, 1, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 en_bnz_hlm = Armor('Enhanced Bronze Helmet',
                    'An enhanced version of your typical Bronze Helmet (+3 Defense)',
-                   60, 25, 3, 'melee', 'head', 'warrior', 'Helmet')
+                   60, 25, 3, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
                    'An enhanced version of your typical Bronze Chestpiece (+4 Defense)',
-                   70, 35, 4, 'melee', 'body', 'warrior', 'Shirt')
+                   70, 35, 4, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 en_bnz_leg = Armor('Enhanced Bronze Greaves',
                    'An enhanced version of your typical Bronze Greaves (+3 Defense)',
-                   65, 30, 3, 'melee', 'legs', 'warrior', 'Pants')
+                   65, 30, 3, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 # Armor -- Mage -- Weak
 wiz_hat = Armor('Wizard Hat',
                 'A silk hat woven with magic thread (+1 Magic Defense)',
-                20, 8, 1, 'magic', 'head', 'mage', 'Wizard Hat')
+                20, 8, 1, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 wiz_rob = Armor('Wizard Robe',
                 'A silk robe woven with magic thread (+2 Magic Defense)',
-                30, 12, 2, 'magic', 'body', 'mage', 'Robe')
+                30, 12, 2, 'magic', 'body', ['mage', 'monk'], 'Robe')
 wiz_gar = Armor('Wizard Garments',
                 'Silk garments woven with magic thread (+1 Magic Defense)',
-                25, 10, 1, 'magic', 'legs', 'mage', 'Robe Pants')
+                25, 10, 1, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 en_wiz_hat = Armor('Enhanced Wizard Hat',
                    'An enhanced version of your typical Wizard Hat (+3 Magic Defense)',
-                   60, 25, 3, 'magic', 'head', 'mage', 'Wizard Hat')
+                   60, 25, 3, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 en_wiz_rob = Armor('Enhanced Wizard Robe',
                    'An enhanced version of your typical Wizard Robe (+4 Magic Defense)',
-                   70, 35, 4, 'magic', 'body', 'mage', 'Robe')
+                   70, 35, 4, 'magic', 'body', ['mage', 'monk'], 'Robe')
 en_wiz_gar = Armor('Enhanced Wizard Garments',
                    'An enhanced version of your typical Wizard Garments (+3 Magic Defense)',
-                   65, 30, 3, 'magic', 'legs', 'mage', 'Robe Pants')
+                   65, 30, 3, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Weak
 lth_cap = Armor('Leather Cap',
@@ -958,45 +958,45 @@ en_lth_leg = Armor('Enhanced Leather Leggings',
 # Armor -- Warrior -- Mid
 stl_hlm = Armor('Steel Helmet',
                 'A decent helmet created from a solid metal (+6 Defense)',
-                145, 50, 6, 'melee', 'head', 'warrior', 'Helmet')
+                145, 50, 6, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 stl_cst = Armor('Steel Chestpiece',
                 'Decent body armor made from a solid metal (+7 Defense)',
-                165, 60, 7, 'melee', 'body', 'warrior', 'Shirt')
+                165, 60, 7, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 stl_leg = Armor('Steel Greaves',
                 'Decent greaves made from a solid metal (+6 Defense)',
-                155, 55, 6, 'melee', 'legs', 'warrior', 'Pants')
+                155, 55, 6, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 en_stl_hlm = Armor('Enhanced Steel Helmet',
                    'An enhanced version of your typical Steel Helmet (+10 Defense)',
-                   260, 75, 10, 'melee', 'head', 'warrior', 'Helmet')
+                   260, 75, 10, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 en_stl_cst = Armor('Enhanced Steel Chestpiece',
                    'An enhanced version of your typical Steel Chestpiece (+11 Defense)',
-                   280, 85, 11, 'melee', 'body', 'warrior', 'Shirt')
+                   280, 85, 11, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 en_stl_leg = Armor('Enhanced Steel Leggings',
                    'An enhanced version of your typical Steel Greaves (+10 Defense)',
-                   270, 80, 10, 'melee', 'legs', 'warrior', 'Pants')
+                   270, 80, 10, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 
 # Armor -- Mage -- Mid
 myst_hat = Armor('Mystical Hood',
                  'A mysterious hood with strange symbols sewn into it (+6 Magic Defense)',
-                 145, 50, 6, 'magic', 'head', 'mage', 'Wizard Hat')
+                 145, 50, 6, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 myst_rob = Armor('Mystical Robe',
                  'A mysterious robe with strange symbols sewn into it (+7 Magic Defense)',
-                 165, 60, 7, 'magic', 'body', 'mage', 'Robe')
+                 165, 60, 7, 'magic', 'body', ['mage', 'monk'], 'Robe')
 myst_gar = Armor('Mystical Garments',
                  'Mysterious garments with strange symbols sewn into it (+6 Magic Defense)',
-                 155, 55, 6, 'magic', 'legs', 'mage', 'Robe Pants')
+                 155, 55, 6, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 en_myst_hat = Armor('Enhanced Mystical Hood',
                     'An enhanced version of your typical Mystical Hood (+10 Magic Defense)',
-                    260, 75, 10, 'magic', 'head', 'mage', 'Wizard Hat')
+                    260, 75, 10, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 en_myst_rob = Armor('Enhanced Mystical Robe',
                     'An enhanced version of your typical Mystical Robe (+11 Magic Defense)',
-                    280, 85, 11, 'magic', 'body', 'mage', 'Robe')
+                    280, 85, 11, 'magic', 'body', ['mage', 'monk'], 'Robe')
 en_myst_gar = Armor('Enhanced Mystical Garments',
                     'An enhanced version of your typical Mystical Garments (+10 Magic Defense)',
-                    270, 80, 10, 'magic', 'legs', 'mage', 'Robe Pants')
+                    270, 80, 10, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Mid
 std_cwl = Armor('Studded Cowl',
@@ -1023,24 +1023,24 @@ en_std_leg = Armor('Enhanced Studded Leggings',
 # Armor -- Warrior -- Pow
 ori_hlm = Armor('Orichalcum Helmet',
                 'A strong helmet smelted from rare mountain copper  (+14 Defense)',
-                320, 110, 14, 'melee', 'head', 'warrior', 'Helmet')
+                320, 110, 14, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 ori_cst = Armor('Orichalcum Chestplate',
                 'Strong chest armor smelted from rare mountain copper  (+15 Defense)',
-                340, 120, 15, 'melee', 'body', 'warrior', 'Shirt')
+                340, 120, 15, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 ori_leg = Armor('Orichalcum Greaves',
                 'Strong leg armor smelted from rare mountain copper (+14 Defense)',
-                330, 115, 14, 'melee', 'legs', 'warrior', 'Pants')
+                330, 115, 14, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 # Armor -- Mage -- Pow
 elem_hat = Armor('Elemental Hat',
                  'A leather hat enchanted with elemental power (+14 Magic Defense)',
-                 320, 110, 14, 'magic', 'head', 'mage', 'Wizard Hat')
+                 320, 110, 14, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 elem_rob = Armor('Elemental Robe',
                  'A leather robe enchanted with elemental power (+15 Magic Defense)',
-                 340, 120, 15, 'magic', 'body', 'mage', 'Robe')
+                 340, 120, 15, 'magic', 'body', ['mage', 'monk'], 'Robe')
 elem_gar = Armor('Elemental Garments',
                  'Leather garments enchanted with elemental power (+14 Magic Defense).',
-                 330, 115, 14, 'magic', 'legs', 'mage', 'Robe Pants')
+                 330, 115, 14, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Pow
 drg_cwl = Armor('Dragonhide Cowl',
@@ -1151,13 +1151,13 @@ citrine_gem = Valuable('Citrine',
                        0, 175, 53, 92)
 
 jade_gem = Valuable('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
-                    0, 175, 99, -107)
+                    0, 175, 81, -103)
 
 opal_gem = Valuable('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
                     0, 175, 25, 67)
 
 onyx_gem = Valuable('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
-                    0, 175, 76, -100)
+                    0, 175, 121, -56)
 
 diamond_gem = Valuable('Diamond', 'A valuable diamond. This could probably be sold for quite a \
 bit.',
@@ -1220,7 +1220,7 @@ slimey_residue = Misc('Slimy Residue', 'The slimy remains of a slimy monster.', 
 ink_sack = Misc('Ink Sack', 'A small pouch full of an inky substance.', 0, 5)
 skeleton_bone = Misc('Skeleton Bone', 'The leg bone of a now-deceased creature.', 0, 5)
 monster_skull = Misc('Monster Skull', 'A broken skull from a strange creature.', 0, 5)
-plant_stalk = Misc('Plant Stalk', 'The decaying stalk of a large plant.', 0, 5)
+living_bark = Misc('Living Bark', 'This bark has a fleshy texture to it.', 0, 5)
 shirt_cloth = Misc('Cloth', 'A thick, torn cloth made out of an unknown fabric.', 0, 5)
 beetle_shell = Misc('Beetle Shell', 'A bluish shell from a large beetle.', 0, 5)
 wing_piece = Misc('Wing Piece', 'A piece of wing from a flying creature.', 0, 5)
@@ -1244,11 +1244,11 @@ def monster_drop(level, name):
                          'Bog Slime': [slimey_residue],
                          'Moss Ogre': [skeleton_bone],
                          'Sludge Rat': [monster_skull],
-                         'Walking Venus': [plant_stalk],
+                         'Spriggan': [living_bark],
                          'Vine Lizard': [serpent_scale],
                          'Goblin': [shirt_cloth],
                          'Beetle': [beetle_shell],
-                         'Sprite': [fairy_dust],
+                         "Will-o'-the-wisp": [fairy_dust],
                          'Imp': [wing_piece],
                          'Bat': [bat_fang],
                          'Mummy': [burnt_ash],
@@ -1319,3 +1319,13 @@ def deserialize_gems(path):
 #         total += 1
 #
 # print(total)
+
+# for gem in valuable_list:
+#     for other in valuable_list:
+#         if gem == other:
+#             continue
+#         if bool(gem.posx > 0) == bool(other.posx > 0):
+#             if bool(gem.posy > 0) == bool(other.posy > 0):
+#                 print(gem.name,
+#                       other.name,
+#                       round(math.hypot(gem.posx - other.posx, gem.posy - other.posy)))

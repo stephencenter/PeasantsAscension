@@ -52,11 +52,12 @@ You don't have enough mana to cast that spell!"""
 
 
 class Spell:
-    def __init__(self, name, desc, mana, req_lvl):
+    def __init__(self, name, desc, mana, req_lvl, a_c=('mage',)):
         self.name = name
         self.desc = desc
         self.mana = mana
         self.req_lvl = req_lvl
+        self.a_c = a_c  # These are the classes that are able to obtain this spell
 
     def __str__(self):
         return self.name
@@ -69,8 +70,8 @@ class Spell:
 
 class Healing(Spell):
     # Healing spells are spells that restore your HP during battle
-    def __init__(self, name, desc, mana, req_lvl, health):
-        Spell.__init__(self, name, desc, mana, req_lvl)
+    def __init__(self, name, desc, mana, req_lvl, health, a_c=('mage', 'paladin')):
+        Spell.__init__(self, name, desc, mana, req_lvl, a_c)
         self.health = health
 
     def __str__(self):
@@ -103,8 +104,8 @@ class Damaging(Spell):
     # Damaging spells are spells that deal damage to the enemy during battle.
     # Just like normal attacks, they have a chance to miss based on
     # the enemy's evade stat.
-    def __init__(self, name, desc, mana, req_lvl, damage, element):
-        Spell.__init__(self, name, desc, mana, req_lvl)
+    def __init__(self, name, desc, mana, req_lvl, damage, element, a_c=('mage',)):
+        Spell.__init__(self, name, desc, mana, req_lvl, a_c)
         self.damage = damage
         self.element = element
 
@@ -170,8 +171,8 @@ class Buff(Spell):
     # Buffs are spells that temporarily raise the player's stats
     # during battle. They last until the battle is over, at which
     # point the player's stats will return to normal.
-    def __init__(self, name, desc, mana, req_lvl, incre, stat):
-        Spell.__init__(self, name, desc, mana, req_lvl)
+    def __init__(self, name, desc, mana, req_lvl, incre, stat, a_c=('mage', 'monk')):
+        Spell.__init__(self, name, desc, mana, req_lvl, a_c)
         self.incre = incre
         self.stat = stat
 
@@ -204,13 +205,16 @@ class Buff(Spell):
 # Neutral (No element)
 magic_shot = Damaging('Magical Shot',
                       "Hurl a small ball of magical energy at your enemies! (Weak)",
-                      3, 1, 4, "none")
+                      3, 1, 4, "none",
+                      a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 magic_burst = Damaging('Magical Burst',
                        "Shatter your enemies defenses with a burst of magical energy! (Moderate)",
-                       9, 11, 13, "none")
+                       9, 11, 13, "none",
+                      a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 magic_blast = Damaging('Magical Blast',
                        "Bomb your enemies with a detonating ball of magical energy! (Strong)",
-                       18, 23, 23, "none")
+                       18, 23, 23, "none",
+                      a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 
 # Fire
 w_flame = Damaging('Weak Flame',
@@ -292,13 +296,13 @@ cyclone = Damaging('Cyclone',
 # Life
 purify = Damaging('Purify',
                   "Call upon His Divinity to cast out evil creatures! (Weak)",
-                  3, 5, 5, "life")
+                  3, 5, 5, "life", a_c=('paladin', 'mage'))
 smite = Damaging('Holy Smite',
                  "Strike down unholy beings using His Divinity's power! (Moderate)",
-                 11, 15, 14, "life")
+                 11, 15, 14, "life", a_c=('paladin', 'mage'))
 moonbeam = Damaging('Moonbeam',
                     "Utterly destroy evil creatures with holy rays from the moon! (Strong)",
-                    23, 27, 24, "life")
+                    23, 27, 24, "life", a_c=('paladin', 'mage'))
 
 
 # Death
@@ -315,75 +319,72 @@ unholy_rend = Damaging('Unholy Rend',
 # -- Healing -- #
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic. (Weak)",
-                   3, 3, 20)
+                   3, 3, 20, a_c=('paladin', 'mage'))
 adv_heal = Healing('Advanced Healing',
                    "Restore a large amount of HP by using magic. (Moderate)",
-                   10, 15, 60)
+                   10, 15, 60, a_c=('paladin', 'mage'))
 div_heal = Healing('Divine Healing',
                    "Call upon the arcane arts to greatly restore your HP. (Strong)",
-                   25, 28, 125)
+                   25, 28, 125, a_c=('paladin', 'mage'))
 
 # -- Buffs -- #
 
 # Movement Buffs
 m_quick = Buff('Minor Quickness',
                "Temporarily raise your speed by a small amount. (Weak)",
-               3, 1, 5, "spd")
+               3, 1, 5, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
 m_evade = Buff('Minor Evade',
                "Temporarily raise your evasion by a small amount. (Weak)",
-               3, 1, 5, "evad")
+               3, 1, 5, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
 
 a_quick = Buff('Adept Quickness',
                "Temporarily raise your speed by a large amount. (Moderate)",
-               6, 10, 12, "spd")
+               6, 10, 12, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
 a_evade = Buff('Adept Evade',
                "Temporarily raise your evasion by a large amount. (Moderate)",
-               6, 10, 12, "evad")
+               6, 10, 12, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
 
 # Defense Buffs
 m_defend = Buff('Minor Defend',
                 "Temporarily raise your defense by a small amount. (Weak)",
-                3, 3, 5, "dfns")
+                3, 3, 5, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 m_shield = Buff('Minor Shield',
                 "Temporarily raise your magic defense by a small amount. (Weak)",
-                3, 3, 5, "m_dfns")
+                3, 3, 5, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+m_block = Buff('Minor Block',
+               "Temporarily raise your pierce defense by a small amount. (Weak)",
+               3, 7, 5, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 
 a_defend = Buff('Adept Defend',
                 "Temporarily raise your defense by a large amount. (Moderate)",
-                6, 13, 12, "dfns")
+                6, 13, 12, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 a_shield = Buff('Adept Shield',
                 "Temporarily raise your magic defense by a large amount. (Moderate)",
-                6, 13, 12, "m_dfns")
+                6, 13, 12, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+a_block = Buff('Adept Block',
+               "Temporarily raise your pierce defense by a large amount. (Moderate)",
+               6, 17, 12, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 
 # Attack Buffs
 m_stren = Buff('Minor Strengthen',
                "Temporarily raise your attack by a small amount. (Weak)",
-               3, 6, 5, "attk")
+               3, 6, 5, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
 m_power = Buff('Minor Empower',
                "Temporarily raise your magic attack by a small amount. (Weak)",
                3, 6, 5, "m_attk")
+m_aim = Buff('Minor Aim',
+             "Temporarily raise your pierce attack by a small amount. (Weak)",
+             3, 7, 5, "p_attk", a_c=('ranger', 'mage', 'monk'))
 
 a_stren = Buff('Adept Strengthen',
                "Temporarily raise your attack by a large amount. (Moderate)",
-               6, 16, 12, "attk")
+               6, 16, 12, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
 a_power = Buff('Adept Empower',
                "Temporarily raise your magic attack by a large amount. (Moderate)",
                6, 16, 12, "m_attk")
-
-# Pierce Buffs
-m_block = Buff('Minor Block',
-               "Temporarily raise your pierce defense by a small amount. (Weak)",
-               3, 7, 5, "p_dfns")
-m_aim = Buff('Minor Aim',
-             "Temporarily raise your pierce attack by a small amount. (Weak)",
-             3, 7, 5, "p_attk")
-
-a_block = Buff('Adept Block',
-               "Temporarily raise your pierce defense by a large amount. (Moderate)",
-               6, 17, 12, "p_dfns")
 a_aim = Buff('Adept Aim',
              "Temporarily raise your pierce attack by a large amount. (Moderate)",
-             6, 17, 12, "p_attk")
+             6, 17, 12, "p_attk", a_c=('ranger', 'mage', 'monk'))
 
 # -- Other Spells -- #
 r_affliction = Spell('Relieve Affliction',
@@ -685,11 +686,17 @@ def new_spells():
         elif isinstance(spell, Buff):
             cat = 'Buffs'
 
+        # Only give the player spells that they are a high enough level for
         if main.player.lvl >= spell.req_lvl:
             for x in spellbook[cat]:
                 if x.name == spell.name:
                     break
             else:
+                # Almost all spells can be learned by mages, but only a few can be learned
+                # by other classes
+                if player.class_ not in spell.a_c:
+                    continue
+
                 sounds.item_pickup.play()
                 spellbook[cat].append(spell)
                 print('You have learned "{0}", a new {1} spell!'.format(

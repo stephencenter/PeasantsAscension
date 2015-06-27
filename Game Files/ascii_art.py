@@ -114,13 +114,12 @@ monster_art = {
   *  *
         %s""",
 
-    "Walking Venus":
+    "Will-o'-the-wisp":
     """
-(--{
-  |
-  |
-  -
- / \\
+  )\^^/(
+ / o  o \\
+|        |
+ \______/
         %s""",
 
     "Vine Lizard":
@@ -137,9 +136,9 @@ monster_art = {
 
     "Beetle":
     """
- ..
-[==]
-[==]
+ ______
+/______\C
+ ''''''
      %s""",
 
     "Calculator":
@@ -149,11 +148,11 @@ monster_art = {
 [==]
      %s""",
 
-    "Sprite":
+    "Spriggan":
     """
-   O
-/}-|-{\\
-  / \\
+ }o{
+3-|-E
+ / \\
         %s""",
 
     "Imp":
