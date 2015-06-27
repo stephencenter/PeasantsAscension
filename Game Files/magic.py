@@ -319,7 +319,8 @@ unholy_rend = Damaging('Unholy Rend',
 # -- Healing -- #
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic. (Weak)",
-                   3, 3, 20, a_c=('paladin', 'mage'))
+                   3, 3, 20,
+                   a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 adv_heal = Healing('Advanced Healing',
                    "Restore a large amount of HP by using magic. (Moderate)",
                    10, 15, 60, a_c=('paladin', 'mage'))

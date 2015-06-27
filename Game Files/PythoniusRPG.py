@@ -42,7 +42,7 @@ player = ''
 
 # A dictionary containing miscellaneous variables made entirely of
 misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
-             'int': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20,
+             'int': 1, 'wis': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20,
              'visited_towns': []}
 
 # A dictionary containing all information related to the player's position
@@ -352,6 +352,7 @@ class PlayerCharacter:  # The Player
 
             skill = input("""Choose a skill to advance:
     [I]ntelligence - Use powerful magic with higher magic stats and MP!
+    [W]isdom - Cast powerful healing magics with higher proficiency and MP!
     [S]trength -  Smash through enemies with higher attack and defense!
     [C]onstitution - Become a tank with higher defense stats and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
@@ -361,10 +362,14 @@ Input letter: """)
 
             skill = skill.lower()
 
-            if any(map(skill.startswith, ['i', 's', 'c', 'd', 'p', 'f'])):
+            if any(map(skill.startswith, ['i', 'w', 's', 'c', 'd', 'p', 'f'])):
                 if skill.startswith('i'):
                     act_skill = 'int'
                     vis_skill = 'Intelligence'
+
+                elif skill.startswith('w'):
+                    act_skill = 'wis'
+                    vis_skill = 'Wisdom'
 
                 elif skill.startswith('s'):
                     act_skill = 'str'
@@ -409,6 +414,10 @@ Input letter: """)
                         self.mp += 2
                         misc_vars['int'] += 1
 
+                    elif skill.startswith('w'):
+                        self.mp += 1
+                        misc_vars['wis'] += 1
+
                     elif skill.startswith('s'):
                         self.attk += 1
                         self.p_dfns += random.randint(0, 1)
@@ -435,9 +444,15 @@ Input letter: """)
                         misc_vars['per'] += 1
 
                     elif skill.startswith('f'):
-                        self.ext_ski += 1
-                        self.ext_gol += 1
-                        self.ext_exp += 1
+                        if self.ext_ski == 10:
+                            self.ext_gol += 2
+                            self.ext_exp += 2
+
+                        else:
+                            self.ext_ski += 1
+                            self.ext_gol += 1
+                            self.ext_exp += 1
+
                         misc_vars['for'] += 1
 
 
@@ -463,16 +478,16 @@ HP: {4}/{5} | MP: {6}/{7}
 Attack: {8} | M. Attack: {9} | P. Attack {10}
 Defense: {11} | M. Defense: {12} | P. Defense {13}
 Speed: {14} | Evasion: {15}
-INT: {16} | STR: {17} | CON: {18} | DEX: {19} | PER: {20} | FOR: {21}
-Experience Pts: {22}/{23} | Gold Pieces: {24}
+INT: {16} | WIS: {17} | STR: {18} | CON: {19} | DEX: {20} | PER: {21} | FOR: {22}
+Experience Pts: {23}/{24} | Gold Pieces: {25}
 
 -Equipped Items-
-Weapon: {25}
-Accessory: {26}
+Weapon: {26}
+Accessory: {27}
 Armor:
-  Head: {27}
-  Body: {28}
-  Legs: {29}
+  Head: {28}
+  Body: {29}
+  Legs: {30}
 
 -Current Pet-""".format(self.name,
                         self.lvl, self.class_.title(), self.element,
@@ -480,7 +495,7 @@ Armor:
                         self.attk, self.m_attk, self.p_attk,
                         self.dfns, self.m_dfns, self.p_dfns,
                         self.spd, self.evad,
-                        misc_vars['int'], misc_vars['str'], misc_vars['con'],
+                        misc_vars['int'], misc_vars['wis'], misc_vars['str'], misc_vars['con'],
                         misc_vars['dex'], misc_vars['per'], misc_vars['for'],
                         self.exp, misc_vars['r_xp'], misc_vars['gp'],
                         inv_system.equipped['weapon'], inv_system.equipped['access'],
@@ -850,14 +865,18 @@ def check_save():  # Check for save files and load the game if they're found
                     print('Attempt successful!')
 
                 # Make the save file compatible with v0.6.5
-                if 'is_aethus' not in position or 'visited_towns' not in misc_vars:
+                if 'is_aethus' not in position or 'visited_towns' not in misc_vars \
+                        or 'wis' not in misc_vars:
                     print('Attempting to make save file compatible with v0.6.5...')
 
                     if 'is_aethus' not in position:
                         position['is_aethus'] = False
 
-                    elif 'visited_towns' not in misc_vars:
+                    if 'visited_towns' not in misc_vars:
                         misc_vars['visited_towns'] = []
+
+                    if 'wis' not in misc_vars:
+                        misc_vars['wis'] = 1
 
                     print('Attempt successful!')
 
