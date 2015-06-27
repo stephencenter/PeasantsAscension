@@ -220,22 +220,27 @@ class PlayerCharacter:  # The Player
 
     def choose_class(self):
         while True:
-            class_ = input('{0}, which class would you like to train as?\n\
-    Warrior, Mage, Assassin, or Ranger: '.format(self.name))
+            class_ = input("""{0}, which class would you like to train as?\n\
+      [1] Mage: Master of the arcane arts, capable of using all spells, but has low defense
+      [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
+      [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
+      [4] Paladin: Heavy-armor user who accels at holy and healing magic and uses hammers
+      [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
+      [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
+Input [#]: """.format(self.name))
 
-            class_ = class_.lower()
-            classes = ['warrior', 'mage', 'assassin', 'ranger']
+            try:
+                class_ = {'1': "mage",
+                          '2': "assassin",
+                          '3': "ranger",
+                          '4': "paladin",
+                          '5': "monk",
+                          '6': "warrior"}[class_]
 
-            spam = False
-
-            for x, y in enumerate(['w', 'm', 'a', 'r']):
-                if class_.startswith(y):
-                    class_ = classes[x]
-                    spam = True
-
-            if not spam:
+            except KeyError:
                 continue
 
+            print('-'*25)
             if self.name == "Flygon Jones":
                 print("You wish to be a {0}? Good choice, dear friend!".format(class_.title()))
                 input('Press enter/return ')
@@ -252,6 +257,7 @@ class PlayerCharacter:  # The Player
                     return class_
 
                 elif y_n.startswith('n'):
+                    print('-'*25)
                     break
 
     def level_up(self):

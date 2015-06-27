@@ -878,8 +878,13 @@ rnc_stf = Weapon('Runic Staff',
                  'A powerful staff enchanted with ancient magic (+19 Magic Attack)',
                  325, 115, 19, 'magic', 'mage', 'Staff')
 en_rnc_stf = Weapon('Enhanced Runic Staff',
-                    'An enhanced version of your typical Runic Staff (+25 Magic Attack',
+                    'An enhanced version of your typical Runic Staff (+25 Magic Attack)',
                     420, 135, 25, 'magic', 'mage', 'Staff')
+
+# Weapons -- Paladin
+rbr_mlt = Weapon('Rubber Mallet',
+                 'This can barely hammer nails, what do you expect to kill with it? (+3 Attack)',
+                 10, 5, 3, 'melee', 'paladin', 'Hammer')
 
 # Starting Armor (Useless)
 straw_hat = Armor('Straw Hat',
