@@ -513,6 +513,11 @@ def class_ability():
 
     global ability_used
 
+    if player.lvl < 5:
+        # You must be at least level 5 to use your class ability
+        print("You have not realized your class's inner potential yet (must be level 5 to use)")
+        return False
+
     if ability_used:
         # You can only use your ability once per battle.
         print('You feel drained, and are unable to call upon your class ability again.')
@@ -553,8 +558,8 @@ Element: {8} | Elemental Weakness: {9}""".format(
              'life': 'Death',
              'death': 'Life'}[monster.element]))
 
-        player.hp += 8
-        player.mp += 8
+        player.hp += 10
+        player.mp += 10
 
         if player.hp > misc_vars['hp_p']:
             player.hp -= (player.hp - misc_vars['hp_p'])

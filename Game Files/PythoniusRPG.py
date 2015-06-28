@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.6.5 Alpha
-game_version = 'v0.6.5'
+# PythoniusRPG v0.6.6 Alpha
+game_version = 'v0.6.6'
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
 #
@@ -279,13 +279,18 @@ Input [#]: """.format(self.name))
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
 
+                if self.lvl == 5:
+                    print('You now understand the true potential of your class!')
+                    print('You can activate this potential in the form of a "class ability"')
+                    print('once per battle. Use it wisely!')
+
                 rem_points += 10
                 extra_points += self.ext_ski
                 magic.new_spells()
 
                 if self.class_ == 'warrior':
                     self.p_attk += random.randint(0, 2)
-                    self.p_dfns += random.randint(1, 3)
+                    self.p_dfns += random.randint(2, 3)
                     self.attk += random.randint(2, 4)
                     self.dfns += random.randint(2, 3)
                     self.m_attk += random.randint(0, 2)
@@ -300,10 +305,10 @@ Input [#]: """.format(self.name))
                     self.p_dfns += random.randint(0, 2)
                     self.attk += random.randint(0, 1)
                     self.dfns += random.randint(0, 2)
-                    self.m_attk += random.randint(1, 3)
-                    self.m_dfns += random.randint(1, 3)
+                    self.m_attk += random.randint(2, 4)
+                    self.m_dfns += random.randint(2, 3)
                     self.spd += random.randint(1, 2)
-                    self.evad += random.randint(0, 1)
+                    self.evad += random.randint(1, 2)
                     self.hp += random.randint(1, 2)
                     self.mp += random.randint(2, 3)
 
@@ -311,24 +316,48 @@ Input [#]: """.format(self.name))
                     self.p_attk += random.randint(0, 2)
                     self.p_dfns += random.randint(1, 2)
                     self.attk += random.randint(1, 3)
-                    self.dfns += random.randint(1, 2)
-                    self.m_attk += random.randint(0, 2)
-                    self.m_dfns += random.randint(1, 2)
-                    self.spd += random.randint(2, 4)
-                    self.evad += random.randint(1, 2)
-                    self.hp += random.randint(2, 3)
-                    self.mp += random.randint(1, 2)
-
-                elif self.class_ == 'ranger':
-                    self.p_attk += random.randint(2, 4)
-                    self.p_dfns += random.randint(0, 2)
-                    self.attk += random.randint(1, 2)
                     self.dfns += random.randint(0, 2)
                     self.m_attk += random.randint(0, 2)
                     self.m_dfns += random.randint(1, 2)
                     self.spd += random.randint(2, 4)
+                    self.evad += random.randint(1, 2)
+                    self.hp += random.randint(1, 3)
+                    self.mp += random.randint(1, 2)
+
+                elif self.class_ == 'ranger':
+                    self.p_attk += random.randint(2, 4)
+                    self.p_dfns += random.randint(0, 1)
+                    self.attk += random.randint(1, 2)
+                    self.dfns += random.randint(0, 1)
+                    self.m_attk += random.randint(0, 2)
+                    self.m_dfns += random.randint(0, 2)
+                    self.spd += random.randint(1, 3)
                     self.evad += random.randint(2, 3)
                     self.hp += random.randint(1, 3)
+                    self.mp += random.randint(1, 3)
+
+                elif self.class_ == 'monk':
+                    self.p_attk += random.randint(0, 2)
+                    self.p_dfns += random.randint(0, 1)
+                    self.attk += random.randint(2, 4)
+                    self.dfns += random.randint(0, 1)
+                    self.m_attk += random.randint(1, 3)
+                    self.m_dfns += random.randint(0, 1)
+                    self.spd += random.randint(1, 2)
+                    self.evad += random.randint(2, 3)
+                    self.hp += random.randint(1, 2)
+                    self.mp += random.randint(1, 3)
+
+                elif self.class_ == 'paladin':
+                    self.p_attk += random.randint(0, 2)
+                    self.p_dfns += random.randint(1, 3)
+                    self.attk += random.randint(2, 3)
+                    self.dfns += random.randint(1, 3)
+                    self.m_attk += random.randint(1, 2)
+                    self.m_dfns += random.randint(1, 3)
+                    self.spd += random.randint(0, 2)
+                    self.evad += random.randint(0, 1)
+                    self.hp += random.randint(1, 2)
                     self.mp += random.randint(1, 3)
 
                 self.exp -= misc_vars['r_xp']
@@ -662,6 +691,28 @@ def create_player():
         player.evad += 2
         player.spd += 2
         inv_system.equipped['weapon'] = copy.copy(items.slg_sht)
+
+    elif player.class_ == "monk":
+        misc_vars['hp_p'] += 1
+        misc_vars['mp_p'] += 1
+        player.attk += 2
+        player.m_dfns += 1
+        player.evad += 1
+        player.spd += 1
+        player.dfns -= 1
+        inv_system.equipped['weapon'] = copy.copy(items.fists)
+
+    elif player.class_ == "paladin":
+        misc_vars['hp_p'] += 2
+        misc_vars['mp_p'] += 2
+        player.m_dfns += 1
+        player.m_attk += 1
+        player.dfns += 1
+        player.p_dfns += 1
+        player.attk += 1
+        player.spd -= 1
+        player.evad -= 1
+        inv_system.equipped['weapon'] = copy.copy(items.rbr_mlt)
 
     player.hp = copy.copy(misc_vars['hp_p'])
     player.mp = copy.copy(misc_vars['mp_p'])

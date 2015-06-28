@@ -81,7 +81,8 @@ class Healing(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            main.player.hp += self.health + int(main.misc_vars['int']/4) + random.randint(-2, 2)
+            main.player.hp += self.health + (2*main.misc_vars['wis'] if main.player.class_ !=
+                                             'paladin' else 4*main.misc_vars['wis'])
 
             if main.player.hp > main.misc_vars['hp_p']:
                 main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
