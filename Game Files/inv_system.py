@@ -84,7 +84,9 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
 
             [i.sht_bow, i.en_sht_bow, i.lng_bow,
              i.en_lng_bow, i.ash_cbow, i.en_ash_cbow]  # Ranger Weapons
-            ],
+
+            [i.holy_mace, i.en_holy_mace, i.hmr_of_mgt,
+             i.en_hmr_of_mgt, i.ngt_bane, i.en_ngt_bane]],
 
             'Armor': [[i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
             i.en_stl_hlm, i.ori_hlm, i.ori_hlm],  # Warrior Armor -- Head
