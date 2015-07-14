@@ -662,7 +662,7 @@ def non_magic_ai(var, dodge):
         possible_p_dam = math.ceil(monster.p_attk - battle.temp_stats['p_dfns']/2) + var
         possible_a_dam = math.ceil(monster.attk - battle.temp_stats['dfns']/2) + var
 
-        most_effective = max([possible_p_dam, possible_m_dam, possible_a_dam])
+        most_effective = max([possible_p_dam, possible_a_dam])
 
         if player.spd >= monster.spd:
             print('-'*25)

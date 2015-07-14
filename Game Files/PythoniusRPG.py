@@ -162,19 +162,20 @@ class PlayerCharacter:  # The Player
 
     def player_damage(self, var):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
-            dam_dealt = math.ceil(battle.temp_stats['attk']/1.5 - (battle.monster.dfns/2)) + var
+            dam_dealt = math.ceil(battle.temp_stats['attk']/1.5 - (battle.monster.dfns/2))
+            dam_dealt += dam_dealt*inv_system.equipped['weapon'].power + var
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
-                print('You deal less damage because of your weakened state.')
+                print('You deal half damage because of your weakened state!')
 
         else:
-            dam_dealt = math.ceil(battle.temp_stats['p_attk']/1.5 - (battle.monster.p_dfns/2)) + var
-            dam_dealt *= 2
+            dam_dealt = math.ceil(battle.temp_stats['p_attk']/1.5 - (battle.monster.p_dfns/2))
+            dam_dealt += dam_dealt*inv_system.equipped['weapon'].power + var
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
-                print('You deal less damage because your eyesight made aiming difficult.')
+                print('Your poor vision reduces your attack damage by half!')
 
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
@@ -186,6 +187,10 @@ class PlayerCharacter:  # The Player
         if random.randint(1, 100) <= 7:
             print("It's a critical hit! 2x damage!")
             dam_dealt *= 2
+
+        if dam_dealt > 999:
+            dam_dealt = 999
+            print('Overkill!')
 
         return dam_dealt
 
