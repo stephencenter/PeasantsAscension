@@ -372,9 +372,9 @@ def rest():
     if isinstance(inv_system.equipped['pet'], pets.Healer):
         inv_system.equipped['pet'].mana += int(inv_system.equipped['pet'].max_m/3)
 
-    if inv_system.equipped['pet'].mana > inv_system.equipped['pet'].max_m:
-        inv_system.equipped['pet'].mana -= (inv_system.equipped['pet'].mana
-                                            - inv_system.equipped['pet'].max_m)
+        if inv_system.equipped['pet'].mana > inv_system.equipped['pet'].max_m:
+            inv_system.equipped['pet'].mana -= (inv_system.equipped['pet'].mana
+                                                - inv_system.equipped['pet'].max_m)
 
     is_battle = not random.randint(0, 3)
 

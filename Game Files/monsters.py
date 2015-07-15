@@ -290,6 +290,12 @@ class Monster:
             elif player.class_ == 'assassin':
                 status = 'paralyzed'  # Severely lowers speed and evasion
 
+            elif player.class_ == 'monk':
+                status = random.choice(['paralyzed', 'weakened'])
+
+            elif player.class_ == 'paladin':
+                status = random.choice(['silenced', 'weakened'])
+
         else:
             status = random.choice(['asleep',  # Skips the players turn until they wake up
                                     'poisoned'  # The player takes damage each turn until cured
