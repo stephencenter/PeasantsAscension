@@ -528,7 +528,9 @@ def class_ability():
 
     if player.lvl < 5:
         # You must be at least level 5 to use your class ability
-        print("You have not realized your class's inner potential yet (must be level 5 to use)")
+        print("You have not realized your class's inner potential yet (must be level 5 to use)\n")
+        input('Press enter/return ')
+        
         return False
 
     if ability_used:
