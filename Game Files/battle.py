@@ -57,6 +57,7 @@ position = ''
 vowels = 'AEIOU'
 temp_stats = ''
 ability_used = False
+monk_tc = 0
 
 if __name__ == "__main__":
     sys.exit()
@@ -111,6 +112,7 @@ def player_choice(actual_speed):
 
 def battle_system(is_boss=False, ambush=False):
     global ability_used
+    global monk_tc
 
     if is_boss:  # Bosses have different battle music than normal enemies
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
@@ -173,6 +175,14 @@ def battle_system(is_boss=False, ambush=False):
 
         actual_speed = math.floor(temp_stats['spd']/2) \
             if player.status_ail == 'paralyzed' else temp_stats['spd']
+
+        # Increment the monk turn-counter for lower defense until it equals 3
+        if player.class_ == 'monk' and ability_used:
+            if monk_tc == 3:
+                print('You recover from the usage of your class ability, and your')
+                print('defenses return to normal.')
+
+            monk_tc += 1
 
         if player.status_ail == 'asleep':
             if not random.randint(0, 2):
@@ -512,6 +522,9 @@ def class_ability():
     # strategy being used.
 
     global ability_used
+    global monster
+    global player
+    global temp_stats
 
     if player.lvl < 5:
         # You must be at least level 5 to use your class ability
@@ -520,7 +533,9 @@ def class_ability():
 
     if ability_used:
         # You can only use your ability once per battle.
-        print('You feel drained, and are unable to call upon your class ability again.')
+        print('You feel drained, and are unable to call upon your class ability again.\n')
+        input('Press enter/return ')
+
         return False
 
     else:
@@ -531,11 +546,17 @@ def class_ability():
 
     print("You use the knowledge you've gained to unleash your class ability!")
 
+    # Ranger Ability: Scout
     if player.class_ == 'ranger':
         # The ranger class identifies their enemy and prints their stats.
         # This is really useful for defeating bosses, which are often weak to
         # certain types and elements of attacks.
-        print('As a Ranger, you identify your enemy and meditate!')
+
+        print('-'*25)
+        print('ABILITY: SCOUT')
+        print('-'*25)
+
+        print('As a Ranger, you identify your enemy and focus, increasing your pierce attack!')
         input("Press Enter/Return to view your enemy's stats ")
 
         print('-'*25)
@@ -558,26 +579,12 @@ Element: {8} | Elemental Weakness: {9}""".format(
              'life': 'Death',
              'death': 'Life'}[monster.element]))
 
-        # Always restore at least 10% of the player's stats
-        if 10 < 0.1*main.player.hp:
-            main.player.hp += 0.1*main.player.hp
-            main.player.hp = math.ceil(main.player.hp)
-        else:
-            player.hp += 10
-
-        if 10 < 0.1*main.player.mp:
-            main.player.mp += 0.1*main.player.mp
-            main.player.mp = math.ceil(main.player.mp)
-        else:
-            player.mp += 10
-
-        if player.hp > misc_vars['hp_p']:
-            player.hp -= (player.hp - misc_vars['hp_p'])
-        if player.mp > misc_vars['mp_p']:
-            player.mp -= (player.mp - misc_vars['mp_p'])
+        player.p_attk *= 1.2
+        player.p_attk = math.ceil(p_attk)
 
         return True
 
+    # Warrior Ability: Warrior's Spirit
     elif player.class_ == 'warrior':
 
         if 20 < 0.2*main.player.hp:
@@ -589,6 +596,11 @@ Element: {8} | Elemental Weakness: {9}""".format(
         temp_stats['dfns'] *= 1.2
         temp_stats['m_dfns'] *= 1.2
         temp_stats['p_dfns'] *= 1.2
+
+        print('-'*25)
+        print("ABILITY: WARRIOR'S SPIRIT")
+        print('-'*25)
+
         print('As a Warrior, you channel your inner-strength and restore health and defense!')
 
         if player.hp > misc_vars['hp_p']:
@@ -598,6 +610,7 @@ Element: {8} | Elemental Weakness: {9}""".format(
 
         return True
 
+    # Mage Ability: Artificial Intelligence
     elif player.class_ == "mage":
         player.mp += _c(misc_vars['mp_p'])/2
 
@@ -608,18 +621,108 @@ Element: {8} | Elemental Weakness: {9}""".format(
 
         temp_stats['m_attk'] *= 1.2
         temp_stats['m_dfns'] *= 1.2
+
+        print('-'*25)
+        print("ABILITY: ARTIFICIAL INTELLIGENCE")
+        print('-'*25)
+
         print('As a Mage, you focus intently and sharply increase your magical prowess!')
+        print('Your magic attack and defense increase, and you regain MP!')
 
         return True
 
+    # Assassin Ability: Poison Injection
     elif player.class_ == "assassin":
         temp_stats['m_ispoisoned'] = True
+
+        print('-'*25)
+        print("ABILITY: POISON INJECTION")
+        print('-'*25)
+
         print('As an Assassin, you discreetly inject poison into your enemy!')
 
         return True
 
+    # Paladin Ability: Divine Intervention
     elif player.class_ == "paladin":
-        pass
+        print('-'*25)
+        print('ABILITY: DIVINE INTERVENTION')
+        print('-'*25)
+
+        print('As a Paladin, you call upon the power of His Divinity to aid you!')
+        print('You enemy has been turned to the "death" element, causing your')
+        print('holy spells to inflict more damage! You also regain health and MP.')
+
+        monster.element = "death"
+
+        if 15 < 0.15*main.player.hp:
+            main.player.hp += 0.1*main.player.hp
+            main.player.hp = math.ceil(main.player.hp)
+        else:
+            player.hp += 15
+
+        if 15 < 0.15*main.player.mp:
+            main.player.mp += 0.1*main.player.mp
+            main.player.mp = math.ceil(main.player.mp)
+        else:
+            player.mp += 15
+
+        if player.hp > misc_vars['hp_p']:
+            player.hp -= (player.hp - misc_vars['hp_p'])
+        if player.mp > misc_vars['mp_p']:
+            player.mp -= (player.mp - misc_vars['mp_p'])
+
+        return True
+
+    # Monk Ability: Chakra-smash
+    elif player.class_ == 'monk':
+        # Essentially a 4x crit. As an added bonus, this attack has a 14%
+        # chance to get a crit itself, resulting in a total of an 8x critical.
+        # This attack lowers your defenses by 25% for three turns to balance it out.
+        # If you are weakened, this attack ignores that and will deal full damage anyway.
+        print('-'*25)
+        print('ABILITY: CHAKRA-SMASH')
+        print('-'*25)
+
+        print('As a monk, you meditate and focus your inner chi.')
+        print('After a brief moment of confusion from the enemy, you strike, dealing')
+        print('an immense amount of damage in a single, powerful strike! As a result, your')
+        print('defenses have been lowered by 25% for three turns.')
+        print()
+
+        dam_dealt = math.ceil(temp_stats['attk']/1.5 - (monster.dfns/2))
+        dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
+
+        dam_dealt = magic.eval_element(
+            p_elem=inv_system.equipped['weapon'].element,
+            m_elem=monster.element, p_dmg=dam_dealt)[0]
+
+        dam_dealt *= 4
+
+        if dam_dealt < 4:
+            dam_dealt = 4
+
+        if random.randint(1, 100) <= 14:
+            print("It's a critical hit! 2x damage!")
+            print('Overkill!')
+            dam_dealt *= 2
+
+        if dam_dealt > 999:
+            dam_dealt = 999
+
+        print('The attack deals {0} damage to the {1}!'.format(dam_dealt, monster.name))
+
+        temp_stats['dfns'] /= 1.25
+        temp_stats['m_dfns'] /= 1.25
+        temp_stats['p_dfns'] /= 1.25
+
+        temp_stats['dfns'] = math.floor(player.dfns)
+        temp_stats['m_dfns'] = math.floor(player.m_dfns)
+        temp_stats['p_dfns'] = math.floor(player.p_dfns)
+
+        monster.hp -= dam_dealt
+
+        return True
 
 
 def run_away():

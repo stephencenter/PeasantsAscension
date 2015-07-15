@@ -225,8 +225,7 @@ class Armor(Item):
 
         else:
             print('-'*25)
-            input("You must be a {0} to equip this | Press enter/return ".format(
-                self.class_.title()))
+            input("You must be a different class in order to equip this item.")
             print('-'*25)
 
 

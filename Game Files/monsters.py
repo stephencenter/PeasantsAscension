@@ -368,7 +368,6 @@ class Monster:
                         }
 
         chosen = random.randint(0, 4)
-        print(chosen)
 
         self.name = monster_type[position['reg']][chosen]
 
@@ -662,9 +661,9 @@ def non_magic_ai(var, dodge):
             monster.dfns /= 1.1
             monster.m_dfns /= 1.1
             monster.p_dfns /= 1.1
-            monster.dfns = math.floor(dfns)
-            monster.m_dfns = math.floor(m_dfns)
-            monster.p_dfns = math.floor(p_dfns)
+            monster.dfns = math.floor(monster.dfns)
+            monster.m_dfns = math.floor(monster.m_dfns)
+            monster.p_dfns = math.floor(monster.p_dfns)
 
         battle.temp_stats['turn_counter'] += 1
 
