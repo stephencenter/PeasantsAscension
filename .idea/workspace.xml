@@ -10,7 +10,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d19a7f44-3ef1-4b67-8670-56343c3a2afb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/items.py" afterPath="$PROJECT_DIR$/Game Files/items.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Pythonius.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,8 +65,8 @@
       <file leaf-file-name="items.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/items.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6678281" vertical-offset="30865" max-vertical-offset="39060">
-              <caret line="1060" column="35" selection-start-line="1060" selection-start-column="35" selection-end-line="1060" selection-end-column="35" />
+            <state vertical-scroll-proportion="-0.39372823" vertical-offset="26709" max-vertical-offset="39150">
+              <caret line="891" column="30" selection-start-line="891" selection-start-column="30" selection-end-line="891" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -997,8 +996,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/items.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6678281" vertical-offset="30865" max-vertical-offset="39060">
-          <caret line="1060" column="35" selection-start-line="1060" selection-start-column="35" selection-end-line="1060" selection-end-column="35" />
+        <state vertical-scroll-proportion="-0.39372823" vertical-offset="26709" max-vertical-offset="39150">
+          <caret line="891" column="30" selection-start-line="891" selection-start-column="30" selection-end-line="891" selection-end-column="30" />
           <folding />
         </state>
       </provider>
