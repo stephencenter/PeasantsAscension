@@ -558,8 +558,18 @@ Element: {8} | Elemental Weakness: {9}""".format(
              'life': 'Death',
              'death': 'Life'}[monster.element]))
 
-        player.hp += 10
-        player.mp += 10
+        # Always restore at least 10% of the player's stats
+        if 10 < 0.1*main.player.hp:
+            main.player.hp += 0.1*main.player.hp
+            main.player.hp = math.ceil(main.player.hp)
+        else:
+            player.hp += 10
+
+        if 10 < 0.1*main.player.mp:
+            main.player.mp += 0.1*main.player.mp
+            main.player.mp = math.ceil(main.player.mp)
+        else:
+            player.mp += 10
 
         if player.hp > misc_vars['hp_p']:
             player.hp -= (player.hp - misc_vars['hp_p'])
@@ -569,10 +579,16 @@ Element: {8} | Elemental Weakness: {9}""".format(
         return True
 
     elif player.class_ == 'warrior':
-        player.hp += 20
-        temp_stats['dfns'] += 10
-        temp_stats['m_dfns'] += 10
-        temp_stats['p_dfns'] += 10
+
+        if 20 < 0.2*main.player.hp:
+            main.player.hp += 0.2*main.player.hp
+            main.player.hp = math.ceil(main.player.hp)
+        else:
+            player.hp += 20
+
+        temp_stats['dfns'] *= 1.2
+        temp_stats['m_dfns'] *= 1.2
+        temp_stats['p_dfns'] *= 1.2
         print('As a Warrior, you channel your inner-strength and restore health and defense!')
 
         if player.hp > misc_vars['hp_p']:
@@ -588,10 +604,10 @@ Element: {8} | Elemental Weakness: {9}""".format(
         if player.mp > misc_vars['mp_p']:
             player.mp = _c(misc_vars['mp_p'])
 
-        player.mp = int(player.mp)
+        player.mp = math.ceil(player.mp)
 
-        temp_stats['m_attk'] += 5
-        temp_stats['m_dfns'] += 5
+        temp_stats['m_attk'] *= 1.2
+        temp_stats['m_dfns'] *= 1.2
         print('As a Mage, you focus intently and sharply increase your magical prowess!')
 
         return True
@@ -601,6 +617,9 @@ Element: {8} | Elemental Weakness: {9}""".format(
         print('As an Assassin, you discreetly inject poison into your enemy!')
 
         return True
+
+    elif player.class_ == "paladin":
+        pass
 
 
 def run_away():

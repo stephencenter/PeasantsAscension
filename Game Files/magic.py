@@ -493,19 +493,18 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
     if p_elem == 'none' or m_elem == 'none':
         return [p_dmg, m_dmg]
 
-    if element_matchup[p_elem][0] == m_elem or p_elem == m_elem:
-        return [int(p_dmg/1.5), int(m_dmg/1.5)]
-
-    elif element_matchup[p_elem][1] == m_elem:
-        spam = [int(p_dmg*1.5), int(m_dmg*1.5)]
+    if element_matchup[p_elem][1] == m_elem:
+        spam = [int(p_dmg*1.5), int(m_dmg/1.5)]
 
         if spam[0] <= 1:
             spam[0] = 2
 
         return spam
 
-    return [p_dmg, m_dmg]
+    elif element_matchup[p_elem][0] == m_elem or p_elem == m_elem:
+        return [int(p_dmg/1.5), int(m_dmg*1.5)]
 
+    return [p_dmg, m_dmg]
 
 spellbook = {'Healing': [], 'Damaging': [magic_shot], 'Buffs': [m_evade, m_quick]}
 

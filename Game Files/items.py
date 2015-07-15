@@ -734,24 +734,24 @@ wdn_sht = Weapon('Wooden Shortsword',
 
 bnz_swd = Weapon('Bronze Sword',
                  'A light yet sturdy sword smelted from a bronze alloy (+10% Damage)',
-                 45, 15, 0.1, 'melee', 'warrior', 'Sword')
+                 50, 15, 0.1, 'melee', 'warrior', 'Sword')
 en_bnz_swd = Weapon('Enhanced Bronze Sword',
                     'An enhanced version of your typical Bronze Sword (+25% Damage)',
-                    65, 25, 0.25, 'melee', 'warrior', 'Sword')
+                    100, 25, 0.25, 'melee', 'warrior', 'Sword')
 
 stl_spr = Weapon('Steel Spear',
                  'A fair-sized spear crafted from well made steel (+40% Damage)',
-                 175, 60, 0.4, 'melee', 'warrior', 'Spear')
+                 225, 75, 0.4, 'melee', 'warrior', 'Spear')
 en_stl_spr = Weapon('Enhanced Steel Spear',
                     'An enhanced version of your typical Steel Spear (+60% Damage)',
-                    250, 75, 0.6, 'melee', 'warrior', 'Spear')
+                    350, 125, 0.6, 'melee', 'warrior', 'Spear')
 
 durs_axe = Weapon('Durasteel Battleaxe',
                   'A heavy and powerful axe made with high quality durasteel ore (+80% Damage)',
-                  325, 110, 0.8, 'melee', 'warrior', 'Axe')
+                  500, 225, 0.8, 'melee', 'warrior', 'Axe')
 en_durs_axe = Weapon('Enhanced Durasteel Battleaxe',
                      'An enhanced version of your typical Durasteel Battleaxe (+100% Damage)',
-                     420, 135, 1, 'melee', 'warrior', 'Axe')
+                     750, 325, 1, 'melee', 'warrior', 'Axe')
 
 # Weapons -- Assassin
 stn_dag = Weapon('Stone Dagger',
@@ -760,24 +760,24 @@ stn_dag = Weapon('Stone Dagger',
 
 ser_knf = Weapon('Serated Knife',
                  'A durable knife made of iron, with one side made jagged (+10% Damage)',
-                 45, 15, 0.1, 'melee', 'assassin', 'Dagger')
+                 50, 15, 0.1, 'melee', 'assassin', 'Dagger')
 en_ser_knf = Weapon('Enhanced Serated Knife',
                     'An enhanced version of your typical Serated Knife (+25% Damage)',
-                    65, 25, 0.25, 'melee', 'assassin', 'Dagger')
+                    100, 25, 0.25, 'melee', 'assassin', 'Dagger')
 
 stiletto = Weapon('Stiletto',
                   'A long, cross-shaped knife perfect for "removing" your enemies (+40% Damage)',
-                  175, 60, 0.4, 'melee', 'assassin', 'Stiletto')
+                  225, 75, 0.4, 'melee', 'assassin', 'Stiletto')
 en_stiletto = Weapon('Enhanced Stiletto',
                      'An enhanced version of your typical Stiletto (+60% Damage)',
-                     250, 75, 0.6, 'melee', 'assassin', 'Stiletto')
+                     350, 125, 0.6, 'melee', 'assassin', 'Stiletto')
 
 myth_sb = Weapon('Mythril Shortblade',
                  'A knife made of a rare and powerful material (+80% Damage)',
-                 325, 115, 0.8, 'melee', 'assassin', 'Short Sword')
+                 500, 225, 0.8, 'melee', 'assassin', 'Short Sword')
 en_myth_sb = Weapon('Enhanced Mythril Shortblade',
                     'An enhanced version of your typical Mythril Shortblade (+100% Damage)',
-                    420, 135, 1, 'melee', 'assassin', 'Short Sword')
+                    750, 325, 1, 'melee', 'assassin', 'Short Sword')
 
 # Weapons -- Ranger
 slg_sht = Weapon('Sling Shot',
@@ -786,24 +786,24 @@ slg_sht = Weapon('Sling Shot',
 
 sht_bow = Weapon('Short Bow',
                  "A bow of great craftsmanship. It's kinda small, though (+10% Damage)",
-                 45, 15, 0.10, 'ranged', 'ranger', 'Bow')
+                 50, 15, 0.10, 'ranged', 'ranger', 'Bow')
 en_sht_bow = Weapon('Enhanced Short Bow',
                     " An enhanced version of your typical Short Bow (+25% Damage)",
-                    65, 25, 0.25, 'ranged', 'ranger', 'Bow')
+                    100, 25, 0.25, 'ranged', 'ranger', 'Bow')
 
 lng_bow = Weapon('Long Bow',
                  'A much more impressive bow capable of accuracy at long distances (+40% Damage)',
-                 175, 60, 0.4, 'ranged', 'ranger', 'Bow')
+                 225, 75, 0.4, 'ranged', 'ranger', 'Bow')
 en_lng_bow = Weapon('Enhanced Long Bow',
                     'An enhanced version of your typical Long Bow (+60% Damage)',
-                    250, 75, 0.6, 'ranged', 'ranger', 'Bow')
+                    350, 125, 0.6, 'ranged', 'ranger', 'Bow')
 
 ash_cbow = Weapon('Ashen Crossbow',
                   'A beautifully-crafted crossbow made fromt the wood of an ash tree. (+80% Damage)',
-                  325, 115, 0.8, 'ranged', 'ranger', 'Crossbow')
+                  500, 225, 0.8, 'ranged', 'ranger', 'Crossbow')
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
                      'An enhanced version of your typical Ashen Crossbow (+100% Damage)',
-                     420, 135, 1, 'ranged', 'ranger', 'Crossbow')
+                     750, 325, 1, 'ranged', 'ranger', 'Crossbow')
 
 # Weapons -- Mage
 # Mage weapons deal around half that of other weapons, but their magic deals 2x damage so it
@@ -814,24 +814,24 @@ mag_twg = Weapon('Magical Twig',
 
 oak_stf = Weapon('Oak Staff',
                  'A wooden staff imbued with weak magical abilities (+10% Damage)',
-                 45, 15, 0.1, 'magic', 'mage', 'Staff')
+                 50, 15, 0.1, 'magic', 'mage', 'Staff')
 en_oak_stf = Weapon('Enhanced Oak Staff',
                     'An enhanced version of your typical Oak Staff (+15% Damage)',
-                    65, 25, 0.15, 'magic', 'mage', 'Staff')
+                    100, 25, 0.15, 'magic', 'mage', 'Staff')
 
 arc_spb = Weapon('Arcane Spellbook',
                  'An intermediate spellbook for combat purposes (+20% Damage)',
-                 175, 60, 0.2, 'magic', 'mage', 'Book')
+                 225, 75, 0.2, 'magic', 'mage', 'Book')
 en_arc_spb = Weapon('Enhanced Arcane Spellbook',
                     'An enhanced version of your typical Arcane Spellbook (+30% Damage)',
-                    250, 75, 0.3, 'magic', 'mage', 'Book')
+                    350, 125, 0.3, 'magic', 'mage', 'Book')
 
 rnc_stf = Weapon('Runic Staff',
                  'A powerful staff enchanted with ancient magic (+40% Damage)',
-                 325, 115, 0.4, 'magic', 'mage', 'Staff')
+                 500, 225, 0.4, 'magic', 'mage', 'Staff')
 en_rnc_stf = Weapon('Enhanced Runic Staff',
                     'An enhanced version of your typical Runic Staff (+50% Damage)',
-                    420, 135, 0.5, 'magic', 'mage', 'Staff')
+                    750, 325, 0.5, 'magic', 'mage', 'Staff')
 
 # Weapons -- Paladin
 rbr_mlt = Weapon('Rubber Mallet',
@@ -840,24 +840,49 @@ rbr_mlt = Weapon('Rubber Mallet',
 
 holy_mace = Weapon('Holy Mace',
                    'An well-made iron mace imbued with the power of the heavens (+10% Damage)',
-                   45, 15, 0.1, 'melee', 'paladin', 'Hammer')
+                   50, 15, 0.1, 'melee', 'paladin', 'Hammer')
 en_holy_mace = Weapon('Enhanced Holy Mace',
                       'An enhanced version of your typical Holy Mace (+25% Damage)',
-                      65, 25, 0.25, 'melee', 'paladin', 'Hammer')
+                      100, 25, 0.25, 'melee', 'paladin', 'Hammer')
 
 hmr_of_mgt = Weapon('Hammer of Might',
                     'A hammer often used by holy warriors to smash their foes (+40% Damage)',
-                    175, 60, 0.4, 'melee', 'paladin', 'Hammer')
+                    225, 75, 0.4, 'melee', 'paladin', 'Hammer')
 en_hmr_of_mgt = Weapon('Enhanced Hammer of Might',
                        'An enhanced version of your typical Hammer of Might (+60% Damage)',
-                       250, 75, 0.6, 'melee', 'paladin', 'Hammer')
+                       350, 125, 0.6, 'melee', 'paladin', 'Hammer')
 
 ngt_bane = Weapon("Night's Bane",  # Reference to Terraria's "Light's Bane"
                   'A hammer used by countless paladins to stamp out unholy creatures (+80% Damage)',
-                  325, 115, 0.8, 'melee', 'paladin', 'Hammer')
+                  500, 225, 0.8, 'melee', 'paladin', 'Hammer')
 en_ngt_bane = Weapon("Enhanced Night's Bane",
                      "An enhanced version of your typical Night's Bane (+100% Damage)",
-                     420, 135, 1, 'melee', 'paladin', 'Hammer')
+                     750, 325, 1, 'melee', 'paladin', 'Hammer')
+
+# Weapon -- Monk
+brass_kncls = Weapon('Brass Knuckles',
+                     'A brass adornment for your knuckles providing\
+extra punching power (+10% Damage)',
+                     50, 15, 0.1, 'melee', 'monk', 'Knuckles')
+en_brass_kncls = Weapon('Enhanced Brass Knuckles',
+                        'An enhanced version of your typical Brass Knuckles (+25% Damage)',
+                        100, 25, 0.25, 'melee', 'monk', 'Knuckles')
+
+bladed_gloves = Weapon('Bladed Gloves',
+                       'Leather gloves with sturdy steel blades protruding from them (+40% Damage)',
+                       225, 75, 0.4, 'melee', 'monk', 'Gloves')
+en_bladed_gloves = Weapon('Enhanced Bladed Gloves',
+                          'An enhanced version of your typical Bladed Gloves (+60% Damage)',
+                          350, 125, 0.6, 'melee', 'monk', 'Gloves')
+
+lead_bg = Weapon('Lead-Weighted Boxing Gloves',
+                 'Weighted with 5 pounds of lead and tipped with steel blades. Probably\n\
+not allowed in standard matches (+80% Damage)',
+                 500, 225, 0.8, 'melee', 'monk', 'Gloves')
+en_lead_bg = Weapon('Enhanced Lead Gloves',
+                    'An enhanced version of your typical\
+Lead-Weighted Boxing Gloves (+100% Damage)',
+                    750, 325, 1, 'melee', 'monk', 'Gloves')
 
 # Starting Armor (Useless)
 straw_hat = Armor('Straw Hat',
@@ -1298,7 +1323,7 @@ def deserialize_gems(path):
 # for x in copy.copy(globals()):
 #     if isinstance(globals()[x], Item):
 #         total += 1
-#
+#         print(globals()[x].desc)
 # print(total)
 
 # for gem in valuable_list:

@@ -394,7 +394,15 @@ model! | [ENTER]')
             for item_group in inv_system.gs_stock[category]:
                 stock[category].append(item_group[self.gs_level - 1])
 
-        stock['Others'] = [items.shovel, items.divining_rod]
+        stock['Other'] = [items.shovel, items.divining_rod]
+        stock['All'] = []
+
+        for category in stock.keys():
+            if category == 'All':
+                continue
+
+            for item in stock[category]:
+                stock['All'].append(item)
 
         print('-'*25)
         print('Merchant: "Welcome, Traveler!"')
@@ -412,7 +420,8 @@ model! | [ENTER]')
       [2] Weapons
       [3] Armor
       [4] Accessories
-      [5] Other""")
+      [5] Other
+      [6] All""")
                 while True:
                     spam = input('Input [#] (or type "back"): ')
                     if spam == '1':
@@ -429,6 +438,9 @@ model! | [ENTER]')
 
                     elif spam == '5':
                         item_category = 'Other'
+
+                    elif spam == '6':
+                        item_category = 'All'
 
                     elif spam in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         eggs = True

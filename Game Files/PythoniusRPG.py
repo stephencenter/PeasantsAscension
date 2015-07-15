@@ -1204,8 +1204,6 @@ def set_prompt_properties():
     # Adjust for screen sizes
     font.dwFontSize.X = 8 if screensize[0] < 1024 else 10 \
         if screensize[0] < 1280 else 12 if screensize[0] < 1920 else 15
-    font.dwFontSize.Y = 14 if screensize[0] < 1024 else 18 \
-        if screensize[0] < 1280 else 22 if screensize[1] < 1080 else 28
 
     font.FontFamily = 54
     font.FontWeight = 400
@@ -1217,7 +1215,7 @@ def set_prompt_properties():
 
     # Set the CMD window size
     os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/font.dwFontSize.X - 2),
-                                                   math.ceil(screensize[1]/font.dwFontSize.Y - 2)))
+                                                   1000))
 
 
 def copy_error(text):
