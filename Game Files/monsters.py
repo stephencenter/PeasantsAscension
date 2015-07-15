@@ -79,10 +79,12 @@ class Monster:
             self.items = ''
 
     def monst_damage(self, var, mode):
+        ise = inv_system.equipped
+        dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
         if mode == 'melee':
-            dam_dealt = math.ceil(self.attk - battle.temp_stats['dfns']/1.75) + var
+            dam_dealt = math.ceil(self.attk - (battle.temp_stats['dfns']/1.75)*(1 + dr)) + var
         else:
-            dam_dealt = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/1.75) + var
+            dam_dealt = math.ceil(self.p_attk - (battle.temp_stats['p_dfns']/1.75)*(1 + dr)) + var
 
         dam_dealt = magic.eval_element(
             p_elem=battle.player.element,
@@ -98,7 +100,9 @@ class Monster:
         return dam_dealt
 
     def monst_magic(self, var):
-        monst_dealt = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2) + var
+        ise = inv_system.equipped
+        dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
+        monst_dealt = math.ceil(self.m_attk - (battle.temp_stats['m_dfns']/1.75)*(1 + dr)) + var
 
         if monst_dealt < 1:
             monst_dealt = 1
@@ -121,13 +125,13 @@ class Monster:
 
         for x in range(1, self.lvl):
             self.hp += random.randint(4, 7)
-            self.mp += random.randint(2, 3)
+            self.mp += random.randint(2, 5)
             self.attk = random.randint(2, 4)
-            self.dfns += random.randint(1, 3)
+            self.dfns += random.randint(2, 3)
             self.p_attk += random.randint(2, 4)
-            self.p_dfns += random.randint(1, 3)
+            self.p_dfns += random.randint(2, 3)
             self.m_attk += random.randint(2, 4)
-            self.m_dfns += random.randint(1, 3)
+            self.m_dfns += random.randint(2, 3)
             self.spd += random.randint(2, 4)
             self.evad += random.randint(1, 2)
 
@@ -364,10 +368,11 @@ class Monster:
                         }
 
         chosen = random.randint(0, 4)
+        print(chosen)
 
         self.name = monster_type[position['reg']][chosen]
 
-        if chosen == 2:
+        if chosen != 2:
             self.enemy_turn = non_magic_ai
 
         self.monster_name = copy.copy(self.name)
@@ -651,11 +656,15 @@ def non_magic_ai(var, dodge):
         global monster
 
         if is_defending:
+            # Set defense back to normal
             is_defending = False
 
-            monster.dfns -= 10
-            monster.m_dfns -= 10
-            monster.p_dfns -= 10
+            monster.dfns /= 1.1
+            monster.m_dfns /= 1.1
+            monster.p_dfns /= 1.1
+            monster.dfns = math.floor(dfns)
+            monster.m_dfns = math.floor(m_dfns)
+            monster.p_dfns = math.floor(p_dfns)
 
         battle.temp_stats['turn_counter'] += 1
 
@@ -672,20 +681,19 @@ def non_magic_ai(var, dodge):
             monster.monster_name
         ))
 
-        # Only do this on turns that are a multiple of 4 (or turn 1)
-        if (not battle.temp_stats['turn_counter'] % 4 or
-            battle.temp_stats['turn_counter'] == 1) \
-                and random.randint(0, 1) and monster.mp > 2:
-
-            monster.give_status()
-
-        elif not random.randint(0, 4):
+        if not random.randint(0, 4):
             # Defend
             sounds.buff_spell.play()
 
-            monster.dfns += 10
-            monster.m_dfns += 10
-            monster.p_dfns += 10
+            # Scaling Defense
+            monster.dfns *= 1.1
+            monster.m_dfns *= 1.1
+            monster.p_dfns *= 1.1
+
+            monster.dfns = math.ceil(monster.dfns)
+            monster.p_dfns = math.ceil(monster.p_dfns)
+            monster.m_dfns = math.ceil(monster.m_dfns)
+
             print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(
                 monster.name))
 
@@ -704,7 +712,7 @@ def non_magic_ai(var, dodge):
             else:
                 monster.monst_attk(var, dodge, 'melee')
 
-        self.check_poison()
+        monster.check_poison()
 
 
         if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:

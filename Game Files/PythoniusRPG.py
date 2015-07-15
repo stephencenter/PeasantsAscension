@@ -163,7 +163,7 @@ class PlayerCharacter:  # The Player
     def player_damage(self, var):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
             dam_dealt = math.ceil(battle.temp_stats['attk']/1.5 - (battle.monster.dfns/2))
-            dam_dealt += dam_dealt*inv_system.equipped['weapon'].power + var
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power + var)
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
@@ -171,7 +171,7 @@ class PlayerCharacter:  # The Player
 
         else:
             dam_dealt = math.ceil(battle.temp_stats['p_attk']/1.5 - (battle.monster.p_dfns/2))
-            dam_dealt += dam_dealt*inv_system.equipped['weapon'].power + var
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power + var)
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)

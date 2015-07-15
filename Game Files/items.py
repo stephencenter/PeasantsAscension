@@ -872,166 +872,166 @@ sunday_trousers = Armor('Sunday Trousers',
 
 # Armor -- Warrior + Paladin -- Weak
 bnz_hlm = Armor('Bronze Helmet',
-                'A simple helmet crafted from bronze (+5% DR)',
+                'A simple helmet crafted from bronze (+5% ARMOR)',
                 20, 8, 0.05, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 bnz_cst = Armor('Bronze Chestpiece',
-                'Simple chest armor crafted from bronze (+10% DR)',
+                'Simple chest armor crafted from bronze (+10% ARMOR)',
                 30, 12, 0.1, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 bnz_leg = Armor('Bronze Greaves',
-                'Simple leg armor crafted from bronze (+5% DR)',
+                'Simple leg armor crafted from bronze (+5% ARMOR)',
                 25, 10, 0.05, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 en_bnz_hlm = Armor('Enhanced Bronze Helmet',
-                   'An enhanced version of your typical Bronze Helmet (+10% DR)',
+                   'An enhanced version of your typical Bronze Helmet (+10% ARMOR)',
                    60, 25, 0.1, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
-                   'An enhanced version of your typical Bronze Chestpiece (+15% DR)',
+                   'An enhanced version of your typical Bronze Chestpiece (+15% ARMOR)',
                    70, 35, 0.15, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 en_bnz_leg = Armor('Enhanced Bronze Greaves',
-                   'An enhanced version of your typical Bronze Greaves (+10% DR)',
+                   'An enhanced version of your typical Bronze Greaves (+10% ARMOR)',
                    65, 30, 0.1, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 # Armor -- Mage + Monk -- Weak
 wiz_hat = Armor('Wizard Hat',
-                'A silk hat woven with magic thread (+3% DR)',
+                'A silk hat woven with magic thread (+3% ARMOR)',
                 20, 8, 0.03, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 wiz_rob = Armor('Wizard Robe',
-                'A silk robe woven with magic thread (+5% DR)',
+                'A silk robe woven with magic thread (+5% ARMOR)',
                 30, 12, 0.05, 'magic', 'body', ['mage', 'monk'], 'Robe')
 wiz_gar = Armor('Wizard Garments',
-                'Silk garments woven with magic thread (+3% DR)',
+                'Silk garments woven with magic thread (+3% ARMOR)',
                 25, 10, 0.03, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 en_wiz_hat = Armor('Enhanced Wizard Hat',
-                   'An enhanced version of your typical Wizard Hat (+5% DR)',
+                   'An enhanced version of your typical Wizard Hat (+5% ARMOR)',
                    60, 25, 0.05, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 en_wiz_rob = Armor('Enhanced Wizard Robe',
-                   'An enhanced version of your typical Wizard Robe (+10% DR)',
+                   'An enhanced version of your typical Wizard Robe (+10% ARMOR)',
                    70, 35, 0.1, 'magic', 'body', ['mage', 'monk'], 'Robe')
 en_wiz_gar = Armor('Enhanced Wizard Garments',
-                   'An enhanced version of your typical Wizard Garments (+5% DR)',
+                   'An enhanced version of your typical Wizard Garments (+5% ARMOR)',
                    65, 30, 0.05, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Weak
 lth_cap = Armor('Leather Cap',
-                'A simple leather cap providing equally simple protection (+2% DR)',
+                'A simple leather cap providing equally simple protection (+2% ARMOR)',
                 20, 8, 0.02, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 lth_bdy = Armor('Leather Bodyarmor',
-                'Simple body armor providing equally simple protection (+4% DR)',
+                'Simple body armor providing equally simple protection (+4% ARMOR)',
                 30, 12, 0.04, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 lth_leg = Armor('Leather Leggings',
-                'Simple leggings providing equally simple protection (+2% DR)',
+                'Simple leggings providing equally simple protection (+2% ARMOR)',
                 25, 10, 0.02, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 en_lth_cap = Armor('Enhanced Leather Cap',
-                   'An enhanced version of your typical Leather Cap (+7% DR)',
+                   'An enhanced version of your typical Leather Cap (+7% ARMOR)',
                    60, 25, 0.07, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 en_lth_bdy = Armor('Enhanced Leather Bodyarmor',
-                   'An enhanced version of your typical Leather Bodyarmor (+12% DR)',
+                   'An enhanced version of your typical Leather Bodyarmor (+12% ARMOR)',
                    70, 35, 0.12, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 en_lth_leg = Armor('Enhanced Leather Leggings',
-                   'An enhanced version of your typical Leather Leggings (+7% DR)',
+                   'An enhanced version of your typical Leather Leggings (+7% ARMOR)',
                    65, 30, 0.07, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 # Armor -- Warrior + Paladin -- Mid
 stl_hlm = Armor('Steel Helmet',
-                'A decent helmet created from a solid metal (+15% DR)',
+                'A decent helmet created from a solid metal (+15% ARMOR)',
                 145, 50, 0.15, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 stl_cst = Armor('Steel Chestpiece',
-                'Decent body armor made from a solid metal (+20% DR)',
+                'Decent body armor made from a solid metal (+20% ARMOR)',
                 165, 60, 0.20, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 stl_leg = Armor('Steel Greaves',
-                'Decent greaves made from a solid metal (+15% DR)',
+                'Decent greaves made from a solid metal (+15% ARMOR)',
                 155, 55, 0.15, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 en_stl_hlm = Armor('Enhanced Steel Helmet',
-                   'An enhanced version of your typical Steel Helmet (+20% DR)',
+                   'An enhanced version of your typical Steel Helmet (+20% ARMOR)',
                    260, 75, 0.20, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 en_stl_cst = Armor('Enhanced Steel Chestpiece',
-                   'An enhanced version of your typical Steel Chestpiece (+25% DR)',
+                   'An enhanced version of your typical Steel Chestpiece (+25% ARMOR)',
                    280, 85, 0.25, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 en_stl_leg = Armor('Enhanced Steel Leggings',
-                   'An enhanced version of your typical Steel Greaves (+20% DR)',
+                   'An enhanced version of your typical Steel Greaves (+20% ARMOR)',
                    270, 80, 0.20, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 
 # Armor -- Mage + Monk -- Mid
 myst_hat = Armor('Mystical Hood',
-                 'A mysterious hood with strange symbols sewn into it (+8% DR)',
+                 'A mysterious hood with strange symbols sewn into it (+8% ARMOR)',
                  145, 50, 0.08, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 myst_rob = Armor('Mystical Robe',
-                 'A mysterious robe with strange symbols sewn into it (+12% DR)',
+                 'A mysterious robe with strange symbols sewn into it (+12% ARMOR)',
                  165, 60, 0.12, 'magic', 'body', ['mage', 'monk'], 'Robe')
 myst_gar = Armor('Mystical Garments',
-                 'Mysterious garments with strange symbols sewn into it (+8% DR)',
+                 'Mysterious garments with strange symbols sewn into it (+8% ARMOR)',
                  155, 55, 0.08, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 en_myst_hat = Armor('Enhanced Mystical Hood',
-                    'An enhanced version of your typical Mystical Hood (+15% DR)',
+                    'An enhanced version of your typical Mystical Hood (+15% ARMOR)',
                     260, 75, 0.15, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 en_myst_rob = Armor('Enhanced Mystical Robe',
-                    'An enhanced version of your typical Mystical Robe (+20% DR)',
+                    'An enhanced version of your typical Mystical Robe (+20% ARMOR)',
                     280, 85, 0.2, 'magic', 'body', ['mage', 'monk'], 'Robe')
 en_myst_gar = Armor('Enhanced Mystical Garments',
-                    'An enhanced version of your typical Mystical Garments (+15% DR)',
+                    'An enhanced version of your typical Mystical Garments (+15% ARMOR)',
                     270, 80, 0.15, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Mid
 std_cwl = Armor('Studded Cowl',
-                'A soft leather cap studded with steel pieces (+12% DR)',
+                'A soft leather cap studded with steel pieces (+12% ARMOR)',
                 145, 50, 0.12, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 std_bdy = Armor('Studded Body-armor',
-                'Soft leather body armor studded with steel pieces (+18% DR)',
+                'Soft leather body armor studded with steel pieces (+18% ARMOR)',
                 165, 60, 0.18, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 std_leg = Armor('Studded Leggings',
-                'Soft leather leggings studded with steel pieces (+12% DR)',
+                'Soft leather leggings studded with steel pieces (+12% ARMOR)',
                 155, 55, 0.12, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 en_std_cwl = Armor('Enhanced Studded Cowl',
-                   'An enhanced version of your typical Studded Hood (+17% DR)',
+                   'An enhanced version of your typical Studded Hood (+17% ARMOR)',
                    260, 75, 0.17, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 en_std_bdy = Armor('Enhanced Studded Body-armor',
-                   'An enhanced version of your typical Studded Bodyarmor (+22% DR)',
+                   'An enhanced version of your typical Studded Bodyarmor (+22% ARMOR)',
                    280, 85, 0.22, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 en_std_leg = Armor('Enhanced Studded Leggings',
-                   'An enhanced version of your typical Studded Leggings (+17% DR)',
+                   'An enhanced version of your typical Studded Leggings (+17% ARMOR)',
                    270, 80, 0.17, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 
 # Armor -- Warrior + Paladin -- Pow
-# 90% DR
+# 90% ARMOR
 ori_hlm = Armor('Orichalcum Helmet',
-                'A strong helmet smelted from rare mountain copper  (+25% DR)',
+                'A strong helmet smelted from rare mountain copper  (+25% ARMOR)',
                 320, 110, 0.25, 'melee', 'head', ['warrior', 'paladin'], 'Helmet')
 ori_cst = Armor('Orichalcum Chestplate',
-                'Strong chest armor smelted from rare mountain copper  (+35% DR)',
+                'Strong chest armor smelted from rare mountain copper  (+35% ARMOR)',
                 340, 120, 0.35, 'melee', 'body', ['warrior', 'paladin'], 'Shirt')
 ori_leg = Armor('Orichalcum Greaves',
-                'Strong leg armor smelted from rare mountain copper (+25% DR)',
+                'Strong leg armor smelted from rare mountain copper (+25% ARMOR)',
                 330, 115, 0.25, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 # Armor -- Mage + Monk -- Pow
-# 65% DR
+# 65% ARMOR
 elem_hat = Armor('Elemental Hat',
-                 'A leather hat enchanted with elemental power (+20% DR)',
+                 'A leather hat enchanted with elemental power (+20% ARMOR)',
                  320, 110, 0.20, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
 elem_rob = Armor('Elemental Robe',
-                 'A leather robe enchanted with elemental power (+25% DR)',
+                 'A leather robe enchanted with elemental power (+25% ARMOR)',
                  340, 120, 0.25, 'magic', 'body', ['mage', 'monk'], 'Robe')
 elem_gar = Armor('Elemental Garments',
-                 'Leather garments enchanted with elemental power (+20% DR)',
+                 'Leather garments enchanted with elemental power (+20% ARMOR)',
                  330, 115, 0.20, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Pow
-# 80% DR
+# 80% ARMOR
 drg_cwl = Armor('Dragonhide Cowl',
-                'A tough hood crafted from high-quality dragonskin (+25% DR)',
+                'A tough hood crafted from high-quality dragonskin (+25% ARMOR)',
                 320, 110, 0.25, 'melee', 'head', ['assassin', 'ranger'], 'Cap')
 drg_bdy = Armor('Dragonhide Bodyarmor',
-                'Tough bodyarmor crafted from high-quality dragonskin (+30% DR)',
+                'Tough bodyarmor crafted from high-quality dragonskin (+30% ARMOR)',
                 340, 120, 0.3, 'melee', 'body', ['assassin', 'ranger'], 'Shirt')
 drg_leg = Armor('Dragonhide Leggings',
-                'Tough leggings crafted from high-quality dragonskin (+25% DR)',
+                'Tough leggings crafted from high-quality dragonskin (+25% ARMOR)',
                 330, 115, 0.25, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
 # Unique Drops -- Weapons
