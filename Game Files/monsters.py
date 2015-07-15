@@ -123,8 +123,8 @@ class Monster:
         if position['reg'] == 'Aethus':
             self.lvl += 15
 
-        for x in range(1, self.lvl):
-            self.hp += random.randint(4, 7)
+        for x in range(0, self.lvl):
+            self.hp += random.randint(4, 8)
             self.mp += random.randint(2, 5)
             self.attk = random.randint(2, 4)
             self.dfns += random.randint(2, 3)

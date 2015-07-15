@@ -70,9 +70,10 @@ class Spell:
 
 class Healing(Spell):
     # Healing spells are spells that restore your HP during battle
-    def __init__(self, name, desc, mana, req_lvl, health, a_c=('mage', 'paladin')):
+    def __init__(self, name, desc, mana, req_lvl, health, thresh, a_c=('mage', 'paladin')):
         Spell.__init__(self, name, desc, mana, req_lvl, a_c)
         self.health = health
+        self.thresh = thresh
 
     def __str__(self):
         return self.name
@@ -81,14 +82,28 @@ class Healing(Spell):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
-            main.player.hp += self.health + (2*main.misc_vars['wis'] if main.player.class_ !=
-                                             'paladin' else 4*main.misc_vars['wis'])
+
+            # Healing spells will always restore a minimum of main.player.hp*thresh.
+            # i.e. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
+            # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
+            # In addition to this, the player restores an additional 2*Wisdom, unless they are a
+            # Paladin in which case it it 4*Wisdom.
+            if self.health < main.player.hp*thresh:
+                main.player.hp += main.player.hp*thresh + \
+                                  (2*main.misc_vars['wis'] if main.player.class_ !=
+                                   'paladin' else 4*main.misc_vars['wis'])
+                main.player.hp = math.ceil(main.player.hp)
+
+            else:
+                main.player.hp += self.health + (2*main.misc_vars['wis'] if main.player.class_ !=
+                                                 'paladin' else 4*main.misc_vars['wis'])
 
             if main.player.hp > main.misc_vars['hp_p']:
                 main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
             sounds.magic_healing.play()
 
             if is_battle:
+                # Print the ASCII art and "Player Turn" info if a battle is going on
                 print('-Player Turn-')
                 print(ascii_art.player_art[main.player.class_.title()] %
                       "{0} is making a move!\n".format(main.player.name))
@@ -97,6 +112,7 @@ class Healing(Spell):
             return True
 
         else:
+            # Disallow the usage of spells if the player has insufficent MP
             print(out_of_mana)
             return False
 
@@ -119,8 +135,10 @@ class Damaging(Spell):
             Spell.use_mana(self)
 
             # Determine the power of the attack
-            attk_pwr = math.ceil(self.damage + (battle.temp_stats['m_attk']/2.5) -
-                                 (battle.monster.m_dfns/1.5) + var)
+            attk_pwr = math.ceil(battle.temp_stats['m_attk']/2.5) - \
+                                (battle.monster.m_dfns/1.5) + var
+            attk_pwr *= 1 + self.damage
+            attk_pwr = math.ceil(attk_pwr)
 
             # Evaluate the element of the attack and the enemy
             attk_pwr = eval_element(
@@ -192,7 +210,7 @@ class Buff(Spell):
 
             sounds.buff_spell.play()
 
-            battle.temp_stats[self.stat] += self.incre
+            battle.temp_stats[self.stat] *= 1 + self.incre
 
             return True
 
@@ -206,187 +224,186 @@ class Buff(Spell):
 # Neutral (No element)
 magic_shot = Damaging('Magical Shot',
                       "Hurl a small ball of magical energy at your enemies! (Weak)",
-                      3, 1, 4, "none",
+                      3, 1, 0.25, "none",
                       a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 magic_burst = Damaging('Magical Burst',
                        "Shatter your enemies defenses with a burst of magical energy! (Moderate)",
-                       9, 11, 13, "none",
+                       9, 11, 0.5, "none",
                       a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 magic_blast = Damaging('Magical Blast',
                        "Bomb your enemies with a detonating ball of magical energy! (Strong)",
-                       18, 23, 23, "none",
+                       18, 23, 1, "none",
                       a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 
 # Fire
 w_flame = Damaging('Weak Flame',
                    "Summon a weak fireball to destroy your foes. (Weak)",
-                   3, 2, 5, "fire")
+                   3, 2, 0.25, "fire")
 f_blaze = Damaging('Fierce Blaze',
                    "Summon a powerful flame to destroy your foes. (Moderate)",
-                   10, 12, 14, "fire")
+                   10, 12, 0.5, "fire")
 g_infer = Damaging('Grand Inferno',
                    "Unleash a monstrous blaze destroy your foes. (Strong)",
-                   20, 24, 24, "fire")
+                   20, 24, 1, "fire")
 
 # Grass
 lef_blad = Damaging('Leaf Blade',
                     "Summon a weak blade of grass to destroy your foes. (Weak)",
-                    3, 2, 5, "grass")
+                    3, 2, 0.25, "grass")
 gra_gren = Damaging('Grass Grenade',
                     "Summon a small explosion to destroy your foes. (Moderate)",
-                    10, 12, 14, "grass")
+                    10, 12, 0.5, "grass")
 vin_strm = Damaging('Vine Storm',
                     "Unleash a frenzy of powerful vines to destroy your foes. (Strong)",
-                    20, 24, 24, "grass")
+                    20, 24, 1, "grass")
 
 # Electricity
 in_spark = Damaging('Inferior Spark',
                     "Summon a weak spark to destroy your foes. (Weak)",
-                    3, 3, 5, "electric")
+                    3, 3, 0.25, "electric")
 pwr_jolt = Damaging('Powerful Jolt',
                     "Summon a powerful jolt of energy to destroy your foes. (Moderate)",
-                    10, 13, 14, "electric")
+                    10, 13, 0.5, "electric")
 sp_storm = Damaging('Superior Storm',
                     "Unleash a devastating lightning storm to destroy your foes. (Strong)",
-                    20, 25, 24, "electric")
+                    20, 25, 1, "electric")
 
 # Water
 bub_splsh = Damaging('Bubble Splash',
                      "Summon a small wave of bubbles to destroy your foes. (Weak)",
-                     3, 3, 5, "water")
+                     3, 3, 0.25, "water")
 wtr_blast = Damaging('Water Blast',
                      "Summon a large burst of water to destroy your foes. (Moderate)",
-                     10, 13, 14, "water")
+                     10, 13, 0.5, "water")
 tsunami = Damaging('Tsunami',
                    "Unleash a terrifying barrage of waves upon your foes. (Strong)",
-                   20, 25, 24, "water")
+                   20, 25, 1, "water")
 
 # Earth
 mud_toss = Damaging('Mud Toss',
                     "Summon a small ball of mud to throw at your foes. (Weak)",
-                    3, 4, 5, "earth")
+                    3, 4, 0.25, "earth")
 rock_slam = Damaging('Rock Slam',
                      "Crush your enemies with a wall of solid rock. (Moderate)",
-                     10, 13, 14, "earth")
+                     10, 13, 0.5, "earth")
 earthquake = Damaging("Earthquake",
                       "Wreck havoc on your enemies with a powerful earthquake. (Strong)",
-                      20, 25, 24, "earth")
+                      20, 25, 1, "earth")
 
 # Ice
 icicle_dagger = Damaging('Icicle Dagger',
                          "Hurl a volley of supercooled icicles at your enemies. (Weak)",
-                         3, 4, 5, "ice")
+                         3, 4, 0.25, "ice")
 hail_storm = Damaging('Hailstorm',
                       "Rain ice upon your enemies with unrelenting force! (Moderate)",
-                      11, 14, 14, 'ice')
+                      11, 14, 0.5, 'ice')
 blizzard = Damaging('Blizzard',
                     "Devastate your enemies with a terrifying flurry of ice and wind. (Strong)",
-                    23, 26, 24, 'ice')
+                    23, 26, 1, 'ice')
 
 # Wind
 m_gust = Damaging('Minor Gust',
                   "Batter your enemies with powerful gusts and winds! (Weak)",
-                  3, 4, 5, "wind")
+                  3, 4, 0.25, "wind")
 microburst = Damaging('Microburst',
                       "Decimate your foes with a powerful blast of wind! (Moderate)",
-                      11, 14, 14, "wind")
+                      11, 14, 0.5, "wind")
 cyclone = Damaging('Cyclone',
                    "Demolish all that stand in your path with a terrifying tornado! (Strong)",
-                   23, 26, 24, "wind")
+                   23, 26, 1, "wind")
 
 # Life
 purify = Damaging('Purify',
                   "Call upon His Divinity to cast out evil creatures! (Weak)",
-                  3, 5, 5, "life", a_c=('paladin', 'mage'))
+                  3, 5, 0.25, "life", a_c=('paladin', 'mage'))
 smite = Damaging('Holy Smite',
                  "Strike down unholy beings using His Divinity's power! (Moderate)",
-                 11, 15, 14, "life", a_c=('paladin', 'mage'))
+                 11, 15, 0.5, "life", a_c=('paladin', 'mage'))
 moonbeam = Damaging('Moonbeam',
                     "Utterly destroy evil creatures with holy rays from the moon! (Strong)",
-                    23, 27, 24, "life", a_c=('paladin', 'mage'))
+                    23, 27, 1, "life", a_c=('paladin', 'mage'))
 
 
 # Death
 curse = Damaging('Evil Curse',
                  "Call upon His Wickedness to harm holy creatures! (Weak)",
-                 3, 5, 5, "death")
+                 3, 5, 0.25, "death")
 desecration = Damaging('Desecration',
                        "Cast out holy spirits with an evil aura! (Moderate)",
-                       11, 15, 14, "death")
+                       11, 15, 0.5, "death")
 unholy_rend = Damaging('Unholy Rend',
                        "Anniahlate holy creatures with a searing blow! (Strong)",
-                       23, 27, 24, "death")
+                       23, 27, 1, "death")
 
 # -- Healing -- #
 min_heal = Healing('Minor Healing',
                    "Restore a small amount of HP by using magic. (Weak)",
-                   3, 3, 20,
-                   a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
+                   3, 3, 20, 0.2, a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 adv_heal = Healing('Advanced Healing',
                    "Restore a large amount of HP by using magic. (Moderate)",
-                   10, 15, 60, a_c=('paladin', 'mage'))
+                   10, 15, 60, 0.5, a_c=('paladin', 'mage'))
 div_heal = Healing('Divine Healing',
                    "Call upon the arcane arts to greatly restore your HP. (Strong)",
-                   25, 28, 125, a_c=('paladin', 'mage'))
+                   25, 28, 0, 1, a_c=('paladin', 'mage'))
 
 # -- Buffs -- #
 
 # Movement Buffs
 m_quick = Buff('Minor Quickness',
                "Temporarily raise your speed by a small amount. (Weak)",
-               3, 1, 5, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
+               3, 1, 0.25, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
 m_evade = Buff('Minor Evade',
                "Temporarily raise your evasion by a small amount. (Weak)",
-               3, 1, 5, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
+               3, 1, 0.25, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
 
 a_quick = Buff('Adept Quickness',
                "Temporarily raise your speed by a large amount. (Moderate)",
-               6, 10, 12, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
+               6, 10, 0.5, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
 a_evade = Buff('Adept Evade',
                "Temporarily raise your evasion by a large amount. (Moderate)",
-               6, 10, 12, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
+               6, 10, 0.5, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
 
 # Defense Buffs
 m_defend = Buff('Minor Defend',
                 "Temporarily raise your defense by a small amount. (Weak)",
-                3, 3, 5, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+                3, 3, 0.25, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 m_shield = Buff('Minor Shield',
                 "Temporarily raise your magic defense by a small amount. (Weak)",
-                3, 3, 5, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+                3, 3, 0.25, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 m_block = Buff('Minor Block',
                "Temporarily raise your pierce defense by a small amount. (Weak)",
-               3, 7, 5, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+               3, 7, 0.25, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 
 a_defend = Buff('Adept Defend',
                 "Temporarily raise your defense by a large amount. (Moderate)",
-                6, 13, 12, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+                6, 13, 0.5, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 a_shield = Buff('Adept Shield',
                 "Temporarily raise your magic defense by a large amount. (Moderate)",
-                6, 13, 12, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+                6, 13, 0.5, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 a_block = Buff('Adept Block',
                "Temporarily raise your pierce defense by a large amount. (Moderate)",
-               6, 17, 12, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+               6, 17, 0.5, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
 
 # Attack Buffs
 m_stren = Buff('Minor Strengthen',
                "Temporarily raise your attack by a small amount. (Weak)",
-               3, 6, 5, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
+               3, 6, 0.25, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
 m_power = Buff('Minor Empower',
                "Temporarily raise your magic attack by a small amount. (Weak)",
-               3, 6, 5, "m_attk")
+               3, 6, 0.25, "m_attk")
 m_aim = Buff('Minor Aim',
              "Temporarily raise your pierce attack by a small amount. (Weak)",
-             3, 7, 5, "p_attk", a_c=('ranger', 'mage', 'monk'))
+             3, 7, 0.25, "p_attk", a_c=('ranger', 'mage', 'monk'))
 
 a_stren = Buff('Adept Strengthen',
                "Temporarily raise your attack by a large amount. (Moderate)",
-               6, 16, 12, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
+               6, 16, 0.5, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
 a_power = Buff('Adept Empower',
                "Temporarily raise your magic attack by a large amount. (Moderate)",
-               6, 16, 12, "m_attk")
+               6, 16, 0.5, "m_attk")
 a_aim = Buff('Adept Aim',
              "Temporarily raise your pierce attack by a large amount. (Moderate)",
-             6, 17, 12, "p_attk", a_c=('ranger', 'mage', 'monk'))
+             6, 17, 0.5, "p_attk", a_c=('ranger', 'mage', 'monk'))
 
 # -- Other Spells -- #
 r_affliction = Spell('Relieve Affliction',
