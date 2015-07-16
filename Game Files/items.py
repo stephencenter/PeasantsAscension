@@ -378,7 +378,8 @@ class InsaneSpeedBoots(Item):
 
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    def use_item(self):
+    @staticmethod
+    def use_item():
         from towns import search_towns
 
         letters = 'abcdefghijklmnopqrstuvwxyz'
@@ -520,7 +521,6 @@ started.")
 
                     return
 
-
                 print('-'*25)
                 print('Your input has been interpretted as {0}{1}.'.format(vert_message,
                                                                            horiz_message))
@@ -560,7 +560,6 @@ started.")
 
 
 class TownTeleporter(Item):
-
     def __init__(self, name, desc, buy, sell, imp=False, cat='misc', ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
@@ -592,8 +591,8 @@ class TownTeleporter(Item):
 
         print("Avilable Towns:\n      ", sep='', end='')
         print("\n      ".join(["[{0}] {1}: {2}, {3}".format(num + 1, town[0],
-                                                           ''.join([str(town[3]), town[4]]),
-                                                           ''.join([str(town[1]), town[2]]))
+                                                            ''.join([str(town[3]), town[4]]),
+                                                            ''.join([str(town[1]), town[2]]))
                               for num, town in enumerate(available)]))
         while True:
             chosen = input('Input [#] (or type "exit"): ')
@@ -798,7 +797,8 @@ en_lng_bow = Weapon('Enhanced Long Bow',
                     350, 125, 0.6, 'ranged', 'ranger', 'Bow')
 
 ash_cbow = Weapon('Ashen Crossbow',
-                  'A beautifully-crafted crossbow made fromt the wood of an ash tree. (+80% Damage)',
+                  'A beautifully-crafted crossbow made fromt the wood\
+of an ash tree. (+80% Damage)',
                   500, 225, 0.8, 'ranged', 'ranger', 'Crossbow')
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
                      'An enhanced version of your typical Ashen Crossbow (+100% Damage)',
@@ -1087,8 +1087,6 @@ lightning_dagger = Weapon('Lightning Dagger',
                           'A blade in the shape of a lightning bolt. A powerful current \n\
 flows through the edge (+60% Damage, ELECTRIC)',
                           0, 450, 0.6, 'melee', 'assassin', 'Dagger', element='electric')
-
-
 
 # Accessories
 # -- Elemental Accessories

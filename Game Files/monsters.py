@@ -122,6 +122,7 @@ class Monster:
         if self.lvl < 1:
             self.lvl = 1
 
+        # Monsters in the Aethus are 15 levels higher than monsters below
         if position['reg'] == 'Aethus':
             self.lvl += 15
 
@@ -146,7 +147,10 @@ class Monster:
 
     def monst_attk(self, var, dodge, mode):
         sounds.sword_slash.play()
-        print('The {0} is getting ready to attack you!'.format(self.name))
+        if isinstance(self, bosses.Boss):
+            print('The {0} is getting ready to attack you!'.format(self.name))
+        else:
+            print('The {0} {1}'.format(self.name, self.attk_msg))
         time.sleep(0.75)
 
         while msvcrt.kbhit():
@@ -169,7 +173,7 @@ class Monster:
             print("You narrowly avoid the {0}'s attack!".format(self.name))
 
     def enemy_turn(self, var, dodge):
-        # This is the Enemy's AI.
+        # Default AI used solely by bosses without custom AI
         global is_defending
 
         if is_defending:
@@ -278,7 +282,6 @@ class Monster:
 
         self.check_poison()
 
-
         if isinstance(self, bosses.Boss) and self.multiphase and self.hp <= 0:
             self.enemy_turn(var, dodge)
 
@@ -385,45 +388,69 @@ class Monster:
         chosen = random.randint(0, 4)
         self.name = monster_type[position['reg']][chosen]
 
+        # A list of monster-types and what AI they are to have
         magic_enemies = ['Naiad', "Will-o'the-wisp", 'Minubis', 'Oread', 'Necromancer', 'Wraith',
                          'Alicorn', 'Flying Serpent', 'Imp', 'Corrupt Thaumaturge', 'Spriggan']
 
         melee_enemies = ['Shell Mimic', 'Giant Crab', 'Bog Slime', 'Mummy', 'Sand Golem',
                          'Moss Ogre', 'Vine Lizard', 'Troll', 'Ghoul', 'Griffin', 'Tengu',
                          'Giant Worm', 'Zombie', 'Arctic Wolf', 'Minor Yeti', 'Sludge Rat',
-                         'Sea Serpent', 'Beetle', 'Calculator']
+                         'Sea Serpent', 'Beetle', 'Calculator', 'Harpy']
 
-        ranged_enemies = ['Fire Ant', 'Naga', 'Ice Soldier', 'Frost Bat', 'Bat', 'Harpy',
+        ranged_enemies = ['Fire Ant', 'Naga', 'Ice Soldier', 'Frost Bat', 'Bat',
                           'Skeleton', 'Squid', 'Rock Giant', 'Undead Archer', 'Goblin Archer']
 
+        # Assign the correct AI and stats to each kind of monster
         if self.name in magic_enemies:
             self.enemy_turn = magic_ai
+            magic_stats(self)
 
         elif self.name in melee_enemies:
             self.enemy_turn = melee_ai
+            melee_stats(self)
 
         elif self.name in ranged_enemies:
             self.enemy_turn = ranged_ai
+            ranger_stats(self)
 
         else:
             raise Exception('Enemy "{0}" does not have an AI set!'.format(self.name))
 
+        # Set the flavor text to match the attack style of various monsters
+        biting_monsters = ['Vine Lizard', 'Beetle', 'Zombie', 'Ghoul',
+                           'Arctic Wolf', 'Sea Serpent', 'Shell Mimic']
+        charging_monsters = ['Giant Worm', 'Bog Slime']
+        slashing_monsters = ['Griffin', 'Tengu', 'Harpy', 'Sludge Rat', 'Giant Crab',]
+        whacking_monsters = ['Troll', 'Rock Giant']
+        spitting_monsters = ['Frost Bat', 'Squid', 'Fire Ant', 'Bat']
+        arrow_monsters = ['Naga', 'Ice Soldier', 'Undead Archer', 'Goblin Archer', 'Skeleton',]
+        fist_monsters = ['Moss Ogre', 'Minor Yeti', 'Sand Golem', 'Mummy']
+        magic_monsters = ['Imp', 'Naiad', "Will-o'the-wisp", 'Minubis',
+                          'Oread', 'Necromancer', 'Wraith', 'Alicorn',
+                          'Flying Serpent', 'Corrupt Thaumaturge', 'Spriggan']
+        math_monsters = ['Calculator']
+
+        if self.name in biting_monsters:
+            self.attk_msg = "bears its fangs and tries to bite you!"
+        elif self.name in charging_monsters:
+            monster.attk_msg = "puts all its weight into trying to charge you!"
+        elif self.name in slashing_monsters:
+            self.attk_msg = "reveals its claws and prepares to slash you!"
+        elif self.name in whacking_monsters:
+            self.attk_msg = "finds a nearby rock and prepares to beat you with it!"
+        elif self.name in spitting_monsters:
+            self.attk_msg = "begins to spit a dangerous projectile at you!"
+        elif self.name in arrow_monsters:
+            self.attk_msg = "readies its bow to fire a volley of arrows!"
+        elif self.name in fist_monsters:
+            self.attk_msg = "prepares to smash you with its fists!"
+        elif self.name in magic_monsters:
+            self.attk_msg = "draws from its magical essense to destroy you!"
+        elif self.name in math_monsters:
+            self.attk_msg = "begins answering algebra questions in a devastating manner!"
+
+        # Prepare to add the modifier onto the name
         self.monster_name = copy.copy(self.name)
-
-        if self.name == monster_type[position['reg']][0]:
-            fighter_stats(self)
-
-        if self.name == monster_type[position['reg']][1]:
-            tank_stats(self)
-
-        elif self.name == monster_type[position['reg']][2]:
-            magic_stats(self)
-
-        elif self.name == monster_type[position['reg']][3]:
-            agile_stats(self)
-
-        elif self.name == monster_type[position['reg']][4]:
-            ranger_stats(self)
 
         modifiers = [
             'Slow', 'Fast',
@@ -583,47 +610,47 @@ and magic defense. They have low health.
 """
 
 
-def fighter_stats(self):
-    # Set stats for Fighter-class monsters
-    self.hp *= 0.8
+def melee_stats(self):
+    # Set stats for melee-class monsters
+    self.hp *= 1.2
     self.hp = math.ceil(self.hp)
     misc_vars['hp_m'] = copy.copy(self.hp)
 
-    self.attk *= 1.2
+    self.attk *= 1.5
     self.attk = math.ceil(self.attk)
 
-    self.p_attk *= 1.2
+    self.p_attk *= 0.5
     self.p_attk = math.ceil(self.p_attk)
 
-    self.m_attk *= 1.2
+    self.m_attk *= 0.5
     self.m_attk = math.ceil(self.m_attk)
 
-    self.dfns *= 0.9
+    self.dfns *= 1.5
     self.dfns = math.ceil(self.dfns)
 
-    self.p_dfns *= 0.9
+    self.p_dfns *= 1.5
     self.p_dfns = math.ceil(self.p_dfns)
 
-    self.m_dfns *= 0.8
+    self.m_dfns *= 0.5
     self.m_dfns = math.ceil(self.m_dfns)
 
-    self.spd *= 1.2
+    self.spd *= 0.5
     self.spd = math.ceil(self.spd)
 
 
 def magic_stats(self):
     # Set stats for Mage-class monsters
-    self.mp *= 1.2
+    self.mp *= 1.5
     self.mp = math.ceil(self.mp)
     misc_vars['mp_m'] = copy.copy(self.mp)
 
-    self.attk *= 0.9
+    self.attk *= 0.5
     self.attk = math.ceil(self.attk)
 
-    self.p_attk *= 0.8
+    self.p_attk *= 0.5
     self.p_attk = math.ceil(self.p_attk)
 
-    self.m_attk *= 1.2
+    self.m_attk *= 1.5
     self.m_attk = math.ceil(self.m_attk)
 
     self.dfns *= 0.9
@@ -632,54 +659,35 @@ def magic_stats(self):
     self.p_dfns *= 0.9
     self.p_dfns = math.ceil(self.p_dfns)
 
-    self.m_dfns *= 1.2
+    self.m_dfns *= 1.5
     self.m_dfns = math.ceil(self.m_dfns)
-
-
-def agile_stats(self):
-    # Set stats for Rogue-class monsters
-
-    self.dfns *= 0.8
-    self.dfns = math.ceil(self.dfns)
-
-    self.p_dfns *= 0.9
-    self.p_dfns = math.ceil(self.p_dfns)
-
-    self.m_dfns *= 0.8
-    self.m_dfns = math.ceil(self.m_dfns)
-
-    self.spd *= 1.3
-    self.spd = math.ceil(self.spd)
-
-    self.evad *= 1.3
-    self.evad = math.ceil(self.evad)
 
 
 def ranger_stats(self):
     # Set stats for Ranger-class monsters
-    self.hp *= 0.8
+    self.hp *= 0.9
     self.hp = math.ceil(self.hp)
     misc_vars['hp_m'] = copy.copy(self.hp)
 
-    self.attk *= 0.9
+    self.attk *= 0.8
     self.attk = math.ceil(self.attk)
 
-    self.p_attk *= 1.2
+    self.p_attk *= 1.5
     self.p_attk = math.ceil(self.p_attk)
 
-    self.m_attk *= 0.9
+    self.m_attk *= 0.8
     self.m_attk = math.ceil(self.m_attk)
 
     self.dfns *= 0.8
     self.dfns = math.ceil(self.dfns)
 
-    self.p_dfns *= 1.2
+    self.p_dfns *= 1.3
     self.p_dfns = math.ceil(self.p_dfns)
 
-    self.spd *= 1.2
+    self.spd *= 1.5
     self.spd = math.ceil(self.spd)
 
-    self.evad *= 1.2
+    self.evad *= 1.5
     self.evad = math.ceil(self.evad)
 
 
@@ -689,35 +697,35 @@ def magic_ai(var, dodge):
 
     print('\n-Enemy Turn-')
     print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
-        self.monster_name
+        monster.monster_name
     ))
 
     # Only do this on turns that are a multiple of 4 (or turn 1)
     if (not battle.temp_stats['turn_counter'] % 4 or
         battle.temp_stats['turn_counter'] == 1) \
-            and random.randint(0, 1) and self.mp > 2:
+            and random.randint(0, 1) and monster.mp > 2:
 
-        self.give_status()
+        monster.give_status()
 
-    elif self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
+    elif monster.hp <= int(misc_vars['hp_m']/4) and monster.mp >= 5:
         # Magic heal
         sounds.magic_healing.play()
 
-        if 20 < self.hp*0.2:
-            self.hp += self.hp*0.2
+        if 20 < monster.hp*0.2:
+            monster.hp += monster.hp*0.2
         else:
-            self.hp += 20
+            monster.hp += 20
 
-        if self.hp > main.misc_vars['hp_m']:
-            self.hp = main.misc_vars['hp_m']
+        if monster.hp > main.misc_vars['hp_m']:
+            monster.hp = main.misc_vars['hp_m']
 
-        print('The {0} casts a healing spell!'.format(self.name))
+        print('The {0} casts a healing spell!'.format(monster.name))
 
-    elif self.mp >= 2:
+    elif monster.mp >= 3:
         # Magic Attack
         sounds.magic_attack.play()
 
-        print('The {0} is attempting to cast a strange spell...'.format(self.name))
+        print('The {0} {1}'.format(monster.name, monster.attk_msg))
         time.sleep(0.75)
 
         while msvcrt.kbhit():
@@ -726,29 +734,29 @@ def magic_ai(var, dodge):
         if dodge in range(battle.temp_stats['evad'], 512):
             dam_dealt = magic.eval_element(
                 p_elem=battle.player.element,
-                m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
+                m_elem=battle.monster.element, m_dmg=monster.monst_magic(var))[1]
 
             player.hp -= dam_dealt
             sounds.enemy_hit.play()
 
             print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
-                self.name, dam_dealt))
+                monster.name, dam_dealt))
 
         else:
             sounds.attack_miss.play()
             print("The spell misses you by a landslide!")
 
-        self.mp -= 2
+        monster.mp -= 2
 
     else:
         # Non-magic Attack
-        random.choice([self.monst_attk(var, dodge, 'pierce'),
-                       self.monst_attk(var, dodge, 'melee')])
+        random.choice([monster.monst_attk(var, dodge, 'pierce'),
+                       monster.monst_attk(var, dodge, 'melee')])
 
-    self.check_poison()
+    monster.check_poison()
 
-    if isinstance(self, bosses.Boss) and self.multiphase and self.hp <= 0:
-        self.enemy_turn(var, dodge)
+    if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
+        monster.enemy_turn(var, dodge)
 
 
 def ranged_ai(var, dodge):
@@ -849,9 +857,9 @@ def melee_ai(var, dodge):
 
     monster.check_poison()
 
-
     if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
         monster.enemy_turn(var, dodge)
+
 
 def spawn_monster():
     global monster
@@ -873,8 +881,3 @@ def setup_vars():
     misc_vars = main.misc_vars
     position = main.position
     inventory = inv_system.inventory
-
-flying_attack_msg = "attempts to nose-dive straight into you!"
-biting_attack_msg = "readies its fangs and tries to bite you!"
-charging_attack_msg = "puts all its weight into trying to charge you!"
-slashing_attack_msg = "reveals its claws and prepares to slash you!"

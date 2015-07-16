@@ -364,7 +364,7 @@ def player_turn(var, dodge, move, is_boss):
                 player.status_ail = 'none'
 
         # Check to see if the player is silenced
-        elif player.status_ail != 'none' and player.status_ail != 'asleep' :
+        elif player.status_ail != 'none' and player.status_ail != 'asleep':
             if not random.randint(0, 3):
 
                 time.sleep(0.5)

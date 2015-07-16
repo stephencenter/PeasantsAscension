@@ -90,8 +90,8 @@ class Healing(Spell):
             # Paladin in which case it it 4*Wisdom.
             if self.health < main.player.hp*thresh:
                 main.player.hp += main.player.hp*thresh + \
-                                  (2*main.misc_vars['wis'] if main.player.class_ !=
-                                   'paladin' else 4*main.misc_vars['wis'])
+                    (2*main.misc_vars['wis'] if main.player.class_ !=
+                     'paladin' else 4*main.misc_vars['wis'])
                 main.player.hp = math.ceil(main.player.hp)
 
             else:
@@ -229,11 +229,11 @@ magic_shot = Damaging('Magical Shot',
 magic_burst = Damaging('Magical Burst',
                        "Shatter your enemies defenses with a burst of magical energy! (Moderate)",
                        9, 11, 0.5, "none",
-                      a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
+                       a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 magic_blast = Damaging('Magical Blast',
                        "Bomb your enemies with a detonating ball of magical energy! (Strong)",
                        18, 23, 1, "none",
-                      a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
+                       a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 
 # Fire
 w_flame = Damaging('Weak Flame',

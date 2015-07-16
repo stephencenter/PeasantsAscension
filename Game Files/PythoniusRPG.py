@@ -118,7 +118,7 @@ sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'  # Quests & Dialo
 
 sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'  # Spellbook
 
-sav_prevtowns = 'Save Files/{CHARACTER_NAME}/prevtowns.json' # Previously visited towns
+sav_prevtowns = 'Save Files/{CHARACTER_NAME}/prevtowns.json'  # Previously visited towns
 
 # NOTE 1: The save file locations can be changed in the file "settings.cfg".
 
@@ -226,7 +226,7 @@ class PlayerCharacter:  # The Player
     def choose_class(self):
         while True:
             class_ = input("""{0}, which class would you like to train as?\n\
-      [1] Mage: Master of the arcane arts, capable of using all spells, but has low defense
+      [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
       [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
       [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
       [4] Paladin: Heavy-armor user who accels at holy and healing magic and uses hammers
@@ -494,7 +494,6 @@ Input letter: """)
                             self.ext_exp += 1
 
                         misc_vars['for'] += 1
-
 
                     else:
                         continue
@@ -775,12 +774,12 @@ def check_save():  # Check for save files and load the game if they're found
     save_files = {}
     menu_info = {}
     save_file_list = [
-                sav_acquired_gems, sav_def_bosses,
-                sav_equip_items, sav_inventory,
-                sav_misc_boss_info, sav_misc_vars,
-                sav_play_stats, sav_position,
-                sav_quests_dia, sav_spellbook,
-                sav_prevtowns
+        sav_acquired_gems, sav_def_bosses,
+        sav_equip_items, sav_inventory,
+        sav_misc_boss_info, sav_misc_vars,
+        sav_play_stats, sav_position,
+        sav_quests_dia, sav_spellbook,
+        sav_prevtowns
     ]
 
     for directory in dirs:
@@ -804,9 +803,6 @@ def check_save():  # Check for save files and load the game if they're found
                     menu_info[directory] = f.read()
             except FileNotFoundError:
                 menu_info[directory] = "Unable to load preview info"
-
-
-
 
     time.sleep(0.25)
 
@@ -846,14 +842,16 @@ def check_save():  # Check for save files and load the game if they're found
         while True:
             chosen = input('Input [#] (or type "create new"): ')
             try:
-                chosen = int(chosen) - 1  # Account for the fact that list indices start at 0
+                # Account for the fact that list indices start at 0
+                chosen = int(chosen) - 1
                 if chosen < 0:
                     continue
 
             except ValueError:
                 chosen = chosen.lower()
 
-                if chosen.startswith("c"):  # Let the player create a new save file
+                # Let the player create a new save file
+                if chosen.startswith("c"):
                     print('-'*25)
                     create_player()
                     return
@@ -862,8 +860,8 @@ def check_save():  # Check for save files and load the game if they're found
                     continue
 
             try:
-                adventure_name = sorted(save_files)[chosen]  # Sort the save file names
-                                                             # in alphanumerical order
+                # Sort the save file names in alphanumerical order
+                adventure_name = sorted(save_files)[chosen]
             except IndexError:
                 continue
 
@@ -876,8 +874,9 @@ def check_save():  # Check for save files and load the game if they're found
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-            try:  # Attempt to open the save files and translate
-                  # them into objects/dictionaries
+            # Attempt to open the save files and translate
+            # them into objects/dictionaries
+            try:
 
                 with open(sav_def_bosses, encoding='utf-8') as f:
                     bosses.defeated_bosses = list(json.load(f))
@@ -888,6 +887,7 @@ def check_save():  # Check for save files and load the game if they're found
                 with open(sav_position, encoding='utf-8') as f:
                     position = json.load(f)
 
+                # Call functions to serialice more advanced things
                 items.deserialize_gems(sav_acquired_gems)
                 inv_system.deserialize_equip(sav_equip_items)
                 inv_system.deserialize_inv(sav_inventory)
@@ -926,10 +926,10 @@ def check_save():  # Check for save files and load the game if they're found
 
                     print('Attempt successful!')
 
-                # Make the save file compatible with v0.6.5
+                # Make the save file compatible with v0.6.6
                 if 'is_aethus' not in position or 'visited_towns' not in misc_vars \
                         or 'wis' not in misc_vars:
-                    print('Attempting to make save file compatible with v0.6.5...')
+                    print('Attempting to make save file compatible with v0.6.6...')
 
                     if 'is_aethus' not in position:
                         position['is_aethus'] = False
@@ -1021,7 +1021,7 @@ def deserialize_player(path):  # Load the JSON file and translate
     # it into a "PlayerCharacter" object
     global player
 
-    player = PlayerCharacter('', 15, 4, 3, 1, 3, 1, 3, 1, 3, 1, 1, 0, 1, 0, 0)
+    player = PlayerCharacter('', 20, 5, 5, 3, 5, 3, 5, 3, 5, 3, 1, 0, 0, 0, 0)
 
     with open(path, encoding='utf-8') as f:
         player_dict = json.load(f)
@@ -1175,16 +1175,17 @@ def title_screen():
             print('-'*25)
 
         elif choice.startswith('e'):
+            # Exit the game
             pygame.quit()
             sys.exit()
 
 
+# Configure the properties of the command prompt so that everything fits/looks right
 def set_prompt_properties():
-    ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
 
     # Calculate the screen size of the player
     screensize = ctypes.windll.user32.GetSystemMetrics(0),\
-                 ctypes.windll.user32.GetSystemMetrics(1)
+        ctypes.windll.user32.GetSystemMetrics(1)
 
     class Coord(ctypes.Structure):
         _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
@@ -1204,6 +1205,8 @@ def set_prompt_properties():
     # Adjust for screen sizes
     font.dwFontSize.X = 8 if screensize[0] < 1024 else 10 \
         if screensize[0] < 1280 else 12 if screensize[0] < 1920 else 15
+    font.dwFontSize.Y = 14 if screensize[0] < 1024 else 18 \
+        if screensize[0] < 1280 else 22 if screensize[1] < 1080 else 28
 
     font.FontFamily = 54
     font.FontWeight = 400
@@ -1213,9 +1216,22 @@ def set_prompt_properties():
     ctypes.windll.kernel32.SetCurrentConsoleFontEx(
         handle, ctypes.c_long(False), ctypes.pointer(font))
 
-    # Set the CMD window size
-    os.system("mode con cols={0} lines={1}".format(180, 500))
+    # Calculate the proper width for the buffer size and then set the height to be 200
+    # A height of 200 should allow the player to scroll back up to read previous events if needs
+    # be.
+    os.system("@echo off")
+    os.system("conSize.bat {0} {1} {2} {3}".format(
+        math.ceil(screensize[0]/font.dwFontSize.X),
+        math.ceil(screensize[1]/font.dwFontSize.Y),
+        math.ceil(screensize[0]/font.dwFontSize.X),
+        200)
+    )
+
+    # Set the font color to dark green (because why not?)
     os.system("color 2")
+
+    # Set the console title
+    ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
 
 
 def copy_error(text):
@@ -1249,14 +1265,19 @@ def main():
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
 
-    try:  # Run the game.
-        main()  # Yes, this is a try...except statement that includes functions that span
-                # over 8000 lines, but it's necessary for error logging.
+    # Yes, this is a try...except statement that includes functions that span
+    # over 8000 lines, but it's necessary for error logging.
+    try:
+        # Run the game.
+        main()
 
-    except Exception as e:  # If an exception is raised and not caught, log the error message.
+    except Exception as e:
+        # If an exception is raised and not caught, log the error message.
+
         logging.exception('Got exception of main handler:')
         pygame.mixer.music.stop()
         print(traceback.format_exc())
+
         print('''PythoniusRPG encountered an error and crashed! The error message above should
 be sent immediately to RbwNjaFurret (ninjafurret@gmail.com) to make sure the bug gets fixed.
 The error message can be immediately copied to your clipboard if you wish.''')
