@@ -202,13 +202,6 @@ def battle_system(is_boss=False, ambush=False):
         else:
             move = player_choice(actual_speed)
 
-        # var is how much less/more the attacks will deal than normal.
-        # This makes the battle less predictable and more interesting.
-        var = random.randint(-1, 1)
-
-        # m_var is the same as var, except it applies to the enemy instead of the player
-        m_var = random.randint(-1, 1)
-
         # If dodge is in a certain range, the attack will miss
         dodge = random.randint(0, 512)
         m_dodge = random.randint(0, 512)
@@ -217,7 +210,7 @@ def battle_system(is_boss=False, ambush=False):
 
             if battle_inventory() and monster.hp > 0:
                 input('\nPress Enter/Return ')
-                monster.enemy_turn(m_var, m_dodge)
+                monster.enemy_turn(m_dodge)
 
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
@@ -236,7 +229,7 @@ def battle_system(is_boss=False, ambush=False):
                 return
 
             # If it fails, the enemy will attack you and skip your turn
-            monster.enemy_turn(m_var, m_dodge)
+            monster.enemy_turn(m_dodge)
 
             if player.hp > 0:
                 input('\nPress Enter/Return ')
@@ -247,9 +240,9 @@ def battle_system(is_boss=False, ambush=False):
         elif (actual_speed > monster.spd or move == '2' or move == '3') \
                 and player.status_ail != 'asleep':
 
-            if move and player_turn(var, dodge, move, is_boss) and monster.hp > 0:
+            if move and player_turn(dodge, move, is_boss) and monster.hp > 0:
                 input('\nPress Enter/Return ')
-                monster.enemy_turn(m_var, m_dodge)
+                monster.enemy_turn(m_dodge)
 
                 if player.hp > 0:
                     input('\nPress Enter/Return ')
@@ -261,7 +254,7 @@ def battle_system(is_boss=False, ambush=False):
             if monster.spd < actual_speed and player.status_ail != 'asleep':
                 print('-'*25)
             is_asleep = 'asleep' if player.status_ail == 'asleep' else False
-            monster.enemy_turn(m_var, m_dodge)
+            monster.enemy_turn(m_dodge)
 
             if player.hp > 0:
                 if player.status_ail != 'asleep':
@@ -270,7 +263,7 @@ def battle_system(is_boss=False, ambush=False):
                     if is_asleep:
                         move = player_choice(actual_speed)
 
-                    player_turn(var, dodge, move, is_boss)
+                    player_turn(dodge, move, is_boss)
 
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
@@ -280,7 +273,7 @@ def battle_system(is_boss=False, ambush=False):
             print('-'*25)
 
 
-def player_turn(var, dodge, move, is_boss):
+def player_turn(dodge, move, is_boss):
     global player
     global monster
 
@@ -310,7 +303,7 @@ def player_turn(var, dodge, move, is_boss):
                 msvcrt.getwch()
 
             if dodge in range(monster.evad, 512):
-                dam_dealt = player.player_damage(var)
+                dam_dealt = player.player_damage()
                 monster.hp -= dam_dealt
                 sounds.enemy_hit.play()
                 print('Your attack connects with the {0}, dealing {1} damage!'.format(
@@ -321,7 +314,7 @@ def player_turn(var, dodge, move, is_boss):
                 print('The {0} dodges your attack with ease!'.format(monster.name))
 
         elif move == '2':
-            if not magic.pick_cat(var, dodge):
+            if not magic.pick_cat(dodge):
                 return False
 
         elif move == '3':
@@ -378,7 +371,7 @@ def player_turn(var, dodge, move, is_boss):
                 player.status_ail = 'none'
 
         if is_boss and monster.multiphase and monster.hp <= 0:
-            monster.enemy_turn(var, dodge)
+            monster.enemy_turn(dodge)
 
         return True
 

@@ -160,18 +160,18 @@ class PlayerCharacter:  # The Player
         self.element = element
         self.status_ail = 'none'  # Current Status Ailment
 
-    def player_damage(self, var):  # The formula for the player dealing damage
+    def player_damage(self):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
-            dam_dealt = math.ceil(battle.temp_stats['attk']/1.5 - (battle.monster.dfns/2))
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power + var)
+            dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/1.5))
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
                 print('You deal half damage because of your weakened state!')
 
         else:
-            dam_dealt = math.ceil(battle.temp_stats['p_attk']/1.5 - (battle.monster.p_dfns/2))
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power + var)
+            dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/1.5))
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
@@ -289,7 +289,7 @@ Input [#]: """.format(self.name))
                     print('You can activate this potential in the form of a "class ability"')
                     print('once per battle. Use it wisely!')
 
-                rem_points += 10
+                rem_points += 5
                 extra_points += self.ext_ski
                 magic.new_spells()
 
@@ -449,9 +449,9 @@ Input letter: """)
                         continue
 
                     if skill.startswith('i'):
-                        self.m_dfns += 1
-                        self.m_attk += 1
-                        self.mp += 2
+                        self.m_dfns += random.randint(0, 1)
+                        self.m_attk += random.randint(0, 1)
+                        self.mp += random.randint(1, 2)
                         misc_vars['int'] += 1
 
                     elif skill.startswith('w'):
@@ -459,9 +459,9 @@ Input letter: """)
                         misc_vars['wis'] += 1
 
                     elif skill.startswith('s'):
-                        self.attk += 1
+                        self.attk += random.randint(0, 1)
                         self.p_dfns += random.randint(0, 1)
-                        self.dfns += 1
+                        self.dfns += random.randint(0, 1)
                         misc_vars['str'] += 1
 
                     elif skill.startswith('c'):
@@ -472,14 +472,14 @@ Input letter: """)
                         misc_vars['con'] += 1
 
                     elif skill.startswith('d'):
-                        self.spd += 1
+                        self.spd += random.randint(0, 1)
                         self.p_attk += random.randint(0, 1)
-                        self.evad += 1
+                        self.evad += random.randint(0, 1)
                         misc_vars['dex'] += 1
 
                     elif skill.startswith('p'):
-                        self.p_attk += 1
-                        self.p_dfns += 1
+                        self.p_attk += random.randint(0, 1)
+                        self.p_dfns += random.randint(0, 1)
                         self.evad += random.randint(0, 1)
                         misc_vars['per'] += 1
 

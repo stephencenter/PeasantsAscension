@@ -78,15 +78,15 @@ class Monster:
         if not isinstance(self, bosses.Boss):
             self.items = ''
 
-    def monst_damage(self, var, mode):
+    def monst_damage(self, mode):
         ise = inv_system.equipped
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
-            dam_dealt = math.ceil(self.attk - (battle.temp_stats['dfns']/1.75)*(1 + dr)) + var
+            dam_dealt = math.ceil(self.attk*1.2 - (battle.temp_stats['dfns']/3)*(1 + dr))
 
         else:
-            dam_dealt = math.ceil(self.p_attk - (battle.temp_stats['p_dfns']/1.75)*(1 + dr)) + var
+            dam_dealt = math.ceil(self.p_attk*1.2 - (battle.temp_stats['p_dfns']/3)*(1 + dr))
 
         dam_dealt = magic.eval_element(
             p_elem=battle.player.element,
@@ -101,10 +101,10 @@ class Monster:
 
         return dam_dealt
 
-    def monst_magic(self, var):
+    def monst_magic(self):
         ise = inv_system.equipped
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
-        monst_dealt = math.ceil(self.m_attk - (battle.temp_stats['m_dfns']/1.75)*(1 + dr)) + var
+        monst_dealt = math.ceil(self.m_attk*1.2 - (battle.temp_stats['m_dfns']/3)*(1 + dr))
 
         if monst_dealt < 1:
             monst_dealt = 1
@@ -145,7 +145,7 @@ class Monster:
         if not num:
             self.items = random.choice(items.monster_drop(self.lvl, self.monster_name))
 
-    def monst_attk(self, var, dodge, mode):
+    def monst_attk(self, dodge, mode):
         sounds.sword_slash.play()
         if isinstance(self, bosses.Boss):
             print('The {0} is getting ready to attack you!'.format(self.name))
@@ -157,7 +157,7 @@ class Monster:
             msvcrt.getwch()
 
         if dodge in range(player.evad, 512):
-            damage = self.monst_damage(var, mode)
+            damage = self.monst_damage(mode)
 
             player.hp -= damage
             sounds.enemy_hit.play()
@@ -172,7 +172,7 @@ class Monster:
             sounds.attack_miss.play()
             print("You narrowly avoid the {0}'s attack!".format(self.name))
 
-    def enemy_turn(self, var, dodge):
+    def enemy_turn(self, dodge):
         # Default AI used solely by bosses without custom AI
         global is_defending
 
@@ -188,9 +188,9 @@ class Monster:
 
         battle.temp_stats['turn_counter'] += 1
 
-        possible_p_dam = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2) + var
-        possible_m_dam = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2) + var
-        possible_a_dam = math.ceil(self.attk - battle.temp_stats['dfns']/2) + var
+        possible_p_dam = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2)
+        possible_m_dam = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2)
+        possible_a_dam = math.ceil(self.attk - battle.temp_stats['dfns']/2)
 
         most_effective = max([possible_p_dam, possible_m_dam, possible_a_dam])
 
@@ -242,10 +242,10 @@ class Monster:
         elif most_effective in [possible_p_dam, possible_a_dam]:
             # Non-magic Attack
             if most_effective == possible_p_dam:
-                self.monst_attk(var, dodge, 'pierce')
+                self.monst_attk(dodge, 'pierce')
 
             else:
-                self.monst_attk(var, dodge, 'melee')
+                self.monst_attk(dodge, 'melee')
 
         elif self.m_attk > self.attk and self.mp >= 2:
             # Magic Attack
@@ -260,7 +260,7 @@ class Monster:
             if dodge in range(battle.temp_stats['evad'], 512):
                 dam_dealt = magic.eval_element(
                     p_elem=battle.player.element,
-                    m_elem=battle.monster.element, m_dmg=self.monst_magic(var))[1]
+                    m_elem=battle.monster.element, m_dmg=self.monst_magic())[1]
 
                 player.hp -= dam_dealt
                 sounds.enemy_hit.play()
@@ -276,14 +276,14 @@ class Monster:
 
         else:
             if most_effective == possible_p_dam:
-                self.monst_attk(var, dodge, 'pierce')
+                self.monst_attk(dodge, 'pierce')
             else:
-                self.monst_attk(var, dodge, 'melee')
+                self.monst_attk(dodge, 'melee')
 
         self.check_poison()
 
         if isinstance(self, bosses.Boss) and self.multiphase and self.hp <= 0:
-            self.enemy_turn(var, dodge)
+            self.enemy_turn(dodge)
 
     def give_status(self):
         # Attempt to give the player a status ailment
@@ -691,7 +691,7 @@ def ranger_stats(self):
     self.evad = math.ceil(self.evad)
 
 
-def magic_ai(var, dodge):
+def magic_ai(dodge):
     if player.spd >= monster.spd:
         print('-'*25)
 
@@ -734,7 +734,7 @@ def magic_ai(var, dodge):
         if dodge in range(battle.temp_stats['evad'], 512):
             dam_dealt = magic.eval_element(
                 p_elem=battle.player.element,
-                m_elem=battle.monster.element, m_dmg=monster.monst_magic(var))[1]
+                m_elem=battle.monster.element, m_dmg=monster.monst_magic())[1]
 
             player.hp -= dam_dealt
             sounds.enemy_hit.play()
@@ -750,16 +750,16 @@ def magic_ai(var, dodge):
 
     else:
         # Non-magic Attack
-        random.choice([monster.monst_attk(var, dodge, 'pierce'),
-                       monster.monst_attk(var, dodge, 'melee')])
+        random.choice([monster.monst_attk(dodge, 'pierce'),
+                       monster.monst_attk(dodge, 'melee')])
 
     monster.check_poison()
 
     if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
-        monster.enemy_turn(var, dodge)
+        monster.enemy_turn(dodge)
 
 
-def ranged_ai(var, dodge):
+def ranged_ai(dodge):
     # This is the Enemy's AI.
     global is_defending
     global monster
@@ -803,14 +803,16 @@ def ranged_ai(var, dodge):
 
         is_defending = True
 
-    monster.monst_attk(var, dodge, 'pierce')
+    else:
+        monster.monst_attk(dodge, 'pierce')
+
     monster.check_poison()
 
     if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
-        monster.enemy_turn(var, dodge)
+        monster.enemy_turn(dodge)
 
 
-def melee_ai(var, dodge):
+def melee_ai(dodge):
     # This is the Enemy's AI.
     global is_defending
     global monster
@@ -852,13 +854,15 @@ def melee_ai(var, dodge):
         print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(
             monster.name))
 
-    is_defending = True
-    monster.monst_attk(var, dodge, 'melee')
+        is_defending = True
+
+    else:
+        monster.monst_attk(dodge, 'melee')
 
     monster.check_poison()
 
     if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
-        monster.enemy_turn(var, dodge)
+        monster.enemy_turn(dodge)
 
 
 def spawn_monster():

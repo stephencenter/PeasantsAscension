@@ -147,7 +147,7 @@ monster_art = {
 
     "Goblin Archer":
     """
-  o  \
+  o  \\
 --|--|
  / \\ /
         %s""",
