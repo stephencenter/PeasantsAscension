@@ -651,7 +651,7 @@ def create_player():
     global player
     global misc_vars
 
-    player = PlayerCharacter('', 15, 4, 3, 1, 3, 1, 3, 1, 3, 1, 1, 0, 0, 0, 0)
+    player = PlayerCharacter('', 20, 5, 5, 3, 5, 3, 5, 3, 5, 3, 1, 0, 0, 0, 0)
 
     # Set the player's max HP and MP
     misc_vars['hp_p'] = copy.copy(player.hp)
@@ -666,55 +666,55 @@ def create_player():
     if player.class_ == "warrior":
         misc_vars['hp_p'] += 5
         misc_vars['mp_p'] -= 1
-        player.dfns += 2
-        player.p_dfns += 1
-        player.attk += 2
+        player.dfns += 3
+        player.p_dfns += 2
+        player.attk += 3
         player.spd -= 1
         player.evad -= 1
         inv_system.equipped['weapon'] = copy.copy(items.wdn_sht)
 
     elif player.class_ == "mage":
         misc_vars['hp_p'] += 1
-        misc_vars['mp_p'] += 4
-        player.m_attk += 2
-        player.m_dfns += 2
+        misc_vars['mp_p'] += 6
+        player.m_attk += 3
+        player.m_dfns += 3
         inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
 
     elif player.class_ == "assassin":
         misc_vars['hp_p'] += 2
         misc_vars['mp_p'] += 1
-        player.attk += 1
-        player.dfns += 1
-        player.spd += 3
-        player.evad += 1
+        player.attk += 2
+        player.dfns += 2
+        player.spd += 4
+        player.evad += 2
         inv_system.equipped['weapon'] = copy.copy(items.stn_dag)
 
     elif player.class_ == "ranger":
         misc_vars['mp_p'] += 2
-        player.p_attk += 3
+        player.p_attk += 4
         player.m_dfns += 1
-        player.evad += 2
-        player.spd += 2
+        player.evad += 3
+        player.spd += 3
         inv_system.equipped['weapon'] = copy.copy(items.slg_sht)
 
     elif player.class_ == "monk":
-        misc_vars['hp_p'] += 1
-        misc_vars['mp_p'] += 1
+        misc_vars['hp_p'] += 2
+        misc_vars['mp_p'] += 2
         player.attk += 2
-        player.m_dfns += 1
-        player.evad += 1
-        player.spd += 1
+        player.m_dfns += 2
+        player.evad += 2
+        player.spd += 2
         player.dfns -= 1
         inv_system.equipped['weapon'] = copy.copy(items.fists)
 
     elif player.class_ == "paladin":
-        misc_vars['hp_p'] += 2
-        misc_vars['mp_p'] += 2
-        player.m_dfns += 1
-        player.m_attk += 1
-        player.dfns += 1
-        player.p_dfns += 1
-        player.attk += 1
+        misc_vars['hp_p'] += 3
+        misc_vars['mp_p'] += 4
+        player.m_dfns += 2
+        player.m_attk += 2
+        player.dfns += 2
+        player.p_dfns += 2
+        player.attk += 2
         player.spd -= 1
         player.evad -= 1
         inv_system.equipped['weapon'] = copy.copy(items.rbr_mlt)
@@ -1215,7 +1215,7 @@ def set_prompt_properties():
 
     # Set the CMD window size
     os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/font.dwFontSize.X - 2),
-                                                   1000))
+                                                   500))
 
 
 def copy_error(text):

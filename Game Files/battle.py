@@ -415,8 +415,8 @@ def after_battle(is_boss):  # Assess the results of the battle
                     # if you haven't been to a town yet.
                     world.back_to_coords()
 
-                    player.hp = int(misc_vars['hp_p']/1.5)
-                    player.mp = int(misc_vars['mp_p']/1.5)
+                    player.hp = misc_vars['hp_p']
+                    player.mp = misc_vars['mp_p']
 
                     player.status_ail = "none"
 
@@ -530,7 +530,7 @@ def class_ability():
         # You must be at least level 5 to use your class ability
         print("You have not realized your class's inner potential yet (must be level 5 to use)\n")
         input('Press enter/return ')
-        
+
         return False
 
     if ability_used:

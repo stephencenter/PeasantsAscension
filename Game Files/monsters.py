@@ -124,7 +124,7 @@ class Monster:
             self.lvl += 15
 
         for x in range(0, self.lvl):
-            self.hp += random.randint(4, 8)
+            self.hp += random.randint(4, 7)
             self.mp += random.randint(2, 5)
             self.attk = random.randint(2, 4)
             self.dfns += random.randint(2, 3)
@@ -726,7 +726,7 @@ def non_magic_ai(var, dodge):
 def spawn_monster():
     global monster
     setup_vars()
-    monster = Monster('', random.randint(6, 8), random.randint(3, 4), 2, 1, 2, 1, 2, 1, 2, 1, 1)
+    monster = Monster('', random.randint(2, 3), random.randint(2, 4), 1, 1, 1, 1, 1, 1, 1, 1, 1)
     monster.monst_name()
     monster.monst_level()
     if monster.evad > 256:
