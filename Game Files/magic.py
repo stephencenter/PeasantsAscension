@@ -129,14 +129,14 @@ class Damaging(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic(self, var, dodge):
+    def use_magic(self, dodge):
         if main.player.mp >= self.mana:
             print()
             Spell.use_mana(self)
 
             # Determine the power of the attack
             attk_pwr = math.ceil(battle.temp_stats['m_attk']/2.5) - \
-                                (battle.monster.m_dfns/1.5) + var
+                                (battle.monster.m_dfns/1.5)
             attk_pwr *= 1 + self.damage
             attk_pwr = math.ceil(attk_pwr)
 
@@ -509,7 +509,7 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
 spellbook = {'Healing': [], 'Damaging': [magic_shot], 'Buffs': [m_evade, m_quick]}
 
 
-def pick_cat(var, dodge, is_battle=True):
+def pick_cat(dodge, is_battle=True):
     if main.player.status_ail == 'silenced' \
             and 'Relieve Affliction' not in [x.name for x in spellbook['Healing']]:
         input("You find youself unable to use spells! | Press enter/return ")
@@ -577,7 +577,7 @@ def pick_cat(var, dodge, is_battle=True):
                     if y_n.startswith('y'):
                         if isinstance(spell, Damaging):
 
-                            if spell.use_magic(var, dodge):
+                            if spell.use_magic(dodge):
                                 return True
                             else:
                                 return False
@@ -615,12 +615,12 @@ def pick_cat(var, dodge, is_battle=True):
                 print('-'*25)
                 continue
 
-            if pick_spell(cat, var, dodge, is_battle):
+            if pick_spell(cat, dodge, is_battle):
                 return True
             break
 
 
-def pick_spell(cat, var, dodge, is_battle):
+def pick_spell(cat, dodge, is_battle):
     print('-'*25)
 
     while True:
@@ -668,7 +668,7 @@ def pick_spell(cat, var, dodge, is_battle):
 
                     if isinstance(spell, Damaging):
 
-                        if spell.use_magic(var, dodge):
+                        if spell.use_magic(dodge):
                             return True
 
                         else:
@@ -759,7 +759,7 @@ def deserialize_sb(path):
                     norm_sb[category].append(x)
                     continue
 
-                x = Healing('', '', '', '', '')
+                x = Healing('', '', '', '', '', '')
 
             elif category == 'Buffs':
                 x = Buff('', '', '', '', '', '')
