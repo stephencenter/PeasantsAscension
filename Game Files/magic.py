@@ -712,7 +712,7 @@ def new_spells():
             else:
                 # Almost all spells can be learned by mages, but only a few can be learned
                 # by other classes
-                if player.class_ not in spell.a_c:
+                if main.player.class_ not in spell.a_c:
                     continue
 
                 sounds.item_pickup.play()

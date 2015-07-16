@@ -839,10 +839,10 @@ rbr_mlt = Weapon('Rubber Mallet',
 
 holy_mace = Weapon('Holy Mace',
                    'An well-made iron mace imbued with the power of the heavens (+10% Damage)',
-                   50, 15, 0.1, 'melee', 'paladin', 'Hammer')
+                   50, 15, 0.1, 'melee', 'paladin', 'Mace')
 en_holy_mace = Weapon('Enhanced Holy Mace',
                       'An enhanced version of your typical Holy Mace (+25% Damage)',
-                      100, 25, 0.25, 'melee', 'paladin', 'Hammer')
+                      100, 25, 0.25, 'melee', 'paladin', 'Mace')
 
 hmr_of_mgt = Weapon('Hammer of Might',
                     'A hammer often used by holy warriors to smash their foes (+40% Damage)',

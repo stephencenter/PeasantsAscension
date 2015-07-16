@@ -853,7 +853,7 @@ def check_save():  # Check for save files and load the game if they're found
             except ValueError:
                 chosen = chosen.lower()
 
-                if chosen == "create new":  # Let the player create a new save file
+                if chosen.startswith("c"):  # Let the player create a new save file
                     print('-'*25)
                     create_player()
                     return
@@ -1214,7 +1214,7 @@ def set_prompt_properties():
         handle, ctypes.c_long(False), ctypes.pointer(font))
 
     # Set the CMD window size
-    os.system("mode con cols={0} lines={1}".format(math.ceil(screensize[0]/font.dwFontSize.X - 2),
+    os.system("mode con cols={0} lines={1}".format(math.ceil(500),
                                                    500))
 
 
