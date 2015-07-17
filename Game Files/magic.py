@@ -88,8 +88,8 @@ class Healing(Spell):
             # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
             # In addition to this, the player restores an additional 2*Wisdom, unless they are a
             # Paladin in which case it it 4*Wisdom.
-            if self.health < main.player.hp*thresh:
-                main.player.hp += main.player.hp*thresh + \
+            if self.health < main.player.hp*self.thresh:
+                main.player.hp += main.player.hp*self.thresh + \
                     (2*main.misc_vars['wis'] if main.player.class_ !=
                      'paladin' else 4*main.misc_vars['wis'])
                 main.player.hp = math.ceil(main.player.hp)
@@ -494,7 +494,10 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
         return [p_dmg, m_dmg]
 
     if element_matchup[p_elem][1] == m_elem:
-        spam = [int(p_dmg*1.5), int(m_dmg/1.5)]
+        if p_elem == 'life' or p_elem == 'death':
+            spam = [int(p_dmg/1.5), int(m_dmg/1.5)]
+        else:
+            spam = [int(p_dmg*1.5), int(m_dmg/1.5)]
 
         if spam[0] <= 1:
             spam[0] = 2
@@ -502,9 +505,16 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
         return spam
 
     elif element_matchup[p_elem][0] == m_elem or p_elem == m_elem:
-        return [int(p_dmg/1.5), int(m_dmg*1.5)]
+        if p_elem == 'life' or p_elem == 'death':
+            return [int(p_dmg*1.5), int(m_dmg*1.5)]
+        else:
+            return [int(p_dmg/1.5), int(m_dmg*1.5)]
 
     return [p_dmg, m_dmg]
+
+# THIS IS FOR TESTING ELEMENT MATCHUPS
+# while True:
+#     exec(input())
 
 spellbook = {'Healing': [], 'Damaging': [magic_shot], 'Buffs': [m_evade, m_quick]}
 

@@ -162,7 +162,7 @@ class PlayerCharacter:  # The Player
 
     def player_damage(self):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
-            dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/1.5))
+            dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
@@ -170,7 +170,7 @@ class PlayerCharacter:  # The Player
                 print('You deal half damage because of your weakened state!')
 
         else:
-            dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/1.5))
+            dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
@@ -485,13 +485,13 @@ Input letter: """)
 
                     elif skill.startswith('f'):
                         if self.ext_ski == 10:
-                            self.ext_gol += 2
-                            self.ext_exp += 2
+                            self.ext_gol += random.randint(0, 2)
+                            self.ext_exp += random.randint(0, 2)
 
                         else:
                             self.ext_ski += 1
-                            self.ext_gol += 1
-                            self.ext_exp += 1
+                            self.ext_gol += random.randint(0, 1)
+                            self.ext_exp += random.randint(0, 1)
 
                         misc_vars['for'] += 1
 
