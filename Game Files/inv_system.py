@@ -506,35 +506,10 @@ Press enter/return ")
 
                     if not isinstance(selected, pets.Companion):
                         if isinstance(selected, i.Weapon):
-                            if selected.type_ == 'melee':
-                                main.player.attk -= selected.power
-                                main.player.p_attk -= int(math.ceil(selected.power/3))
-                                main.player.m_attk -= int(math.ceil(selected.power/3))
-
-                            elif selected.type_ == 'magic':
-                                main.player.m_attk -= selected.power
-                                main.player.p_attk -= int(math.ceil(selected.power/3))
-                                main.player.attk -= int(math.ceil(selected.power/3))
-
-                            elif selected.type_ == 'ranged':
-                                main.player.p_attk -= selected.power
-                                main.player.m_attk -= int(math.ceil(selected.power/3))
-                                main.player.attk -= int(math.ceil(selected.power/3))
-
                             inventory[selected.cat].append(equipped[key])
                             equipped[key] = i.fists
 
                         elif isinstance(selected, i.Armor):
-                            if selected.type_ == 'melee':
-                                main.player.dfns -= selected.defense
-                                main.player.m_dfns -= int(math.ceil(selected.defense/2))
-                                main.player.p_dfns -= int(math.ceil(selected.defense/1.5))
-
-                            elif selected.type_ == 'magic':
-                                main.player.m_dfns -= selected.defense
-                                main.player.p_dfns -= int(math.ceil(selected.defense/1.5))
-                                main.player.dfns -= int(math.ceil(selected.defense/2))
-
                             inventory[selected.cat].append(equipped[key])
                             equipped[key] = '(None)'
 

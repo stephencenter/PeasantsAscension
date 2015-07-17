@@ -144,30 +144,30 @@ class Fighter(Companion):
 
 # --Healing Pets--
 pet_cherub = Healer("Cherub",
-                    "A sweet angel skilled in the way of weak-healing (T1)", 150, 35, 2, 10, 5, 3)
+                    "A sweet angel skilled in the way of magical healing", 150, 35, 2, 10, 5, 3)
 pet_sapling = Healer("Cherry Sapling",
-                     "A small cherry tree that emits a soothing aroma with strange properties (T2)",
+                     "A small cherry tree that emits a soothing aroma with strange properties",
                      350, 75, 5, 15, 5, 4)
 pet_dove = Healer("White Dove",
-                  "A lovely dove that has powerful healing abilities (T3)",
+                  "A lovely dove that has powerful healing abilities",
                   750, 275, 10, 25, 4, 7)
 pet_doe = Healer("Holy Doe",
-                 "A beautiful deer that is enchanted with powerful healing magic (T4)",
+                 "A beautiful deer that is enchanted with powerful healing magic",
                  2000, 750, 20, 40, 3, 6)
 
 # --Fighting Pets--
 pet_fox = Fighter("Fox",
-                  "A fearsome but tame canine capable of low-level fighting power (T1)",
+                  "A fearsome but tame canine capable of low-level fighting power",
                   200, 50, 2)
 pet_viper = Fighter("Viper",
-                    "Despite not being that big, this viper does pack quite a punch (T2)",
+                    "Despite not being that big, this viper does pack quite a punch",
                     400, 100, 5, incap_chance=30)
 pet_wolf = Fighter("Wolf",
-                   "A decently strong beast that will help you fight in battle (T3)",
+                   "A decently strong beast that will help you fight in battle",
                    750, 275, 12, incap_turns=3, incap_chance=15)
 pet_dragon = Fighter("Dragon",
-                     "A massive and powerful dragon that uses his flames to attack (T4)",
+                     "A massive and powerful dragon that uses his flames to attack",
                      2000, 750, 25, incap_turns=4)
 pet_ost = Fighter("Ostrich",
-                  "A large and ferocious avian that kicks its prey with the force of an ox (T5)",
+                  "A large and ferocious avian that kicks its prey with the force of an ox",
                   9001, 3500, 50, incap_turns=1, incap_chance=45)

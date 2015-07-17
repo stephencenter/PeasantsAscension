@@ -643,10 +643,7 @@ def magic_ai(dodge):
     ))
 
     # Only do this on turns that are a multiple of 4 (or turn 1)
-    if (not battle.temp_stats['turn_counter'] % 4 or
-        battle.temp_stats['turn_counter'] == 1) \
-            and random.randint(0, 1) and monster.mp > 2:
-
+    if player.status_ail != "none" and not random.randint(0, 4) and monster.mp > 2:
         monster.give_status()
 
     elif monster.hp <= int(misc_vars['hp_m']/4) and monster.mp >= 5:
@@ -810,7 +807,7 @@ def melee_ai(dodge):
 def spawn_monster():
     global monster
     setup_vars()
-    monster = Monster('', 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+    monster = Monster('', 10, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     monster.monst_name()
     monster.monst_level()
     if monster.evad > 256:

@@ -869,7 +869,7 @@ en_ngt_bane = Weapon("Enhanced Night's Bane",
 
 # Weapon -- Monk
 brass_kncls = Weapon('Brass Knuckles',
-                     'A brass adornment for your knuckles providing\
+                     'A brass adornment for your knuckles providing \
 extra punching power (+10% Damage)',
                      50, 15, 0.1, 'melee', 'monk', 'Knuckles')
 en_brass_kncls = Weapon('Enhanced Brass Knuckles',
@@ -884,11 +884,11 @@ en_bladed_gloves = Weapon('Enhanced Bladed Gloves',
                           350, 125, 0.6, 'melee', 'monk', 'Gloves')
 
 lead_bg = Weapon('Lead-Weighted Boxing Gloves',
-                 'Weighted with 5 pounds of lead and tipped with steel blades. Probably\n\
+                 'Weighted with 5 pounds of lead and tipped with steel blades. Probably \n\
 not allowed in standard matches (+80% Damage)',
                  500, 225, 0.8, 'melee', 'monk', 'Gloves')
 en_lead_bg = Weapon('Enhanced Lead Gloves',
-                    'An enhanced version of your typical\
+                    'An enhanced version of your typical \
 Lead-Weighted Boxing Gloves (+100% Damage)',
                     750, 325, 1, 'melee', 'monk', 'Gloves')
 
@@ -925,23 +925,23 @@ en_bnz_leg = Armor('Enhanced Bronze Greaves',
                    65, 30, 0.1, 'melee', 'legs', ['warrior', 'paladin'], 'Pants')
 
 # Armor -- Mage + Monk -- Weak
-wiz_hat = Armor('Wizard Hat',
+wiz_hat = Armor('Silk Hat',
                 'A silk hat woven with magic thread (+3% ARMOR)',
                 20, 8, 0.03, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
-wiz_rob = Armor('Wizard Robe',
+wiz_rob = Armor('Silk Robe',
                 'A silk robe woven with magic thread (+5% ARMOR)',
                 30, 12, 0.05, 'magic', 'body', ['mage', 'monk'], 'Robe')
-wiz_gar = Armor('Wizard Garments',
+wiz_gar = Armor('Silk Garments',
                 'Silk garments woven with magic thread (+3% ARMOR)',
                 25, 10, 0.03, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
-en_wiz_hat = Armor('Enhanced Wizard Hat',
+en_wiz_hat = Armor('Enhanced Silk Hat',
                    'An enhanced version of your typical Wizard Hat (+5% ARMOR)',
                    60, 25, 0.05, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
-en_wiz_rob = Armor('Enhanced Wizard Robe',
+en_wiz_rob = Armor('Enhanced Silk Robe',
                    'An enhanced version of your typical Wizard Robe (+10% ARMOR)',
                    70, 35, 0.1, 'magic', 'body', ['mage', 'monk'], 'Robe')
-en_wiz_gar = Armor('Enhanced Wizard Garments',
+en_wiz_gar = Armor('Enhanced Silk Garments',
                    'An enhanced version of your typical Wizard Garments (+5% ARMOR)',
                    65, 30, 0.05, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
@@ -1045,14 +1045,14 @@ ori_leg = Armor('Orichalcum Greaves',
 
 # Armor -- Mage + Monk -- Pow
 # 65% ARMOR
-elem_hat = Armor('Elemental Hat',
-                 'A leather hat enchanted with elemental power (+20% ARMOR)',
+elem_hat = Armor('Armored Cloth Hat',
+                 'A silk hat lined with chainmail in important parts (+20% ARMOR)',
                  320, 110, 0.20, 'magic', 'head', ['mage', 'monk'], 'Wizard Hat')
-elem_rob = Armor('Elemental Robe',
-                 'A leather robe enchanted with elemental power (+25% ARMOR)',
+elem_rob = Armor('Armored Cloth Robe',
+                 'A silk robe lined with chainmail in important parts (+25% ARMOR)',
                  340, 120, 0.25, 'magic', 'body', ['mage', 'monk'], 'Robe')
-elem_gar = Armor('Elemental Garments',
-                 'Leather garments enchanted with elemental power (+20% ARMOR)',
+elem_gar = Armor('Armored Cloth Garments',
+                 'Silk garments lined with chainmail in important parts (+20% ARMOR)',
                  330, 115, 0.20, 'magic', 'legs', ['mage', 'monk'], 'Robe Pants')
 
 # Armor -- Assassin + Ranger -- Pow

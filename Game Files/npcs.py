@@ -1028,7 +1028,7 @@ sondalar_phrase_1 = Conversation(["Greetings! Say, I haven't seen you in quite a
                                   "years, and haven't had time to say hello. Let me share some",
                                   "of the knowledge I gained while on my route: almost every town",
                                   "has a general store and an inn. Make good use of them!",
-                                  "The general store sells all sorts of helpful equiptment,",
+                                  "The general store sells all sorts of helpful equipment,",
                                   "and the further you travel from Nearton, the better their",
                                   "stock will get! Don't ask why - all I've heard is that it's",
                                   "supposedly better for business or something. Inns are helpful",

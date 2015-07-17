@@ -1024,7 +1024,7 @@ def deserialize_player(path):  # Load the JSON file and translate
     # it into a "PlayerCharacter" object
     global player
 
-    player = PlayerCharacter('', 20, 5, 5, 3, 5, 3, 5, 3, 5, 3, 1, 0, 0, 0, 0)
+    player = PlayerCharacter('', 10, 5, 5, 4, 5, 4, 5, 4, 5, 3, 1, 0, 0, 0, 0)
 
     with open(path, encoding='utf-8') as f:
         player_dict = json.load(f)
