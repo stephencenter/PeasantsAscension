@@ -70,7 +70,16 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
              i.sleep_potion, i.sleep_potion, i.sleep_potion],  # Sleep Potion
 
             [i.silence_potion, i.silence_potion, i.silence_potion,
-             i.silence_potion, i.silence_potion, i.silence_potion]  # Silence Potion
+             i.silence_potion, i.silence_potion, i.silence_potion],  # Silence Potion
+
+            [i.blindness_potion, i.blindness_potion, i.blindness_potion,
+             i.blindness_potion, i.blindness_potion, i.blindness_potion],  # Blindness Potion
+
+            [i.paralyzation_potion, i.paralyzation_potion, i.paralyzation_potion,
+             i.paralyzation_potion, i.paralyzation_potion, i.paralyzation_potion],  # Para. Potion
+
+            [i.weakness_potion, i.weakness_potion, i.weakness_potion,
+             i.weakness_potion, i.weakness_potion, i.weakness_potion]  # Weakness Potion
             ],
 
             'Weapons': [[i.bnz_swd, i.en_bnz_swd, i.stl_spr,

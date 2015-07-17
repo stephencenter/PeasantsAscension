@@ -683,40 +683,49 @@ x_potion = Consumable('Super Potion',
 # Potions -- Mana
 s_elixir = Consumable('Basic Elixir',
                       'A generic elixir that restores 15 MP when consumed.',
-                      10, 3, mana=10)
+                      10, 3, mana=10, ascart='Elixir')
 m_elixir = Consumable('Enhanced Elixir',
                       'A more potent elixir that restores 45 MP when consumed.',
-                      25, 8, mana=35)
+                      25, 8, mana=35, ascart='Elixir')
 l_elixir = Consumable('Grand Elixir',
                       'A powerful elixir that restores 100 MP when consumed.',
-                      50, 17, mana=75)
+                      50, 17, mana=75, ascart='Elixir')
 x_elixir = Consumable('Extreme Elixir',
                       'A super powerful elixir that restores 175 MP when consumed.',
-                      100, 35, mana=175)
+                      100, 35, mana=175, ascart='Elixir')
 
 # Potions -- Both
 s_rejuv = Consumable('Minor Rejuvenation Potion',
                      'A basic mixture that restores 15 HP and 15 MP when consumed.',
-                     35, 12, heal=15, mana=15)
+                     35, 12, heal=15, mana=15, ascart='Rejuv')
 
 m_rejuv = Consumable('Refined Rejuvenation Potion',
                      'A higher quality mixture that restores 45 HP and 45 MP when consumed.',
-                     65, 22, heal=45, mana=45)
+                     65, 22, heal=45, mana=45, ascart='Rejuv')
 
 l_rejuv = Consumable('Mighty Rejuvenation Potion',
                      'A super powerful mixture that restores 100 HP and 100 MP when consumed.',
-                     225, 80, heal=100, mana=100)
+                     225, 80, heal=100, mana=100, ascart='Rejuv')
 
 # Potions - Status
 sleep_potion = StatusPotion('Potion of Waking Up',
-                            "Cures sleep. Don't ask how you're supposed to drink it while asleep.",
-                            25, 10, 'asleep')
+                            "A potion designed to wake its partaker from a deep sleep.",
+                            25, 10, 'asleep', ascart='Status')
 silence_potion = StatusPotion('Potion of Allowing Speech',
-                              "Cures silence. One wonders how your supposed to talk to the seller.",
-                              25, 10, 'silenced')
+                              "A potion designed to enable the usage of damaged vocal chords.",
+                              25, 10, 'silenced', ascart='Status')
 poison_potion = StatusPotion('Potion of Curing Disease',
-                             'Cures poison. Testing this potion proved to be difficult.',
-                             25, 10, 'poisoned')
+                             'A potion designed to cure even the most deadly of illnesses.',
+                             25, 10, 'poisoned', ascart='Status')
+weakness_potion = StatusPotion('Potion of Regaining Strength',
+                               'A potion designed to help regain lost muscle-mass and stamina.',
+                               25, 10, 'weakened', ascart='Status')
+blindness_potion = StatusPotion('Potion of Enabling Sight',
+                                'A potion designed to help the blind regain their eyesight.',
+                                25, 10, 'blinded', ascart='Status')
+paralyzation_potion = StatusPotion('Potion of Inducing Motion',
+                                   'A potion designed to cure minor paralysis in most of the body.',
+                                   25, 10, 'paralyzed', ascart='Status')
 
 # Fists
 fists = Weapon('Fists',
