@@ -83,10 +83,10 @@ class Monster:
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
-            dam_dealt = math.ceil(self.attk*1.1 - (battle.temp_stats['dfns']/2)*(1 + dr))
+            dam_dealt = math.ceil(self.attk*1.15 - (battle.temp_stats['dfns']/2)*(1 + dr))
 
         else:
-            dam_dealt = math.ceil(self.p_attk*1.1 - (battle.temp_stats['p_dfns']/2)*(1 + dr))
+            dam_dealt = math.ceil(self.p_attk*1.15 - (battle.temp_stats['p_dfns']/2)*(1 + dr))
 
         dam_dealt = magic.eval_element(
             p_elem=battle.player.element,
@@ -109,7 +109,7 @@ class Monster:
 
     def monst_level(self):
         global misc_vars
-        self.lvl = int((1/3)*abs(position['avg'] - 1)) + 1
+        self.lvl = int((1/2)*abs(position['avg'] - 1)) + 1
 
         if self.lvl < 1:
             self.lvl = 1
@@ -122,7 +122,7 @@ class Monster:
             self.hp += 5
             self.mp += 4
             self.attk = 4
-            self.dfns +=3
+            self.dfns += 3
             self.p_attk += 4
             self.p_dfns += 3
             self.m_attk += 4

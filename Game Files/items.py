@@ -216,6 +216,7 @@ class Armor(Item):
             if isinstance(equipped[self.part], Armor):
                 old = copy.copy(equipped[self.part])
                 inventory['armor'].append(old)
+                inventory['armor'].remove(self)
             else:
                 equipped[self.part] = fizz
                 inventory['armor'].remove(self)

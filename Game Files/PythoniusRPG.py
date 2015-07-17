@@ -188,6 +188,7 @@ class PlayerCharacter:  # The Player
             print("It's a critical hit! 2x damage!")
             dam_dealt *= 2
 
+        # Limit the amount of damage to 999 (as if that matters)
         if dam_dealt > 999:
             dam_dealt = 999
             print('Overkill!')
@@ -273,6 +274,7 @@ Input [#]: """.format(self.name))
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(music_vol)
 
+            # The player restores all their health and mana when they level up
             self.hp = misc_vars['hp_p']
             self.mp = misc_vars['mp_p']
 
