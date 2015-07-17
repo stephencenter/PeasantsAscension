@@ -121,12 +121,12 @@ class Monster:
         for x in range(0, self.lvl):
             self.hp += 5
             self.mp += 4
-            self.attk = 3
-            self.dfns += 2
-            self.p_attk += 3
-            self.p_dfns += 2
-            self.m_attk += 3
-            self.m_dfns += 2
+            self.attk = 4
+            self.dfns +=3
+            self.p_attk += 4
+            self.p_dfns += 3
+            self.m_attk += 4
+            self.m_dfns += 3
             self.spd += 3
             self.evad += 2
 
@@ -354,8 +354,8 @@ class Monster:
         monster_type = {'Pythonian Coastline': ['Shell Mimic', 'Giant Crab',
                                                 'Naiad', 'Sea Serpent', 'Squid'],
 
-                        'Bogthorn': ['Bog Slime', 'Moss Ogre',
-                                     "Will-o'-the-wisp", 'Vine Lizard', 'Sludge Rat'],
+                        'Bogthorn Marsh': ['Bog Slime', 'Moss Ogre',
+                                           "Will-o'-the-wisp", 'Vine Lizard', 'Sludge Rat'],
 
                         'Central Forest': ['Goblin Archer', 'Beetle'
                         if main.player.name != "Flygon Jones" else "Calculator",

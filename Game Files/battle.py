@@ -664,8 +664,8 @@ Element: {8} | Elemental Weakness: {9}""".format(
 
     # Monk Ability: Chakra-smash
     elif player.class_ == 'monk':
-        # Essentially a 4x crit. As an added bonus, this attack has a 14%
-        # chance to get a crit itself, resulting in a total of an 8x critical.
+        # Essentially a 2.5x crit. As an added bonus, this attack has a 14%
+        # chance to get a crit itself, resulting in a total of an 5x critical.
         # This attack lowers your defenses by 25% for three turns to balance it out.
         # If you are weakened, this attack ignores that and will deal full damage anyway.
         print('-'*25)
@@ -685,7 +685,8 @@ Element: {8} | Elemental Weakness: {9}""".format(
             p_elem=inv_system.equipped['weapon'].element,
             m_elem=monster.element, p_dmg=dam_dealt)[0]
 
-        dam_dealt *= 4
+        dam_dealt *= 2.5
+        dam_dealt = math.ceil(dam_dealt)
 
         if dam_dealt < 4:
             dam_dealt = 4

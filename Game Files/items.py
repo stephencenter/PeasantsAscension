@@ -215,10 +215,10 @@ class Armor(Item):
 
             if isinstance(equipped[self.part], Armor):
                 old = copy.copy(equipped[self.part])
-                inventory['armor'].remove(self)
                 inventory['armor'].append(old)
-
-            equipped[self.part] = fizz
+            else:
+                equipped[self.part] = fizz
+                inventory['armor'].remove(self)
 
             print('-'*25)
             input('You equip the {0} | Press enter/return '.format(str(self)))
