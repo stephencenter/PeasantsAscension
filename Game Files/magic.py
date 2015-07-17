@@ -89,17 +89,20 @@ class Healing(Spell):
             # In addition to this, the player restores an additional 2*Wisdom, unless they are a
             # Paladin in which case it it 4*Wisdom.
             if self.health < main.player.hp*self.thresh:
-                main.player.hp += main.player.hp*self.thresh + \
+                total_heal = main.player.hp*self.thresh + \
                     (2*main.misc_vars['wis'] if main.player.class_ !=
                      'paladin' else 4*main.misc_vars['wis'])
+                main.player.hp += total_heal
                 main.player.hp = math.ceil(main.player.hp)
 
             else:
-                main.player.hp += self.health + (2*main.misc_vars['wis'] if main.player.class_ !=
-                                                 'paladin' else 4*main.misc_vars['wis'])
+                total_heal = self.health + (2*main.misc_vars['wis'] if main.player.class_ !=
+                                            'paladin' else 4*main.misc_vars['wis'])
+                main.player.hp += total_heal
 
             if main.player.hp > main.misc_vars['hp_p']:
                 main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
+
             sounds.magic_healing.play()
 
             if is_battle:
@@ -108,7 +111,7 @@ class Healing(Spell):
                 print(ascii_art.player_art[main.player.class_.title()] %
                       "{0} is making a move!\n".format(main.player.name))
 
-            print('Using "{0}", you are healed by {1} HP!'.format(self.name, self.health))
+            print('Using "{0}", you are healed by {1} HP!'.format(self.name, total_heal))
             return True
 
         else:

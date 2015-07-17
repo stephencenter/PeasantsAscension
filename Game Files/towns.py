@@ -72,7 +72,7 @@ class Town:
                                   # allow you to purchase.
 
         self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest.
-                                                # Definitely not a blatant ripoff of Apple Inc...
+                                              # Definitely not a blatant ripoff of Apple Inc...
 
     def town_choice(self):
         print('-'*25)
@@ -739,7 +739,8 @@ consisting of castle surrounded by reinforced stone walls, a lower-class
 outer portion comprised of smalls buildings and huts, and a middle-class
 section situated in between. As an outsider, you are forbidden to enter the
 upper two, but are welcome to do as you wish in the lower.""",
-             [npcs.stewson, npcs.jeffery], -11, 13, inn_cost=5, gs_level=2)
+             [npcs.stewson, npcs.jeffery, npcs.harthos, npcs.typhen],
+             -11, 13, inn_cost=5, gs_level=2)
 
 town4 = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
