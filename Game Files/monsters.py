@@ -83,10 +83,10 @@ class Monster:
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
-            dam_dealt = math.ceil(self.attk*1.2 - (battle.temp_stats['dfns']/3)*(1 + dr))
+            dam_dealt = math.ceil(self.attk*1.1 - (battle.temp_stats['dfns']/2)*(1 + dr))
 
         else:
-            dam_dealt = math.ceil(self.p_attk*1.2 - (battle.temp_stats['p_dfns']/3)*(1 + dr))
+            dam_dealt = math.ceil(self.p_attk*1.1 - (battle.temp_stats['p_dfns']/2)*(1 + dr))
 
         dam_dealt = magic.eval_element(
             p_elem=battle.player.element,
@@ -104,7 +104,7 @@ class Monster:
     def monst_magic(self):
         ise = inv_system.equipped
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
-        monst_dealt = math.ceil(self.m_attk*1.2 - (battle.temp_stats['m_dfns']/3)*(1 + dr))
+        monst_dealt = math.ceil(self.m_attk*1.1 - (battle.temp_stats['m_dfns']/2)*(1 + dr))
 
         if monst_dealt < 1:
             monst_dealt = 1
@@ -557,59 +557,9 @@ class Monster:
 
         self.name = ' '.join([modifier, self.name]) if modifier else self.name
 
-# Enemy Stat Classes:
 
-# -- Tank Stats --
-"""
-Tanks are resistant to player attacks and has above-average HP.
-However, they lacks significantly in the damage-dealing department.
-They are slower than most enemies and have low evasion.
-
-"""
-
-
-def tank_stats(self):
-    # Set Tank stats
-    global misc_vars
-
-    self.hp *= 1.3
-    self.hp = math.ceil(self.hp)
-    misc_vars['hp_m'] = copy.copy(self.hp)
-
-    self.attk *= 0.8
-    self.attk = math.ceil(self.attk)
-
-    self.p_attk *= 0.8
-    self.p_attk = math.ceil(self.p_attk)
-
-    self.m_attk *= 0.8
-    self.m_attk = math.ceil(self.m_attk)
-
-    self.dfns *= 1.3
-    self.dfns = math.ceil(self.dfns)
-
-    self.p_dfns *= 1.3
-    self.p_dfns = math.ceil(self.p_dfns)
-
-    self.m_dfns *= 1.3
-    self.m_dfns = math.ceil(self.m_dfns)
-
-    self.spd *= 0.8
-    self.spd = math.ceil(self.spd)
-
-    self.evad *= 0.8
-    self.evad = math.ceil(self.evad)
-
-
-# -- Fighter Stats --
-"""
-Fighters are the opposite of Tanks. They have high attack and above-average
-magic attack, as well as above-average speed. However, they have below-average defense
-and magic defense. They have low health.
-
-"""
-
-
+# Enemy AI + Stats:
+# -- Melee Stats --
 def melee_stats(self):
     # Set stats for melee-class monsters
     self.hp *= 1.2
@@ -653,10 +603,10 @@ def magic_stats(self):
     self.m_attk *= 1.5
     self.m_attk = math.ceil(self.m_attk)
 
-    self.dfns *= 0.9
+    self.dfns *= 0.65
     self.dfns = math.ceil(self.dfns)
 
-    self.p_dfns *= 0.9
+    self.p_dfns *= 0.65
     self.p_dfns = math.ceil(self.p_dfns)
 
     self.m_dfns *= 1.5
@@ -681,7 +631,7 @@ def ranger_stats(self):
     self.dfns *= 0.8
     self.dfns = math.ceil(self.dfns)
 
-    self.p_dfns *= 1.3
+    self.p_dfns *= 1.2
     self.p_dfns = math.ceil(self.p_dfns)
 
     self.spd *= 1.5
