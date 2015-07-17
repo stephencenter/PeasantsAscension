@@ -1222,16 +1222,13 @@ def set_prompt_properties():
     # Calculate the proper width for the buffer size and then set the height to be 200
     # A height of 200 should allow the player to scroll back up to read previous events if needs
     # be.
-    os.system("@echo off")
-    os.system("conSize.bat {0} {1} {2} {3}".format(
-        math.ceil(screensize[0]/font.dwFontSize.X),
-        math.ceil(screensize[1]/font.dwFontSize.Y),
-        math.ceil(screensize[0]/font.dwFontSize.X),
-        200)
-    )
-
-    # Set the font color to dark green (because why not?)
-    os.system("color 2")
+    # os.system("@echo off")
+    # os.system("conSize.bat {0} {1} {2} {3}".format(
+    #     math.ceil(screensize[0]/font.dwFontSize.X),
+    #     math.ceil(screensize[1]/font.dwFontSize.Y),
+    #     math.ceil(screensize[0]/font.dwFontSize.X),
+    #     200)
+    # )
 
     # Set the console title
     ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())

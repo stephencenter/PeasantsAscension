@@ -16,6 +16,11 @@
 # This file is where ALL of the Enemy and Player ASCII
 # art in the game is located.
 
+import colorama
+from colorama import init, Fore, Style
+
+init()
+
 player_art = {
     "Ranger":
     """
@@ -446,21 +451,27 @@ O0o"
 
 # Sprites used for items (not yet implemented!)
 item_sprites = {
-    "Potion":
-        """
+    "Potion": Fore.RED + """
      _ _
      | |
     /   \\
     | P |
     \\___/
-""",
+""" + Fore.RESET,
+    "Elixir": Fore.BLUE + """
+     _ _
+     | |
+    /   \\
+    | E |
+    \\___/
+""" + Fore.RESET,
 
     "Bow":
         """
       ______
      /      \\
     /~~~~~~~~\\
-""",
+""" + Fore.RESET,
 
     "Dagger":
         """
@@ -468,7 +479,7 @@ item_sprites = {
       ||
      _||_
       ||
-""",
+""" + Fore.RESET,
 
     "Short Sword":
         """
@@ -478,7 +489,7 @@ item_sprites = {
        //
     \_//_/
      //
-""",
+""" + Fore.RESET,
 
     "Sword":
         """
@@ -491,7 +502,7 @@ item_sprites = {
     \_//_/
      //
 
-""",
+""" + Fore.RESET,
 
     "Fists":
         """
@@ -499,7 +510,7 @@ item_sprites = {
     /|||\\
     \\   /
      | |
-""",
+""" + Fore.RESET,
 
     "Amulet":
         """
@@ -508,7 +519,7 @@ item_sprites = {
     |   |
      \ /
      {A}
-""",
+""" + Fore.RESET,
 
     "Wizard Hat":
         """
@@ -516,25 +527,23 @@ item_sprites = {
        /* \\
     __/  * \__
     ----------
-""",
+""" + Fore.RESET,
 
-    "Spear":
-        """
+    "Spear": Fore.WHITE + """
        ,
-    ~~/
+    """ + Fore.RED + """~~""" + Style.DIM + Fore.YELLOW + """/
      /
     /
-""",
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Axe":
-        """
-    ^_/\\
-    |_  |
-    | \/
+    "Axe": Fore.RED + """
+    ^""" + Style.BRIGHT + Fore.BLACK + """_/\\""" + Style.DIM + Fore.YELLOW + """
+    |""" + Style.BRIGHT + Fore.BLACK + """_  |""" + Style.DIM + Fore.YELLOW + """
+    |""" + Style.BRIGHT + Fore.BLACK + """ \/""" + Style.DIM + Fore.YELLOW + """
     |
     |
     |
-""",
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Book":
         """
@@ -543,7 +552,7 @@ item_sprites = {
     |=====|
     |     |
     |_____|
-""",
+""" + Fore.RESET,
 
     "Compass":
         """
@@ -551,7 +560,7 @@ item_sprites = {
     /  N  \\
     W  ^> E
     \__S__/
-""",
+""" + Fore.RESET,
 
     "Stiletto":
         """
@@ -559,7 +568,8 @@ item_sprites = {
      |
     _|_
      |
-""",
+""" + Fore.RESET,
+
     "Hammer":
     """
      ________
@@ -569,7 +579,8 @@ item_sprites = {
         ||
         ||
         ||
-""",
+""" + Fore.RESET,
+
     "Mace":
     """
      ____
@@ -579,19 +590,21 @@ item_sprites = {
       ||
       ||
       ||
-""",
-    "Knuckles":
-    """
+""" + Fore.RESET,
+
+    "Knuckles": Fore.WHITE + """
      _  _  _  _
-    / \/ \/ \/ \
+    / \/ \/ \/ \\
     \_/\_/\_/\_/
-""",
+""" + Fore.RESET,
+
     "Gloves":
     """
     |\_/|
     |   |
      | |
-""",
+""" + Fore.RESET,
+
     "Staff":
         """
     ~\O/~
@@ -599,14 +612,14 @@ item_sprites = {
       |
       |
       |
-""",
+""" + Fore.RESET,
 
-    "Twig":
-        """
-    `/
+    "Twig": Fore.GREEN + """
+    `""" + Fore.YELLOW + Style.DIM + """/
      |
      /
-""",
+""" + Style.RESET_ALL + Fore.RESET,
+
     "Crossbow":
         """
      ___/\___
@@ -616,14 +629,14 @@ item_sprites = {
       ~~||~~
         ||
         ||
-""",
+""" + Fore.RESET,
 
     "Hat":
         """
        ____
     __|____|__
     ----------
-""",
+""" + Fore.RESET,
 
     "Shirt":
         """
@@ -632,7 +645,7 @@ item_sprites = {
        |    |
        |    |
        |____|
-""",
+""" + Fore.RESET,
 
     "Pants":
         """
@@ -642,14 +655,14 @@ item_sprites = {
     | |  | |
     | |  | |
     | |  | |
-""",
+""" + Fore.RESET,
 
     "Helmet":
         """
     |\_____/|
     |  ___  |
     |_/   \_|
-""",
+""" + Fore.RESET,
 
     "Robe":
         """
@@ -658,7 +671,7 @@ item_sprites = {
        | *  |
        |   *|
        |____|
-""",
+""" + Fore.RESET,
 
     "Robe Pants":
         """
@@ -667,7 +680,7 @@ item_sprites = {
       /  * \\
      / *  * \\
     |________|
-""",
+""" + Fore.RESET,
 
     "Misc":
         """
@@ -678,7 +691,7 @@ item_sprites = {
        /
        |
        O
-""",
+""" + Fore.RESET,
 
     "Sling Shot":
         """
@@ -687,7 +700,7 @@ item_sprites = {
        |
        |
        |
-""",
+""" + Fore.RESET,
     "Div Rod":
         """
     ~\   /~
@@ -695,7 +708,7 @@ item_sprites = {
        |
        |=
        |
-""",
+""" + Fore.RESET,
 
     "Gem":
         """
@@ -703,7 +716,7 @@ item_sprites = {
      /  _  \\
     |  |_|  |
      \_____/
-""",
+""" + Fore.RESET,
 
     "Shovel":
         """
@@ -717,7 +730,7 @@ item_sprites = {
       ||
       /\\
      /==\\
-""",
+""" + Fore.RESET,
 
     "Cap":
         """
@@ -725,7 +738,7 @@ item_sprites = {
     ~~/    \\
      | O__O |
       \/  \/
-""",
+""" + Fore.RESET,
 
     "Wand":
         """
@@ -734,7 +747,7 @@ item_sprites = {
     ||
     ||
     ||
-""",
+""" + Fore.RESET,
 
     "Map":
         """
@@ -742,7 +755,7 @@ item_sprites = {
     |  >>> x  |
     |   MAP   |
     |~~~~~~~~~|
-""",
+""" + Fore.RESET,
 
     "Boots":
         """
@@ -751,7 +764,7 @@ item_sprites = {
      >|   |____
       |        |
       |--------|
-""",
+""" + Fore.RESET,
 
     "Healer Pet":
         """
@@ -759,7 +772,7 @@ item_sprites = {
      _| |_
     |_PET_|
       |_|
-""",
+""" + Fore.RESET,
 
     "Fighter Pet":
         """
@@ -768,5 +781,8 @@ item_sprites = {
     <-|-----<<
       |
       |
-"""
+""" + Fore.RESET
 }
+
+for x in item_sprites.keys():
+    print(item_sprites[x])
