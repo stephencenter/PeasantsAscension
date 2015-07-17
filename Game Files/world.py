@@ -247,7 +247,7 @@ It's probably in your best interests that you not do that.
 
                     elif decision.startswith('m'):
                         if magic.spellbook['Healing']:
-                            magic.pick_spell('Healing', 0, 0, False)
+                            magic.pick_spell('Healing', 0, False)
                         else:
                             print('-'*25)
                             print('You have no overworld-allowed spells available.')

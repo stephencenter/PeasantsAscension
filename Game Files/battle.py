@@ -185,6 +185,7 @@ def battle_system(is_boss=False, ambush=False):
             monk_tc += 1
 
         if player.status_ail == 'asleep':
+            # There is a 1/3 chance for the player to wake up each turn if they are asleep
             if not random.randint(0, 2):
                 sounds.buff_spell.play()
                 print('\n-Player Turn-')
@@ -253,18 +254,10 @@ def battle_system(is_boss=False, ambush=False):
         else:
             if monster.spd < actual_speed and player.status_ail != 'asleep':
                 print('-'*25)
-            is_asleep = 'asleep' if player.status_ail == 'asleep' else False
+
             monster.enemy_turn(m_dodge)
 
             if player.hp > 0:
-                if player.status_ail != 'asleep':
-                    input('\nPress Enter/Return ')
-
-                    if is_asleep:
-                        move = player_choice(actual_speed)
-
-                    player_turn(dodge, move, is_boss)
-
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
 

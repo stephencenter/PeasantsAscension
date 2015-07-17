@@ -285,85 +285,88 @@ Input [#]: """.format(self.name))
                 print("You've advanced to level {0}!".format(self.lvl))
 
                 if self.lvl == 5:
+                    print()
                     print('You now understand the true potential of your class!')
                     print('You can activate this potential in the form of a "class ability"')
                     print('once per battle. Use it wisely!')
+                    print()
+                    input('Press enter/return ')
 
                 rem_points += 5
                 extra_points += self.ext_ski
                 magic.new_spells()
 
                 if self.class_ == 'warrior':
-                    self.p_attk += random.randint(0, 2)
-                    self.p_dfns += random.randint(2, 3)
-                    self.attk += random.randint(2, 4)
-                    self.dfns += random.randint(2, 3)
-                    self.m_attk += random.randint(0, 2)
-                    self.m_dfns += random.randint(0, 2)
-                    self.spd += random.randint(1, 2)
-                    self.evad += random.randint(0, 1)
-                    self.hp += random.randint(1, 2)
-                    self.mp += random.randint(1, 2)
+                    # Total gain: 20 pts.
+                    self.p_dfns += 4
+                    self.attk += 4
+                    self.dfns += 4
+                    self.m_attk += 1
+                    self.m_dfns += 1
+                    self.spd += 1
+                    self.evad += 1
+                    self.hp += 3
+                    self.mp += 1
 
                 elif self.class_ == 'mage':
-                    self.p_attk += random.randint(0, 2)
-                    self.p_dfns += random.randint(0, 2)
-                    self.attk += random.randint(0, 1)
-                    self.dfns += random.randint(0, 2)
-                    self.m_attk += random.randint(2, 4)
-                    self.m_dfns += random.randint(2, 3)
-                    self.spd += random.randint(1, 2)
-                    self.evad += random.randint(1, 2)
-                    self.hp += random.randint(1, 2)
-                    self.mp += random.randint(2, 3)
+                    # Total gain: 20 pts.
+                    self.p_dfns += 1
+                    self.attk += 1
+                    self.dfns += 1
+                    self.m_attk += 4
+                    self.m_dfns += 4
+                    self.spd += 2
+                    self.evad += 2
+                    self.hp += 1
+                    self.mp += 4
 
                 elif self.class_ == 'assassin':
-                    self.p_attk += random.randint(0, 2)
-                    self.p_dfns += random.randint(1, 2)
-                    self.attk += random.randint(1, 3)
-                    self.dfns += random.randint(0, 2)
-                    self.m_attk += random.randint(0, 2)
-                    self.m_dfns += random.randint(1, 2)
-                    self.spd += random.randint(2, 4)
-                    self.evad += random.randint(1, 2)
-                    self.hp += random.randint(1, 3)
-                    self.mp += random.randint(1, 2)
+                    # Total gain: 20 pts.
+                    self.p_dfns += 2
+                    self.attk += 4
+                    self.dfns += 2
+                    self.m_attk += 2
+                    self.m_dfns += 1
+                    self.spd += 5
+                    self.evad += 2
+                    self.hp += 1
+                    self.mp += 1
 
                 elif self.class_ == 'ranger':
-                    self.p_attk += random.randint(2, 4)
-                    self.p_dfns += random.randint(0, 1)
-                    self.attk += random.randint(1, 2)
-                    self.dfns += random.randint(0, 1)
-                    self.m_attk += random.randint(0, 2)
-                    self.m_dfns += random.randint(0, 2)
-                    self.spd += random.randint(1, 3)
-                    self.evad += random.randint(2, 3)
-                    self.hp += random.randint(1, 3)
-                    self.mp += random.randint(1, 3)
+                    # Total gain: 20 pts.
+                    self.p_attk += 4
+                    self.p_dfns += 2
+                    self.dfns += 1
+                    self.m_attk += 1
+                    self.m_dfns += 2
+                    self.spd += 3
+                    self.evad += 4
+                    self.hp += 1
+                    self.mp += 2
 
                 elif self.class_ == 'monk':
-                    self.p_attk += random.randint(0, 2)
-                    self.p_dfns += random.randint(0, 1)
-                    self.attk += random.randint(2, 4)
-                    self.dfns += random.randint(0, 1)
-                    self.m_attk += random.randint(1, 3)
-                    self.m_dfns += random.randint(0, 1)
-                    self.spd += random.randint(1, 2)
-                    self.evad += random.randint(2, 3)
-                    self.hp += random.randint(1, 2)
-                    self.mp += random.randint(1, 3)
+                    # Total gain: 20 pts.
+                    self.p_dfns += 1
+                    self.attk += 4
+                    self.dfns += 1
+                    self.m_attk += 2
+                    self.m_dfns += 2
+                    self.spd += 3
+                    self.evad += 3
+                    self.hp += 2
+                    self.mp += 2
 
                 elif self.class_ == 'paladin':
-                    self.p_attk += random.randint(0, 2)
-                    self.p_dfns += random.randint(1, 3)
-                    self.attk += random.randint(2, 3)
-                    self.dfns += random.randint(1, 3)
-                    self.m_attk += random.randint(1, 2)
-                    self.m_dfns += random.randint(1, 3)
-                    self.spd += random.randint(0, 2)
-                    self.evad += random.randint(0, 1)
-                    self.hp += random.randint(1, 2)
-                    self.mp += random.randint(1, 3)
+                    # Total gain: 20 pts.
+                    self.p_dfns += 3
+                    self.attk += 3
+                    self.dfns += 3
+                    self.m_attk += 2
+                    self.m_dfns += 3
+                    self.spd += 1
+                    self.evad += 1
+                    self.hp += 2
+                    self.mp += 2
 
                 self.exp -= misc_vars['r_xp']
                 misc_vars['r_xp'] = int((math.pow(self.lvl*2, 2) - 1.2*self.lvl))
@@ -650,7 +653,7 @@ def create_player():
     global player
     global misc_vars
 
-    player = PlayerCharacter('', 20, 5, 5, 3, 5, 3, 5, 3, 5, 3, 1, 0, 0, 0, 0)
+    player = PlayerCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, 1, 0, 0, 0, 0)
 
     # Set the player's max HP and MP
     misc_vars['hp_p'] = copy.copy(player.hp)
@@ -675,14 +678,14 @@ def create_player():
     elif player.class_ == "mage":
         misc_vars['hp_p'] += 1
         misc_vars['mp_p'] += 6
-        player.m_attk += 3
+        player.m_attk += 4
         player.m_dfns += 3
         inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
 
     elif player.class_ == "assassin":
         misc_vars['hp_p'] += 2
         misc_vars['mp_p'] += 1
-        player.attk += 2
+        player.attk += 3
         player.dfns += 2
         player.spd += 4
         player.evad += 2
@@ -691,7 +694,7 @@ def create_player():
     elif player.class_ == "ranger":
         misc_vars['mp_p'] += 2
         player.p_attk += 4
-        player.m_dfns += 1
+        player.m_dfns += 2
         player.evad += 3
         player.spd += 3
         inv_system.equipped['weapon'] = copy.copy(items.slg_sht)
@@ -699,21 +702,21 @@ def create_player():
     elif player.class_ == "monk":
         misc_vars['hp_p'] += 2
         misc_vars['mp_p'] += 2
-        player.attk += 2
+        player.attk += 3
         player.m_dfns += 2
-        player.evad += 2
-        player.spd += 2
+        player.evad += 3
+        player.spd += 3
         player.dfns -= 1
         inv_system.equipped['weapon'] = copy.copy(items.fists)
 
     elif player.class_ == "paladin":
         misc_vars['hp_p'] += 3
         misc_vars['mp_p'] += 4
-        player.m_dfns += 2
-        player.m_attk += 2
-        player.dfns += 2
-        player.p_dfns += 2
-        player.attk += 2
+        player.m_dfns += 3
+        player.m_attk += 3
+        player.dfns += 3
+        player.p_dfns += 3
+        player.attk += 3
         player.spd -= 1
         player.evad -= 1
         inv_system.equipped['weapon'] = copy.copy(items.rbr_mlt)

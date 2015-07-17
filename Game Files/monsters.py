@@ -95,10 +95,6 @@ class Monster:
         if dam_dealt < 1:
             dam_dealt = 1
 
-        if random.randint(1, 100) <= 7:
-            print("It's a critical hit! 2x damage!")
-            dam_dealt *= 2
-
         return dam_dealt
 
     def monst_magic(self):
@@ -108,10 +104,6 @@ class Monster:
 
         if monst_dealt < 1:
             monst_dealt = 1
-
-        if random.randint(1, 100) <= 14:
-            print("It's a critical hit! 2x damage!")
-            monst_dealt *= 2
 
         return monst_dealt
 
@@ -127,16 +119,16 @@ class Monster:
             self.lvl += 15
 
         for x in range(0, self.lvl):
-            self.hp += random.randint(4, 7)
-            self.mp += random.randint(2, 5)
-            self.attk = random.randint(2, 4)
-            self.dfns += random.randint(2, 3)
-            self.p_attk += random.randint(2, 4)
-            self.p_dfns += random.randint(2, 3)
-            self.m_attk += random.randint(2, 4)
-            self.m_dfns += random.randint(2, 3)
-            self.spd += random.randint(2, 4)
-            self.evad += random.randint(1, 2)
+            self.hp += 5
+            self.mp += 4
+            self.attk = 3
+            self.dfns += 2
+            self.p_attk += 3
+            self.p_dfns += 2
+            self.m_attk += 3
+            self.m_dfns += 2
+            self.spd += 3
+            self.evad += 2
 
         misc_vars['hp_m'] = self.hp
         misc_vars['mp_m'] = self.mp
@@ -818,7 +810,7 @@ def melee_ai(dodge):
 def spawn_monster():
     global monster
     setup_vars()
-    monster = Monster('', random.randint(2, 3), random.randint(2, 4), 1, 1, 1, 1, 1, 1, 1, 1, 1)
+    monster = Monster('', 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     monster.monst_name()
     monster.monst_level()
     if monster.evad > 256:
