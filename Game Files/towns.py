@@ -720,7 +720,7 @@ he Forest.
 It is in this very town where numerous brave adventurers have begun
 their journey. Nearton has a general store, an inn, and a few small houses.
 An old man is standing near one of the houses, and appears to be very
-troubled about something.""", [npcs.philliard, npcs.alfred], 0, 1)
+troubled about something.""", [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar], 0, 1)
 
 # Southford is essentially the tutorial town. It's easy to find, and there are three NPCs
 # that all give helpful advice about the game.
