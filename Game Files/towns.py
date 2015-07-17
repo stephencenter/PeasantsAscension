@@ -155,7 +155,7 @@ class Town:
                 print('-'*25)
                 print("{0}'s location has been added to your coordinates.".format(self.name))
 
-                items.visited_towns.append(self.name)
+                main.misc_vars['visited_towns'].append(self.name)
         else:
             return spam
 

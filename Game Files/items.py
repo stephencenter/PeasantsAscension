@@ -47,7 +47,6 @@ equipped = ''
 
 # A regular expression that replaces all non-NSEW characters with ''
 only_nsew = lambda x: re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', x)
-visited_towns = main.misc_vars['visited_towns']
 
 
 class Item:
@@ -578,7 +577,7 @@ class TownTeleporter(Item):
         available = []
 
         for town in town_list:
-            for visited in visited_towns:
+            for visited in main.misc_vars['visited_towns']:
                 if town.name == visited:
                     available.append((town.name,
                                       town.x, "\u00b0E" if town.x >= 0 else "\u00b0W",

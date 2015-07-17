@@ -258,6 +258,7 @@ def battle_system(is_boss=False, ambush=False):
             monster.enemy_turn(m_dodge)
 
             if player.hp > 0:
+                player_turn(dodge, move, is_boss)
                 if monster.hp > 0:
                     input('\nPress Enter/Return ')
 
@@ -678,7 +679,7 @@ Element: {8} | Elemental Weakness: {9}""".format(
         print('defenses have been lowered by 25% for three turns.')
         print()
 
-        dam_dealt = math.ceil(temp_stats['attk']/1.5 - (monster.dfns/2))
+        dam_dealt = math.ceil(temp_stats['attk']/2- (monster.dfns/1.25))
         dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
 
         dam_dealt = magic.eval_element(

@@ -109,7 +109,7 @@ class Monster:
 
     def monst_level(self):
         global misc_vars
-        self.lvl = int((1/2)*abs(position['avg'] - 1)) + 1
+        self.lvl = int((1/2.5)*abs(position['avg'] - 1)) + 1
 
         if self.lvl < 1:
             self.lvl = 1
@@ -121,7 +121,7 @@ class Monster:
         for x in range(0, self.lvl):
             self.hp += 5
             self.mp += 4
-            self.attk = 4
+            self.attk += 4
             self.dfns += 3
             self.p_attk += 4
             self.p_dfns += 3
