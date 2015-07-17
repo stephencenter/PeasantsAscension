@@ -457,21 +457,21 @@ item_sprites = {
     /   \\
     | P |
     \\___/
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
+
     "Elixir": Fore.BLUE + """
      _ _
      | |
     /   \\
     | E |
     \\___/
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Bow":
-        """
+    "Bow": Style.DIM + Fore.YELLOW + """
       ______
      /      \\
-    /~~~~~~~~\\
-""" + Fore.RESET,
+    /""" + Style.RESET_ALL + Fore.WHITE + """~~~~~~~~""" + Style.DIM + Fore.YELLOW + """\\
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Dagger":
         """
@@ -479,55 +479,49 @@ item_sprites = {
       ||
      _||_
       ||
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Short Sword":
-        """
+    "Short Sword": Fore.WHITE + Style.DIM + """
           /|
          //
         //
        //
-    \_//_/
-     //
-""" + Fore.RESET,
+    """ + Fore.RED + """\_""" + Fore.WHITE + """//""" + Fore.RED + """_/
+     """ + Fore.YELLOW + """//
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Sword":
-        """
+    "Sword": Fore.WHITE + Style.DIM + """
             /|
            //
           //
          //
         //
        //
-    \_//_/
-     //
+    """ + Fore.RED + """\_""" + Fore.WHITE + """//""" + Fore.RED + """_/
+     """ + Fore.YELLOW + """//
+""" + Style.RESET_ALL + Fore.RESET,
 
-""" + Fore.RESET,
-
-    "Fists":
-        """
+    "Fists": Fore.YELLOW + """
      ___
     /|||\\
     \\   /
      | |
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Amulet":
-        """
+    "Amulet": Fore.BLACK + Style.BRIGHT + """
      ___
     /   \\
     |   |
      \ /
-     {A}
-""" + Fore.RESET,
+     """ + Style.NORMAL + Fore.GREEN + """{A}
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Wizard Hat":
-        """
+    "Wizard Hat": Fore.BLUE + """
         /\\
-       /* \\
-    __/  * \__
+       /""" + Fore.YELLOW + """*""" + Fore.BLUE + """ \\
+    __/  """ + Fore.YELLOW + """*""" + Fore.BLUE + """ \__
     ----------
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Spear": Fore.WHITE + """
        ,
@@ -545,65 +539,59 @@ item_sprites = {
     |
 """ + Style.RESET_ALL + Fore.RESET,
 
-    "Book":
-        """
+    "Book": Fore.YELLOW + Style.DIM + """
      _____
-    |Livre|
-    |=====|
+    |""" + Style.RESET_ALL + Fore.WHITE + """Livre""" + Fore.YELLOW + Style.DIM + """|
+    |""" + Fore.RED + Style.BRIGHT + """=====""" + Fore.YELLOW + Style.DIM + """|
     |     |
     |_____|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Compass":
-        """
+    "Compass": Fore.BLUE + """
      _____
-    /  N  \\
-    W  ^> E
-    \__S__/
-""" + Fore.RESET,
+    /  """ + Fore.RED + """N""" + Fore.BLUE + """  \\""" + Fore.RED + """
+    W  ^> E""" + Fore.BLUE + """
+    \__""" + Fore.RED + """S""" + Fore.BLUE + """__/
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Stiletto":
-        """
+    "Stiletto": Fore.WHITE + Style.DIM + """
      |
      |
     _|_
      |
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Hammer":
-    """
+    "Hammer": Style.BRIGHT + Fore.BLACK + """
      ________
     |        |
-    |________|
+    |________|""" + Style.DIM + Fore.YELLOW + """
         ||
         ||
         ||
         ||
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Mace":
-    """
+    "Mace": Style.BRIGHT + Fore.BLACK + """
      ____
     |    |
-    |____|
+    |____|""" + Style.DIM + Fore.YELLOW + """
       ||
       ||
       ||
       ||
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Knuckles": Fore.WHITE + """
      _  _  _  _
     / \/ \/ \/ \\
     \_/\_/\_/\_/
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Gloves":
-    """
-    |\_/|
-    |   |
+    "Gloves": Style.BRIGHT + Fore.BLACK + """
+    |\\""" + Style.DIM + Fore.YELLOW + """_""" + Style.BRIGHT + Fore.BLACK + """/|
+    """ + Style.DIM + Fore.YELLOW + """|   |
      | |
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Staff":
         """
@@ -612,7 +600,7 @@ item_sprites = {
       |
       |
       |
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Twig": Fore.GREEN + """
     `""" + Fore.YELLOW + Style.DIM + """/
@@ -620,70 +608,65 @@ item_sprites = {
      /
 """ + Style.RESET_ALL + Fore.RESET,
 
-    "Crossbow":
-        """
+    "Crossbow": Style.DIM + Fore.YELLOW + """
      ___/\___
     /   ||   \\
-    \   ||   /
-     \  ||  /
-      ~~||~~
+    """ + Fore.WHITE + """\\""" + Style.DIM + Fore.YELLOW + """   ||   """ + Fore.WHITE + """/
+     \\""" + Style.DIM + Fore.YELLOW + """  ||  """ + Fore.WHITE + """/
+      ~~""" + Style.DIM + Fore.YELLOW + """||""" + Fore.WHITE + """~~"""
+        + Style.DIM + Fore.YELLOW + """
         ||
         ||
-""" + Fore.RESET,
+        ||
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Hat":
         """
        ____
     __|____|__
     ----------
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Shirt":
-        """
+    "Shirt": Style.DIM + Fore.YELLOW +"""
      ____  ____
     |__  \/  __|
        |    |
        |    |
        |____|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Pants":
-        """
+    "Pants": Style.DIM + Fore.YELLOW + """
      ______
     |      |
     |  __  |
     | |  | |
     | |  | |
     | |  | |
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Helmet":
-        """
+    "Helmet": Style.DIM + Fore.YELLOW + """
     |\_____/|
     |  ___  |
     |_/   \_|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Robe":
-        """
+    "Robe": Fore.BLUE + """
      ____  ____
-    |__ *   *__|
-       | *  |
-       |   *|
+    |__ """ + Fore.YELLOW + """*   *""" + Fore.BLUE + """__|
+       | """ + Fore.YELLOW + """*""" + Fore.BLUE + """  |
+       |   """ + Fore.YELLOW + """*""" + Fore.BLUE + """|
        |____|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Robe Pants":
-        """
+    "Robe Pants": Fore.BLUE + """
         __
-       / *\\
-      /  * \\
-     / *  * \\
+       / """ + Fore.YELLOW + """*""" + Fore.BLUE + """\\
+      /  """ + Fore.YELLOW + """*""" + Fore.BLUE + """ \\
+     / """ + Fore.YELLOW + """*  *""" + Fore.BLUE + """ \\
     |________|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Misc":
-        """
+    "Misc": Fore.WHITE + """
      ____
     /    \\
          |
@@ -691,7 +674,7 @@ item_sprites = {
        /
        |
        O
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Sling Shot":
         """
@@ -700,7 +683,7 @@ item_sprites = {
        |
        |
        |
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
     "Div Rod":
         """
     ~\   /~
@@ -708,37 +691,34 @@ item_sprites = {
        |
        |=
        |
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Gem":
-        """
+    "Gem": Fore.WHITE + """
       _____
      /  _  \\
     |  |_|  |
      \_____/
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Shovel":
-        """
+    "Shovel": Style.BRIGHT + Fore.BLACK + """
       __
      /  \\
-    |____|
+    |____|""" + Style.DIM + Fore.YELLOW + """
       ||
       ||
       ||
       ||
       ||
       /\\
-     /==\\
-""" + Fore.RESET,
+     /""" + Style.BRIGHT + Fore.RED + """==""" + Style.DIM + Fore.YELLOW + """\\
+""" + Style.RESET_ALL + Fore.RESET,
 
-    "Cap":
-        """
+    "Cap": Style.DIM + Fore.YELLOW + """
        ____
     ~~/    \\
      | O__O |
       \/  \/
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Wand":
         """
@@ -747,7 +727,7 @@ item_sprites = {
     ||
     ||
     ||
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Map":
         """
@@ -755,7 +735,7 @@ item_sprites = {
     |  >>> x  |
     |   MAP   |
     |~~~~~~~~~|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Boots":
         """
@@ -764,7 +744,7 @@ item_sprites = {
      >|   |____
       |        |
       |--------|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Healer Pet":
         """
@@ -772,7 +752,7 @@ item_sprites = {
      _| |_
     |_PET_|
       |_|
-""" + Fore.RESET,
+""" + Style.RESET_ALL + Fore.RESET,
 
     "Fighter Pet":
         """
@@ -781,7 +761,7 @@ item_sprites = {
     <-|-----<<
       |
       |
-""" + Fore.RESET
+""" + Style.RESET_ALL + Fore.RESET
 }
 
 for x in item_sprites.keys():
