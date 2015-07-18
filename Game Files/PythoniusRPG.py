@@ -794,7 +794,7 @@ def check_save():  # Check for save files and load the game if they're found
 
                 with open(sav_prevtowns.format(CHARACTER_NAME=directory),
                           mode='w', encoding='utf-8') as f:
-                    json.dump(items.visited_towns, f, indent=4, separators=(', ', ': '))
+                    json.dump(misc_vars['visited_towns'], f, indent=4, separators=(', ', ': '))
 
         # If all save-file components exist...
         if all(map(os.path.isfile, [x.format(CHARACTER_NAME=directory) for x in save_file_list])):
@@ -990,7 +990,7 @@ def save_game():
                     json.dump(position, f, indent=4, separators=(', ', ': '))
 
                 with open(sav_prevtowns, mode='w', encoding='utf-8') as f:
-                    json.dump(items.visited_towns, f, indent=4, separators=(', ', ': '))
+                    json.dump(misc_vars['visited_towns'], f, indent=4, separators=(', ', ': '))
 
                 items.serialize_gems(sav_acquired_gems)
                 inv_system.serialize_equip(sav_equip_items)
