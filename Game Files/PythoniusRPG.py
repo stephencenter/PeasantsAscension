@@ -41,7 +41,7 @@ game_version = 'v0.6.6'
 player = ''
 
 # A dictionary containing miscellaneous variables made entirely of
-misc_vars = {'hp_p': '', 'hp_m': '', 'mp_p': '', 'mp_m': '', 'r_xp': 3,
+misc_vars = {'hp_m': '', 'mp_m': '', 'r_xp': 3,
              'int': 1, 'wis': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20,
              'visited_towns': []}
 
@@ -159,6 +159,8 @@ class PlayerCharacter:  # The Player
         self.class_ = class_  # Player Class
         self.element = element
         self.status_ail = 'none'  # Current Status Ailment
+        self.max_hp = copy.copy(self.hp)
+        self.max_mp = copy.copy(self.mp)
 
     def player_damage(self):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
@@ -275,8 +277,8 @@ Input [#]: """.format(self.name))
             pygame.mixer.music.set_volume(music_vol)
 
             # The player restores all their health and mana when they level up
-            self.hp = misc_vars['hp_p']
-            self.mp = misc_vars['mp_p']
+            self.hp = copy.copy(self.max_hp)
+            self.mp = copy.copy(self.max_mp)
 
             rem_points = 0  # Remaining Skill Points
             extra_points = 0  # The number of extra skill points the player will receive
@@ -376,11 +378,12 @@ Input [#]: """.format(self.name))
             print('-'*25)
             self.skill_points(rem_points, extra_points)
 
-            misc_vars['hp_p'] = self.hp
-            misc_vars['mp_p'] = self.mp
+            self.max_hp = copy.copy(self.hp)
+            self.max_mp = copy.copy(self.mp)
 
             print('-'*25)
             save_game()
+
             return
 
     def skill_points(self, rem_points, extra_points):
@@ -470,7 +473,7 @@ Input letter: """)
                         misc_vars['str'] += 1
 
                     elif skill.startswith('c'):
-                        self.hp += 1
+                        self.max_hp += 1
                         self.dfns += random.randint(0, 1)
                         self.p_dfns += random.randint(0, 1)
                         self.m_dfns += random.randint(0, 1)
@@ -535,7 +538,7 @@ Armor:
 
 -Current Pet-""".format(self.name,
                         self.lvl, self.class_.title(), self.element,
-                        self.hp, misc_vars['hp_p'], self.mp, misc_vars['mp_p'],
+                        self.hp, self.max_hp, self.mp, self.max_mp,
                         self.attk, self.m_attk, self.p_attk,
                         self.dfns, self.m_dfns, self.p_dfns,
                         self.spd, self.evad,
@@ -658,8 +661,8 @@ def create_player():
     player = PlayerCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, 1, 0, 0, 0, 0)
 
     # Set the player's max HP and MP
-    misc_vars['hp_p'] = copy.copy(player.hp)
-    misc_vars['mp_p'] = copy.copy(player.mp)
+    player.max_hp = copy.copy(player.hp)
+    player.max_mp = copy.copy(player.mp)
 
     player.name = player.choose_name()
     print()
@@ -668,8 +671,8 @@ def create_player():
     set_adventure_name()
 
     if player.class_ == "warrior":
-        misc_vars['hp_p'] += 5
-        misc_vars['mp_p'] -= 1
+        player.max_hp += 5
+        player.max_mp -= 1
         player.dfns += 3
         player.p_dfns += 2
         player.attk += 3
@@ -678,15 +681,15 @@ def create_player():
         inv_system.equipped['weapon'] = copy.copy(items.wdn_sht)
 
     elif player.class_ == "mage":
-        misc_vars['hp_p'] += 1
-        misc_vars['mp_p'] += 6
+        player.max_hp += 1
+        player.max_mp += 6
         player.m_attk += 4
         player.m_dfns += 3
         inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
 
     elif player.class_ == "assassin":
-        misc_vars['hp_p'] += 2
-        misc_vars['mp_p'] += 1
+        player.max_hp += 2
+        player.max_mp += 1
         player.attk += 3
         player.dfns += 2
         player.spd += 4
@@ -694,7 +697,7 @@ def create_player():
         inv_system.equipped['weapon'] = copy.copy(items.stn_dag)
 
     elif player.class_ == "ranger":
-        misc_vars['mp_p'] += 2
+        player.max_mp += 2
         player.p_attk += 4
         player.m_dfns += 2
         player.evad += 3
@@ -702,8 +705,8 @@ def create_player():
         inv_system.equipped['weapon'] = copy.copy(items.slg_sht)
 
     elif player.class_ == "monk":
-        misc_vars['hp_p'] += 2
-        misc_vars['mp_p'] += 2
+        player.max_hp += 2
+        player.max_mp += 2
         player.attk += 3
         player.m_dfns += 2
         player.evad += 3
@@ -712,8 +715,8 @@ def create_player():
         inv_system.equipped['weapon'] = copy.copy(items.fists)
 
     elif player.class_ == "paladin":
-        misc_vars['hp_p'] += 3
-        misc_vars['mp_p'] += 4
+        player.max_hp += 3
+        player.max_mp += 4
         player.m_dfns += 3
         player.m_attk += 3
         player.dfns += 3
@@ -723,8 +726,8 @@ def create_player():
         player.evad -= 1
         inv_system.equipped['weapon'] = copy.copy(items.rbr_mlt)
 
-    player.hp = copy.copy(misc_vars['hp_p'])
-    player.mp = copy.copy(misc_vars['mp_p'])
+    player.hp = copy.copy(player.max_hp)
+    player.mp = copy.copy(player.max_mp)
     print('-'*25)
 
 

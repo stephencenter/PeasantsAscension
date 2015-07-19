@@ -118,7 +118,7 @@ class Monster:
         if position['reg'] == 'Aethus':
             self.lvl += 15
 
-        for x in range(0, self.lvl):
+        for x in range(1, self.lvl):
             self.hp += 5
             self.mp += 4
             self.attk += 4

@@ -167,7 +167,7 @@ def battle_system(is_boss=False, ambush=False):
                (is_boss and (not monster.multiphase or monster.currphase == monster.multiphase)
                 and monster.hp <= 0)):
 
-        if player.hp <= 0.20*misc_vars["hp_p"]:
+        if player.hp <= 0.20*player.max_hp:
             print("Warning: HP is low, heal as soon as possible!")
             sounds.health_low.play()
 
@@ -333,7 +333,7 @@ def player_turn(dodge, move, is_boss):
 
                 sounds.poison_damage.play()
 
-                poison_damage = int(math.ceil(misc_vars['hp_p']/10))
+                poison_damage = int(math.ceil(player.max_hp/10))
                 print('You took poison damage! (-{0} HP)'.format(poison_damage))
                 player.hp -= poison_damage
 
@@ -402,8 +402,8 @@ def after_battle(is_boss):  # Assess the results of the battle
                     # if you haven't been to a town yet.
                     world.back_to_coords()
 
-                    player.hp = misc_vars['hp_p']
-                    player.mp = misc_vars['mp_p']
+                    player.hp = copy.copy(player.max_hp)
+                    player.mp = copy.copy(player.max_mp)
 
                     player.status_ail = "none"
 
@@ -592,19 +592,19 @@ Element: {8} | Elemental Weakness: {9}""".format(
 
         print('As a Warrior, you channel your inner-strength and restore health and defense!')
 
-        if player.hp > misc_vars['hp_p']:
-            player.hp -= (player.hp - misc_vars['hp_p'])
-        if player.mp > misc_vars['mp_p']:
-            player.mp -= (player.mp - misc_vars['mp_p'])
+        if player.hp > player.max_hp:
+            player.hp -= (player.hp - player.max_hp)
+        if player.mp > player.max_mp:
+            player.mp -= (player.mp - player.max_mp)
 
         return True
 
     # Mage Ability: Artificial Intelligence
     elif player.class_ == "mage":
-        player.mp += _c(misc_vars['mp_p'])/2
+        player.mp += _c(player.max_mp)/2
 
-        if player.mp > misc_vars['mp_p']:
-            player.mp = _c(misc_vars['mp_p'])
+        if player.mp > player.max_mp:
+            player.mp = _c(player.max_mp)
 
         player.mp = math.ceil(player.mp)
 
@@ -656,10 +656,10 @@ Element: {8} | Elemental Weakness: {9}""".format(
         else:
             player.mp += 15
 
-        if player.hp > misc_vars['hp_p']:
-            player.hp -= (player.hp - misc_vars['hp_p'])
-        if player.mp > misc_vars['mp_p']:
-            player.mp -= (player.mp - misc_vars['mp_p'])
+        if player.hp > player.max_hp:
+            player.hp -= (player.hp - player.max_hp)
+        if player.mp > player.max_mp:
+            player.mp -= (player.mp - player.max_mp)
 
         return True
 
@@ -805,16 +805,16 @@ def bat_stats():
         player.hp = 0
     if monster.hp < 0:
         monster.hp = 0
-    if player.hp > misc_vars['hp_p']:
-        player.hp -= (player.hp - misc_vars['hp_p'])
+    if player.hp > player.max_hp:
+        player.hp -= (player.hp - player.max_hp)
     if monster.hp > misc_vars['hp_m']:
         monster.hp -= (monster.hp - misc_vars['hp_m'])
     if player.mp < 0:
         player.mp = 0
     if monster.mp < 0:
         monster.mp = 0
-    if player.mp > misc_vars['mp_p']:
-        player.mp -= (player.mp - misc_vars['mp_p'])
+    if player.mp > player.max_mp:
+        player.mp -= (player.mp - player.max_mp)
     if monster.mp > misc_vars['mp_m']:
         monster.mp -= (monster.mp - misc_vars['mp_m'])
     print('-'*25)
@@ -827,32 +827,32 @@ def bat_stats():
         first_padding = len(max([''.join([player.name, "'s ", pet.name]),
                                  pet.name, monster.name], key=len))
 
-        second_padding = len(max(['{0}/{1} HP'.format(player.hp, misc_vars['hp_p']),
+        second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp),
                                   'LVL: {0}'.format(pet.level)
                                   if isinstance(pet, pets.Fighter)
                                   else '{0}/{1}'.format(pet.mana, pet.max_m)
                                   if isinstance(pet, pets.Healer)
                                   else '',
-                                  '{0}/{1} HP'.format(monster.mp, misc_vars['mp_p'])], key=len))
+                                  '{0}/{1} HP'.format(monster.mp, misc_vars['mp_m'])], key=len))
 
     else:
         first_padding = len(max([player.name, monster.name], key=len))
 
-        second_padding = len(max(['{0}/{1} HP'.format(player.hp, misc_vars['hp_p']),
-                                  '{0}/{1} HP'.format(monster.mp, misc_vars['mp_p'])], key=len))
+        second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp),
+                                  '{0}/{1} HP'.format(monster.hp, misc_vars['hp_m'])], key=len))
 
-    third_padding = len(max(['{0}/{1} MP'.format(player.mp, misc_vars['mp_p']),
+    third_padding = len(max(['{0}/{1} MP'.format(player.mp, player.max_mp),
                              '{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])]))
 
     # Player Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
           player.name, player.hp,
-          misc_vars['hp_p'], player.mp,
-          misc_vars['mp_p'], player.lvl,
+          player.max_hp, player.mp,
+          player.max_mp, player.lvl,
           player.status_ail.title(),
           pad1=' '*(first_padding - len(player.name)),
-          pad2=' '*(second_padding - len('{0}/{1} HP'.format(player.hp, misc_vars['hp_p']))),
-          pad3=' '*(third_padding - len('{0}/{1} MP'.format(player.mp, misc_vars['mp_p'])))))
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(player.hp, player.max_hp))),
+          pad3=' '*(third_padding - len('{0}/{1} MP'.format(player.mp, player.max_mp)))))
 
     # Monster Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
@@ -860,7 +860,7 @@ def bat_stats():
           misc_vars['hp_m'], monster.mp,
           misc_vars['mp_m'], monster.lvl,
           pad1=' '*(first_padding - len(monster.name)),
-          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.mp, misc_vars['mp_p']))),
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.mp, misc_vars['hp_m']))),
           pad3=' '*(third_padding - len('{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])))))
 
     # Pet Stats

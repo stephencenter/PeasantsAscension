@@ -347,7 +347,7 @@ def rest():
     setup_vars()
     print('-'*25)
 
-    if player.hp == misc_vars['hp_p'] and player.mp == misc_vars['mp_p']:
+    if player.hp == player.max_hp and player.mp == player.max_mp:
         print('You feel fine, and decide not to rest.')
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
@@ -360,14 +360,14 @@ def rest():
     while msvcrt.kbhit():
         msvcrt.getwch()
 
-    player.hp += int(misc_vars['hp_p']/3)
-    player.mp += int(misc_vars['mp_p']/3)
+    player.hp += math.ceil(player.max_hp/3)
+    player.mp += math.ceil(player.max_mp/3)
 
     # Make sure that the player doesn't have more than the max HP/MP
-    if player.hp > misc_vars['hp_p']:
-        player.hp -= (player.hp - misc_vars['hp_p'])
-    if player.mp > misc_vars['mp_p']:
-        player.mp -= (player.mp - misc_vars['mp_p'])
+    if player.hp > player.max_hp:
+        player.hp -= (player.hp - player.max_hp)
+    if player.mp > player.max_mp:
+        player.mp -= (player.mp - player.max_mp)
 
     if isinstance(inv_system.equipped['pet'], pets.Healer):
         inv_system.equipped['pet'].mana += int(inv_system.equipped['pet'].max_m/3)

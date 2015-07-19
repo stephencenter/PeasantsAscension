@@ -367,8 +367,8 @@ model! | [ENTER]')
 
                     main.misc_vars['gp'] -= self.inn_cost
 
-                    main.player.hp = copy.copy(main.misc_vars['hp_p'])
-                    main.player.mp = copy.copy(main.misc_vars['mp_p'])
+                    main.player.hp = copy.copy(main.player.max_hp)
+                    main.player.mp = copy.copy(main.player.max_mp)
                     print('Your HP and MP have been fully restored. ')
 
                     if main.player.status_ail != 'none':

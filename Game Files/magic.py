@@ -100,8 +100,8 @@ class Healing(Spell):
                                             'paladin' else 4*main.misc_vars['wis'])
                 main.player.hp += total_heal
 
-            if main.player.hp > main.misc_vars['hp_p']:
-                main.player.hp -= (main.player.hp - main.misc_vars['hp_p'])
+            if main.player.hp > main.player.max_hp:
+                main.player.hp -= (main.player.hp - main.player.max_hp)
 
             sounds.magic_healing.play()
 

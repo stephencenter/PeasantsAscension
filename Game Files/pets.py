@@ -72,7 +72,7 @@ class Healer(Companion):
 
     def use_ability(self):
         # Heal!
-        if self.mana >= self.rm and main.player.hp == main.misc_vars['hp_p']:
+        if self.mana >= self.rm and main.player.hp == main.player.max_hp:
             print('Your pet {0} senses that you are healthy and waits patiently.'.format(self.name))
 
         elif self.mana >= self.rm:  # If the pet has enough mana...
