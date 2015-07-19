@@ -402,8 +402,8 @@ def after_battle(is_boss):  # Assess the results of the battle
                     # if you haven't been to a town yet.
                     world.back_to_coords()
 
-                    player.hp = copy.copy(player.max_hp)
-                    player.mp = copy.copy(player.max_mp)
+                    player.hp = _c(player.max_hp)
+                    player.mp = _c(player.max_mp)
 
                     player.status_ail = "none"
 
@@ -860,7 +860,7 @@ def bat_stats():
           misc_vars['hp_m'], monster.mp,
           misc_vars['mp_m'], monster.lvl,
           pad1=' '*(first_padding - len(monster.name)),
-          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.mp, misc_vars['hp_m']))),
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.hp, misc_vars['hp_m']))),
           pad3=' '*(third_padding - len('{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])))))
 
     # Pet Stats

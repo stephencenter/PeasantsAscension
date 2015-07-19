@@ -41,8 +41,7 @@ game_version = 'v0.6.6'
 player = ''
 
 # A dictionary containing miscellaneous variables made entirely of
-misc_vars = {'hp_m': '', 'mp_m': '', 'r_xp': 3,
-             'int': 1, 'wis': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1, 'gp': 20,
+misc_vars = {'hp_m': '', 'mp_m': '', 'r_xp': 3, 'gp': 20,
              'visited_towns': []}
 
 # A dictionary containing all information related to the player's position
@@ -161,6 +160,7 @@ class PlayerCharacter:  # The Player
         self.status_ail = 'none'  # Current Status Ailment
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
+        self.attributes = {'int': 1, 'wis': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1}
 
     def player_damage(self):  # The formula for the player dealing damage
         if inv_system.equipped['weapon'].type_ != 'ranged':
@@ -301,7 +301,7 @@ Input [#]: """.format(self.name))
                 magic.new_spells()
 
                 if self.class_ == 'warrior':
-                    # Total gain: 20 pts.
+                    # Total gain: 21 pts.
                     self.p_dfns += 4
                     self.attk += 4
                     self.dfns += 4
@@ -309,11 +309,11 @@ Input [#]: """.format(self.name))
                     self.m_dfns += 1
                     self.spd += 1
                     self.evad += 1
-                    self.hp += 3
+                    self.hp += 4
                     self.mp += 1
 
                 elif self.class_ == 'mage':
-                    # Total gain: 20 pts.
+                    # Total gain: 21 pts.
                     self.p_dfns += 1
                     self.attk += 1
                     self.dfns += 1
@@ -321,11 +321,11 @@ Input [#]: """.format(self.name))
                     self.m_dfns += 4
                     self.spd += 2
                     self.evad += 2
-                    self.hp += 1
+                    self.hp += 2
                     self.mp += 4
 
                 elif self.class_ == 'assassin':
-                    # Total gain: 20 pts.
+                    # Total gain: 21 pts.
                     self.p_dfns += 2
                     self.attk += 4
                     self.dfns += 2
@@ -333,11 +333,11 @@ Input [#]: """.format(self.name))
                     self.m_dfns += 1
                     self.spd += 5
                     self.evad += 2
-                    self.hp += 1
+                    self.hp += 2
                     self.mp += 1
 
                 elif self.class_ == 'ranger':
-                    # Total gain: 20 pts.
+                    # Total gain: 21 pts.
                     self.p_attk += 4
                     self.p_dfns += 2
                     self.dfns += 1
@@ -345,11 +345,11 @@ Input [#]: """.format(self.name))
                     self.m_dfns += 2
                     self.spd += 3
                     self.evad += 4
-                    self.hp += 1
+                    self.hp += 2
                     self.mp += 2
 
                 elif self.class_ == 'monk':
-                    # Total gain: 20 pts.
+                    # Total gain: 21 pts.
                     self.p_dfns += 1
                     self.attk += 4
                     self.dfns += 1
@@ -357,11 +357,11 @@ Input [#]: """.format(self.name))
                     self.m_dfns += 2
                     self.spd += 3
                     self.evad += 3
-                    self.hp += 2
+                    self.hp += 3
                     self.mp += 2
 
                 elif self.class_ == 'paladin':
-                    # Total gain: 20 pts.
+                    # Total gain: 21 pts.
                     self.p_dfns += 3
                     self.attk += 3
                     self.dfns += 3
@@ -369,7 +369,7 @@ Input [#]: """.format(self.name))
                     self.m_dfns += 3
                     self.spd += 1
                     self.evad += 1
-                    self.hp += 2
+                    self.hp += 3
                     self.mp += 2
 
                 self.exp -= misc_vars['r_xp']
@@ -440,7 +440,7 @@ Input letter: """)
                     vis_skill = 'Fortune'
 
                 print('-'*25)
-                print('Current {0}: {1}'.format(vis_skill, misc_vars[act_skill]))
+                print('Current {0}: {1}'.format(vis_skill, self.attributes[act_skill]))
                 while True:
                     y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
 
@@ -460,36 +460,36 @@ Input letter: """)
                         self.m_dfns += random.randint(0, 1)
                         self.m_attk += random.randint(0, 1)
                         self.mp += random.randint(1, 2)
-                        misc_vars['int'] += 1
+                        self.attributes['int'] += 1
 
                     elif skill.startswith('w'):
                         self.mp += 1
-                        misc_vars['wis'] += 1
+                        self.attributes['wis'] += 1
 
                     elif skill.startswith('s'):
                         self.attk += random.randint(0, 1)
                         self.p_dfns += random.randint(0, 1)
                         self.dfns += random.randint(0, 1)
-                        misc_vars['str'] += 1
+                        self.attributes['str'] += 1
 
                     elif skill.startswith('c'):
                         self.max_hp += 1
                         self.dfns += random.randint(0, 1)
                         self.p_dfns += random.randint(0, 1)
                         self.m_dfns += random.randint(0, 1)
-                        misc_vars['con'] += 1
+                        self.attributes['con'] += 1
 
                     elif skill.startswith('d'):
                         self.spd += random.randint(0, 1)
                         self.p_attk += random.randint(0, 1)
                         self.evad += random.randint(0, 1)
-                        misc_vars['dex'] += 1
+                        self.attributes['dex'] += 1
 
                     elif skill.startswith('p'):
                         self.p_attk += random.randint(0, 1)
                         self.p_dfns += random.randint(0, 1)
                         self.evad += random.randint(0, 1)
-                        misc_vars['per'] += 1
+                        self.attributes['per'] += 1
 
                     elif skill.startswith('f'):
                         if self.ext_ski == 10:
@@ -501,7 +501,7 @@ Input letter: """)
                             self.ext_gol += random.randint(0, 1)
                             self.ext_exp += random.randint(0, 1)
 
-                        misc_vars['for'] += 1
+                        self.attributes['for'] += 1
 
                     else:
                         continue
@@ -542,8 +542,10 @@ Armor:
                         self.attk, self.m_attk, self.p_attk,
                         self.dfns, self.m_dfns, self.p_dfns,
                         self.spd, self.evad,
-                        misc_vars['int'], misc_vars['wis'], misc_vars['str'], misc_vars['con'],
-                        misc_vars['dex'], misc_vars['per'], misc_vars['for'],
+                        self.attributes['int'], self.attributes['wis'],
+                        self.attributes['str'], self.attributes['con'],
+                        self.attributes['dex'], self.attributes['per'],
+                        self.attributes['for'],
                         self.exp, misc_vars['r_xp'], misc_vars['gp'],
                         inv_system.equipped['weapon'], inv_system.equipped['access'],
                         inv_system.equipped['head'], inv_system.equipped['body'],
@@ -905,18 +907,15 @@ def check_save():  # Check for save files and load the game if they're found
                 magic.deserialize_sb(sav_spellbook)
 
                 # Make the save file compatible with v0.6.2
-                if 'status_ail' not in player.__dict__ or 'per' not in misc_vars:
+                if 'status_ail' not in player.__dict__:
                     print('Attemping to make save file compatible with v0.6.2...')
                     if 'status_ail' not in player.__dict__:
                         player.status_ail = 'none'
-                    if 'per' not in misc_vars:
-                        misc_vars['per'] = 1
                     print('Attempt successful!')
 
                 # Make the save file compatible with v0.6.4
                 if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped \
-                        or 'pet' not in inv_system.equipped \
-                        or('luc' in misc_vars and 'for' not in misc_vars):
+                        or 'pet' not in inv_system.equipped:
 
                     print('Attempting to make save file compatible with v0.6.4...')
                     if 'access' not in inv_system.inventory:
@@ -928,15 +927,10 @@ def check_save():  # Check for save files and load the game if they're found
                     if 'pet' not in inv_system.equipped:
                         inv_system.equipped['pet'] = '(None)'
 
-                    if 'luc' in misc_vars and 'for' not in misc_vars:
-                        misc_vars['for'] = misc_vars['luc']
-                        del misc_vars['luc']
-
                     print('Attempt successful!')
 
                 # Make the save file compatible with v0.6.6
-                if 'is_aethus' not in position or 'visited_towns' not in misc_vars \
-                        or 'wis' not in misc_vars:
+                if 'is_aethus' not in position or 'visited_towns' not in misc_vars:
                     print('Attempting to make save file compatible with v0.6.6...')
 
                     if 'is_aethus' not in position:
@@ -944,9 +938,6 @@ def check_save():  # Check for save files and load the game if they're found
 
                     if 'visited_towns' not in misc_vars:
                         misc_vars['visited_towns'] = []
-
-                    if 'wis' not in misc_vars:
-                        misc_vars['wis'] = 1
 
                     print('Attempt successful!')
 

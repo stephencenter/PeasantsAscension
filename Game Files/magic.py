@@ -96,8 +96,8 @@ class Healing(Spell):
                 main.player.hp = math.ceil(main.player.hp)
 
             else:
-                total_heal = self.health + (2*main.misc_vars['wis'] if main.player.class_ !=
-                                            'paladin' else 4*main.misc_vars['wis'])
+                total_heal = self.health + (2*main.player.attributes['wis'] if main.player.class_ !=
+                                            'paladin' else 4*main.player.attributes['wis'])
                 main.player.hp += total_heal
 
             if main.player.hp > main.player.max_hp:

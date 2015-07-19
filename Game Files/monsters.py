@@ -660,6 +660,8 @@ def magic_ai(dodge):
 
         print('The {0} casts a healing spell!'.format(monster.name))
 
+        monster.mp -= 5
+
     elif monster.mp >= 3:
         # Magic Attack
         sounds.magic_attack.play()
@@ -685,7 +687,7 @@ def magic_ai(dodge):
             sounds.attack_miss.play()
             print("The spell misses you by a landslide!")
 
-        monster.mp -= 2
+        monster.mp -= 3
 
     else:
         # Non-magic Attack
