@@ -107,6 +107,10 @@ sav_misc_vars = 'Save Files/{CHARACTER_NAME}/misc_vars.json'  # Misc Variables
 
 sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'  # Player Stats
 
+sav_solou_stats = 'Save Files/{CHARACTER_NAME}/solou_stats.json'  # Solou's Stats
+
+sav_xoann_stats = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'  # Xoann's Stats
+
 sav_position = 'Save Files/{CHARACTER_NAME}/position.json'  # Position
 
 sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'  # Quests & Dialogue
@@ -183,7 +187,7 @@ class PlayableCharacter:
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
-                print('You deal half damage because of your weakened state!')
+                print('{0} deals half damage because of their weakened state!'.format(self.name))
 
         else:
             dam_dealt = math.ceil(
@@ -194,7 +198,7 @@ class PlayableCharacter:
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
-                print('Your poor vision reduces your attack damage by half!')
+                print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
 
         # Increase or decrease the damage depending on the player/monster's elements
         dam_dealt = magic.eval_element(
@@ -306,12 +310,16 @@ Input [#]: """.format(self.name))
             while self.exp >= self.req_xp:
                 sounds.item_pickup.play()
                 self.lvl += 1
-                print("You've advanced to level {0}!".format(self.lvl))
+                print("{0} has advanced to level {1}!".format(self.name, self.lvl))
 
                 if self.lvl == 5:
                     print()
-                    print('You now understand the true potential of your class!')
-                    print('You can activate this potential in the form of a "class ability"')
+                    print('{0} now understands the true potential of their class!'.format(
+                        self.name
+                    ))
+                    print('{0} can activate this potential in the form of a "class ability"'.format(
+                        self.name
+                    ))
                     print('once per battle. Use it wisely!')
                     print()
                     input('Press enter/return ')
@@ -410,13 +418,15 @@ Input [#]: """.format(self.name))
         global misc_vars
 
         if extra_points:
-            print('Your great fortune has granted you {0} additional skill points!'.format(
-                extra_points))
+            print("{0}'s great fortune has granted them {1} additional skill points!".format(
+                self.name, extra_points
+            ))
             rem_points += extra_points
 
         while rem_points > 0:
-            print('You have {0} skill point{1} left to spend.'.format(
-                rem_points, 's' if rem_points > 1 else ''))
+            print('{0} has {1} skill point{2} left to spend.'.format(
+                self.name, rem_points, 's' if rem_points > 1 else ''
+            ))
 
             skill = input("""Choose a skill to advance:
     [I]ntelligence - Use powerful magic with higher magic stats and MP!
@@ -462,7 +472,7 @@ Input letter: """)
                 print('-'*25)
                 print('Current {0}: {1}'.format(vis_skill, self.attributes[act_skill]))
                 while True:
-                    y_n = input("Increase your {0}? | Yes or No: ".format(vis_skill))
+                    y_n = input("Increase {0}'s {1}? | Yes or No: ".format(self.name, vis_skill))
 
                     y_n = y_n.lower()
 
@@ -527,7 +537,7 @@ Input letter: """)
                         continue
 
                     print('-'*25)
-                    print('Your {0} has increased!'.format(vis_skill))
+                    print("{0}'s {1} has increased!".format(self.name, vis_skill))
 
                     rem_points -= 1
 
@@ -535,7 +545,7 @@ Input letter: """)
 
                     break
         print()
-        print('You are out of skill points.')
+        print('{0} is out of skill points.'.format(self.name))
 
     def player_info(self):
         print("""\
@@ -554,30 +564,20 @@ Accessory: {27}
 Armor:
   Head: {28}
   Body: {29}
-  Legs: {30}
-
--Current Pet-""".format(self.name,
-                        self.lvl, self.class_.title(), self.element,
-                        self.hp, self.max_hp, self.mp, self.max_mp,
-                        self.attk, self.m_attk, self.p_attk,
-                        self.dfns, self.m_dfns, self.p_dfns,
-                        self.spd, self.evad,
-                        self.attributes['int'], self.attributes['wis'],
-                        self.attributes['str'], self.attributes['con'],
-                        self.attributes['dex'], self.attributes['per'],
-                        self.attributes['for'],
-                        self.exp, self.req_xp, misc_vars['gp'],
-                        inv_system.equipped['weapon'], inv_system.equipped['access'],
-                        inv_system.equipped['head'], inv_system.equipped['body'],
-                        inv_system.equipped['legs']))
-
-        if inv_system.equipped['pet'] != '(None)':
-            print('  Name: {0}'.format(inv_system.equipped['pet']))
-            print('  Type: {0}'.format(inv_system.equipped['pet'].pet_type.title()))
-            print('  Level: {0}'.format(inv_system.equipped['pet'].level))
-
-        else:
-            print('  (None)')
+  Legs: {30}""".format(self.name,
+                       self.lvl, self.class_.title(), self.element,
+                       self.hp, self.max_hp, self.mp, self.max_mp,
+                       self.attk, self.m_attk, self.p_attk,
+                       self.dfns, self.m_dfns, self.p_dfns,
+                       self.spd, self.evad,
+                       self.attributes['int'], self.attributes['wis'],
+                       self.attributes['str'], self.attributes['con'],
+                       self.attributes['dex'], self.attributes['per'],
+                       self.attributes['for'],
+                       self.exp, self.req_xp, misc_vars['gp'],
+                       inv_system.equipped['weapon'], inv_system.equipped['access'],
+                       inv_system.equipped['head'], inv_system.equipped['body'],
+                       inv_system.equipped['legs']))
 
         print('-'*25)
         input('Press Enter/Return ')
@@ -589,47 +589,51 @@ Armor:
             if self.move != '2':
                 print("\n-{0}'s Turn-".format(self.name))
 
+            # Basic Attack
             if self.move == '1' or self.move == 'q':
                 print(ascii_art.player_art[self.class_.title()] %
                       "{0} is making a move!\n".format(self.name))
 
                 if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
                     sounds.sword_slash.play()
-                    print('You begin to fiercely attack the {0} using your {1}...'.format(
-                        monster.name, str(inv_system.equipped['weapon'])))
+                    print('{0} begin to fiercely attack the {1} using their {2}...'.format(
+                        self.name, monster.name, str(inv_system.equipped['weapon'])))
 
                 # Ranged weapons aren't swung, so play a different sound effect
                 else:
                     sounds.aim_weapon.play()
-                    print('You aim carefully at the {0} using your {1}...'.format(
-                        monster.name, str(inv_system.equipped['weapon'])))
+                    print('{0} aims carefully at the {1} using their {2}...'.format(
+                        self.name, monster.name, str(inv_system.equipped['weapon'])))
 
                 time.sleep(0.75)
 
                 while msvcrt.kbhit():
                     msvcrt.getwch()
 
+                # Check for attack accuracy
                 if self.dodge in range(monster.evad, 512):
                     dam_dealt = self.player_damage()
                     monster.hp -= dam_dealt
                     sounds.enemy_hit.play()
-                    print('Your attack connects with the {0}, dealing {1} damage!'.format(
-                        monster.name, dam_dealt))
+                    print("{0}'s attack connects with the {1}, dealing {2} damage!".format(
+                        self.name, monster.name, dam_dealt))
 
                 else:
                     sounds.attack_miss.play()
-                    print('The {0} dodges your attack with ease!'.format(monster.name))
+                    print("The {0} dodges {1}'s attack with ease!".format(monster.name, self.name))
 
+            # Magic Attack
             elif self.move == '2':
                 if not magic.pick_cat(self.dodge):
                     return False
 
+            # Class Ability
             elif self.move == '3':
                 if not self.class_ability():
                     return False
 
-            elif self.move == '4':  # Use the Battle Inventory
-
+            # Battle Inventory
+            elif self.move == '4':
                 if battle.battle_inventory() and monster.hp > 0:
                     input('\nPress Enter/Return ')
                     monster.battle('', '')
@@ -639,6 +643,7 @@ Armor:
 
                 continue
 
+            # RUN AWAY!!!
             elif self.move == '5':
                 if battle.run_away():
                     # Attempt to run.
@@ -661,11 +666,6 @@ Armor:
             else:
                 return False
 
-            if inv_system.equipped['pet'] != '(None)' and monster.hp > 0:
-                input('\nPress Enter/Return')
-                print("\n-Pet Turn-")
-                inv_system.equipped['pet'].use_ability()
-
             # Check to see if the PCU is poisoned
             if self.status_ail == 'poisoned' and monster.hp > 0:
                 if random.randint(0, 3):
@@ -676,8 +676,8 @@ Armor:
 
                     sounds.poison_damage.play()
 
-                    poison_damage = int(math.ceil(self.max_hp/10))
-                    print('You took poison damage! (-{0} HP)'.format(poison_damage))
+                    poison_damage = math.ceil(self.max_hp/10)
+                    print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
                     self.hp -= poison_damage
 
                     if self.hp <= 0:
@@ -690,7 +690,7 @@ Armor:
                         msvcrt.getwch()
 
                     sounds.buff_spell.play()
-                    input('You start to feel better! | Press enter/return ')
+                    input('{0} starts to feel better! | Press enter/return '.format(self.name))
                     self.status_ail = 'none'
 
             # Check to see if the PCU is silenced
@@ -704,7 +704,8 @@ Armor:
 
                     sounds.buff_spell.play()
 
-                    input('Your afflictions have worn off! | Press enter/return ')
+                    input("{0}'s afflictions have worn off! | Press enter/return ".format(
+                        self.name))
                     self.status_ail = 'none'
 
             if is_boss and monster.multiphase and monster.hp <= 0:
@@ -737,8 +738,8 @@ Pick {0}'s Move:
                 if move == '3':
                     if self.lvl < 5:
                         # You must be at least level 5 to use your class ability
-                        print("You have not yet realized your class's inner potential \
-(must be level 5 to use)\n")
+                        print("{0} has not yet realized their class's inner potential \
+(must be level 5 to use)\n".format(self.name))
                         input('Press enter/return ')
 
                         print('-'*25)
@@ -754,7 +755,7 @@ Pick {0}'s Move:
 
                     if battle.temp_stats[self.name]['ability_used']:
                         # You can only use your ability once per battle.
-                        print('You feel drained, and are unable to call upon your class\
+                        print('{0} feels drained, and are unable to call upon their class\
 ability again.\n')
                         input('Press enter/return ')
 
@@ -784,7 +785,9 @@ Pick {0}'s Move:
         print(ascii_art.player_art[self.class_.title()] %
               "{0} is making a move!\n".format(self.name))
 
-        print("You use the knowledge you've gained to unleash your class ability!")
+        print("{0} uses the knowledge they've gained to unleash their class ability!".format(
+            self.name
+        ))
 
         # Ranger Ability: Scout
         if self.class_ == 'ranger':
@@ -796,7 +799,9 @@ Pick {0}'s Move:
             print('ABILITY: SCOUT')
             print('-'*25)
 
-            print('As a Ranger, you identify your enemy and focus, increasing your pierce attack!')
+            print('As a Ranger, {0} identifies their enemy and focuses\
+, increasing their pierce attack!'.format(self.name))
+
             input("Press Enter/Return to view your enemy's stats ")
 
             print('-'*25)
@@ -925,9 +930,11 @@ Pick {0}'s Move:
             print('ABILITY: CHAKRA-SMASH')
             print('-'*25)
 
-            print('As a monk, you meditate and focus your inner chi.')
-            print('After a brief moment of confusion from the enemy, you strike, dealing')
-            print('an immense amount of damage in a single, powerful strike! As a result, your')
+            print('As a monk, {0} meditates and focus their inner chi.'.format(self.name))
+            print('After a brief moment of confusion from the enemy, {0} strikes, dealing'.format(
+                self.name))
+            print("an immense amount of damage in a single, powerful strike! As a result, {0}'s\
+".format(self.name))
             print('defenses have been lowered by 25% for three turns.')
             print()
 
@@ -1059,7 +1066,8 @@ def format_save_names():
                      'sav_misc_boss_info', 'sav_misc_vars',
                      'sav_play_stats', 'sav_position',
                      'sav_quests_dia', 'sav_spellbook',
-                     'sav_prevtowns'], key=str.lower):
+                     'sav_prevtowns', 'sav_solou_stats',
+                     'sav_xoann_stats'], key=str.lower):
 
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
@@ -1198,7 +1206,8 @@ def check_save():  # Check for save files and load the game if they're found
         sav_misc_boss_info, sav_misc_vars,
         sav_play_stats, sav_position,
         sav_quests_dia, sav_spellbook,
-        sav_prevtowns
+        sav_prevtowns, sav_solou_stats,
+        sav_xoann_stats
     ]
 
     for directory in dirs:
@@ -1306,49 +1315,14 @@ def check_save():  # Check for save files and load the game if they're found
                 with open(sav_position, encoding='utf-8') as f:
                     position = json.load(f)
 
-                # Call functions to serialice more advanced things
+                # Call functions to serialize more advanced things
                 items.deserialize_gems(sav_acquired_gems)
                 inv_system.deserialize_equip(sav_equip_items)
                 inv_system.deserialize_inv(sav_inventory)
                 bosses.deserialize_bosses(sav_misc_boss_info)
-                deserialize_player(sav_play_stats)
+                deserialize_player(sav_play_stats, sav_solou_stats, sav_xoann_stats)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
-
-                # Make the save file compatible with v0.6.2
-                if 'status_ail' not in player.__dict__:
-                    print('Attemping to make save file compatible with v0.6.2...')
-                    if 'status_ail' not in player.__dict__:
-                        player.status_ail = 'none'
-                    print('Attempt successful!')
-
-                # Make the save file compatible with v0.6.4
-                if 'access' not in inv_system.inventory or 'access' not in inv_system.equipped \
-                        or 'pet' not in inv_system.equipped:
-
-                    print('Attempting to make save file compatible with v0.6.4...')
-                    if 'access' not in inv_system.inventory:
-                        inv_system.inventory['access'] = []
-
-                    if 'access' not in inv_system.equipped:
-                        inv_system.equipped['access'] = '(None)'
-
-                    if 'pet' not in inv_system.equipped:
-                        inv_system.equipped['pet'] = '(None)'
-
-                    print('Attempt successful!')
-
-                # Make the save file compatible with v0.6.6
-                if 'is_aethus' not in position or 'visited_towns' not in misc_vars:
-                    print('Attempting to make save file compatible with v0.6.6...')
-
-                    if 'is_aethus' not in position:
-                        position['is_aethus'] = False
-
-                    if 'visited_towns' not in misc_vars:
-                        misc_vars['visited_towns'] = []
-
-                    print('Attempt successful!')
 
                 print('Load successful.')
 
@@ -1399,7 +1373,7 @@ def save_game():
                 inv_system.serialize_equip(sav_equip_items)
                 inv_system.serialize_inv(sav_inventory)
                 bosses.serialize_bosses(sav_misc_boss_info)
-                serialize_player(sav_play_stats)
+                serialize_player(sav_play_stats, sav_solou_stats, sav_xoann_stats)
                 npcs.serialize_dialogue(sav_quests_dia)
                 magic.serialize_sb(sav_spellbook)
 
@@ -1420,23 +1394,37 @@ def save_game():
             return
 
 
-def serialize_player(path):
+def serialize_player(path, s_path, x_path):
     # Save the "PlayableCharacter" object as a JSON file
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
+    with open(s_path, mode='w', encoding='utf-8') as f:
+        json.dump(solou.__dict__, f, indent=4, separators=(', ', ': '))
+    with open(x_path, mode='w', encoding='utf-8') as f:
+        json.dump(xoann.__dict__, f, indent=4, separators=(', ', ': '))
 
 
-def deserialize_player(path):
+def deserialize_player(path, s_path, x_path):
     # Load the JSON file and translate
     # it into a "PlayableCharacter" object
     global player
+    global solou
+    global xoann
 
     player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
 
     with open(path, encoding='utf-8') as f:
         player_dict = json.load(f)
+    with open(s_path, encoding='utf-8') as f:
+        solou_dict = json.load(f)
+    with open(x_path, encoding='utf-8') as f:
+        xoann_dict = json.load(f)
 
     player.__dict__ = player_dict
+    solou.__dict__ = solou_dict
+    xoann.__dict__ = xoann_dict
 
 
 # This is the logo that's displayed on the titlescreen

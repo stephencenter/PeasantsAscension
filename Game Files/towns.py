@@ -91,7 +91,7 @@ class Town:
 
                 elif choice == '2':
                     print('-'*25)
-                    if self.gen_store or self.inn or self.pet_shop or self.wtrmelon_store:
+                    if self.gen_store or self.inn or self.wtrmelon_store:
                         self.inside_town()
 
                     else:
@@ -157,44 +157,23 @@ class Town:
     def inside_town(self):
         gen_words = ['g']
         inn_words = ['i']
-        pet_words = ['p']
         watermelon_words = ['w']
         buildings = []
         while True:
             spam = False
             # (if anyone knows how to simplify this, please tell me!)
-            if self.inn and not self.gen_store and not self.pet_shop:
+            if self.inn and not self.gen_store:
                 print('There is an [I]nn in this town.')
                 buildings = inn_words
 
-            elif self.gen_store and not self.inn and not self.pet_shop:
+            elif self.gen_store and not self.inn:
                 print('There is a [G]eneral Store in this town.')
                 buildings = gen_words
 
-            elif self.pet_shop and not self.inn and not self.gen_store:
-                print('There is a [P]et Shop in this town.')
-                buildings = pet_words
-
-            elif self.pet_shop and self.inn and not self.gen_store:
-                print('There is an [I]nn and a [P]et Shop in this town.')
-                buildings = inn_words[:]
-                buildings.extend(pet_words)
-
-            elif self.pet_shop and self.gen_store and not self.inn:
-                print('There is a [G]eneral Store and a [P]et Shop in this town.')
-                buildings = gen_words[:]
-                buildings.extend(pet_words)
-
-            elif self.gen_store and self.inn and not self.pet_shop:
+            elif self.gen_store and self.inn:
                 print('There is a [G]eneral Store and an [I]nn in this town.')
                 buildings = gen_words[:]
                 buildings.extend(inn_words)
-
-            elif self.gen_store and self.inn and self.pet_shop:
-                print('There is an [I]nn, a [P]et Shop, and a [G]eneral Store in this town.')
-                buildings = inn_words[:]
-                buildings.extend(gen_words)
-                buildings.extend(pet_words)
 
             elif self.wtrmelon_store:
                 print('There is a... [W]atermelon store? Why is there a store \
