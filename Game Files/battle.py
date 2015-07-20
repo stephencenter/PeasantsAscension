@@ -25,7 +25,6 @@ import pygame
 
 import inv_system
 import monsters
-import magic
 import world
 import bosses
 import sounds
@@ -172,9 +171,13 @@ def battle_system(is_boss=False, ambush=False):
                 and monster.hp <= 0)):
 
         for character in [x for x in [solou, xoann, player] if x.enabled]:
-            if character.hp <= 0.20*character.max_hp:
+            if 0 < character.hp <= 0.20*character.max_hp:
                 print("Warning: {0}'s HP is low, heal as soon as possible!".format(character.name))
                 sounds.health_low.play()
+
+        for character in [x for x in [solou, xoann, player] if x.enabled]:
+            if character.hp <= 0:
+                character.status_ail = 'dead'
 
         bat_stats()
 
@@ -187,7 +190,8 @@ def battle_system(is_boss=False, ambush=False):
             monk_tc += 1
 
         # There is a 1/3 chance for the player to wake up each turn if they are asleep
-        for character in [x for x in [ player, solou, xoann] if x.enabled]:
+        for character in [x for x in [ player, solou, xoann]
+                          if x.enabled and x.status_ail != 'dead']:
             if character.status_ail == 'asleep':
                 # If dodge is in a certain range, the attack will miss
                 character.dodge = random.randint(0, 512)
@@ -216,8 +220,13 @@ def battle_system(is_boss=False, ambush=False):
 
                 character.player_choice()
 
-        for unit in sorted([monster, player, solou, xoann], key=lambda x: x.spd):
-            unit.battle_turn(is_boss)
+        for unit in sorted([monster] + [c for c in [player, solou, xoann] if c.enabled],
+                           key=lambda x: x.spd):
+            if isinstance(unit, main.PlayableCharacter) and unit.status_ail == 'dead':
+                continue
+
+            if unit.battle_turn(is_boss) == 'Ran':
+                return
 
             if (monster.hp > 0) and any([player.hp > 0, solou.hp > 0, xoann.hp > 0]):
                 input('\nPress enter/return ')
@@ -240,12 +249,12 @@ def after_battle(is_boss):  # Assess the results of the battle
 
     while True:
         # If the monster wins...
-        if monster.hp > 0 >= player.hp:
+        if monster.hp > 0 >= player.hp and 0 >= solou.hp  and 0 >= xoann.hp:
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
 
-            print('Despite your best efforts, the {0} has bested you. You are dead.'.format(
+            print('Despite your best efforts, the {0} has bested your party. You are dead.'.format(
                 monster.name))
             print('-'*25)
 
@@ -306,7 +315,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 if gold <= 0:
                     gold = random.randint(1, 2)
 
-                experience = math.ceil((monster.lvl*1.5 + player.ext_exp)/1.25)
+                experience = math.ceil((monster.lvl**1.5 + player.ext_exp)/1.5)
 
                 if experience <= 0:
                     experience = random.randint(1, 2)
@@ -325,32 +334,33 @@ def after_battle(is_boss):  # Assess the results of the battle
                 # Check to see if the boss does anything special at death
                 monster.upon_defeating()
 
-            # Give the Player their GP
-            main.misc_vars['gp'] += gold + player.ext_gol
-            print("You've gained {0} GP!".format(gold), end='')
-            sounds.item_pickup.play()
-            input(' | Press Enter/Return ')
-
-            # Give the Player their XP
-            player.exp += experience
-            print("You've gained {0} XP!".format(experience), end='')
-            sounds.item_pickup.play()
-            input(' | Press Enter/Return ')
-
             # If the monster has items, give them to the player
             if monster.items:
                 cat = monster.items.cat
                 inv_system.inventory[cat].append(_c(monster.items))
 
-                print('The {0} dropped a {1}! You decide to take {2}.'.format(
+                print('The {0} dropped a {1}! Your party decides to take {2}.'.format(
                       monster.name, str(monster.items),
                       'them' if str(monster.items).endswith('s') else 'it'), end='')  # Grammar!!
 
                 sounds.item_pickup.play()
                 input(' | Press Enter/Return ')
 
-            # Check to see if the player gained any levels
-            player.level_up()
+            # Give the Player their GP
+            main.misc_vars['gp'] += gold + player.ext_gol
+            print("Your party has gained {0} GP!".format(gold), end='')
+            sounds.item_pickup.play()
+            input(' | Press Enter/Return ')
+
+            for character in [x for x in [solou, xoann, player] if x.enabled]:
+                # Give the Player their XP
+                character.exp += experience
+                print("{0} gained {1} XP!".format(character.name, experience), end='')
+                sounds.item_pickup.play()
+                input(' | Press Enter/Return ')
+
+                # Check to see if the player gained any levels
+                character.level_up()
 
             pygame.mixer.music.load(main.position['reg_music'])
             pygame.mixer.music.play(-1)
@@ -359,12 +369,11 @@ def after_battle(is_boss):  # Assess the results of the battle
 
             return
 
-        # If the battle is a tie, the player wins
-        elif player.hp <= 0 and monster.hp <= 0:
-            player.hp = 1
-
 
 def run_away():
+    print(ascii_art.player_art[self.class_.title()] %
+          "{0} is making a move!\n".format(self.name))
+    print()
     print('You start to run away from the {0}...'.format(monster.name))
 
     sounds.foot_steps.play()

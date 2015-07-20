@@ -47,7 +47,6 @@ else:
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
-player = ''
 monster = ''
 position = ''
 misc_vars = ''
@@ -147,7 +146,7 @@ class Monster:
     def monst_attk(self, mode, target):
         sounds.sword_slash.play()
         if isinstance(self, bosses.Boss):
-            print('The {0} is getting ready to attack {1}!'.format(self.name, self.target))
+            print('The {0} is getting ready to attack {1}!'.format(self.name, target.name))
 
         else:
             print('The {0} {1} {2}'.format(self.name, self.attk_msg, target.name))
@@ -163,134 +162,18 @@ class Monster:
             target.hp -= damage
             sounds.enemy_hit.play()
             if mode == 'pierce':
-                print('The {0} hits you with a ranged attack, dealing {1} damage!'.format(
-                    self.name, damage))
+                print('The {0} hits {1} with a ranged attack, dealing {2} damage!'.format(
+                    self.name, target.name, 2damage))
             else:
-                print('The {0} hits you with a melee attack, dealing {1} damage!'.format(
-                    self.name, damage))
+                print('The {0} hits {1} with a melee attack, dealing {2} damage!'.format(
+                    self.name, target.name, damage))
 
         else:
             sounds.attack_miss.play()
-            print("You narrowly avoid the {0}'s attack!".format(self.name))
-
-    def battle_turn(self, is_boss):
-        # Default AI used solely by bosses without custom AI
-        global is_defending
-
-        target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
-
-        if is_defending:
-            is_defending = False
-
-            monster.dfns /= 1.1
-            monster.m_dfns /= 1.1
-            monster.p_dfns /= 1.1
-            monster.dfns = math.floor(monster.dfns)
-            monster.m_dfns = math.floor(monster.m_dfns)
-            monster.p_dfns = math.floor(monster.p_dfns)
-
-        battle.turn_counter += 1
-
-        possible_p_dam = math.ceil(self.p_attk - battle.temp_stats[target.name]['p_dfns']/2)
-        possible_m_dam = math.ceil(self.m_attk - battle.temp_stats[target.name]['m_dfns']/2)
-        possible_a_dam = math.ceil(self.attk - battle.temp_stats[target.name]['dfns']/2)
-
-        most_effective = max([possible_p_dam, possible_m_dam, possible_a_dam])
-
-        if target.spd >= monster.spd:
-            print('-'*25)
-
-        print('\n-Enemy Turn-')
-        print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(
-            self.monster_name
-        ))
-
-        # Only do this on turns that are a multiple of 4 (or turn 1)
-        if (not battle.turn_counter % 4 or
-            battle.turn_counter == 1) \
-                and random.randint(0, 1) and self.mp > 2:
-
-            self.give_status()
-
-        elif not random.randint(0, 4):
-            # Defend
-            sounds.buff_spell.play()
-
-            monster.dfns *= 1.1
-            monster.m_dfns *= 1.1
-            monster.p_dfns *= 1.1
-            monster.dfns = math.ceil(monster.dfns)
-            monster.m_dfns = math.ceil(monster.m_dfns)
-            monster.p_dfns = math.ceil(monster.p_dfns)
-
-            print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(
-                self.name))
-
-            is_defending = True
-
-        elif self.hp <= math.ceil(self.max_hp/4) and self.mp >= 5 and random.randint(0, 1):
-            # Magic heal
-            sounds.magic_healing.play()
-
-            if 20 < self.hp*0.2:
-                self.hp += self.hp*0.2
-            else:
-                self.hp += 20
-
-            if self.hp > self.max_hp:
-                self.hp = self.max_hp
-
-            print('The {0} casts a healing spell!'.format(self.name))
-
-        elif most_effective in [possible_p_dam, possible_a_dam]:
-            # Non-magic Attack
-            if most_effective == possible_p_dam:
-                self.monst_attk(self.dodge, 'pierce', target)
-
-            else:
-                self.monst_attk(self.dodge, 'melee', target)
-
-        elif self.m_attk > self.attk and self.mp >= 2:
-            # Magic Attack
-            sounds.magic_attack.play()
-
-            print('The {0} is attempting to cast a strange spell on {1}...'.format(
-                self.name, target.name))
-            time.sleep(0.75)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
-
-            if self.dodge in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = magic.eval_element(
-                    p_elem=target.element,
-                    m_elem=target.element, m_dmg=self.monst_magic(target))[1]
-
-                target.hp -= dam_dealt
-                sounds.enemy_hit.play()
-
-                print("The {0}'s spell succeeds, and deals {1} damage to {2}!".format(
-                    self.name, dam_dealt, target.name))
-
-            else:
-                sounds.attack_miss.play()
-                print("The spell misses {0} by a landslide!".format(target.name))
-
-            self.mp -= 2
-
-        else:
-            if most_effective == possible_p_dam:
-                self.monst_attk('pierce', target)
-            else:
-                self.monst_attk('melee', target)
-
-        self.check_poison()
-
-        if isinstance(self, bosses.Boss) and self.multiphase and self.hp <= 0:
-            self.battle_turn(is_boss)
+            print("{0} narrowly avoids the {1}'s attack!".format(target.name, self.name))
 
     def give_status(self, target):
-        # Attempt to give the player a status ailment
+        # Attempt to give the target a status ailment
 
         if random.randint(1, 6) < 4:
             if target.class_ == 'warrior':
@@ -322,18 +205,19 @@ class Monster:
                                                 'blinded', 'paralyzed']
                                     if x != target.status_ail])
 
-        print('The {0} is attempting to make you {1}...'.format(self.name, status))
+        print('The {0} is attempting to make {1} {2}...'.format(self.name, target.name, status))
         time.sleep(0.75)
 
         while msvcrt.kbhit():
             msvcrt.getwch()
 
         if random.randint(0, 1):
-            print('You are now {0}!'.format(status))
-            battle.player.status_ail = status
+            print('{0} is now {1}!'.format(target.name, status))
+            target.status_ail = status
 
         else:
-            print('The {0} failed to make you {1}!'.format(monster.monster_name, status))
+            print('The {0} failed to make {1} {2}!'.format(
+                monster.monster_name, target.name, status))
 
         self.mp -= 2
 

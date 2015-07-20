@@ -141,7 +141,7 @@ class PlayableCharacter:
                  p_dfns, spd, evad, class_='', enabled=True):
         self.name = name        # Name
         self.hp = hp            # Health
-        self.mp = mp            #    Mana Points
+        self.mp = mp            # Mana Points
         self.attk = attk        # Attack
         self.dfns = dfns        # Defense
         self.p_attk = p_attk    # Pierce Attack
@@ -326,7 +326,7 @@ Input [#]: """.format(self.name))
 
                 rem_points += 5
                 extra_points += self.ext_ski
-                magic.new_spells()
+                magic.new_spells(self)
 
                 if self.class_ == 'warrior':
                     # Total gain: 21 pts.
@@ -624,7 +624,7 @@ Armor:
 
             # Magic Attack
             elif self.move == '2':
-                if not magic.pick_cat(self.dodge):
+                if not magic.pick_cat(self):
                     return False
 
             # Class Ability
@@ -649,14 +649,14 @@ Armor:
                     # Attempt to run.
                     # If it succeeds, end the battle without giving the player a reward
                     print('-'*25)
-                    pygame.mixer.music.load(main.position['reg_music'])
+                    pygame.mixer.music.load(position['reg_music'])
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(main.music_vol)
+                    pygame.mixer.music.set_volume(music_vol)
 
-                    return
+                    return 'Ran'
 
                 # If it fails, the enemy will attack you and skip your turn
-                monster.battle_turn('', '')
+                monster.battle_turn(is_boss)
 
                 if self.hp > 0:
                     input('\nPress Enter/Return ')
@@ -833,9 +833,9 @@ Pick {0}'s Move:
         # Warrior Ability: Warrior's Spirit
         elif self.class_ == 'warrior':
 
-            if 20 < 0.2*main.self.hp:
-                main.self.hp += 0.2*main.self.hp
-                main.self.hp = math.ceil(main.self.hp)
+            if 20 < 0.2*self.hp:
+                self.hp += 0.2*self.hp
+                self.hp = math.ceil(self.hp)
             else:
                 self.hp += 20
 
@@ -901,13 +901,13 @@ Pick {0}'s Move:
 
             monster.element = "death"
 
-            if 15 < 0.15*main.self.hp:
+            if 15 < 0.15*self.hp:
                 self.hp += 0.1*self.hp
                 self.hp = math.ceil(self.hp)
             else:
                 self.hp += 15
 
-            if 15 < 0.15*main.self.mp:
+            if 15 < 0.15*self.mp:
                 self.mp += 0.1*self.mp
                 self.mp = math.ceil(self.mp)
             else:
@@ -938,7 +938,7 @@ Pick {0}'s Move:
             print('defenses have been lowered by 25% for three turns.')
             print()
 
-            dam_dealt = math.ceil(p_temp_stats['attk']/2- (monster.dfns/1.25))
+            dam_dealt = math.ceil(p_temp_stats['attk']/2 - (monster.dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
 
             dam_dealt = magic.eval_element(

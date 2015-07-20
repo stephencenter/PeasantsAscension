@@ -1097,6 +1097,8 @@ lightning_dagger = Weapon('Lightning Dagger',
 flows through the edge (+60% Damage, ELECTRIC)',
                           0, 450, 0.6, 'melee', 'assassin', 'Dagger', element='electric')
 
+# forksbane = Weapon('Forksbane')
+
 # Accessories
 # -- Elemental Accessories
 water_amulet = ElementAccessory('Aquatic Amulet',

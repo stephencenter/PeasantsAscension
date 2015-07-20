@@ -62,10 +62,10 @@ class Spell:
     def __str__(self):
         return self.name
 
-    def use_mana(self):
-        main.player.mp -= self.mana
-        if main.player.mp < 0:
-            main.player.mp = 0
+    def use_mana(self, user):
+        user.mp -= self.mana
+        if user.mp < 0:
+            user.mp = 0
 
 
 class Healing(Spell):
@@ -78,40 +78,40 @@ class Healing(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic(self, is_battle):
-        if main.player.mp >= self.mana:
+    def use_magic(self, user, is_battle):
+        if user.mp >= self.mana:
             print()
-            Spell.use_mana(self)
+            Spell.use_mana(self, user)
 
-            # Healing spells will always restore a minimum of main.player.hp*thresh.
+            # Healing spells will always restore a minimum of user.hp*thresh.
             # i.e. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
             # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
-            # In addition to this, the player restores an additional 2*Wisdom, unless they are a
+            # In addition to this, the user restores an additional 2*Wisdom, unless they are a
             # Paladin in which case it it 4*Wisdom.
-            if self.health < main.player.hp*self.thresh:
-                total_heal = main.player.hp*self.thresh + \
-                    (2*main.misc_vars['wis'] if main.player.class_ !=
+            if self.health < user.hp*self.thresh:
+                total_heal = user.hp*self.thresh + \
+                    (2*main.misc_vars['wis'] if user.class_ !=
                      'paladin' else 4*main.misc_vars['wis'])
-                main.player.hp += total_heal
-                main.player.hp = math.ceil(main.player.hp)
+                user.hp += total_heal
+                user.hp = math.ceil(user.hp)
 
             else:
-                total_heal = self.health + (2*main.player.attributes['wis'] if main.player.class_ !=
-                                            'paladin' else 4*main.player.attributes['wis'])
-                main.player.hp += total_heal
+                total_heal = self.health + (2*user.attributes['wis'] if user.class_ !=
+                                            'paladin' else 4*user.attributes['wis'])
+                user.hp += total_heal
 
-            if main.player.hp > main.player.max_hp:
-                main.player.hp -= (main.player.hp - main.player.max_hp)
+            if user.hp > user.max_hp:
+                user.hp -= (user.hp - user.max_hp)
 
             sounds.magic_healing.play()
 
             if is_battle:
-                # Print the ASCII art and "Player Turn" info if a battle is going on
-                print('-Player Turn-')
-                print(ascii_art.player_art[main.player.class_.title()] %
-                      "{0} is making a move!\n".format(main.player.name))
+                # Print the ASCII art and "User Turn" info if a battle is going on
+                print("-{0}'s Turn-")
+                print(ascii_art.player_art[user.class_.title()] %
+                      "{0} is making a move!\n".format(user.name))
 
-            print('Using "{0}", you are healed by {1} HP!'.format(self.name, total_heal))
+            print('Using "{0}", {1} is healed by {2} HP!'.format(self.name, user.name, total_heal))
             return True
 
         else:
@@ -132,13 +132,13 @@ class Damaging(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic(self, dodge):
-        if main.player.mp >= self.mana:
+    def use_magic(self, user):
+        if user.mp >= self.mana:
             print()
-            Spell.use_mana(self)
+            Spell.use_mana(self, user)
 
             # Determine the power of the attack
-            attk_pwr = math.ceil(battle.temp_stats['m_attk']/2.5) - \
+            attk_pwr = math.ceil(battle.temp_stats[user.name]['m_attk']/2.5) - \
                                 (battle.monster.m_dfns/1.5)
             attk_pwr *= 1 + self.damage
             attk_pwr = math.ceil(attk_pwr)
@@ -152,15 +152,15 @@ class Damaging(Spell):
             if attk_pwr < 1:
                 attk_pwr = 1
 
-            print('-Player Turn-')
-            print(ascii_art.player_art[main.player.class_.title()] %
-                  "{0} is making a move!\n".format(main.player.name))
+            print("-{0}'s Turn-".format(user.name))
+            print(ascii_art.player_art[user.class_.title()] %
+                  "{0} is making a move!\n".format(user.name))
 
             if inv_system.equipped['weapon'].class_ == 'magic':
-                print('You begin to use your {0} to summon a powerful spell...'.format(
-                    inv_system.equipped['weapon']))
+                print('{0} begins to use their {1} to summon a powerful spell...'.format(
+                    user.name, inv_system.equipped['weapon']))
             else:
-                print('You attempt to summon a powerful spell...')
+                print('{0} attempts to summon a powerful spell...'.format(user.name))
 
             sounds.magic_attack.play()
             time.sleep(0.75)
@@ -168,19 +168,19 @@ class Damaging(Spell):
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-            if dodge in range(monsters.monster.evad, 1024):
-                if random.randint(0, 100) <= (14 if main.player.class_ == 'mage' else 7):
+            if user.dodge in range(monsters.monster.evad, 1024):
+                if random.randint(0, 100) <= (14 if user.class_ == 'mage' else 7):
                     print("It's a critical hit! 2x damage!")
                     attk_pwr *= 2
 
                 sounds.enemy_hit.play()
-                print('Using the power of "{0}", you deal {1} damage to the {2}!'.format(
-                    self.name, attk_pwr, monsters.monster.name))
+                print('Using the power of "{0}", {1} deals {2} damage to the {3}!'.format(
+                    self.name, user.name, attk_pwr, monsters.monster.name))
                 monsters.monster.hp -= attk_pwr
 
             else:
                 sounds.attack_miss.play()
-                print('The {0} dodges your attack!'.format(monsters.monster.name))
+                print("The {0} dodges {1}'s attack!".format(monsters.monster.name, user.name))
 
             return True
 
@@ -201,19 +201,19 @@ class Buff(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic(self):
-        if main.player.mp >= self.mana:
-            Spell.use_mana(self)
+    def use_magic(self, user):
+        if user.mp >= self.mana:
+            Spell.use_mana(self, user)
 
-            print('\n-Player Turn-')
-            print(ascii_art.player_art[main.player.class_.title()] %
-                  "{0} is making a move!\n".format(main.player.name))
+            print("\n-{0}'s Turn-")
+            print(ascii_art.player_art[user.class_.title()] %
+                  "{0} is making a move!\n".format(user.name))
 
-            print('You raise your stats using the power of {0}!'.format(self.name))
+            print('{0} raises their stats using the power of {1}!'.format(user.name, self.name))
 
             sounds.buff_spell.play()
 
-            battle.temp_stats[self.stat] *= 1 + self.incre
+            battle.temp_stats[user.name][self.stat] *= 1 + self.incre
 
             return True
 
@@ -414,31 +414,29 @@ r_affliction = Spell('Relieve Affliction',
                      4, 5)
 
 
-def relieve_affliction(is_battle):
-    if main.player.mp >= r_affliction.mana:
-        if main.player.status_ail != 'none':
+def relieve_affliction(is_battle, user):
+    if user.mp >= r_affliction.mana:
+        if user.status_ail != 'none':
 
-            Spell.use_mana(r_affliction)
+            Spell.use_mana(r_affliction, user)
 
             if is_battle:
-                print('\n-Player Turn-')
-                print(ascii_art.player_art[main.player.class_.title()] %
-                      "{0} is making a move!\n".format(main.player.name))
+                print("\n-{0}'s Turn-".format(user.name))
+                print(ascii_art.player_art[user.class_.title()] %
+                      "{0} is making a move!\n".format(user.name))
 
-            print('Using the power of {0}, you are cured of your afflictions!'.format(
-                r_affliction.name))
+            print('Using the power of {0}, {1} is cured of their afflictions!'.format(
+                r_affliction.name, user.name))
 
-            if main.player.status_ail == 'weakened':
-                battle.temp_stats['attk'] *= 2
 
-            main.player.status_ail = 'none'
+            user.status_ail = 'none'
             sounds.buff_spell.play()
 
             return True
 
         else:
             print('-'*25)
-            print("You don't have any status ailments.")
+            print("{0} doesn't have any status ailments.".format(user.name))
             print('-'*25)
             return False
 
@@ -522,13 +520,13 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
 spellbook = {'Healing': [], 'Damaging': [magic_shot], 'Buffs': [m_evade, m_quick]}
 
 
-def pick_cat(dodge, is_battle=True):
-    if main.player.status_ail == 'silenced' \
+def pick_cat(user, is_battle=True):
+    if user.status_ail == 'silenced' \
             and 'Relieve Affliction' not in [x.name for x in spellbook['Healing']]:
         input("You find youself unable to use spells! | Press enter/return ")
         return False
 
-    elif main.player.status_ail == 'silenced':
+    elif user.status_ail == 'silenced':
         print('The only spell you can use without talking is "Relieve Affliction".')
         while True:
             y_n = input('Use Revlieve Affliction? | Yes or No ')
@@ -590,7 +588,7 @@ def pick_cat(dodge, is_battle=True):
                     if y_n.startswith('y'):
                         if isinstance(spell, Damaging):
 
-                            if spell.use_magic(dodge):
+                            if spell.use_magic(user):
                                 return True
                             else:
                                 return False
@@ -598,10 +596,10 @@ def pick_cat(dodge, is_battle=True):
                         else:
                             # noinspection PyArgumentList
                             if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                                if spell.use_magic(is_battle):
+                                if spell.use_magic(user, is_battle):
                                     return True
 
-                            elif spell.use_magic():
+                            elif spell.use_magic(user):
                                 return True
 
                             else:
@@ -628,12 +626,12 @@ def pick_cat(dodge, is_battle=True):
                 print('-'*25)
                 continue
 
-            if pick_spell(cat, dodge, is_battle):
+            if pick_spell(cat, user, is_battle):
                 return True
             break
 
 
-def pick_spell(cat, dodge, is_battle):
+def pick_spell(cat, user, is_battle):
     print('-'*25)
 
     while True:
@@ -681,7 +679,7 @@ def pick_spell(cat, dodge, is_battle):
 
                     if isinstance(spell, Damaging):
 
-                        if spell.use_magic(dodge):
+                        if spell.use_magic(user):
                             return True
 
                         else:
@@ -690,10 +688,10 @@ def pick_spell(cat, dodge, is_battle):
                     else:
                         # noinspection PyArgumentList
                         if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                            if spell.use_magic(is_battle):
+                            if spell.use_magic(user, is_battle):
                                 return True
 
-                        elif spell.use_magic():
+                        elif spell.use_magic(user):
                             return True
 
                         else:
@@ -705,7 +703,7 @@ def pick_spell(cat, dodge, is_battle):
                     break
 
 
-def new_spells():
+def new_spells(character):
     # Teach the player new spells as they level up, or low-level spells not
     # previously in the game.
     global spellbook
@@ -717,20 +715,21 @@ def new_spells():
         elif isinstance(spell, Buff):
             cat = 'Buffs'
 
-        # Only give the player spells that they are a high enough level for
-        if main.player.lvl >= spell.req_lvl:
+        # Only give the character spells that they are a high enough level for
+        if character.lvl >= spell.req_lvl:
             for x in spellbook[cat]:
                 if x.name == spell.name:
                     break
             else:
                 # Almost all spells can be learned by mages, but only a few can be learned
                 # by other classes
-                if main.player.class_ not in spell.a_c:
+                if character.class_ not in spell.a_c:
                     continue
 
                 sounds.item_pickup.play()
                 spellbook[cat].append(spell)
-                print('You have learned "{0}", a new {1} spell!'.format(
+                print('{0} has learned "{0}", a new {1} spell!'.format(
+                    character.name,
                     str(spell), cat if not cat.endswith('s') else cat[0:len(cat) - 1]))
 
                 input('  Press enter/return ')

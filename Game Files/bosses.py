@@ -51,25 +51,26 @@ class Boss(monsters.Monster):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.items = items
-        self.per_hp = copy.copy(self.hp)
-        self.per_mp = copy.copy(self.mp)
         self.gold = gold
         self.experience = experience
         self.active = active
         self.max_stats()
         self.monster_name = copy.copy(self.name)
-        self.hp = copy.copy(misc_vars['hp_m'])
-        self.mp = copy.copy(misc_vars['mp_m'])
+        self.hp = hp
+        self.mp = mp
         self.multiphase = multiphase
         self.currphase = currphase
+        self.max_hp = copy.copy(self.hp)
+        self.max_mp = copy.copy(self.mp)
+        self.is_poisoned = False
+        self.dodge = 0
+
 
     def max_stats(self):
         global misc_vars
         setup_vars()
-        misc_vars['hp_m'] = self.per_hp  # Make sure the bosses HP/MP regenerate
-        misc_vars['mp_m'] = self.per_mp  # if the player runs away
-        self.hp = copy.copy(misc_vars['hp_m'])
-        self.mp = copy.copy(misc_vars['mp_m'])
+        self.hp = copy.copy(self.max_hp)
+        self.mp = copy.copy(self.max_mp)
 
     def new_location(self, add=True):  # Translate the location of the boss
         if self.pos_y >= 0:  # into a string, then add to inventory.
@@ -178,6 +179,7 @@ master_slime = Boss('Master Slime',
                     [],
                     35, 35,
                     active=False)
+master_slime.battle_turn = monsters.melee_ai
 
 
 def mastslim_ud():
@@ -199,6 +201,7 @@ whisp_goblin = Boss('Whispering Goblin',
                     -2, 4,
                     None,
                     25, 25)
+whisp_goblin.battle_turn = monsters.melee_ai
 
 whisp_goblin.upon_defeating = unimportant_boss_ud
 
@@ -214,6 +217,7 @@ menac_phantom = Boss('Menacing Phantom',
                      None,
                      75, 75,
                      active=False, element='death')
+menac_phantom.battle_turn = monsters.magic_ai
 
 
 def menacphan_ud():
@@ -235,6 +239,7 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    -11, -23,  # Located at -23'S, -11'W
                    None,      # Drops no items
                    100, 100)  # Drops 100 XP and 100 GP
+terr_tarant.battle_turn = monsters.melee_ai
 
 
 def terrtar_ud():
@@ -261,6 +266,7 @@ cursed_spect = Boss('Cursed Spectre',
                     250, 250,          # Drops 100 XP and 100 GP
                     element='death',   # Death Element
                     active=False)
+cursed_spect.battle_turn = monsters.magic_ai
 
 
 def cursspect_ud():
@@ -282,6 +288,7 @@ giant_ent = Boss('Giant Ent',
                  items.enc_yw,
                  120, 120,
                  active=True, element='grass')
+giant_ent.battle_turn = monsters.melee_ai
 
 giant_ent.upon_defeating = unimportant_boss_ud
 
@@ -299,8 +306,7 @@ anti_blood_squad = Boss('Hunter Lackey #1',
                         active=False,
                         multiphase=3)
 
-
-def antibloodsquad_et(var, dodge):
+def antibloodsquad_et(is_boss):
     if monsters.monster.name == "Hunter Lackey #1" and monsters.monster.hp <= 0:
         monsters.monster.currphase += 1
         print('The first lackey falls dead, and the second one takes her place!')
@@ -309,7 +315,7 @@ def antibloodsquad_et(var, dodge):
         monsters.monster.monster_name = "Hunter Lackey #2"
         monsters.monster.hp = 75
         monsters.monster.mp = 20
-        battle.temp_stats['m_ispoisoned'] = False
+        self.is_poisoned = False
 
         return
 
@@ -321,10 +327,10 @@ def antibloodsquad_et(var, dodge):
         monsters.monster.monster_name = "Typhen the Vampire Hunter"
 
         monsters.monster.hp = 200
-        main.misc_vars['hp_m'] = 200
+        monsters.monster.max_hp = 200
 
         monsters.monster.mp = 50
-        main.misc_vars['mp_m'] = 50
+        monsters.monster.max_mp = 50
 
         monsters.monster.attk += 15
         monsters.monster.dfns += 15
@@ -340,16 +346,16 @@ def antibloodsquad_et(var, dodge):
         monsters.monster.gold = 1000
 
         monsters.monster.items = items.wind_bow
-        battle.temp_stats['m_ispoisoned'] = False
+        self.is_poisoned = False
 
         return
 
     elif monsters.monster.hp <= 0:
         return
 
-    monsters.Monster.enemy_turn(anti_blood_squad, var, dodge)
+    monsters.ranged_ai(is_boss)
 
-anti_blood_squad.enemy_turn = antibloodsquad_et
+anti_blood_squad.battle_turn = antibloodsquad_et
 
 
 def absquad_ud():
