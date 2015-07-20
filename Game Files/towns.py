@@ -25,7 +25,6 @@ import inv_system
 import world
 import npcs
 import items
-import pets
 import text_scroll
 import sounds
 import ascii_art
@@ -50,7 +49,7 @@ pygame.mixer.init()
 
 class Town:
     def __init__(self, name, desc, people, x, y, inn=True, inn_cost=0,
-                 gen_store=True, gs_level=1, pet_shop=False, ps_level=1, wtrmelon_store=False):
+                 gen_store=True, gs_level=1, wtrmelon_store=False):
 
         self.name = name  # The town's name (i.e. New York City)
         self.desc = desc  # A brief description of the town
@@ -66,10 +65,6 @@ class Town:
         self.gen_store = gen_store  # If True, the town contains a General Store
         self.gs_level = gs_level  # The higher this value is, the better the
                                   # items the store will sell.
-
-        self.pet_shop = pet_shop  # If True, the town contains a Pet Shop
-        self.ps_level = ps_level  # The higher this value, the better te pets the shop will
-                                  # allow you to purchase.
 
         self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest.
                                               # Definitely not a blatant ripoff of Apple Inc...
@@ -538,8 +533,7 @@ GP). (Press enter/return).'.format(i, i.buy))
       [2] Consumables
       [3] Weapons
       [4] Accessories
-      [5] Pets
-      [6] Miscellaneous""")
+      [5] Miscellaneous""")
                     while True:
                         cat = input('Input [#] (or type "back"): ')
 
@@ -562,9 +556,6 @@ GP). (Press enter/return).'.format(i, i.buy))
                             cat = 'access'
                             vis_cat = 'Accessories'
                         elif cat == '5':
-                            cat = 'pets'
-                            vis_cat = 'Pets'
-                        elif cat == '6':
                             cat = 'misc'
                             vis_cat = 'Miscellaneous'
                         else:
@@ -588,86 +579,6 @@ Press enter/return ".format(vis_cat))
 
             elif b_s in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                 return
-
-    def town_pet(self):
-        pet_list = [[pets.pet_fox, pets.pet_cherub],
-                    [pets.pet_sapling, pets.pet_viper],
-                    [pets.pet_dove, pets.pet_wolf],
-                    [pets.pet_dragon, pets.pet_doe]][self.ps_level - 1]
-
-        padding = len(max([x.name for x in pet_list], key=len))
-
-        print('-'*25)
-        print('Welcome, adventurer!')
-        print('-'*25)
-
-        spam = True
-
-        while spam:
-            print("Here's what we have to offer:",
-                  ''.join(["\n      [{0}] {1} {2}--> {3}".format(
-                      num + 1, pet, ' '*(padding - len(pet.name)), pet.cost)
-                      for num, pet in enumerate(pet_list)]))
-
-            print("You have {0} GP.".format(main.misc_vars['gp']))
-
-            while True:
-                chosen = input('Input [#] (or type "exit"): ')
-
-                try:
-                    chosen = int(chosen) - 1
-                    if chosen < 0:
-                        continue
-
-                except ValueError:
-                    chosen = chosen.lower()
-
-                    if chosen in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                        spam = False
-                        break
-
-                    else:
-                        continue
-
-                try:
-                    chosen_pet = pet_list[chosen]
-                except IndexError:
-                    continue
-
-                print('-'*25)
-                print('{0}: {1}'.format(chosen_pet, chosen_pet.desc))
-                print('-'*25)
-
-                while True:
-                    y_n = input(
-                        "You want this {0}? That would cost you {1} GP. | Yes or No: ".format(
-                        chosen_pet, chosen_pet.cost))
-
-                    y_n = y_n.lower()
-
-                    if y_n.startswith('y'):
-                        if main.misc_vars['gp'] >= chosen_pet.cost:
-                            print('-'*25)
-                            print("You received a {0} pet!".format(chosen_pet))
-                            print('You give the shopkeeper {0} GP.'.format(chosen_pet.cost))
-                            main.misc_vars['gp'] -= chosen_pet.cost
-
-                            inv_system.inventory['pets'].append(copy.copy(chosen_pet))
-
-                            print('-'*25)
-
-                        else:
-                            print('-'*25)
-                            print("Hey, come on! You don't even have enough money for this!")
-                            print('-'*25)
-
-                        break
-
-                    elif y_n.startswith('n'):
-                        print('-'*25)
-                        break
-
-                break
 
     def speak_to_npcs(self):
         while True:
@@ -722,15 +633,12 @@ their journey. Nearton has a general store, an inn, and a few small houses.
 An old man is standing near one of the houses, and appears to be very
 troubled about something.""", [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar], 0, 1)
 
-# Southford is essentially the tutorial town. It's easy to find, and there are three NPCs
-# that all give helpful advice about the game.
 town2 = Town('Southford', """Southford: A fair-size town in the central-southe\
 rn region of the Forest.
-Many of the residents of this town own pets, which can often be seen wandering the
-street. Pets can be bought at the pet-shop located in the north-east part of the
-town. The inhabitants of this town are known for being quite wise, and may
+
+The inhabitants of this town are known for being quite wise, and may
 provide you with helpful advice.""",
-             [npcs.wesley, npcs.elisha, npcs.lazaro], -2, -6, inn_cost=2, pet_shop=True)
+             [npcs.wesley, npcs.lazaro], -2, -6, inn_cost=2)
 
 town3 = Town('Overshire', """Overshire: A city in the northwestern region of the Forest.
 Overshire is the capital of Pythonia, and as such is very densely populated.
@@ -767,7 +675,7 @@ the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
 two towns, particularly between the village leaders.""", [npcs.krystal, npcs.frederick],
-             -12, -23, gs_level=2, pet_shop=True)
+             -12, -23, gs_level=2)
 
 town8 = Town('Parceon', """Parceon: A highly populated town renown for it's rich
 magical background. Parceon is home to the famous Sorcerers' Guild,
@@ -814,7 +722,7 @@ section of the Sorcerers' Guild. Vegetation grows on almost
 every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""",
-              [npcs.strathius], -30, -39, gs_level=3, pet_shop=True, ps_level=2)
+              [npcs.strathius], -30, -39, gs_level=3)
 
 town13 = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
 located in the Terrius Mt. Range. The Chin'toric embassy can be found
@@ -832,7 +740,7 @@ the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
 on the steps of the general store.""",
               [npcs.polmor, npcs.serena], 52, 12, gs_level=4,
-              inn_cost=13, pet_shop=True, ps_level=3)
+              inn_cost=13)
 
 town15 = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Pythonia
 that still has cases of "Hatchnuk's Blight", a plauge-like disease that
@@ -866,8 +774,7 @@ actually refuse to drink the blood of intelligent lifeforms. As a matter of fact
 non-vampires who are afraid of vampires are actually more of a threat to civilization
 than the actual vampires are! They look very friendly, although a few of them do look
 quite scared for some reason. Perhaps you should investigate.""",
-              [npcs.pime, npcs.ariver], -96, -67, gs_level=5, inn_cost=18,
-              pet_shop=True, ps_level=2)
+              [npcs.pime, npcs.ariver], -96, -67, gs_level=5, inn_cost=18)
 
 town18 = Town("Lamtonum", """"Lantonum: Lantonum is a small town that has the best
 forge in all of Arcadia. Nearly 2/3s of all citizens of this town are
@@ -875,20 +782,20 @@ experienced blacksmiths, and 90% of all ores and minerals mined
 in Chin'tor or Ambercreek are brought here. It is one of the wealthiest
 cities in all of the desert region due to its Mythril, Magestite, and
 Necrite exports.""", [npcs.matthew],
-              72, 69, gs_level=4, pet_shop=True, ps_level=3)
+              72, 69, gs_level=4)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
 flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""", [npcs.alden],
-                    -12, -26, inn=False, gen_store=False, pet_shop=True, ps_level=2)
+                    -12, -26, inn=False, gen_store=False)
 
 
 class StairwayToAethus(Town):
     def __init__(self, name, desc, people, x, y, inn=False, inn_cost=0,
-                 gen_store=False, gs_level=1, pet_shop=False, ps_level=1):
+                 gen_store=False, gs_level=1):
         Town.__init__(self, name, desc, people, x, y, inn, inn_cost,
-                      gen_store, gs_level, pet_shop, ps_level)
+                      gen_store, gs_level)
 
     def town_choice(self):
         pygame.mixer.music.load('Music/CopperNickel.ogg')
@@ -956,9 +863,9 @@ to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
 
 class StairwayFromAethus(Town):
     def __init__(self, name, desc, people, x, y, inn=False, inn_cost=0,
-                 gen_store=False, gs_level=1, pet_shop=False, ps_level=1):
+                 gen_store=False, gs_level=1):
         Town.__init__(self, name, desc, people, x, y, inn, inn_cost,
-                      gen_store, gs_level, pet_shop, ps_level)
+                      gen_store, gs_level)
 
     def town_choice(self):
         pygame.mixer.music.load('Music/CopperNickel.ogg')
@@ -1019,8 +926,8 @@ town19 = Town("Valenfall", """Not much is known about the ancient city of Valenf
 It's inhabitants claim that it was lifted up from the mainland several millenia ago
 by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
 all of the surrounding land of Aethus around it. Valenfall is deeply intertwined with
-nature, and houses a petshop that sells rather... "unusual" pets.
-""", [npcs.fitzgerald], 5, 12, inn_cost=2, gs_level=4, pet_shop=True, ps_level=4)
+nature, and monuments depicting the nature dieties can be seen on every corner.
+""", [npcs.fitzgerald], 5, 12, inn_cost=2, gs_level=4)
 
 to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
 

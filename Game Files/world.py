@@ -28,7 +28,6 @@ import bosses
 import sounds
 import inv_system
 import magic
-import pets
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -368,13 +367,6 @@ def rest():
         player.hp -= (player.hp - player.max_hp)
     if player.mp > player.max_mp:
         player.mp -= (player.mp - player.max_mp)
-
-    if isinstance(inv_system.equipped['pet'], pets.Healer):
-        inv_system.equipped['pet'].mana += int(inv_system.equipped['pet'].max_m/3)
-
-        if inv_system.equipped['pet'].mana > inv_system.equipped['pet'].max_m:
-            inv_system.equipped['pet'].mana -= (inv_system.equipped['pet'].mana
-                                                - inv_system.equipped['pet'].max_m)
 
     is_battle = not random.randint(0, 3)
 

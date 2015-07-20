@@ -77,32 +77,37 @@ class Monster:
         self.monster_name = ''
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
+        self.is_poisoned = False
+        self.dodge = 0
         if not isinstance(self, bosses.Boss):
             self.items = ''
 
-    def monst_damage(self, mode):
+    def monst_damage(self, mode, target):
         ise = inv_system.equipped
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
-            dam_dealt = math.ceil(self.attk*1.15 - (battle.temp_stats['dfns']/2)*(1 + dr))
+            dam_dealt = math.ceil(
+                self.attk*1.15 - (battle.temp_stats[target.name]['dfns']/2)*(1 + dr))
 
         else:
-            dam_dealt = math.ceil(self.p_attk*1.15 - (battle.temp_stats['p_dfns']/2)*(1 + dr))
+            dam_dealt = math.ceil(
+                self.p_attk*1.15 - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr))
 
         dam_dealt = magic.eval_element(
-            p_elem=battle.player.element,
-            m_elem=battle.monster.element, m_dmg=dam_dealt)[1]
+            p_elem=target.element,
+            m_elem=self.element, m_dmg=dam_dealt)[1]
 
         if dam_dealt < 1:
             dam_dealt = 1
 
         return dam_dealt
 
-    def monst_magic(self):
+    def monst_magic(self, target):
         ise = inv_system.equipped
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
-        monst_dealt = math.ceil(self.m_attk*1.1 - (battle.temp_stats['m_dfns']/2)*(1 + dr))
+        monst_dealt = math.ceil(
+            self.m_attk*1.1 - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr))
 
         if monst_dealt < 1:
             monst_dealt = 1
@@ -139,21 +144,23 @@ class Monster:
         if not num:
             self.items = random.choice(items.monster_drop(self.lvl, self.monster_name))
 
-    def monst_attk(self, dodge, mode):
+    def monst_attk(self, mode, target):
         sounds.sword_slash.play()
         if isinstance(self, bosses.Boss):
-            print('The {0} is getting ready to attack you!'.format(self.name))
+            print('The {0} is getting ready to attack {1}!'.format(self.name, self.target))
+
         else:
-            print('The {0} {1}'.format(self.name, self.attk_msg))
+            print('The {0} {1} {2}'.format(self.name, self.attk_msg, target.name))
+
         time.sleep(0.75)
 
         while msvcrt.kbhit():
             msvcrt.getwch()
 
-        if dodge in range(player.evad, 512):
-            damage = self.monst_damage(mode)
+        if self.dodge in range(target.evad, 512):
+            damage = self.monst_damage(mode, target)
 
-            player.hp -= damage
+            target.hp -= damage
             sounds.enemy_hit.play()
             if mode == 'pierce':
                 print('The {0} hits you with a ranged attack, dealing {1} damage!'.format(
@@ -166,9 +173,11 @@ class Monster:
             sounds.attack_miss.play()
             print("You narrowly avoid the {0}'s attack!".format(self.name))
 
-    def enemy_turn(self, dodge):
+    def battle_turn(self, is_boss):
         # Default AI used solely by bosses without custom AI
         global is_defending
+
+        target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
 
         if is_defending:
             is_defending = False
@@ -180,15 +189,15 @@ class Monster:
             monster.m_dfns = math.floor(monster.m_dfns)
             monster.p_dfns = math.floor(monster.p_dfns)
 
-        battle.temp_stats['turn_counter'] += 1
+        battle.turn_counter += 1
 
-        possible_p_dam = math.ceil(self.p_attk - battle.temp_stats['p_dfns']/2)
-        possible_m_dam = math.ceil(self.m_attk - battle.temp_stats['m_dfns']/2)
-        possible_a_dam = math.ceil(self.attk - battle.temp_stats['dfns']/2)
+        possible_p_dam = math.ceil(self.p_attk - battle.temp_stats[target.name]['p_dfns']/2)
+        possible_m_dam = math.ceil(self.m_attk - battle.temp_stats[target.name]['m_dfns']/2)
+        possible_a_dam = math.ceil(self.attk - battle.temp_stats[target.name]['dfns']/2)
 
         most_effective = max([possible_p_dam, possible_m_dam, possible_a_dam])
 
-        if player.spd >= monster.spd:
+        if target.spd >= monster.spd:
             print('-'*25)
 
         print('\n-Enemy Turn-')
@@ -197,8 +206,8 @@ class Monster:
         ))
 
         # Only do this on turns that are a multiple of 4 (or turn 1)
-        if (not battle.temp_stats['turn_counter'] % 4 or
-            battle.temp_stats['turn_counter'] == 1) \
+        if (not battle.turn_counter % 4 or
+            battle.turn_counter == 1) \
                 and random.randint(0, 1) and self.mp > 2:
 
             self.give_status()
@@ -236,81 +245,82 @@ class Monster:
         elif most_effective in [possible_p_dam, possible_a_dam]:
             # Non-magic Attack
             if most_effective == possible_p_dam:
-                self.monst_attk(dodge, 'pierce')
+                self.monst_attk(self.dodge, 'pierce', target)
 
             else:
-                self.monst_attk(dodge, 'melee')
+                self.monst_attk(self.dodge, 'melee', target)
 
         elif self.m_attk > self.attk and self.mp >= 2:
             # Magic Attack
             sounds.magic_attack.play()
 
-            print('The {0} is attempting to cast a strange spell...'.format(self.name))
+            print('The {0} is attempting to cast a strange spell on {1}...'.format(
+                self.name, target.name))
             time.sleep(0.75)
 
             while msvcrt.kbhit():
                 msvcrt.getwch()
 
-            if dodge in range(battle.temp_stats['evad'], 512):
+            if self.dodge in range(battle.temp_stats[target.name]['evad'], 512):
                 dam_dealt = magic.eval_element(
-                    p_elem=battle.player.element,
-                    m_elem=battle.monster.element, m_dmg=self.monst_magic())[1]
+                    p_elem=target.element,
+                    m_elem=target.element, m_dmg=self.monst_magic(target))[1]
 
-                player.hp -= dam_dealt
+                target.hp -= dam_dealt
                 sounds.enemy_hit.play()
 
-                print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
-                    self.name, dam_dealt))
+                print("The {0}'s spell succeeds, and deals {1} damage to {2}!".format(
+                    self.name, dam_dealt, target.name))
 
             else:
                 sounds.attack_miss.play()
-                print("The spell misses you by a landslide!")
+                print("The spell misses {0} by a landslide!".format(target.name))
 
             self.mp -= 2
 
         else:
             if most_effective == possible_p_dam:
-                self.monst_attk(dodge, 'pierce')
+                self.monst_attk('pierce', target)
             else:
-                self.monst_attk(dodge, 'melee')
+                self.monst_attk('melee', target)
 
         self.check_poison()
 
         if isinstance(self, bosses.Boss) and self.multiphase and self.hp <= 0:
-            self.enemy_turn(dodge)
+            self.battle_turn(is_boss)
 
-    def give_status(self):
+    def give_status(self, target):
         # Attempt to give the player a status ailment
 
         if random.randint(1, 6) < 4:
-            if player.class_ == 'warrior':
+            if target.class_ == 'warrior':
                 status = 'weakened'  # Severely lowers melee attack
 
-            elif player.class_ == 'mage':
+            elif target.class_ == 'mage':
                 status = 'silenced'  # Makes the use of magic impossible, except for spells
                                      # that cure status (such as silence)
 
-            elif player.class_ == 'ranger':
+            elif target.class_ == 'ranger':
                 status = 'blinded'  # Severely lowers pierce attack
 
-            elif player.class_ == 'assassin':
+            elif target.class_ == 'assassin':
                 status = 'paralyzed'  # Severely lowers speed and evasion
 
-            elif player.class_ == 'monk':
+            elif target.class_ == 'monk':
                 status = random.choice(['paralyzed', 'weakened'])
 
-            elif player.class_ == 'paladin':
+            elif target.class_ == 'paladin':
                 status = random.choice(['silenced', 'weakened'])
 
         else:
-            status = random.choice(['asleep',  # Skips the players turn until they wake up
-                                    'poisoned'  # The player takes damage each turn until cured
+            status = random.choice(['asleep',  # Skips the target's turn until they wake up
+                                    'poisoned'  # The target takes damage each turn until cured
                                     ])
 
-        if status == battle.player.status_ail:
+        if status == target.status_ail:
             status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened',
                                                 'blinded', 'paralyzed']
-                                    if x != battle.player.status_ail])
+                                    if x != target.status_ail])
 
         print('The {0} is attempting to make you {1}...'.format(self.name, status))
         time.sleep(0.75)
@@ -329,7 +339,7 @@ class Monster:
 
     def check_poison(self):
         # Check whether the monster is poisoned or not.
-        if battle.temp_stats['m_ispoisoned']:
+        if self.is_poisoned:
             if random.randint(0, 9):  # 10% chance to recover per turn
                 time.sleep(0.5)
 
@@ -350,7 +360,7 @@ class Monster:
 
                 sounds.buff_spell.play()
                 print('The {0} recovered from the poison!'.format(self.name))
-                battle.temp_stats['m_ispoisoned'] = False
+                self.is_poisoned = False
 
     def monst_name(self):
         monster_type = {'Pythonian Coastline': ['Shell Mimic', 'Giant Crab',
@@ -396,15 +406,15 @@ class Monster:
 
         # Assign the correct AI and stats to each kind of monster
         if self.name in magic_enemies:
-            self.enemy_turn = magic_ai
+            self.battle_turn = magic_ai
             magic_stats(self)
 
         elif self.name in melee_enemies:
-            self.enemy_turn = melee_ai
+            self.battle_turn = melee_ai
             melee_stats(self)
 
         elif self.name in ranged_enemies:
-            self.enemy_turn = ranged_ai
+            self.battle_turn = ranged_ai
             ranger_stats(self)
 
         else:
@@ -425,23 +435,23 @@ class Monster:
         math_monsters = ['Calculator']
 
         if self.name in biting_monsters:
-            self.attk_msg = "bears its fangs and tries to bite you!"
+            self.attk_msg = "bears its fangs and tries to bite"
         elif self.name in charging_monsters:
-            monster.attk_msg = "puts all its weight into trying to charge you!"
+            monster.attk_msg = "puts all its weight into trying to charge"
         elif self.name in slashing_monsters:
-            self.attk_msg = "reveals its claws and prepares to slash you!"
+            self.attk_msg = "reveals its claws and prepares to slash"
         elif self.name in whacking_monsters:
-            self.attk_msg = "finds a nearby rock and prepares to beat you with it!"
+            self.attk_msg = "finds a nearby rock and prepares to use it to beat"
         elif self.name in spitting_monsters:
-            self.attk_msg = "begins to spit a dangerous projectile at you!"
+            self.attk_msg = "begins to spit a dangerous projectile at"
         elif self.name in arrow_monsters:
-            self.attk_msg = "readies its bow to fire a volley of arrows!"
+            self.attk_msg = "readies its bow to fire a volley of arrows at"
         elif self.name in fist_monsters:
-            self.attk_msg = "prepares to smash you with its fists!"
+            self.attk_msg = "prepares its fists to smash "
         elif self.name in magic_monsters:
-            self.attk_msg = "draws from its magical essense to destroy you!"
+            self.attk_msg = "draws from its magical essense to destroy"
         elif self.name in math_monsters:
-            self.attk_msg = "begins answering algebra questions in a devastating manner!"
+            self.attk_msg = "begins calculating the fuck out of"
 
         # Prepare to add the modifier onto the name
         self.monster_name = copy.copy(self.name)
@@ -635,8 +645,10 @@ def ranger_stats(self):
     self.evad = math.ceil(self.evad)
 
 
-def magic_ai(dodge):
-    if player.spd >= monster.spd:
+def magic_ai(is_boss):
+    target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
+
+    if target.spd >= monster.spd:
         print('-'*25)
 
     print('\n-Enemy Turn-')
@@ -645,7 +657,7 @@ def magic_ai(dodge):
     ))
 
     # Only do this on turns that are a multiple of 4 (or turn 1)
-    if player.status_ail != "none" and not random.randint(0, 4) and monster.mp > 2:
+    if target.status_ail != "none" and not random.randint(0, 4) and monster.mp > 2:
         monster.give_status()
 
     elif monster.hp <= math.ceil(monster.max_hp/4) and monster.mp >= 5:
@@ -668,44 +680,45 @@ def magic_ai(dodge):
         # Magic Attack
         sounds.magic_attack.play()
 
-        print('The {0} {1}'.format(monster.name, monster.attk_msg))
+        print('The {0} {1} {2}'.format(monster.name, monster.attk_msg, target.name))
         time.sleep(0.75)
 
         while msvcrt.kbhit():
             msvcrt.getwch()
 
-        if dodge in range(battle.temp_stats['evad'], 512):
+        if monster.dodge in range(battle.temp_stats[target.name]['evad'], 512):
             dam_dealt = magic.eval_element(
-                p_elem=battle.player.element,
-                m_elem=battle.monster.element, m_dmg=monster.monst_magic())[1]
+                p_elem=target.element,
+                m_elem=monster.element, m_dmg=monster.monst_magic(target))[1]
 
-            player.hp -= dam_dealt
+            target.hp -= dam_dealt
             sounds.enemy_hit.play()
 
-            print("The {0}'s spell succeeds, and deals {1} damage to you!".format(
-                monster.name, dam_dealt))
+            print("The {0}'s spell succeeds, and deals {1} damage to {2}!".format(
+                monster.name, dam_dealt, target.name))
 
         else:
             sounds.attack_miss.play()
-            print("The spell misses you by a landslide!")
+            print("The spell misses {0} by a landslide!".format(target.name))
 
         monster.mp -= 3
 
     else:
         # Non-magic Attack
         if random.randint(0, 1):
-            monster.monst_attk(dodge, 'pierce')
+            monster.monst_attk('pierce', target)
         else:
-            monster.monst_attk(dodge, 'melee')
+            monster.monst_attk('melee', target)
 
     monster.check_poison()
 
     if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
-        monster.enemy_turn(dodge)
+        monster.battle_turn(is_boss)
 
 
-def ranged_ai(dodge):
-    # This is the Enemy's AI.
+def ranged_ai(is_boss):
+    target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
+
     global is_defending
     global monster
 
@@ -720,9 +733,9 @@ def ranged_ai(dodge):
         monster.m_dfns = math.floor(monster.m_dfns)
         monster.p_dfns = math.floor(monster.p_dfns)
 
-    battle.temp_stats['turn_counter'] += 1
+    battle.turn_counter += 1
 
-    if player.spd >= monster.spd:
+    if target.spd >= monster.spd:
         print('-'*25)
 
     print('\n-Enemy Turn-')
@@ -749,16 +762,17 @@ def ranged_ai(dodge):
         is_defending = True
 
     else:
-        monster.monst_attk(dodge, 'pierce')
+        monster.monst_attk('pierce', target)
 
     monster.check_poison()
 
     if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
-        monster.enemy_turn(dodge)
+        monster.battle_turn(is_boss)
 
 
-def melee_ai(dodge):
-    # This is the Enemy's AI.
+def melee_ai(is_boss):
+    target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
+
     global is_defending
     global monster
 
@@ -773,9 +787,9 @@ def melee_ai(dodge):
         monster.m_dfns = math.floor(monster.m_dfns)
         monster.p_dfns = math.floor(monster.p_dfns)
 
-    battle.temp_stats['turn_counter'] += 1
+    battle.turn_counter += 1
 
-    if player.spd >= monster.spd:
+    if target.spd >= monster.spd:
         print('-'*25)
 
     print('\n-Enemy Turn-')
@@ -802,12 +816,12 @@ def melee_ai(dodge):
         is_defending = True
 
     else:
-        monster.monst_attk(dodge, 'melee')
+        monster.monst_attk('melee', target)
 
     monster.check_poison()
 
     if isinstance(monster, bosses.Boss) and monster.multiphase and monster.hp <= 0:
-        monster.enemy_turn(dodge)
+        monster.battle_turn(is_boss)
 
 
 def spawn_monster():
@@ -821,12 +835,10 @@ def spawn_monster():
 
 
 def setup_vars():
-    global player
     global misc_vars
     global position
     global inventory
 
-    player = main.player
     misc_vars = main.misc_vars
     position = main.position
     inventory = inv_system.inventory

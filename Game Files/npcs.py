@@ -20,7 +20,6 @@ import random
 
 import bosses
 import inv_system
-import pets
 import items
 import text_scroll
 
@@ -415,8 +414,6 @@ def stwqst_uc1():
     rivesh_phrase_2.active = False
     rivesh_quest_1.active = True
     print('-'*25)
-    input('You have recieved a Cherub pet! | Press Enter/Return ')
-    inv_system.inventory['pets'].append(pets.pet_cherub)
     input('You now have experience defeating ghosts! | Press Enter/Return ')
 
 
@@ -1058,14 +1055,6 @@ travel.",
 
 wesley = NPC('Wesley', [wesley_phrase_1], "Peasant")
 
-# -- Name: Elisha -- Town: Southford
-elisha_phrase_1 = Conversation(["Not all towns have pet stores - ours is one of the few!",
-                                "From what I remember, Fallville and Ravenstone also have",
-                                "pet shops. I don't remember where Ravenstone is, but ",
-                                "Fallville is located at -23\u00b0S, -12\u00b0W."], active=True)
-
-elisha = NPC('Elisha', [elisha_phrase_1], "Pet Enthusiest")
-
 # -- Name: Lazaro -- Town: Southford
 lazaro_phrase_1 = Conversation(["Greetings, adventurer from Nearton! How do I know who",
                                 "you are, you ask? Well, I am the oracle of Southford!",
@@ -1251,7 +1240,6 @@ all_dialogue = [
     sakura_phrase_1,
     sugulat_phrase_1,
     raidon_phrase_1,
-    elisha_phrase_1,
     lazaro_phrase_1,
     caesar_phrase_1,
     wesley_phrase_1,

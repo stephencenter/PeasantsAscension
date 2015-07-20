@@ -16,7 +16,6 @@
 import sys
 import json
 import time
-import pets
 import math
 import random
 import msvcrt
@@ -42,8 +41,7 @@ else:
     main = sys.modules["__main__"]
 
 inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
-             'weapons': [], 'armor': [], 'pets': [], 'misc': [],
-             'access': []}
+             'weapons': [], 'armor': [], 'misc': [], 'access': []}
 
 equipped = {'weapon': '', 'head': _c(i.straw_hat),
             'body': _c(i.cotton_shirt),
@@ -175,14 +173,13 @@ def pick_category():
         print("""Categories:
       [1] Armor
       [2] Weapons
-      [3] Pets
-      [4] Accessories
-      [5] Equipped Items
-      [6] Consumables
-      [7] Coordinates
-      [8] Quest Items
-      [9] Quests
-      [10] Miscellaneous""")
+      [3] Accessories
+      [4] Equipped Items
+      [5] Consumables
+      [6] Coordinates
+      [7] Quest Items
+      [8] Quests
+      [9] Miscellaneous""")
         while True:
             cat = input('Input [#] (or type "exit"): ')
 
@@ -198,27 +195,24 @@ def pick_category():
                 cat = 'weapons'
                 vis_cat = 'Weapons'
             elif cat == '3':
-                cat = 'pets'
-                vis_cat = 'Pets'
-            elif cat == '4':
                 cat = 'access'
                 vis_cat = 'Accessories'
-            elif cat == '5':
+            elif cat == '4':
                 cat = 'equipped_items'
                 vis_cat = 'Equipped Items'
-            elif cat == '6':
+            elif cat == '5':
                 cat = 'consum'
                 vis_cat = 'Consumables'
-            elif cat == '7':
+            elif cat == '6':
                 cat = 'coord'
                 vis_cat = 'Coordinates'
-            elif cat == '8':
+            elif cat == '7':
                 cat = 'q_items'
                 vis_cat = 'Quest Items'
-            elif cat == '9':
+            elif cat == '8':
                 cat = 'quests'
                 vis_cat = 'Quests'
-            elif cat == '10':
+            elif cat == '9':
                 cat = 'misc'
                 vis_cat = 'Miscellaneous'
             else:
@@ -227,7 +221,7 @@ def pick_category():
             if cat in inventory:
                 if inventory[cat]:
 
-                    if cat not in ['coord', 'weapons', 'armor', 'pets', 'access']:
+                    if cat not in ['coord', 'weapons', 'armor', 'access']:
                         pick_item(cat, vis_cat)
                         print('-'*25)
 
@@ -349,7 +343,6 @@ def pick_action(cat, item):
     while item in inventory[cat]:
         if (isinstance(item, i.Weapon)
             or isinstance(item, i.Armor)
-            or isinstance(item, pets.Companion)
                 or isinstance(item, i.Accessory)):
 
             # You equip weapons/armor/companions/accessories
@@ -367,22 +360,9 @@ def pick_action(cat, item):
 Input [#] (or type "back"): """.format(str(item), use_equip))
 
         if action == '1':
-            # Pets do not have a ".use_item()" method, so they have to be equipped
-            # manually.
-            if isinstance(item, pets.Companion):
-                input('You equip the {0} | Press enter/return '.format(item.name))
-
-                if isinstance(equipped['pet'], pets.Companion):
-                    inventory['pets'].append(equipped['pet'])
-
-                equipped['pet'] = item
-                inventory['pets'].remove(item)
+            item.use_item()
+            if item not in inventory[cat]:
                 return
-
-            else:
-                item.use_item()
-                if item not in inventory[cat]:
-                    return
 
         elif action == '2':
             # Display the item description
@@ -504,27 +484,22 @@ Press enter/return ")
                     print('-'*25)
                     input('You unequip the {0} | Press enter/return '.format(selected.name))
 
-                    if not isinstance(selected, pets.Companion):
-                        if isinstance(selected, i.Weapon):
-                            inventory[selected.cat].append(equipped[key])
-                            equipped[key] = i.fists
+                    if isinstance(selected, i.Weapon):
+                        inventory[selected.cat].append(equipped[key])
+                        equipped[key] = i.fists
 
-                        elif isinstance(selected, i.Armor):
-                            inventory[selected.cat].append(equipped[key])
-                            equipped[key] = '(None)'
+                    elif isinstance(selected, i.Armor):
+                        inventory[selected.cat].append(equipped[key])
+                        equipped[key] = '(None)'
 
-                        elif isinstance(selected, i.Accessory):
-                            if isinstance(selected, i.ElementAccessory):
-                                main.player.element = 'None'
-                                print('You are no longer imbued with the {0} element.'.format(
-                                    selected.element))
+                    elif isinstance(selected, i.Accessory):
+                        if isinstance(selected, i.ElementAccessory):
+                            main.player.element = 'None'
+                            print('You are no longer imbued with the {0} element.'.format(
+                                selected.element))
 
-                            inventory[selected.cat].append(equipped[key])
-                            equipped[key] = '(None)'
-
-                    else:
-                        inventory[selected.cat].append(equipped['pet'])
-                        equipped['pet'] = '(None)'
+                        inventory[selected.cat].append(equipped[key])
+                        equipped[key] = '(None)'
 
                     spam = False
                     break
@@ -774,14 +749,6 @@ def deserialize_inv(path):
                 if item['acc_type'] == 'elemental':
                     x = i.ElementAccessory('', '', '', '', '')
 
-            elif category == 'pets':
-
-                if item['pet_type'] == 'fighter':
-                    x = pets.Fighter('', '', '', '', '')
-
-                elif item['pet_type'] == 'healer':
-                    x = pets.Healer('', '', '', '', '', '', '', '')
-
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue
@@ -818,8 +785,7 @@ def deserialize_inv(path):
                 continue
 
             if (not isinstance(x, i.Armor)
-                and not isinstance(x, i.Weapon)
-                    and not isinstance(x, pets.Companion)):
+                    and not isinstance(x, i.Weapon)):
 
                 item_art = x.ascart
                 x.__dict__ = item
@@ -864,13 +830,6 @@ def deserialize_equip(path):
         elif category == 'access':
             if j_equipped[category]['acc_type'] == 'elemental':
                 x = i.ElementAccessory('', '', '', '', '')
-
-        elif category == 'pet':
-            if j_equipped[category]['pet_type'] == 'fighter':
-                x = pets.Fighter('', '', '', '', '')
-
-            elif j_equipped[category]['pet_type'] == 'healer':
-                x = pets.Healer('', '', '', '', '', '', '', '')
 
         else:
             x = i.Armor('', '', '', '', '', '', '', '', '')

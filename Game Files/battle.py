@@ -28,7 +28,6 @@ import monsters
 import magic
 import world
 import bosses
-import pets
 import sounds
 import ascii_art
 import items
@@ -45,19 +44,16 @@ import items
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
-# Creates a lambda function that strips all non-numeric characters
-# This fixes some (possible) problems later on
-only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
+player = ''
+solou = ''
+xoann = ''
 
 monster = ''
-player = ''
-misc_vars = ''
-position = ''
+temp_stats = ''
 
 vowels = 'AEIOU'
-temp_stats = ''
-ability_used = False
 monk_tc = 0
+turn_counter = 0
 
 if __name__ == "__main__":
     sys.exit()
@@ -66,48 +62,55 @@ else:
 
 
 def setup_vars():
-    global position
-    global misc_vars
     global player
+    global solou
+    global xoann
     global monster
 
     monster = monsters.monster
     player = main.player
-    misc_vars = main.misc_vars
-    position = main.position
+    solou = main.solou
+    xoann = main.xoann
 
 
 def update_stats():
     # Forces stats to return to normal when battle is finished
     global temp_stats
-    temp_stats = {'attk': _c(player.attk), 'dfns': _c(player.dfns),
-                  'p_attk': _c(player.p_attk), 'p_dfns': _c(player.p_dfns),
-                  'm_attk': _c(player.m_attk), 'm_dfns': _c(player.m_dfns),
-                  'spd': _c(player.spd), 'evad': _c(player.evad),
-                  'm_ispoisoned': False, 'turn_counter': 0}
-
-
-def player_choice(actual_speed):
-    print("""\
-      [1]: Attack
-      [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
-      [5]: Run""")
-
-    while True:
-        # Only return if "move" refers to a valid move
-        move = input("Input [#]: ")
-        if move != "q":
-            move = only_num(move)
-
-        if move.isdigit() and int(move) in range(1, 6) or \
-                (move == 'q' and player.name == "Flygon Jones"):
-
-            if actual_speed > monster.spd:
-                print('-'*25)
-
-            return move
+    temp_stats = {
+        player.name: {
+            'attk': _c(player.attk),
+            'dfns': _c(player.dfns),
+            'p_attk': _c(player.p_attk),
+            'p_dfns': _c(player.p_dfns),
+            'm_attk': _c(player.m_attk),
+            'm_dfns': _c(player.m_dfns),
+            'spd': _c(player.spd),
+            'evad': _c(player.evad),
+            'ability_used': False
+        },
+        'Solou': {
+            'attk': _c(solou.attk),
+            'dfns': _c(solou.dfns),
+            'p_attk': _c(solou.p_attk),
+            'p_dfns': _c(solou.p_dfns),
+            'm_attk': _c(solou.m_attk),
+            'm_dfns': _c(solou.m_dfns),
+            'spd': _c(solou.spd),
+            'evad': _c(solou.evad),
+            'ability_used': False
+        },
+        'Xoann': {
+            'attk': _c(xoann.attk),
+            'dfns': _c(xoann.dfns),
+            'p_attk': _c(xoann.p_attk),
+            'p_dfns': _c(xoann.p_dfns),
+            'm_attk': _c(xoann.m_attk),
+            'm_dfns': _c(xoann.m_dfns),
+            'spd': _c(xoann.spd),
+            'evad': _c(xoann.evad),
+            'ability_used': False
+        }
+    }
 
 
 def battle_system(is_boss=False, ambush=False):
@@ -162,19 +165,18 @@ def battle_system(is_boss=False, ambush=False):
 
     ability_used = False
 
-    while not ((player.hp <= 0) or  # Continue the battle until one of a few conditions are met
+    # Continue the battle until one of a few conditions are met
+    while not ((player.hp <= 0 or solou.hp <= 0 or xoann.hp <= 0) or
                (not is_boss and monster.hp <= 0) or
                (is_boss and (not monster.multiphase or monster.currphase == monster.multiphase)
                 and monster.hp <= 0)):
 
-        if player.hp <= 0.20*player.max_hp:
-            print("Warning: HP is low, heal as soon as possible!")
-            sounds.health_low.play()
+        for character in [x for x in [solou, xoann, player] if x.enabled]:
+            if character.hp <= 0.20*character.max_hp:
+                print("Warning: {0}'s HP is low, heal as soon as possible!".format(character.name))
+                sounds.health_low.play()
 
         bat_stats()
-
-        actual_speed = math.floor(temp_stats['spd']/2) \
-            if player.status_ail == 'paralyzed' else temp_stats['spd']
 
         # Increment the monk turn-counter for lower defense until it equals 3
         if player.class_ == 'monk' and ability_used:
@@ -184,190 +186,49 @@ def battle_system(is_boss=False, ambush=False):
 
             monk_tc += 1
 
-        if player.status_ail == 'asleep':
-            # There is a 1/3 chance for the player to wake up each turn if they are asleep
-            if not random.randint(0, 2):
-                sounds.buff_spell.play()
-                print('\n-Player Turn-')
-                input('You start to regain conciousness! | Press enter/return ')
+        # There is a 1/3 chance for the player to wake up each turn if they are asleep
+        for character in [x for x in [ player, solou, xoann] if x.enabled]:
+            if character.status_ail == 'asleep':
+                # If dodge is in a certain range, the attack will miss
+                character.dodge = random.randint(0, 512)
+                monster.dodge = random.randint(0, 512)
 
-                player.status_ail = 'none'
-                bat_stats()
-                move = player_choice(actual_speed)
+                if not random.randint(0, 2):
+                    sounds.buff_spell.play()
+                    print('\n-Player Turn-')
+                    input('You start to regain conciousness! | Press enter/return ')
+
+                    character.status_ail = 'none'
+                    bat_stats()
+                    character.player_choice()
+
+                else:
+                    print('-Player Turn-')
+                    print(ascii_art.player_art["Asleep"] % "{0} is asleep!\n ".format(
+                        character.name))
+                    input("You're too tired to do anything! | Press Enter/Return ")
+                    character.move = ''
 
             else:
-                print('-Player Turn-')
-                print(ascii_art.player_art["Asleep"] % "{0} is asleep!\n ".format(player.name))
-                input("You're too tired to do anything! | Press Enter/Return ")
-                move = ''
-        else:
-            move = player_choice(actual_speed)
+                # If dodge is in a certain range, the attack will miss
+                character.dodge = random.randint(0, 512)
+                monster.dodge = random.randint(0, 512)
 
-        # If dodge is in a certain range, the attack will miss
-        dodge = random.randint(0, 512)
-        m_dodge = random.randint(0, 512)
+                character.player_choice()
 
-        if move == '4':  # Use the Battle Inventory
+        for unit in sorted([monster, player, solou, xoann], key=lambda x: x.spd):
+            unit.battle_turn(is_boss)
 
-            if battle_inventory() and monster.hp > 0:
-                input('\nPress Enter/Return ')
-                monster.enemy_turn(m_dodge)
+            if (monster.hp > 0) and any([player.hp > 0, solou.hp > 0, xoann.hp > 0]):
+                input('\nPress enter/return ')
 
-                if player.hp > 0:
-                    input('\nPress Enter/Return ')
+            else:
+                break
 
-            continue
-
-        elif move == '5':
-
-            if run_away():  # Attempt to run.
-                # If it succeeds, end the battle without giving the player a reward
-                print('-'*25)
-                pygame.mixer.music.load(position['reg_music'])
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
-
-                return
-
-            # If it fails, the enemy will attack you and skip your turn
-            monster.enemy_turn(m_dodge)
-
-            if player.hp > 0:
-                input('\nPress Enter/Return ')
-
-            continue
-
-        # The player goes first if they have a higher speed
-        elif (actual_speed > monster.spd or move == '2' or move == '3') \
-                and player.status_ail != 'asleep':
-
-            if move and player_turn(dodge, move, is_boss) and monster.hp > 0:
-                input('\nPress Enter/Return ')
-                monster.enemy_turn(m_dodge)
-
-                if player.hp > 0:
-                    input('\nPress Enter/Return ')
-
-            continue
-
-        # Otherwise, the monster will go first
-        else:
-            if monster.spd < actual_speed and player.status_ail != 'asleep':
-                print('-'*25)
-
-            monster.enemy_turn(m_dodge)
-
-            if player.hp > 0:
-                player_turn(dodge, move, is_boss)
-                if monster.hp > 0:
-                    input('\nPress Enter/Return ')
 
     else:
         if after_battle(is_boss) != 'dead':
             print('-'*25)
-
-
-def player_turn(dodge, move, is_boss):
-    global player
-    global monster
-
-    while True:
-        # "2" refers to magic, which will print this later
-        if move != '2':
-            print('\n-Player Turn-')
-
-        if move == '1' or move == 'q':
-            print(ascii_art.player_art[player.class_.title()] %
-                  "{0} is making a move!\n".format(player.name))
-
-            if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
-                sounds.sword_slash.play()
-                print('You begin to fiercely attack the {0} using your {1}...'.format(
-                    monster.name, str(inv_system.equipped['weapon'])))
-
-            # Ranged weapons aren't swung, so play a different sound effect
-            else:
-                sounds.aim_weapon.play()
-                print('You aim carefully at the {0} using your {1}...'.format(
-                    monster.name, str(inv_system.equipped['weapon'])))
-
-            time.sleep(0.75)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
-
-            if dodge in range(monster.evad, 512):
-                dam_dealt = player.player_damage()
-                monster.hp -= dam_dealt
-                sounds.enemy_hit.play()
-                print('Your attack connects with the {0}, dealing {1} damage!'.format(
-                    monster.name, dam_dealt))
-
-            else:
-                sounds.attack_miss.play()
-                print('The {0} dodges your attack with ease!'.format(monster.name))
-
-        elif move == '2':
-            if not magic.pick_cat(dodge):
-                return False
-
-        elif move == '3':
-            if not class_ability():
-                return False
-
-        else:
-            return False
-
-        if inv_system.equipped['pet'] != '(None)' and monster.hp > 0:
-            input('\nPress Enter/Return')
-            print("\n-Pet Turn-")
-            inv_system.equipped['pet'].use_ability()
-
-        # Check to see if the player is poisoned
-        if player.status_ail == 'poisoned' and monster.hp > 0:
-            if random.randint(0, 3):
-                time.sleep(0.5)
-
-                while msvcrt.kbhit():
-                    msvcrt.getwch()
-
-                sounds.poison_damage.play()
-
-                poison_damage = int(math.ceil(player.max_hp/10))
-                print('You took poison damage! (-{0} HP)'.format(poison_damage))
-                player.hp -= poison_damage
-
-                if player.hp <= 0:
-                    break
-
-            else:
-                time.sleep(0.5)
-
-                while msvcrt.kbhit():
-                    msvcrt.getwch()
-
-                sounds.buff_spell.play()
-                input('You start to feel better! | Press enter/return ')
-                player.status_ail = 'none'
-
-        # Check to see if the player is silenced
-        elif player.status_ail != 'none' and player.status_ail != 'asleep':
-            if not random.randint(0, 3):
-
-                time.sleep(0.5)
-
-                while msvcrt.kbhit():
-                    msvcrt.getwch()
-
-                sounds.buff_spell.play()
-
-                input('Your afflictions have worn off! | Press enter/return ')
-                player.status_ail = 'none'
-
-        if is_boss and monster.multiphase and monster.hp <= 0:
-            monster.enemy_turn(dodge)
-
-        return True
 
 
 def after_battle(is_boss):  # Assess the results of the battle
@@ -407,7 +268,7 @@ def after_battle(is_boss):  # Assess the results of the battle
 
                     player.status_ail = "none"
 
-                    pygame.mixer.music.load(position['reg_music'])
+                    pygame.mixer.music.load(main.position['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
@@ -465,7 +326,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 monster.upon_defeating()
 
             # Give the Player their GP
-            misc_vars['gp'] += gold + player.ext_gol
+            main.misc_vars['gp'] += gold + player.ext_gol
             print("You've gained {0} GP!".format(gold), end='')
             sounds.item_pickup.play()
             input(' | Press Enter/Return ')
@@ -491,7 +352,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             # Check to see if the player gained any levels
             player.level_up()
 
-            pygame.mixer.music.load(position['reg_music'])
+            pygame.mixer.music.load(main.position['reg_music'])
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
             pygame.mixer.music.set_volume(main.music_vol)
@@ -501,218 +362,6 @@ def after_battle(is_boss):  # Assess the results of the battle
         # If the battle is a tie, the player wins
         elif player.hp <= 0 and monster.hp <= 0:
             player.hp = 1
-
-
-def class_ability():
-    # Class abilities are special abilities only available to characters of certain classes.
-    # Their purpose is to help make the characters more diverse, as well as encourage more
-    # strategy being used.
-
-    global ability_used
-    global monster
-    global player
-    global temp_stats
-
-    if player.lvl < 5:
-        # You must be at least level 5 to use your class ability
-        print("You have not realized your class's inner potential yet (must be level 5 to use)\n")
-        input('Press enter/return ')
-
-        return False
-
-    if ability_used:
-        # You can only use your ability once per battle.
-        print('You feel drained, and are unable to call upon your class ability again.\n')
-        input('Press enter/return ')
-
-        return False
-
-    else:
-        ability_used = True
-
-    print(ascii_art.player_art[player.class_.title()] %
-          "{0} is making a move!\n".format(player.name))
-
-    print("You use the knowledge you've gained to unleash your class ability!")
-
-    # Ranger Ability: Scout
-    if player.class_ == 'ranger':
-        # The ranger class identifies their enemy and prints their stats.
-        # This is really useful for defeating bosses, which are often weak to
-        # certain types and elements of attacks.
-
-        print('-'*25)
-        print('ABILITY: SCOUT')
-        print('-'*25)
-
-        print('As a Ranger, you identify your enemy and focus, increasing your pierce attack!')
-        input("Press Enter/Return to view your enemy's stats ")
-
-        print('-'*25)
-        print("{0}'s STATS:".format(monster.name.upper()))
-
-        print("""Attack: {0} | M. Attack: {1} | P. Attack: {2} | Speed: {3}
-Defense: {4} | M. Defense: {5} | P. Defense: {6} | Evasion: {7}
-Element: {8} | Elemental Weakness: {9}""".format(
-            monster.attk, monster.m_attk, monster.p_attk, monster.spd,
-            monster.dfns, monster.m_dfns, monster.p_dfns, monster.evad,
-            monster.element.title(),
-            {'fire': 'Water',
-             'water': 'Electric',
-             'electric': 'Earth',
-             'earth': 'Grass',
-             'grass': 'Wind',
-             'wind': 'Ice',
-             'ice': 'Fire',
-             'none': 'None',
-             'life': 'Death',
-             'death': 'Life'}[monster.element]))
-
-        player.p_attk *= 1.2
-        player.p_attk = math.ceil(p_attk)
-
-        return True
-
-    # Warrior Ability: Warrior's Spirit
-    elif player.class_ == 'warrior':
-
-        if 20 < 0.2*main.player.hp:
-            main.player.hp += 0.2*main.player.hp
-            main.player.hp = math.ceil(main.player.hp)
-        else:
-            player.hp += 20
-
-        temp_stats['dfns'] *= 1.2
-        temp_stats['m_dfns'] *= 1.2
-        temp_stats['p_dfns'] *= 1.2
-
-        print('-'*25)
-        print("ABILITY: WARRIOR'S SPIRIT")
-        print('-'*25)
-
-        print('As a Warrior, you channel your inner-strength and restore health and defense!')
-
-        if player.hp > player.max_hp:
-            player.hp -= (player.hp - player.max_hp)
-        if player.mp > player.max_mp:
-            player.mp -= (player.mp - player.max_mp)
-
-        return True
-
-    # Mage Ability: Artificial Intelligence
-    elif player.class_ == "mage":
-        player.mp += _c(player.max_mp)/2
-
-        if player.mp > player.max_mp:
-            player.mp = _c(player.max_mp)
-
-        player.mp = math.ceil(player.mp)
-
-        temp_stats['m_attk'] *= 1.2
-        temp_stats['m_dfns'] *= 1.2
-
-        print('-'*25)
-        print("ABILITY: ARTIFICIAL INTELLIGENCE")
-        print('-'*25)
-
-        print('As a Mage, you focus intently and sharply increase your magical prowess!')
-        print('Your magic attack and defense increase, and you regain MP!')
-
-        return True
-
-    # Assassin Ability: Poison Injection
-    elif player.class_ == "assassin":
-        temp_stats['m_ispoisoned'] = True
-
-        print('-'*25)
-        print("ABILITY: POISON INJECTION")
-        print('-'*25)
-
-        print('As an Assassin, you discreetly inject poison into your enemy!')
-
-        return True
-
-    # Paladin Ability: Divine Intervention
-    elif player.class_ == "paladin":
-        print('-'*25)
-        print('ABILITY: DIVINE INTERVENTION')
-        print('-'*25)
-
-        print('As a Paladin, you call upon the power of His Divinity to aid you!')
-        print('You enemy has been turned to the "death" element, causing your')
-        print('holy spells to inflict more damage! You also regain health and MP.')
-
-        monster.element = "death"
-
-        if 15 < 0.15*main.player.hp:
-            main.player.hp += 0.1*main.player.hp
-            main.player.hp = math.ceil(main.player.hp)
-        else:
-            player.hp += 15
-
-        if 15 < 0.15*main.player.mp:
-            main.player.mp += 0.1*main.player.mp
-            main.player.mp = math.ceil(main.player.mp)
-        else:
-            player.mp += 15
-
-        if player.hp > player.max_hp:
-            player.hp -= (player.hp - player.max_hp)
-        if player.mp > player.max_mp:
-            player.mp -= (player.mp - player.max_mp)
-
-        return True
-
-    # Monk Ability: Chakra-smash
-    elif player.class_ == 'monk':
-        # Essentially a 2.5x crit. As an added bonus, this attack has a 14%
-        # chance to get a crit itself, resulting in a total of an 5x critical.
-        # This attack lowers your defenses by 25% for three turns to balance it out.
-        # If you are weakened, this attack ignores that and will deal full damage anyway.
-        print('-'*25)
-        print('ABILITY: CHAKRA-SMASH')
-        print('-'*25)
-
-        print('As a monk, you meditate and focus your inner chi.')
-        print('After a brief moment of confusion from the enemy, you strike, dealing')
-        print('an immense amount of damage in a single, powerful strike! As a result, your')
-        print('defenses have been lowered by 25% for three turns.')
-        print()
-
-        dam_dealt = math.ceil(temp_stats['attk']/2- (monster.dfns/1.25))
-        dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
-
-        dam_dealt = magic.eval_element(
-            p_elem=inv_system.equipped['weapon'].element,
-            m_elem=monster.element, p_dmg=dam_dealt)[0]
-
-        dam_dealt *= 2.5
-        dam_dealt = math.ceil(dam_dealt)
-
-        if dam_dealt < 4:
-            dam_dealt = 4
-
-        if random.randint(1, 100) <= 14:
-            print("It's a critical hit! 2x damage!")
-            print('Overkill!')
-            dam_dealt *= 2
-
-        if dam_dealt > 999:
-            dam_dealt = 999
-
-        print('The attack deals {0} damage to the {1}!'.format(dam_dealt, monster.name))
-
-        temp_stats['dfns'] /= 1.25
-        temp_stats['m_dfns'] /= 1.25
-        temp_stats['p_dfns'] /= 1.25
-
-        temp_stats['dfns'] = math.floor(player.dfns)
-        temp_stats['m_dfns'] = math.floor(player.m_dfns)
-        temp_stats['p_dfns'] = math.floor(player.p_dfns)
-
-        monster.hp -= dam_dealt
-
-        return True
 
 
 def run_away():
@@ -795,54 +444,66 @@ def battle_inventory():
             return True
 
 
-# Makes sure that the player and monster never have negative stats,
-# and then display their stats after they're fixed
+
 def bat_stats():
+    # Makes sure that that no-one ever has negative stats,
+    # and then display their stats after they're fixed
     global player
+    global solou
+    global xoann
     global monster
 
     if player.hp < 0:
         player.hp = 0
+    if solou.hp < 0:
+        solou.hp = 0
+    if xoann.hp < 0:
+        xoann.hp = 0
     if monster.hp < 0:
         monster.hp = 0
+
     if player.hp > player.max_hp:
         player.hp -= (player.hp - player.max_hp)
+    if solou.hp > solou.max_hp:
+        solou.hp -= (solou.hp - solou.max_hp)
+    if xoann.hp > xoann.max_hp:
+        xoann.hp -= (xoann.hp - xoann.max_hp)
     if monster.hp > monster.max_hp:
         monster.hp -= (monster.hp - monster.max_hp)
+
     if player.mp < 0:
         player.mp = 0
+    if solou.mp < 0:
+        solou.mp = 0
+    if xoann.mp < 0:
+        xoann.mp = 0
     if monster.mp < 0:
         monster.mp = 0
+
     if player.mp > player.max_mp:
         player.mp -= (player.mp - player.max_mp)
+    if solou.hp > solou.max_hp:
+        solou.hp -= (solou.mp - solou.max_mp)
+    if xoann.hp > xoann.max_hp:
+        xoann.hp -= (xoann.mp - xoann.max_mp)
     if monster.mp > monster.max_mp:
         monster.mp -= (monster.mp - monster.max_mp)
-    print('-'*25)
 
-    pet = inv_system.equipped['pet']
+    print('-'*25)
 
     # Sorry this section is kinda complicated. Basically, this calculates the length of certain
     # strings to see how much padding (extra spaces) is needed to make things line up.
-    if pet != '(None)':
-        first_padding = len(max([''.join([player.name, "'s ", pet.name]),
-                                 pet.name, monster.name], key=len))
+    first_padding = len(max([player.name, solou.name, xoann.name, monster.name], key=len))
 
-        second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp),
-                                  'LVL: {0}'.format(pet.level)
-                                  if isinstance(pet, pets.Fighter)
-                                  else '{0}/{1}'.format(pet.mana, pet.max_m)
-                                  if isinstance(pet, pets.Healer)
-                                  else '',
-                                  '{0}/{1} HP'.format(monster.mp, monster.max_mp)], key=len))
-
-    else:
-        first_padding = len(max([player.name, monster.name], key=len))
-
-        second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp),
-                                  '{0}/{1} HP'.format(monster.hp, monster.max_hp)], key=len))
+    second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp),
+                              '{0}/{1} HP'.format(solou.hp, solou.max_hp),
+                              '{0}/{1} HP'.format(xoann.hp, xoann.max_hp),
+                              '{0}/{1} HP'.format(monster.hp, monster.max_hp)], key=len))
 
     third_padding = len(max(['{0}/{1} MP'.format(player.mp, player.max_mp),
-                             '{0}/{1} MP'.format(monster.mp, monster.max_mp)]))
+                             '{0}/{1} MP'.format(solou.mp, solou.max_mp),
+                             '{0}/{1} MP'.format(xoann.mp, xoann.max_mp),
+                             '{0}/{1} MP'.format(monster.mp, monster.max_mp)], key=len))
 
     # Player Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
@@ -854,6 +515,26 @@ def bat_stats():
           pad2=' '*(second_padding - len('{0}/{1} HP'.format(player.hp, player.max_hp))),
           pad3=' '*(third_padding - len('{0}/{1} MP'.format(player.mp, player.max_mp)))))
 
+    if solou.enabled:
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+              solou.name, solou.hp,
+              solou.max_hp, solou.mp,
+              solou.max_mp, solou.lvl,
+              solou.status_ail.title(),
+              pad1=' '*(first_padding - len(solou.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(solou.hp, solou.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(solou.mp, solou.max_mp)))))
+
+    if xoann.enabled:
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+              xoann.name, xoann.hp,
+              xoann.max_hp, xoann.mp,
+              xoann.max_mp, xoann.lvl,
+              xoann.status_ail.title(),
+              pad1=' '*(first_padding - len(xoann.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(xoann.hp, xoann.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(xoann.mp, xoann.max_mp)))))
+
     # Monster Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
           monster.name, monster.hp,
@@ -862,19 +543,5 @@ def bat_stats():
           pad1=' '*(first_padding - len(monster.name)),
           pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.hp, monster.max_hp))),
           pad3=' '*(third_padding - len('{0}/{1} MP'.format(monster.mp, monster.max_mp)))))
-
-    # Pet Stats
-    if pet:
-        if isinstance(pet, pets.Healer):
-            print("{0}'s {1}{pad1} | {2}/{3} MP {pad2}| LVL: {4}".format(
-                player.name, pet.name, pet.mana, pet.max_m, pet.level,
-                pad1=' '*(first_padding - len(''.join([player.name, "'s ", pet.name]))),
-                pad2=' '*(second_padding - len('{0}/{1}'.format(pet.mana, pet.max_m)))))
-
-        elif isinstance(pet, pets.Fighter):
-            print("{0}'s {1}{pad1} | LVL: {2} {pad2}| STATUS: {3}".format(
-                player.name, pet.name, pet.level, 'Incapacitated' if pet.rt else 'None',
-                pad1=' '*(first_padding - len(''.join([player.name, "'s ", pet.name]))),
-                pad2=' '*(second_padding - len('LVL: {0}'.format(pet.level)))))
 
     print('-'*25)

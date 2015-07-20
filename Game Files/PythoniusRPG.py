@@ -37,11 +37,6 @@ game_version = 'v0.6.6'
 #     the top of the module.
 #-----------------------------------------------------------------------------#
 
-# Establish "player" as a global variable
-player = ''
-lazaya = ''
-xoann = ''
-
 # A dictionary containing miscellaneous variables made entirely of
 misc_vars = {'gp': 20, 'visited_towns': []}
 
@@ -71,10 +66,10 @@ import inv_system
 import battle
 import magic
 import bosses
-import pets
 import items
 import sounds
 import towns
+import ascii_art
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -139,28 +134,31 @@ do_text_scroll = False
 class PlayableCharacter:
     # A class for characters whose input can be directly controlled by the player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk,
-                 p_dfns, spd, evad, class_=''):
-        self.name = name      # Name
-        self.hp = hp          # Health
-        self.mp = mp          # Mana Points
-        self.attk = attk      # Attack
-        self.dfns = dfns      # Defense
-        self.p_attk = p_attk  # Pierce Attack
-        self.p_dfns = p_dfns  # Pierce Defense
-        self.m_attk = m_attk  # Magic Attack
-        self.m_dfns = m_dfns  # Magic Defense
-        self.spd = spd        # Speed
-        self.evad = evad      # Evasion
+                 p_dfns, spd, evad, class_='', enabled=True):
+        self.name = name        # Name
+        self.hp = hp            # Health
+        self.mp = mp            #    Mana Points
+        self.attk = attk        # Attack
+        self.dfns = dfns        # Defense
+        self.p_attk = p_attk    # Pierce Attack
+        self.p_dfns = p_dfns    # Pierce Defense
+        self.m_attk = m_attk    # Magic Attack
+        self.m_dfns = m_dfns    # Magic Defense
+        self.spd = spd          # Speed
+        self.evad = evad        # Evasion
+        self.enabled = enabled  # Whether the party member has been recruited or not
+        self.class_ = class_    # Player Class
 
         self.lvl = 1              # Level
         self.exp = 0              # Experience
         self.ext_ski = 0          # Extra Skill Points
         self.ext_gol = 0          # Extra Gold Pieces
         self.ext_exp = 0          # Extra Experience
-        self.class_ = class_      # Player Class
         self.element = 'none'     # Player's Element
         self.status_ail = 'none'  # Current Status Ailment
         self.req_xp = 3           # Required XP to level up
+        self.battle_move = ''     # What move the character chose during battle
+        self.dodge = 0            # Variable used to determine chance to dodge
 
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
@@ -174,23 +172,25 @@ class PlayableCharacter:
                            'for': 1}  # Fortune
 
     def player_damage(self):
-        # The formula for the player dealing damage
+        # The formula for PCUs dealing damage
 
         if inv_system.equipped['weapon'].type_ != 'ranged':
-            dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/1.25))
+            dam_dealt = math.ceil(
+                battle.temp_stats[self.name]['attk']/2 - (battle.monster.dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
 
-            # The player deals 1/2 damage with melee attacks when given the weakened status ailment
+            # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
                 print('You deal half damage because of your weakened state!')
 
         else:
-            dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/1.25))
+            dam_dealt = math.ceil(
+                battle.temp_stats[self.name]['p_attk']/2 - (battle.monster.p_dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
 
-            # The player deals 1/2 damage with ranged attacks when given the blinded status ailment
+            # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
@@ -581,6 +581,395 @@ Armor:
 
         print('-'*25)
         input('Press Enter/Return ')
+
+    def battle_turn(self, is_boss):
+        monster = battle.monster
+        while True:
+            # "2" refers to magic, which will print this later
+            if self.move != '2':
+                print("\n-{0}'s Turn-".format(self.name))
+
+            if self.move == '1' or self.move == 'q':
+                print(ascii_art.player_art[self.class_.title()] %
+                      "{0} is making a move!\n".format(self.name))
+
+                if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
+                    sounds.sword_slash.play()
+                    print('You begin to fiercely attack the {0} using your {1}...'.format(
+                        monster.name, str(inv_system.equipped['weapon'])))
+
+                # Ranged weapons aren't swung, so play a different sound effect
+                else:
+                    sounds.aim_weapon.play()
+                    print('You aim carefully at the {0} using your {1}...'.format(
+                        monster.name, str(inv_system.equipped['weapon'])))
+
+                time.sleep(0.75)
+
+                while msvcrt.kbhit():
+                    msvcrt.getwch()
+
+                if self.dodge in range(monster.evad, 512):
+                    dam_dealt = self.player_damage()
+                    monster.hp -= dam_dealt
+                    sounds.enemy_hit.play()
+                    print('Your attack connects with the {0}, dealing {1} damage!'.format(
+                        monster.name, dam_dealt))
+
+                else:
+                    sounds.attack_miss.play()
+                    print('The {0} dodges your attack with ease!'.format(monster.name))
+
+            elif self.move == '2':
+                if not magic.pick_cat(self.dodge):
+                    return False
+
+            elif self.move == '3':
+                if not self.class_ability():
+                    return False
+
+            elif self.move == '4':  # Use the Battle Inventory
+
+                if battle.battle_inventory() and monster.hp > 0:
+                    input('\nPress Enter/Return ')
+                    monster.battle('', '')
+
+                    if self.hp > 0:
+                        input('\nPress Enter/Return ')
+
+                continue
+
+            elif self.move == '5':
+                if battle.run_away():
+                    # Attempt to run.
+                    # If it succeeds, end the battle without giving the player a reward
+                    print('-'*25)
+                    pygame.mixer.music.load(main.position['reg_music'])
+                    pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(main.music_vol)
+
+                    return
+
+                # If it fails, the enemy will attack you and skip your turn
+                monster.battle_turn('', '')
+
+                if self.hp > 0:
+                    input('\nPress Enter/Return ')
+
+                continue
+
+            else:
+                return False
+
+            if inv_system.equipped['pet'] != '(None)' and monster.hp > 0:
+                input('\nPress Enter/Return')
+                print("\n-Pet Turn-")
+                inv_system.equipped['pet'].use_ability()
+
+            # Check to see if the PCU is poisoned
+            if self.status_ail == 'poisoned' and monster.hp > 0:
+                if random.randint(0, 3):
+                    time.sleep(0.5)
+
+                    while msvcrt.kbhit():
+                        msvcrt.getwch()
+
+                    sounds.poison_damage.play()
+
+                    poison_damage = int(math.ceil(self.max_hp/10))
+                    print('You took poison damage! (-{0} HP)'.format(poison_damage))
+                    self.hp -= poison_damage
+
+                    if self.hp <= 0:
+                        break
+
+                else:
+                    time.sleep(0.5)
+
+                    while msvcrt.kbhit():
+                        msvcrt.getwch()
+
+                    sounds.buff_spell.play()
+                    input('You start to feel better! | Press enter/return ')
+                    self.status_ail = 'none'
+
+            # Check to see if the PCU is silenced
+            elif self.status_ail != 'none' and self.status_ail != 'asleep':
+                if not random.randint(0, 3):
+
+                    time.sleep(0.5)
+
+                    while msvcrt.kbhit():
+                        msvcrt.getwch()
+
+                    sounds.buff_spell.play()
+
+                    input('Your afflictions have worn off! | Press enter/return ')
+                    self.status_ail = 'none'
+
+            if is_boss and monster.multiphase and monster.hp <= 0:
+                monster.enemy_turn(is_boss)
+
+            return True
+
+    def player_choice(self):
+        # Creates a lambda function that strips all non-numeric characters
+        # This fixes some (possible) problems later on
+        only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
+
+        print("""\
+Pick {0}'s Move:
+      [1]: Attack
+      [2]: Use Magic
+      [3]: Class Ability
+      [4]: Use Items
+      [5]: Run""".format(self.name))
+
+        while True:
+            # Only return if "move" refers to a valid move
+            move = input("Input [#]: ")
+            if move != "q":
+                move = only_num(move)
+
+            if move.isdigit() and int(move) in range(1, 6) or \
+                    (move == 'q' and self.name == "Flygon Jones"):
+
+                if move == '3':
+                    if self.lvl < 5:
+                        # You must be at least level 5 to use your class ability
+                        print("You have not yet realized your class's inner potential \
+(must be level 5 to use)\n")
+                        input('Press enter/return ')
+
+                        print('-'*25)
+                        print("""\
+Pick {0}'s Move:
+      [1]: Attack
+      [2]: Use Magic
+      [3]: Class Ability
+      [4]: Use Items
+      [5]: Run""".format(self.name))
+
+                        continue
+
+                    if battle.temp_stats[self.name]['ability_used']:
+                        # You can only use your ability once per battle.
+                        print('You feel drained, and are unable to call upon your class\
+ability again.\n')
+                        input('Press enter/return ')
+
+                        print('-'*25)
+                        print("""\
+Pick {0}'s Move:
+      [1]: Attack
+      [2]: Use Magic
+      [3]: Class Ability
+      [4]: Use Items
+      [5]: Run""".format(self.name))
+
+                        continue
+
+                self.move = move
+
+                return
+
+    def class_ability(self):
+        # Class abilities are special abilities only available to characters of certain classes.
+        # Their purpose is to help make the characters more diverse, as well as encourage more
+        # strategy being used.
+
+        monster = battle.monster
+        battle.temp_stats[self.name]['ability_used'] = True
+
+        print(ascii_art.player_art[self.class_.title()] %
+              "{0} is making a move!\n".format(self.name))
+
+        print("You use the knowledge you've gained to unleash your class ability!")
+
+        # Ranger Ability: Scout
+        if self.class_ == 'ranger':
+            # The ranger class identifies their enemy and prints their stats.
+            # This is really useful for defeating bosses, which are often weak to
+            # certain types and elements of attacks.
+
+            print('-'*25)
+            print('ABILITY: SCOUT')
+            print('-'*25)
+
+            print('As a Ranger, you identify your enemy and focus, increasing your pierce attack!')
+            input("Press Enter/Return to view your enemy's stats ")
+
+            print('-'*25)
+            print("{0}'s STATS:".format(monster.name.upper()))
+
+            print("""Attack: {0} | M. Attack: {1} | P. Attack: {2} | Speed: {3}
+    Defense: {4} | M. Defense: {5} | P. Defense: {6} | Evasion: {7}
+    Element: {8} | Elemental Weakness: {9}""".format(
+                monster.attk, monster.m_attk, monster.p_attk, monster.spd,
+                monster.dfns, monster.m_dfns, monster.p_dfns, monster.evad,
+                monster.element.title(),
+                {'fire': 'Water',
+                 'water': 'Electric',
+                 'electric': 'Earth',
+                 'earth': 'Grass',
+                 'grass': 'Wind',
+                 'wind': 'Ice',
+                 'ice': 'Fire',
+                 'none': 'None',
+                 'life': 'Death',
+                 'death': 'Life'}[monster.element]))
+
+            battle.temp_stats[self.name]['p_attk'] *= 1.2
+            battle.temp_stats[self.name]['p_attk'] =\
+                math.ceil(battle.temp_stats[self.name]['p_attk'])
+
+            return True
+
+        # Warrior Ability: Warrior's Spirit
+        elif self.class_ == 'warrior':
+
+            if 20 < 0.2*main.self.hp:
+                main.self.hp += 0.2*main.self.hp
+                main.self.hp = math.ceil(main.self.hp)
+            else:
+                self.hp += 20
+
+            p_temp_stats['dfns'] *= 1.2
+            p_temp_stats['m_dfns'] *= 1.2
+            p_temp_stats['p_dfns'] *= 1.2
+
+            print('-'*25)
+            print("ABILITY: WARRIOR'S SPIRIT")
+            print('-'*25)
+
+            print('As a Warrior, you channel your inner-strength and restore health and defense!')
+
+            if self.hp > self.max_hp:
+                self.hp -= (self.hp - self.max_hp)
+            if self.mp > self.max_mp:
+                self.mp -= (self.mp - self.max_mp)
+
+            return True
+
+        # Mage Ability: Artificial Intelligence
+        elif self.class_ == "mage":
+            self.mp += _c(self.max_mp)/2
+
+            if self.mp > self.max_mp:
+                self.mp = _c(self.max_mp)
+
+            self.mp = math.ceil(self.mp)
+
+            battle.temp_stats[self.name]['m_attk'] *= 1.2
+            battle.temp_stats[self.name]['m_dfns'] *= 1.2
+
+            print('-'*25)
+            print("ABILITY: ARTIFICIAL INTELLIGENCE")
+            print('-'*25)
+
+            print('As a Mage, you focus intently and sharply increase your magical prowess!')
+            print('Your magic attack and defense increase, and you regain MP!')
+
+            return True
+
+        # Assassin Ability: Poison Injection
+        elif self.class_ == "assassin":
+            monster.is_poisoned = True
+
+            print('-'*25)
+            print("ABILITY: POISON INJECTION")
+            print('-'*25)
+
+            print('As an Assassin, you discreetly inject poison into your enemy!')
+
+            return True
+
+        # Paladin Ability: Divine Intervention
+        elif self.class_ == "paladin":
+            print('-'*25)
+            print('ABILITY: DIVINE INTERVENTION')
+            print('-'*25)
+
+            print('As a Paladin, you call upon the power of His Divinity to aid you!')
+            print('You enemy has been turned to the "death" element, causing your')
+            print('holy spells to inflict more damage! You also regain health and MP.')
+
+            monster.element = "death"
+
+            if 15 < 0.15*main.self.hp:
+                self.hp += 0.1*self.hp
+                self.hp = math.ceil(self.hp)
+            else:
+                self.hp += 15
+
+            if 15 < 0.15*main.self.mp:
+                self.mp += 0.1*self.mp
+                self.mp = math.ceil(self.mp)
+            else:
+                self.mp += 15
+
+            if self.hp > self.max_hp:
+                self.hp -= (self.hp - self.max_hp)
+            if self.mp > self.max_mp:
+                self.mp -= (self.mp - self.max_mp)
+
+            return True
+
+        # Monk Ability: Chakra-smash
+        elif self.class_ == 'monk':
+            # Essentially a 2.5x crit. As an added bonus, this attack has a 14%
+            # chance to get a crit itself, resulting in a total of an 5x critical.
+            # This attack lowers your defenses by 25% for three turns to balance it out.
+            # If you are weakened, this attack ignores that and will deal full damage anyway.
+            print('-'*25)
+            print('ABILITY: CHAKRA-SMASH')
+            print('-'*25)
+
+            print('As a monk, you meditate and focus your inner chi.')
+            print('After a brief moment of confusion from the enemy, you strike, dealing')
+            print('an immense amount of damage in a single, powerful strike! As a result, your')
+            print('defenses have been lowered by 25% for three turns.')
+            print()
+
+            dam_dealt = math.ceil(p_temp_stats['attk']/2- (monster.dfns/1.25))
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
+
+            dam_dealt = magic.eval_element(
+                p_elem=inv_system.equipped['weapon'].element,
+                m_elem=monster.element, p_dmg=dam_dealt)[0]
+
+            dam_dealt *= 2.5
+            dam_dealt = math.ceil(dam_dealt)
+
+            if dam_dealt < 4:
+                dam_dealt = 4
+
+            if random.randint(1, 100) <= 14:
+                print("It's a critical hit! 2x damage!")
+                print('Overkill!')
+                dam_dealt *= 2
+
+            if dam_dealt > 999:
+                dam_dealt = 999
+
+            print('The attack deals {0} damage to the {1}!'.format(dam_dealt, monster.name))
+
+            battle.temp_stats[self.name]['dfns'] /= 1.25
+            battle.temp_stats[self.name]['m_dfns'] /= 1.25
+            battle.temp_stats[self.name]['p_dfns'] /= 1.25
+
+            battle.temp_stats[self.name]['dfns'] = math.floor(
+                battle.temp_stats[self.name]['dfns'])
+
+            battle.temp_stats[self.name]['m_dfns'] = math.floor(
+                battle.temp_stats[self.name]['m_dfns'])
+
+            battle.temp_stats[self.name]['p_dfns'] = math.floor(
+                battle.temp_stats[self.name]['p_dfns'])
+
+            monster.hp -= dam_dealt
+
+            return True
 
 
 def set_adventure_name():
@@ -1282,6 +1671,13 @@ def main():
 
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
+
+    # Establish all three characters as global variables
+    player = ''
+    solou = PlayableCharacter('Solou', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
+                              class_='assassin', enabled=True)
+    xoann = PlayableCharacter('Xoann', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
+                              class_='monk', enabled=True)
 
     # Yes, this is a try...except statement that includes functions that span
     # over 8000 lines, but it's necessary for error logging.

@@ -751,21 +751,6 @@ item_sprites = {
      """ + Fore.WHITE + """>""" + Fore.YELLOW + Style.DIM + """|   |____
       |        |
       |--------|
-""" + Style.RESET_ALL + Fore.RESET,
-
-    "Healer Pet": Fore.RED + """
-       _
-     _| |_
-    |_""" + Fore.WHITE + """PET""" + Fore.RED + """_|
-      |_|
-""" + Style.RESET_ALL + Fore.RESET,
-
-    "Fighter Pet": Fore.RED + """
-      |
-      """ + Fore.RED + """| """ + Fore.WHITE + """PET
-    <-""" + Fore.RED + """|""" + Fore.YELLOW + Style.DIM + """-----""" + Fore.WHITE + """<<
-      """ + Fore.RED + """|
-      |
 """ + Style.RESET_ALL + Fore.RESET
 }
 
