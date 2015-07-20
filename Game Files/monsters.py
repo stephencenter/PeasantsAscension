@@ -75,6 +75,8 @@ class Monster:
         self.lvl = lvl  # Level
         self.element = element  # Element
         self.monster_name = ''
+        self.max_hp = copy.copy(self.hp)
+        self.max_mp = copy.copy(self.mp)
         if not isinstance(self, bosses.Boss):
             self.items = ''
 
@@ -130,8 +132,8 @@ class Monster:
             self.spd += 3
             self.evad += 2
 
-        misc_vars['hp_m'] = self.hp
-        misc_vars['mp_m'] = self.mp
+        self.max_hp = self.hp
+        self.max_mp = self.mp
 
         num = random.randint(0, 4)  # 20% chance
         if not num:
@@ -217,7 +219,7 @@ class Monster:
 
             is_defending = True
 
-        elif self.hp <= int(misc_vars['hp_m']/4) and self.mp >= 5 and random.randint(0, 1):
+        elif self.hp <= math.ceil(self.max_hp/4) and self.mp >= 5 and random.randint(0, 1):
             # Magic heal
             sounds.magic_healing.play()
 
@@ -226,8 +228,8 @@ class Monster:
             else:
                 self.hp += 20
 
-            if self.hp > main.misc_vars['hp_m']:
-                self.hp = main.misc_vars['hp_m']
+            if self.hp > self.max_hp:
+                self.hp = self.max_hp
 
             print('The {0} casts a healing spell!'.format(self.name))
 
@@ -336,7 +338,7 @@ class Monster:
 
                 sounds.poison_damage.play()
 
-                poison_damage = int(math.ceil(misc_vars['hp_m']/10))
+                poison_damage = int(math.ceil(self.max_hp/10))
                 print('The {0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
                 self.hp -= poison_damage
 
@@ -556,7 +558,7 @@ def melee_stats(self):
     # Set stats for melee-class monsters
     self.hp *= 1.2
     self.hp = math.ceil(self.hp)
-    misc_vars['hp_m'] = copy.copy(self.hp)
+    self.max_hp = copy.copy(self.hp)
 
     self.attk *= 1.5
     self.attk = math.ceil(self.attk)
@@ -584,7 +586,7 @@ def magic_stats(self):
     # Set stats for Mage-class monsters
     self.mp *= 1.5
     self.mp = math.ceil(self.mp)
-    misc_vars['mp_m'] = copy.copy(self.mp)
+    self.max_mp = copy.copy(self.mp)
 
     self.attk *= 0.5
     self.attk = math.ceil(self.attk)
@@ -609,7 +611,7 @@ def ranger_stats(self):
     # Set stats for Ranger-class monsters
     self.hp *= 0.9
     self.hp = math.ceil(self.hp)
-    misc_vars['hp_m'] = copy.copy(self.hp)
+    self.max_hp = copy.copy(self.hp)
 
     self.attk *= 0.8
     self.attk = math.ceil(self.attk)
@@ -646,7 +648,7 @@ def magic_ai(dodge):
     if player.status_ail != "none" and not random.randint(0, 4) and monster.mp > 2:
         monster.give_status()
 
-    elif monster.hp <= int(misc_vars['hp_m']/4) and monster.mp >= 5:
+    elif monster.hp <= math.ceil(monster.max_hp/4) and monster.mp >= 5:
         # Magic heal
         sounds.magic_healing.play()
 
@@ -655,8 +657,8 @@ def magic_ai(dodge):
         else:
             monster.hp += 20
 
-        if monster.hp > main.misc_vars['hp_m']:
-            monster.hp = main.misc_vars['hp_m']
+        if monster.hp > monster.max_hp:
+            monster.hp = monster.max_hp
 
         print('The {0} casts a healing spell!'.format(monster.name))
 
@@ -691,8 +693,10 @@ def magic_ai(dodge):
 
     else:
         # Non-magic Attack
-        random.choice([monster.monst_attk(dodge, 'pierce'),
-                       monster.monst_attk(dodge, 'melee')])
+        if random.randint(0, 1):
+            monster.monst_attk(dodge, 'pierce')
+        else:
+            monster.monst_attk(dodge, 'melee')
 
     monster.check_poison()
 

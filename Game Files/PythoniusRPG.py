@@ -39,10 +39,11 @@ game_version = 'v0.6.6'
 
 # Establish "player" as a global variable
 player = ''
+lazaya = ''
+xoann = ''
 
 # A dictionary containing miscellaneous variables made entirely of
-misc_vars = {'hp_m': '', 'mp_m': '', 'r_xp': 3, 'gp': 20,
-             'visited_towns': []}
+misc_vars = {'gp': 20, 'visited_towns': []}
 
 # A dictionary containing all information related to the player's position
 position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
@@ -135,37 +136,51 @@ sound_vol = 1.0  # These values can be changed in settings.cfg file
 do_text_scroll = False
 
 
-class PlayerCharacter:  # The Player
+class PlayableCharacter:
+    # A class for characters whose input can be directly controlled by the player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk,
-                 p_dfns, spd, evad, lvl, exp, ext_ski, ext_gol, ext_exp,
-                 class_='', element='none'):
-        self.name = name  # Name
-        self.hp = hp  # Health
-        self.mp = mp  # Mana Points
-        self.attk = attk  # Attack
-        self.dfns = dfns  # Defense
+                 p_dfns, spd, evad, class_=''):
+        self.name = name      # Name
+        self.hp = hp          # Health
+        self.mp = mp          # Mana Points
+        self.attk = attk      # Attack
+        self.dfns = dfns      # Defense
         self.p_attk = p_attk  # Pierce Attack
         self.p_dfns = p_dfns  # Pierce Defense
         self.m_attk = m_attk  # Magic Attack
         self.m_dfns = m_dfns  # Magic Defense
-        self.spd = spd  # Speed
-        self.evad = evad  # Evasion
-        self.lvl = lvl  # Level
-        self.exp = exp  # Experience
-        self.ext_ski = ext_ski  # Skill Points
-        self.ext_gol = ext_gol  # Extra Gold Pieces
-        self.ext_exp = ext_exp  # Extra Experience
-        self.class_ = class_  # Player Class
-        self.element = element
+        self.spd = spd        # Speed
+        self.evad = evad      # Evasion
+
+        self.lvl = 1              # Level
+        self.exp = 0              # Experience
+        self.ext_ski = 0          # Extra Skill Points
+        self.ext_gol = 0          # Extra Gold Pieces
+        self.ext_exp = 0          # Extra Experience
+        self.class_ = class_      # Player Class
+        self.element = 'none'     # Player's Element
         self.status_ail = 'none'  # Current Status Ailment
+        self.req_xp = 3           # Required XP to level up
+
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
-        self.attributes = {'int': 1, 'wis': 1, 'str': 1, 'con': 1, 'dex': 1, 'per': 1, 'for': 1}
 
-    def player_damage(self):  # The formula for the player dealing damage
+        self.attributes = {'int': 1,  # Intelligence
+                           'wis': 1,  # Wisdom
+                           'str': 1,  # Strength
+                           'con': 1,  # Constitution
+                           'dex': 1,  # Dexterity
+                           'per': 1,  # Perception
+                           'for': 1}  # Fortune
+
+    def player_damage(self):
+        # The formula for the player dealing damage
+
         if inv_system.equipped['weapon'].type_ != 'ranged':
             dam_dealt = math.ceil(battle.temp_stats['attk']/2 - (battle.monster.dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
+
+            # The player deals 1/2 damage with melee attacks when given the weakened status ailment
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
@@ -174,18 +189,23 @@ class PlayerCharacter:  # The Player
         else:
             dam_dealt = math.ceil(battle.temp_stats['p_attk']/2 - (battle.monster.p_dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
+
+            # The player deals 1/2 damage with ranged attacks when given the blinded status ailment
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
                 dam_dealt = math.ceil(dam_dealt)
                 print('Your poor vision reduces your attack damage by half!')
 
+        # Increase or decrease the damage depending on the player/monster's elements
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped['weapon'].element,
             m_elem=battle.monster.element, p_dmg=dam_dealt)[0]
 
+        # All attacks deal a minimum of one damage
         if dam_dealt < 1:
             dam_dealt = 1
 
+        # There is a 7% chance to inflict double damage
         if random.randint(1, 100) <= 7:
             print("It's a critical hit! 2x damage!")
             dam_dealt *= 2
@@ -208,6 +228,7 @@ class PlayerCharacter:  # The Player
 
             self.name = alphanumeric(self.name)
 
+            # Flygon Jones is my real life best friend and the bug-tester for this game!
             if self.name == "Flygon Jones":
                 print('Ah, Flygon Jones! My dear friend, it is good to see you again!')
                 input('Press enter/return ')
@@ -215,7 +236,6 @@ class PlayerCharacter:  # The Player
                 return self.name
 
             while True:
-
                 y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
                 y_n = y_n.lower()
 
@@ -270,7 +290,7 @@ Input [#]: """.format(self.name))
 
     def level_up(self):
         global misc_vars
-        if self.exp >= misc_vars['r_xp']:
+        if self.exp >= self.req_xp:
             print()
             pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
@@ -283,7 +303,7 @@ Input [#]: """.format(self.name))
             rem_points = 0  # Remaining Skill Points
             extra_points = 0  # The number of extra skill points the player will receive
 
-            while self.exp >= misc_vars['r_xp']:
+            while self.exp >= self.req_xp:
                 sounds.item_pickup.play()
                 self.lvl += 1
                 print("You've advanced to level {0}!".format(self.lvl))
@@ -372,8 +392,8 @@ Input [#]: """.format(self.name))
                     self.hp += 3
                     self.mp += 2
 
-                self.exp -= misc_vars['r_xp']
-                misc_vars['r_xp'] = int((math.pow(self.lvl*2, 2) - 1.2*self.lvl))
+                self.exp -= self.req_xp
+                self.req_xp = math.ceil((math.pow(self.lvl*2, 2) - 1.2*self.lvl))
 
             print('-'*25)
             self.skill_points(rem_points, extra_points)
@@ -546,7 +566,7 @@ Armor:
                         self.attributes['str'], self.attributes['con'],
                         self.attributes['dex'], self.attributes['per'],
                         self.attributes['for'],
-                        self.exp, misc_vars['r_xp'], misc_vars['gp'],
+                        self.exp, self.req_xp, misc_vars['gp'],
                         inv_system.equipped['weapon'], inv_system.equipped['access'],
                         inv_system.equipped['head'], inv_system.equipped['body'],
                         inv_system.equipped['legs']))
@@ -660,7 +680,7 @@ def create_player():
     global player
     global misc_vars
 
-    player = PlayerCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, 1, 0, 0, 0, 0)
+    player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
 
     # Set the player's max HP and MP
     player.max_hp = copy.copy(player.hp)
@@ -1011,16 +1031,18 @@ def save_game():
             return
 
 
-def serialize_player(path):  # Save the "PlayerCharacter" object as a JSON file
+def serialize_player(path):
+    # Save the "PlayableCharacter" object as a JSON file
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
 
 
-def deserialize_player(path):  # Load the JSON file and translate
-    # it into a "PlayerCharacter" object
+def deserialize_player(path):
+    # Load the JSON file and translate
+    # it into a "PlayableCharacter" object
     global player
 
-    player = PlayerCharacter('', 10, 5, 5, 4, 5, 4, 5, 4, 5, 3, 1, 0, 0, 0, 0)
+    player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
 
     with open(path, encoding='utf-8') as f:
         player_dict = json.load(f)

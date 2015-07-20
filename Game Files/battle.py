@@ -807,16 +807,16 @@ def bat_stats():
         monster.hp = 0
     if player.hp > player.max_hp:
         player.hp -= (player.hp - player.max_hp)
-    if monster.hp > misc_vars['hp_m']:
-        monster.hp -= (monster.hp - misc_vars['hp_m'])
+    if monster.hp > monster.max_hp:
+        monster.hp -= (monster.hp - monster.max_hp)
     if player.mp < 0:
         player.mp = 0
     if monster.mp < 0:
         monster.mp = 0
     if player.mp > player.max_mp:
         player.mp -= (player.mp - player.max_mp)
-    if monster.mp > misc_vars['mp_m']:
-        monster.mp -= (monster.mp - misc_vars['mp_m'])
+    if monster.mp > monster.max_mp:
+        monster.mp -= (monster.mp - monster.max_mp)
     print('-'*25)
 
     pet = inv_system.equipped['pet']
@@ -833,16 +833,16 @@ def bat_stats():
                                   else '{0}/{1}'.format(pet.mana, pet.max_m)
                                   if isinstance(pet, pets.Healer)
                                   else '',
-                                  '{0}/{1} HP'.format(monster.mp, misc_vars['mp_m'])], key=len))
+                                  '{0}/{1} HP'.format(monster.mp, monster.max_mp)], key=len))
 
     else:
         first_padding = len(max([player.name, monster.name], key=len))
 
         second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp),
-                                  '{0}/{1} HP'.format(monster.hp, misc_vars['hp_m'])], key=len))
+                                  '{0}/{1} HP'.format(monster.hp, monster.max_hp)], key=len))
 
     third_padding = len(max(['{0}/{1} MP'.format(player.mp, player.max_mp),
-                             '{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])]))
+                             '{0}/{1} MP'.format(monster.mp, monster.max_mp)]))
 
     # Player Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
@@ -857,11 +857,11 @@ def bat_stats():
     # Monster Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
           monster.name, monster.hp,
-          misc_vars['hp_m'], monster.mp,
-          misc_vars['mp_m'], monster.lvl,
+          monster.max_hp, monster.mp,
+          monster.max_mp, monster.lvl,
           pad1=' '*(first_padding - len(monster.name)),
-          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.hp, misc_vars['hp_m']))),
-          pad3=' '*(third_padding - len('{0}/{1} MP'.format(monster.mp, misc_vars['mp_m'])))))
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monster.hp, monster.max_hp))),
+          pad3=' '*(third_padding - len('{0}/{1} MP'.format(monster.mp, monster.max_mp)))))
 
     # Pet Stats
     if pet:
