@@ -640,7 +640,7 @@ item_sprites = {
     ----------
 """ + Style.RESET_ALL + Fore.RESET,
 
-    "Shirt": Style.DIM + Fore.YELLOW +"""
+    "Shirt": Style.DIM + Fore.YELLOW + """
      ____  ____
     |__  \/  __|
        |    |

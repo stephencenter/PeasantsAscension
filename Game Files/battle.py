@@ -190,7 +190,7 @@ def battle_system(is_boss=False, ambush=False):
             monk_tc += 1
 
         # There is a 1/3 chance for the player to wake up each turn if they are asleep
-        for character in [x for x in [ player, solou, xoann]
+        for character in [x for x in [player, solou, xoann]
                           if x.enabled and x.status_ail != 'dead']:
             if character.status_ail == 'asleep':
                 # If dodge is in a certain range, the attack will miss
@@ -200,7 +200,7 @@ def battle_system(is_boss=False, ambush=False):
                 if not random.randint(0, 2):
                     sounds.buff_spell.play()
                     print('\n-Player Turn-')
-                    input('You start to regain conciousness! | Press enter/return ')
+                    input('You start to regain consciousness! | Press enter/return ')
 
                     character.status_ail = 'none'
                     bat_stats()
@@ -234,7 +234,6 @@ def battle_system(is_boss=False, ambush=False):
             else:
                 break
 
-
     else:
         if after_battle(is_boss) != 'dead':
             print('-'*25)
@@ -249,7 +248,7 @@ def after_battle(is_boss):  # Assess the results of the battle
 
     while True:
         # If the monster wins...
-        if monster.hp > 0 >= player.hp and 0 >= solou.hp  and 0 >= xoann.hp:
+        if monster.hp > 0 >= player.hp and 0 >= solou.hp and 0 >= xoann.hp:
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
@@ -451,7 +450,6 @@ def battle_inventory():
 
             item.use_item(is_battle=True)
             return True
-
 
 
 def bat_stats():

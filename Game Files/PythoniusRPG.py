@@ -178,10 +178,15 @@ class PlayableCharacter:
     def player_damage(self):
         # The formula for PCUs dealing damage
 
-        if inv_system.equipped['weapon'].type_ != 'ranged':
+        if inv_system.equipped[
+            self.name if self != player else 'player'
+        ]['weapon'].type_ != 'ranged':
+
             dam_dealt = math.ceil(
                 battle.temp_stats[self.name]['attk']/2 - (battle.monster.dfns/1.25))
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
+                self.name if self != player else 'player'
+            ]['weapon'].power)
 
             # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
             if self.status_ail == 'weakened':
@@ -192,7 +197,9 @@ class PlayableCharacter:
         else:
             dam_dealt = math.ceil(
                 battle.temp_stats[self.name]['p_attk']/2 - (battle.monster.p_dfns/1.25))
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
+                self.name if self != player else 'player'
+            ]['weapon'].power)
 
             # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
             if self.status_ail == 'blinded':
@@ -202,7 +209,9 @@ class PlayableCharacter:
 
         # Increase or decrease the damage depending on the player/monster's elements
         dam_dealt = magic.eval_element(
-            p_elem=inv_system.equipped['weapon'].element,
+            p_elem=inv_system.equipped[
+                self.name if self != player else 'player'
+            ]['weapon'].element,
             m_elem=battle.monster.element, p_dmg=dam_dealt)[0]
 
         # All attacks deal a minimum of one damage
@@ -256,7 +265,7 @@ class PlayableCharacter:
       [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
       [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
       [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
-      [4] Paladin: Heavy-armor user who accels at holy and healing magic and uses hammers
+      [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers
       [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
       [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
 Input [#]: """.format(self.name))
@@ -434,7 +443,7 @@ Input [#]: """.format(self.name))
     [S]trength -  Smash through enemies with higher attack and defense!
     [C]onstitution - Become a tank with higher defense stats and HP!
     [D]exterity - Improve your aerobic ability with higher evade/speed stats!
-    [P]erception - Eleminate your enemies with ease using higher pierce and evasion!
+    [P]erception - Eliminate your enemies with ease using higher pierce and evasion!
     [F]ortune - Increase your luck in hopes of getting more GP, XP, and skill points!
 Input letter: """)
 
@@ -575,9 +584,20 @@ Armor:
                        self.attributes['dex'], self.attributes['per'],
                        self.attributes['for'],
                        self.exp, self.req_xp, misc_vars['gp'],
-                       inv_system.equipped['weapon'], inv_system.equipped['access'],
-                       inv_system.equipped['head'], inv_system.equipped['body'],
-                       inv_system.equipped['legs']))
+                       inv_system.equipped[
+                           self.name if self != player else 'player'
+                       ]['weapon'], inv_system.equipped[
+                           self.name if self != player else 'player'
+                       ]['access'],
+                       inv_system.equipped[
+                           self.name if self != player else 'player'
+                       ]['head'],
+                       inv_system.equipped[
+                           self.name if self != player else 'player'
+                       ]['body'],
+                       inv_system.equipped[
+                           self.name if self != player else 'player'
+                       ]['legs']))
 
         print('-'*25)
         input('Press Enter/Return ')
@@ -594,16 +614,23 @@ Armor:
                 print(ascii_art.player_art[self.class_.title()] %
                       "{0} is making a move!\n".format(self.name))
 
-                if inv_system.equipped['weapon'].type_ in ['melee', 'magic']:
+                if inv_system.equipped[
+                    self.name if self != player else 'player'
+                ]['weapon'].type_ in ['melee', 'magic']:
+
                     sounds.sword_slash.play()
                     print('{0} begin to fiercely attack the {1} using their {2}...'.format(
-                        self.name, monster.name, str(inv_system.equipped['weapon'])))
+                        self.name, monster.name, str(inv_system.equipped[
+                            self.name if self != player else 'player'
+                        ]['weapon'])))
 
                 # Ranged weapons aren't swung, so play a different sound effect
                 else:
                     sounds.aim_weapon.play()
                     print('{0} aims carefully at the {1} using their {2}...'.format(
-                        self.name, monster.name, str(inv_system.equipped['weapon'])))
+                        self.name, monster.name, str(inv_system.equipped[
+                            self.name if self != player else 'player'
+                        ]['weapon'])))
 
                 time.sleep(0.75)
 
@@ -939,10 +966,14 @@ Pick {0}'s Move:
             print()
 
             dam_dealt = math.ceil(p_temp_stats['attk']/2 - (monster.dfns/1.25))
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped['weapon'].power)
+            dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
+                self.name if self != player else 'player'
+            ]['weapon'].power)
 
             dam_dealt = magic.eval_element(
-                p_elem=inv_system.equipped['weapon'].element,
+                p_elem=inv_system.equipped[
+                    self.name if self != player else 'player'
+                ]['weapon'].element,
                 m_elem=monster.element, p_dmg=dam_dealt)[0]
 
             dam_dealt *= 2.5
@@ -1097,14 +1128,14 @@ def create_player():
         player.attk += 3
         player.spd -= 1
         player.evad -= 1
-        inv_system.equipped['weapon'] = copy.copy(items.wdn_sht)
+        inv_system.equipped['player']['weapon'] = copy.copy(items.wdn_sht)
 
     elif player.class_ == "mage":
         player.max_hp += 1
         player.max_mp += 6
         player.m_attk += 4
         player.m_dfns += 3
-        inv_system.equipped['weapon'] = copy.copy(items.mag_twg)
+        inv_system.equipped['player']['weapon'] = copy.copy(items.mag_twg)
 
     elif player.class_ == "assassin":
         player.max_hp += 2
@@ -1113,7 +1144,7 @@ def create_player():
         player.dfns += 2
         player.spd += 4
         player.evad += 2
-        inv_system.equipped['weapon'] = copy.copy(items.stn_dag)
+        inv_system.equipped['player']['weapon'] = copy.copy(items.stn_dag)
 
     elif player.class_ == "ranger":
         player.max_mp += 2
@@ -1121,7 +1152,7 @@ def create_player():
         player.m_dfns += 2
         player.evad += 3
         player.spd += 3
-        inv_system.equipped['weapon'] = copy.copy(items.slg_sht)
+        inv_system.equipped['player']['weapon'] = copy.copy(items.slg_sht)
 
     elif player.class_ == "monk":
         player.max_hp += 2
@@ -1131,7 +1162,7 @@ def create_player():
         player.evad += 3
         player.spd += 3
         player.dfns -= 1
-        inv_system.equipped['weapon'] = copy.copy(items.fists)
+        inv_system.equipped['player']['weapon'] = copy.copy(items.fists)
 
     elif player.class_ == "paladin":
         player.max_hp += 3
@@ -1143,7 +1174,7 @@ def create_player():
         player.attk += 3
         player.spd -= 1
         player.evad -= 1
-        inv_system.equipped['weapon'] = copy.copy(items.rbr_mlt)
+        inv_system.equipped['player']['weapon'] = copy.copy(items.rbr_mlt)
 
     player.hp = copy.copy(player.max_hp)
     player.mp = copy.copy(player.max_mp)
@@ -1662,10 +1693,30 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
 
     # Establish all three characters as global variables
     player = ''
+
+    # Pronounced "So-low"
     solou = PlayableCharacter('Solou', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                              class_='assassin', enabled=True)
+                              class_='mage', enabled=True)
+
+    # Pronounced "Zo-ann"
     xoann = PlayableCharacter('Xoann', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                              class_='monk', enabled=True)
+                              class_='assassin', enabled=False)
+
+    # Pronounced "Adore-een"
+    adorine = PlayableCharacter('Adorine', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
+                                class_='warrior', enabled=False)
+
+    # Pronounced "Rahn-ahf"
+    ran_af = PlayableCharacter("Ran'Af", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
+                               class_='monk', enabled=False)
+
+    # Pronounced "Parse-toe"
+    parsto = PlayableCharacter("Parsto", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
+                               class_='ranger', enabled=False)
+
+    # Pronounced "Ran-dull"
+    randall = PlayableCharacter("Randall", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
+                                class_='paladin', enabled=False)
 
     # Yes, this is a try...except statement that includes functions that span
     # over 8000 lines, but it's necessary for error logging.

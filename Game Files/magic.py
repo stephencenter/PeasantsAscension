@@ -156,9 +156,13 @@ class Damaging(Spell):
             print(ascii_art.player_art[user.class_.title()] %
                   "{0} is making a move!\n".format(user.name))
 
-            if inv_system.equipped['weapon'].class_ == 'magic':
+            if inv_system.equipped[
+                user.name if self != main.player else 'player'
+            ]['weapon'].class_ == 'magic':
                 print('{0} begins to use their {1} to summon a powerful spell...'.format(
-                    user.name, inv_system.equipped['weapon']))
+                    user.name, inv_system.equipped[
+                        user.name if self != main.player else 'player'
+                    ]['weapon']))
             else:
                 print('{0} attempts to summon a powerful spell...'.format(user.name))
 
@@ -335,7 +339,7 @@ desecration = Damaging('Desecration',
                        "Cast out holy spirits with an evil aura! (Moderate)",
                        11, 15, 0.5, "death")
 unholy_rend = Damaging('Unholy Rend',
-                       "Anniahlate holy creatures with a searing blow! (Strong)",
+                       "Annihilate holy creatures with a searing blow! (Strong)",
                        23, 27, 1, "death")
 
 # -- Healing -- #
@@ -428,7 +432,6 @@ def relieve_affliction(is_battle, user):
             print('Using the power of {0}, {1} is cured of their afflictions!'.format(
                 r_affliction.name, user.name))
 
-
             user.status_ail = 'none'
             sounds.buff_spell.play()
 
@@ -517,39 +520,43 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
 # while True:
 #     exec(input())
 
-spellbook = {'Healing': [], 'Damaging': [magic_shot], 'Buffs': [m_evade, m_quick]}
+spellbook = {
+    'player': {
+        'Healing': [],
+        'Damaging': [magic_shot],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    },
+
+    'Solou': {
+        'Healing': [],
+        'Damaging': [magic_shot],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    },
+
+    'Xoann': {
+        'Healing': [],
+        'Damaging': [magic_shot],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    }
+}
 
 
 def pick_cat(user, is_battle=True):
-    if user.status_ail == 'silenced' \
-            and 'Relieve Affliction' not in [x.name for x in spellbook['Healing']]:
-        input("You find youself unable to use spells! | Press enter/return ")
+    if user.status_ail == 'silenced':
+        input("You find yourself unable to use spells! | Press enter/return ")
+
         return False
-
-    elif user.status_ail == 'silenced':
-        print('The only spell you can use without talking is "Relieve Affliction".')
-        while True:
-            y_n = input('Use Revlieve Affliction? | Yes or No ')
-
-            y_n = y_n.lower()
-
-            if y_n.startswith('y'):
-                if relieve_affliction(is_battle):
-                    main.misc_vars['prev_spell'] = 'Relieve Affliction'
-                    return True
-                else:
-                    return False
-
-            elif y_n.startswith('n'):
-                return False
 
     while True:
         do_continue = False
-        print("""Spellbook:
+        print("""{0}'s spellbook:
       [1] Damaging Spells
       [2] Buff Spells
       [3] Healing Spells
-      [4] Use Most Recent Spell""")
+      [4] Use Most Recent Spell""".format(user.name))
         spam = True
         while spam:
             cat = input('Input [#] (or type "exit"): ')
@@ -566,13 +573,12 @@ def pick_cat(user, is_battle=True):
             elif cat == '4':
                 spell = ''
 
-                try:
-                    for cat in spellbook:
-                        for x in spellbook[cat]:
-                            if x.name == main.misc_vars['prev_spell']:
-                                spell = x
-                except KeyError:
-                    main.misc_vars['prev_spell'] = ""
+                for cat in spellbook[user.name if user != main.player else 'player']:
+                    for x in spellbook[user.name if user != main.player else 'player'][cat]:
+                        if x.name in spellbook[
+                            user.name if user != main.player else 'player'
+                        ]['Previous Spell']:
+                            spell = x
 
                 if not spell:
                     print('-'*25)
@@ -620,7 +626,7 @@ def pick_cat(user, is_battle=True):
             if do_continue:
                 continue
 
-            if not spellbook[cat]:
+            if not spellbook[user.name if user != main.player else 'player'][cat]:
                 print('-'*25)
                 print('You do not yet have any spells in the {0} category.'.format(cat))
                 print('-'*25)
@@ -628,20 +634,26 @@ def pick_cat(user, is_battle=True):
 
             if pick_spell(cat, user, is_battle):
                 return True
+
             break
 
 
 def pick_spell(cat, user, is_battle):
-    print('-'*25)
+    global spellbook
 
+    print('-'*25)
     while True:
-        padding = len(max([spell.name for spell in spellbook[cat]], key=len))
+        padding = len(max([spell.name for spell in spellbook[
+            user.name if user != main.player else 'player'
+        ][cat]], key=len))
 
         print(''.join([cat, ' Spells: \n      ']), end='')
         print('\n      '.join(
             ['[{0}] {1} --{2}> {3} MP'.format(num + 1, spell, '-'*(padding - len(spell.name)),
                                               spell.mana)
-             for num, spell in enumerate(spellbook[cat])]))
+             for num, spell in enumerate(spellbook[
+                 user.name if user != main.player else 'player'
+             ][cat])]))
 
         fizz = True
         while fizz:
@@ -661,7 +673,7 @@ def pick_spell(cat, user, is_battle):
                     continue
 
             try:
-                spell = spellbook[cat][spell]
+                spell = spellbook[user.name if user != main.player else 'player'][cat][spell]
             except IndexError:
                 continue
 
@@ -675,7 +687,9 @@ def pick_spell(cat, user, is_battle):
                 y_n = y_n.lower()
 
                 if y_n.startswith('y'):
-                    main.misc_vars['prev_spell'] = spell.name
+                    spellbook[
+                        user.name if user != main.player else 'player'
+                    ]['Previous Spell'] = [spell.name]
 
                     if isinstance(spell, Damaging):
 
@@ -717,7 +731,7 @@ def new_spells(character):
 
         # Only give the character spells that they are a high enough level for
         if character.lvl >= spell.req_lvl:
-            for x in spellbook[cat]:
+            for x in spellbook[character.name if character != main.player else 'player'][cat]:
                 if x.name == spell.name:
                     break
             else:
@@ -727,7 +741,10 @@ def new_spells(character):
                     continue
 
                 sounds.item_pickup.play()
-                spellbook[cat].append(spell)
+                spellbook[
+                    character.name if character != main.player else 'player'
+                ][cat].append(spell)
+
                 print('{0} has learned "{0}", a new {1} spell!'.format(
                     character.name,
                     str(spell), cat if not cat.endswith('s') else cat[0:len(cat) - 1]))
@@ -737,12 +754,17 @@ def new_spells(character):
 
 def serialize_sb(path):
     j_spellbook = {}
-    for cat in spellbook:
-        j_spellbook[cat] = []
+    for user in spellbook:
+        j_spellbook[user] = {}
 
-        for spell in spellbook[cat]:
-            spell_dict = {key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'}
-            j_spellbook[cat].append(spell_dict)
+        for cat in spellbook[user]:
+            j_spellbook[user][cat] = []
+
+            for spell in spellbook[user][cat]:
+                spell_dict = {
+                    key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'
+                }
+                j_spellbook[user][cat].append(spell_dict)
 
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_spellbook, f, indent=4, separators=(', ', ': '))
@@ -755,28 +777,32 @@ def deserialize_sb(path):
     with open(path, encoding='utf-8') as f:
         j_spellbook = json.load(f)
 
-    for category in j_spellbook:
-        norm_sb[category] = []
+    for user in j_spellbook:
+        norm_sb[user] = {}
 
-        for spell in j_spellbook[category]:
+        for category in j_spellbook[user]:
+            norm_sb[user][category] = []
 
-            if category == 'Damaging':
-                x = Damaging('', '', '', '', '', '')
+            for spell in j_spellbook[user][category]:
 
-            elif category == 'Healing':
-                if spell['name'] == 'Relieve Affliction':
-                    x = Spell('', '', '', '')
-                    x.__dict__ = spell
-                    x.use_magic = relieve_affliction
-                    norm_sb[category].append(x)
-                    continue
+                if category == 'Damaging':
+                    x = Damaging('', '', '', '', '', '')
 
-                x = Healing('', '', '', '', '', '')
+                elif category == 'Healing':
+                    if spell['name'] == 'Relieve Affliction':
+                        x = Spell('', '', '', '')
+                        x.__dict__ = spell
+                        x.use_magic = relieve_affliction
+                        norm_sb[user][category].append(x)
 
-            elif category == 'Buffs':
-                x = Buff('', '', '', '', '', '')
+                        continue
 
-            x.__dict__ = spell
-            norm_sb[category].append(x)
+                    x = Healing('', '', '', '', '', '')
+
+                elif category == 'Buffs':
+                    x = Buff('', '', '', '', '', '')
+
+                x.__dict__ = spell
+                norm_sb[user][category].append(x)
 
     spellbook = norm_sb

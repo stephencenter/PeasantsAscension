@@ -82,7 +82,9 @@ class Monster:
             self.items = ''
 
     def monst_damage(self, mode, target):
-        ise = inv_system.equipped
+        ise = inv_system.equipped[
+            target.name if self != main.player else 'player'
+        ]
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
@@ -103,7 +105,9 @@ class Monster:
         return dam_dealt
 
     def monst_magic(self, target):
-        ise = inv_system.equipped
+        ise = inv_system.equipped[
+            target.name if self != main.player else 'player'
+        ]
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
         monst_dealt = math.ceil(
             self.m_attk*1.1 - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr))
@@ -163,7 +167,7 @@ class Monster:
             sounds.enemy_hit.play()
             if mode == 'pierce':
                 print('The {0} hits {1} with a ranged attack, dealing {2} damage!'.format(
-                    self.name, target.name, 2damage))
+                    self.name, target.name, damage))
             else:
                 print('The {0} hits {1} with a melee attack, dealing {2} damage!'.format(
                     self.name, target.name, damage))
@@ -308,10 +312,10 @@ class Monster:
         biting_monsters = ['Vine Lizard', 'Beetle', 'Zombie', 'Ghoul',
                            'Arctic Wolf', 'Sea Serpent', 'Shell Mimic']
         charging_monsters = ['Giant Worm', 'Bog Slime']
-        slashing_monsters = ['Griffin', 'Tengu', 'Harpy', 'Sludge Rat', 'Giant Crab',]
+        slashing_monsters = ['Griffin', 'Tengu', 'Harpy', 'Sludge Rat', 'Giant Crab']
         whacking_monsters = ['Troll', 'Rock Giant']
         spitting_monsters = ['Frost Bat', 'Squid', 'Fire Ant', 'Bat']
-        arrow_monsters = ['Naga', 'Ice Soldier', 'Undead Archer', 'Goblin Archer', 'Skeleton',]
+        arrow_monsters = ['Naga', 'Ice Soldier', 'Undead Archer', 'Goblin Archer', 'Skeleton']
         fist_monsters = ['Moss Ogre', 'Minor Yeti', 'Sand Golem', 'Mummy']
         magic_monsters = ['Imp', 'Naiad', "Will-o'the-wisp", 'Minubis',
                           'Oread', 'Necromancer', 'Wraith', 'Alicorn',
@@ -333,7 +337,7 @@ class Monster:
         elif self.name in fist_monsters:
             self.attk_msg = "prepares its fists to smash "
         elif self.name in magic_monsters:
-            self.attk_msg = "draws from its magical essense to destroy"
+            self.attk_msg = "draws from its magical essence to destroy"
         elif self.name in math_monsters:
             self.attk_msg = "begins calculating the fuck out of"
 

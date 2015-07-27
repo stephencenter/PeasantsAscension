@@ -220,7 +220,7 @@ specifically for one fruit?')
         for sentence in [
             'Greetings, sir! Welcome to the Watermelon Inc. Store! We sell the latest',
             'Watermelon brand products, including the iSheet, the uPhone, and our most',
-            'popular: the iSound! The latest one is our thinest yet, at slightly less',
+            'popular: the iSound! The latest one is our thinnest yet, at slightly less',
             'than a micrometer thick! What purpose does that serve, you ask? No clue,',
             'I just sell the stuff. So, what will it be?'
         ]:  # They focus to much on the thickness and size of the phones, and not enough
@@ -293,7 +293,7 @@ we'd never sell that! | [ENTER] ")
                             input('It has been added to the Quest Items page of your inventory | \
 [ENTER] ')
                             print('-'*25)
-                            input('Saleman: Thank you for your time, and especially for \
+                            input('Salesman: Thank you for your time, and especially for \
 your money! | [ENTER] ')
 
                             main.misc_vars['gp'] -= 250
@@ -362,7 +362,7 @@ model! | [ENTER]')
                 return
 
     def town_gen(self):  # Let the player purchase items from the General Store
-        stock = {}  # A dictionary containing objects the player can purchase
+        stock = {}       # A dictionary containing objects the player can purchase
         for category in inv_system.gs_stock:
             stock[category] = []
             for item_group in inv_system.gs_stock[category]:
@@ -663,7 +663,7 @@ Azura, lives in a large tower in the southwest side of the town.""",
              [npcs.azura], 28, 24, gs_level=3)
 
 town9 = Town('Sardooth', """Sardooth: A ghost town. There has not been a single
-permanant inhabitant of this town for more than 75 years. It is completely
+permanent inhabitant of this town for more than 75 years. It is completely
 run down, with most of the buildings having been destroyed in the Pythonian
 Revolution. While this town may seem interesting and historic, there is nothing
 of value here.""",
@@ -694,7 +694,7 @@ talk with them for a bit.""",
               [npcs.f_jones, npcs.stravi, npcs.caesar], 3, 39, gs_level=3)
 
 town12 = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
-home to dozens upon dozens of different animals and plantlife. Naturally,
+home to dozens upon dozens of different flora and fauna. Naturally,
 the majority population of Ravenstone consists of Druids and
 other nature-magicians. Ravenstone is also the home of the Druids'
 section of the Sorcerers' Guild. Vegetation grows on almost
@@ -722,7 +722,7 @@ on the steps of the general store.""",
               inn_cost=13)
 
 town15 = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Pythonia
-that still has cases of "Hatchnuk's Blight", a plauge-like disease that
+that still has cases of "Hatchnuk's Blight", a plague-like disease that
 killed hundreds of thousands of people during the 10th and 11th centuries.
 Something about the strand that infects Hatchnuk seems to make it completely
 incurable, as the disease has been running rampant for the past four centuries.
@@ -748,7 +748,7 @@ developed and perfected the Steam Engine and later the Train before the year
 
 town17 = Town("Sanguion", """Sanguion: Sanguion is a save-haven for vampires. Vampires
 are feared throughout Pythonia, so this fairly unknown town is the only place they
-can go without being persecuted. The vampires in this town are peacful, and
+can go without being persecuted. The vampires in this town are peaceful, and
 actually refuse to drink the blood of intelligent lifeforms. As a matter of fact,
 non-vampires who are afraid of vampires are actually more of a threat to civilization
 than the actual vampires are! They look very friendly, although a few of them do look
@@ -905,7 +905,7 @@ town19 = Town("Valenfall", """Not much is known about the ancient city of Valenf
 It's inhabitants claim that it was lifted up from the mainland several millenia ago
 by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
 all of the surrounding land of Aethus around it. Valenfall is deeply intertwined with
-nature, and monuments depicting the nature dieties can be seen on every corner.
+nature, and monuments depicting the nature deities can be seen on every corner.
 """, [npcs.fitzgerald], 5, 12, inn_cost=2, gs_level=4)
 
 to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)

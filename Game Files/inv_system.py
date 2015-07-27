@@ -43,11 +43,32 @@ else:
 inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': [], 'access': []}
 
-equipped = {'weapon': '', 'head': _c(i.straw_hat),
-            'body': _c(i.cotton_shirt),
-            'legs': _c(i.sunday_trousers),
-            'access': '(None)',
-            'pet': '(None)'}
+equipped = {
+    'player': {
+        'weapon': '',
+        'head': _c(i.straw_hat),
+        'body': _c(i.cotton_shirt),
+        'legs': _c(i.sunday_trousers),
+        'access': '(None)'
+    },
+
+    'Solou': {
+        'weapon': i.mag_twg,
+        'head': _c(i.straw_hat),
+        'body': _c(i.cotton_shirt),
+        'legs': _c(i.sunday_trousers),
+        'access': '(None)'
+    },
+
+    'Xoann': {
+        'weapon': i.stn_dag,
+        'head': _c(i.straw_hat),
+        'body': _c(i.cotton_shirt),
+        'legs': _c(i.sunday_trousers),
+        'access': '(None)'
+    },
+
+}
 
 # "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
 # what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
@@ -288,18 +309,20 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
 
                 else:
                     try:
-                        padding = len(max([i.name for i in inventory[cat] if not i.imp], key=len))
+                        padding = len(max([
+                            it.name for it in inventory[cat] if not it.imp
+                        ], key=len))
                     except ValueError:
                         padding = 1
 
-                    ext_pad = len(str(len([i.name for i in inventory[cat] if not i.imp]) + 1))
+                    ext_pad = len(str(len([it.name for it in inventory[cat] if not it.imp]) + 1))
 
                     print('{0}: \n      '.format(vis_cat), end='')
                     print('\n      '.join(
                         ['[{0}] {1} {2}--> {3} GP'.format(
                             x + 1, y, '-'*(padding - len(y.name) + (ext_pad - len(str(x + 1)))),
                             y.sell)
-                         for x, y in enumerate([i for i in inventory[cat] if not i.imp])]))
+                         for x, y in enumerate([it for it in inventory[cat] if not it.imp])]))
             else:
                 return
 
@@ -631,13 +654,13 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
         y_n = y_n.lower()
 
         if y_n.startswith('y'):
-            for num, i in enumerate(inventory[cat]):
-                if i.name == item.name:
+            for num, it in enumerate(inventory[cat]):
+                if it.name == item.name:
 
-                    inventory[cat].remove(i)
+                    inventory[cat].remove(it)
                     main.misc_vars['gp'] += item.sell
 
-                    print('You hand the shopkeep your {0} and recieve {1} GP.'.format(
+                    print('You hand the shopkeeper your {0} and receive {1} GP.'.format(
                         item.name, item.sell))
 
                     return
@@ -802,11 +825,13 @@ def deserialize_inv(path):
 def serialize_equip(path):
     j_equipped = {}
 
-    for category in equipped:
-        if equipped[category] != '(None)':
-            j_equipped[category] = equipped[category].__dict__
-        else:
-            j_equipped[category] = '(None)'
+    for user in equipped:
+        j_equipped[user] = {}
+        for category in equipped[user]:
+            if equipped[user][category] != '(None)':
+                j_equipped[user][category] = equipped[user][category].__dict__
+            else:
+                j_equipped[user][category] = '(None)'
 
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_equipped, f, indent=4, separators=(', ', ': '))
@@ -819,22 +844,24 @@ def deserialize_equip(path):
     with open(path, encoding='utf-8') as f:
         j_equipped = json.load(f)
 
-    for category in j_equipped:
-        if j_equipped[category] == '(None)':
-            norm_equip[category] = '(None)'
-            continue
+    for user in j_equipped:
+        j_equipped[user] = {}
+        for category in j_equipped[user]:
+            if j_equipped[user][category] == '(None)':
+                norm_equip[user][category] = '(None)'
+                continue
 
-        elif category == 'weapon':
-            x = i.Weapon('', '', '', '', '', '', '', '')
+            elif category == 'weapon':
+                x = i.Weapon('', '', '', '', '', '', '', '')
 
-        elif category == 'access':
-            if j_equipped[category]['acc_type'] == 'elemental':
-                x = i.ElementAccessory('', '', '', '', '')
+            elif category == 'access':
+                if j_equipped[category]['acc_type'] == 'elemental':
+                    x = i.ElementAccessory('', '', '', '', '')
 
-        else:
-            x = i.Armor('', '', '', '', '', '', '', '', '')
+            else:
+                x = i.Armor('', '', '', '', '', '', '', '', '')
 
-        x.__dict__ = j_equipped[category]
-        norm_equip[category] = x
+            x.__dict__ = j_equipped[user][category]
+            norm_equip[user][category] = x
 
     equipped = norm_equip

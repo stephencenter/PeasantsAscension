@@ -21,7 +21,7 @@ import random
 import npcs
 import monsters
 import battle
-import items
+import items as i_items
 import inv_system
 import sounds
 
@@ -64,7 +64,6 @@ class Boss(monsters.Monster):
         self.max_mp = copy.copy(self.mp)
         self.is_poisoned = False
         self.dodge = 0
-
 
     def max_stats(self):
         global misc_vars
@@ -262,7 +261,7 @@ cursed_spect = Boss('Cursed Spectre',
                     25, 20,            # 20 Speed, 15 Evasion
                     12,                # Level 12
                     3, 22,             # Located at 22'N, 3'E
-                    items.spect_wand,  # Drops a spectre wand
+                    i_items.spect_wand,  # Drops a spectre wand
                     250, 250,          # Drops 100 XP and 100 GP
                     element='death',   # Death Element
                     active=False)
@@ -285,7 +284,7 @@ giant_ent = Boss('Giant Ent',
                  12, 3,
                  13,
                  15, 27,
-                 items.enc_yw,
+                 i_items.enc_yw,
                  120, 120,
                  active=True, element='grass')
 giant_ent.battle_turn = monsters.melee_ai
@@ -305,6 +304,7 @@ anti_blood_squad = Boss('Hunter Lackey #1',
                         200, 200,
                         active=False,
                         multiphase=3)
+
 
 def antibloodsquad_et(is_boss):
     if monsters.monster.name == "Hunter Lackey #1" and monsters.monster.hp <= 0:
@@ -345,7 +345,7 @@ def antibloodsquad_et(is_boss):
         monsters.monster.experience = 1000
         monsters.monster.gold = 1000
 
-        monsters.monster.items = items.wind_bow
+        monsters.monster.items = i_items.wind_bow
         self.is_poisoned = False
 
         return

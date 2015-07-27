@@ -506,7 +506,7 @@ started.")
                         or (abs(int(dt_horizontal)) == 0 and abs(int(dt_vertical)) == 1)):
 
                     print('\nUsing the nearly unlimited magical power of these expensive and rare')
-                    print('boots, you heriocally and valiantly take a single step {0}ward.'.format(
+                    print('boots, you heroically and valiantly take a single step {0}ward.'.format(
                         dir_
                     ))
                     input('Press enter/return ')
@@ -522,8 +522,8 @@ started.")
                     return
 
                 print('-'*25)
-                print('Your input has been interpretted as {0}{1}.'.format(vert_message,
-                                                                           horiz_message))
+                print('Your input has been interpreted as {0}{1}.'.format(vert_message,
+                                                                          horiz_message))
                 print('Travelling in that direction will take you to {0}{1}, {2}{3}.'.format(
                     new_position[1], verdir, new_position[0], hordir
                 ))
@@ -589,7 +589,7 @@ class TownTeleporter(Item):
 
         available = sorted(available, key=lambda x: x[0])
 
-        print("Avilable Towns:\n      ", sep='', end='')
+        print("Available Towns:\n      ", sep='', end='')
         print("\n      ".join(["[{0}] {1}: {2}, {3}".format(num + 1, town[0],
                                                             ''.join([str(town[3]), town[4]]),
                                                             ''.join([str(town[1]), town[2]]))
@@ -616,7 +616,7 @@ class TownTeleporter(Item):
 
                 if y_n.lower().startswith('y'):
                     print('You wave your hand over the map and then blow into it, and you suddenly')
-                    print('feel a rush of air around you. You go unconcious for a few seconds, and')
+                    print('feel a rush of air around you. You go unconscious for a few seconds and')
                     print('upon waking find yourself exactly where you intended to go.')
                     input('Press enter/return ')
 
@@ -652,7 +652,7 @@ class Misc(Item):
     def use_item(self):
         print('-'*25)
         if 'Message' in self.name:
-            input("""The envelop is designed in a way that makes tampering easily noticable.
+            input("""The envelop is designed in a way that makes tampering easily noticeable.
 It's probably best not to try to open it and read the letter. | [ENTER] """)
 
         else:
@@ -765,11 +765,11 @@ stn_dag = Weapon('Stone Dagger',
                  'A crude yet effective knife carved from a light stone (+5% Damage)',
                  10, 5, 0.05, 'melee', 'assassin', 'Dagger')
 
-ser_knf = Weapon('Serated Knife',
+ser_knf = Weapon('Serrated Knife',
                  'A durable knife made of iron, with one side made jagged (+10% Damage)',
                  50, 15, 0.1, 'melee', 'assassin', 'Dagger')
-en_ser_knf = Weapon('Enhanced Serated Knife',
-                    'An enhanced version of your typical Serated Knife (+25% Damage)',
+en_ser_knf = Weapon('Enhanced Serrated Knife',
+                    'An enhanced version of your typical Serrated Knife (+25% Damage)',
                     100, 25, 0.25, 'melee', 'assassin', 'Dagger')
 
 stiletto = Weapon('Stiletto',
@@ -806,7 +806,7 @@ en_lng_bow = Weapon('Enhanced Long Bow',
                     350, 125, 0.6, 'ranged', 'ranger', 'Bow')
 
 ash_cbow = Weapon('Ashen Crossbow',
-                  'A beautifully-crafted crossbow made fromt the wood\
+                  'A beautifully-crafted crossbow made from the wood\
 of an ash tree. (+80% Damage)',
                   500, 225, 0.8, 'ranged', 'ranger', 'Crossbow')
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',

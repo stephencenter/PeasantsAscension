@@ -37,30 +37,30 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-"""
-Info for reading this file:
-
-This file contains all data regarding the logic behind quests, NPCs, and conversations.
-Every NPC has at least one conversation, and most (but not all) have at least one quest.
-Because of the way that the game works, the person you visit to finish the quest is ALWAYS
-the same person who gave it to you in the first place (this is subject to change if I
-can find a way around this without breaking the already existing quests).
-
-The quests are divided into three categories: Main Questline, Side-story arcs, and side quests.
-The main questline consists of all quests required to finish the game (when a way to do so is
-implemented) and it generally all follows the same story-arc. Side-story arcs include
-side-storyline that spans multiple quests, such as the Graveyard storyline. Side quests are
-single-quest story arcs that have almost nothing to do with the main plot.
-
-Naming style:
-
-If an object name ends with "_ucX", where X is an integer, then it handles what happens
-    when a quest is completed.
-
-If an object name ends with "_usX", where X is an integer, then it handles what happens
-    when a quest is started.
-
-"""
+#
+# Info for reading this file:
+#
+# This file contains all data regarding the logic behind quests, NPCs, and conversations.
+# Every NPC has at least one conversation, and most (but not all) have at least one quest.
+# Because of the way that the game works, the person you visit to finish the quest is ALWAYS
+# the same person who gave it to you in the first place (this is subject to change if I
+# can find a way around this without breaking the already existing quests).
+#
+# The quests are divided into three categories: Main Questline, Side-story arcs, and side quests.
+# The main questline consists of all quests required to finish the game (when a way to do so is
+# implemented) and it generally all follows the same story-arc. Side-story arcs include
+# side-storyline that spans multiple quests, such as the Graveyard storyline. Side quests are
+# single-quest story arcs that have almost nothing to do with the main plot.
+#
+# Naming style:
+#
+# If an object name ends with "_ucX", where X is an integer, then it handles what happens
+#     when a quest is completed.
+#
+# If an object name ends with "_usX", where X is an integer, then it handles what happens
+#     when a quest is started.
+#
+#
 
 
 def setup_vars():
@@ -240,12 +240,12 @@ joseph_phrase_3 = Conversation(["I'd recommend that you give my friend Azura a v
                                 "if I'm remembering correctly."
                                 ])
 
-joseph_quest_1 = Quest(["Wait a second... are you who I think you are? I've recieved",
+joseph_quest_1 = Quest(["Wait a second... are you who I think you are? I've received",
                         'word that a traveller from Nearton was heading',
                         "this way. Yes, that MUST be you they're talking",
                         'about! Could you please do me a favor and take',
                         "this message to Philliard in Nearton? Nearton,",
-                        "in case you've forgotton, is at 1\u00b0N, 0\u00b0E."],
+                        "in case you've forgotten, is at 1\u00b0N, 0\u00b0E."],
                        'An Important Message',
                        ["Deliver a message (located in your Quest Items) to Philliard in Nearton,",
                         "located at 1\u00b0N, 0\u00b0E, and then return to Joseph in \
@@ -303,7 +303,7 @@ def jphqst_uc1():
     azura_phrase_2.active = True
 
     print('-'*25)
-    print("You've recieved a Magic Compass from Joseph.")
+    print("You've received a Magic Compass from Joseph.")
     input('It has been added to the "Misc" section of your inventory. | Press enter/return ')
     input('You write down the coordinates of Parceon. | Press enter/return ')
 
@@ -374,13 +374,13 @@ stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                  "The Forest lies in the center, while the Shore surrounds them.",
                                  "There's a small region somewhere around here that is the",
                                  "cause of much worry and panic in this town: The Graveyard.",
-                                 "Inside lies a dangerous aparrition, feared by all who have \
+                                 "Inside lies a dangerous apparition, feared by all who have \
 seen it.",
                                  "As the captain of the guard, my men and I have tried",
                                  "and failed countless times to defeat that wretched ghost!",
                                  ], active=True)
 
-stewson_phrase_2 = Conversation(["Please save us from this monsterous wraith!"])
+stewson_phrase_2 = Conversation(["Please save us from this monstrous wraith!"])
 
 stewson_phrase_3 = Conversation(["Thank you again for your help, adventurer!"])
 
@@ -430,7 +430,7 @@ seriph_phrase_1 = Conversation(['...You actually came to this town? And of your 
                                 'is far more likely.'], active=True)
 
 seriph_phrase_2 = Conversation(["What?! You're going to try to kill the evil spirit?",
-                                "You're truely stupider than I thought. I wish you"
+                                "You're truly stupider than I thought. I wish you"
                                 "good luck nonetheless."])
 
 seriph_phrase_3 = Conversation(["I still can't believe that you killed the evil spirit!",
@@ -447,19 +447,19 @@ rivesh_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've
                                 "Inside, they found a terrifying ghost, which they",
                                 "oh-so-cunningly defeated -- or so they thought! No,",
                                 "instead the ghost had grown tired of the pointless battle,",
-                                "and decided to hide in the shadows of the unsuspecting 'heros'.",
+                                "and decided to hide in the shadows of the unsuspecting 'heroes'.",
                                 "When they least expected it, the ghost possessed them!",
                                 "As punishment for their foolishness, the evil spirit",
                                 "now forcefully takes a victim from this town every 10 days",
                                 "and forbids its inhabitants from leaving!"], active=True)
 
-rivesh_phrase_2 = Conversation(["Hey... I don't suppose that you have any experiecne",
+rivesh_phrase_2 = Conversation(["Hey... I don't suppose that you have any experience",
                                 "with fighting ghosts, do you? No? Ok then. If you find",
                                 "someone who has defeated a very menacing phantom before,",
                                 "please request that they come help us!"], active=True)
 
 rivesh_phrase_3 = Conversation(["Help us, young adventurer! You are the only one",
-                                "who can save us from this terrible ghool!"])
+                                "who can save us from this terrible spirit!"])
 
 rivesh_phrase_4 = Conversation(["Thanks again, hero! We are forever indebted to you!"])
 
@@ -644,7 +644,7 @@ frederick = NPC('Frederick', [frederick_phrase_1, frederick_phrase_2, frederick_
 
 # -- Name: Alden -- Town: Small Cottage (1)
 alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of the",
-                       "confict going on between the villages of Fallville and",
+                       "conflict going on between the villages of Fallville and",
                        "Tripton. I have an idea on how to settle this foul feud,",
                        "but alas, I cannot perform it due to my old and fragile",
                        "state. You, however, appear to be a very young and capable",
@@ -723,7 +723,7 @@ polmor_quest_1 = Quest(["Wait a minute... I am so stupid! According to my calcul
                        "Polmor", [450, 450],
                        ["...Wait, what?! You obtained the items we needed? ",
                         "You are our savior! We owe our lives to you, you are",
-                        "truely a hero! *He walks over to his wife, and the two begin",
+                        "truly a hero! *He walks over to his wife, and the two begin",
                         "mixing the ingredients to make the cure for Hatchnuk's Blight*",
                         "At last, we have the cure! Let us not waste time. *The two administer",
                         "the medicine to their daughter, and she immediately begins ",
@@ -943,7 +943,7 @@ pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quic
                               "on wild animals and vampire hunters. You are completely safe, as",
                               "long as you are not a hunter, that is. As of late, a new group",
                               'of vampire hunters named the "Anti-blood Squad". Not only do these',
-                              "terrorists have an extrordinarily uncreative name, but they've",
+                              "terrorists have an extraordinarily uncreative name, but they've",
                               "also been capturing our friends and family and are torturing,",
                               "ransoming, and even killing them! We vampires are not harmful to",
                               "society, and do not deserve this kind of treatment! Our loved",
@@ -982,7 +982,7 @@ pime_quest_1 = Quest(["Hey - you look like quite the seasoned adventurer. Maybe 
                       "to Pime at Sanguion."], "Pime",
                      [1000, 1000],
                      ["Di... did you really defeat them? Amazing! You have saved us so much",
-                      "trouble! Those horrendous villians shall not hurt our tribe anymore!",
+                      "trouble! Those horrendous villains shall not hurt our tribe anymore!",
                       "*He looks overjoyed, and gives you a great big hug. One wonders why",
                       "the hunters attacked these people in the first place.*"])
 
@@ -1034,7 +1034,7 @@ sondalar_phrase_1 = Conversation(["Greetings! Say, I haven't seen you in quite a
                                   "log you've got there. That's all I've got to say, catch up with",
                                   "you soon hopefully!"], active=True)
 
-sondalar = NPC('Sondalar', [sondalar_phrase_1], "Goods Pedaller")
+sondalar = NPC('Sondalar', [sondalar_phrase_1], "Goods Peddler")
 
 # -- Name: Saar -- Town: Nearton
 saar_phrase_1 = Conversation(["I haven't really explored too far away from this town.",
@@ -1063,7 +1063,7 @@ lazaro_phrase_1 = Conversation(["Greetings, adventurer from Nearton! How do I kn
                                 "  \"Your position is saved whenever you cross region borders",
                                 "  or visit a town. If you die, you will return there!\"",
                                 "That's what He said. I do not understand His words, but",
-                                "I hope they serve their intened recipient well."], active=True)
+                                "I hope they serve their intended recipient well."], active=True)
 
 lazaro = NPC('Lazaro', [lazaro_phrase_1], "Oracle")
 
@@ -1080,7 +1080,7 @@ jeffery_phrase_1 = Conversation(["I heard that there was a man in a town far sou
                                  "around -8\u00b0S, 20\u00b0E. Something like that."],
                                 active=True)
 
-jeffery = NPC('Jeffery', [jeffery_phrase_1], "Knowledgable Serf")
+jeffery = NPC('Jeffery', [jeffery_phrase_1], "Knowledgeable Serf")
 
 # -- Name: Harthos -- Town: Overshire
 harthos_phrase_1 = Conversation(["Welcome to Overshire, stranger! Our Kingdom's capital is",
