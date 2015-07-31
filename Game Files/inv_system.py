@@ -68,6 +68,38 @@ equipped = {
         'access': '(None)'
     },
 
+    'Parsto': {
+        'weapon': i.stn_dag,
+        'head': _c(i.straw_hat),
+        'body': _c(i.cotton_shirt),
+        'legs': _c(i.sunday_trousers),
+        'access': '(None)'
+    },
+
+    'Adorine': {
+        'weapon': i.stn_dag,
+        'head': _c(i.straw_hat),
+        'body': _c(i.cotton_shirt),
+        'legs': _c(i.sunday_trousers),
+        'access': '(None)'
+    },
+
+    'Randall': {
+        'weapon': i.stn_dag,
+        'head': _c(i.straw_hat),
+        'body': _c(i.cotton_shirt),
+        'legs': _c(i.sunday_trousers),
+        'access': '(None)'
+    },
+
+    "Ran'Af": {
+        'weapon': i.stn_dag,
+        'head': _c(i.straw_hat),
+        'body': _c(i.cotton_shirt),
+        'legs': _c(i.sunday_trousers),
+        'access': '(None)'
+    },
+
 }
 
 # "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
@@ -845,7 +877,7 @@ def deserialize_equip(path):
         j_equipped = json.load(f)
 
     for user in j_equipped:
-        j_equipped[user] = {}
+        norm_equip[user] = {}
         for category in j_equipped[user]:
             if j_equipped[user][category] == '(None)':
                 norm_equip[user][category] = '(None)'

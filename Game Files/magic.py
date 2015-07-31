@@ -83,6 +83,23 @@ class Healing(Spell):
             print()
             Spell.use_mana(self, user)
 
+            target_options = [x for x in [
+                main.player,
+                main.solou,
+                main.xoann,
+                main.adorine,
+                main.ran_af,
+                main.parsto,
+                main.randall] if x.enabled
+            ]
+
+            if len(target_options) == 1:
+                target = user
+
+            else:
+                for character, num in enumerate(target_options):
+                    print(character, num)
+
             # Healing spells will always restore a minimum of user.hp*thresh.
             # i.e. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
             # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
@@ -157,11 +174,11 @@ class Damaging(Spell):
                   "{0} is making a move!\n".format(user.name))
 
             if inv_system.equipped[
-                user.name if self != main.player else 'player'
+                user.name if user != main.player else 'player'
             ]['weapon'].class_ == 'magic':
                 print('{0} begins to use their {1} to summon a powerful spell...'.format(
                     user.name, inv_system.equipped[
-                        user.name if self != main.player else 'player'
+                        user.name if user != main.player else 'player'
                     ]['weapon']))
             else:
                 print('{0} attempts to summon a powerful spell...'.format(user.name))
@@ -336,7 +353,7 @@ curse = Damaging('Evil Curse',
                  "Call upon His Wickedness to harm holy creatures! (Weak)",
                  3, 5, 0.25, "death")
 desecration = Damaging('Desecration',
-                       "Cast out holy spirits with an evil aura! (Moderate)",
+                       "Defile holy spirits with an evil aura! (Moderate)",
                        11, 15, 0.5, "death")
 unholy_rend = Damaging('Unholy Rend',
                        "Annihilate holy creatures with a searing blow! (Strong)",
@@ -536,6 +553,34 @@ spellbook = {
     },
 
     'Xoann': {
+        'Healing': [],
+        'Damaging': [magic_shot],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    },
+
+    'Parsto': {
+        'Healing': [],
+        'Damaging': [magic_shot],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    },
+
+    "Ran'af": {
+        'Healing': [],
+        'Damaging': [magic_shot],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    },
+
+    'Adorine': {
+        'Healing': [],
+        'Damaging': [magic_shot],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    },
+
+    'Randall': {
         'Healing': [],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
