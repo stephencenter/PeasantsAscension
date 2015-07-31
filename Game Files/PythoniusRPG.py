@@ -58,6 +58,7 @@ import re
 import logging
 import msvcrt
 import traceback
+import stat
 
 import pygame
 
@@ -105,12 +106,6 @@ sav_misc_boss_info = 'Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc B
 
 sav_misc_vars = 'Save Files/{CHARACTER_NAME}/misc_vars.json'  # Misc Variables
 
-sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'  # Player Stats
-
-sav_solou_stats = 'Save Files/{CHARACTER_NAME}/solou_stats.json'  # Solou's Stats
-
-sav_xoann_stats = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'  # Xoann's Stats
-
 sav_position = 'Save Files/{CHARACTER_NAME}/position.json'  # Position
 
 sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'  # Quests & Dialogue
@@ -118,6 +113,21 @@ sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'  # Quests & Dialo
 sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'  # Spellbook
 
 sav_prevtowns = 'Save Files/{CHARACTER_NAME}/prevtowns.json'  # Previously visited towns
+
+# PCU Save Files
+sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'  # Player Stats
+
+sav_solou_stats = 'Save Files/{CHARACTER_NAME}/solou_stats.json'  # Solou's Stats
+
+sav_xoann_stats = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'  # Xoann's Stats
+
+sav_randall_stats = 'Save Files/{CHARACTER_NAME}/randall_stats.json'  # Randall's Stats
+
+sav_ran_af_stats = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'  # Ran'Af's Stats
+
+sav_parsto_stats = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'  # Parsto's Stats
+
+sav_adorine_stats = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
 
 # NOTE 1: The save file locations can be changed in the file "settings.cfg".
 
@@ -183,7 +193,7 @@ class PlayableCharacter:
         ]['weapon'].type_ != 'ranged':
 
             dam_dealt = math.ceil(
-                battle.temp_stats[self.name]['attk']/2 - (battle.monster.dfns/1.25))
+                battle.temp_stats[self.name]['attk'] - (battle.monster.dfns/2))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
                 self.name if self != player else 'player'
             ]['weapon'].power)
@@ -196,7 +206,8 @@ class PlayableCharacter:
 
         else:
             dam_dealt = math.ceil(
-                battle.temp_stats[self.name]['p_attk']/2 - (battle.monster.p_dfns/1.25))
+                battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2))
+
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
                 self.name if self != player else 'player'
             ]['weapon'].power)
@@ -207,7 +218,7 @@ class PlayableCharacter:
                 dam_dealt = math.ceil(dam_dealt)
                 print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
 
-        # Increase or decrease the damage depending on the player/monster's elements
+        # Increase or decrease the damage depending on the PSU+/monster's elements
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped[
                 self.name if self != player else 'player'
@@ -496,38 +507,38 @@ Input letter: """)
                         continue
 
                     if skill.startswith('i'):
-                        self.m_dfns += random.randint(0, 1)
-                        self.m_attk += random.randint(0, 1)
-                        self.mp += random.randint(1, 2)
+                        self.m_dfns += 1
+                        self.m_attk += 1
+                        self.mp += 2
                         self.attributes['int'] += 1
 
                     elif skill.startswith('w'):
-                        self.mp += 1
+                        self.mp += 2
                         self.attributes['wis'] += 1
 
                     elif skill.startswith('s'):
-                        self.attk += random.randint(0, 1)
-                        self.p_dfns += random.randint(0, 1)
-                        self.dfns += random.randint(0, 1)
+                        self.attk += 1
+                        self.p_dfns += 1
+                        self.dfns += 1
                         self.attributes['str'] += 1
 
                     elif skill.startswith('c'):
                         self.max_hp += 1
-                        self.dfns += random.randint(0, 1)
-                        self.p_dfns += random.randint(0, 1)
-                        self.m_dfns += random.randint(0, 1)
+                        self.dfns += 1
+                        self.p_dfns += 1
+                        self.m_dfns += 1
                         self.attributes['con'] += 1
 
                     elif skill.startswith('d'):
-                        self.spd += random.randint(0, 1)
-                        self.p_attk += random.randint(0, 1)
-                        self.evad += random.randint(0, 1)
+                        self.spd += 1
+                        self.p_attk += 1
+                        self.evad += 1
                         self.attributes['dex'] += 1
 
                     elif skill.startswith('p'):
-                        self.p_attk += random.randint(0, 1)
-                        self.p_dfns += random.randint(0, 1)
-                        self.evad += random.randint(0, 1)
+                        self.p_attk += 1
+                        self.p_dfns += 1
+                        self.evad += 1
                         self.attributes['per'] += 1
 
                     elif skill.startswith('f'):
@@ -672,7 +683,7 @@ Armor:
 
             # RUN AWAY!!!
             elif self.move == '5':
-                if battle.run_away():
+                if battle.run_away(self):
                     # Attempt to run.
                     # If it succeeds, end the battle without giving the player a reward
                     print('-'*25)
@@ -1098,7 +1109,9 @@ def format_save_names():
                      'sav_play_stats', 'sav_position',
                      'sav_quests_dia', 'sav_spellbook',
                      'sav_prevtowns', 'sav_solou_stats',
-                     'sav_xoann_stats'], key=str.lower):
+                     'sav_xoann_stats', 'sav_randall_stats',
+                     'sav_adorine_stats', 'sav_ran_af_stats',
+                     'sav_parsto_stats'], key=str.lower):
 
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
@@ -1351,9 +1364,18 @@ def check_save():  # Check for save files and load the game if they're found
                 inv_system.deserialize_equip(sav_equip_items)
                 inv_system.deserialize_inv(sav_inventory)
                 bosses.deserialize_bosses(sav_misc_boss_info)
-                deserialize_player(sav_play_stats, sav_solou_stats, sav_xoann_stats)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
+
+                deserialize_player(
+                    sav_play_stats,
+                    sav_solou_stats,
+                    sav_xoann_stats,
+                    sav_adorine_stats,
+                    sav_randall_stats,
+                    sav_ran_af_stats,
+                    sav_parsto_stats
+                )
 
                 print('Load successful.')
 
@@ -1382,8 +1404,10 @@ def save_game():
                 msvcrt.getwch()
 
             # Check if the save directory already exists, and create it if it doesn't
-            if not os.path.exists('/'.join([save_dir, adventure_name])):
+            try:
                 os.makedirs('/'.join([save_dir, adventure_name]))
+            except FileExistsError:
+                pass
 
             format_save_names()
 
@@ -1404,9 +1428,18 @@ def save_game():
                 inv_system.serialize_equip(sav_equip_items)
                 inv_system.serialize_inv(sav_inventory)
                 bosses.serialize_bosses(sav_misc_boss_info)
-                serialize_player(sav_play_stats, sav_solou_stats, sav_xoann_stats)
                 npcs.serialize_dialogue(sav_quests_dia)
                 magic.serialize_sb(sav_spellbook)
+
+                serialize_player(
+                    sav_play_stats,
+                    sav_solou_stats,
+                    sav_xoann_stats,
+                    sav_adorine_stats,
+                    sav_randall_stats,
+                    sav_ran_af_stats,
+                    sav_parsto_stats
+                )
 
                 with open('/'.join([save_dir, adventure_name, 'menu_info.txt']),
                           mode='w', encoding='utf-8') as f:
@@ -1418,44 +1451,66 @@ def save_game():
                 return
 
             except (OSError, ValueError):
-                logging.exception('Error saving game:')
-                input('There was an error saving your game (Press Enter/Return)')
+                # logging.exception('Error saving game:')
+                # input('There was an error saving your game (Press Enter/Return)')
+
+                raise
 
         elif y_n.startswith('n'):
             return
 
 
-def serialize_player(path, s_path, x_path):
-    # Save the "PlayableCharacter" object as a JSON file
+def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
+    # Save the "PlayableCharacter" objects as JSON files
+
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
     with open(s_path, mode='w', encoding='utf-8') as f:
         json.dump(solou.__dict__, f, indent=4, separators=(', ', ': '))
     with open(x_path, mode='w', encoding='utf-8') as f:
         json.dump(xoann.__dict__, f, indent=4, separators=(', ', ': '))
+    with open(a_path, mode='w', encoding='utf-8') as f:
+        json.dump(adorine.__dict__, f, indent=4, separators=(', ', ': '))
+    with open(r_path, mode='w', encoding='utf-8') as f:
+        json.dump(randall.__dict__, f, indent=4, separators=(', ', ': '))
+    with open(f_path, mode='w', encoding='utf-8') as f:
+        json.dump(ran_af.__dict__, f, indent=4, separators=(', ', ': '))
+    with open(p_path, mode='w', encoding='utf-8') as f:
+        json.dump(parsto.__dict__, f, indent=4, separators=(', ', ': '))
 
 
-def deserialize_player(path, s_path, x_path):
-    # Load the JSON file and translate
-    # it into a "PlayableCharacter" object
+def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
+    # Load the JSON files and translate them into "PlayableCharacter" objects
     global player
     global solou
     global xoann
+    global adorine
+    global randall
+    global ran_af
+    global parsto
 
     player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
     solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
     xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    randall = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
 
     with open(path, encoding='utf-8') as f:
-        player_dict = json.load(f)
+        player.__dict__ = json.load(f)
     with open(s_path, encoding='utf-8') as f:
-        solou_dict = json.load(f)
+        solou.__dict__ = json.load(f)
     with open(x_path, encoding='utf-8') as f:
-        xoann_dict = json.load(f)
-
-    player.__dict__ = player_dict
-    solou.__dict__ = solou_dict
-    xoann.__dict__ = xoann_dict
+        xoann.__dict__ = json.load(f)
+    with open(a_path, encoding='utf-8') as f:
+        adorine.__dict__ = json.load(f)
+    with open(r_path, encoding='utf-8') as f:
+        randall.__dict__ = json.load(f)
+    with open(f_path, encoding='utf-8') as f:
+        ran_af.__dict__ = json.load(f)
+    with open(p_path, encoding='utf-8') as f:
+        parsto.__dict__ = json.load(f)
 
 
 # This is the logo that's displayed on the titlescreen

@@ -369,11 +369,11 @@ def after_battle(is_boss):  # Assess the results of the battle
             return
 
 
-def run_away():
-    print(ascii_art.player_art[self.class_.title()] %
-          "{0} is making a move!\n".format(self.name))
+def run_away(runner):
+    print(ascii_art.player_art[runner.class_.title()] %
+          "{0} is making a move!\n".format(runner.name))
     print()
-    print('You start to run away from the {0}...'.format(monster.name))
+    print('Your party starts to run away from the {0}...'.format(monster.name))
 
     sounds.foot_steps.play()
     time.sleep(0.75)

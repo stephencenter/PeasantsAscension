@@ -83,17 +83,17 @@ class Monster:
 
     def monst_damage(self, mode, target):
         ise = inv_system.equipped[
-            target.name if self != main.player else 'player'
+            target.name if target != main.player else 'player'
         ]
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
             dam_dealt = math.ceil(
-                self.attk*1.15 - (battle.temp_stats[target.name]['dfns']/2)*(1 + dr))
+                self.attk - (battle.temp_stats[target.name]['dfns']/2)*(1 + dr))
 
         else:
             dam_dealt = math.ceil(
-                self.p_attk*1.15 - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr))
+                self.p_attk - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr))
 
         dam_dealt = magic.eval_element(
             p_elem=target.element,
@@ -106,11 +106,11 @@ class Monster:
 
     def monst_magic(self, target):
         ise = inv_system.equipped[
-            target.name if self != main.player else 'player'
+            target.name if target != main.player else 'player'
         ]
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
         monst_dealt = math.ceil(
-            self.m_attk*1.1 - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr))
+            self.m_attk - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr))
 
         if monst_dealt < 1:
             monst_dealt = 1
