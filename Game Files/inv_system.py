@@ -415,9 +415,54 @@ def pick_action(cat, item):
 Input [#] (or type "back"): """.format(str(item), use_equip))
 
         if action == '1':
-            item.use_item()
-            if item not in inventory[cat]:
-                return
+            if any([
+                isinstance(item, i.Accessory),
+                isinstance(item, i.Armor),
+                isinstance(item, i.Consumable),
+                isinstance(item, i.Weapon),
+                isinstance(item, i.StatusPotion)
+            ]):
+                target_options = [x for x in [
+                    main.player,
+                    main.solou,
+                    main.xoann,
+                    main.adorine,
+                    main.ran_af,
+                    main.parsto,
+                    main.randall] if x.enabled
+                ]
+
+                if len(target_options) == 1:
+                    target = user
+
+                else:
+                    print("Who should {0} the {1}?".format(use_equip.lower(), item.name))
+                    print("     ", "\n      ".join(
+                        ["[{0}] {1}".format(int(num) + 1, character.name)
+                         for num, character in enumerate(target_options)]))
+
+                    while True:
+                        target = input("Input [#]: ")
+                        try:
+                            target = int(target) - 1
+                        except ValueError:
+                            continue
+
+                        try:
+                            target = target_options[target]
+                        except IndexError:
+                            continue
+
+                        break
+
+                item.use_item(target)
+                if item not in inventory[cat]:
+                    return
+
+            else:
+                item.use_item(main.player)
+                if item not in inventory[cat]:
+                    return
 
         elif action == '2':
             # Display the item description
@@ -787,7 +832,7 @@ def tools_menu():  # Display a set of usable tools on the world map
                 continue
 
             tool = available_tools[tool]
-            tool.use_item()
+            tool.use_item(main.player)
 
             return
 

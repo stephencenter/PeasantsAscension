@@ -66,37 +66,36 @@ class Item:
 
 
 class Consumable(Item):
-    # Items that restore you HP, MP, or both. All items of this class stacks
-    # in the players inventory to increase organization.
+    # Items that restore your HP, MP, or both
     def __init__(self, name, desc, buy, sell,
                  cat='consum', imp=False, heal=0, mana=0, ascart='Potion'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.heal = heal
         self.mana = mana
 
-    def use_item(self, is_battle=False):
+    def use_item(self, user, is_battle=False):
         global inventory
 
         item_setup_vars()
 
         if is_battle:
-            print(ascii_art.player_art[main.player.class_.title()] %
-                  "{0} is making a move!\n".format(main.player.name))
+            print(ascii_art.player_art[user.class_.title()] %
+                  "{0} is making a move!\n".format(user.name))
 
         else:
             print('-'*25)
 
-        main.player.hp += self.heal
+        user.hp += self.heal
 
         sounds.magic_healing.play()
 
-        if main.player.hp > main.player.max_hp:
-            main.player.hp -= (main.player.hp - main.player.max_hp)
-        main.player.mp += self.mana
+        if user.hp > user.max_hp:
+            user.hp -= (user.hp - user.max_hp)
+        user.mp += self.mana
 
-        if main.player.mp > main.player.max_mp:
-            main.player.mp -= (main.player.mp - player.max_mp)
-        print('You consume the {0}'.format(self.name))
+        if user.mp > user.max_mp:
+            user.mp -= (user.mp - user.max_mp)
+        print('{0} consumes the {1}'.format(user.name, self.name))
 
         for x, y in enumerate(inventory[self.cat]):
             if y.name == self.name:
@@ -109,22 +108,22 @@ class StatusPotion(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.status = status
 
-    def use_item(self):
+    def use_item(self, user):
         global inventory
 
         item_setup_vars()
 
         if is_battle:
-            print(ascii_art.player_art[main.player.class_.title()] %
-                  "{0} is making a move!\n".format(main.player.name))
+            print(ascii_art.player_art[user.class_.title()] %
+                  "{0} is making a move!\n".format(user.name))
 
         else:
             print('-'*25)
 
-        if main.player.status_ail == self.status:
+        if user.status_ail == self.status:
             sounds.buff_spell.play()
-            print('You drink the {0} and feel much better.'.format(self.name))
-            main.player.status_ail = 'none'
+            print('{0} drinks the {1} and feels much better.'.format(user.name, self.name))
+            user.status_ail = 'none'
 
             for x, y in enumerate(inventory[self.cat]):
                 if y.name == self.name:
@@ -137,9 +136,7 @@ class StatusPotion(Item):
 
 
 class Weapon(Item):
-    # Items that increase your attack, magic attack, or both when equipped.
-    # Certain weapons are planned to be infused with elements later on, which
-    # will deal more/less damage to certain enemies.
+    # Items that increase your damage by a percentage.
     def __init__(self, name, desc, buy, sell, power, type_, class_, ascart,
                  element='none', cat='weapons', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
@@ -155,35 +152,40 @@ class Weapon(Item):
             self.desc = ' '.join([desc, '|', ' and '.join([
                 x.title() for x in self.class_]), 'ONLY'])
 
-    def use_item(self):
+    def use_item(self, user):
         global equipped
         global inventory
 
         item_setup_vars()
 
-        if main.player.class_ in self.class_ or self.class_ == 'none':
+        if user.class_ in self.class_ or self.class_ == 'none':
             # Creating a copy of the weapon ensures that
             # only one weapon can be equipped at a time.
             spam = copy.copy(self)
 
-            if isinstance(equipped['weapon'], Weapon):
-                old = copy.copy(equipped['weapon'])
+            if isinstance(
+                    equipped[user.name if user != main.player else 'player']['weapon'], Weapon
+            ):
+
+                old = copy.copy(equipped[user.name if user != main.player else 'player']['weapon'])
                 inventory['weapons'].remove(self)
                 if old.name != 'Fists':
                     inventory['weapons'].append(old)
 
-            equipped['weapon'] = spam
+            equipped[user.name if user != main.player else 'player']['weapon'] = spam
 
             print('-'*25)
-            input('You equip the {0} | Press enter/return '.format(str(self)))
+            input('{0} equips the {1} | Press enter/return '.format(user.name, str(self)))
 
         else:
             print('-'*25)
-            input("You must be a {0} to equip this | Press enter/return ".format(
+            input("{0} must be a {1} to equip this | Press enter/return ".format(
+                user.name,
                 self.class_.title()))
 
 
 class Armor(Item):
+    # Items that give the player a percent increase in defense when hit.
     def __init__(self, name, desc, buy, sell, defense, type_, part,
                  class_, ascart, cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
@@ -202,31 +204,36 @@ class Armor(Item):
         else:
             self.desc = ' '.join([desc, '|', "ANY CLASS"])
 
-    def use_item(self):
+    def use_item(self, user):
         global equipped
         global inventory
 
         item_setup_vars()
 
-        if main.player.class_ in self.class_ or self.class_ == 'none':
-            fizz = copy.copy(self)  # A copy of the armor is created for the same
-                                    # reason as for weapons.
+        if user.class_ in self.class_ or self.class_ == 'none':
+            # A copy of the armor is created for the same
+            # reason as for weapons.
+            fizz = copy.copy(self)
 
-            if isinstance(equipped[self.part], Armor):
-                old = copy.copy(equipped[self.part])
+            if isinstance(
+                    equipped[user.name if user != main.player else 'player'][self.part], Armor
+            ):
+
+                old = copy.copy(equipped[user.name if user != main.player else 'player'][self.part])
                 inventory['armor'].append(old)
                 inventory['armor'].remove(self)
             else:
-                equipped[self.part] = fizz
+                equipped[user.name if user != main.player else 'player'][self.part] = fizz
                 inventory['armor'].remove(self)
 
             print('-'*25)
-            input('You equip the {0} | Press enter/return '.format(str(self)))
+            input('{0} equip the {1} | Press enter/return '.format(user.name, str(self)))
 
         else:
             print('-'*25)
-            input("You must be a different class in order to equip this item.")
-            print('-'*25)
+            input("{0} must be a {1} to equip this | Press enter/return ".format(
+                user.name,
+                self.class_.title()))
 
 
 # -- ACCESSORIES -- #
@@ -246,24 +253,27 @@ class ElementAccessory(Accessory):
     def __str__(self):
         return self.name
 
-    def use_item(self):
+    def use_item(self, user):
         global equipped
         global inventory
 
         item_setup_vars()
 
         spam = copy.copy(self)
-        if isinstance(equipped['access'], Accessory):
-            old = copy.copy(equipped['access'])
+        if isinstance(
+                equipped[user.name if user != main.player else 'player']['access'], Accessory
+        ):
+
+            old = copy.copy(equipped[user.name if user != main.player else 'player']['access'])
             inventory['access'].append(old)
 
         inventory['access'].remove(self)
-        equipped['access'] = spam
-        main.player.element = self.element
+        equipped[user.name if user != main.player else 'player']['access'] = spam
+        user.element = self.element
 
         print('-'*25)
-        input('You equip the {0}. Your element is now set to {1} | Press enter/return '.format(
-            self.name, self.element))
+        input('{0} equips the {1}. Their element is now set to {2} | Press enter/return '.format(
+            user.name, self.name, self.element))
 
 
 class ImmunityAccessory(Accessory):
@@ -282,7 +292,7 @@ class MagicCompass(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item():
+    def use_item(user):
         if main.position['reg'] == 'Aethus':
             print('-'*25)
             print('Something about this place makes your compass needle spin wildly.')
@@ -297,7 +307,7 @@ class MagicCompass(Item):
         distance = min(pos_towns, key=lambda x: x[1])
 
         print('-'*25)
-        print('The closest town to you is {0} at ~{1} degrees away.'.format(
+        print('The closest town to your party is {0} at ~{1} degrees away.'.format(
             distance[0], distance[1]))
 
         if not search_towns(main.position['x'], main.position['y'], enter=False):
@@ -309,7 +319,7 @@ class DiviningRod(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item():
+    def use_item(user):
         if main.position['reg'] == 'Aethus':
             print('-'*25)
             print("Your divining rod doesn't seem to be working properly up here.")
@@ -322,12 +332,12 @@ class DiviningRod(Item):
                     for gem in valuable_list if not gem.acquired]
 
         if not pos_gems:
-            return print('You are unable to detect any gems.')
+            return print('Your party is unable to detect any gems.')
 
         distance = min(pos_gems, key=lambda x: x[1])
 
         print('-'*25)
-        print('The closest gem to you is {0} {1} at ~{2} degrees away.'.format(
+        print('The closest gem to your party is {0} {1} at ~{2} degrees away.'.format(
             'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
             else 'a', distance[0], distance[1]))
 
@@ -340,7 +350,7 @@ class Shovel(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item():
+    def use_item(user):
         if main.position['reg'] == 'Aethus':
             print('-'*25)
             print('The soil up here is much too tough to be broken up using a shovel.')
@@ -349,7 +359,7 @@ class Shovel(Item):
 
         from towns import search_towns
         print('-'*25)
-        print('You begin to search using your shovel...')
+        print('Your party begins to search using your shovel...')
         time.sleep(1)
 
         while msvcrt.kbhit():
@@ -360,12 +370,12 @@ class Shovel(Item):
                     and not gem.acquired:
 
                 gem.acquired = True
-                print('Using your shovel, you manage to uncover a {0}!'.format(gem.name))
+                print('Using your shovel, your party manages to uncover a {0}!'.format(gem.name))
                 inventory['misc'].append(gem)
 
                 return
 
-        print('You were unable to uncover anything.')
+        print('Your party was unable to uncover anything.')
         if not search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
@@ -379,7 +389,7 @@ class InsaneSpeedBoots(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item():
+    def use_item(user):
         from towns import search_towns
 
         letters = 'abcdefghijklmnopqrstuvwxyz'
@@ -496,8 +506,8 @@ class InsaneSpeedBoots(Item):
                     vert_message = ''.join([vert_message, ", "])
 
                 if not (horiz_message or vert_message):
-                    print("\nYou walk quickly in a small circle, arriving precisely where you \
-started.")
+                    print("\nYour party walk quickly in a small circle, arriving precisely where \
+they started.")
                     input('Press enter/return ')
 
                     return
@@ -506,9 +516,8 @@ started.")
                         or (abs(int(dt_horizontal)) == 0 and abs(int(dt_vertical)) == 1)):
 
                     print('\nUsing the nearly unlimited magical power of these expensive and rare')
-                    print('boots, you heroically and valiantly take a single step {0}ward.'.format(
-                        dir_
-                    ))
+                    print('boots, your party heroically and valiantly takes a single step \
+{0}ward.'.format(dir_))
                     input('Press enter/return ')
 
                     main.position['x'] = new_position[0]
@@ -524,7 +533,7 @@ started.")
                 print('-'*25)
                 print('Your input has been interpreted as {0}{1}.'.format(vert_message,
                                                                           horiz_message))
-                print('Travelling in that direction will take you to {0}{1}, {2}{3}.'.format(
+                print('Travelling in that direction will take your party to {0}{1}, {2}{3}.'.format(
                     new_position[1], verdir, new_position[0], hordir
                 ))
                 while True:
@@ -540,7 +549,7 @@ started.")
                         time.sleep(1)
                         print('1')
                         time.sleep(1)
-                        print('You arrived at your destination for the most part in one piece.')
+                        print('Your party arrives at their destination in one piece.')
                         input('Press enter/return ')
 
                         main.position['x'] = new_position[0]
@@ -564,7 +573,7 @@ class TownTeleporter(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item():
+    def use_item(user):
         from towns import town_list, aethus_towns, search_towns
 
         print('-'*25)
@@ -584,7 +593,7 @@ class TownTeleporter(Item):
                                       town.y, "\u00b0N" if town.y >= 1 else "\u00b0S"))
 
         if not available:
-            print('You have not visited any towns yet, thus the map fails to respond.')
+            print('Your party has not visited any towns yet, thus the map fails to respond.')
             return
 
         available = sorted(available, key=lambda x: x[0])
@@ -641,22 +650,22 @@ class Valuable(Item):
         self.posy = posy
         self.acquired = acquired
 
-    def use_item(self):
-        print('You admire the {0}. It looks very valuable.'.format(self.name))
+    def use_item(self, user):
+        print('Your party admires the {0}. It looks very valuable.'.format(self.name))
 
 
 class Misc(Item):
     def __init__(self, name, desc, buy, sell, ascart='Misc', cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    def use_item(self):
+    def use_item(self, user):
         print('-'*25)
         if 'Message' in self.name:
             input("""The envelop is designed in a way that makes tampering easily noticeable.
 It's probably best not to try to open it and read the letter. | [ENTER] """)
 
         else:
-            input("You can't think of anything useful to do with this. | [ENTER] ")
+            input("Your party cannot think of anything useful to do with this. | [ENTER] ")
 
 
 def item_setup_vars():
