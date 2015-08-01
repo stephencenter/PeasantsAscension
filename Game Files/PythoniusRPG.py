@@ -660,25 +660,10 @@ Armor:
                     sounds.attack_miss.play()
                     print("The {0} dodges {1}'s attack with ease!".format(monster.name, self.name))
 
-            # Magic Attack
-            elif self.move == '2':
-                pass
-
             # Class Ability
             elif self.move == '3':
                 if not self.class_ability():
                     return False
-
-            # Battle Inventory
-            elif self.move == '4':
-                if battle.battle_inventory() and monster.hp > 0:
-                    input('\nPress Enter/Return ')
-                    monster.battle('', '')
-
-                    if self.hp > 0:
-                        input('\nPress Enter/Return ')
-
-                continue
 
             # RUN AWAY!!!
             elif self.move == '5':
@@ -694,9 +679,6 @@ Armor:
 
                 # If it fails, the enemy will attack you and skip your turn
                 monster.battle_turn(is_boss)
-
-                if self.hp > 0:
-                    input('\nPress Enter/Return ')
 
                 continue
 
@@ -746,7 +728,7 @@ Armor:
                     self.status_ail = 'none'
 
             if is_boss and monster.multiphase and monster.hp <= 0:
-                monster.enemy_turn(is_boss)
+                monster.battle_turn(is_boss)
 
             return True
 
@@ -764,14 +746,17 @@ Pick {0}'s Move:
       [5]: Run""".format(self.name))
 
         while True:
-            # Only return if "move" refers to a valid move
             move = input("Input [#]: ")
             if move != "q":
+                # Strip out all non-numeric input
                 move = only_num(move)
 
             if move.isdigit() and int(move) in range(1, 6) or \
                     (move == 'q' and self.name == "Flygon Jones"):
+
+                # Use Magic
                 if move == '2':
+                    print('-'*25)
                     if not magic.pick_cat(self):
                         print("""\
 Pick {0}'s Move:
@@ -783,7 +768,26 @@ Pick {0}'s Move:
 
                         continue
 
-                if move == '3':
+                    input('\nPress enter/Return ')
+
+                # Battle Inventory
+                elif move == '4':
+                    print('-'*25)
+                    if not battle.battle_inventory():
+                        print("""\
+Pick {0}'s Move:
+      [1]: Attack
+      [2]: Use Magic
+      [3]: Class Ability
+      [4]: Use Items
+      [5]: Run""".format(self.name))
+
+                        continue
+
+                    input('\nPress enter/return ')
+
+                # Let the player repick if they try to use their class ability when they can't
+                elif move == '3':
                     if self.lvl < 5:
                         # You must be at least level 5 to use your class ability
                         print("{0} has not yet realized their class's inner potential \
@@ -801,7 +805,7 @@ Pick {0}'s Move:
 
                         continue
 
-                    if battle.temp_stats[self.name]['ability_used']:
+                    elif battle.temp_stats[self.name]['ability_used']:
                         # You can only use your ability once per battle.
                         print('{0} feels drained, and are unable to call upon their class\
 ability again.\n')

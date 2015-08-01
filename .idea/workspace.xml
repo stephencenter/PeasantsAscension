@@ -11,7 +11,6 @@
     <list default="true" id="d19a7f44-3ef1-4b67-8670-56343c3a2afb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/PythoniusRPG.py" afterPath="$PROJECT_DIR$/Game Files/PythoniusRPG.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/battle.py" afterPath="$PROJECT_DIR$/Game Files/battle.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/magic.py" afterPath="$PROJECT_DIR$/Game Files/magic.py" />
     </list>
     <ignored path="Pythonius.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,7 +66,7 @@
       <file leaf-file-name="bosses.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/bosses.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="5491" max-vertical-offset="6443">
+            <state vertical-scroll-proportion="0.0" vertical-offset="5321" max-vertical-offset="6273">
               <caret line="323" column="55" selection-start-line="323" selection-start-column="55" selection-end-line="323" selection-end-column="55" />
               <folding />
             </state>
@@ -77,7 +76,7 @@
       <file leaf-file-name="sounds.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="1462">
+            <state vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="1411">
               <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
               <folding />
             </state>
@@ -117,18 +116,18 @@
       <file leaf-file-name="monsters.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/monsters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1853" max-vertical-offset="12546">
-              <caret line="109" column="9" selection-start-line="109" selection-start-column="9" selection-end-line="109" selection-end-column="9" />
+            <state vertical-scroll-proportion="-5.2647057" vertical-offset="5159" max-vertical-offset="12291">
+              <caret line="329" column="54" selection-start-line="329" selection-start-column="51" selection-end-line="329" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="magic.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="magic.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/magic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="5.1571426" vertical-offset="17371" max-vertical-offset="19030">
-              <caret line="819" column="20" selection-start-line="819" selection-start-column="20" selection-end-line="819" selection-end-column="20" />
+            <state vertical-scroll-proportion="-138.58824" vertical-offset="12360" max-vertical-offset="19030">
+              <caret line="789" column="25" selection-start-line="789" selection-start-column="25" selection-end-line="789" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -137,7 +136,7 @@
       <file leaf-file-name="text_scroll.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/text_scroll.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1649">
+            <state vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="1598">
               <caret line="30" column="39" selection-start-line="30" selection-start-column="39" selection-end-line="30" selection-end-column="39" />
               <folding />
             </state>
@@ -147,18 +146,18 @@
       <file leaf-file-name="battle.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-19.264706" vertical-offset="10378" max-vertical-offset="12580">
-              <caret line="665" column="40" selection-start-line="665" selection-start-column="38" selection-end-line="665" selection-end-column="40" />
+            <state vertical-scroll-proportion="-5.7941175" vertical-offset="6427" max-vertical-offset="17976">
+              <caret line="292" column="44" selection-start-line="292" selection-start-column="44" selection-end-line="292" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PythoniusRPG.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="PythoniusRPG.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.2941175" vertical-offset="13114" max-vertical-offset="30974">
-              <caret line="782" column="0" selection-start-line="782" selection-start-column="0" selection-end-line="782" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.9516129" vertical-offset="16429" max-vertical-offset="38346">
+              <caret line="802" column="20" selection-start-line="802" selection-start-column="20" selection-end-line="802" selection-end-column="20" />
               <folding>
                 <element signature="e#2470#2480#0" expanded="true" />
               </folding>
@@ -201,9 +200,9 @@
         <option value="$PROJECT_DIR$/Game Files/items.py" />
         <option value="$PROJECT_DIR$/Game Files/inv_system.py" />
         <option value="$PROJECT_DIR$/Game Files/monsters.py" />
-        <option value="$PROJECT_DIR$/Game Files/PythoniusRPG.py" />
-        <option value="$PROJECT_DIR$/Game Files/battle.py" />
         <option value="$PROJECT_DIR$/Game Files/magic.py" />
+        <option value="$PROJECT_DIR$/Game Files/battle.py" />
+        <option value="$PROJECT_DIR$/Game Files/PythoniusRPG.py" />
       </list>
     </option>
   </component>
@@ -587,7 +586,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1552" height="840" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3273743" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -597,7 +596,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.7206704" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296355" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32849163" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.7590188" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23376623" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -920,14 +919,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/text_scroll.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="453" max-vertical-offset="2068">
-          <caret line="30" column="39" selection-start-line="30" selection-start-column="39" selection-end-line="30" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/conSize.bat">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.099609375" vertical-offset="0" max-vertical-offset="512">
@@ -974,34 +965,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="1462">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/bosses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5491" max-vertical-offset="6443">
-          <caret line="323" column="55" selection-start-line="323" selection-start-column="55" selection-end-line="323" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="14313" max-vertical-offset="15198">
           <caret line="875" column="38" selection-start-line="875" selection-start-column="38" selection-end-line="875" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/monsters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2092" max-vertical-offset="17352">
-          <caret line="109" column="9" selection-start-line="109" selection-start-column="9" selection-end-line="109" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -1014,29 +981,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py">
+    <entry file="file://$PROJECT_DIR$/Game Files/bosses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.2941175" vertical-offset="13114" max-vertical-offset="30974">
-          <caret line="782" column="0" selection-start-line="782" selection-start-column="0" selection-end-line="782" selection-end-column="0" />
-          <folding>
-            <element signature="e#2470#2480#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="5491" max-vertical-offset="6443">
+          <caret line="323" column="55" selection-start-line="323" selection-start-column="55" selection-end-line="323" selection-end-column="55" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
+    <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-19.264706" vertical-offset="10378" max-vertical-offset="12580">
-          <caret line="665" column="40" selection-start-line="665" selection-start-column="38" selection-end-line="665" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="323" max-vertical-offset="1462">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/monsters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.2647057" vertical-offset="5159" max-vertical-offset="12291">
+          <caret line="329" column="54" selection-start-line="329" selection-start-column="51" selection-end-line="329" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/magic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="5.1571426" vertical-offset="17371" max-vertical-offset="19030">
-          <caret line="819" column="20" selection-start-line="819" selection-start-column="20" selection-end-line="819" selection-end-column="20" />
+        <state vertical-scroll-proportion="-138.58824" vertical-offset="12360" max-vertical-offset="19030">
+          <caret line="789" column="25" selection-start-line="789" selection-start-column="25" selection-end-line="789" selection-end-column="25" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/text_scroll.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="453" max-vertical-offset="2068">
+          <caret line="30" column="39" selection-start-line="30" selection-start-column="39" selection-end-line="30" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.7941175" vertical-offset="6427" max-vertical-offset="17976">
+          <caret line="292" column="44" selection-start-line="292" selection-start-column="44" selection-end-line="292" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9516129" vertical-offset="16429" max-vertical-offset="38346">
+          <caret line="802" column="20" selection-start-line="802" selection-start-column="20" selection-end-line="802" selection-end-column="20" />
+          <folding>
+            <element signature="e#2470#2480#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

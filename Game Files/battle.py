@@ -315,7 +315,15 @@ def battle_system(is_boss=False, ambush=False):
             ran_af,
             adorine
         ] if c.enabled], key=lambda x: x.spd):
-            if isinstance(unit, main.PlayableCharacter) and unit.status_ail == 'dead':
+            if monster.hp <= 0:
+                break
+
+            if isinstance(unit, main.PlayableCharacter) and (
+                unit.status_ail == 'dead'
+                or unit.move == '2'
+                or unit.move == '4'
+            ):
+
                 continue
 
             if unit.battle_turn(is_boss) == 'Ran':
@@ -330,6 +338,7 @@ def battle_system(is_boss=False, ambush=False):
                 ran_af,
                 adorine
             ] if x.enabled]):
+
                 input('\nPress enter/return ')
 
             else:
