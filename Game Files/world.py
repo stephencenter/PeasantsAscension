@@ -245,8 +245,47 @@ It's probably in your best interests that you not do that.
                         print('-'*25)
 
                     elif decision.startswith('m'):
-                        if magic.spellbook['Healing']:
-                            magic.pick_spell('Healing', main.player, False)
+                        user_options = [x for x in [
+                            main.player,
+                            main.solou,
+                            main.xoann,
+                            main.adorine,
+                            main.ran_af,
+                            main.parsto,
+                            main.randall] if x.enabled
+                        ]
+
+                        if len(user_options) == 1:
+                            user = main.player
+
+                        else:
+                            print('-'*25)
+                            print("Select Spellbook:")
+                            print("     ", "\n      ".join(
+                                ["[{0}] {1}'s Spells".format(int(num) + 1, character.name)
+                                 for num, character in enumerate(user_options)]))
+
+                            while True:
+                                user = input("Input [#]: ")
+                                try:
+                                    user = int(user) - 1
+                                except ValueError:
+                                    continue
+
+                                try:
+                                    user = user_options[user]
+                                except IndexError:
+                                    continue
+
+                                break
+
+                        if magic.spellbook[
+                            user.name if user != main.player else 'player'
+                        ]['Healing']:
+
+                            magic.pick_spell('Healing', user, False)
+                            print('-'*25)
+
                         else:
                             print('-'*25)
                             print('You have no overworld-allowed spells available.')

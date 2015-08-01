@@ -97,7 +97,7 @@ class Healing(Spell):
                 target = user
 
             else:
-                print("Select Target:")
+                print("Select Target for {0}:".format(self.name))
                 print("     ", "\n      ".join(
                     ["[{0}] {1}".format(int(num) + 1, character.name)
                      for num, character in enumerate(target_options)]))
@@ -105,30 +105,37 @@ class Healing(Spell):
                 while True:
                     target = input("Input [#]: ")
                     try:
-                        target = int(target) + 1
+                        target = int(target) - 1
                     except ValueError:
                         continue
 
+                    try:
+                        target = target_options[target]
+                    except IndexError:
+                        continue
+
+                    break
 
             # Healing spells will always restore a minimum of user.hp*thresh.
             # i.e. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
             # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
             # In addition to this, the user restores an additional 2*Wisdom, unless they are a
             # Paladin in which case it it 4*Wisdom.
-            if self.health < user.hp*self.thresh:
-                total_heal = user.hp*self.thresh + \
+            if self.health < target.hp*self.thresh:
+                total_heal = target.hp*self.thresh + \
                     (2*main.misc_vars['wis'] if user.class_ !=
                      'paladin' else 4*main.misc_vars['wis'])
-                user.hp += total_heal
-                user.hp = math.ceil(user.hp)
+                target.hp += total_heal
+                target.hp = math.ceil(target.hp)
 
             else:
                 total_heal = self.health + (2*user.attributes['wis'] if user.class_ !=
                                             'paladin' else 4*user.attributes['wis'])
-                user.hp += total_heal
+                target.hp += total_heal
 
-            if user.hp > user.max_hp:
-                user.hp -= (user.hp - user.max_hp)
+            # Handle HP higher than max due to overheal
+            if target.hp > target.max_hp:
+                target.hp -= (target.hp - target.max_hp)
 
             sounds.magic_healing.play()
 
@@ -138,7 +145,12 @@ class Healing(Spell):
                 print(ascii_art.player_art[user.class_.title()] %
                       "{0} is making a move!\n".format(user.name))
 
-            print('Using "{0}", {1} is healed by {2} HP!'.format(self.name, user.name, total_heal))
+            print('Using "{0}", {1} is healed by {2} HP!'.format(
+                self.name,
+                target.name,
+                total_heal
+            ))
+
             return True
 
         else:
