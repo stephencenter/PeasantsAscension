@@ -468,44 +468,70 @@ def manage_equipped():
 
     spam = False
 
+    print('-'*25)
+    target_options = [x for x in [
+        main.player,
+        main.solou,
+        main.xoann,
+        main.adorine,
+        main.ran_af,
+        main.parsto,
+        main.randall] if x.enabled
+    ]
+
+    print("Select Character: ")
+    print("     ", "\n      ".join(
+        ["[{0}] {1}".format(int(num) + 1, character.name)
+         for num, character in enumerate(target_options)]))
+
+    while True:
+        target = input("Input [#]: ")
+        try:
+            target = int(target) - 1
+        except ValueError:
+            continue
+
+        try:
+            target = target_options[target]
+        except IndexError:
+            continue
+
+        break
+
     while True:
         if not spam:
-            equipped_list = []
-            for key in equipped:
-                equipped_list.append(equipped[key])
-            equipped_list.append(equipped['pet'])
+            p_equip = equipped[target.name if target != main.player else 'player']
 
         print('-'*25)
-        print("""Equipped Items:
-      [1] {0}
-      [2] {1}
-      [3] {2}
-      [4] {3}
-      [5] {4}
-      [6] {5}""".format(equipped_list[0], equipped_list[1],
-                        equipped_list[2], equipped_list[3], equipped_list[4], equipped_list[5]))
+        print("""{0}'s Equipped Items:
+      [1] Weapon ----> {1}
+      [2] Head ------> {2}
+      [3] Body ------> {3}
+      [4] Legs ------> {4}
+      [5] Accessory -> {5}""".format(target.name,
+                                     p_equip['weapon'], p_equip['head'],
+                                     p_equip['body'], p_equip['legs'],
+                                     p_equip['access']))
         spam = True
         while spam:
             selected = input('Input [#] (or type "back"): ')
-            try:
-                selected = int(selected) - 1
-                if selected < 0:
-                    continue
+            selected = selected.lower()
 
-            except ValueError:
-                selected = selected.lower()
+            if selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                print('-'*25)
+                return
 
-                if selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    print('-'*25)
-                    return
-
-                else:
-                    continue
-
-            try:
-                selected = equipped_list[selected]
-
-            except IndexError:
+            elif selected == '1':
+                selected = p_equip['weapon']
+            elif selected == '2':
+                selected = p_equip['head']
+            elif selected == '3':
+                selected = p_equip['body']
+            elif selected == '4':
+                selected = p_equip['legs']
+            elif selected == '5':
+                selected = p_equip['access']
+            else:
                 continue
 
             if selected == '(None)':
@@ -540,21 +566,28 @@ Press enter/return ")
                     input('You unequip the {0} | Press enter/return '.format(selected.name))
 
                     if isinstance(selected, i.Weapon):
-                        inventory[selected.cat].append(equipped[key])
-                        equipped[key] = i.fists
+                        inventory[selected.cat].append(p_equip[key])
+
+                        p_equip[key] = i.fists
 
                     elif isinstance(selected, i.Armor):
-                        inventory[selected.cat].append(equipped[key])
-                        equipped[key] = '(None)'
+                        inventory[selected.cat].append(
+                            p_equip[key]
+                        )
+
+                        p_equip[key] = '(None)'
 
                     elif isinstance(selected, i.Accessory):
                         if isinstance(selected, i.ElementAccessory):
-                            main.player.element = 'None'
+                            main.target.element = 'None'
                             print('You are no longer imbued with the {0} element.'.format(
                                 selected.element))
 
-                        inventory[selected.cat].append(equipped[key])
-                        equipped[key] = '(None)'
+                        inventory[selected.cat].append(
+                            p_equip[key]
+
+                        )
+                        p_equip[key] = '(None)'
 
                     spam = False
                     break
