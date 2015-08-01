@@ -241,8 +241,50 @@ It's probably in your best interests that you not do that.
 
                     elif decision.startswith('s'):
                         print('-'*25)
-                        main.player.player_info()
-                        print('-'*25)
+                        target_options = [x for x in [
+                            main.player,
+                            main.solou,
+                            main.xoann,
+                            main.adorine,
+                            main.ran_af,
+                            main.parsto,
+                            main.randall] if x.enabled
+                        ]
+
+                        if len(target_options) == 1:
+                            target = main.player
+
+                        else:
+                            print("Select Character:")
+                            print("     ", "\n      ".join(
+                                ["[{0}] {1}".format(int(num) + 1, character.name)
+                                 for num, character in enumerate(target_options)]))
+
+                            do_thing = True
+                            while True:
+                                target = input('Input [#] (or type "exit"): ')
+
+                                if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                    print('-'*25)
+                                    do_thing = False
+                                    break
+
+                                try:
+                                    target = int(target) - 1
+                                except ValueError:
+                                    continue
+
+                                try:
+                                    target = target_options[target]
+                                except IndexError:
+                                    continue
+
+                                break
+
+                        if do_thing:
+                            print('-'*25)
+                            target.player_info()
+                            print('-'*25)
 
                     elif decision.startswith('m'):
                         user_options = [x for x in [

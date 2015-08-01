@@ -314,7 +314,7 @@ def pick_category():
 
             else:
                 print('-'*25)
-                input("You have no active or completed quests. (Press Enter/Return) ")
+                input("Your party has no active or completed quests. (Press Enter/Return) ")
                 print('-'*25)
                 break
 
@@ -400,7 +400,7 @@ def pick_action(cat, item):
             or isinstance(item, i.Armor)
                 or isinstance(item, i.Accessory)):
 
-            # You equip weapons/armor/companions/accessories
+            # You equip weapons/armor/accessories
             use_equip = 'Equip'
 
         else:
@@ -478,7 +478,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
             print('-'*25)
 
             if item.imp:
-                print('You cannot dispose of quest-related items.')
+                print('You cannot dispose of essential items.')
 
             else:
                 while True:
@@ -488,13 +488,14 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                     y_n = y_n.lower()
 
                     if y_n.startswith('y'):
-                        input('You toss the {0} aside and continue on your journey.'.format(
-                            str(item)))
+                        input('Your party tosses the {0} aside and continues on their \
+journey.'.format(str(item)))
+
                         inventory[cat].remove(item)
                         return
 
                     elif y_n.startswith('n'):
-                        print('You decide to keep the {0} with you.'.format(str(item)))
+                        print('Your party decide to keep the {0} with them.'.format(str(item)))
                         time.sleep(1)
 
                         while msvcrt.kbhit():
@@ -696,7 +697,7 @@ def view_quests():
 
                         break
             else:
-                input('You have no finished quests! (Press Enter/Return) ')
+                input('Your party has no finished quests! (Press Enter/Return) ')
             print('-'*25)
 
         elif choice.startswith('a'):  # Active Quest
@@ -745,7 +746,7 @@ def view_quests():
 
                         break
             else:
-                print('You have no active quests!')
+                print('Your party has no active quests!')
 
             print('-'*25)
 
@@ -770,7 +771,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
                     inventory[cat].remove(it)
                     main.misc_vars['gp'] += item.sell
 
-                    print('You hand the shopkeeper your {0} and receive {1} GP.'.format(
+                    print('Your party hands the shopkeeper their {0} and receives {1} GP.'.format(
                         item.name, item.sell))
 
                     return
@@ -796,7 +797,7 @@ def tools_menu():  # Display a set of usable tools on the world map
     print('-'*25)
 
     if not available_tools:
-        print('You have no available tools to use...')
+        print('Your party has no available tools to use...')
 
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
