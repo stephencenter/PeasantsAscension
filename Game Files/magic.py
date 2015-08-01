@@ -97,8 +97,18 @@ class Healing(Spell):
                 target = user
 
             else:
-                for num, character in enumerate(target_options):
-                    print(character, num)
+                print("Select Target:")
+                print("     ", "\n      ".join(
+                    ["[{0}] {1}".format(int(num) + 1, character.name)
+                     for num, character in enumerate(target_options)]))
+
+                while True:
+                    target = input("Input [#]: ")
+                    try:
+                        target = int(target) + 1
+                    except ValueError:
+                        continue
+
 
             # Healing spells will always restore a minimum of user.hp*thresh.
             # i.e. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
@@ -799,7 +809,7 @@ def new_spells(character):
                     character.name if character != main.player else 'player'
                 ][cat].append(spell)
 
-                print('{0} has learned "{0}", a new {1} spell!'.format(
+                print('{0} has learned "{1}", a new {2} spell!'.format(
                     character.name,
                     str(spell), cat if not cat.endswith('s') else cat[0:len(cat) - 1]))
 

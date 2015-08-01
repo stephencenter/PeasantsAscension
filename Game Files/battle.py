@@ -46,6 +46,10 @@ pygame.mixer.init()
 player = ''
 solou = ''
 xoann = ''
+randall = ''
+parsto = ''
+adorine = ''
+ran_af = ''
 
 monster = ''
 temp_stats = ''
@@ -61,15 +65,23 @@ else:
 
 
 def setup_vars():
+    global monster
     global player
     global solou
     global xoann
-    global monster
+    global randall
+    global parsto
+    global ran_af
+    global adorine
 
     monster = monsters.monster
     player = main.player
     solou = main.solou
     xoann = main.xoann
+    randall = main.randall
+    parsto = main.parsto
+    ran_af = main.ran_af
+    adorine = main.adorine
 
 
 def update_stats():
@@ -107,6 +119,54 @@ def update_stats():
             'm_dfns': _c(xoann.m_dfns),
             'spd': _c(xoann.spd),
             'evad': _c(xoann.evad),
+            'ability_used': False
+        },
+
+        'Randall': {
+            'attk': _c(randall.attk),
+            'dfns': _c(randall.dfns),
+            'p_attk': _c(randall.p_attk),
+            'p_dfns': _c(randall.p_dfns),
+            'm_attk': _c(randall.m_attk),
+            'm_dfns': _c(randall.m_dfns),
+            'spd': _c(randall.spd),
+            'evad': _c(randall.evad),
+            'ability_used': False
+        },
+
+        'Parsto': {
+            'attk': _c(parsto.attk),
+            'dfns': _c(parsto.dfns),
+            'p_attk': _c(parsto.p_attk),
+            'p_dfns': _c(parsto.p_dfns),
+            'm_attk': _c(parsto.m_attk),
+            'm_dfns': _c(parsto.m_dfns),
+            'spd': _c(parsto.spd),
+            'evad': _c(parsto.evad),
+            'ability_used': False
+        },
+
+        "Ran'af": {
+            'attk': _c(ran_af.attk),
+            'dfns': _c(ran_af.dfns),
+            'p_attk': _c(ran_af.p_attk),
+            'p_dfns': _c(ran_af.p_dfns),
+            'm_attk': _c(ran_af.m_attk),
+            'm_dfns': _c(ran_af.m_dfns),
+            'spd': _c(ran_af.spd),
+            'evad': _c(ran_af.evad),
+            'ability_used': False
+        },
+
+        'Adorine': {
+            'attk': _c(adorine.attk),
+            'dfns': _c(adorine.dfns),
+            'p_attk': _c(adorine.p_attk),
+            'p_dfns': _c(adorine.p_dfns),
+            'm_attk': _c(adorine.m_attk),
+            'm_dfns': _c(adorine.m_dfns),
+            'spd': _c(adorine.spd),
+            'evad': _c(adorine.evad),
             'ability_used': False
         }
     }
@@ -165,12 +225,30 @@ def battle_system(is_boss=False, ambush=False):
     ability_used = False
 
     # Continue the battle until one of a few conditions are met
-    while not ((player.hp <= 0 or solou.hp <= 0 or xoann.hp <= 0) or
-               (not is_boss and monster.hp <= 0) or
-               (is_boss and (not monster.multiphase or monster.currphase == monster.multiphase)
-                and monster.hp <= 0)):
+    while not ((all([char.hp <= 0 for char in [
+        player,
+        solou,
+        xoann,
+        randall,
+        parsto,
+        ran_af,
+        adorine
+        ] if char.enabled
+    ]) or
+            (not is_boss and monster.hp <= 0) or
+            (is_boss and (not monster.multiphase or monster.currphase == monster.multiphase)
+             and monster.hp <= 0))):
 
-        for character in [x for x in [solou, xoann, player] if x.enabled]:
+        for character in [x for x in [
+            solou,
+            xoann,
+            player,
+            randall,
+            parsto,
+            ran_af,
+            adorine
+        ] if x.enabled]:
+
             if 0 < character.hp <= 0.20*character.max_hp:
                 print("Warning: {0}'s HP is low, heal as soon as possible!".format(character.name))
                 sounds.health_low.play()
@@ -190,8 +268,16 @@ def battle_system(is_boss=False, ambush=False):
             monk_tc += 1
 
         # There is a 1/3 chance for the player to wake up each turn if they are asleep
-        for character in [x for x in [player, solou, xoann]
-                          if x.enabled and x.status_ail != 'dead']:
+        for character in [x for x in [
+            player,
+            solou,
+            xoann,
+            randall,
+            parsto,
+            ran_af,
+            adorine
+        ] if x.enabled and x.status_ail != 'dead']:
+
             if character.status_ail == 'asleep':
                 # If dodge is in a certain range, the attack will miss
                 character.dodge = random.randint(0, 512)
@@ -220,15 +306,30 @@ def battle_system(is_boss=False, ambush=False):
 
                 character.player_choice()
 
-        for unit in sorted([monster] + [c for c in [player, solou, xoann] if c.enabled],
-                           key=lambda x: x.spd):
+        for unit in sorted([monster] + [c for c in [
+            player,
+            solou,
+            xoann,
+            randall,
+            parsto,
+            ran_af,
+            adorine
+        ] if c.enabled], key=lambda x: x.spd):
             if isinstance(unit, main.PlayableCharacter) and unit.status_ail == 'dead':
                 continue
 
             if unit.battle_turn(is_boss) == 'Ran':
                 return
 
-            if (monster.hp > 0) and any([player.hp > 0, solou.hp > 0, xoann.hp > 0]):
+            if (monster.hp > 0) and any([x.hp > 0 for x in [
+                player,
+                solou,
+                xoann,
+                randall,
+                parsto,
+                ran_af,
+                adorine
+            ] if x.enabled]):
                 input('\nPress enter/return ')
 
             else:
@@ -248,7 +349,17 @@ def after_battle(is_boss):  # Assess the results of the battle
 
     while True:
         # If the monster wins...
-        if monster.hp > 0 >= player.hp and 0 >= solou.hp and 0 >= xoann.hp:
+        if monster.hp > 0 and all([
+            0 >= x.hp for x in [
+                player,
+                solou,
+                xoann,
+                randall,
+                ran_af,
+                parsto,
+                adorine
+            ] if x.enabled
+        ]):
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
@@ -351,7 +462,16 @@ def after_battle(is_boss):  # Assess the results of the battle
             sounds.item_pickup.play()
             input(' | Press Enter/Return ')
 
-            for character in [x for x in [solou, xoann, player] if x.enabled]:
+            for character in [x for x in [
+                solou,
+                xoann,
+                player,
+                randall,
+                parsto,
+                ran_af,
+                adorine
+            ] if x.enabled]:
+
                 # Give the Player their XP
                 character.exp += experience
                 print("{0} gained {1} XP!".format(character.name, experience), end='')
@@ -458,6 +578,10 @@ def bat_stats():
     global player
     global solou
     global xoann
+    global randall
+    global parsto
+    global ran_af
+    global adorine
     global monster
 
     if player.hp < 0:
@@ -466,6 +590,14 @@ def bat_stats():
         solou.hp = 0
     if xoann.hp < 0:
         xoann.hp = 0
+    if randall.hp < 0:
+        randall.hp = 0
+    if parsto.hp < 0:
+        parsto.hp = 0
+    if ran_af.hp < 0:
+        ran_af.hp = 0
+    if adorine.hp < 0:
+        adorine.hp = 0
     if monster.hp < 0:
         monster.hp = 0
 
@@ -475,6 +607,14 @@ def bat_stats():
         solou.hp -= (solou.hp - solou.max_hp)
     if xoann.hp > xoann.max_hp:
         xoann.hp -= (xoann.hp - xoann.max_hp)
+    if randall.hp > randall.max_hp:
+        randall.hp -= (randall.hp - randall.max_hp)
+    if parsto.hp > parsto.max_hp:
+        parsto.hp -= (parsto.hp - parsto.max_hp)
+    if ran_af.hp > ran_af.max_hp:
+        ran_af.hp -= (ran_af.hp - ran_af.max_hp)
+    if adorine.hp > adorine.max_hp:
+        adorine.hp -= (adorine.hp - adorine.max_hp)
     if monster.hp > monster.max_hp:
         monster.hp -= (monster.hp - monster.max_hp)
 
@@ -484,15 +624,31 @@ def bat_stats():
         solou.mp = 0
     if xoann.mp < 0:
         xoann.mp = 0
+    if randall.mp < 0:
+        randall.mp = 0
+    if parsto.mp < 0:
+        parsto.mp = 0
+    if ran_af.mp < 0:
+        ran_af.mp = 0
+    if adorine.mp < 0:
+        adorine.mp = 0
     if monster.mp < 0:
         monster.mp = 0
 
     if player.mp > player.max_mp:
         player.mp -= (player.mp - player.max_mp)
-    if solou.hp > solou.max_hp:
-        solou.hp -= (solou.mp - solou.max_mp)
-    if xoann.hp > xoann.max_hp:
-        xoann.hp -= (xoann.mp - xoann.max_mp)
+    if solou.mp > solou.max_mp:
+        solou.mp -= (solou.mp - solou.max_mp)
+    if xoann.mp > xoann.max_mp:
+        xoann.mp -= (xoann.mp - xoann.max_mp)
+    if randall.mp > randall.max_mp:
+        randall.mp -= (randall.mp - randall.max_mp)
+    if parsto.mp > parsto.max_mp:
+        parsto.mp -= (parsto.mp - parsto.max_mp)
+    if ran_af.mp > ran_af.max_mp:
+        ran_af.mp -= (ran_af.mp - ran_af.max_mp)
+    if adorine.mp > adorine.max_mp:
+        adorine.mp -= (adorine.mp - adorine.max_mp)
     if monster.mp > monster.max_mp:
         monster.mp -= (monster.mp - monster.max_mp)
 
@@ -541,6 +697,46 @@ def bat_stats():
               pad1=' '*(first_padding - len(xoann.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(xoann.hp, xoann.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(xoann.mp, xoann.max_mp)))))
+
+    if randall.enabled:
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+              randall.name, randall.hp,
+              randall.max_hp, randall.mp,
+              randall.max_mp, randall.lvl,
+              randall.status_ail.title(),
+              pad1=' '*(first_padding - len(randall.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(randall.hp, randall.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(randall.mp, randall.max_mp)))))
+
+    if parsto.enabled:
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+              parsto.name, parsto.hp,
+              parsto.max_hp, parsto.mp,
+              parsto.max_mp, parsto.lvl,
+              parsto.status_ail.title(),
+              pad1=' '*(first_padding - len(parsto.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(parsto.hp, parsto.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(parsto.mp, parsto.max_mp)))))
+
+    if adorine.enabled:
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+              adorine.name, adorine.hp,
+              adorine.max_hp, adorine.mp,
+              adorine.max_mp, adorine.lvl,
+              adorine.status_ail.title(),
+              pad1=' '*(first_padding - len(adorine.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(adorine.hp, adorine.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(adorine.mp, adorine.max_mp)))))
+
+    if ran_af.enabled:
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+              ran_af.name, ran_af.hp,
+              ran_af.max_hp, ran_af.mp,
+              ran_af.max_mp, ran_af.lvl,
+              ran_af.status_ail.title(),
+              pad1=' '*(first_padding - len(ran_af.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(ran_af.hp, ran_af.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(ran_af.mp, ran_af.max_mp)))))
 
     # Monster Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(

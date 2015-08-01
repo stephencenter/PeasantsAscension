@@ -662,8 +662,7 @@ Armor:
 
             # Magic Attack
             elif self.move == '2':
-                if not magic.pick_cat(self):
-                    return False
+                pass
 
             # Class Ability
             elif self.move == '3':
@@ -772,6 +771,17 @@ Pick {0}'s Move:
 
             if move.isdigit() and int(move) in range(1, 6) or \
                     (move == 'q' and self.name == "Flygon Jones"):
+                if move == '2':
+                    if not magic.pick_cat(self):
+                        print("""\
+Pick {0}'s Move:
+      [1]: Attack
+      [2]: Use Magic
+      [3]: Class Ability
+      [4]: Use Items
+      [5]: Run""".format(self.name))
+
+                        continue
 
                 if move == '3':
                     if self.lvl < 5:
