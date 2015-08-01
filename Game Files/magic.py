@@ -257,6 +257,9 @@ class Buff(Spell):
             sounds.buff_spell.play()
 
             battle.temp_stats[user.name][self.stat] *= 1 + self.incre
+            battle.temp_stats[user.name][self.stat] = math.ceil(
+                battle.temp_stats[user.name][self.stat]
+            )
 
             return True
 
@@ -467,7 +470,7 @@ r_affliction = Spell('Relieve Affliction',
                      4, 5)
 
 
-def relieve_affliction(is_battle, user):
+def relieve_affliction(user, is_battle):
     if user.mp >= r_affliction.mana:
         if user.status_ail != 'none':
 
@@ -647,18 +650,23 @@ def pick_cat(user, is_battle=True):
                 cat = 'Healing'
 
             elif cat == '4':
-                spell = ''
+                spell = spellbook[user.name if user != main.player else 'player']['Previous Spell']
+                if spell:
+                    spell = spell[0]
 
-                for cat in spellbook[user.name if user != main.player else 'player']:
-                    for x in spellbook[user.name if user != main.player else 'player'][cat]:
-                        if x.name in spellbook[
-                            user.name if user != main.player else 'player'
-                        ]['Previous Spell']:
-                            spell = x
+                    if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
+                        spell.use_magic(user, is_battle)
 
-                if not spell:
+                        return True
+
+                    else:
+                        spell.use_magic(user)
+
+                        return True
+
+                else:
                     print('-'*25)
-                    print('You have no previously used spells!')
+                    print('{0} has no previously used spells!'.format(user.name))
                     print('-'*25)
                     break
 
@@ -765,7 +773,7 @@ def pick_spell(cat, user, is_battle):
                 if y_n.startswith('y'):
                     spellbook[
                         user.name if user != main.player else 'player'
-                    ]['Previous Spell'] = [spell.name]
+                    ]['Previous Spell'] = [spell]
 
                     if isinstance(spell, Damaging):
 
@@ -833,10 +841,13 @@ def serialize_sb(path):
     for user in spellbook:
         j_spellbook[user] = {}
 
+        print(spellbook)
         for cat in spellbook[user]:
+            print(cat)
             j_spellbook[user][cat] = []
 
             for spell in spellbook[user][cat]:
+                print(spell)
                 spell_dict = {
                     key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'
                 }
@@ -877,6 +888,9 @@ def deserialize_sb(path):
 
                 elif category == 'Buffs':
                     x = Buff('', '', '', '', '', '')
+
+                elif category == 'Previous Spell':
+                    continue
 
                 x.__dict__ = spell
                 norm_sb[user][category].append(x)

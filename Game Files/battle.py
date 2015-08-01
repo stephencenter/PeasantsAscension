@@ -536,7 +536,7 @@ def run_away(runner):
         return False
 
 
-def battle_inventory():
+def battle_inventory(user):
     # The player can use items from the "consum" category of their inventory during battles.
     if not inv_system.inventory['consum']:
         print('You have no battle-allowed items! The Consumable category is empty.')
@@ -577,7 +577,7 @@ def battle_inventory():
                     print()
                     break
 
-            item.use_item(is_battle=True)
+            item.use_item(user, is_battle=True)
             return True
 
 

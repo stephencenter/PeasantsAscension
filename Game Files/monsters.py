@@ -546,7 +546,7 @@ def magic_ai(is_boss):
 
     # Only do this on turns that are a multiple of 4 (or turn 1)
     if target.status_ail != "none" and not random.randint(0, 4) and monster.mp > 2:
-        monster.give_status()
+        monster.give_status(target)
 
     elif monster.hp <= math.ceil(monster.max_hp/4) and monster.mp >= 5:
         # Magic heal
@@ -574,6 +574,7 @@ def magic_ai(is_boss):
         while msvcrt.kbhit():
             msvcrt.getwch()
 
+        print(monster.dodge, battle.temp_stats[target.name]['evad'])
         if monster.dodge in range(battle.temp_stats[target.name]['evad'], 512):
             dam_dealt = magic.eval_element(
                 p_elem=target.element,

@@ -20,6 +20,7 @@ import random
 import time
 import msvcrt
 import pygame
+import math
 
 import battle
 import monsters

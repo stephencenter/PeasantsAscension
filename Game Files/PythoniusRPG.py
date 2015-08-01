@@ -773,7 +773,7 @@ Pick {0}'s Move:
                 # Battle Inventory
                 elif move == '4':
                     print('-'*25)
-                    if not battle.battle_inventory():
+                    if not battle.battle_inventory(self):
                         print("""\
 Pick {0}'s Move:
       [1]: Attack
@@ -910,10 +910,10 @@ Pick {0}'s Move:
 
         # Mage Ability: Artificial Intelligence
         elif self.class_ == "mage":
-            self.mp += _c(self.max_mp)/2
+            self.mp += copy.copy(self.max_mp)/2
 
             if self.mp > self.max_mp:
-                self.mp = _c(self.max_mp)
+                self.mp = copy.copy(self.max_mp)
 
             self.mp = math.ceil(self.mp)
 
@@ -1672,10 +1672,10 @@ def title_screen():
 
             print('-'*25)
 
-        elif choice.startswith('e'):
-            # Exit the game
-            pygame.quit()
-            sys.exit()
+        # elif choice.startswith('e'):
+        #     # Exit the game
+        #     pygame.quit()
+        #     sys.exit()
 
 
 # Configure the properties of the command prompt so that everything fits/looks right
@@ -1796,26 +1796,27 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
     except Exception as e:
         # If an exception is raised and not caught, log the error message.
 
-        logging.exception('Got exception of main handler:')
-        pygame.mixer.music.stop()
-        print(traceback.format_exc())
-
-        print('''PythoniusRPG encountered an error and crashed! The error message above should
-be sent immediately to RbwNjaFurret (ninjafurret@gmail.com) to make sure the bug gets fixed.
-The error message can be immediately copied to your clipboard if you wish.''')
-        print('-'*25)
-
-        # The player is given the option to copy it instead of just being forced, because
-        # I personally hate programs that overwrite your clipboard without permission.
-        while True:
-            c = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ')
-            if c.lower() == "copy":
-                copy_error(traceback.format_exc())
-                print('-'*25)
-                print('The error message has been copied to your clipboard.')
-                input('Press enter/return to exit ')
-
-                raise
-
-            elif c.lower() == '':
-                raise
+#         logging.exception('Got exception of main handler:')
+#         pygame.mixer.music.stop()
+#         print(traceback.format_exc())
+#
+#         print('''PythoniusRPG encountered an error and crashed! The error message above should
+# be sent immediately to RbwNjaFurret (ninjafurret@gmail.com) to make sure the bug gets fixed.
+# The error message can be immediately copied to your clipboard if you wish.''')
+#         print('-'*25)
+#
+#         # The player is given the option to copy it instead of just being forced, because
+#         # I personally hate programs that overwrite your clipboard without permission.
+#         while True:
+#             c = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ')
+#             if c.lower() == "copy":
+#                 copy_error(traceback.format_exc())
+#                 print('-'*25)
+#                 print('The error message has been copied to your clipboard.')
+#                 input('Press enter/return to exit ')
+#
+#                 raise
+#
+#             elif c.lower() == '':
+#                 raise
+        raise
