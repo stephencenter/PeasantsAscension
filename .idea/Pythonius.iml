@@ -9,11 +9,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/FUCK-MARRY-KILL" />
+      <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/TEST" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/UCT" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/WHAT" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/hello" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/n" />
-      <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/TEST" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/y" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.4.0 (C:\Python34\python.exe)" jdkType="Python SDK" />

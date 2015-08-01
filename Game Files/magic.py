@@ -97,7 +97,7 @@ class Healing(Spell):
                 target = user
 
             else:
-                for character, num in enumerate(target_options):
+                for num, character in enumerate(target_options):
                     print(character, num)
 
             # Healing spells will always restore a minimum of user.hp*thresh.
@@ -251,7 +251,7 @@ magic_shot = Damaging('Magical Shot',
                       3, 1, 0.25, "none",
                       a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 magic_burst = Damaging('Magical Burst',
-                       "Shatter your enemies defenses with a burst of magical energy! (Moderate)",
+                       "Shatter your enemy's defenses with a burst of magical energy! (Moderate)",
                        9, 11, 0.5, "none",
                        a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 magic_blast = Damaging('Magical Blast',
@@ -337,7 +337,7 @@ cyclone = Damaging('Cyclone',
                    23, 26, 1, "wind")
 
 # Life
-purify = Damaging('Purify',
+purify = Damaging('Purify',  # Paladins start with this spell
                   "Call upon His Divinity to cast out evil creatures! (Weak)",
                   3, 5, 0.25, "life", a_c=('paladin', 'mage'))
 smite = Damaging('Holy Smite',
@@ -360,14 +360,24 @@ unholy_rend = Damaging('Unholy Rend',
                        23, 27, 1, "death")
 
 # -- Healing -- #
-min_heal = Healing('Minor Healing',
-                   "Restore a small amount of HP by using magic. (Weak)",
+pit_heal = Healing('Pitiful Healing',  # Every character starts with this spell
+                   """Restore a downright pitiful amount of HP by using magic.
+Heals 5 HP or 5% of the target's max HP, whichever is more (Tier 1: Pitiful)""",
+                   1, 1, 5, 0.05)
+
+min_heal = Healing('Minor Healing',  # The Paladin also starts with this spell
+                   """Restore a small amount of HP by using magic.
+Heals 20 HP or 20% of the target's max HP, whichever is more (Tier 2: Weak)""",
                    3, 3, 20, 0.2, a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
-adv_heal = Healing('Advanced Healing',
-                   "Restore a large amount of HP by using magic. (Moderate)",
+
+adv_heal = Healing('Advanced Healing',  # This tier and up can only be learned by Paladins and Mages
+                   """Restore a large amount of HP by using magic.
+Heals 60 HP, or 50% of the target's max HP, whichever is more (Tier 3: Moderate)""",
                    10, 15, 60, 0.5, a_c=('paladin', 'mage'))
+
 div_heal = Healing('Divine Healing',
-                   "Call upon the arcane arts to greatly restore your HP. (Strong)",
+                   """Call upon the arcane arts to greatly restore your HP
+Heals 100% of the target's HP (Tier 4: Strong)""",
                    25, 28, 0, 1, a_c=('paladin', 'mage'))
 
 # -- Buffs -- #
@@ -468,18 +478,17 @@ def relieve_affliction(is_battle, user):
 r_affliction.use_magic = relieve_affliction
 
 spells = [
-    min_heal, adv_heal, div_heal,          # Healing Spells (Level 3, 15, 28)
-
-    magic_shot, magic_burst, magic_blast,  # Neutral-typed Spells (Level 1, 11, 23)
-    w_flame, f_blaze, g_infer,             # Fire Spells (Level 2, 12, 24)
-    lef_blad, gra_gren, vin_strm,          # Grass Spells (Level 2, 12, 24)
-    in_spark, pwr_jolt, sp_storm,          # Electric Spells (Level 3, 13, 25)
-    bub_splsh, wtr_blast, tsunami,         # Water Spells (Level 3, 13, 25)
-    mud_toss, rock_slam, earthquake,       # Earth Spells (Level 4, 14, 26)
-    icicle_dagger, hail_storm, blizzard,   # Ice Spells (Level 4, 14, 26)
-    m_gust, microburst, cyclone,           # Wind Spells (Level 4, 14, 26)
-    purify, smite, moonbeam,               # Life Spells (Level 5, 15, 27)
-    curse, desecration, unholy_rend,       # Death Spells (Level 5, 15, 27)
+    pit_heal, min_heal, adv_heal, div_heal,  # Healing Spells (Level 1, 3, 15, 28)
+    magic_shot, magic_burst, magic_blast,    # Neutral-typed Spells (Level 1, 11, 23)
+    w_flame, f_blaze, g_infer,               # Fire Spells (Level 2, 12, 24)
+    lef_blad, gra_gren, vin_strm,            # Grass Spells (Level 2, 12, 24)
+    in_spark, pwr_jolt, sp_storm,            # Electric Spells (Level 3, 13, 25)
+    bub_splsh, wtr_blast, tsunami,           # Water Spells (Level 3, 13, 25)
+    mud_toss, rock_slam, earthquake,         # Earth Spells (Level 4, 14, 26)
+    icicle_dagger, hail_storm, blizzard,     # Ice Spells (Level 4, 14, 26)
+    m_gust, microburst, cyclone,             # Wind Spells (Level 4, 14, 26)
+    purify, smite, moonbeam,                 # Life Spells (Level 5, 15, 27)
+    curse, desecration, unholy_rend,         # Death Spells (Level 5, 15, 27)
 
     m_quick, m_evade, a_quick, a_evade,       # Movement Spells (Level 1, 10)
     m_defend, m_shield, a_defend, a_shield,   # Defense Spells (Level 3, 13)
@@ -539,50 +548,50 @@ def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
 
 spellbook = {
     'player': {
-        'Healing': [],
+        'Healing': [pit_heal],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     },
 
     'Solou': {
-        'Healing': [],
+        'Healing': [pit_heal],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     },
 
     'Xoann': {
-        'Healing': [],
+        'Healing': [pit_heal],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     },
 
     'Parsto': {
-        'Healing': [],
+        'Healing': [pit_heal],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     },
 
     "Ran'af": {
-        'Healing': [],
+        'Healing': [pit_heal],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     },
 
     'Adorine': {
-        'Healing': [],
+        'Healing': [pit_heal],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     },
 
     'Randall': {
-        'Healing': [],
-        'Damaging': [magic_shot],
+        'Healing': [pit_heal, min_heal],
+        'Damaging': [magic_shot, purify],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     }
