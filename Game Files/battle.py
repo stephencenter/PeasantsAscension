@@ -253,9 +253,22 @@ def battle_system(is_boss=False, ambush=False):
                 print("Warning: {0}'s HP is low, heal as soon as possible!".format(character.name))
                 sounds.health_low.play()
 
-        for character in [x for x in [solou, xoann, player] if x.enabled]:
-            if character.hp <= 0:
+        for character in [x for x in [
+            player,
+            solou,
+            xoann,
+            randall,
+            ran_af,
+            adorine,
+            parsto
+        ] if x.enabled]:
+            if character.hp <= 0 and character.status_ail != 'dead':
                 character.status_ail = 'dead'
+                sounds.ally_death.play()
+                print()
+                print('{0} has fallen to the {1}!'.format(character.name, monster.monster_name))
+                input('Press enter/return ')
+
 
         bat_stats()
 
@@ -351,6 +364,12 @@ def battle_system(is_boss=False, ambush=False):
 
 def after_battle(is_boss):  # Assess the results of the battle
     global player
+    global xoann
+    global randall
+    global solou
+    global parsto
+    global adorine
+    global ran_af
 
     update_stats()  # Reset non-hp/mp stats to the way they were before battle
 
@@ -391,10 +410,18 @@ def after_battle(is_boss):  # Assess the results of the battle
                     # if you haven't been to a town yet.
                     world.back_to_coords()
 
-                    player.hp = _c(player.max_hp)
-                    player.mp = _c(player.max_mp)
-
-                    player.status_ail = "none"
+                    for character in [
+                        player,
+                        solou,
+                        xoann,
+                        randall,
+                        ran_af,
+                        parsto,
+                        adorine
+                    ]:
+                        character.hp = _c(character.max_hp)
+                        character.mp = _c(character.max_mp)
+                        character.status_ail = "none"
 
                     pygame.mixer.music.load(main.position['reg_music'])
                     pygame.mixer.music.play(-1)

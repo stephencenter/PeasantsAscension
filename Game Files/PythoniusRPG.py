@@ -204,6 +204,11 @@ class PlayableCharacter:
                 dam_dealt = math.ceil(dam_dealt)
                 print('{0} deals half damage because of their weakened state!'.format(self.name))
 
+            # Mages deal 1/2 damage with melee attacks
+            if self.class_ == 'mage':
+                dam_dealt /= 2
+                dam_dealt = math.ceil(dam_dealt)
+
         else:
             dam_dealt = math.ceil(
                 battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2))
@@ -218,7 +223,7 @@ class PlayableCharacter:
                 dam_dealt = math.ceil(dam_dealt)
                 print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
 
-        # Increase or decrease the damage depending on the PSU+/monster's elements
+        # Increase or decrease the damage depending on the PSU/monster's elements
         dam_dealt = magic.eval_element(
             p_elem=inv_system.equipped[
                 self.name if self != player else 'player'

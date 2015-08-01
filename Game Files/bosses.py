@@ -168,15 +168,15 @@ def unimportant_boss_ud():
 
 # Boss: Master Slime -- Position: 0'N, 1'E
 master_slime = Boss('Master Slime',
-                    45, 4,
-                    8, 3,
-                    4, 3,
-                    5, 0,
-                    3, 3,
-                    5,
+                    35, 4,
+                    10, 4,
+                    6, 5,
+                    7, 0,
+                    6, 6,
+                    4,
                     1, 0,
                     [],
-                    35, 35,
+                    25, 25,
                     active=False)
 master_slime.battle_turn = monsters.melee_ai
 
@@ -191,15 +191,15 @@ master_slime.upon_defeating = mastslim_ud
 
 # Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
 whisp_goblin = Boss('Whispering Goblin',
-                    35, 10,
-                    4, 6,
-                    2, 1,
-                    2, 6,
-                    2, 2,
-                    4,
-                    -2, 4,
-                    None,
-                    25, 25)
+                    50, 10,  # 50 HP and 10 MP
+                    20, 20,  # 12 Attack, 12 Defense
+                    12, 15,    # 8 Pierce Attack, 5 Pierce Defense
+                    8, 12,   # 6 Magic Attack, 12 Magic Defense
+                    15, 7,   # 15 Speed, 7 Evasion
+                    5,       # Level 5
+                    -2, 4,   # Located at 4'N, -2'W
+                    None,    # Drops no items
+                    35, 35)  # Drops 25 XP and 25 GP
 whisp_goblin.battle_turn = monsters.melee_ai
 
 whisp_goblin.upon_defeating = unimportant_boss_ud

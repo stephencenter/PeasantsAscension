@@ -70,6 +70,9 @@ poison_damage = Sound('Sound FX/poison_damage.wav')
 # Use Buff Spell -- Played when the player or enemy use a buff spell
 buff_spell = Sound('Sound FX/buff_spell.wav')
 
+# Ally Death -- Played when a member of your party dies
+ally_death = Sound('Sound FX/ally_death.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
@@ -77,5 +80,5 @@ def change_volume():
               'foot_steps', 'aim_weapon',
               'attack_miss', 'item_pickup',
               'health_low', 'poison_damage',
-              'buff_spell']:
+              'buff_spell', 'ally_death']:
         globals()[x].set_volume(main.sound_vol)

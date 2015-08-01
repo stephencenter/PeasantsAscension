@@ -534,7 +534,15 @@ def ranger_stats(self):
 
 
 def magic_ai(is_boss):
-    target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
+    target = random.choice([x for x in [
+        main.player,
+        main.solou,
+        main.xoann,
+        main.randall,
+        main.ran_af,
+        main.parsto,
+        main.adorine
+    ] if x.enabled and x.status_ail != 'dead'])
 
     if target.spd >= monster.spd:
         print('-'*25)
@@ -574,7 +582,6 @@ def magic_ai(is_boss):
         while msvcrt.kbhit():
             msvcrt.getwch()
 
-        print(monster.dodge, battle.temp_stats[target.name]['evad'])
         if monster.dodge in range(battle.temp_stats[target.name]['evad'], 512):
             dam_dealt = magic.eval_element(
                 p_elem=target.element,
@@ -606,7 +613,15 @@ def magic_ai(is_boss):
 
 
 def ranged_ai(is_boss):
-    target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
+    target = random.choice([x for x in [
+        main.player,
+        main.solou,
+        main.xoann,
+        main.randall,
+        main.ran_af,
+        main.parsto,
+        main.adorine
+    ] if x.enabled and x.status_ail != 'dead'])
 
     global is_defending
     global monster
@@ -660,7 +675,15 @@ def ranged_ai(is_boss):
 
 
 def melee_ai(is_boss):
-    target = random.choice([x for x in [main.solou, main.player, main.xoann] if x.enabled])
+    target = random.choice([x for x in [
+        main.player,
+        main.solou,
+        main.xoann,
+        main.randall,
+        main.ran_af,
+        main.parsto,
+        main.adorine
+    ] if x.enabled and x.status_ail != 'dead'])
 
     global is_defending
     global monster
