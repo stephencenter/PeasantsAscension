@@ -309,7 +309,7 @@ def battle_system(is_boss=False, ambush=False):
                     print('-Player Turn-')
                     print(ascii_art.player_art["Asleep"] % "{0} is asleep!\n ".format(
                         character.name))
-                    input("You're too tired to do anything! | Press Enter/Return ")
+                    input("You're too tired to do anything! | Press enter/return ")
                     character.move = ''
 
             else:
@@ -456,26 +456,18 @@ def after_battle(is_boss):  # Assess the results of the battle
                 print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
 
                 # Enemies drop gold/exp based on the player/monster's levels
-                gold = math.ceil(random.randint(2, 3)*monster.lvl - player.lvl) + player.ext_gol
+                gold = math.ceil(random.randint(2, 3)*monster.lvl - player.lvl)
 
                 if gold <= 0:
                     gold = random.randint(1, 2)
-
-                experience = math.ceil((monster.lvl**1.5 + player.ext_exp)/1.5)
-
-                if experience <= 0:
-                    experience = random.randint(1, 2)
 
             else:
                 # Only do the following if the player defeated a boss
                 bosses.defeated_bosses.append(monster.name)
                 print('The almighty {0} has been slain!'.format(monster.name))
 
-                # Bosses drop a set amount of gold...
-                gold = monster.gold + player.ext_gol
-
-                # ...and exp
-                experience = monster.experience
+                # Bosses drop a set amount of gold
+                gold = monster.gold
 
                 # Check to see if the boss does anything special at death
                 monster.upon_defeating()
@@ -486,17 +478,17 @@ def after_battle(is_boss):  # Assess the results of the battle
                 inv_system.inventory[cat].append(_c(monster.items))
 
                 print('The {0} dropped a {1}! Your party decides to take {2}.'.format(
-                      monster.name, str(monster.items),
+                      monster.monster_name, str(monster.items),
                       'them' if str(monster.items).endswith('s') else 'it'), end='')  # Grammar!!
 
                 sounds.item_pickup.play()
-                input(' | Press Enter/Return ')
+                input(' | Press enter/return ')
 
             # Give the Player their GP
-            main.misc_vars['gp'] += gold + player.ext_gol
+            main.misc_vars['gp'] += gold
             print("Your party has gained {0} GP!".format(gold), end='')
             sounds.item_pickup.play()
-            input(' | Press Enter/Return ')
+            input(' | Press enter/return ')
 
             for character in [x for x in [
                 solou,
@@ -509,10 +501,16 @@ def after_battle(is_boss):  # Assess the results of the battle
             ] if x.enabled]:
 
                 # Give the Player their XP
+                experience = math.ceil((monster.lvl**1.5 + player.ext_exp)/2) \
+                             + random.randint(0, 2) if not is_boss else monster.experience
+
+                if experience <= 0:
+                    experience = random.randint(1, 2)
+
                 character.exp += experience
                 print("{0} gained {1} XP!".format(character.name, experience), end='')
                 sounds.item_pickup.play()
-                input(' | Press Enter/Return ')
+                input(' | Press enter/return ')
 
                 # Check to see if the player gained any levels
                 character.level_up()
@@ -538,20 +536,20 @@ def run_away(runner):
         msvcrt.getwch()
 
     if player.status_ail == 'paralyzed':
-        # 25% chance of success
-        chance = 25
+        # 20% chance of success
+        chance = 20
 
     elif bool(player.spd > monster.spd) != bool(player.evad > monster.evad):
-        # 75% chance of success
-        chance = 75
+        # 60% chance of success
+        chance = 60
 
     elif player.spd > monster.spd and player.evad > monster.evad:
-        # 90% chance of success
-        chance = 90
+        # 80% chance of success
+        chance = 80
 
     else:
-        # 50% chance of success
-        chance = 50
+        # 40% chance of success
+        chance = 40
 
     if random.randint(0, 100) <= chance:
         print('You manage to escape from the {0}!'.format(monster.name))
@@ -559,14 +557,14 @@ def run_away(runner):
 
     else:
         print('Your attempt to escape failed!')
-        input("\nPress Enter/Return")
+        input("\nPress enter/return")
         return False
 
 
 def battle_inventory(user):
     # The player can use items from the "consum" category of their inventory during battles.
     if not inv_system.inventory['consum']:
-        print('You have no battle-allowed items! The Consumable category is empty.')
+        print('You have no battle-allowed items - the consumable category is empty!')
         return False
 
     while True:
@@ -694,14 +692,36 @@ def bat_stats():
     # strings to see how much padding (extra spaces) is needed to make things line up.
     first_padding = len(max([player.name, solou.name, xoann.name, monster.name], key=len))
 
-    second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp),
-                              '{0}/{1} HP'.format(solou.hp, solou.max_hp),
-                              '{0}/{1} HP'.format(xoann.hp, xoann.max_hp),
+    second_padding = len(max(['{0}/{1} HP'.format(player.hp, player.max_hp)
+                              if player.enabled else '',
+                              '{0}/{1} HP'.format(solou.hp, solou.max_hp)
+                              if solou.enabled else '',
+                              '{0}/{1} HP'.format(xoann.hp, xoann.max_hp)
+                              if xoann.enabled else '',
+                             '{0}/{1} MP'.format(adorine.hp, adorine.max_hp)
+                             if adorine.enabled else '',
+                             '{0}/{1} MP'.format(randall.hp, randall.max_hp)
+                             if randall.enabled else '',
+                             '{0}/{1} MP'.format(ran_af.hp, ran_af.max_hp)
+                             if ran_af.enabled else '',
+                             '{0}/{1} MP'.format(parsto.hp, parsto.max_hp)
+                             if parsto.enabled else '',
                               '{0}/{1} HP'.format(monster.hp, monster.max_hp)], key=len))
 
-    third_padding = len(max(['{0}/{1} MP'.format(player.mp, player.max_mp),
-                             '{0}/{1} MP'.format(solou.mp, solou.max_mp),
-                             '{0}/{1} MP'.format(xoann.mp, xoann.max_mp),
+    third_padding = len(max(['{0}/{1} MP'.format(player.mp, player.max_mp)
+                             if player.enabled else '',
+                             '{0}/{1} MP'.format(solou.mp, solou.max_mp)
+                             if solou.enabled else '',
+                             '{0}/{1} MP'.format(xoann.mp, xoann.max_mp)
+                             if xoann.enabled else '',
+                             '{0}/{1} MP'.format(adorine.mp, adorine.max_mp)
+                             if adorine.enabled else '',
+                             '{0}/{1} MP'.format(randall.mp, randall.max_mp)
+                             if randall.enabled else '',
+                             '{0}/{1} MP'.format(ran_af.mp, ran_af.max_mp)
+                             if ran_af.enabled else '',
+                             '{0}/{1} MP'.format(parsto.mp, parsto.max_mp)
+                             if parsto.enabled else '',
                              '{0}/{1} MP'.format(monster.mp, monster.max_mp)], key=len))
 
     # Player Stats

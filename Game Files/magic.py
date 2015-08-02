@@ -177,8 +177,11 @@ class Damaging(Spell):
             Spell.use_mana(self, user)
 
             # Determine the power of the attack
-            attk_pwr = math.ceil(battle.temp_stats[user.name]['m_attk']/2.5) - \
-                                (battle.monster.m_dfns/1.5)
+            attk_pwr = math.ceil(battle.temp_stats[user.name]['m_attk'] - battle.monster.m_dfns/2)
+
+            if user.class_ == 'mage':
+                attk_pwr *= 1.5
+
             attk_pwr *= 1 + self.damage
             attk_pwr = math.ceil(attk_pwr)
 

@@ -298,11 +298,6 @@ Input [#]: """.format(self.name))
                 continue
 
             print('-'*25)
-            if self.name == "Flygon Jones":
-                print("You wish to be a {0}? Good choice, dear friend!".format(class_.title()))
-                input('Press enter/return ')
-
-                return class_
 
             while True:
                 y_n = input('You wish to be of the {0} class? | Yes or No: '.format(
@@ -576,22 +571,22 @@ Input letter: """)
         print("""\
 -{0}'s Stats-
 Level: {1} | Class: {2} | Element: {3}
-HP: {4}/{5} | MP: {6}/{7}
-Attack: {8} | M. Attack: {9} | P. Attack {10}
-Defense: {11} | M. Defense: {12} | P. Defense {13}
-Speed: {14} | Evasion: {15}
-INT: {16} | WIS: {17} | STR: {18} | CON: {19} | DEX: {20} | PER: {21} | FOR: {22}
-Experience Pts: {23}/{24} | Gold Pieces: {25}
+HP: {4}/{5} | MP: {6}/{7} | Status Ailment: {8}
+Attack: {9} | M. Attack: {10} | P. Attack {11}
+Defense: {12} | M. Defense: {13} | P. Defense {14}
+Speed: {15} | Evasion: {16}
+INT: {17} | WIS: {18} | STR: {19} | CON: {20} | DEX: {21} | PER: {22} | FOR: {23}
+Experience Pts: {24}/{25} | Gold Pieces: {26}
 
 -Equipped Items-
-Weapon: {26}
-Accessory: {27}
+Weapon: {27}
+Accessory: {28}
 Armor:
-  Head: {28}
-  Body: {29}
-  Legs: {30}""".format(self.name,
-                       self.lvl, self.class_.title(), self.element,
-                       self.hp, self.max_hp, self.mp, self.max_mp,
+  Head: {29}
+  Body: {30}
+  Legs: {31}""".format(self.name,
+                       self.lvl, self.class_.title(), self.element.title(),
+                       self.hp, self.max_hp, self.mp, self.max_mp, self.status_ail.title(),
                        self.attk, self.m_attk, self.p_attk,
                        self.dfns, self.m_dfns, self.p_dfns,
                        self.spd, self.evad,
@@ -616,7 +611,7 @@ Armor:
                        ]['legs']))
 
         print('-'*25)
-        input('Press Enter/Return ')
+        input('Press enter/return ')
 
     def battle_turn(self, is_boss):
         monster = battle.monster
@@ -773,7 +768,7 @@ Pick {0}'s Move:
 
                         continue
 
-                    input('\nPress enter/Return ')
+                    input('\nPress enter/return ')
 
                 # Battle Inventory
                 elif move == '4':
@@ -859,7 +854,7 @@ Pick {0}'s Move:
             print('As a Ranger, {0} identifies their enemy and focuses\
 , increasing their pierce attack!'.format(self.name))
 
-            input("Press Enter/Return to view your enemy's stats ")
+            input("Press enter/return to view your enemy's stats ")
 
             print('-'*25)
             print("{0}'s STATS:".format(monster.name.upper()))
@@ -1404,7 +1399,7 @@ def check_save():  # Check for save files and load the game if they're found
 
             except (OSError, ValueError):
                 logging.exception('Error loading game:')
-                input('There was an error loading your game | Press Enter/Return ')
+                input('There was an error loading your game | Press enter/return ')
                 print('-'*25)
                 break
 
@@ -1470,10 +1465,8 @@ def save_game():
                 return
 
             except (OSError, ValueError):
-                # logging.exception('Error saving game:')
-                # input('There was an error saving your game (Press Enter/Return)')
-
-                raise
+                logging.exception('Error saving game:')
+                input('There was an error saving your game (Press enter/return)')
 
         elif y_n.startswith('n'):
             return
@@ -1611,7 +1604,7 @@ def title_screen():
         elif choice.startswith('s'):
             # Display the storyline of the game
             print('-'*25)
-            input('Press Enter/Return after each line to advance the text ')
+            input('Press enter/return after each line to advance the text ')
             print('-'*25)
 
             try:
@@ -1647,7 +1640,7 @@ def title_screen():
         elif choice.startswith('l'):
             # Display side-story lore and the history of Pythonia
             print('-'*25)
-            input('Press Enter/Return after each line to advance the text ')
+            input('Press enter/return after each line to advance the text ')
             print('-'*25)
 
             try:
