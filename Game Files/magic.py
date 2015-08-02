@@ -841,13 +841,10 @@ def serialize_sb(path):
     for user in spellbook:
         j_spellbook[user] = {}
 
-        print(spellbook)
         for cat in spellbook[user]:
-            print(cat)
             j_spellbook[user][cat] = []
 
             for spell in spellbook[user][cat]:
-                print(spell)
                 spell_dict = {
                     key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'
                 }

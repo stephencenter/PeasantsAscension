@@ -75,7 +75,6 @@ class Consumable(Item):
 
     def use_item(self, user, is_battle=False):
         global inventory
-
         item_setup_vars()
 
         if is_battle:
@@ -351,6 +350,10 @@ class Shovel(Item):
 
     @staticmethod
     def use_item(user):
+        global inventory
+
+        item_setup_vars()
+
         if main.position['reg'] == 'Aethus':
             print('-'*25)
             print('The soil up here is much too tough to be broken up using a shovel.')
@@ -372,6 +375,9 @@ class Shovel(Item):
                 gem.acquired = True
                 print('Using your shovel, your party manages to uncover a {0}!'.format(gem.name))
                 inventory['misc'].append(gem)
+
+                if not search_towns(main.position['x'], main.position['y'], enter=False):
+                    print('-'*25)
 
                 return
 
@@ -1230,9 +1236,9 @@ map_of_fast_travel = TownTeleporter('Map of Fast Travel',
                                     'Allows quick travelling to previously visited towns.',
                                     575, 190)
 
-boots_of_insane_speed = InsaneSpeedBoots('Boots of Insane Speed',
-                                         'Allows insanely fast travel to any point on the map.',
-                                         10000, 3750)
+boots_of_travel = InsaneSpeedBoots('Boots of Travel',
+                                   'Allows insanely fast travel to any point on the map.',
+                                   7500, 3750)
 
 # Monster Drops
 shell_fragment = Misc('Shell Fragment', 'A broken fragment of a remarkable sea-shell.', 0, 5)

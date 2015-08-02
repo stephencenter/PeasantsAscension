@@ -214,8 +214,8 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
                       [i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel,
                        i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel],
 
-                      [i.boots_of_insane_speed, i.boots_of_insane_speed, i.boots_of_insane_speed,
-                       i.boots_of_insane_speed, i.boots_of_insane_speed, i.boots_of_insane_speed]]}
+                      [i.boots_of_travel, i.boots_of_travel, i.boots_of_travel,
+                       i.boots_of_travel, i.boots_of_travel, i.boots_of_travel]]}
 
 i.item_setup_vars()
 
@@ -908,8 +908,8 @@ def deserialize_inv(path):
                     norm_inv[category].append(item)
                     continue
 
-                elif item['name'] == 'Boots of Insane Speed':
-                    item = i.boots_of_insane_speed
+                elif item['name'] == 'Boots of Travel':
+                    item = i.boots_of_travel
                     norm_inv[category].append(item)
                     continue
 
