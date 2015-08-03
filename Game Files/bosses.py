@@ -168,15 +168,15 @@ def unimportant_boss_ud():
 
 # Boss: Master Slime -- Position: 0'N, 1'E
 master_slime = Boss('Master Slime',
-                    35, 4,
-                    10, 4,
-                    6, 5,
-                    7, 0,
-                    6, 6,
-                    4,
-                    1, 0,
-                    [],
-                    25, 25,
+                    35, 5,   # 35 HP and 5 MP
+                    12, 5,   # 12 Attack, 5 Defense
+                    6, 5,    # 6 Pierce Attack, 5 Pierce Defense
+                    8, 0,    # 8 Magic Attack, 0 Magic Defense
+                    6, 6,    # 6 Speed, 6 Evasion
+                    3,       # Level 3
+                    1, 0,    # Located at 0'N, 1'W
+                    None,    # Drops no items
+                    25, 25,  # Drops 25 XP and 25 GP
                     active=False)
 master_slime.battle_turn = monsters.melee_ai
 
@@ -199,22 +199,22 @@ whisp_goblin = Boss('Whispering Goblin',
                     5,       # Level 5
                     -2, 4,   # Located at 4'N, -2'W
                     None,    # Drops no items
-                    35, 35)  # Drops 25 XP and 25 GP
+                    45, 45)  # Drops 45 XP and 45 GP
 whisp_goblin.battle_turn = monsters.melee_ai
 
 whisp_goblin.upon_defeating = unimportant_boss_ud
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
 menac_phantom = Boss('Menacing Phantom',
-                     75, 25,
-                     10, 20,
-                     5, 20,
-                     35, 25,
-                     20, 15,
-                     8,
-                     -12, 8,
-                     None,
-                     75, 75,
+                     75, 50,  # 75 HP and 50 MP
+                     10, 20,  # 10 Attack, 20 Defense
+                     5, 20,   # 5 Pierce Attack, 20 Pierce Defense
+                     35, 25,  # 35 Magic Attack, 25 Magic Defense
+                     20, 15,  # 20 Speed, 15 Evasion
+                     8,       # Level 8
+                     -12, 8,  # Located at 8'N, -12'W
+                     None,    # Drops no items
+                     75, 75,  # Drops 75 XP and 75 GP
                      active=False, element='death')
 menac_phantom.battle_turn = monsters.magic_ai
 
@@ -229,15 +229,15 @@ menac_phantom.upon_defeating = menacphan_ud
 
 # Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
 terr_tarant = Boss('Terrible Tarantuloid',
-                   100, 20,   # 100 Health, 20 Mana
-                   50, 30,    # 25 Attack, 25 Defense
-                   25, 15,    # 15 Pierce Attack, 15 Pierce Defense
-                   12, 8,      # 8 Magic Attack, 8 Magic Defense
-                   25, 12,    # 25 Speed, 12 Evasion
-                   11,        # Level 11
+                   100, 25,   # 100 Health, 25 Mana
+                   45, 30,    # 45 Attack, 30 Defense
+                   25, 15,    # 25 Pierce Attack, 15 Pierce Defense
+                   15, 25,     # 15 Magic Attack, 25 Magic Defense
+                   35, 25,    # 35 Speed, 25 Evasion
+                   12,        # Level 12
                    -11, -23,  # Located at -23'S, -11'W
                    None,      # Drops no items
-                   100, 100)  # Drops 100 XP and 100 GP
+                   150, 150)  # Drops 150 XP and 150 GP
 terr_tarant.battle_turn = monsters.melee_ai
 
 
@@ -254,17 +254,16 @@ terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
 cursed_spect = Boss('Cursed Spectre',
-                    100, 50,            # 85 Health, 35 Mana
-                    20, 35,            # 15 Attack, 20 Defense
-                    30, 25,            # 20 Pierce Attack, 20 Pierce Defense
-                    45, 15,            # 30 Magic Attack, 20 Magic Defense
-                    25, 20,            # 20 Speed, 15 Evasion
-                    12,                # Level 12
-                    3, 22,             # Located at 22'N, 3'E
+                    125, 75,             # 125 Health, 75 Mana
+                    15, 30,              # 15 Attack, 30 Defense
+                    20, 25,              # 20 Pierce Attack, 25 Pierce Defense
+                    50, 35,              # 50 Magic Attack, 35 Magic Defense
+                    25, 20,              # 25 Speed, 20 Evasion
+                    15,                  # Level 15
+                    3, 22,               # Located at 22'N, 3'E
                     i_items.spect_wand,  # Drops a spectre wand
-                    250, 250,          # Drops 100 XP and 100 GP
-                    element='death',   # Death Element
-                    active=False)
+                    250, 250,            # Drops 250 XP and 250 GP
+                    element='death', active=False)
 cursed_spect.battle_turn = monsters.magic_ai
 
 
@@ -277,16 +276,16 @@ cursed_spect.upon_defeating = cursspect_ud
 
 # Boss: Ent -- Position: 27'N, 15'E
 giant_ent = Boss('Giant Ent',
-                 125, 35,
-                 17, 12,
-                 15, 14,
-                 20, 20,
-                 12, 3,
-                 13,
-                 15, 27,
-                 i_items.enc_yw,
-                 120, 120,
-                 active=True, element='grass')
+                 125, 35,         # 125 Health, 75 Mana
+                 35, 50,          # 35 Attack, 50 Defense
+                 15, 50,          # 15 Pierce Attack, 50 Pierce Defense
+                 20, 15,          # 20 Magic Attack, 15 Magic Defense
+                 15, 5,           # 15 Speed, 5 Evasion
+                 15,              # Level 15
+                 15, 27,          # Located at 27'N, 15'E
+                 i_items.enc_yw,  # Drops an enchanted yew wand
+                 250, 250,        # Drops 250 XP and 250 GP
+                 element='grass', active=True)
 giant_ent.battle_turn = monsters.melee_ai
 
 giant_ent.upon_defeating = unimportant_boss_ud
