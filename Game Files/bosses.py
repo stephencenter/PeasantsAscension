@@ -192,9 +192,9 @@ master_slime.upon_defeating = mastslim_ud
 # Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
 whisp_goblin = Boss('Whispering Goblin',
                     50, 10,  # 50 HP and 10 MP
-                    20, 20,  # 12 Attack, 12 Defense
-                    12, 15,    # 8 Pierce Attack, 5 Pierce Defense
-                    8, 12,   # 6 Magic Attack, 12 Magic Defense
+                    20, 20,  # 20 Attack, 20 Defense
+                    12, 15,  # 12 Pierce Attack, 15 Pierce Defense
+                    8, 12,   # 8 Magic Attack, 12 Magic Defense
                     15, 7,   # 15 Speed, 7 Evasion
                     5,       # Level 5
                     -2, 4,   # Located at 4'N, -2'W
@@ -209,8 +209,8 @@ menac_phantom = Boss('Menacing Phantom',
                      75, 25,
                      10, 20,
                      5, 20,
+                     35, 25,
                      20, 15,
-                     15, 15,
                      8,
                      -12, 8,
                      None,
@@ -230,9 +230,9 @@ menac_phantom.upon_defeating = menacphan_ud
 # Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
 terr_tarant = Boss('Terrible Tarantuloid',
                    100, 20,   # 100 Health, 20 Mana
-                   25, 25,    # 25 Attack, 25 Defense
-                   15, 15,    # 15 Pierce Attack, 15 Pierce Defense
-                   8, 8,      # 8 Magic Attack, 8 Magic Defense
+                   50, 30,    # 25 Attack, 25 Defense
+                   25, 15,    # 15 Pierce Attack, 15 Pierce Defense
+                   12, 8,      # 8 Magic Attack, 8 Magic Defense
                    25, 12,    # 25 Speed, 12 Evasion
                    11,        # Level 11
                    -11, -23,  # Located at -23'S, -11'W
