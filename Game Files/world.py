@@ -29,6 +29,7 @@ import bosses
 import sounds
 import inv_system
 import magic
+import ascii_art
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -53,11 +54,9 @@ position = ''
 def setup_vars():
     global position
     global misc_vars
-    global player
 
     position = main.position
     misc_vars = main.misc_vars
-    player = main.player
 
 
 def movement_system():
@@ -387,6 +386,7 @@ def check_region():
 
     if position['reg'] != region:
         print('-'*25)
+        print(ascii_art.locations[region])
         print('You have left the {0} and are now entering the {1}.'.format(
             position['reg'], region))
 
@@ -428,27 +428,80 @@ def rest():
     setup_vars()
     print('-'*25)
 
-    if player.hp == player.max_hp and player.mp == player.max_mp:
-        print('You feel fine, and decide not to rest.')
+    if all([
+        main.player.hp == main.player.max_hp and main.player.mp == main.player.max_mp,
+        main.solou.hp == main.solou.max_hp and main.solou.mp == main.solou.max_mp,
+        main.xoann.hp == main.xoann.max_hp and main.xoann.mp == main.xoann.max_mp,
+        main.randall.hp == main.randall.max_hp and main.randall.mp == main.randall.max_mp,
+        main.ran_af.hp == main.ran_af.max_hp and main.ran_af.mp == main.ran_af.max_mp,
+        main.parsto.hp == main.parsto.max_hp and main.parsto.mp == main.parsto.max_mp,
+        main.adorine.hp == main.adorine.max_hp and main.adorine.mp == main.adorine.max_mp
+    ]):
+
+        print('Your party feels fine and decides not to rest.')
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
+
         return
 
-    print('You set up camp and begin to rest.')
+    print(ascii_art.locations['Campsite'])
+    print('Your party sets up camp and begin to rest.')
 
     time.sleep(1)
 
     while msvcrt.kbhit():
         msvcrt.getwch()
 
-    player.hp += math.ceil(player.max_hp/3)
-    player.mp += math.ceil(player.max_mp/3)
+    main.player.hp += math.ceil(main.player.max_hp/3)
+    main.player.mp += math.ceil(main.player.max_mp/3)
+    main.solou.hp += math.ceil(main.solou.max_hp/3)
+    main.solou.mp += math.ceil(main.solou.max_mp/3)
+    main.xoann.hp += math.ceil(main.xoann.max_hp/3)
+    main.xoann.mp += math.ceil(main.xoann.max_mp/3)
+    main.randall.hp += math.ceil(main.randall.max_hp/3)
+    main.randall.mp += math.ceil(main.randall.max_mp/3)
+    main.ran_af.hp += math.ceil(main.ran_af.max_hp/3)
+    main.ran_af.mp += math.ceil(main.ran_af.max_mp/3)
+    main.parsto.hp += math.ceil(main.parsto.max_hp/3)
+    main.parsto.mp += math.ceil(main.parsto.max_mp/3)
+    main.adorine.hp += math.ceil(main.adorine.max_hp/3)
+    main.adorine.mp += math.ceil(main.adorine.max_mp/3)
 
     # Make sure that the player doesn't have more than the max HP/MP
-    if player.hp > player.max_hp:
-        player.hp -= (player.hp - player.max_hp)
-    if player.mp > player.max_mp:
-        player.mp -= (player.mp - player.max_mp)
+    if main.player.hp > main.player.max_hp:
+        main.player.hp -= (main.player.hp - main.player.max_hp)
+    if main.player.mp > main.player.max_mp:
+        main.player.mp -= (main.player.mp - main.player.max_mp)
+
+    if main.solou.hp > main.solou.max_hp:
+        main.solou.hp -= (main.solou.hp - main.solou.max_hp)
+    if main.solou.mp > main.solou.max_mp:
+        main.solou.mp -= (main.solou.mp - main.solou.max_mp)
+
+    if main.xoann.hp > main.xoann.max_hp:
+        main.xoann.hp -= (main.xoann.hp - main.xoann.max_hp)
+    if main.xoann.mp > main.xoann.max_mp:
+        main.xoann.mp -= (main.xoann.mp - main.xoann.max_mp)
+
+    if main.randall.hp > main.randall.max_hp:
+        main.randall.hp -= (main.randall.hp - main.randall.max_hp)
+    if main.randall.mp > main.randall.max_mp:
+        main.randall.mp -= (main.randall.mp - main.randall.max_mp)
+
+    if main.ran_af.hp > main.ran_af.max_hp:
+        main.ran_af.hp -= (main.ran_af.hp - main.ran_af.max_hp)
+    if main.ran_af.mp > main.ran_af.max_mp:
+        main.ran_af.mp -= (main.ran_af.mp - main.ran_af.max_mp)
+
+    if main.parsto.hp > main.parsto.max_hp:
+        main.parsto.hp -= (main.parsto.hp - main.parsto.max_hp)
+    if main.parsto.mp > main.parsto.max_mp:
+        main.parsto.mp -= (main.parsto.mp - main.parsto.max_mp)
+
+    if main.adorine.hp > main.adorine.max_hp:
+        main.adorine.hp -= (main.adorine.hp - main.adorine.max_hp)
+    if main.adorine.mp > main.adorine.max_mp:
+        main.adorine.mp -= (main.adorine.mp - main.adorine.max_mp)
 
     is_battle = not random.randint(0, 3)
 

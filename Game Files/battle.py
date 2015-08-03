@@ -362,6 +362,43 @@ def battle_system(is_boss=False, ambush=False):
             print('-'*25)
 
 
+def run_away(runner):
+    print(ascii_art.player_art[runner.class_.title()] %
+          "{0} is making a move!\n".format(runner.name))
+    print()
+    print('Your party starts to run away from the {0}...'.format(monster.name))
+
+    sounds.foot_steps.play()
+    time.sleep(0.75)
+
+    while msvcrt.kbhit():
+        msvcrt.getwch()
+
+    if player.status_ail == 'paralyzed':
+        # 20% chance of success
+        chance = 20
+
+    elif bool(player.spd > monster.spd) != bool(player.evad > monster.evad):
+        # 60% chance of success
+        chance = 60
+
+    elif player.spd > monster.spd and player.evad > monster.evad:
+        # 80% chance of success
+        chance = 80
+
+    else:
+        # 40% chance of success
+        chance = 40
+
+    if random.randint(0, 100) <= chance:
+        print('You manage to escape from the {0}!'.format(monster.name))
+        return True
+
+    else:
+        print('Your attempt to escape failed!')
+        return False
+
+
 def after_battle(is_boss):  # Assess the results of the battle
     global player
     global xoann
@@ -521,44 +558,6 @@ def after_battle(is_boss):  # Assess the results of the battle
             pygame.mixer.music.set_volume(main.music_vol)
 
             return
-
-
-def run_away(runner):
-    print(ascii_art.player_art[runner.class_.title()] %
-          "{0} is making a move!\n".format(runner.name))
-    print()
-    print('Your party starts to run away from the {0}...'.format(monster.name))
-
-    sounds.foot_steps.play()
-    time.sleep(0.75)
-
-    while msvcrt.kbhit():
-        msvcrt.getwch()
-
-    if player.status_ail == 'paralyzed':
-        # 20% chance of success
-        chance = 20
-
-    elif bool(player.spd > monster.spd) != bool(player.evad > monster.evad):
-        # 60% chance of success
-        chance = 60
-
-    elif player.spd > monster.spd and player.evad > monster.evad:
-        # 80% chance of success
-        chance = 80
-
-    else:
-        # 40% chance of success
-        chance = 40
-
-    if random.randint(0, 100) <= chance:
-        print('You manage to escape from the {0}!'.format(monster.name))
-        return True
-
-    else:
-        print('Your attempt to escape failed!')
-        input("\nPress enter/return")
-        return False
 
 
 def battle_inventory(user):

@@ -71,6 +71,7 @@ class Town:
 
     def town_choice(self):
         print('-'*25)
+        print(ascii_art.locations['Town'])
         print('Welcome to {0}!\n{1}'.format(self.name, '-'*25))
 
         while True:

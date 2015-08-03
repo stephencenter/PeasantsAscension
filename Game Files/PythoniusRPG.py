@@ -677,11 +677,6 @@ Armor:
 
                     return 'Ran'
 
-                # If it fails, the enemy will attack you and skip your turn
-                monster.battle_turn(is_boss)
-
-                continue
-
             else:
                 return False
 
