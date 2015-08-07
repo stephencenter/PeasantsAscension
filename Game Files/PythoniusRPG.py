@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.6.6 Alpha
-game_version = 'v0.6.6'
+# PythoniusRPG v0.7 Alpha
+game_version = 'v0.7'
 # -----------------------------------------------------------------------------#
 #   This file is part of PythoniusRPG.
 #
@@ -123,7 +123,7 @@ sav_xoann_stats = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'  # Xoann's Stat
 
 sav_randall_stats = 'Save Files/{CHARACTER_NAME}/randall_stats.json'  # Randall's Stats
 
-sav_ran_af_stats = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'  # Ran'Af's Stats
+sav_ran_af_stats = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'  # Ran'af's Stats
 
 sav_parsto_stats = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'  # Parsto's Stats
 
@@ -140,7 +140,7 @@ sav_adorine_stats = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine'
 # files before doing so.
 
 music_vol = 1.0  # The volume of the game, on a scale from 0 (muted) to 1.0 (loudest)
-sound_vol = 1.0  # These values can be changed in settings.cfg file
+sound_vol = 1.0  # These values can be changed in the settings.cfg file
 
 do_text_scroll = False
 
@@ -559,6 +559,7 @@ Input letter: """)
                     print('-'*25)
                     print("{0}'s {1} has increased!".format(self.name, vis_skill))
 
+                    # Decrement remaining points
                     rem_points -= 1
 
                     print('-'*25) if rem_points else ''

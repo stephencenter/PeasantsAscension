@@ -269,7 +269,6 @@ def battle_system(is_boss=False, ambush=False):
                 print('{0} has fallen to the {1}!'.format(character.name, monster.monster_name))
                 input('Press enter/return ')
 
-
         bat_stats()
 
         # Increment the monk turn-counter for lower defense until it equals 3
@@ -330,6 +329,22 @@ def battle_system(is_boss=False, ambush=False):
         ] if c.enabled], key=lambda x: x.spd):
             if monster.hp <= 0:
                 break
+
+            for character in [x for x in [
+                player,
+                solou,
+                xoann,
+                randall,
+                ran_af,
+                adorine,
+                parsto
+            ] if x.enabled]:
+                if character.hp <= 0 and character.status_ail != 'dead':
+                    character.status_ail = 'dead'
+                    sounds.ally_death.play()
+                    print()
+                    print('{0} has fallen to the {1}!'.format(character.name, monster.monster_name))
+                    input('Press enter/return ')
 
             if isinstance(unit, main.PlayableCharacter) and (
                 unit.status_ail == 'dead'

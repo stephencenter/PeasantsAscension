@@ -74,6 +74,7 @@ class Monster:
         self.lvl = lvl  # Level
         self.element = element  # Element
         self.monster_name = ''
+        self.status = ''
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
         self.is_poisoned = False
@@ -172,42 +173,27 @@ class Monster:
                 print('The {0} hits {1} with a melee attack, dealing {2} damage!'.format(
                     self.name, target.name, damage))
 
+            if random.randint(0, 4) == 4:  # 20% chance
+                print("The {0}'s attack {1}".format(self.monster_name, self.status_msg))
+                target.status_ail = self.status
+
         else:
             sounds.attack_miss.play()
             print("{0} narrowly avoids the {1}'s attack!".format(target.name, self.name))
 
     def give_status(self, target):
         # Attempt to give the target a status ailment
-
-        if random.randint(1, 6) < 4:
-            if target.class_ == 'warrior':
-                status = 'weakened'  # Severely lowers melee attack
-
-            elif target.class_ == 'mage':
-                status = 'silenced'  # Makes the use of magic impossible, except for spells
-                                     # that cure status (such as silence)
-
-            elif target.class_ == 'ranger':
-                status = 'blinded'  # Severely lowers pierce attack
-
-            elif target.class_ == 'assassin':
-                status = 'paralyzed'  # Severely lowers speed and evasion
-
-            elif target.class_ == 'monk':
-                status = random.choice(['paralyzed', 'weakened'])
-
-            elif target.class_ == 'paladin':
-                status = random.choice(['silenced', 'weakened'])
-
-        else:
-            status = random.choice(['asleep',  # Skips the target's turn until they wake up
-                                    'poisoned'  # The target takes damage each turn until cured
-                                    ])
-
-        if status == target.status_ail:
-            status = random.choice([x for x in ['asleep', 'poisoned', 'silenced', 'weakened',
-                                                'blinded', 'paralyzed']
-                                    if x != target.status_ail])
+        status = random.choice([x for x in ['asleep',
+                                            'poisoned',
+                                            'silenced',
+                                            'weakened',
+                                            'blinded',
+                                            'paralyzed',
+                                            'frostbitten',
+                                            'burned',
+                                            'deafened',
+                                            'muted']
+                                if x != target.status_ail])
 
         print('The {0} is attempting to make {1} {2}...'.format(self.name, target.name, status))
         time.sleep(0.75)
@@ -236,7 +222,7 @@ class Monster:
 
                 sounds.poison_damage.play()
 
-                poison_damage = int(math.ceil(self.max_hp/10))
+                poison_damage = math.ceil(self.max_hp/10)
                 print('The {0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
                 self.hp -= poison_damage
 
@@ -430,20 +416,44 @@ class Monster:
 
         if position['reg'] == 'Glacian Plains':
             self.element = 'ice'
+            self.status = 'frostbitten'
+            self.status_msg = "was imbued with frost, causing painful frostbite!"
+
         elif position['reg'] == 'Arcadian Desert':
             self.element = 'fire'
+            self.status = 'burned'
+            self.status_msg = "was imbued with fire, causing painful burns!"
+
         elif position['reg'] == 'Terrius Mt. Range':
             self.element = 'earth'
+            self.status = 'paralyzed'
+            self.status_msg = "hit a nerve ending, causing temporary paralysis!"
+
         elif position['reg'] == 'Pythonian Coastline':
             self.element = 'water'
+            self.status = 'muted'
+            self.status_msg = "caused organizational issues, leading to impaired item usage!"
+
         elif position['reg'] == 'Central Forest':
             self.element = 'electric'
+            self.status = 'blinded'
+            self.status_msg = "was imbued with darkness, causing impaired vision!"
+
         elif position['reg'] == 'Bogthorn Marsh':
             self.element = 'grass'
+            self.status = 'poisoned'
+            self.status_msg = "was imbued with deadly toxins that will slowly drain health!"
+
         elif position['reg'] == 'Overshire Graveyard':
             self.element = 'death'
+            self.status = 'asleep'
+            self.status = "knocked their target unconscious using noxious fumes!"
+
         elif position['reg'] == 'Aethus':
             self.element = 'wind'
+            self.status = 'deafened'
+            self.status_msg = "brought upon the winds, dampening their target's hearing!"
+
         else:
             self.element = 'none'
 
