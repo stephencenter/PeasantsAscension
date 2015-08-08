@@ -24,6 +24,7 @@
       <w>bodyarmor</w>
       <w>bogthorn</w>
       <w>brah</w>
+      <w>capwild</w>
       <w>cesura</w>
       <w>chainmail</w>
       <w>chakra</w>
@@ -38,6 +39,7 @@
       <w>dangit</w>
       <w>deserialize</w>
       <w>dfns</w>
+      <w>divinic</w>
       <w>dragonhide</w>
       <w>dragonskin</w>
       <w>durasteel</w>
@@ -99,6 +101,7 @@
       <w>o'the</w>
       <w>onstitution</w>
       <w>ools</w>
+      <w>oralyn</w>
       <w>oread</w>
       <w>orichalcum</w>
       <w>ortune</w>
@@ -129,6 +132,8 @@
       <w>rejuv</w>
       <w>rivesh</w>
       <w>ruari</w>
+      <w>rymn</w>
+      <w>rymnes</w>
       <w>sakura</w>
       <w>sanguion</w>
       <w>sanguion's</w>
@@ -154,6 +159,7 @@
       <w>tengu</w>
       <w>terrius</w>
       <w>thex</w>
+      <w>thexian</w>
       <w>thexus</w>
       <w>trength</w>
       <w>tripton</w>
@@ -166,6 +172,7 @@
       <w>xoann</w>
       <w>y'know</w>
       <w>yewen</w>
+      <w>zadael</w>
       <w>zipline</w>
     </words>
   </dictionary>

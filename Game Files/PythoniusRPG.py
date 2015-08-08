@@ -1759,7 +1759,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
 
     # Pronounced "So-low"
     solou = PlayableCharacter('Solou', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                              class_='mage', enabled=True)
+                              class_='mage', enabled=False)
 
     # Pronounced "Zo-ann"
     xoann = PlayableCharacter('Xoann', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,

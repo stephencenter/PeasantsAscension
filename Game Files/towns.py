@@ -176,7 +176,7 @@ class Town:
                 break
 
     def new_location(self, add=True):  # Translate the location of newly-found towns
-        if self.y >= 0:  # into a string, then add to inventory.
+        if self.y >= 0:                # into a string, then add to inventory.
             foo = "\u00b0N"
         else:
             foo = "\u00b0S"
@@ -412,8 +412,11 @@ model! | [ENTER]')
             elif choice.startswith('n'):
                 return
 
-    def town_gen(self):  # Let the player purchase items from the General Store
-        stock = {}       # A dictionary containing objects the player can purchase
+    def town_gen(self):
+        # Let the player purchase items from the General Store
+        # A dictionary containing objects the player can purchase
+
+        stock = {}
         for category in inv_system.gs_stock:
             stock[category] = []
             for item_group in inv_system.gs_stock[category]:
@@ -788,8 +791,68 @@ class Tavern():
     def new_location(self):
         pass
 
-    def inside_town(self):
-        pass
+    def town_choice(self):
+        print('-'*25)
+        print('Inn Keeper: "Hello, traveler! Welcome to the {0}!"'.format(self.name))
+
+        while True:
+            choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
+                "It's free, y'know." if not self.cost else ' '.join(
+                    ["One Night is", str(self.cost), "GP."])))
+
+            choice = choice.lower()
+
+            if choice.startswith('y'):
+                print()
+                if main.misc_vars['gp'] >= self.cost:
+
+                    print('"Good night, traveler."')
+                    print('Sleeping...')
+
+                    time.sleep(1)
+
+                    while msvcrt.kbhit():
+                        msvcrt.getwch()
+
+                    main.misc_vars['gp'] -= self.cost
+
+                    for character in [
+                        main.player,
+                        main.solou,
+                        main.xoann,
+                        main.randall,
+                        main.ran_af,
+                        main.parsto,
+                        main.adorine
+                    ]:
+                        character.hp = copy.copy(character.max_hp)
+                        character.mp = copy.copy(character.max_mp)
+                        character.status_ail = "none"
+
+                    print("Your party's HP and MP have been fully restored.")
+                    print('Your party has been relieved of your status ailment.')
+
+                    print('-'*25)
+
+                    main.save_game()
+
+                else:
+                    print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
+
+                pygame.mixer.music.load(world.position['reg_music'])
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
+                print('-'*25)
+
+                return
+
+            elif choice.startswith('n'):
+                pygame.mixer.music.load(world.position['reg_music'])
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
+                print('-'*25)
+
+                return
 
 
 # OVERWORLD TOWNS
@@ -798,7 +861,8 @@ he Forest.
 It is in this very town where numerous brave adventurers have begun
 their journey. Nearton has a general store, an inn, and a few small houses.
 An old man is standing near one of the houses, and appears to be very
-troubled about something.""", [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar], 0, 1)
+troubled about something.""", [npcs.philliard, npcs.alfred,
+                               npcs.sondalar, npcs.saar, npcs.npc_solou], 0, 1)
 
 town2 = Town('Southford', """Southford: A fair-size town in the central-southe\
 rn region of the Forest.
@@ -942,13 +1006,24 @@ than the actual vampires are! They look very friendly, although a few of them do
 quite scared for some reason. Perhaps you should investigate.""",
               [npcs.pime, npcs.ariver], -96, -67, gs_level=5, inn_cost=18)
 
-town18 = Town("Lamtonum", """"Lantonum: Lantonum is a small town that has the best
+town18 = Town("Lamtonum", """Lantonum: Lantonum is a small town that has the best
 forge in all of Arcadia. Nearly 2/3s of all citizens of this town are
 experienced blacksmiths, and 90% of all ores and minerals mined
 in Chin'tor or Ambercreek are brought here. It is one of the wealthiest
 cities in all of the desert region due to its Mythril, Magestite, and
-Necrite exports.""", [npcs.matthew],
+Necrite bar exports.""", [npcs.matthew],
               72, 69, gs_level=4)
+
+town19 = Town("Capwild", """Capwild: Capwild is a medium sized town situated in the
+Terrius Mt. Range. Capwild is a supplier of grains and herbs for the entire region,
+and makes extensive use of terrace farming to make up for the lack of arable land.""",
+              [], -76, 56, gs_level=5, inn_cost=15)
+
+town20 = Town("Rymn Outpost", """Rymn Outpost: Rymn Outpost is one of the several
+small villages established after the Thexian Incursion. All of the residents of this town
+are soldiers or family members of soldiers, with the exception a few merchants. Rymn Outpost
+is named after Rymnes, the Divinic gods of defense.""",
+              [], 47, -99, gs_level=5, inn_cost=17)
 
 small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
@@ -959,7 +1034,7 @@ be any other people near here.""", [npcs.alden],
 to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
 
 # AETHUS TOWNS
-town19 = Town("Valenfall", """Not much is known about the ancient city of Valenfall.
+a_town1 = Town("Valenfall", """Not much is known about the ancient city of Valenfall.
 It's inhabitants claim that it was lifted up from the mainland several millenia ago
 by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
 all of the surrounding land of Aethus around it. Valenfall is deeply intertwined with
@@ -968,12 +1043,31 @@ nature, and monuments depicting the nature deities can be seen on every corner.
 
 to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
 
+# OVERWORLD TAVERNS
+tavern1 = Tavern("The Traveling Merchant Inn", 5, 7, 0)
+tavern2 = Tavern("The Drunken Moon Tavern ", -51, 43, 5)
+tavern3 = Tavern("The Wandering Falcon Inn", 51, 23, 5)
+tavern4 = Tavern("The Dancing Knight Tavern", 51, -28, 5)
+tavern5 = Tavern("The Golden Watchman Tavern", -51, -32, 5)
+tavern6 = Tavern("The Smiling Rapier Inn", -40, 2, 5)
+tavern7 = Tavern("The Howling Warrior Inn", -87, -80, 10)
+tavern8 = Tavern("The Vanishing Skull Inn", 65, 76, 10)
+tavern9 = Tavern("The Brave Foal Tavern", -59, 84, 10)
+tavern10 = Tavern("The Cowardly Dagger Inn", 85, 62, 10)
+tavern11 = Tavern("The Thirsty Wizard Tavern", 7, -117, 15)
+tavern12 = Tavern("The Painted Bard Inn", -118, 5, 15)
+
 town_list = [town1, town2, town3, town4, town5, town6, town7,
              town8, town9, town10, town11, town12, town13, town14,
-             town15, town16, town17, town18,
+             town15, town16, town17, town18, town19, town20,
              small_house1, to_aethus]
 
-aethus_towns = [to_mainland, town19]
+tavern_list = [tavern1, tavern2, tavern3, tavern4, tavern5, tavern6,
+               tavern7, tavern8, tavern9, tavern10, tavern11, tavern12]
+
+aethus_towns = [to_mainland, a_town1]
+
+aethus_taverns = []
 
 
 def search_towns(pos_x, pos_y, enter=True):
@@ -981,6 +1075,7 @@ def search_towns(pos_x, pos_y, enter=True):
     # town where the player is located
 
     available_towns = town_list if not main.position['is_aethus'] else aethus_towns
+
     for town in available_towns:
 
         if town.x == pos_x and town.y == pos_y:
@@ -1020,12 +1115,53 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                 return True
 
     else:
-        return False
+        available_taverns = tavern_list if not main.position['is_aethus'] else aethus_taverns
+        for tavern in available_taverns:
 
-# import math
+            if tavern.x == pos_x and tavern.y == pos_y:
+
+                if enter:
+                    print('-'*25)
+
+                    sounds.item_pickup.play()
+
+                    while True:
+                        y_n = input('{0} is nearby. \
+Do you want to visit it? | Yes or No: '.format(tavern.name))
+
+                        y_n = y_n.lower()
+
+                        if y_n.startswith('y'):
+                            pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
+                            pygame.mixer.music.play(-1)
+                            pygame.mixer.music.set_volume(main.music_vol)
+                            world.save_coords(tavern.x, tavern.y)
+                            tavern.town_choice()
+
+                            return
+
+                        elif y_n.startswith('n'):
+                            print('-'*25)
+
+                            return
+
+                else:
+                    return True
+
+
+# import matplotlib.pyplot as plt
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
 #
-# for x_town in town_list:
-#     x = abs(x_town.x)
-#     y = abs(x_town.y)
-#     pos = (x + y)/2
-#     print(x_town.name, math.ceil(pos/(125/8)), x_town.gs_level)
+# x_points = [town.x for town in town_list]
+# y_points = [town.y for town in town_list]
+#
+# tx_points = [tavern.x for tavern in tavern_list]
+# ty_points = [tavern.y for tavern in tavern_list]
+#
+# p = ax.plot(x_points, y_points, 'ro')
+# q = ax.plot(tx_points, ty_points, 'bs')
+# ax.set_xlabel('x-points')
+# ax.set_ylabel('y-points')
+# ax.set_title('Simple XY point plot')
+# fig.show()
