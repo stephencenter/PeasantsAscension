@@ -222,7 +222,7 @@ class Monster:
 
                 sounds.poison_damage.play()
 
-                poison_damage = math.ceil(self.max_hp/10)
+                poison_damage = math.floor(self.hp/4)
                 print('The {0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
                 self.hp -= poison_damage
 
