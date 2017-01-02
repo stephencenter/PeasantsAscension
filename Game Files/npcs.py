@@ -173,7 +173,7 @@ class Quest(Conversation):
 
             if accept.startswith('y'):
                 print('-'*25)
-                print('{0}: "Terrific! Good luck on your quest!"'.format(self.q_giver))
+                print('{0}: "Terrific! Thank you for your help!"'.format(self.q_giver))
                 self.started = True
                 self.upon_starting()
 
@@ -181,7 +181,7 @@ class Quest(Conversation):
 
             elif accept.startswith('n'):
                 print('-'*25)
-                print('{0}: "...Oh. Come back later if you change your mind."'.format(self.q_giver))
+                print('{0}: "Oh... That\'s fine. Come back later if you change your mind."'.format(self.q_giver))
 
                 return
 
@@ -211,7 +211,7 @@ solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
                                "for you! As it is sensitive information, I am required by law",
                                "to read it to you and then dispose of it permanently.",
                                "*Ahem*: ",
-                               '    "As captain of the 7th Platoon of the Pythonian Army, you"',
+                               '   "As captain of the 7th Platoon of the Pythonian Army, you',
                                "    are hereby entrusted with the following information and a",
                                "    mission. Princess Celeste, heiress to the throne and daughter",
                                "    of His Majesty King Pythonius II, has been kidnapped by the",

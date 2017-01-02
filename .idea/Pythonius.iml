@@ -16,8 +16,7 @@
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/n" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Save Files/y" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.4.0 (C:\Python34\python.exe)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.6.0 (C:\Users\Stephen Center\AppData\Local\Programs\Python\Python36\python.exe)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
-

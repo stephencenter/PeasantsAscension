@@ -18,8 +18,6 @@ import sys
 import time
 import math
 import copy
-import msvcrt
-
 import pygame
 
 import inv_system
@@ -156,10 +154,7 @@ class Monster:
         else:
             print('The {0} {1} {2}'.format(self.name, self.attk_msg, target.name))
 
-        time.sleep(0.75)
-
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        main.smart_sleep(0.75)
 
         if self.dodge in range(target.evad, 512):
             damage = self.monst_damage(mode, target)
@@ -196,10 +191,7 @@ class Monster:
                                 if x != target.status_ail])
 
         print('The {0} is attempting to make {1} {2}...'.format(self.name, target.name, status))
-        time.sleep(0.75)
-
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        main.smart_sleep(0.75)
 
         if random.randint(0, 1):
             print('{0} is now {1}!'.format(target.name, status))
@@ -215,10 +207,7 @@ class Monster:
         # Check whether the monster is poisoned or not.
         if self.is_poisoned:
             if random.randint(0, 9):  # 10% chance to recover per turn
-                time.sleep(0.5)
-
-                while msvcrt.kbhit():
-                    msvcrt.getwch()
+                main.smart_sleep(0.5)
 
                 sounds.poison_damage.play()
 
@@ -227,10 +216,7 @@ class Monster:
                 self.hp -= poison_damage
 
             else:
-                time.sleep(0.5)
-
-                while msvcrt.kbhit():
-                    msvcrt.getwch()
+                main.smart_sleep(0.5)
 
                 sounds.buff_spell.play()
                 print('The {0} recovered from the poison!'.format(self.name))
@@ -447,15 +433,17 @@ class Monster:
         elif position['reg'] == 'Overshire Graveyard':
             self.element = 'death'
             self.status = 'asleep'
-            self.status = "knocked their target unconscious using noxious fumes!"
+            self.status_msg = "knocked their target unconscious using noxious fumes!"
 
         elif position['reg'] == 'Aethus':
             self.element = 'wind'
             self.status = 'deafened'
             self.status_msg = "brought upon the winds, dampening their target's hearing!"
 
-        else:
+        else: # This should not happen
             self.element = 'none'
+            self.status = False
+            self.status_msg = False
 
         self.name = ' '.join([modifier, self.name]) if modifier else self.name
 
@@ -563,7 +551,7 @@ def magic_ai(is_boss):
     ))
 
     # Only do this on turns that are a multiple of 4 (or turn 1)
-    if target.status_ail != "none" and not random.randint(0, 4) and monster.mp > 2:
+    if target.status_ail != "none" and not random.randint(0, 4) and monster.mp > 2 and monster.status:
         monster.give_status(target)
 
     elif monster.hp <= math.ceil(monster.max_hp/4) and monster.mp >= 5:
@@ -587,10 +575,7 @@ def magic_ai(is_boss):
         sounds.magic_attack.play()
 
         print('The {0} {1} {2}'.format(monster.name, monster.attk_msg, target.name))
-        time.sleep(0.75)
-
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        main.smart_sleep(0.75)
 
         if monster.dodge in range(battle.temp_stats[target.name]['evad'], 512):
             dam_dealt = magic.eval_element(

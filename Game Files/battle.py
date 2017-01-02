@@ -17,11 +17,9 @@ import sys
 import random
 import time
 import math
-import msvcrt
 import re
-from copy import copy as _c
-
 import pygame
+from copy import copy as _c
 
 import inv_system
 import monsters
@@ -183,10 +181,7 @@ def battle_system(is_boss=False, ambush=False):
 
         print(ascii_art.monster_art[monster.monster_name] % '')
         print('The legendary {0} has awoken!'.format(monster.name))
-        time.sleep(0.35)
-
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        main.smart_sleep(0.35)
 
     else:
         print(ascii_art.monster_art[monster.monster_name] % '')
@@ -199,24 +194,15 @@ def battle_system(is_boss=False, ambush=False):
         if ambush:
             print('{0}{1} ambushed you while you were resting!'.format(
                 a_an, monster.name))
-            pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(main.music_vol)
-            time.sleep(1)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
-
         else:
             print('{0}{1} suddenly appeared out of nowhere!'.format(
                 a_an, monster.name))
-            pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(main.music_vol)
-            time.sleep(1)
 
-            while msvcrt.kbhit():
-                msvcrt.getwch()
+        pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(main.music_vol)
+
+        main.smart_sleep(1)
 
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
@@ -384,10 +370,7 @@ def run_away(runner):
     print('Your party starts to run away from the {0}...'.format(monster.name))
 
     sounds.foot_steps.play()
-    time.sleep(0.75)
-
-    while msvcrt.kbhit():
-        msvcrt.getwch()
+    main.smart_sleep(0.75)
 
     if player.status_ail == 'paralyzed':
         # 20% chance of success
@@ -579,6 +562,8 @@ def battle_inventory(user):
     # The player can use items from the "consum" category of their inventory during battles.
     if not inv_system.inventory['consum']:
         print('You have no battle-allowed items - the consumable category is empty!')
+        print('-'*25)
+
         return False
 
     while True:

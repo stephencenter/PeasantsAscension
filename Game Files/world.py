@@ -18,9 +18,8 @@
 import sys
 import random
 import time
-import msvcrt
-import pygame
 import math
+import pygame
 
 import battle
 import monsters
@@ -48,45 +47,32 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-position = ''
-
-
-def setup_vars():
-    global position
-    global misc_vars
-
-    position = main.position
-    misc_vars = main.misc_vars
-
 
 def movement_system():
     # Adjust the player's x/y coordinates based on inputted direction.
-    global position
 
-    setup_vars()
-
-    pygame.mixer.music.load(position['reg_music'])
+    pygame.mixer.music.load(main.position['reg_music'])
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(main.music_vol)
 
     while True:
-        towns.search_towns(position['x'], position['y'])
+        towns.search_towns(main.position['x'], main.position['y'])
 
-        if position['x'] >= 0:
-            position['h'] = "\u00b0E"
+        if main.position['x'] >= 0:
+            main.position['h'] = "\u00b0E"
         else:
-            position['h'] = "\u00b0W"
+            main.position['h'] = "\u00b0W"
 
-        if position['y'] >= 0:
-            position['v'] = "\u00b0N"
+        if main.position['y'] >= 0:
+            main.position['v'] = "\u00b0N"
         else:
-            position['v'] = "\u00b0S"
+            main.position['v'] = "\u00b0S"
 
         while True:
             direction = input('{0}{1}, {2}{3} | {4} | Input Dir. (N, S, E, W), \
-[P]layer, [T]ools, [R]est: '.format(position['y'], position['v'],
-                                    position['x'], position['h'],
-                                    position['reg']))
+[P]layer, [T]ools, [R]est: '.format(main.position['y'], main.position['v'],
+                                    main.position['x'], main.position['h'],
+                                    main.position['reg']))
 
             direction = direction.lower()
 
@@ -97,13 +83,13 @@ def movement_system():
                 # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
                 if direction.startswith('n'):
 
-                    if position['y'] < 125 if not position['is_aethus'] else 50:
-                        position['y'] += 1
+                    if main.position['y'] < 125 if not main.position['is_aethus'] else 50:
+                        main.position['y'] += 1
 
                     else:
                         print('-'*25)
 
-                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -111,7 +97,7 @@ It's probably in your best interests that you not do that.
 
                             continue
 
-                        if position['x'] <= 42:
+                        if main.position['x'] <= 42:
                             print('Off in the distance, you see what appears to be a large')
                             print('island. According to your map, this island is known as')
                             print('Durcuba. You probably shouldn\'t go there.')
@@ -126,13 +112,13 @@ pass.')
                         continue
 
                 elif direction.startswith('s'):
-                    if position['y'] > -125 if not position['is_aethus'] else -50:
-                        position['y'] -= 1
+                    if main.position['y'] > -125 if not main.position['is_aethus'] else -50:
+                        main.position['y'] -= 1
 
                     else:
                         print('-'*25)
 
-                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -140,7 +126,7 @@ It's probably in your best interests that you not do that.
 
                             continue
 
-                        if position['x'] <= 42:
+                        if main.position['x'] <= 42:
                             print('You see a large island off in the distance. According to')
                             print('your map, this island appears to be Thex! Unfortunately,')
                             print("you don't have any way to cross the sea.")
@@ -154,13 +140,13 @@ pass.')
                         continue
 
                 elif direction.startswith('w'):
-                    if position['x'] > -125 if not position['is_aethus'] else -50:
-                        position['x'] -= 1
+                    if main.position['x'] > -125 if not main.position['is_aethus'] else -50:
+                        main.position['x'] -= 1
 
                     else:
                         print('-'*25)
 
-                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -175,13 +161,13 @@ You cannot continue in this direction.')
                         continue
 
                 elif direction.startswith('e'):
-                    if position['x'] < 125 if not position['is_aethus'] else 50:
-                        position['x'] += 1
+                    if main.position['x'] < 125 if not main.position['is_aethus'] else 50:
+                        main.position['x'] += 1
 
                     else:
                         print('-'*25)
 
-                        if position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -189,10 +175,10 @@ It's probably in your best interests that you not do that.
 
                             continue
 
-                        if position['y'] >= 42:
+                        if main.position['y'] >= 42:
                             nation = 'Hillsbrad'
 
-                        elif position['y'] <= -42:
+                        elif main.position['y'] <= -42:
                             nation = 'Maranon'
 
                         else:
@@ -205,12 +191,11 @@ It's probably in your best interests that you not do that.
 
                         continue
 
-                position['avg'] = int(((abs(position['x'])) +
-                                       (abs(position['y'])))/2)
+                main.position['avg'] = int(((abs(main.position['x'])) + (abs(main.position['y'])))/2)
 
                 if not any([check_region(),
-                           bosses.check_bosses(position['x'], position['y']),
-                           towns.search_towns(position['x'], position['y'], enter=False)]
+                           bosses.check_bosses(main.position['x'], main.position['y']),
+                           towns.search_towns(main.position['x'], main.position['y'], enter=False)]
                            ):
 
                     # If none of the previous statements return True, then a battle can occur.
@@ -228,10 +213,9 @@ It's probably in your best interests that you not do that.
             elif direction.startswith('p'):
                 print('-'*25)
                 print('You stop to rest for a moment.')
-                while True:
-                    decision = input(
-                        'View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
 
+                while True:
+                    decision = input('View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
                     decision = decision.lower()
 
                     if decision.startswith('i'):
@@ -239,8 +223,7 @@ It's probably in your best interests that you not do that.
                         inv_system.pick_category()
                         print('-'*25)
 
-                    elif decision.startswith('s'):
-                        print('-'*25)
+                    if decision.startswith('s'):
                         target_options = [x for x in [
                             main.player,
                             main.solou,
@@ -260,13 +243,12 @@ It's probably in your best interests that you not do that.
                                 ["[{0}] {1}".format(int(num) + 1, character.name)
                                  for num, character in enumerate(target_options)]))
 
-                            do_thing = True
                             while True:
                                 target = input('Input [#] (or type "exit"): ')
 
                                 if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                     print('-'*25)
-                                    do_thing = False
+
                                     break
 
                                 try:
@@ -281,12 +263,12 @@ It's probably in your best interests that you not do that.
 
                                 break
 
-                        if do_thing:
+                        if isinstance(target, main.PlayableCharacter):
                             print('-'*25)
                             target.player_info()
                             print('-'*25)
 
-                    elif decision.startswith('m'):
+                    if decision.startswith('m'):
                         user_options = [x for x in [
                             main.player,
                             main.solou,
@@ -326,13 +308,12 @@ It's probably in your best interests that you not do that.
                         ]['Healing']:
 
                             magic.pick_spell('Healing', user, False)
-                            print('-'*25)
 
                         else:
                             print('-'*25)
                             print('You have no overworld-allowed spells available.')
 
-                    elif decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    if decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         print('-'*25)
                         break
 
@@ -349,9 +330,9 @@ It's probably in your best interests that you not do that.
 
 def check_region():
     # Check the coordinates of the player and change the region to match.
-    global position
-    x, y = position['x'], position['y']
-    if position['is_aethus']:
+    x, y = main.position['x'], main.position['y']
+
+    if main.position['is_aethus']:
         region = 'Aethus'
         reg_music = 'Music/Island of Peace.ogg'
 
@@ -384,18 +365,18 @@ def check_region():
             region = 'Pythonian Coastline'
             reg_music = "Music/We're all under the stars.ogg"
 
-    if position['reg'] != region:
+    if main.position['reg'] != region:
         print('-'*25)
         print(ascii_art.locations[region])
         print('You have left the {0} and are now entering the {1}.'.format(
-            position['reg'], region))
+            main.position['reg'], region))
 
         if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
             print('-'*25)
 
-        position['reg'] = region
-        position['reg_music'] = reg_music
-        save_coords(position['x'], position['y'])
+        main.position['reg'] = region
+        main.position['reg_music'] = reg_music
+        save_coords(main.position['x'], main.position['y'])
 
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
@@ -411,21 +392,17 @@ def check_region():
 def save_coords(x, y):
     # Mark the player's coordinates when they change regions or visit towns.
     # The player will return to these coordinates if they die.
-    global position
-    position['prev_town'][0], position['prev_town'][1] = x, y
+    main.position['prev_town'][0], main.position['prev_town'][1] = x, y
 
 
 def back_to_coords():
-    global position
-    position['x'] = position['prev_town'][0]
-    position['y'] = position['prev_town'][1]
+    main.position['x'] = main.position['prev_town'][0]
+    main.position['y'] = main.position['prev_town'][1]
 
 
 def rest():
     # Attempt to re-gain health on the world map. There is a chance to get ambushed by an enemy
     # when doing this.
-
-    setup_vars()
     print('-'*25)
 
     if all([
@@ -447,10 +424,7 @@ def rest():
     print(ascii_art.locations['Campsite'])
     print('Your party sets up camp and begin to rest.')
 
-    time.sleep(1)
-
-    while msvcrt.kbhit():
-        msvcrt.getwch()
+    main.smart_sleep(1)
 
     main.player.hp += math.ceil(main.player.max_hp/3)
     main.player.mp += math.ceil(main.player.max_mp/3)
@@ -502,6 +476,28 @@ def rest():
         main.adorine.hp -= (main.adorine.hp - main.adorine.max_hp)
     if main.adorine.mp > main.adorine.max_mp:
         main.adorine.mp -= (main.adorine.mp - main.adorine.max_mp)
+
+    # Revive any dead characters
+    if main.player.status_ail == 'dead':
+        main.player.status_ail = 'none'
+
+    if main.solou.hp == 'dead':
+        main.solou.status_ail = 'none'
+
+    if main.xoann.hp == 'dead':
+        main.xoann.status_ail = 'none'
+
+    if main.randall.hp == 'dead':
+        main.randall.status_ail = 'none'
+
+    if main.ran_af.hp == 'dead':
+        main.ran_af.status_ail = 'none'
+
+    if main.parsto.hp == 'dead':
+        main.parsto.status_ail = 'none'
+
+    if main.adorine.hp == 'dead':
+        main.adorine.status_ail = 'none'
 
     is_battle = not random.randint(0, 3)
 

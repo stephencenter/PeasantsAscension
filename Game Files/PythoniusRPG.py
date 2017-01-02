@@ -59,7 +59,6 @@ import logging
 import msvcrt
 import traceback
 import stat
-
 import pygame
 
 import world
@@ -83,50 +82,35 @@ import ascii_art
 
 # Log everything and send it to stderr.
 logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
-
 logging.debug("Game run")
 
+# Set up Pygame audio
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
-town_list = towns.town_list
-
+# Save File information
 save_dir = 'Save Files'
 adventure_name = ''
 
-sav_acquired_gems = 'Save Files/{CHARACTER_NAME}/acquired_gems.json'  # Acquired Gems
-
-sav_def_bosses = 'Save Files/{CHARACTER_NAME}/def_bosses.json'  # Defeated Bosses
-
-sav_equip_items = 'Save Files/{CHARACTER_NAME}/equip_items.json'  # Equipped Items
-
-sav_inventory = 'Save Files/{CHARACTER_NAME}/inventory.json'  # Inventory
-
+# General Save Files
+sav_acquired_gems = 'Save Files/{CHARACTER_NAME}/acquired_gems.json'    # Acquired Gems
+sav_def_bosses = 'Save Files/{CHARACTER_NAME}/def_bosses.json'          # Defeated Bosses
+sav_equip_items = 'Save Files/{CHARACTER_NAME}/equip_items.json'        # Equipped Items
+sav_inventory = 'Save Files/{CHARACTER_NAME}/inventory.json'            # Inventory
 sav_misc_boss_info = 'Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc Boss Info
-
-sav_misc_vars = 'Save Files/{CHARACTER_NAME}/misc_vars.json'  # Misc Variables
-
-sav_position = 'Save Files/{CHARACTER_NAME}/position.json'  # Position
-
-sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'  # Quests & Dialogue
-
-sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'  # Spellbook
-
-sav_prevtowns = 'Save Files/{CHARACTER_NAME}/prevtowns.json'  # Previously visited towns
+sav_misc_vars = 'Save Files/{CHARACTER_NAME}/misc_vars.json'            # Misc Variables
+sav_position = 'Save Files/{CHARACTER_NAME}/position.json'              # Position
+sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'          # Quests & Dialogue
+sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'            # Spellbook
+sav_prevtowns = 'Save Files/{CHARACTER_NAME}/prevtowns.json'            # Previously visited towns
 
 # PCU Save Files
-sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'  # Player Stats
-
-sav_solou_stats = 'Save Files/{CHARACTER_NAME}/solou_stats.json'  # Solou's Stats
-
-sav_xoann_stats = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'  # Xoann's Stats
-
+sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
+sav_solou_stats = 'Save Files/{CHARACTER_NAME}/solou_stats.json'      # Solou's Stats
+sav_xoann_stats = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'      # Xoann's Stats
 sav_randall_stats = 'Save Files/{CHARACTER_NAME}/randall_stats.json'  # Randall's Stats
-
-sav_ran_af_stats = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'  # Ran'af's Stats
-
-sav_parsto_stats = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'  # Parsto's Stats
-
+sav_ran_af_stats = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's Stats
+sav_parsto_stats = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
 sav_adorine_stats = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
 
 # NOTE 1: The save file locations can be changed in the file "settings.cfg".
@@ -644,10 +628,7 @@ Armor:
                             self.name if self != player else 'player'
                         ]['weapon'])))
 
-                time.sleep(0.75)
-
-                while msvcrt.kbhit():
-                    msvcrt.getwch()
+                smart_sleep(0.75)
 
                 # Check for attack accuracy
                 if self.dodge in range(monster.evad, 512):
@@ -684,10 +665,7 @@ Armor:
             # Check to see if the PCU is poisoned
             if self.status_ail == 'poisoned' and monster.hp > 0:
                 if random.randint(0, 3):
-                    time.sleep(0.5)
-
-                    while msvcrt.kbhit():
-                        msvcrt.getwch()
+                    smart_sleep(0.5)
 
                     sounds.poison_damage.play()
 
@@ -699,10 +677,7 @@ Armor:
                         break
 
                 else:
-                    time.sleep(0.5)
-
-                    while msvcrt.kbhit():
-                        msvcrt.getwch()
+                    smart_sleep(0.5)
 
                     sounds.buff_spell.play()
                     input('{0} starts to feel better! | Press enter/return '.format(self.name))
@@ -712,10 +687,7 @@ Armor:
             elif self.status_ail != 'none' and self.status_ail != 'asleep':
                 if not random.randint(0, 3):
 
-                    time.sleep(0.5)
-
-                    while msvcrt.kbhit():
-                        msvcrt.getwch()
+                    smart_sleep(0.5)
 
                     sounds.buff_spell.play()
 
@@ -887,9 +859,9 @@ Pick {0}'s Move:
             else:
                 self.hp += 20
 
-            p_temp_stats['dfns'] *= 1.2
-            p_temp_stats['m_dfns'] *= 1.2
-            p_temp_stats['p_dfns'] *= 1.2
+            battle.p_temp_stats['dfns'] *= 1.2
+            battle.p_temp_stats['m_dfns'] *= 1.2
+            battle.p_temp_stats['p_dfns'] *= 1.2
 
             print('-'*25)
             print("ABILITY: WARRIOR'S SPIRIT")
@@ -986,7 +958,7 @@ Pick {0}'s Move:
             print('defenses have been lowered by 25% for three turns.')
             print()
 
-            dam_dealt = math.ceil(p_temp_stats['attk']/2 - (monster.dfns/1.25))
+            dam_dealt = math.ceil(battle.p_temp_stats['attk']/2 - (monster.dfns/1.25))
             dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
                 self.name if self != player else 'player'
             ]['weapon'].power)
@@ -1236,16 +1208,10 @@ def check_save():  # Check for save files and load the game if they're found
     print('Searching for valid save files...')
 
     if not os.path.isdir(save_dir):
-        time.sleep(0.25)
-
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        smart_sleep(0.25)
 
         print('No save files found. Starting new game...')
-        time.sleep(0.35)
-
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        smart_sleep(0.35)
 
         print('-'*25)
         create_player()
@@ -1286,18 +1252,13 @@ def check_save():  # Check for save files and load the game if they're found
             except FileNotFoundError:
                 menu_info[directory] = "Unable to load preview info"
 
-    time.sleep(0.25)
-
-    while msvcrt.kbhit():
-        msvcrt.getwch()
+    smart_sleep(0.25)
 
     if not save_files:
         # If there are no found save files, then have the player make a new character
         print('No save files found. Starting new game...')
-        time.sleep(0.35)
 
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        smart_sleep(0.35)
 
         print('-'*25)
         create_player()
@@ -1351,10 +1312,7 @@ def check_save():  # Check for save files and load the game if they're found
 
             print('-'*25)
             print('Loading Save File: "{0}"...'.format(sorted(save_files)[chosen]))
-            time.sleep(0.25)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
+            smart_sleep(0.25)
 
             # Attempt to open the save files and translate
             # them into objects/dictionaries
@@ -1408,10 +1366,7 @@ def save_game():
 
         if y_n.startswith('y'):
             print('Saving...')
-            time.sleep(0.25)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
+            smart_sleep(0.25)
 
             # Check if the save directory already exists, and create it if it doesn't
             try:
@@ -1567,7 +1522,7 @@ def title_screen():
                 with open('../Credits.txt') as f:
                     for number, f.readline in enumerate(f):
                         print(''.join(f.readline.rstrip("\n").split(";")))
-                        time.sleep([0.75, 1.25, 0.75, 1.25, 1, 1, 0.5, 0.5, 1, 1,
+                        smart_sleep([0.75, 1.25, 0.75, 1.25, 1, 1, 0.5, 0.5, 1, 1,
                                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                     1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                     1, 1, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5,
@@ -1576,14 +1531,11 @@ def title_screen():
                                     0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
                                     0.5, 0.5, 0.5, 0.5][number])
 
-                    time.sleep(3)
+                    smart_sleep(3)
 
                     pygame.mixer.music.load('Music/Prologue.ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(music_vol)
-
-                    while msvcrt.kbhit():
-                        msvcrt.getwch()
 
             except FileNotFoundError:
                 # Display this is the Credits.txt file couldn't be found
@@ -1740,6 +1692,15 @@ def copy_error(text):
     d.user32.CloseClipboard()
 
 
+def smart_sleep(duration):
+    # "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
+    time.sleep(duration)
+
+    # I have no idea how this works but I found it on Stack Overflow and it makes the text sync properly
+    while msvcrt.kbhit():
+        msvcrt.getwch()
+
+
 def main():
     # main() handles all the setup for the game, and includes the main game loop.
     # Everything happens in this function in one way or another.
@@ -1789,7 +1750,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
 
     except Exception as e:
         # If an exception is raised and not caught, log the error message.
-
+        # raise # Uncomment this if you're using the auto-input debugger
         logging.exception('Got exception of main handler:')
         pygame.mixer.music.stop()
         print(traceback.format_exc())

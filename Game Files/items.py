@@ -19,7 +19,6 @@ import random
 import math
 import json
 import time
-import msvcrt
 import re
 
 import inv_system
@@ -41,12 +40,6 @@ if __name__ == "__main__":
     sys.exit()
 else:
     main = sys.modules["__main__"]
-
-inventory = ''
-equipped = ''
-
-# A regular expression that replaces all non-NSEW characters with ''
-only_nsew = lambda x: re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', x)
 
 
 class Item:
@@ -74,9 +67,6 @@ class Consumable(Item):
         self.mana = mana
 
     def use_item(self, user, is_battle=False):
-        global inventory
-        item_setup_vars()
-
         if is_battle:
             print(ascii_art.player_art[user.class_.title()] %
                   "{0} is making a move!\n".format(user.name))
@@ -96,9 +86,9 @@ class Consumable(Item):
             user.mp -= (user.mp - user.max_mp)
         print('{0} consumes the {1}'.format(user.name, self.name))
 
-        for x, y in enumerate(inventory[self.cat]):
+        for x, y in enumerate(inv_system.inventory[self.cat]):
             if y.name == self.name:
-                inventory[self.cat].remove(y)
+                inv_system.inventory[self.cat].remove(y)
                 break
 
 
@@ -108,10 +98,6 @@ class StatusPotion(Item):
         self.status = status
 
     def use_item(self, user):
-        global inventory
-
-        item_setup_vars()
-
         if is_battle:
             print(ascii_art.player_art[user.class_.title()] %
                   "{0} is making a move!\n".format(user.name))
@@ -124,9 +110,9 @@ class StatusPotion(Item):
             print('{0} drinks the {1} and feels much better.'.format(user.name, self.name))
             user.status_ail = 'none'
 
-            for x, y in enumerate(inventory[self.cat]):
+            for x, y in enumerate(inv_system.inventory[self.cat]):
                 if y.name == self.name:
-                    inventory[self.cat].remove(y)
+                    inv_system.inventory[self.cat].remove(y)
                     break
 
         else:
@@ -152,35 +138,38 @@ class Weapon(Item):
                 x.title() for x in self.class_]), 'ONLY'])
 
     def use_item(self, user):
-        global equipped
-        global inventory
-
-        item_setup_vars()
-
         if user.class_ in self.class_ or self.class_ == 'none':
             # Creating a copy of the weapon ensures that
             # only one weapon can be equipped at a time.
             spam = copy.copy(self)
 
             if isinstance(
-                    equipped[user.name if user != main.player else 'player']['weapon'], Weapon
+                    inv_system.equipped[user.name if user != main.player else 'player']['weapon'], Weapon
             ):
 
-                old = copy.copy(equipped[user.name if user != main.player else 'player']['weapon'])
-                inventory['weapons'].remove(self)
+                old = copy.copy(inv_system.equipped[user.name if user != main.player else 'player']['weapon'])
+                inv_system.inventory['weapons'].remove(self)
                 if old.name != 'Fists':
-                    inventory['weapons'].append(old)
+                    inv_system.inventory['weapons'].append(old)
 
-            equipped[user.name if user != main.player else 'player']['weapon'] = spam
+                    inv_system.equipped[user.name if user != main.player else 'player']['weapon'] = spam
 
             print('-'*25)
             input('{0} equips the {1} | Press enter/return '.format(user.name, str(self)))
 
         else:
             print('-'*25)
-            input("{0} must be a {1} to equip this | Press enter/return ".format(
-                user.name,
-                self.class_.title()))
+
+            if isinstance(self.class_, list):
+                input("{0} must be a {1} or a {2} to equip this | Press enter/return ".format(
+                    user.name,
+                    self.class_[0].title(),
+                    self.class_[1].title()))
+
+            else:
+                input("{0} must be a {1} to equip this | Press enter/return ".format(
+                    user.name,
+                    self.class_.title()))
 
 
 class Armor(Item):
@@ -204,35 +193,38 @@ class Armor(Item):
             self.desc = ' '.join([desc, '|', "ANY CLASS"])
 
     def use_item(self, user):
-        global equipped
-        global inventory
-
-        item_setup_vars()
-
         if user.class_ in self.class_ or self.class_ == 'none':
             # A copy of the armor is created for the same
             # reason as for weapons.
             fizz = copy.copy(self)
 
             if isinstance(
-                    equipped[user.name if user != main.player else 'player'][self.part], Armor
+                    inv_system.equipped[user.name if user != main.player else 'player'][self.part], Armor
             ):
 
-                old = copy.copy(equipped[user.name if user != main.player else 'player'][self.part])
-                inventory['armor'].append(old)
-                inventory['armor'].remove(self)
+                old = copy.copy(inv_system.equipped[user.name if user != main.player else 'player'][self.part])
+                inv_system.inventory['armor'].append(old)
+                inv_system.inventory['armor'].remove(self)
             else:
-                equipped[user.name if user != main.player else 'player'][self.part] = fizz
-                inventory['armor'].remove(self)
+                inv_system.equipped[user.name if user != main.player else 'player'][self.part] = fizz
+                inv_system.inventory['armor'].remove(self)
 
             print('-'*25)
             input('{0} equip the {1} | Press enter/return '.format(user.name, str(self)))
 
         else:
             print('-'*25)
-            input("{0} must be a {1} to equip this | Press enter/return ".format(
-                user.name,
-                self.class_.title()))
+
+            if isinstance(self.class_, list):
+                input("{0} must be a {1} or a {2} to equip this | Press enter/return ".format(
+                    user.name,
+                    self.class_[0].title(),
+                    self.class_[1].title()))
+
+            else:
+                input("{0} must be a {1} to equip this | Press enter/return ".format(
+                    user.name,
+                    self.class_.title()))
 
 
 # -- ACCESSORIES -- #
@@ -253,21 +245,16 @@ class ElementAccessory(Accessory):
         return self.name
 
     def use_item(self, user):
-        global equipped
-        global inventory
-
-        item_setup_vars()
-
         spam = copy.copy(self)
         if isinstance(
-                equipped[user.name if user != main.player else 'player']['access'], Accessory
+                inv_system.equipped[user.name if user != main.player else 'player']['access'], Accessory
         ):
 
-            old = copy.copy(equipped[user.name if user != main.player else 'player']['access'])
-            inventory['access'].append(old)
+            old = copy.copy(inv_system.equipped[user.name if user != main.player else 'player']['access'])
+            inv_system.inventory['access'].append(old)
 
-        inventory['access'].remove(self)
-        equipped[user.name if user != main.player else 'player']['access'] = spam
+        inv_system.inventory['access'].remove(self)
+        inv_system.equipped[user.name if user != main.player else 'player']['access'] = spam
         user.element = self.element
 
         print('-'*25)
@@ -350,10 +337,6 @@ class Shovel(Item):
 
     @staticmethod
     def use_item(user):
-        global inventory
-
-        item_setup_vars()
-
         if main.position['reg'] == 'Aethus':
             print('-'*25)
             print('The soil up here is much too tough to be broken up using a shovel.')
@@ -363,10 +346,7 @@ class Shovel(Item):
         from towns import search_towns
         print('-'*25)
         print('Your party begins to search using your shovel...')
-        time.sleep(1)
-
-        while msvcrt.kbhit():
-            msvcrt.getwch()
+        main.smart_sleep(1)
 
         for gem in valuable_list:
             if (main.position['x'], main.position['y']) == (gem.posx, gem.posy) \
@@ -374,7 +354,7 @@ class Shovel(Item):
 
                 gem.acquired = True
                 print('Using your shovel, your party manages to uncover a {0}!'.format(gem.name))
-                inventory['misc'].append(gem)
+                inv_system.inventory['misc'].append(gem)
 
                 if not search_towns(main.position['x'], main.position['y'], enter=False):
                     print('-'*25)
@@ -550,11 +530,11 @@ they started.")
                         print('-'*25)
                         print('Fast travelling in...')
                         print('3')
-                        time.sleep(1)
+                        main.smart_sleep(1)
                         print('2')
-                        time.sleep(1)
+                        main.smart_sleep(1)
                         print('1')
-                        time.sleep(1)
+                        main.smart_sleep(1)
                         print('Your party arrives at their destination in one piece.')
                         input('Press enter/return ')
 
@@ -674,11 +654,9 @@ It's probably best not to try to open it and read the letter. | [ENTER] """)
             input("Your party cannot think of anything useful to do with this. | [ENTER] ")
 
 
-def item_setup_vars():
-    global inventory
-    global equipped
-    inventory = inv_system.inventory
-    equipped = inv_system.equipped
+# A regular expression that replaces all non-NSEW characters with ''
+def only_nsew(string):
+    return re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', string)
 
 
 # Potions -- Health

@@ -18,8 +18,6 @@ import json
 import random
 import time
 import math
-import msvcrt
-
 import pygame
 
 import monsters
@@ -209,10 +207,7 @@ class Damaging(Spell):
                 print('{0} attempts to summon a powerful spell...'.format(user.name))
 
             sounds.magic_attack.play()
-            time.sleep(0.75)
-
-            while msvcrt.kbhit():
-                msvcrt.getwch()
+            main.smart_sleep(0.75)
 
             if user.dodge in range(monsters.monster.evad, 1024):
                 if random.randint(0, 100) <= (14 if user.class_ == 'mage' else 7):
@@ -705,6 +700,7 @@ def pick_cat(user, is_battle=True):
 
             else:
                 if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    print('-'*25)
                     return False
 
                 else:

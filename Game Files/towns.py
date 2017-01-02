@@ -1,6 +1,6 @@
 #   This file is part of PythoniusRPG.
 #
-#	 PythoniusRPG is free software: you can redistribute it and/or modify
+#    PythoniusRPG is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -17,8 +17,6 @@ import sys
 import time
 import copy
 import random
-import msvcrt
-
 import pygame
 
 import inv_system
@@ -63,11 +61,9 @@ class Town:
         self.inn_cost = inn_cost  # How much money it costs to sleep at the inn
 
         self.gen_store = gen_store  # If True, the town contains a General Store
-        self.gs_level = gs_level  # The higher this value is, the better the
-                                  # items the store will sell.
+        self.gs_level = gs_level  # The higher this value is, the better the items the store will sell
 
-        self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest.
-                                              # Definitely not a blatant ripoff of Apple Inc...
+        self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest
 
     def town_choice(self):
         print('-'*25)
@@ -132,13 +128,11 @@ class Town:
                             ["[{0}] {1}".format(int(num) + 1, character.name)
                              for num, character in enumerate(target_options)]))
 
-                        do_thing = True
                         while True:
                             target = input('Input [#] (or type "exit"): ')
 
                             if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                 print('-'*25)
-                                do_thing = False
                                 break
 
                             try:
@@ -153,10 +147,10 @@ class Town:
 
                             break
 
-                    if do_thing:
-                        print('-'*25)
+                    if isinstance(target, main.PlayableCharacter):
+                        print('-' * 25)
                         target.player_info()
-                        print('-'*25)
+                        print('-' * 25)
 
                 elif choice == '5':
                     print('-'*25)
@@ -164,7 +158,7 @@ class Town:
                     print('-'*25)
 
                 elif choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    pygame.mixer.music.load(world.position['reg_music'])
+                    pygame.mixer.music.load(main.position['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
                     print('-'*25)
@@ -377,10 +371,7 @@ model! | [ENTER]')
                     print('"Good night, Traveler."')
                     print('Sleeping...')
 
-                    time.sleep(1)
-
-                    while msvcrt.kbhit():
-                        msvcrt.getwch()
+                    main.smart_sleep(1)
 
                     main.misc_vars['gp'] -= self.inn_cost
 
@@ -687,16 +678,16 @@ island floating up in the sky. Perhaps something is up there!""")
                 input('You begin to climb the staircase | Press enter/return ')
                 sounds.foot_steps.play()
                 print('Climbing...')
-                time.sleep(1)
+                main.smart_sleep(1)
                 sounds.foot_steps.play()
                 print('Climbing...')
-                time.sleep(1)
+                main.smart_sleep(1)
                 sounds.foot_steps.play()
                 print('Climbing...')
-                time.sleep(1)
+                main.smart_sleep(1)
                 sounds.foot_steps.play()
                 print('Still climbing...')
-                time.sleep(1)
+                main.smart_sleep(1)
 
                 input("After several hours of climbing the staircase, \
 you finally arrive at the top | Press enter/return ")
@@ -752,10 +743,10 @@ you notice a zipline-like structure that would be much easier and faster to use.
                 input('You strap yourself to the zipline using a harness | Press enter/return ')
                 sounds.foot_steps.play()
                 print('Zipping...')
-                time.sleep(1)
+                main.smart_sleep(1)
                 sounds.foot_steps.play()
                 print('Zipping...')
-                time.sleep(1)
+                main.smart_sleep(1)
                 input("Amazing, that was much faster! | Press enter/return ")
 
                 main.position['x'] = -84
@@ -781,7 +772,7 @@ you notice a zipline-like structure that would be much easier and faster to use.
                 return
 
 
-class Tavern():
+class Tavern:
     def __init__(self, name, x, y, cost):
         self.name = name
         self.x = x
@@ -809,10 +800,7 @@ class Tavern():
                     print('"Good night, traveler."')
                     print('Sleeping...')
 
-                    time.sleep(1)
-
-                    while msvcrt.kbhit():
-                        msvcrt.getwch()
+                    main.smart_sleep(1)
 
                     main.misc_vars['gp'] -= self.cost
 
@@ -839,7 +827,7 @@ class Tavern():
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
 
-                pygame.mixer.music.load(world.position['reg_music'])
+                pygame.mixer.music.load(main.position['reg_music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
                 print('-'*25)
@@ -847,7 +835,7 @@ class Tavern():
                 return
 
             elif choice.startswith('n'):
-                pygame.mixer.music.load(world.position['reg_music'])
+                pygame.mixer.music.load(main.position['reg_music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
                 print('-'*25)
@@ -1147,21 +1135,3 @@ Do you want to visit it? | Yes or No: '.format(tavern.name))
 
                 else:
                     return True
-
-
-# import matplotlib.pyplot as plt
-# fig = plt.figure()
-# ax = fig.add_subplot(111)
-#
-# x_points = [town.x for town in town_list]
-# y_points = [town.y for town in town_list]
-#
-# tx_points = [tavern.x for tavern in tavern_list]
-# ty_points = [tavern.y for tavern in tavern_list]
-#
-# p = ax.plot(x_points, y_points, 'ro')
-# q = ax.plot(tx_points, ty_points, 'bs')
-# ax.set_xlabel('x-points')
-# ax.set_ylabel('y-points')
-# ax.set_title('Simple XY point plot')
-# fig.show()

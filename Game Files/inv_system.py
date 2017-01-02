@@ -18,7 +18,6 @@ import json
 import time
 import math
 import random
-import msvcrt
 from copy import copy as _c
 
 import npcs
@@ -216,8 +215,6 @@ gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
 
                       [i.boots_of_travel, i.boots_of_travel, i.boots_of_travel,
                        i.boots_of_travel, i.boots_of_travel, i.boots_of_travel]]}
-
-i.item_setup_vars()
 
 
 def pick_category():
@@ -433,7 +430,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                 ]
 
                 if len(target_options) == 1:
-                    target = user
+                    target = main.player
 
                 else:
                     print("Who should {0} the {1}?".format(use_equip.lower(), item.name))
@@ -496,10 +493,7 @@ journey.'.format(str(item)))
 
                     elif y_n.startswith('n'):
                         print('Your party decide to keep the {0} with them.'.format(str(item)))
-                        time.sleep(1)
-
-                        while msvcrt.kbhit():
-                            msvcrt.getwch()
+                        main.smart_sleep(1)
 
                         break
 
