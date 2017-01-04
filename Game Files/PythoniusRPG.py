@@ -172,63 +172,55 @@ class PlayableCharacter:
     def player_damage(self):
         # The formula for PCUs dealing damage
 
-        if inv_system.equipped[
-            self.name if self != player else 'player'
-        ]['weapon'].type_ != 'ranged':
+        inv_name = self.name if self != player else 'player'
 
-            dam_dealt = math.ceil(
-                battle.temp_stats[self.name]['attk'] - (battle.monster.dfns/2))
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
-                self.name if self != player else 'player'
-            ]['weapon'].power)
+        if inv_system.equipped[inv_name]['weapon'].type_ != 'ranged':
+
+            # Base damage is equal to the PCU's attack stat minus half the target's defense
+            # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
+            # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
+            # based on the PCU/target's elements, status ailments, weapons, and critical strikes.
+            dam_dealt = battle.temp_stats[self.name]['attk'] - (battle.monster.dfns/2)
+            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
 
             # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
-                dam_dealt = math.ceil(dam_dealt)
                 print('{0} deals half damage because of their weakened state!'.format(self.name))
 
             # Mages deal 1/2 damage with melee attacks
             if self.class_ == 'mage':
                 dam_dealt /= 2
-                dam_dealt = math.ceil(dam_dealt)
 
         else:
-            dam_dealt = math.ceil(
-                battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2))
-
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
-                self.name if self != player else 'player'
-            ]['weapon'].power)
+            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2)
+            dam_dealt += dam_dealt*inv_system.equipped[inv_name]['weapon'].power
 
             # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
-                dam_dealt = math.ceil(dam_dealt)
                 print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
 
         # Increase or decrease the damage depending on the PSU/monster's elements
-        dam_dealt = magic.eval_element(
-            p_elem=inv_system.equipped[
-                self.name if self != player else 'player'
-            ]['weapon'].element,
-            m_elem=battle.monster.element, p_dmg=dam_dealt)[0]
+        dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
+                                       battle.monster.element,
+                                       p_dmg=dam_dealt)[0]
 
         # All attacks deal a minimum of one damage
         if dam_dealt < 1:
             dam_dealt = 1
 
-        # There is a 7% chance to inflict double damage
-        if random.randint(1, 100) <= 7:
-            print("It's a critical hit! 2x damage!")
-            dam_dealt *= 2
+        # There is a 15% chance to inflict 1.5x damage
+        if random.randint(1, 100) <= 15:
+            print("It's a critical strike! 1.5x damage!")
+            dam_dealt *= 1.5
 
         # Limit the amount of damage to 999 (as if that matters)
         if dam_dealt > 999:
             dam_dealt = 999
             print('Overkill!')
 
-        return dam_dealt
+        return math.ceil(dam_dealt)
 
     def choose_name(self):
         while True:
@@ -241,9 +233,10 @@ class PlayableCharacter:
 
             self.name = alphanumeric(self.name)
 
-            # Flygon Jones is my real life best friend and the bug-tester for this game!
-            if self.name == "Flygon Jones":
-                print('Ah, Flygon Jones! My dear friend, it is good to see you again!')
+            # Flygon Jones, Cynder887, and Apollo Kalar are all pseudonyms for my real-life
+            # best friend. He also happens to be one of the primary bug-testers for the game!
+            if self.name.lower() in ["flygon jones", "apollo kalar", "cynder887"]:
+                print(''.join(['Ah, ', self.name, '! My dear friend, it is great to see you again!']))
                 input('Press enter/return ')
 
                 return self.name
@@ -475,13 +468,14 @@ Input letter: """)
 
                 print('-'*25)
                 print('Current {0}: {1}'.format(vis_skill, self.attributes[act_skill]))
+
                 while True:
                     y_n = input("Increase {0}'s {1}? | Yes or No: ".format(self.name, vis_skill))
-
                     y_n = y_n.lower()
 
                     if y_n.startswith('y'):
                         pass
+
                     elif y_n.startswith('n'):
                         print('-'*25)
 
@@ -553,6 +547,8 @@ Input letter: """)
         print('{0} is out of skill points.'.format(self.name))
 
     def player_info(self):
+        inv_name = self.name if self != player else 'player'
+
         print("""\
 -{0}'s Stats-
 Level: {1} | Class: {2} | Element: {3}
@@ -580,26 +576,19 @@ Armor:
                        self.attributes['dex'], self.attributes['per'],
                        self.attributes['for'],
                        self.exp, self.req_xp, misc_vars['gp'],
-                       inv_system.equipped[
-                           self.name if self != player else 'player'
-                       ]['weapon'], inv_system.equipped[
-                           self.name if self != player else 'player'
-                       ]['access'],
-                       inv_system.equipped[
-                           self.name if self != player else 'player'
-                       ]['head'],
-                       inv_system.equipped[
-                           self.name if self != player else 'player'
-                       ]['body'],
-                       inv_system.equipped[
-                           self.name if self != player else 'player'
-                       ]['legs']))
+                       inv_system.equipped[inv_name]['weapon'],
+                       inv_system.equipped[inv_name]['access'],
+                       inv_system.equipped[inv_name]['head'],
+                       inv_system.equipped[inv_name]['body'],
+                       inv_system.equipped[inv_name]['legs']))
 
         print('-'*25)
         input('Press enter/return ')
 
     def battle_turn(self, is_boss):
+        inv_name = self.name if self != player else 'player'
         monster = battle.monster
+
         while True:
             # "2" refers to magic, which will print this later
             if self.move != '2':
@@ -610,23 +599,17 @@ Armor:
                 print(ascii_art.player_art[self.class_.title()] %
                       "{0} is making a move!\n".format(self.name))
 
-                if inv_system.equipped[
-                    self.name if self != player else 'player'
-                ]['weapon'].type_ in ['melee', 'magic']:
+                if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
 
                     sounds.sword_slash.play()
                     print('{0} begin to fiercely attack the {1} using their {2}...'.format(
-                        self.name, monster.name, str(inv_system.equipped[
-                            self.name if self != player else 'player'
-                        ]['weapon'])))
+                        self.name, monster.name, str(inv_system.equipped[inv_name]['weapon'])))
 
                 # Ranged weapons aren't swung, so play a different sound effect
                 else:
                     sounds.aim_weapon.play()
                     print('{0} aims carefully at the {1} using their {2}...'.format(
-                        self.name, monster.name, str(inv_system.equipped[
-                            self.name if self != player else 'player'
-                        ]['weapon'])))
+                        self.name, monster.name, str(inv_system.equipped[inv_name]['weapon'])))
 
                 smart_sleep(0.75)
 
@@ -647,7 +630,7 @@ Armor:
                 if not self.class_ability():
                     return False
 
-            # RUN AWAY!!!
+            # Run away!
             elif self.move == '5':
                 if battle.run_away(self):
                     # Attempt to run.
@@ -799,6 +782,7 @@ Pick {0}'s Move:
         # Their purpose is to help make the characters more diverse, as well as encourage more
         # strategy being used.
 
+        inv_name = self.name if self != player else 'player'
         monster = battle.monster
         battle.temp_stats[self.name]['ability_used'] = True
 
@@ -844,30 +828,22 @@ Pick {0}'s Move:
                  'life': 'Death',
                  'death': 'Life'}[monster.element]))
 
-            battle.temp_stats[self.name]['p_attk'] *= 1.2
-            battle.temp_stats[self.name]['p_attk'] =\
-                math.ceil(battle.temp_stats[self.name]['p_attk'])
+            battle.temp_stats[self.name]['p_attk'] *= 1.35
 
             return True
 
         # Warrior Ability: Warrior's Spirit
         elif self.class_ == 'warrior':
-
-            if 20 < 0.2*self.hp:
-                self.hp += 0.2*self.hp
-                self.hp = math.ceil(self.hp)
-            else:
-                self.hp += 20
-
-            battle.p_temp_stats['dfns'] *= 1.2
-            battle.p_temp_stats['m_dfns'] *= 1.2
-            battle.p_temp_stats['p_dfns'] *= 1.2
-
             print('-'*25)
             print("ABILITY: WARRIOR'S SPIRIT")
             print('-'*25)
-
             print('As a Warrior, you channel your inner-strength and restore health and defense!')
+
+            self.hp += math.ceil(max([0.35*self.max_hp, 35]))
+
+            battle.p_temp_stats['dfns'] *= 1.35
+            battle.p_temp_stats['m_dfns'] *= 1.35
+            battle.p_temp_stats['p_dfns'] *= 1.35
 
             if self.hp > self.max_hp:
                 self.hp -= (self.hp - self.max_hp)
@@ -878,34 +854,30 @@ Pick {0}'s Move:
 
         # Mage Ability: Artificial Intelligence
         elif self.class_ == "mage":
-            self.mp += copy.copy(self.max_mp)/2
-
-            if self.mp > self.max_mp:
-                self.mp = copy.copy(self.max_mp)
-
-            self.mp = math.ceil(self.mp)
-
-            battle.temp_stats[self.name]['m_attk'] *= 1.2
-            battle.temp_stats[self.name]['m_dfns'] *= 1.2
-
             print('-'*25)
             print("ABILITY: ARTIFICIAL INTELLIGENCE")
             print('-'*25)
-
             print('As a Mage, you focus intently and sharply increase your magical prowess!')
             print('Your magic attack and defense increase, and you regain MP!')
+
+            self.mp += math.ceil(max([0.35*self.max_mp, 35]))
+
+            if self.mp > self.max_mp:
+                self.mp -= (self.mp - self.max_mp)
+
+            battle.temp_stats[self.name]['m_attk'] *= 1.35
+            battle.temp_stats[self.name]['m_dfns'] *= 1.35
 
             return True
 
         # Assassin Ability: Poison Injection
         elif self.class_ == "assassin":
-            monster.is_poisoned = True
-
             print('-'*25)
             print("ABILITY: POISON INJECTION")
             print('-'*25)
-
             print('As an Assassin, you discreetly inject poison into your enemy!')
+
+            monster.is_poisoned = True
 
             return True
 
@@ -921,17 +893,8 @@ Pick {0}'s Move:
 
             monster.element = "death"
 
-            if 15 < 0.15*self.hp:
-                self.hp += 0.1*self.hp
-                self.hp = math.ceil(self.hp)
-            else:
-                self.hp += 15
-
-            if 15 < 0.15*self.mp:
-                self.mp += 0.1*self.mp
-                self.mp = math.ceil(self.mp)
-            else:
-                self.mp += 15
+            self.hp += math.ceil(max([0.15*self.max_hp, 15]))
+            self.mp += math.ceil(max([0.15*self.max_mp, 15]))
 
             if self.hp > self.max_hp:
                 self.hp -= (self.hp - self.max_hp)
@@ -942,63 +905,45 @@ Pick {0}'s Move:
 
         # Monk Ability: Chakra-smash
         elif self.class_ == 'monk':
-            # Essentially a 2.5x crit. As an added bonus, this attack has a 14%
-            # chance to get a crit itself, resulting in a total of an 5x critical.
-            # This attack lowers your defenses by 25% for three turns to balance it out.
-            # If you are weakened, this attack ignores that and will deal full damage anyway.
+            # Essentially a 2.5x crit. As an added bonus, this attack has a 15%
+            # chance to get a crit itself, resulting in a total of an 3.75x critical.
+            # This attack lowers the user defenses by 25% for three turns to balance it out.
+            # If the user is weakened, this attack ignores that and will deal full damage anyway.
             print('-'*25)
             print('ABILITY: CHAKRA-SMASH')
             print('-'*25)
 
             print('As a monk, {0} meditates and focus their inner chi.'.format(self.name))
-            print('After a brief moment of confusion from the enemy, {0} strikes, dealing'.format(
-                self.name))
-            print("an immense amount of damage in a single, powerful strike! As a result, {0}'s\
-".format(self.name))
-            print('defenses have been lowered by 25% for three turns.')
-            print()
+            print('After a brief moment of confusion from the enemy, {0} strikes, dealing'.format(self.name))
+            print("an immense amount of damage in a single, powerful strike! As a result, {0}'s".format(self.name))
+            print('defenses have been lowered by 25% for three turns.\n')
 
-            dam_dealt = math.ceil(battle.p_temp_stats['attk']/2 - (monster.dfns/1.25))
-            dam_dealt += math.ceil(dam_dealt*inv_system.equipped[
-                self.name if self != player else 'player'
-            ]['weapon'].power)
-
-            dam_dealt = magic.eval_element(
-                p_elem=inv_system.equipped[
-                    self.name if self != player else 'player'
-                ]['weapon'].element,
-                m_elem=monster.element, p_dmg=dam_dealt)[0]
-
-            dam_dealt *= 2.5
-            dam_dealt = math.ceil(dam_dealt)
+            dam_dealt = (battle.p_temp_stats['attk'] - monster.dfns/2)*2.5
+            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
+            dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element, monster.element, p_dmg=dam_dealt)[0]
 
             if dam_dealt < 4:
                 dam_dealt = 4
 
-            if random.randint(1, 100) <= 14:
-                print("It's a critical hit! 2x damage!")
+            if random.randint(1, 100) <= 15:
+                print("It's a critical hit! 1.5x damage!")
                 print('Overkill!')
-                dam_dealt *= 2
+                dam_dealt *= 1.5
 
             if dam_dealt > 999:
                 dam_dealt = 999
 
-            print('The attack deals {0} damage to the {1}!'.format(dam_dealt, monster.name))
+            print('The attack deals {0} damage to the {1}!'.format(math.ceil(dam_dealt), monster.name))
 
             battle.temp_stats[self.name]['dfns'] /= 1.25
             battle.temp_stats[self.name]['m_dfns'] /= 1.25
             battle.temp_stats[self.name]['p_dfns'] /= 1.25
 
-            battle.temp_stats[self.name]['dfns'] = math.floor(
-                battle.temp_stats[self.name]['dfns'])
+            battle.temp_stats[self.name]['dfns'] = math.floor(battle.temp_stats[self.name]['dfns'])
+            battle.temp_stats[self.name]['m_dfns'] = math.floor(battle.temp_stats[self.name]['m_dfns'])
+            battle.temp_stats[self.name]['p_dfns'] = math.floor(battle.temp_stats[self.name]['p_dfns'])
 
-            battle.temp_stats[self.name]['m_dfns'] = math.floor(
-                battle.temp_stats[self.name]['m_dfns'])
-
-            battle.temp_stats[self.name]['p_dfns'] = math.floor(
-                battle.temp_stats[self.name]['p_dfns'])
-
-            monster.hp -= dam_dealt
+            monster.hp -= math.ceil(dam_dealt)
 
             return True
 

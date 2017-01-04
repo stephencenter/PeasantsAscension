@@ -46,10 +46,6 @@ pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
 monster = ''
-position = ''
-misc_vars = ''
-inventory = ''
-
 is_defending = False
 
 
@@ -117,14 +113,13 @@ class Monster:
         return monst_dealt
 
     def monst_level(self):
-        global misc_vars
-        self.lvl = int((1/2.5)*abs(position['avg'] - 1)) + 1
+        self.lvl = int((1/2.5)*abs(main.position['avg'] - 1)) + 1
 
         if self.lvl < 1:
             self.lvl = 1
 
         # Monsters in the Aethus are 15 levels higher than monsters below
-        if position['reg'] == 'Aethus':
+        if main.position['reg'] == 'Aethus':
             self.lvl += 15
 
         for x in range(1, self.lvl):
@@ -250,7 +245,7 @@ class Monster:
                         }
 
         chosen = random.randint(0, 4)
-        self.name = monster_type[position['reg']][chosen]
+        self.name = monster_type[main.position['reg']][chosen]
 
         # A list of monster-types and what AI they are to have
         magic_enemies = ['Naiad', "Will-o'the-wisp", 'Minubis', 'Oread', 'Necromancer', 'Wraith',
@@ -400,42 +395,42 @@ class Monster:
             elif isinstance(eval(stat), float):  # Enemy stats must be integers
                 exec("{0} = math.ceil({0})".format(stat))
 
-        if position['reg'] == 'Glacian Plains':
+        if main.position['reg'] == 'Glacian Plains':
             self.element = 'ice'
             self.status = 'frostbitten'
             self.status_msg = "was imbued with frost, causing painful frostbite!"
 
-        elif position['reg'] == 'Arcadian Desert':
+        elif main.position['reg'] == 'Arcadian Desert':
             self.element = 'fire'
             self.status = 'burned'
             self.status_msg = "was imbued with fire, causing painful burns!"
 
-        elif position['reg'] == 'Terrius Mt. Range':
+        elif main.position['reg'] == 'Terrius Mt. Range':
             self.element = 'earth'
             self.status = 'paralyzed'
             self.status_msg = "hit a nerve ending, causing temporary paralysis!"
 
-        elif position['reg'] == 'Pythonian Coastline':
+        elif main.position['reg'] == 'Pythonian Coastline':
             self.element = 'water'
             self.status = 'muted'
             self.status_msg = "caused organizational issues, leading to impaired item usage!"
 
-        elif position['reg'] == 'Central Forest':
+        elif main.position['reg'] == 'Central Forest':
             self.element = 'electric'
             self.status = 'blinded'
             self.status_msg = "was imbued with darkness, causing impaired vision!"
 
-        elif position['reg'] == 'Bogthorn Marsh':
+        elif main.position['reg'] == 'Bogthorn Marsh':
             self.element = 'grass'
             self.status = 'poisoned'
             self.status_msg = "was imbued with deadly toxins that will slowly drain health!"
 
-        elif position['reg'] == 'Overshire Graveyard':
+        elif main.position['reg'] == 'Overshire Graveyard':
             self.element = 'death'
             self.status = 'asleep'
             self.status_msg = "knocked their target unconscious using noxious fumes!"
 
-        elif position['reg'] == 'Aethus':
+        elif main.position['reg'] == 'Aethus':
             self.element = 'wind'
             self.status = 'deafened'
             self.status_msg = "brought upon the winds, dampening their target's hearing!"
@@ -532,6 +527,9 @@ def ranger_stats(self):
 
 
 def magic_ai(is_boss):
+    global is_defending
+    global monster
+
     target = random.choice([x for x in [
         main.player,
         main.solou,
@@ -608,6 +606,9 @@ def magic_ai(is_boss):
 
 
 def ranged_ai(is_boss):
+    global is_defending
+    global monster
+
     target = random.choice([x for x in [
         main.player,
         main.solou,
@@ -617,9 +618,6 @@ def ranged_ai(is_boss):
         main.parsto,
         main.adorine
     ] if x.enabled and x.status_ail != 'dead'])
-
-    global is_defending
-    global monster
 
     if is_defending:
         # Set defense back to normal
@@ -670,6 +668,9 @@ def ranged_ai(is_boss):
 
 
 def melee_ai(is_boss):
+    global is_defending
+    global monster
+
     target = random.choice([x for x in [
         main.player,
         main.solou,
@@ -679,9 +680,6 @@ def melee_ai(is_boss):
         main.parsto,
         main.adorine
     ] if x.enabled and x.status_ail != 'dead'])
-
-    global is_defending
-    global monster
 
     if is_defending:
         # Set defense back to normal
@@ -733,19 +731,10 @@ def melee_ai(is_boss):
 
 def spawn_monster():
     global monster
-    setup_vars()
+
     monster = Monster('', 10, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     monster.monst_name()
     monster.monst_level()
+
     if monster.evad > 256:
         monster.evad = 256
-
-
-def setup_vars():
-    global misc_vars
-    global position
-    global inventory
-
-    misc_vars = main.misc_vars
-    position = main.position
-    inventory = inv_system.inventory

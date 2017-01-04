@@ -170,55 +170,61 @@ class Damaging(Spell):
         return self.name
 
     def use_magic(self, user):
+        inv_name = user.name if user != main.player else 'player'
+
+        # Spells cannot be cast if the player does not have enough mana for it
         if user.mp >= self.mana:
             print()
             Spell.use_mana(self, user)
 
             # Determine the power of the attack
-            attk_pwr = math.ceil(battle.temp_stats[user.name]['m_attk'] - battle.monster.m_dfns/2)
+            dam_dealt = math.ceil(battle.temp_stats[user.name]['m_attk'] - battle.monster.m_dfns/2)
 
             if user.class_ == 'mage':
-                attk_pwr *= 1.5
+                dam_dealt *= 1.5
 
-            attk_pwr *= 1 + self.damage
-            attk_pwr = math.ceil(attk_pwr)
+            dam_dealt *= 1 + self.damage
+            dam_dealt = math.ceil(dam_dealt)
 
             # Evaluate the element of the attack and the enemy
-            attk_pwr = eval_element(
+            dam_dealt = eval_element(
                 p_elem=self.element,
                 m_elem=monsters.monster.element,
-                p_dmg=attk_pwr)[0]
+                p_dmg=dam_dealt)[0]
 
-            if attk_pwr < 1:
-                attk_pwr = 1
+            if dam_dealt < 1:
+                dam_dealt = 1
 
             print("-{0}'s Turn-".format(user.name))
             print(ascii_art.player_art[user.class_.title()] %
                   "{0} is making a move!\n".format(user.name))
 
-            if inv_system.equipped[
-                user.name if user != main.player else 'player'
-            ]['weapon'].class_ == 'magic':
+            if inv_system.equipped[inv_name]['weapon'].class_ == 'magic':
                 print('{0} begins to use their {1} to summon a powerful spell...'.format(
-                    user.name, inv_system.equipped[
-                        user.name if user != main.player else 'player'
-                    ]['weapon']))
+                    user.name, inv_system.equipped[inv_name]['weapon']))
+
             else:
                 print('{0} attempts to summon a powerful spell...'.format(user.name))
 
             sounds.magic_attack.play()
             main.smart_sleep(0.75)
 
-            if user.dodge in range(monsters.monster.evad, 1024):
-                if random.randint(0, 100) <= (14 if user.class_ == 'mage' else 7):
-                    print("It's a critical hit! 2x damage!")
-                    attk_pwr *= 2
-
+            # If the monster's evasion (with a max of 256) is higher than the user's accuracy roll,
+            # the spell will land
+            if user.dodge in range(monsters.monster.evad, 512):
                 sounds.enemy_hit.play()
-                print('Using the power of "{0}", {1} deals {2} damage to the {3}!'.format(
-                    self.name, user.name, attk_pwr, monsters.monster.name))
-                monsters.monster.hp -= attk_pwr
 
+                # Mages have a 15% chance to get a critical hit, whereas other classes cannot
+                if random.randint(0, 100) <= (15 if user.class_ == 'mage' else -1):
+                    print("It's a critical hit! 1.5x damage!")
+                    dam_dealt *= 1.5
+
+                print('Using the power of "{0}", {1} deals {2} damage to the {3}!'.format(
+                    self.name, user.name, dam_dealt, monsters.monster.name))
+
+                monsters.monster.hp -= dam_dealt
+
+            # Otherwise, the spell with miss and deal no damage
             else:
                 sounds.attack_miss.play()
                 print("The {0} dodges {1}'s attack!".format(monsters.monster.name, user.name))
@@ -522,7 +528,7 @@ spells = [
 ]
 
 
-def eval_element(p_elem='none', m_elem='none', m_dmg=0, p_dmg=0):
+def eval_element(p_elem, m_elem, m_dmg=0, p_dmg=0):
     # Fire < Water < Electricity < Earth < Grass < Wind < Ice < Fire
     # Life < Death and Death < Life
     # "None" element is neutral to all elements.
@@ -622,6 +628,8 @@ spellbook = {
 
 
 def pick_cat(user, is_battle=True):
+    inv_name = user.name if user != main.player else 'player'
+
     if user.status_ail == 'silenced':
         input("You find yourself unable to use spells! | Press enter/return ")
 
@@ -648,19 +656,22 @@ def pick_cat(user, is_battle=True):
                 cat = 'Healing'
 
             elif cat == '4':
-                spell = spellbook[user.name if user != main.player else 'player']['Previous Spell']
+                spell = spellbook[inv_name]['Previous Spell']
                 if spell:
                     spell = spell[0]
 
                     if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                        spell.use_magic(user, is_battle)
+                        if spell.use_magic(user, is_battle):
+                            return True
 
+                        else:
+                            break
+
+                    if spell.use_magic(user):
                         return True
 
                     else:
-                        spell.use_magic(user)
-
-                        return True
+                        break
 
                 else:
                     print('-'*25)
@@ -675,23 +686,13 @@ def pick_cat(user, is_battle=True):
 
                     if y_n.startswith('y'):
                         if isinstance(spell, Damaging):
-
-                            if spell.use_magic(user):
-                                return True
-                            else:
-                                return False
+                            return spell.use_magic(user)
 
                         else:
-                            # noinspection PyArgumentList
                             if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                                if spell.use_magic(user, is_battle):
-                                    return True
+                                return spell.use_magic(user, is_battle)
 
-                            elif spell.use_magic(user):
-                                return True
-
-                            else:
-                                return False
+                            return spell.use_magic(user)
 
                     elif y_n.startswith('n'):
                         spam = False
@@ -709,7 +710,7 @@ def pick_cat(user, is_battle=True):
             if do_continue:
                 continue
 
-            if not spellbook[user.name if user != main.player else 'player'][cat]:
+            if not spellbook[inv_name][cat]:
                 print('-'*25)
                 print('You do not yet have any spells in the {0} category.'.format(cat))
                 print('-'*25)
@@ -723,20 +724,16 @@ def pick_cat(user, is_battle=True):
 
 def pick_spell(cat, user, is_battle):
     global spellbook
+    inv_name = user.name if user != main.player else 'player'
 
     print('-'*25)
     while True:
-        padding = len(max([spell.name for spell in spellbook[
-            user.name if user != main.player else 'player'
-        ][cat]], key=len))
+        padding = len(max([spell.name for spell in spellbook[inv_name][cat]], key=len))
 
         print(''.join([cat, ' Spells: \n      ']), end='')
-        print('\n      '.join(
-            ['[{0}] {1} --{2}> {3} MP'.format(num + 1, spell, '-'*(padding - len(spell.name)),
-                                              spell.mana)
-             for num, spell in enumerate(spellbook[
-                 user.name if user != main.player else 'player'
-             ][cat])]))
+        print('\n      '.join(['[{0}] {1} --{2}> {3} MP'.format(
+            num + 1, spell, '-'*(padding - len(spell.name)), spell.mana)
+                               for num, spell in enumerate(spellbook[inv_name][cat])]))
 
         fizz = True
         while fizz:
@@ -756,7 +753,7 @@ def pick_spell(cat, user, is_battle):
                     continue
 
             try:
-                spell = spellbook[user.name if user != main.player else 'player'][cat][spell]
+                spell = spellbook[inv_name][cat][spell]
             except IndexError:
                 continue
 
@@ -770,29 +767,16 @@ def pick_spell(cat, user, is_battle):
                 y_n = y_n.lower()
 
                 if y_n.startswith('y'):
-                    spellbook[
-                        user.name if user != main.player else 'player'
-                    ]['Previous Spell'] = [spell]
+                    spellbook[inv_name]['Previous Spell'] = [spell]
 
                     if isinstance(spell, Damaging):
-
-                        if spell.use_magic(user):
-                            return True
-
-                        else:
-                            return False
+                        return spell.use_magic(user)
 
                     else:
-                        # noinspection PyArgumentList
                         if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                            if spell.use_magic(user, is_battle):
-                                return True
+                            return spell.use_magic(user, is_battle)
 
-                        elif spell.use_magic(user):
-                            return True
-
-                        else:
-                            return False
+                        return spell.use_magic(user)
 
                 elif y_n.startswith('n'):
                     print('-'*25)
@@ -804,6 +788,7 @@ def new_spells(character):
     # Teach the player new spells as they level up, or low-level spells not
     # previously in the game.
     global spellbook
+
     for spell in spells:
         if isinstance(spell, Damaging):
             cat = 'Damaging'
@@ -817,6 +802,7 @@ def new_spells(character):
             for x in spellbook[character.name if character != main.player else 'player'][cat]:
                 if x.name == spell.name:
                     break
+
             else:
                 # Almost all spells can be learned by mages, but only a few can be learned
                 # by other classes

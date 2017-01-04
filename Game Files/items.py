@@ -1214,7 +1214,7 @@ map_of_fast_travel = TownTeleporter('Map of Fast Travel',
                                     'Allows quick travelling to previously visited towns.',
                                     575, 190)
 
-boots_of_travel = InsaneSpeedBoots('Boots of Travel',
+boots_of_travel = InsaneSpeedBoots('Boots of Travel',  # Made with Boots of Speed and a 2000 gold recipe
                                    'Allows insanely fast travel to any point on the map.',
                                    7500, 3750)
 
@@ -1239,7 +1239,7 @@ antennae = Misc('Antennae', 'A pair of antennae from a massive insect.', 0, 5)
 ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.', 0, 5)
 chain_link = Misc('Chain links', 'A couple joined links of chain made from steel.', 0, 5)
 unicorn_horn = Misc('Unicorn Horn', 'A tough and shiny horn from a mythical creature.', 0, 5)
-calculus_homework = Misc('Calculus Homework', 'A load of random symbols and gibberish', 0, 10)
+calculus_homework = Misc('Calculus Homework', 'A load of random symbols and gibberish', 0, 25)
 
 
 def monster_drop(level, name):
@@ -1320,13 +1320,16 @@ def deserialize_gems(path):
             if gem.name == name:
                 gem.acquired = True
 
+
+# These are bits of code used to get information about various items
+
 # total = 0
 # for x in copy.copy(globals()):
 #     if isinstance(globals()[x], Item):
 #         total += 1
 #         print(globals()[x].desc)
 # print(total)
-
+#
 # for gem in valuable_list:
 #     for other in valuable_list:
 #         if gem == other:
@@ -1336,3 +1339,6 @@ def deserialize_gems(path):
 #                 print(gem.name,
 #                       other.name,
 #                       round(math.hypot(gem.posx - other.posx, gem.posy - other.posy)))
+
+# for gem in valuable_list:
+#     print(''.join([gem.name, ": ", str((abs(gem.posx) + abs(gem.posy))/2)]))
