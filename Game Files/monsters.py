@@ -113,13 +113,13 @@ class Monster:
         return monst_dealt
 
     def monst_level(self):
-        self.lvl = int((1/2.5)*abs(main.position['avg'] - 1)) + 1
+        self.lvl = int((1/2.5)*abs(main.party_info['avg'] - 1)) + 1
 
         if self.lvl < 1:
             self.lvl = 1
 
         # Monsters in the Aethus are 15 levels higher than monsters below
-        if main.position['reg'] == 'Aethus':
+        if main.party_info['reg'] == 'Aethus':
             self.lvl += 15
 
         for x in range(1, self.lvl):
@@ -245,7 +245,7 @@ class Monster:
                         }
 
         chosen = random.randint(0, 4)
-        self.name = monster_type[main.position['reg']][chosen]
+        self.name = monster_type[main.party_info['reg']][chosen]
 
         # A list of monster-types and what AI they are to have
         magic_enemies = ['Naiad', "Will-o'the-wisp", 'Minubis', 'Oread', 'Necromancer', 'Wraith',
@@ -395,42 +395,42 @@ class Monster:
             elif isinstance(eval(stat), float):  # Enemy stats must be integers
                 exec("{0} = math.ceil({0})".format(stat))
 
-        if main.position['reg'] == 'Glacian Plains':
+        if main.party_info['reg'] == 'Glacian Plains':
             self.element = 'ice'
             self.status = 'frostbitten'
             self.status_msg = "was imbued with frost, causing painful frostbite!"
 
-        elif main.position['reg'] == 'Arcadian Desert':
+        elif main.party_info['reg'] == 'Arcadian Desert':
             self.element = 'fire'
             self.status = 'burned'
             self.status_msg = "was imbued with fire, causing painful burns!"
 
-        elif main.position['reg'] == 'Terrius Mt. Range':
+        elif main.party_info['reg'] == 'Terrius Mt. Range':
             self.element = 'earth'
             self.status = 'paralyzed'
             self.status_msg = "hit a nerve ending, causing temporary paralysis!"
 
-        elif main.position['reg'] == 'Pythonian Coastline':
+        elif main.party_info['reg'] == 'Pythonian Coastline':
             self.element = 'water'
             self.status = 'muted'
             self.status_msg = "caused organizational issues, leading to impaired item usage!"
 
-        elif main.position['reg'] == 'Central Forest':
+        elif main.party_info['reg'] == 'Central Forest':
             self.element = 'electric'
             self.status = 'blinded'
             self.status_msg = "was imbued with darkness, causing impaired vision!"
 
-        elif main.position['reg'] == 'Bogthorn Marsh':
+        elif main.party_info['reg'] == 'Bogthorn Marsh':
             self.element = 'grass'
             self.status = 'poisoned'
             self.status_msg = "was imbued with deadly toxins that will slowly drain health!"
 
-        elif main.position['reg'] == 'Overshire Graveyard':
+        elif main.party_info['reg'] == 'Overshire Graveyard':
             self.element = 'death'
             self.status = 'asleep'
             self.status_msg = "knocked their target unconscious using noxious fumes!"
 
-        elif main.position['reg'] == 'Aethus':
+        elif main.party_info['reg'] == 'Aethus':
             self.element = 'wind'
             self.status = 'deafened'
             self.status_msg = "brought upon the winds, dampening their target's hearing!"

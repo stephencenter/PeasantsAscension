@@ -194,7 +194,7 @@ class Quest(Conversation):
         input('Press Enter/Return')
 
         main.player.exp += self.reward[0]
-        main.misc_vars['gp'] += self.reward[1]
+        main.party_info['gp'] += self.reward[1]
         main.player.level_up()
 
         self.active = False
@@ -785,12 +785,37 @@ ser_pol_phrase_3 = Conversation(['You are our heroes! Here, allow us to treat yo
 
 
 def ser_pol_p3_at():
-    main.player.hp += (main.misc_vars['hp_p'] - main.player.hp)
-    main.player.mp += (main.misc_vars['mp_p'] - main.player.mp)
+    main.player.hp += (main.player.max_hp - main.player.hp)
+    main.player.mp += (main.player.max_mp - main.player.mp)
     main.player.status_ail = 'none'
+
+    main.solou.hp += (main.solou.max_hp - main.solou.hp)
+    main.solou.mp += (main.solou.max_mp - main.solou.mp)
+    main.solou.status_ail = 'none'
+
+    main.ran_af.hp += (main.ran_af.max_hp - main.ran_af.hp)
+    main.ran_af.mp += (main.ran_af.max_mp - main.ran_af.mp)
+    main.ran_af.status_ail = 'none'
+
+    main.adorine.hp += (main.adorine.max_hp - main.adorine.hp)
+    main.adorine.mp += (main.adorine.max_mp - main.adorine.mp)
+    main.adorine.status_ail = 'none'
+
+    main.randall.hp += (main.randall.max_hp - main.randall.hp)
+    main.randall.mp += (main.randall.max_mp - main.randall.mp)
+    main.randall.status_ail = 'none'
+
+    main.xoann.hp += (main.xoann.max_hp - main.xoann.hp)
+    main.xoann.mp += (main.xoann.max_mp - main.xoann.mp)
+    main.xoann.status_ail = 'none'
+
+    main.parsto.hp += (main.parsto.max_hp - main.parsto.hp)
+    main.parsto.mp += (main.parsto.max_mp - main.parsto.mp)
+    main.parsto.status_ail = 'none'
+
     print('-'*25)
-    print('Polmor and Serena get to work on fixing up your wounds.')
-    print('Your HP and MP have been fully replenished, and your status ailment has been cured.')
+    print('Polmor and Serena get to work on healing your party.')
+    print('Your party has been restored to full HP and healed of its status ailments.')
 
 
 ser_pol_phrase_3.after_talking = ser_pol_p3_at

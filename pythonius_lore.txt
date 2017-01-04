@@ -155,5 +155,5 @@ Facts about Pythonia
 
   Fact #2: Region numbers
 	Pythonia originally had 32 different regions. These regions were named after the lord/lady of 
-	the Flyscorian Empire that had rule of the land. In 462 A.D., these 32 were consolidated into 
-	only 6 different regions based on the geographical similarities certain ones had.
+	the Flyscorian Empire that had rule of the land. By 462 A.D., these 32 had been consolidated into 
+	only 6 different regions based primarily on geographical differences.

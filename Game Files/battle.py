@@ -53,7 +53,6 @@ monster = ''
 temp_stats = ''
 
 vowels = 'AEIOU'
-monk_tc = 0
 turn_counter = 0
 
 if __name__ == "__main__":
@@ -85,6 +84,7 @@ def setup_vars():
 def update_stats():
     # Forces stats to return to normal when battle is finished
     global temp_stats
+
     temp_stats = {
         player.name: {
             'attk': _c(player.attk),
@@ -171,8 +171,6 @@ def update_stats():
 
 
 def battle_system(is_boss=False, ambush=False):
-    global ability_used
-    global monk_tc
 
     if is_boss:  # Bosses have different battle music than normal enemies
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
@@ -207,8 +205,6 @@ def battle_system(is_boss=False, ambush=False):
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
     update_stats()
-
-    ability_used = False
 
     # Continue the battle until one of a few conditions are met
     while not ((all([char.hp <= 0 for char in [
@@ -256,14 +252,6 @@ def battle_system(is_boss=False, ambush=False):
                 input('Press enter/return ')
 
         bat_stats()
-
-        # Increment the monk turn-counter for lower defense until it equals 3
-        if player.class_ == 'monk' and ability_used:
-            if monk_tc == 3:
-                print('You recover from the usage of your class ability, and your')
-                print('defenses return to normal.')
-
-            monk_tc += 1
 
         # There is a 1/3 chance for the player to wake up each turn if they are asleep
         for character in [x for x in [
@@ -458,7 +446,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                         character.mp = _c(character.max_mp)
                         character.status_ail = "none"
 
-                    pygame.mixer.music.load(main.position['reg_music'])
+                    pygame.mixer.music.load(main.party_info['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
@@ -520,7 +508,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 input(' | Press enter/return ')
 
             # Give the Player their GP
-            main.misc_vars['gp'] += gold
+            main.party_info['gp'] += gold
             print("Your party has gained {0} GP!".format(gold), end='')
             sounds.item_pickup.play()
             input(' | Press enter/return ')
@@ -550,7 +538,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                 # Check to see if the player gained any levels
                 character.level_up()
 
-            pygame.mixer.music.load(main.position['reg_music'])
+            pygame.mixer.music.load(main.party_info['reg_music'])
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
             pygame.mixer.music.set_volume(main.music_vol)

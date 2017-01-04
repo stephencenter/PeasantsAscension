@@ -121,8 +121,8 @@ class Healing(Spell):
             # Paladin in which case it it 4*Wisdom.
             if self.health < target.hp*self.thresh:
                 total_heal = target.hp*self.thresh + \
-                    (2*main.misc_vars['wis'] if user.class_ !=
-                     'paladin' else 4*main.misc_vars['wis'])
+                    (4*user.attributes['wis'] if user.class_ == 'paladin' else 2*user.attributes['wis'])
+
                 target.hp += total_heal
                 target.hp = math.ceil(target.hp)
 
@@ -571,10 +571,6 @@ def eval_element(p_elem, m_elem, m_dmg=0, p_dmg=0):
 
     return [p_dmg, m_dmg]
 
-# THIS IS FOR TESTING ELEMENT MATCHUPS
-# while True:
-#     exec(input())
-
 spellbook = {
     'player': {
         'Healing': [pit_heal],
@@ -830,9 +826,7 @@ def serialize_sb(path):
             j_spellbook[user][cat] = []
 
             for spell in spellbook[user][cat]:
-                spell_dict = {
-                    key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'
-                }
+                spell_dict = {key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'}
                 j_spellbook[user][cat].append(spell_dict)
 
     with open(path, mode='w', encoding='utf-8') as f:

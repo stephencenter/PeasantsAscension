@@ -39,8 +39,6 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-misc_vars = ''
-
 
 class Boss(monsters.Monster):
     def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad,
@@ -66,8 +64,6 @@ class Boss(monsters.Monster):
         self.dodge = 0
 
     def max_stats(self):
-        global misc_vars
-        setup_vars()
         self.hp = copy.copy(self.max_hp)
         self.mp = copy.copy(self.max_mp)
 
@@ -122,8 +118,11 @@ def check_bosses(x, y):
                     battle.setup_vars()
                     boss.max_stats()
                     boss.new_location()
+
                     print('-'*25)
+
                     battle.battle_system(is_boss=True)
+
                     return True
 
                 elif y_n.startswith('n'):
@@ -155,11 +154,6 @@ def deserialize_bosses(path):
         for boss in boss_list:
             if key == boss.name:
                 boss.active = json_bosslist[key]
-
-
-def setup_vars():
-    global misc_vars
-    misc_vars = main.misc_vars
 
 
 def unimportant_boss_ud():

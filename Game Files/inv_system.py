@@ -763,7 +763,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
                 if it.name == item.name:
 
                     inventory[cat].remove(it)
-                    main.misc_vars['gp'] += item.sell
+                    main.party_info['gp'] += item.sell
 
                     print('Your party hands the shopkeeper their {0} and receives {1} GP.'.format(
                         item.name, item.sell))
@@ -793,7 +793,7 @@ def tools_menu():  # Display a set of usable tools on the world map
     if not available_tools:
         print('Your party has no available tools to use...')
 
-        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)
 
         return
@@ -814,8 +814,8 @@ def tools_menu():  # Display a set of usable tools on the world map
                 ]:
                     spam = False  # Essentially breaks the loop twice
                     if not towns.search_towns(
-                            main.position['x'],
-                            main.position['y'], enter=False
+                            main.party_info['x'],
+                            main.party_info['y'], enter=False
                     ):
                         print('-'*25)
                     break

@@ -279,7 +279,7 @@ class MagicCompass(Item):
 
     @staticmethod
     def use_item(user):
-        if main.position['reg'] == 'Aethus':
+        if main.party_info['reg'] == 'Aethus':
             print('-'*25)
             print('Something about this place makes your compass needle spin wildly.')
             print('-'*25)
@@ -287,8 +287,8 @@ class MagicCompass(Item):
 
         from towns import town_list, search_towns
 
-        pos_towns = [tuple([town.name, round(math.hypot(town.x - main.position['x'],
-                                                        town.y - main.position['y']))])
+        pos_towns = [tuple([town.name, round(math.hypot(town.x - main.party_info['x'],
+                                                        town.y - main.party_info['y']))])
                      for town in town_list]
         distance = min(pos_towns, key=lambda x: x[1])
 
@@ -296,7 +296,7 @@ class MagicCompass(Item):
         print('The closest town to your party is {0} at ~{1} degrees away.'.format(
             distance[0], distance[1]))
 
-        if not search_towns(main.position['x'], main.position['y'], enter=False):
+        if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)
 
 
@@ -306,15 +306,15 @@ class DiviningRod(Item):
 
     @staticmethod
     def use_item(user):
-        if main.position['reg'] == 'Aethus':
+        if main.party_info['reg'] == 'Aethus':
             print('-'*25)
             print("Your divining rod doesn't seem to be working properly up here.")
             print('-'*25)
             return
 
         from towns import search_towns
-        pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.position['x'],
-                                                      gem.posy - main.position['y']))])
+        pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.party_info['x'],
+                                                      gem.posy - main.party_info['y']))])
                     for gem in valuable_list if not gem.acquired]
 
         if not pos_gems:
@@ -327,7 +327,7 @@ class DiviningRod(Item):
             'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
             else 'a', distance[0], distance[1]))
 
-        if not search_towns(main.position['x'], main.position['y'], enter=False):
+        if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)
 
 
@@ -337,7 +337,7 @@ class Shovel(Item):
 
     @staticmethod
     def use_item(user):
-        if main.position['reg'] == 'Aethus':
+        if main.party_info['reg'] == 'Aethus':
             print('-'*25)
             print('The soil up here is much too tough to be broken up using a shovel.')
             print('-'*25)
@@ -349,20 +349,20 @@ class Shovel(Item):
         main.smart_sleep(1)
 
         for gem in valuable_list:
-            if (main.position['x'], main.position['y']) == (gem.posx, gem.posy) \
+            if (main.party_info['x'], main.party_info['y']) == (gem.posx, gem.posy) \
                     and not gem.acquired:
 
                 gem.acquired = True
                 print('Using your shovel, your party manages to uncover a {0}!'.format(gem.name))
                 inv_system.inventory['misc'].append(gem)
 
-                if not search_towns(main.position['x'], main.position['y'], enter=False):
+                if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
                     print('-'*25)
 
                 return
 
         print('Your party was unable to uncover anything.')
-        if not search_towns(main.position['x'], main.position['y'], enter=False):
+        if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)
 
 
@@ -430,7 +430,7 @@ class InsaneSpeedBoots(Item):
 
                 all_vectors = list(zip(all_directions, all_magnitudes))
 
-                new_position = [main.position['x'], main.position['y']]
+                new_position = [main.party_info['x'], main.party_info['y']]
 
                 for vector in all_vectors:
                     if vector[0] == 'n':
@@ -457,8 +457,8 @@ class InsaneSpeedBoots(Item):
                         if new_position[0] > 125:
                             new_position[0] = 125
 
-                dt_vertical = str(new_position[1] - main.position['y'])
-                dt_horizontal = str(new_position[0] - main.position['x'])
+                dt_vertical = str(new_position[1] - main.party_info['y'])
+                dt_horizontal = str(new_position[0] - main.party_info['x'])
 
                 if int(dt_vertical) > 0:
                     vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 North"])
@@ -506,10 +506,10 @@ they started.")
 {0}ward.'.format(dir_))
                     input('Press enter/return ')
 
-                    main.position['x'] = new_position[0]
-                    main.position['y'] = new_position[1]
-                    main.position['v'] = verdir
-                    main.position['h'] = hordir
+                    main.party_info['x'] = new_position[0]
+                    main.party_info['y'] = new_position[1]
+                    main.party_info['v'] = verdir
+                    main.party_info['h'] = hordir
 
                     if not world.check_region():
                         print('-'*25)
@@ -538,15 +538,15 @@ they started.")
                         print('Your party arrives at their destination in one piece.')
                         input('Press enter/return ')
 
-                        main.position['x'] = new_position[0]
-                        main.position['y'] = new_position[1]
-                        main.position['v'] = verdir
-                        main.position['h'] = hordir
+                        main.party_info['x'] = new_position[0]
+                        main.party_info['y'] = new_position[1]
+                        main.party_info['v'] = verdir
+                        main.party_info['h'] = hordir
 
                         if not world.check_region():
                             print('-'*25)
 
-                        search_towns(main.position['x'], main.position['y'])
+                        search_towns(main.party_info['x'], main.party_info['y'])
 
                         return
 
@@ -564,15 +564,16 @@ class TownTeleporter(Item):
 
         print('-'*25)
 
-        if not main.position['is_aethus']:
+        if not main.party_info['is_aethus']:
             town_list = town_list
+
         else:
             town_list = aethus_towns
 
         available = []
 
         for town in town_list:
-            for visited in main.misc_vars['visited_towns']:
+            for visited in main.party_info['visited_towns']:
                 if town.name == visited:
                     available.append((town.name,
                                       town.x, "\u00b0E" if town.x >= 0 else "\u00b0W",
@@ -615,13 +616,13 @@ class TownTeleporter(Item):
                     print('upon waking find yourself exactly where you intended to go.')
                     input('Press enter/return ')
 
-                    main.position['x'] = chosen_town[1]
-                    main.position['y'] = chosen_town[3]
-                    main.position['h'] = chosen_town[2]
-                    main.position['v'] = chosen_town[4]
+                    main.party_info['x'] = chosen_town[1]
+                    main.party_info['y'] = chosen_town[3]
+                    main.party_info['h'] = chosen_town[2]
+                    main.party_info['v'] = chosen_town[4]
 
                     world.check_region()
-                    search_towns(main.position['x'], main.position['y'])
+                    search_towns(main.party_info['x'], main.party_info['y'])
                     return
 
                 elif y_n.lower().startswith('n'):
@@ -657,7 +658,6 @@ It's probably best not to try to open it and read the letter. | [ENTER] """)
 # A regular expression that replaces all non-NSEW characters with ''
 def only_nsew(string):
     return re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', string)
-
 
 # Potions -- Health
 s_potion = Consumable('Weak Potion',

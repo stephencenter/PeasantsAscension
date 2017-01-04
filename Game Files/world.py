@@ -51,28 +51,28 @@ else:
 def movement_system():
     # Adjust the player's x/y coordinates based on inputted direction.
 
-    pygame.mixer.music.load(main.position['reg_music'])
+    pygame.mixer.music.load(main.party_info['reg_music'])
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(main.music_vol)
 
     while True:
-        towns.search_towns(main.position['x'], main.position['y'])
+        towns.search_towns(main.party_info['x'], main.party_info['y'])
 
-        if main.position['x'] >= 0:
-            main.position['h'] = "\u00b0E"
+        if main.party_info['x'] >= 0:
+            main.party_info['h'] = "\u00b0E"
         else:
-            main.position['h'] = "\u00b0W"
+            main.party_info['h'] = "\u00b0W"
 
-        if main.position['y'] >= 0:
-            main.position['v'] = "\u00b0N"
+        if main.party_info['y'] >= 0:
+            main.party_info['v'] = "\u00b0N"
         else:
-            main.position['v'] = "\u00b0S"
+            main.party_info['v'] = "\u00b0S"
 
         while True:
             direction = input('{0}{1}, {2}{3} | {4} | Input Dir. (N, S, E, W), \
-[P]layer, [T]ools, [R]est: '.format(main.position['y'], main.position['v'],
-                                    main.position['x'], main.position['h'],
-                                    main.position['reg']))
+[P]layer, [T]ools, [R]est: '.format(main.party_info['y'], main.party_info['v'],
+                                    main.party_info['x'], main.party_info['h'],
+                                    main.party_info['reg']))
 
             direction = direction.lower()
 
@@ -83,13 +83,13 @@ def movement_system():
                 # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
                 if direction.startswith('n'):
 
-                    if main.position['y'] < 125 if not main.position['is_aethus'] else 50:
-                        main.position['y'] += 1
+                    if main.party_info['y'] < 125 if not main.party_info['is_aethus'] else 50:
+                        main.party_info['y'] += 1
 
                     else:
                         print('-'*25)
 
-                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -97,7 +97,7 @@ It's probably in your best interests that you not do that.
 
                             continue
 
-                        if main.position['x'] <= 42:
+                        if main.party_info['x'] <= 42:
                             print('Off in the distance, you see what appears to be a large')
                             print('island. According to your map, this island is known as')
                             print('Durcuba. You probably shouldn\'t go there.')
@@ -112,13 +112,13 @@ pass.')
                         continue
 
                 elif direction.startswith('s'):
-                    if main.position['y'] > -125 if not main.position['is_aethus'] else -50:
-                        main.position['y'] -= 1
+                    if main.party_info['y'] > -125 if not main.party_info['is_aethus'] else -50:
+                        main.party_info['y'] -= 1
 
                     else:
                         print('-'*25)
 
-                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -126,7 +126,7 @@ It's probably in your best interests that you not do that.
 
                             continue
 
-                        if main.position['x'] <= 42:
+                        if main.party_info['x'] <= 42:
                             print('You see a large island off in the distance. According to')
                             print('your map, this island appears to be Thex! Unfortunately,')
                             print("you don't have any way to cross the sea.")
@@ -140,13 +140,13 @@ pass.')
                         continue
 
                 elif direction.startswith('w'):
-                    if main.position['x'] > -125 if not main.position['is_aethus'] else -50:
-                        main.position['x'] -= 1
+                    if main.party_info['x'] > -125 if not main.party_info['is_aethus'] else -50:
+                        main.party_info['x'] -= 1
 
                     else:
                         print('-'*25)
 
-                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -161,13 +161,13 @@ You cannot continue in this direction.')
                         continue
 
                 elif direction.startswith('e'):
-                    if main.position['x'] < 125 if not main.position['is_aethus'] else 50:
-                        main.position['x'] += 1
+                    if main.party_info['x'] < 125 if not main.party_info['is_aethus'] else 50:
+                        main.party_info['x'] += 1
 
                     else:
                         print('-'*25)
 
-                        if main.position['is_aethus']:  # Aethus is a floating island in the sky
+                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
                             print("""\
 Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
@@ -175,10 +175,10 @@ It's probably in your best interests that you not do that.
 
                             continue
 
-                        if main.position['y'] >= 42:
+                        if main.party_info['y'] >= 42:
                             nation = 'Hillsbrad'
 
-                        elif main.position['y'] <= -42:
+                        elif main.party_info['y'] <= -42:
                             nation = 'Maranon'
 
                         else:
@@ -191,11 +191,11 @@ It's probably in your best interests that you not do that.
 
                         continue
 
-                main.position['avg'] = int(((abs(main.position['x'])) + (abs(main.position['y'])))/2)
+                main.party_info['avg'] = int(((abs(main.party_info['x'])) + (abs(main.party_info['y'])))/2)
 
                 if not any([check_region(),
-                           bosses.check_bosses(main.position['x'], main.position['y']),
-                           towns.search_towns(main.position['x'], main.position['y'], enter=False)]
+                           bosses.check_bosses(main.party_info['x'], main.party_info['y']),
+                           towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False)]
                            ):
 
                     # If none of the previous statements return True, then a battle can occur.
@@ -319,20 +319,20 @@ It's probably in your best interests that you not do that.
 
             elif direction.startswith('t'):
                 inv_system.tools_menu()
-                if towns.search_towns(main.position['x'], main.position['y'], enter=False):
+                if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
                     print('-'*25)
 
             elif direction.startswith('r'):
                 rest()
-                if towns.search_towns(main.position['x'], main.position['y'], enter=False):
+                if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
                     print('-'*25)
 
 
 def check_region():
     # Check the coordinates of the player and change the region to match.
-    x, y = main.position['x'], main.position['y']
+    x, y = main.party_info['x'], main.party_info['y']
 
-    if main.position['is_aethus']:
+    if main.party_info['is_aethus']:
         region = 'Aethus'
         reg_music = 'Music/Island of Peace.ogg'
 
@@ -365,18 +365,18 @@ def check_region():
             region = 'Pythonian Coastline'
             reg_music = "Music/We're all under the stars.ogg"
 
-    if main.position['reg'] != region:
+    if main.party_info['reg'] != region:
         print('-'*25)
         print(ascii_art.locations[region])
         print('You have left the {0} and are now entering the {1}.'.format(
-            main.position['reg'], region))
+            main.party_info['reg'], region))
 
-        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)
 
-        main.position['reg'] = region
-        main.position['reg_music'] = reg_music
-        save_coords(main.position['x'], main.position['y'])
+        main.party_info['reg'] = region
+        main.party_info['reg_music'] = reg_music
+        save_coords(main.party_info['x'], main.party_info['y'])
 
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
@@ -392,12 +392,12 @@ def check_region():
 def save_coords(x, y):
     # Mark the player's coordinates when they change regions or visit towns.
     # The player will return to these coordinates if they die.
-    main.position['prev_town'][0], main.position['prev_town'][1] = x, y
+    main.party_info['prev_town'][0], main.party_info['prev_town'][1] = x, y
 
 
 def back_to_coords():
-    main.position['x'] = main.position['prev_town'][0]
-    main.position['y'] = main.position['prev_town'][1]
+    main.party_info['x'] = main.party_info['prev_town'][0]
+    main.party_info['y'] = main.party_info['prev_town'][1]
 
 
 def rest():
@@ -416,7 +416,7 @@ def rest():
     ]):
 
         print('Your party feels fine and decides not to rest.')
-        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)
 
         return
@@ -508,5 +508,5 @@ def rest():
 
     else:
         print('You rested well and decide to continue on your way.')
-        if not towns.search_towns(main.position['x'], main.position['y'], enter=False):
+        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)

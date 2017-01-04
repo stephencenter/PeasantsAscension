@@ -5,8 +5,8 @@
 |_|     \__, | \__||_| |_| \___/ |_| |_||_| \__,_||___/|_| \_\|_|     \____|
         |___/
             
-PythoniusRPG -- Programmed in Python by Stephen Center (RbwNjaFurret)
- -- v0.6.5 Alpha
+PythoniusRPG -- Programmed in Python by Stephen Center (TheFrozenMawile)
+ -- v0.7.0 Alpha
 ----------------------------------------------------
 Legal Stuff:
 

@@ -20,7 +20,7 @@ game_version = 'v0.7'
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
 #-----------------------------------------------------------------------------#
-# Contact me via Twitter (@RbwNjaFurret) or email (ninjafurret@gmail.com)
+# Contact me via Twitter (@TheFrozenMawile) or email (ninjafurret@gmail.com)
 # for questions/feedback. My website is http://rbwnjafurret.com/
 #-----------------------------------------------------------------------------#
 # Notes for people reading this code:
@@ -37,13 +37,11 @@ game_version = 'v0.7'
 #     the top of the module.
 #-----------------------------------------------------------------------------#
 
-# A dictionary containing miscellaneous variables made entirely of
-misc_vars = {'gp': 20, 'visited_towns': []}
-
 # A dictionary containing all information related to the player's position
-position = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
-            'reg_music': 'Music/Through the Forest.ogg',
-            'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False}
+party_info = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
+              'reg_music': 'Music/Through the Forest.ogg',
+              'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False,
+              'gp': 20, 'visited_towns': []}
 
 import sys
 import os
@@ -98,11 +96,9 @@ sav_def_bosses = 'Save Files/{CHARACTER_NAME}/def_bosses.json'          # Defeat
 sav_equip_items = 'Save Files/{CHARACTER_NAME}/equip_items.json'        # Equipped Items
 sav_inventory = 'Save Files/{CHARACTER_NAME}/inventory.json'            # Inventory
 sav_misc_boss_info = 'Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc Boss Info
-sav_misc_vars = 'Save Files/{CHARACTER_NAME}/misc_vars.json'            # Misc Variables
-sav_position = 'Save Files/{CHARACTER_NAME}/position.json'              # Position
+sav_party_info = 'Save Files/{CHARACTER_NAME}/party_info.json'          # Party Info
 sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'          # Quests & Dialogue
 sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'            # Spellbook
-sav_prevtowns = 'Save Files/{CHARACTER_NAME}/prevtowns.json'            # Previously visited towns
 
 # PCU Save Files
 sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
@@ -290,7 +286,7 @@ Input [#]: """.format(self.name))
                     break
 
     def level_up(self):
-        global misc_vars
+        global party_info
         if self.exp >= self.req_xp:
             print()
             pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
@@ -412,7 +408,7 @@ Input [#]: """.format(self.name))
             return
 
     def skill_points(self, rem_points, extra_points):
-        global misc_vars
+        global party_info
 
         if extra_points:
             print("{0}'s great fortune has granted them {1} additional skill points!".format(
@@ -575,7 +571,7 @@ Armor:
                        self.attributes['str'], self.attributes['con'],
                        self.attributes['dex'], self.attributes['per'],
                        self.attributes['for'],
-                       self.exp, self.req_xp, misc_vars['gp'],
+                       self.exp, self.req_xp, party_info['gp'],
                        inv_system.equipped[inv_name]['weapon'],
                        inv_system.equipped[inv_name]['access'],
                        inv_system.equipped[inv_name]['head'],
@@ -636,7 +632,7 @@ Armor:
                     # Attempt to run.
                     # If it succeeds, end the battle without giving the player a reward
                     print('-'*25)
-                    pygame.mixer.music.load(position['reg_music'])
+                    pygame.mixer.music.load(party_info['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(music_vol)
 
@@ -758,8 +754,7 @@ Pick {0}'s Move:
 
                     elif battle.temp_stats[self.name]['ability_used']:
                         # You can only use your ability once per battle.
-                        print('{0} feels drained, and are unable to call upon their class\
-ability again.\n')
+                        print('{0} feels drained, and are unable to call upon their class ability again.\n')
                         input('Press enter/return ')
 
                         print('-'*25)
@@ -786,12 +781,8 @@ Pick {0}'s Move:
         monster = battle.monster
         battle.temp_stats[self.name]['ability_used'] = True
 
-        print(ascii_art.player_art[self.class_.title()] %
-              "{0} is making a move!\n".format(self.name))
-
-        print("{0} uses the knowledge they've gained to unleash their class ability!".format(
-            self.name
-        ))
+        print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
+        print("{0} uses the knowledge they've gained to unleash their class ability!".format(self.name))
 
         # Ranger Ability: Scout
         if self.class_ == 'ranger':
@@ -803,8 +794,8 @@ Pick {0}'s Move:
             print('ABILITY: SCOUT')
             print('-'*25)
 
-            print('As a Ranger, {0} identifies their enemy and focuses\
-, increasing their pierce attack!'.format(self.name))
+            print('As a Ranger, {0} identifies their enemy and focuses, increasing their pierce attack!'.format(
+                self.name))
 
             input("Press enter/return to view your enemy's stats ")
 
@@ -916,7 +907,7 @@ Pick {0}'s Move:
             print('As a monk, {0} meditates and focus their inner chi.'.format(self.name))
             print('After a brief moment of confusion from the enemy, {0} strikes, dealing'.format(self.name))
             print("an immense amount of damage in a single, powerful strike! As a result, {0}'s".format(self.name))
-            print('defenses have been lowered by 25% for three turns.\n')
+            print('defenses have been lowered by 20% until the end of the battle.\n')
 
             dam_dealt = (battle.p_temp_stats['attk'] - monster.dfns/2)*2.5
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
@@ -935,9 +926,9 @@ Pick {0}'s Move:
 
             print('The attack deals {0} damage to the {1}!'.format(math.ceil(dam_dealt), monster.name))
 
-            battle.temp_stats[self.name]['dfns'] /= 1.25
-            battle.temp_stats[self.name]['m_dfns'] /= 1.25
-            battle.temp_stats[self.name]['p_dfns'] /= 1.25
+            battle.temp_stats[self.name]['dfns'] /= 1.2
+            battle.temp_stats[self.name]['m_dfns'] /= 1.2
+            battle.temp_stats[self.name]['p_dfns'] /= 1.2
 
             battle.temp_stats[self.name]['dfns'] = math.floor(battle.temp_stats[self.name]['dfns'])
             battle.temp_stats[self.name]['m_dfns'] = math.floor(battle.temp_stats[self.name]['m_dfns'])
@@ -992,8 +983,8 @@ def set_adventure_name():
                     print()
                     break
 
-        elif len(choice) > 35 and len(new_choice) > 30:
-            print('The maximum Adventure Name size is 35 characters - sorry!]')
+        elif len(choice) > 35 and len(new_choice) > 35:
+            print("That adventure name is far too long, it would never catch on! (must be 35 characters or less")
 
             continue
 
@@ -1008,21 +999,15 @@ def set_adventure_name():
                     adventure_name = choice
                     format_save_names()
 
-                    if player.name == "Flygon Jones":
-                        print()
-                        print("Since you're my friend, I'm going to give you a small gift: An")
-                        print("additional 50 GP to use on your travels, \
-as well as an extra potion!")
-
-                        input('Press enter/return ')
-
-                        inv_system.inventory['consum'].append(items.s_potion)
-                        misc_vars['gp'] += 50
+                    if player.name.lower() == "give me the gold":
+                        print("Gold cheat enabled, you now have 99999 gold!")
+                        party_info['gp'] = 99999
 
                     return
 
                 elif y_n.startswith("n"):
                     print()
+
                     break
 
 
@@ -1032,10 +1017,9 @@ def format_save_names():
 
     for x in sorted(['sav_acquired_gems', 'sav_def_bosses',
                      'sav_equip_items', 'sav_inventory',
-                     'sav_misc_boss_info', 'sav_misc_vars',
-                     'sav_play_stats', 'sav_position',
-                     'sav_quests_dia', 'sav_spellbook',
-                     'sav_prevtowns', 'sav_solou_stats',
+                     'sav_misc_boss_info', 'sav_party_info',
+                     'sav_spellbook', 'sav_quests_dia',
+                     'sav_play_stats', 'sav_solou_stats',
                      'sav_xoann_stats', 'sav_randall_stats',
                      'sav_adorine_stats', 'sav_ran_af_stats',
                      'sav_parsto_stats'], key=str.lower):
@@ -1046,7 +1030,7 @@ def format_save_names():
 
 def create_player():
     global player
-    global misc_vars
+    global party_info
 
     player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
 
@@ -1143,8 +1127,7 @@ def change_settings():
 
 
 def check_save():  # Check for save files and load the game if they're found
-    global misc_vars
-    global position
+    global party_info
     global adventure_name
 
     print('-'*25)
@@ -1168,21 +1151,13 @@ def check_save():  # Check for save files and load the game if they're found
     save_file_list = [
         sav_acquired_gems, sav_def_bosses,
         sav_equip_items, sav_inventory,
-        sav_misc_boss_info, sav_misc_vars,
-        sav_play_stats, sav_position,
-        sav_quests_dia, sav_spellbook,
-        sav_prevtowns, sav_solou_stats,
+        sav_misc_boss_info, sav_party_info,
+        sav_play_stats, sav_quests_dia,
+        sav_spellbook, sav_solou_stats,
         sav_xoann_stats
     ]
 
     for directory in dirs:
-        if not os.path.isfile(sav_prevtowns.format(CHARACTER_NAME=directory))\
-                and all([os.path.isfile(file.format(CHARACTER_NAME=directory))
-                         for file in save_file_list[:-1]]):
-
-                with open(sav_prevtowns.format(CHARACTER_NAME=directory),
-                          mode='w', encoding='utf-8') as f:
-                    json.dump(misc_vars['visited_towns'], f, indent=4, separators=(', ', ': '))
 
         # If all save-file components exist...
         if all(map(os.path.isfile, [x.format(CHARACTER_NAME=directory) for x in save_file_list])):
@@ -1266,11 +1241,8 @@ def check_save():  # Check for save files and load the game if they're found
                 with open(sav_def_bosses, encoding='utf-8') as f:
                     bosses.defeated_bosses = list(json.load(f))
 
-                with open(sav_misc_vars, encoding='utf-8') as f:
-                    misc_vars = json.load(f)
-
-                with open(sav_position, encoding='utf-8') as f:
-                    position = json.load(f)
+                with open(sav_party_info, encoding='utf-8') as f:
+                    party_info = json.load(f)
 
                 # Call functions to serialize more advanced things
                 items.deserialize_gems(sav_acquired_gems)
@@ -1292,7 +1264,7 @@ def check_save():  # Check for save files and load the game if they're found
 
                 print('Load successful.')
 
-                if not towns.search_towns(position['x'], position['y'], enter=False):
+                if not towns.search_towns(party_info['x'], party_info['y'], enter=False):
                     print('-'*25)
                 return
 
@@ -1325,14 +1297,8 @@ def save_game():
                 with open(sav_def_bosses, mode='w', encoding='utf-8') as f:
                     json.dump(bosses.defeated_bosses, f, indent=4, separators=(', ', ': '))
 
-                with open(sav_misc_vars, mode='w', encoding='utf-8') as f:
-                    json.dump(misc_vars, f, indent=4, separators=(', ', ': '))
-
-                with open(sav_position, mode='w', encoding='utf-8') as f:
-                    json.dump(position, f, indent=4, separators=(', ', ': '))
-
-                with open(sav_prevtowns, mode='w', encoding='utf-8') as f:
-                    json.dump(misc_vars['visited_towns'], f, indent=4, separators=(', ', ': '))
+                with open(sav_party_info, mode='w', encoding='utf-8') as f:
+                    json.dump(party_info, f, indent=4, separators=(', ', ': '))
 
                 items.serialize_gems(sav_acquired_gems)
                 inv_system.serialize_equip(sav_equip_items)
@@ -1429,7 +1395,7 @@ title_logo = """\
 |  __/ | |_| || |_ | | | || (_) || | | || || |_| |\__ \|  _ < |  __/ | |_| |
 |_|     \__, | \__||_| |_| \___/ |_| |_||_| \__,_||___/|_| \_\|_|     \____|
         |___/
-PythoniusRPG {0} -- Programmed in Python by Stephen Center (RbwNjaFurret)
+PythoniusRPG {0} -- Programmed in Python by Stephen Center (TheFrozenMawile)
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.rbwnjafurret.com/pythoniusrpg/]
 ------------------------------------------------------------------------------""".format(
@@ -1701,7 +1667,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
         print(traceback.format_exc())
 
         print('''PythoniusRPG encountered an error and crashed! The error message above should
-be sent immediately to RbwNjaFurret (ninjafurret@gmail.com) to make sure the bug gets fixed.
+be sent as soon as possible to TheFrozenMawile (ninjafurret@gmail.com) to make sure the bug gets fixed.
 The error message can be immediately copied to your clipboard if you wish.''')
         print('-'*25)
 

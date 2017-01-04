@@ -158,7 +158,7 @@ class Town:
                     print('-'*25)
 
                 elif choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    pygame.mixer.music.load(main.position['reg_music'])
+                    pygame.mixer.music.load(main.party_info['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
                     print('-'*25)
@@ -187,7 +187,8 @@ class Town:
                 print('-'*25)
                 print("{0}'s location has been added to your coordinates.".format(self.name))
 
-                main.misc_vars['visited_towns'].append(self.name)
+                main.party_info['visited_towns'].append(self.name)
+
         else:
             return spam
 
@@ -273,7 +274,7 @@ specifically for one fruit?')
         print('-'*25)
 
         while True:  # That's right, I used scientific notation. That's how serious I am.
-            print('You have {0} GP'.format(main.misc_vars['gp']))
+            print('You have {0} GP'.format(main.party_info['gp']))
             print("""\
       [1] iSheet ---------> 6.5 x 10^96 GP
       [2] uPhone ---------> 6.4 x 10^93 GP
@@ -324,7 +325,7 @@ we'd never sell that! | [ENTER] ")
                     while True:
                         y_n = input("Do you want to buy an iSound for 250 GP? | Yes or No: ")
 
-                        if y_n.lower().startswith("y") and main.misc_vars['gp'] >= 250:
+                        if y_n.lower().startswith("y") and main.party_info['gp'] >= 250:
                             print('-'*25)
                             input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
                             input('It has been added to the Quest Items page of your inventory | \
@@ -333,7 +334,7 @@ we'd never sell that! | [ENTER] ")
                             input('Salesman: Thank you for your time, and especially for \
 your money! | [ENTER] ')
 
-                            main.misc_vars['gp'] -= 250
+                            main.party_info['gp'] -= 250
                             inv_system.inventory['q_items'].append(copy.copy(items.iSound))
                             spam = False
                             print('-'*25)
@@ -366,14 +367,14 @@ model! | [ENTER]')
 
             if choice.startswith('y'):
                 print()
-                if main.misc_vars['gp'] >= self.inn_cost:
+                if main.party_info['gp'] >= self.inn_cost:
 
                     print('"Good night, Traveler."')
                     print('Sleeping...')
 
                     main.smart_sleep(1)
 
-                    main.misc_vars['gp'] -= self.inn_cost
+                    main.party_info['gp'] -= self.inn_cost
 
                     for character in [
                         main.player,
@@ -479,7 +480,7 @@ model! | [ENTER]')
 
                 while fizz:
 
-                    print('You have {0} GP'.format(main.misc_vars['gp']))
+                    print('You have {0} GP'.format(main.party_info['gp']))
                     print('"Well, here\'s what I have in my stock for that category: "')
 
                     padding = len(max([item.name for item in stock[item_category]], key=len))
@@ -525,9 +526,9 @@ model! | [ENTER]')
                             confirm = confirm.lower()
 
                             if confirm.startswith('y'):
-                                if main.misc_vars['gp'] >= i.buy:
+                                if main.party_info['gp'] >= i.buy:
                                     inv_system.inventory[i.cat].append(i)
-                                    main.misc_vars['gp'] -= i.buy
+                                    main.party_info['gp'] -= i.buy
 
                                     print('-'*25)
                                     input('You purchase the {0} (-{1} \
@@ -692,20 +693,20 @@ island floating up in the sky. Perhaps something is up there!""")
                 input("After several hours of climbing the staircase, \
 you finally arrive at the top | Press enter/return ")
 
-                main.position['x'] = 0
-                main.position['y'] = 0
-                main.position['is_aethus'] = True
-                main.position['reg'] = 'Aethus'
-                main.position['avg'] = 0
+                main.party_info['x'] = 0
+                main.party_info['y'] = 0
+                main.party_info['is_aethus'] = True
+                main.party_info['reg'] = 'Aethus'
+                main.party_info['avg'] = 0
 
-                main.position['reg_music'] = 'Music/Island of Peace.ogg'
+                main.party_info['reg_music'] = 'Music/Island of Peace.ogg'
                 world.save_coords(0, 0)
 
                 print('-'*25)
                 print('You have left the Glacian Plains region and are now entering the Aethus.')
                 print('-'*25)
 
-                pygame.mixer.music.load(main.position['reg_music'])
+                pygame.mixer.music.load(main.party_info['reg_music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
 
@@ -749,20 +750,20 @@ you notice a zipline-like structure that would be much easier and faster to use.
                 main.smart_sleep(1)
                 input("Amazing, that was much faster! | Press enter/return ")
 
-                main.position['x'] = -84
-                main.position['y'] = -84
-                main.position['is_aethus'] = False
-                main.position['reg'] = 'Tundra'
-                main.position['avg'] = -84
+                main.party_info['x'] = -84
+                main.party_info['y'] = -84
+                main.party_info['is_aethus'] = False
+                main.party_info['reg'] = 'Tundra'
+                main.party_info['avg'] = -84
+                main.party_info['reg_music'] = 'Music/Arpanauts.ogg'
 
-                main.position['reg_music'] = 'Music/Arpanauts.ogg'
                 world.save_coords(-84, -84)
 
                 print('-'*25)
                 print('You have left the Aethus and are now entering the Tundra region.')
                 print('-'*25)
 
-                pygame.mixer.music.load(main.position['reg_music'])
+                pygame.mixer.music.load(main.party_info['reg_music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
 
@@ -795,14 +796,14 @@ class Tavern:
 
             if choice.startswith('y'):
                 print()
-                if main.misc_vars['gp'] >= self.cost:
+                if main.party_info['gp'] >= self.cost:
 
                     print('"Good night, traveler."')
                     print('Sleeping...')
 
                     main.smart_sleep(1)
 
-                    main.misc_vars['gp'] -= self.cost
+                    main.party_info['gp'] -= self.cost
 
                     for character in [
                         main.player,
@@ -827,7 +828,7 @@ class Tavern:
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
 
-                pygame.mixer.music.load(main.position['reg_music'])
+                pygame.mixer.music.load(main.party_info['reg_music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
                 print('-'*25)
@@ -835,7 +836,7 @@ class Tavern:
                 return
 
             elif choice.startswith('n'):
-                pygame.mixer.music.load(main.position['reg_music'])
+                pygame.mixer.music.load(main.party_info['reg_music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
                 print('-'*25)
@@ -1062,7 +1063,7 @@ def search_towns(pos_x, pos_y, enter=True):
     # Check to see if there is a
     # town where the player is located
 
-    available_towns = town_list if not main.position['is_aethus'] else aethus_towns
+    available_towns = town_list if not main.party_info['is_aethus'] else aethus_towns
 
     for town in available_towns:
 
@@ -1103,7 +1104,7 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                 return True
 
     else:
-        available_taverns = tavern_list if not main.position['is_aethus'] else aethus_taverns
+        available_taverns = tavern_list if not main.party_info['is_aethus'] else aethus_taverns
         for tavern in available_taverns:
 
             if tavern.x == pos_x and tavern.y == pos_y:
