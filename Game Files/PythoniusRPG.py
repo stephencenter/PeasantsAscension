@@ -190,14 +190,14 @@ class PlayableCharacter:
 
         else:
             dam_dealt = battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2)
-            dam_dealt += dam_dealt*inv_system.equipped[inv_name]['weapon'].power
+            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
 
             # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
                 print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
 
-        # Increase or decrease the damage depending on the PSU/monster's elements
+        # Increase or decrease the damage depending on the PCU/monster's elements
         dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
                                        battle.monster.element,
                                        p_dmg=dam_dealt)[0]
@@ -220,14 +220,15 @@ class PlayableCharacter:
 
     def choose_name(self):
         while True:
-            self.name = input('What is your name, young adventurer? | Input Name: ')
+            # Ask the player for their name, and remove any pipe characters from it
+            temp_name = re.sub(r'[|]', '', input('What is your name, young adventurer? | Input Name: '))
 
-            if not ''.join(self.name.split()):
+            if not ''.join(temp_name.split()):
                 continue
 
-            alphanumeric = lambda x: re.sub(r'[|]', '', x)
-
-            self.name = alphanumeric(self.name)
+            for x, y in enumerate(temp_name):
+                if not(y == ' ' and y == ' '):
+                    self.name = ''.join([self.name, y])
 
             # Flygon Jones, Cynder887, and Apollo Kalar are all pseudonyms for my real-life
             # best friend. He also happens to be one of the primary bug-testers for the game!
@@ -242,9 +243,11 @@ class PlayableCharacter:
                 y_n = y_n.lower()
 
                 if y_n.startswith('y'):
+                    print('-'*25)
                     return self.name
 
                 elif y_n.startswith('n'):
+                    self.name = ''
                     print()
                     break
 
@@ -259,6 +262,7 @@ class PlayableCharacter:
       [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
 Input [#]: """.format(self.name))
 
+            print()
             try:
                 class_ = {'1': "mage",
                           '2': "assassin",
@@ -270,25 +274,22 @@ Input [#]: """.format(self.name))
             except KeyError:
                 continue
 
-            print('-'*25)
-
             while True:
-                y_n = input('You wish to be of the {0} class? | Yes or No: '.format(
-                    class_.title()))
-
-                y_n = y_n.lower()
+                y_n = input('You wish to be of the {0} class? | Yes or No: '.format(class_.title())).lower()
 
                 if y_n.startswith('y'):
+                    print('-'*25)
                     return class_
 
                 elif y_n.startswith('n'):
-                    print('-'*25)
+                    print()
                     break
 
     def level_up(self):
         global party_info
         if self.exp >= self.req_xp:
             print()
+
             pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(music_vol)
@@ -306,15 +307,9 @@ Input [#]: """.format(self.name))
                 print("{0} has advanced to level {1}!".format(self.name, self.lvl))
 
                 if self.lvl == 5:
-                    print()
-                    print('{0} now understands the true potential of their class!'.format(
-                        self.name
-                    ))
-                    print('{0} can activate this potential in the form of a "class ability"'.format(
-                        self.name
-                    ))
-                    print('once per battle. Use it wisely!')
-                    print()
+                    print('\n{0} now understands the true potential of their class!'.format(self.name))
+                    print('{0} can activate this potential in the form of a "class ability"'.format(self.name))
+                    print('once per battle. Use it wisely!\n')
                     input('Press enter/return ')
 
                 rem_points += 5
@@ -394,7 +389,7 @@ Input [#]: """.format(self.name))
                     self.mp += 2
 
                 self.exp -= self.req_xp
-                self.req_xp = math.ceil((math.pow(self.lvl*2, 2) - 1.2*self.lvl))
+                self.req_xp = math.ceil((math.pow(self.lvl*2, 2) - self.lvl))
 
             print('-'*25)
             self.skill_points(rem_points, extra_points)
@@ -411,9 +406,7 @@ Input [#]: """.format(self.name))
         global party_info
 
         if extra_points:
-            print("{0}'s great fortune has granted them {1} additional skill points!".format(
-                self.name, extra_points
-            ))
+            print("{0}'s great fortune has granted them {1} additional skill points!".format(self.name, extra_points))
             rem_points += extra_points
 
         while rem_points > 0:
@@ -469,16 +462,12 @@ Input letter: """)
                     y_n = input("Increase {0}'s {1}? | Yes or No: ".format(self.name, vis_skill))
                     y_n = y_n.lower()
 
-                    if y_n.startswith('y'):
-                        pass
-
-                    elif y_n.startswith('n'):
-                        print('-'*25)
-
-                        break
-
-                    else:
+                    if not (y_n.startswith('y') or y_n.startswith('n')):
                         continue
+
+                    if y_n.startswith('n'):
+                        print('-'*25)
+                        break
 
                     if skill.startswith('i'):
                         self.m_dfns += 1
@@ -539,8 +528,8 @@ Input letter: """)
                     print('-'*25) if rem_points else ''
 
                     break
-        print()
-        print('{0} is out of skill points.'.format(self.name))
+
+        print('\n{0} is out of skill points.'.format(self.name))
 
     def player_info(self):
         inv_name = self.name if self != player else 'player'
@@ -947,56 +936,37 @@ def set_adventure_name():
     while True:
         # Certain OSes don't allow certain characters, so this removes those characters
         # and replaces them with whitespace. The player is then asked if this is okay.
-        choice = input("Finally, what do you want to name this adventure? ")
-        new_choice = re.sub('[^\w\-_ ]', '', choice)
+        choice = input("Finally, what do you want to name this adventure? | Input name: ")
 
-        if not choice:  # Files/Folders cannot be have "" as their filename.
-            print("Silence doesn't really make for a great adventure name.")
-            print()
+        # Files/Folders cannot be have only whitespace as their filename.
+        if not ''.join(choice.split()):
             continue
 
-        elif os.path.isdir('/'.join([save_dir, new_choice])) and new_choice:
-            # Make sure that the folder doesn't already exist, because
-            # certain OSes don't allow duplicate folder names.
-            print("I've already read about adventures with that name; be original!")
-            print()
+        temp_name = re.sub('[^\w\-_ ]', '', choice)
+
+        for x, y in enumerate(temp_name):
+            if not(y == ' ' and y == ' '):
+                adventure_name = ''.join([adventure_name, y])
+
+        if not ''.join(adventure_name.split()) and ''.join(choice.split()):
+            print("\nPlease choose a different name, that one definitely won't do!")
             continue
 
-        elif new_choice != choice:
-            if not new_choice and choice:
-                print("Please name it something different.")
-                print()
-                continue
+        # Make sure that the folder doesn't already exist, because
+        # certain OSes don't allow duplicate folder names.
+        elif os.path.isdir('/'.join([save_dir, adventure_name])) and adventure_name:
+            print("\nI've already read about adventures with that name; be original!\n")
+            adventure_name = ''
 
+            continue
+
+        # Check if the modified adventure name is identical to the original one the player proposed
+        elif adventure_name != choice:
             while True:
-                y_n = input('I had to change some of that. Does "{0}" sound okay? | Yes or No: '.
-                            format(new_choice))
-
+                y_n = input('\nI had to change some of that. Does "{0}" sound okay? | Yes or No: '.format(adventure_name))
                 y_n = y_n.lower()
 
                 if y_n.startswith("y"):
-                    adventure_name = new_choice
-                    format_save_names()
-                    return
-
-                elif y_n.startswith("n"):
-                    print()
-                    break
-
-        elif len(choice) > 35 and len(new_choice) > 35:
-            print("That adventure name is far too long, it would never catch on! (must be 35 characters or less")
-
-            continue
-
-        else:
-            while True:
-                y_n = input('You wish for your adventure to be known as "{0}"? | Yes or No: '.
-                            format(choice))
-
-                y_n = y_n.lower()
-
-                if y_n.startswith("y"):
-                    adventure_name = choice
                     format_save_names()
 
                     if player.name.lower() == "give me the gold":
@@ -1006,6 +976,30 @@ def set_adventure_name():
                     return
 
                 elif y_n.startswith("n"):
+                    adventure_name = ''
+                    print()
+
+                    break
+
+        elif len(choice) > 35 and len(adventure_name) > 35:
+            print("\That adventure name is far too long, it would never catch on!")
+            continue
+
+        else:
+            while True:
+                y_n = input('You wish for your adventure to be known as "{0}"? | Yes or No: '.format(choice)).lower()
+
+                if y_n.startswith("y"):
+                    format_save_names()
+
+                    if player.name.lower() == "give me the gold":
+                        print("Gold cheat enabled, you now have 99999 gold!")
+                        party_info['gp'] = 99999
+
+                    return
+
+                elif y_n.startswith("n"):
+                    adventure_name = ''
                     print()
 
                     break
@@ -1039,9 +1033,7 @@ def create_player():
     player.max_mp = copy.copy(player.mp)
 
     player.name = player.choose_name()
-    print()
     player.class_ = player.choose_class()
-    print()
     set_adventure_name()
 
     if player.class_ == "warrior":
@@ -1605,6 +1597,9 @@ def copy_error(text):
 
 def smart_sleep(duration):
     # "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
+
+    # return # Uncomment this when doing automated bug-testing
+
     time.sleep(duration)
 
     # I have no idea how this works but I found it on Stack Overflow and it makes the text sync properly

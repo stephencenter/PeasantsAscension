@@ -7,22 +7,13 @@
     <bookmark url="file://$PROJECT_DIR$/Game Files/inv_system.py" line="469" />
     <bookmark url="file://$PROJECT_DIR$/Game Files/items.py" line="587" />
     <bookmark url="file://$PROJECT_DIR$/Game Files/ascii_art.py" line="788" />
-    <bookmark url="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py" line="644" />
+    <bookmark url="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py" line="633" />
     <bookmark url="file://$PROJECT_DIR$/Game Files/monsters.py" line="165" mnemonic="3" />
     <bookmark url="file://$PROJECT_DIR$/Game Files/items.py" line="1343" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d19a7f44-3ef1-4b67-8670-56343c3a2afb" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/PythoniusRPG.py" afterPath="$PROJECT_DIR$/Game Files/PythoniusRPG.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/battle.py" afterPath="$PROJECT_DIR$/Game Files/battle.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/bosses.py" afterPath="$PROJECT_DIR$/Game Files/bosses.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/inv_system.py" afterPath="$PROJECT_DIR$/Game Files/inv_system.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/items.py" afterPath="$PROJECT_DIR$/Game Files/items.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/magic.py" afterPath="$PROJECT_DIR$/Game Files/magic.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/monsters.py" afterPath="$PROJECT_DIR$/Game Files/monsters.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/npcs.py" afterPath="$PROJECT_DIR$/Game Files/npcs.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/towns.py" afterPath="$PROJECT_DIR$/Game Files/towns.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/world.py" afterPath="$PROJECT_DIR$/Game Files/world.py" />
     </list>
     <ignored path="Pythonius.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,8 +38,8 @@
       <file leaf-file-name="PythoniusRPG.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="1405" column="38" lean-forward="false" selection-start-line="1405" selection-start-column="38" selection-end-line="1405" selection-end-column="38" />
+            <state relative-caret-position="616">
+              <caret line="942" column="20" lean-forward="true" selection-start-line="942" selection-start-column="20" selection-end-line="942" selection-end-column="20" />
               <folding>
                 <element signature="e#2408#2418#0" expanded="true" />
               </folding>
@@ -83,7 +74,7 @@
       <file leaf-file-name="inv_system.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-591">
+            <state relative-caret-position="20175">
               <caret line="817" column="43" lean-forward="false" selection-start-line="817" selection-start-column="43" selection-end-line="817" selection-end-column="43" />
               <folding />
             </state>
@@ -125,8 +116,8 @@
       <file leaf-file-name="battle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="477" column="22" lean-forward="false" selection-start-line="477" selection-start-column="18" selection-end-line="477" selection-end-column="22" />
+            <state relative-caret-position="389">
+              <caret line="779" column="50" lean-forward="true" selection-start-line="779" selection-start-column="50" selection-end-line="779" selection-end-column="50" />
               <folding />
             </state>
           </provider>
@@ -186,19 +177,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>only</find>
-      <find>world.position</find>
-      <find>Input [#] (or type &quot;back&quot;):</find>
-      <find>mvsrt</find>
-      <find>main.</find>
-      <find>msvcrt</find>
-      <find>time.sleep</find>
-      <find>inventory</find>
-      <find>critical</find>
-      <find>math.ceil</find>
-      <find>dam_dealt</find>
-      <find>or type &quot;exit&quot;</find>
-      <find>self.name if</find>
       <find>global</find>
       <find>attk_pwr</find>
       <find>user.name if user != main.player else 'player'</find>
@@ -213,9 +191,22 @@
       <find>position</find>
       <find>misc_vars</find>
       <find>only_nsew</find>
-      <find>visited_towns</find>
       <find>prevtowns</find>
       <find>rbwnjafurret</find>
+      <find>visited_towns</find>
+      <find>PSU</find>
+      <find>.ATTK</find>
+      <find>choice</find>
+      <find>y_n.startswith('y')</find>
+      <find>player.choose_class</find>
+      <find>print()</find>
+      <find>.split</find>
+      <find>choose_class</find>
+      <find>choose_name</find>
+      <find>adventure</find>
+      <find>name</find>
+      <find>ADVENTURE</find>
+      <find>new_choice</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -646,7 +637,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5800866" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27378437" sideWeight="0.49791667" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2230444" sideWeight="0.49791667" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24983433" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296355" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -695,7 +686,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="41" />
+      <option name="time" value="42" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -964,16 +955,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="689">
-          <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-          <folding>
-            <element signature="e#704#714#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/npcs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -981,14 +962,6 @@
           <folding>
             <element signature="e#701#711#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-591">
-          <caret line="817" column="43" lean-forward="false" selection-start-line="817" selection-start-column="43" selection-end-line="817" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1015,14 +988,6 @@
           <folding>
             <element signature="e#704#714#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="477" column="22" lean-forward="false" selection-start-line="477" selection-start-column="18" selection-end-line="477" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1068,10 +1033,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="779" column="50" lean-forward="true" selection-start-line="779" selection-start-column="50" selection-end-line="779" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20175">
+          <caret line="817" column="43" lean-forward="false" selection-start-line="817" selection-start-column="43" selection-end-line="817" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="689">
+          <caret line="81" column="0" lean-forward="true" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+          <folding>
+            <element signature="e#704#714#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/PythoniusRPG.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="1405" column="38" lean-forward="false" selection-start-line="1405" selection-start-column="38" selection-end-line="1405" selection-end-column="38" />
+        <state relative-caret-position="616">
+          <caret line="942" column="20" lean-forward="true" selection-start-line="942" selection-start-column="20" selection-end-line="942" selection-end-column="20" />
           <folding>
             <element signature="e#2408#2418#0" expanded="true" />
           </folding>
