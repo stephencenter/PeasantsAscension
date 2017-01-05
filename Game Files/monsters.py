@@ -206,7 +206,7 @@ class Monster:
 
                 sounds.poison_damage.play()
 
-                poison_damage = math.floor(self.hp/4)
+                poison_damage = math.floor(self.hp/6)
                 print('The {0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
                 self.hp -= poison_damage
 
@@ -224,9 +224,8 @@ class Monster:
                         'Bogthorn Marsh': ['Bog Slime', 'Moss Ogre',
                                            "Will-o'-the-wisp", 'Vine Lizard', 'Sludge Rat'],
 
-                        'Central Forest': ['Goblin Archer', 'Beetle'
-                        if main.player.name != "Flygon Jones" else "Calculator",
-                                           'Spriggan', 'Imp', 'Bat'],
+                        'Central Forest': ['Goblin Archer', 'Spriggan', 'Imp', 'Bat',
+                                           'Beetle' if main.player.name != "Flygon Jones" else "Calculator",],
 
                         'Arcadian Desert': ['Mummy', 'Sand Golem',
                                             'Minubis', 'Fire Ant', 'Naga'],

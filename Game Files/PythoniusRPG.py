@@ -41,7 +41,7 @@ game_version = 'v0.7'
 party_info = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
               'reg_music': 'Music/Through the Forest.ogg',
               'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False,
-              'gp': 20, 'visited_towns': []}
+              'gp': 20, 'visited_towns': [], 'reg_msg': ''}
 
 import sys
 import os
@@ -637,7 +637,7 @@ Armor:
 
                     sounds.poison_damage.play()
 
-                    poison_damage = math.floor(self.hp/4)
+                    poison_damage = math.floor(self.hp/5)
                     print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
                     self.hp -= poison_damage
 
@@ -850,10 +850,10 @@ Pick {0}'s Move:
 
             return True
 
-        # Assassin Ability: Poison Injection
+        # Assassin Ability: Lethal Injection
         elif self.class_ == "assassin":
             print('-'*25)
-            print("ABILITY: POISON INJECTION")
+            print("ABILITY: LETHAL INJECTION")
             print('-'*25)
             print('As an Assassin, you discreetly inject poison into your enemy!')
 

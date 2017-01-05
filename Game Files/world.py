@@ -68,19 +68,19 @@ def movement_system():
         else:
             main.party_info['v'] = "\u00b0S"
 
-        while True:
-            direction = input('{0}{1}, {2}{3} | {4} | Input Dir. (N, S, E, W), \
-[P]layer, [T]ools, [R]est: '.format(main.party_info['y'], main.party_info['v'],
-                                    main.party_info['x'], main.party_info['h'],
-                                    main.party_info['reg']))
+        print('Current Location: <{0}{1}, {2}{3}> in the <{4}>'.format(
+                main.party_info['y'], main.party_info['v'],
+                main.party_info['x'], main.party_info['h'],
+                main.party_info['reg']))
 
+        while True:
+            direction = input('Input Direction ([N], [S], [E], [W]) or [P]layer, [T]ools, [L]ook, [R]est: ')
             direction = direction.lower()
 
             if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
-
                 sounds.foot_steps.play()
-                # The in-game map is square due to simplify things.
-                # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
+
+                # The in-game map is square to simplify things. The real map of the country is a lot different.
                 if direction.startswith('n'):
 
                     if main.party_info['y'] < 125 if not main.party_info['is_aethus'] else 50:
@@ -147,15 +147,13 @@ pass.')
                         print('-'*25)
 
                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-                            print("""\
-Continuing to walk in that direction would cause you to fall to your death.
+                            print("""Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
 -------------------------""")
 
                             continue
 
-                        print('Ahead of you is a seemingly endless ocean. \
-You cannot continue in this direction.')
+                        print('Ahead of you is a seemingly endless ocean. You cannot continue in this direction.')
                         print('-'*25)
 
                         continue
@@ -168,8 +166,7 @@ You cannot continue in this direction.')
                         print('-'*25)
 
                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-                            print("""\
-Continuing to walk in that direction would cause you to fall to your death.
+                            print("""Continuing to walk in that direction would cause you to fall to your death.
 It's probably in your best interests that you not do that.
 -------------------------""")
 
@@ -207,6 +204,9 @@ It's probably in your best interests that you not do that.
                         monsters.spawn_monster()
                         battle.setup_vars()
                         battle.battle_system()
+
+                    else:
+                        print()
 
                 break
 
@@ -322,6 +322,9 @@ It's probably in your best interests that you not do that.
                 if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
                     print('-'*25)
 
+            elif direction.startswith('l'):
+                pass
+
             elif direction.startswith('r'):
                 rest()
                 if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
@@ -376,7 +379,8 @@ def check_region():
 
         main.party_info['reg'] = region
         main.party_info['reg_music'] = reg_music
-        save_coords(main.party_info['x'], main.party_info['y'])
+        main.party_info['prev_town'][0] = main.party_info['x']
+        main.party_info['prev_town'][1] = main.party_info['y']
 
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
@@ -387,17 +391,6 @@ def check_region():
 
     else:
         return False
-
-
-def save_coords(x, y):
-    # Mark the player's coordinates when they change regions or visit towns.
-    # The player will return to these coordinates if they die.
-    main.party_info['prev_town'][0], main.party_info['prev_town'][1] = x, y
-
-
-def back_to_coords():
-    main.party_info['x'] = main.party_info['prev_town'][0]
-    main.party_info['y'] = main.party_info['prev_town'][1]
 
 
 def rest():

@@ -431,7 +431,9 @@ def after_battle(is_boss):  # Assess the results of the battle
                 if y_n.startswith('y'):
                     # If you die, you return to the last town visited or 0'N, 0'E
                     # if you haven't been to a town yet.
-                    world.back_to_coords()
+
+                    main.party_info['x'] = main.party_info['prev_town'][0]
+                    main.party_info['y'] = main.party_info['prev_town'][1]
 
                     for character in [
                         player,

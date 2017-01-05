@@ -695,12 +695,12 @@ you finally arrive at the top | Press enter/return ")
 
                 main.party_info['x'] = 0
                 main.party_info['y'] = 0
-                main.party_info['is_aethus'] = True
-                main.party_info['reg'] = 'Aethus'
                 main.party_info['avg'] = 0
-
+                main.party_info['reg'] = 'Aethus'
+                main.party_info['prev_town'][0] = 0
+                main.party_info['prev_town'][1] = 0
+                main.party_info['is_aethus'] = True
                 main.party_info['reg_music'] = 'Music/Island of Peace.ogg'
-                world.save_coords(0, 0)
 
                 print('-'*25)
                 print('You have left the Glacian Plains region and are now entering the Aethus.')
@@ -752,12 +752,12 @@ you notice a zipline-like structure that would be much easier and faster to use.
 
                 main.party_info['x'] = -84
                 main.party_info['y'] = -84
-                main.party_info['is_aethus'] = False
-                main.party_info['reg'] = 'Tundra'
                 main.party_info['avg'] = -84
+                main.party_info['reg'] = 'Tundra'
+                main.party_info['prev_town'][0] = -84
+                main.party_info['prev_town'][1] = -84
+                main.party_info['is_aethus'] = False
                 main.party_info['reg_music'] = 'Music/Arpanauts.ogg'
-
-                world.save_coords(-84, -84)
 
                 print('-'*25)
                 print('You have left the Aethus and are now entering the Tundra region.')
@@ -1090,7 +1090,10 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                         pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
                         pygame.mixer.music.play(-1)
                         pygame.mixer.music.set_volume(main.music_vol)
-                        world.save_coords(town.x, town.y)
+
+                        main.party_info['prev_town'][0] = town.x
+                        main.party_info['prev_town'][1] = town.y
+
                         town.new_location()
                         town.town_choice()
 
@@ -1115,8 +1118,7 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                     sounds.item_pickup.play()
 
                     while True:
-                        y_n = input('{0} is nearby. \
-Do you want to visit it? | Yes or No: '.format(tavern.name))
+                        y_n = input('{0} is nearby. Do you want to visit it? | Yes or No: '.format(tavern.name))
 
                         y_n = y_n.lower()
 
@@ -1124,8 +1126,9 @@ Do you want to visit it? | Yes or No: '.format(tavern.name))
                             pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                             pygame.mixer.music.play(-1)
                             pygame.mixer.music.set_volume(main.music_vol)
-                            world.save_coords(tavern.x, tavern.y)
-                            tavern.town_choice()
+
+                            main.party_info['prev_town'][0] = tavern.x
+                            main.party_info['prev_town'][1] = tavern.y
 
                             return
 
