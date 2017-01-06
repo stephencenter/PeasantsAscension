@@ -1,17 +1,17 @@
-#   This file is part of PythoniusRPG.
+#   This file is part of Peasants' Ascension.
 #
-#    PythoniusRPG is free software: you can redistribute it and/or modify
+#    Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PythoniusRPG is distributed in the hope that it will be useful,
+#    Peasants' Ascension is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 import time
@@ -38,6 +38,7 @@ import ascii_art
 
 if __name__ == "__main__":
     sys.exit()
+
 else:
     main = sys.modules["__main__"]
 
@@ -860,7 +861,7 @@ provide you with helpful advice.""",
              [npcs.wesley, npcs.lazaro], -2, -6, inn_cost=2)
 
 town3 = Town('Overshire', """Overshire: A city in the northwestern region of the Forest.
-Overshire is the capital of Pythonia, and as such is very densely populated.
+Overshire is the capital of Harconia, and as such is very densely populated.
 The city is separated into three sectors: the upper-class inner portion
 consisting of castle surrounded by reinforced stone walls, a lower-class
 outer portion comprised of smalls buildings and huts, and a middle-class
@@ -904,17 +905,17 @@ Azura, lives in a large tower in the southwest side of the town.""",
 
 town9 = Town('Sardooth', """Sardooth: A ghost town. There has not been a single
 permanent inhabitant of this town for more than 75 years. It is completely
-run down, with most of the buildings having been destroyed in the Pythonian
+run down, with most of the buildings having been destroyed in the Harconian
 Revolution. While this town may seem interesting and historic, there is nothing
 of value here.""",
              [], -25, 29, inn=False, gen_store=False)
 
 town10 = Town('Principalia', """Principalia: Principalia is the home of
-King Pythonius II. The main attraction here is the Pytheror Building, a
-medium-large cottage that the original King Pythonius I had lived in
+King Harconius II. The main attraction here is the Pytheror Building, a
+medium-large cottage that the original King Harconius I had lived in
 centuries ago. Every Monarch to date has decided to instead live in
 the Overshire Castle, with the exception of the current monarch,
-Pythonius. Pythonius II has changed several things since his ancestor
+Harconius. Harconius II has changed several things since his ancestor
 lived here, however. The cottage now has access to running water,
 and the cottage is surrounded by a ring of 12 archer towers, each with
 2 crossbowmen and one archer at the top. Each tower is about
@@ -924,9 +925,9 @@ your attention - probably because she just screamed "HALT!" at you.""",
               [npcs.sakura], -44, 20, gen_store=False, inn=False)
 
 town11 = Town('New Ekanmar', """New Ekanmar: The home of the Flyscorian Embassy in
-Pythonia. Prior to the Pythonian Revolution, this town was the location of
-a large portion of Flyscoria's troops in Pythonia. The Pythonians drove much of
-them out, but a large number of them defected to the Pythonian side and stayed.
+Harconia. Prior to the Harconian Revolution, this town was the location of
+a large portion of Flyscoria's troops in Harconia. The Harconians drove much of
+them out, but a large number of them defected to the Harconian side and stayed.
 After the war, the citizens gave up their weapons and became a peaceful town.
 The vast majority of the inhabitants of this town are, naturally, Flyscors.
 It seems that the Flyscorian Royal Family is visiting here - perhaps you can
@@ -961,7 +962,7 @@ on the steps of the general store.""",
               [npcs.polmor, npcs.serena], 52, 12, gs_level=4,
               inn_cost=13)
 
-town15 = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Pythonia
+town15 = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Harconia
 that still has cases of "Hatchnuk's Blight", a plague-like disease that
 killed hundreds of thousands of people during the 10th and 11th centuries.
 Something about the strand that infects Hatchnuk seems to make it completely
@@ -974,7 +975,7 @@ apparel and stern looks make it clear that they are not in the mood for chit-cha
               [], 63, 17, gen_store=False, inn=False)
 
 town16 = Town("Cesura", """Cesura: A town of great historical significance.
-This town was named after King Cesura I, the war general during the Pythonian Civil War
+This town was named after King Cesura I, the war general during the Harconian Civil War
 who helped to reunite the nation's six regions. Cesura was built on top of the site
 of the Battle of Parchak, the definitive battle in the Civil War that Cesura used
 to help the Central Forest win. There is a large monument to the King in the middle of
@@ -987,7 +988,7 @@ developed and perfected the Steam Engine and later the Train before the year
               [npcs.bamdeliit], 58, 123, gen_store=False, inn=False, wtrmelon_store=True)
 
 town17 = Town("Sanguion", """Sanguion: Sanguion is a save-haven for vampires. Vampires
-are feared throughout Pythonia, so this fairly unknown town is the only place they
+are feared throughout Harconia, so this fairly unknown town is the only place they
 can go without being persecuted. The vampires in this town are peaceful, and
 actually refuse to drink the blood of intelligent lifeforms. As a matter of fact,
 non-vampires who are afraid of vampires are actually more of a threat to civilization

@@ -1,21 +1,21 @@
 #!/usr/bin/env python
-# PythoniusRPG v0.7 Alpha
+# Peasants' Ascension v0.7 Alpha
 game_version = 'v0.7'
 # -----------------------------------------------------------------------------#
-#   This file is part of PythoniusRPG.
+#   This file is part of Peasants' Ascension.
 #
-#	 PythoniusRPG is free software: you can redistribute it and/or modify
+#	 Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PythoniusRPG is distributed in the hope that it will be useful,
+#    Peasants' Ascension is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 #-----------------------------------------------------------------------------#
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -1381,15 +1381,19 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
 
 # This is the logo that's displayed on the titlescreen
 title_logo = """\
- ____          _    _                    _              ____   ___     ____
-|  _ \  _   _ | |_ | |__    ___   _ __  (_) _   _  ___ |  _ \ |  _ \  / ___|
-| |_) || | | || __|| '_ \  / _ \ | '_ \ | || | | |/ __|| |_) || |_) || |  _
-|  __/ | |_| || |_ | | | || (_) || | | || || |_| |\__ \|  _ < |  __/ | |_| |
-|_|     \__, | \__||_| |_| \___/ |_| |_||_| \__,_||___/|_| \_\|_|     \____|
-        |___/
-PythoniusRPG {0} -- Programmed in Python by Stephen Center (TheFrozenMawile)
+  ____                            _       _
+ |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
+ | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
+ |  __/  __/ (_| \__ \ (_| | | | | |_\__ \\
+ |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
+         _                           _
+        / \   ___  ___ ___ _ __  ___(_) ___  _ __
+       / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
+      / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
+     /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
+Peasants' Ascension {0} -- Programmed in Python by Stephen Center (TheFrozenMawile)
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
-Check here often for updates: [http://www.rbwnjafurret.com/pythoniusrpg/]
+Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
 ------------------------------------------------------------------------------""".format(
     game_version)
 
@@ -1465,7 +1469,7 @@ def title_screen():
 
                 # Display each line one at a time, and require the pressing of enter
                 # on lines that aren't solely whitespace
-                with open('../pythonius_plot.txt', encoding='utf-8') as f:
+                with open('../peasant_plot.txt', encoding='utf-8') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
                             input(''.join(f.readline.rstrip("\n").split(";")))
@@ -1477,14 +1481,14 @@ def title_screen():
                 pygame.mixer.music.set_volume(music_vol)
 
             except FileNotFoundError:
-                # Display this is the pythonius_plot.txt file couldn't be found
-                print('The "pythonius_plot.txt" file could not be found.')
+                # Display this is the peasant_plot.txt file couldn't be found
+                print('The "peasant_plot.txt" file could not be found.')
 
             except OSError:
-                # If there is a problem opening the pythonius_plot.txt file, but it does exist,
+                # If there is a problem opening the peasant_plot.txt file, but it does exist,
                 # display this message and log the error
-                logging.exception('Error loading pythonius_plot.txt:')
-                print('There was an problem opening "pythonius_plot.txt".')
+                logging.exception('Error loading peasant_plot.txt:')
+                print('There was an problem opening "peasant_plot.txt".')
 
             print('-'*25)
 
@@ -1501,7 +1505,7 @@ def title_screen():
 
                 # Display each line one at a time, and require the pressing of enter
                 # on lines that aren't solely whitespace
-                with open('../pythonius_lore.txt', encoding='utf-8') as f:
+                with open('../peasant_lore.txt', encoding='utf-8') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
                             input(''.join(f.readline.rstrip("\n").split(";")))
@@ -1513,11 +1517,11 @@ def title_screen():
                 pygame.mixer.music.set_volume(music_vol)
 
             except FileNotFoundError:
-                print('The "pythonius_lore.txt" file could not be found.')
+                print('The "peasant_lore.txt" file could not be found.')
 
             except OSError:
-                logging.exception('Error loading pythonius_lore.txt:')
-                print('There was an problem opening "pythonius_lore.txt".')
+                logging.exception('Error loading peasant_lore.txt:')
+                print('There was an problem opening "peasant_lore.txt".')
 
             print('-'*25)
 
@@ -1575,7 +1579,7 @@ def set_prompt_properties():
     # )
 
     # Set the console title
-    ctypes.windll.kernel32.SetConsoleTitleA("PythoniusRPG {0}".format(game_version).encode())
+    ctypes.windll.kernel32.SetConsoleTitleA("Peasants' Ascension {0}".format(game_version).encode())
 
 
 def copy_error(text):
@@ -1661,7 +1665,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
         pygame.mixer.music.stop()
         print(traceback.format_exc())
 
-        print('''PythoniusRPG encountered an error and crashed! The error message above should
+        print('''Peasants' Ascension encountered an error and crashed! The error message above should
 be sent as soon as possible to TheFrozenMawile (ninjafurret@gmail.com) to make sure the bug gets fixed.
 The error message can be immediately copied to your clipboard if you wish.''')
         print('-'*25)

@@ -1,17 +1,17 @@
-#   This file is part of PythoniusRPG.
+#   This file is part of Peasants' Ascension.
 #
-#	 PythoniusRPG is free software: you can redistribute it and/or modify
+#	 Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PythoniusRPG is distributed in the hope that it will be useful,
+#    Peasants' Ascension is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 # ------------------------------------------------------------------------ #
 # Map of the Arcadian Continent: http://tinyurl.com/arcadia-map-v5
 
@@ -44,6 +44,7 @@ pygame.mixer.init()
 
 if __name__ == "__main__":
     sys.exit()
+
 else:
     main = sys.modules["__main__"]
 
@@ -103,7 +104,7 @@ It's probably in your best interests that you not do that.
                             print('Durcuba. You probably shouldn\'t go there.')
 
                         else:
-                            print('You come across the border between Hillsbrad and Pythonia.')
+                            print('You come across the border between Hillsbrad and Harconia.')
                             print('Despite your pleading, the border guards will not let you \
 pass.')
 
@@ -132,7 +133,7 @@ It's probably in your best interests that you not do that.
                             print("you don't have any way to cross the sea.")
 
                         else:
-                            print('You come across the border between Maranon and Pythonia.')
+                            print('You come across the border between Maranon and Harconia.')
                             print('Despite your pleading, the border guards will not let you \
 pass.')
                         print('-'*25)
@@ -181,7 +182,7 @@ It's probably in your best interests that you not do that.
                         else:
                             nation = 'Elysium'
 
-                        print('You come across the border between {0} and Pythonia.'.format(
+                        print('You come across the border between {0} and Harconia.'.format(
                             nation))
                         print('Despite your pleading, the border guards will not let you pass.')
                         print('-'*25)
@@ -365,7 +366,7 @@ def check_region():
             reg_music = 'Music/Digital Native.ogg'
 
         elif -1*abs(x) in range(-125, -115) or -1*abs(y) in range(-126, -115):  # Edges of World
-            region = 'Pythonian Coastline'
+            region = 'Harconian Coastline'
             reg_music = "Music/We're all under the stars.ogg"
 
     if main.party_info['reg'] != region:

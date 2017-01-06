@@ -1,17 +1,17 @@
-#   This file is part of PythoniusRPG.
+#   This file is part of Peasants' Ascension.
 #
-#	 PythoniusRPG is free software: you can redistribute it and/or modify
+#	 Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PythoniusRPG is distributed in the hope that it will be useful,
+#    Peasants' Ascension is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import random
 import sys
@@ -39,6 +39,7 @@ import bosses
 
 if __name__ == "__main__":
     sys.exit()
+
 else:
     main = sys.modules["__main__"]
 
@@ -218,7 +219,7 @@ class Monster:
                 self.is_poisoned = False
 
     def monst_name(self):
-        monster_type = {'Pythonian Coastline': ['Shell Mimic', 'Giant Crab',
+        monster_type = {'Harconian Coastline': ['Shell Mimic', 'Giant Crab',
                                                 'Naiad', 'Sea Serpent', 'Squid'],
 
                         'Bogthorn Marsh': ['Bog Slime', 'Moss Ogre',
@@ -409,7 +410,7 @@ class Monster:
             self.status = 'paralyzed'
             self.status_msg = "hit a nerve ending, causing temporary paralysis!"
 
-        elif main.party_info['reg'] == 'Pythonian Coastline':
+        elif main.party_info['reg'] == 'Harconian Coastline':
             self.element = 'water'
             self.status = 'muted'
             self.status_msg = "caused organizational issues, leading to impaired item usage!"

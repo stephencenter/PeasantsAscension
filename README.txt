@@ -1,30 +1,33 @@
- ____          _    _                    _              ____   ___     ____
-|  _ \  _   _ | |_ | |__    ___   _ __  (_) _   _  ___ |  _ \ |  _ \  / ___|
-| |_) || | | || __|| '_ \  / _ \ | '_ \ | || | | |/ __|| |_) || |_) || |  _
-|  __/ | |_| || |_ | | | || (_) || | | || || |_| |\__ \|  _ < |  __/ | |_| |
-|_|     \__, | \__||_| |_| \___/ |_| |_||_| \__,_||___/|_| \_\|_|     \____|
-        |___/
-            
-PythoniusRPG -- Programmed in Python by Stephen Center (TheFrozenMawile)
+  ____                            _       _
+ |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
+ | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
+ |  __/  __/ (_| \__ \ (_| | | | | |_\__ \
+ |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
+         _                           _
+        / \   ___  ___ ___ _ __  ___(_) ___  _ __
+       / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \
+      / ___ \\__ \ (_|  __/ | | \__ \ | (_) | | | |
+     /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
+Peasants' Ascension -- Programmed in Python by Stephen Center (TheFrozenMawile)
  -- v0.7.0 Alpha
 ----------------------------------------------------
 Legal Stuff:
 
-    PythoniusRPG is free software: you can redistribute it and/or modify
+    Peasants' Ascension is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    PythoniusRPG is distributed in the hope that it will be useful,
+    Peasants' Ascension is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 ----------------------------------------------------
 Downloads for both the standalone and source-code versions of this game
-are available at http://rbwnjafurret.com/pythoniusrpg . We also have 
+are available at http://rbwnjafurret.com/peasantrpg . We also have 
 articles about programming, technology, and video games, so check it
 out if you enjoy those things! ;)
 ----------------------------------------------------
@@ -41,12 +44,12 @@ How to play:
     SETUP:
     
         1. Find the folder named "Game Files"
-        2. Run the file named "PythoniusRPG.exe" in this folder
+        2. Run the file named "PeasantRPG.exe" in this folder
         3. Play the game
         
     PLAYING THE GAME:
     
-        Pythonius RPG is very simple. After creating a character,
+        Peasants' Ascension is very simple. After creating a character,
         you are placed on the world map with minimal equipment. 
         To use a command, type in the command and then hit 
         Enter (Windows) or Return (Mac OS X) to send it. 
@@ -63,27 +66,13 @@ How to play:
 ----------------------------------------------------
 What exactly is the plot for this game?
 
-    Starting in v0.6.1, Pythonius has an actual plot! The full
+    Starting in v0.6.1, Peasants' Ascension has an actual plot! The full
     backstory for the game can be read by selecting "Story"
     from the title screen. It's a pretty stereotypical 
     fantasy-RPG plotline, but I think it's kinda neat.
     Basically, the objective of the game is to retrieve a magical
-    stone from the Mountains of Pythonia and then use it to
+    stone from the Mountains of Harconia and then use it to
     save the King's daughter.
-----------------------------------------------------
-Why is the game named "Pythonius"?
-
-    The game, as you most likely know, is programmed entirely in
-    using the Python Programming Language. The name of the game
-    is simply "Python" with the letters "ius" appended to it.
-    When I was first making the game, I imagined that Pythonius
-    would be some sort of main-character. In v0.6.1, I finally
-    decided that Pythonius was a war general who helped Pythonia
-    rebel against the oppressive Flysconian Empire. Pythonius IS
-    a character in the game, but this character is actually
-    the war general's son, King Pythonius II. A more in-depth
-    description of these events can be read by selecting
-    "Story" from the title screen.
 ----------------------------------------------------
 What is the "Adventure Name"?
 
@@ -118,7 +107,7 @@ How to change the settings:
     located in the Game Files directory. It also defaults to playing all
     music/sound-effects at full volume. These can both be changed by 
     editing a set of variables in a file called "settings.cfg", located in
-    the "PythoniusRPG" folder. This file can be opened using a program like
+    the "Peasants' Ascension" folder. This file can be opened using a program like
     TextWrangler, Notepad++, or Sublime Text. Instructions on changing these
     are located in the file.
 ----------------------------------------------------

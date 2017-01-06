@@ -1,17 +1,17 @@
-# This file is part of PythoniusRPG.
+# This file is part of Peasants' Ascension.
 #
-# PythoniusRPG is free software: you can redistribute it and/or modify
+# Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    PythoniusRPG is distributed in the hope that it will be useful,
+#    Peasants' Ascension is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with PythoniusRPG.  If not, see <http://www.gnu.org/licenses/>.
+#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 import json
@@ -34,6 +34,7 @@ import text_scroll
 
 if __name__ == "__main__":
     sys.exit()
+
 else:
     main = sys.modules["__main__"]
 
@@ -204,17 +205,17 @@ class Quest(Conversation):
 
 # -- Name: Solou -- Town: Nearton
 solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
-                               "Well, the truth is that I'm actually a page for King Pythonius II,",
+                               "Well, the truth is that I'm actually a page for King Harconius II,",
                                "but my one dream is to become a master sorcerer! For the mean",
                                "time, I'm here delivering a letter to a person named...",
                                "Wait a minute, what did you say your name was? Ah, this letter is",
                                "for you! As it is sensitive information, I am required by law",
                                "to read it to you and then dispose of it permanently.",
                                "*Ahem*: ",
-                               '   "As captain of the 7th Platoon of the Pythonian Army, you',
+                               '   "As captain of the 7th Platoon of the Harconian Army, you',
                                "    are hereby entrusted with the following information and a",
                                "    mission. Princess Celeste, heiress to the throne and daughter",
-                               "    of His Majesty King Pythonius II, has been kidnapped by the",
+                               "    of His Majesty King Harconius II, has been kidnapped by the",
                                "    Thexus, a group of incredibly skilled and well-trained",
                                "    assassins from the island-nation of Thex. We know with 100%",
                                "    confidence her exact whereabouts, but the main issue is",
@@ -304,7 +305,7 @@ azura_phrase_2 = Conversation(["Hello, I'm Azura, leader of this town and head o
                                "that? Joseph of Charsulville sent you? Well in that case,",
                                "I suppose that I can take some time off from my duties to",
                                "speak to you. What is it that you need? ...I see. I know of",
-                               "a way to rescue King Pythonius II's daughter, as Joseph probably",
+                               "a way to rescue King Harconius II's daughter, as Joseph probably",
                                "told you. It's quite dangerous, however - none of the King's",
                                "men have survived the journey. Looking at you, however, I",
                                "see much potential. There is one problem, however: Our Kingdom",
@@ -893,9 +894,9 @@ def matthew_p4_at():
 matthew_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
                          "iSound MP3 player a witch - this is the fifth one I've gone through",
                          "this week! The company that makes them only sells them in Elysium, as",
-                         "nobody in Pythonia could tell an MP3 player from a brick if their life",
+                         "nobody in Harconia could tell an MP3 player from a brick if their life",
                          "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
-                         "train town near the border of Pythonia and Elysium, and buy me a new",
+                         "train town near the border of Harconia and Elysium, and buy me a new",
                          "iSound, I will reward you greatly. Remember: iSounds have watermelons",
                          "on the back. If you get one with a grapefruit, then you're just paying",
                          "a lot of money for a cheap knockoff brand. And definitely stay away",
@@ -1022,7 +1023,7 @@ pime = NPC('Pime', [pime_phrase_1, pime_phrase_2, pime_quest_1, pime_phrase_3, p
 
 # -- Name: Philliard -- Town: Nearton
 philliard_phrase_1 = Conversation(["Hello, adventurer!",
-                                   "Welcome to the Kingdom of Pythonia."], active=True)
+                                   "Welcome to the Kingdom of Harconia."], active=True)
 
 philliard = NPC('Philliard', [philliard_phrase_1], "Scribe")
 
@@ -1113,7 +1114,7 @@ f_jones = NPC('F. Jones', [f_jones_phrase_1], "King of Flyscoria")
 # -- Name: Stravi -- Town: New Ekanmar
 stravi_phrase_1 = Conversation(["Greetings, young traveller. I am Stravi, Queen of Flyscoria. My",
                                 "husband and I are on important business relating to the recent",
-                                "kidnapping of King Pythonius II's daughter, Celeste. Please",
+                                "kidnapping of King Harconius II's daughter, Celeste. Please",
                                 "return in a few weeks if you wish to speak to Fly and me.",
                                 "Oh, and whatever you do, do not under ANY circumstances mention",
                                 'the word "chandelier" to my husband. It makes him very',
