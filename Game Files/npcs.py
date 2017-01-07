@@ -1188,7 +1188,7 @@ bamdeliit_phrase_1 = Conversation(["Hello, sir! I'm Bamdeliit, the head engineer
                                    "I'm a native Elysian, and have only been here for around",
                                    "a year, so I'm pretty new to this place! Most of my",
                                    "time is spent making sure that these trains run properly.",
-                                   'By the way, do you know what "witch" means? Pythic isn\'t my',
+                                   'By the way, do you know what "witch" means? Hythic isn\'t my',
                                    'first language, and the townsfolk keep calling me that when',
                                    'I turn on the trains. Witch is a good thing, right?'
                                    ], active=True)
