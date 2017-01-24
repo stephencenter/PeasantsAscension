@@ -127,8 +127,7 @@ do_text_scroll = False
 
 class PlayableCharacter:
     # A class for characters whose input can be directly controlled by the player
-    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk,
-                 p_dfns, spd, evad, class_='', enabled=True):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
         self.name = name        # Name
         self.hp = hp            # Health
         self.mp = mp            # Mana Points
@@ -140,8 +139,8 @@ class PlayableCharacter:
         self.m_dfns = m_dfns    # Magic Defense
         self.spd = spd          # Speed
         self.evad = evad        # Evasion
-        self.enabled = enabled  # Whether the party member has been recruited or not
         self.class_ = class_    # Player Class
+        self.enabled = enabled  # Whether the party member has been recruited or not
 
         self.lvl = 1              # Level
         self.exp = 0              # Experience
@@ -251,17 +250,16 @@ class PlayableCharacter:
                     print()
                     break
 
-    def choose_class(self):
-        while True:
-            class_ = input("""{0}, which class would you like to train as?\n\
-      [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
-      [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
-      [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
-      [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers
-      [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
-      [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
-Input [#]: """.format(self.name))
-
+            def choose_class(self):
+                while True:
+                    class_ = input("""{0}, which class would you like to train as?\n\
+                  [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
+                  [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
+                  [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
+                  [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers
+                  [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
+                  [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
+            Input [#]: """.format(self.name))
             print()
             try:
                 class_ = {'1': "mage",

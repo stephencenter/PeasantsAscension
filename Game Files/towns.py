@@ -47,22 +47,18 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, x, y, inn=True, inn_cost=0,
-                 gen_store=True, gs_level=1, wtrmelon_store=False):
-
+    def __init__(self, name, desc, people, x, y, houses, inn_cost=0, gs_level=1, wtrmelon_store=False):
         self.name = name  # The town's name (i.e. New York City)
         self.desc = desc  # A brief description of the town
 
         self.x = x  # X-coordinate on map
         self.y = y  # Y-coordinate on map
 
-        self.people = people  # A list that contains the NPCs you can talk to
-
-        self.inn = inn  # If True, the town contains an inn
         self.inn_cost = inn_cost  # How much money it costs to sleep at the inn
-
-        self.gen_store = gen_store  # If True, the town contains a General Store
         self.gs_level = gs_level  # The higher this value is, the better the items the store will sell
+
+        self.people = people  # A list that contains the NPCs you can talk to
+        self.houses = houses  # A list that contains random buildings you can enter
 
         self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest
 
@@ -89,7 +85,7 @@ class Town:
 
                 elif choice == '2':
                     print('-'*25)
-                    if self.gen_store or self.inn or self.wtrmelon_store:
+                    if self.gs_level != -1 or self.inn_cost != -1 or self.wtrmelon_store:
                         self.inside_town()
 
                     else:
@@ -124,7 +120,7 @@ class Town:
                         target = main.player
 
                     else:
-                        print("Select Character:")
+                        print("Select Party Member:")
                         print("     ", "\n      ".join(
                             ["[{0}] {1}".format(int(num) + 1, character.name)
                              for num, character in enumerate(target_options)]))
@@ -194,67 +190,56 @@ class Town:
             return spam
 
     def inside_town(self):
-        gen_words = ['g']
-        inn_words = ['i']
-        watermelon_words = ['w']
+        town_words = ['i', 'g', 'u']
+        watermelon_words = ['w', 'u']
         buildings = []
+
         while True:
             spam = False
-            # (if anyone knows how to simplify this, please tell me!)
-            if self.inn and not self.gen_store:
-                print('There is an [I]nn in this town.')
-                buildings = inn_words
 
-            elif self.gen_store and not self.inn:
-                print('There is a [G]eneral Store in this town.')
-                buildings = gen_words
+            if self.wtrmelon_store:
+                print('There is a [W]atermelon store, as well as {0} [U]nlocked houses in this town.'.format(
+                    len(self.houses)))
 
-            elif self.gen_store and self.inn:
-                print('There is a [G]eneral Store and an [I]nn in this town.')
-                buildings = gen_words[:]
-                buildings.extend(inn_words)
-
-            elif self.wtrmelon_store:
-                print('There is a... [W]atermelon store? Why is there a store \
-specifically for one fruit?')
                 buildings = watermelon_words
 
-            if buildings:
-                while not spam:
-                    selected = input(
-                        'What building will you enter? | Input [Letter] (or type "exit"): ')
+            else:
+                print('There is a [G]eneral Store, an [I]nn, and {0} [U]nlocked houses in this town.'.format(
+                    len(self.houses)))
 
-                    selected = selected.lower()
+                buildings = town_words
 
-                    if any(map(selected.startswith, buildings)):
-                        pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
-                        pygame.mixer.music.play(-1)
-                        pygame.mixer.music.set_volume(main.music_vol)
+            while not spam:
+                selected = input('What building will you enter? | Input [Letter] (or type "exit"): ')
+                selected = selected.lower()
 
-                        if selected.startswith('g'):
-                            self.town_gen()
-                        elif selected.startswith('i'):
-                            self.town_inn()
-                        elif selected.startswith('w'):
-                            self.watermelon()
-                        else:
-                            self.town_pet()
+                if any(map(selected.startswith, buildings)):
+                    pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
+                    pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(main.music_vol)
 
-                        print('-'*25)
+                    if selected.startswith('g'):
+                        self.town_gen()
 
-                        pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
-                        pygame.mixer.music.play(-1)
-                        pygame.mixer.music.set_volume(main.music_vol)
+                    if selected.startswith('i'):
+                        self.town_inn()
 
-                        spam = True
+                    if selected.startswith('w'):
+                        self.watermelon()
 
-                    elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                        return
+                    print('-'*25)
+
+                    pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
+                    pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(main.music_vol)
+
+                    spam = True
+
+                elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    return
 
     @staticmethod
     def watermelon():
-        # Admittedly, this was just an excuse to be able to complain about how much I dislike
-        # Apple Inc.
         print('-'*25)
         for sentence in [
             'Greetings, sir! Welcome to the Watermelon Inc. Store! We sell the latest',
@@ -262,66 +247,46 @@ specifically for one fruit?')
             'popular: the iSound! The latest one is our thinnest yet, at slightly less',
             'than a micrometer thick! What purpose does that serve, you ask? No clue,',
             'I just sell the stuff. So, what will it be?'
-        ]:  # They focus to much on the thickness and size of the phones, and not enough
-            # on important things like battery life, reliability, and computing power.
-            # I would personally pay quite a bit for an iPhone that has the same processing
-            # power as the iPhone 6, but with 2-3 times the battery life.
+        ]:
 
             input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
-        print('-'*25)
 
+        print('-'*25)
         print('You understood absolutely none of what he said, but you get the feeling')
         input('that he wants you to buy something. | Press enter/return ')
         print('-'*25)
 
-        while True:  # That's right, I used scientific notation. That's how serious I am.
+        while True:
             print('You have {0} GP'.format(main.party_info['gp']))
-            print("""\
-      [1] iSheet ---------> 6.5 x 10^96 GP
-      [2] uPhone ---------> 6.4 x 10^93 GP
-      [3] iSound ---------> 250 GP
-      [4] wePad ----------> 7.8 x 10^93 GP
-      [5] iListen --------> 6.2 x 10^94 GP
-      [6] Watermelon TV --> 4.6 x 10^93 GP
-      [7] iPrunes --------> 9.5 x 10^87 GP
-      [8] Papaya Phone ---> 10 GP""")
+            print("""
+      [1] iSheet ---------> 1000000 GP
+      [2] uPhone ---------> 1000000 GP
+      [3] wePad ----------> 1000000 GP
+      [4] iListen --------> 1000000 GP
+      [5] Watermelon TV --> 1000000 GP
+      [6] iSheet Mini ----> 1000000 GP
+      [7] iSound ---------> 250 GP""")
+
             spam = True
             while spam:
                 choice = input('Input [#] (or type "exit") ')
 
                 try:
                     choice = int(choice)
+
                 except ValueError:
                     if choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
 
-                if choice in range(1, 3) or choice in range(4, 8):  # They're expensive...
+                if choice in [1, 2, 3, 4, 5, 6]:
                     print('-'*25)
-                    input('Salesman: \
-Yeah right, as if you actually have that much money | [ENTER] ')
-                    print('-'*25)
-                    break
-
-                elif choice == 8:
-                    # ALL the apps have DRM, and it's difficult to bypass
-                    # their rules and download apps from places
-                    # other than the appstore
-
-                    print('-'*25)
-                    input("Salesman: Ha, that was a joke! Those phones don't have DRM, \
-we'd never sell that! | [ENTER] ")
+                    input('Salesman: Yeah right, as if you actually have that much money | [ENTER] ')
                     print('-'*25)
 
                     break
 
-                elif choice == 3:
+                elif choice == 7:
                     print('-'*25)
-                    for sentence in [
-                        "Are you sure you want to buy an iSound? It's expensive, and all",
-                        "of the apps we make for it will be incompatible within a year."
-                    ]:      # I bought an iPod 4th gen and pretty much every app was
-                            # incompatible with it within a year. That's just stupid.
-                        input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
 
                     while True:
                         y_n = input("Do you want to buy an iSound for 250 GP? | Yes or No: ")
@@ -329,30 +294,28 @@ we'd never sell that! | [ENTER] ")
                         if y_n.lower().startswith("y") and main.party_info['gp'] >= 250:
                             print('-'*25)
                             input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
-                            input('It has been added to the Quest Items page of your inventory | \
-[ENTER] ')
+                            input('It has been added to the Quest Items page of your inventory | [ENTER] ')
                             print('-'*25)
-                            input('Salesman: Thank you for your time, and especially for \
-your money! | [ENTER] ')
+                            input('Salesman: Thank you, come back again!" | [ENTER] ')
+                            print('-'*25)
 
                             main.party_info['gp'] -= 250
                             inv_system.inventory['q_items'].append(copy.copy(items.iSound))
                             spam = False
-                            print('-'*25)
 
                             break
 
                         elif y_n.lower().startswith("y") and main.miscvars['gp'] < 250:
-                            # The "cheap" iPhone 5C is still kinda stupidly expensive
                             print('-'*25)
-                            input('Hey, you don\'t even have enough money for our "cheap" \
-model! | [ENTER]')
+                            input('Salesman: "Hey, you don\'t have enough money for that!" | [ENTER]')
                             print('-'*25)
+
                             break
 
                         elif y_n.lower().startswith("n"):
-                            spam = False
                             print('-'*25)
+                            spam = False
+
                             break
 
     def town_inn(self):
@@ -386,6 +349,7 @@ model! | [ENTER]')
                         main.parsto,
                         main.adorine
                     ]:
+
                         character.hp = copy.copy(character.max_hp)
                         character.mp = copy.copy(character.max_mp)
                         character.status_ail = "none"
@@ -650,10 +614,8 @@ Press enter/return ".format(vis_cat))
 
 
 class StairwayToAethus(Town):
-    def __init__(self, name, desc, people, x, y, inn=False, inn_cost=0,
-                 gen_store=False, gs_level=1):
-        Town.__init__(self, name, desc, people, x, y, inn, inn_cost,
-                      gen_store, gs_level)
+    def __init__(self, name, desc, people, x, y):
+        Town.__init__(self, name, desc, people, x, y, [])
 
     def town_choice(self):
         pygame.mixer.music.load('Music/CopperNickel.ogg')
@@ -718,10 +680,8 @@ you finally arrive at the top | Press enter/return ")
 
 
 class StairwayFromAethus(Town):
-    def __init__(self, name, desc, people, x, y, inn=False, inn_cost=0,
-                 gen_store=False, gs_level=1):
-        Town.__init__(self, name, desc, people, x, y, inn, inn_cost,
-                      gen_store, gs_level)
+    def __init__(self, name, desc, people, x, y):
+        Town.__init__(self, name, desc, people, x, y, [])
 
     def town_choice(self):
         pygame.mixer.music.load('Music/CopperNickel.ogg')
@@ -845,20 +805,37 @@ class Tavern:
                 return
 
 
+class House:
+    def __init__(self, owner, height, width, chests):
+        self.owner = owner
+        self.height = height
+        self.width = width
+        self.chests = chests
+
+
+class Chest:
+    def __init__(self, contents, difficulty, chest_id):
+        self.contents = contents
+        self.difficulty = difficulty
+        self.chest_id = chest_id
+
+
+# AETHUS TRANSPORTS
+to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
+to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
+
 # OVERWORLD TOWNS
-town1 = Town('Nearton', """Nearton: A small village in the central region of t\
-he Forest.
+town1 = Town('Nearton', """Nearton: A small village in the central region of the Forest.
 It is in this very town where numerous brave adventurers have begun
 their journey. Nearton has a general store, an inn, and a few small houses.
 An old man is standing near one of the houses, and appears to be very
-troubled about something.""", [npcs.philliard, npcs.alfred,
-                               npcs.sondalar, npcs.saar, npcs.npc_solou], 0, 1)
+troubled about something.""",
+             [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou], 0, 1, [])
 
-town2 = Town('Southford', """Southford: A fair-size town in the central-southe\
-rn region of the Forest.
+town2 = Town('Southford', """Southford: A fair-size town in the central-southern region of the Forest.
 The inhabitants of this town are known for being quite wise, and may
 provide you with helpful advice.""",
-             [npcs.wesley, npcs.lazaro], -2, -6, inn_cost=2)
+             [npcs.wesley, npcs.lazaro], -2, -6, [], inn_cost=2)
 
 town3 = Town('Overshire', """Overshire: A city in the northwestern region of the Forest.
 Overshire is the capital of Harconia, and as such is very densely populated.
@@ -868,47 +845,47 @@ outer portion comprised of smalls buildings and huts, and a middle-class
 section situated in between. As an outsider, you are forbidden to enter the
 upper two, but are welcome to do as you wish in the lower.""",
              [npcs.stewson, npcs.jeffery, npcs.harthos, npcs.typhen],
-             -11, 13, inn_cost=5, gs_level=2)
+             -11, 13, [], inn_cost=5, gs_level=2)
 
 town4 = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.joseph],
-             19, -7, inn_cost=2, gs_level=2)
+             19, -7, [], inn_cost=2, gs_level=2)
 
 town5 = Town('Fort Sigil', """Fort Sigil: A small village in the northern region
 of the Forest. The citizens of this town have worked tremendously hard to
 convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
-visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh],
-             2, 22, gs_level=3)
+visitors. Perhaps there's a reason...""",
+             [npcs.seriph, npcs.rivesh], 2, 22, [], gs_level=3)
 
 town6 = Town('Tripton', """Tripton: When the town of Tripton was being built,
 the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
-two towns, particularly between the village leaders.""", [npcs.kyle],
-             -10, -24, inn_cost=3, gs_level=3)
+two towns, particularly between the village leaders.""",
+             [npcs.kyle], -10, -24, [], inn_cost=3, gs_level=3)
 
 town7 = Town('Fallville', """Fallville: When the town of Tripton was being built,
 the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
-two towns, particularly between the village leaders.""", [npcs.krystal, npcs.frederick],
-             -12, -23, gs_level=2)
+two towns, particularly between the village leaders.""",
+             [npcs.krystin, npcs.frederick], -12, -23, [], gs_level=2)
 
 town8 = Town('Parceon', """Parceon: A highly populated town renown for it's rich
 magical background. Parceon is home to the famous Sorcerers' Guild,
 a group of unbelievably skilled and wise mages. The head of the guild,
 Azura, lives in a large tower in the southwest side of the town.""",
-             [npcs.azura], 28, 24, gs_level=3)
+             [npcs.azura], 28, 24, [], gs_level=3)
 
 town9 = Town('Sardooth', """Sardooth: A ghost town. There has not been a single
 permanent inhabitant of this town for more than 75 years. It is completely
 run down, with most of the buildings having been destroyed in the Harconian
 Revolution. While this town may seem interesting and historic, there is nothing
 of value here.""",
-             [], -25, 29, inn=False, gen_store=False)
+             [], -25, 29, [])
 
 town10 = Town('Principalia', """Principalia: Principalia is the home of
 King Harconius II. The main attraction here is the Pytheror Building, a
@@ -922,7 +899,7 @@ and the cottage is surrounded by a ring of 12 archer towers, each with
 100 yards from the cottage. In addition, there are numerous guards
 standing watch all around the building. One guard happens to catch
 your attention - probably because she just screamed "HALT!" at you.""",
-              [npcs.sakura], -44, 20, gen_store=False, inn=False)
+              [npcs.sakura], -44, 20, [])
 
 town11 = Town('New Ekanmar', """New Ekanmar: The home of the Flyscorian Embassy in
 Harconia. Prior to the Harconian Revolution, this town was the location of
@@ -932,7 +909,7 @@ After the war, the citizens gave up their weapons and became a peaceful town.
 The vast majority of the inhabitants of this town are, naturally, Flyscors.
 It seems that the Flyscorian Royal Family is visiting here - perhaps you can
 talk with them for a bit.""",
-              [npcs.f_jones, npcs.stravi, npcs.caesar], 3, 39, gs_level=3)
+              [npcs.f_jones, npcs.stravi, npcs.caesar], 3, 39, [], gs_level=3)
 
 town12 = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
 home to dozens upon dozens of different flora and fauna. Naturally,
@@ -942,7 +919,7 @@ section of the Sorcerers' Guild. Vegetation grows on almost
 every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""",
-              [npcs.strathius], -30, -39, gs_level=3)
+              [npcs.strathius], -30, -39, [], gs_level=3)
 
 town13 = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
 located in the Terrius Mt. Range. The Chin'toric embassy can be found
@@ -950,7 +927,7 @@ in the middle of this town surrounded by large stone walls and a few
 guard-towers. Sugulat, the King of Chin'tor, can often be found mining
 on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
-              [npcs.raidon, npcs.sugulat], -51, 7, gs_level=4, inn_cost=15)
+              [npcs.raidon, npcs.sugulat], -51, 7, [], gs_level=4, inn_cost=15)
 
 town14 = Town('Whistumn', """Whistumn: An ancient city situated on the border
 between the Arcadian Desert and the Central Forest. The inhabitants of this town
@@ -959,8 +936,7 @@ skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
 on the steps of the general store.""",
-              [npcs.polmor, npcs.serena], 52, 12, gs_level=4,
-              inn_cost=13)
+              [npcs.polmor, npcs.serena], 52, 12, [], gs_level=4, inn_cost=13)
 
 town15 = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Harconia
 that still has cases of "Hatchnuk's Blight", a plague-like disease that
@@ -972,7 +948,7 @@ is far too great for people to be walking out in the open doing business togethe
 As a result, there are no buildings that you are able to enter, and no people to talk
 to. The only people who are around to speak to are the guards, but their plague-doctor-esque
 apparel and stern looks make it clear that they are not in the mood for chit-chat.""",
-              [], 63, 17, gen_store=False, inn=False)
+              [], 63, 17, [])
 
 town16 = Town("Cesura", """Cesura: A town of great historical significance.
 This town was named after King Cesura I, the war general during the Harconian Civil War
@@ -985,7 +961,7 @@ station. Construction of the town of Cesura was outsourced to Elysium, who is
 the most technologically advanced civilization on the planet by far, having
 developed and perfected the Steam Engine and later the Train before the year
 1300 A.D.""",
-              [npcs.bamdeliit], 58, 123, gen_store=False, inn=False, wtrmelon_store=True)
+              [npcs.bamdeliit], 58, 123, [], wtrmelon_store=True)
 
 town17 = Town("Sanguion", """Sanguion: Sanguion is a save-haven for vampires. Vampires
 are feared throughout Harconia, so this fairly unknown town is the only place they
@@ -994,34 +970,32 @@ actually refuse to drink the blood of intelligent lifeforms. As a matter of fact
 non-vampires who are afraid of vampires are actually more of a threat to civilization
 than the actual vampires are! They look very friendly, although a few of them do look
 quite scared for some reason. Perhaps you should investigate.""",
-              [npcs.pime, npcs.ariver], -96, -67, gs_level=5, inn_cost=18)
+              [npcs.pime, npcs.ariver], -96, -67, [], gs_level=5, inn_cost=18)
 
 town18 = Town("Lamtonum", """Lantonum: Lantonum is a small town that has the best
 forge in all of Arcadia. Nearly 2/3s of all citizens of this town are
 experienced blacksmiths, and 90% of all ores and minerals mined
 in Chin'tor or Ambercreek are brought here. It is one of the wealthiest
 cities in all of the desert region due to its Mythril, Magestite, and
-Necrite bar exports.""", [npcs.matthew],
-              72, 69, gs_level=4)
+Necrite bar exports.""",
+              [npcs.matthew], 72, 69, [], gs_level=4)
 
 town19 = Town("Capwild", """Capwild: Capwild is a medium sized town situated in the
 Terrius Mt. Range. Capwild is a supplier of grains and herbs for the entire region,
 and makes extensive use of terrace farming to make up for the lack of arable land.""",
-              [], -76, 56, gs_level=5, inn_cost=15)
+              [], -76, 56, [], gs_level=5, inn_cost=15)
 
 town20 = Town("Rymn Outpost", """Rymn Outpost: Rymn Outpost is one of the several
 small villages established after the Thexian Incursion. All of the residents of this town
 are soldiers or family members of soldiers, with the exception a few merchants. Rymn Outpost
 is named after Rymnes, the Divinic gods of defense.""",
-              [], 47, -99, gs_level=5, inn_cost=17)
+              [], 47, -99, [], gs_level=5, inn_cost=17)
 
-small_house1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
+cottage1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
 flock in a small pasture behind the building. There doesn't appear
-be any other people near here.""", [npcs.alden],
-                    -12, -26, inn=False, gen_store=False)
-
-to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
+be any other people near here.""",
+                [npcs.alden], -12, -26, [], gs_level=-1, inn_cost=-1)
 
 # AETHUS TOWNS
 a_town1 = Town("Valenfall", """Not much is known about the ancient city of Valenfall.
@@ -1029,9 +1003,7 @@ It's inhabitants claim that it was lifted up from the mainland several millenia 
 by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
 all of the surrounding land of Aethus around it. Valenfall is deeply intertwined with
 nature, and monuments depicting the nature deities can be seen on every corner.
-""", [npcs.fitzgerald], 5, 12, inn_cost=2, gs_level=4)
-
-to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
+""", [npcs.fitzgerald], 5, 12, [], inn_cost=2, gs_level=4)
 
 # OVERWORLD TAVERNS
 tavern1 = Tavern("The Traveling Merchant Inn", 5, 7, 0)
@@ -1050,7 +1022,7 @@ tavern12 = Tavern("The Painted Bard Inn", -118, 5, 15)
 town_list = [town1, town2, town3, town4, town5, town6, town7,
              town8, town9, town10, town11, town12, town13, town14,
              town15, town16, town17, town18, town19, town20,
-             small_house1, to_aethus]
+             cottage1, to_aethus]
 
 tavern_list = [tavern1, tavern2, tavern3, tavern4, tavern5, tavern6,
                tavern7, tavern8, tavern9, tavern10, tavern11, tavern12]

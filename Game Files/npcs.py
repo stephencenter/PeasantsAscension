@@ -552,7 +552,7 @@ def kyle_p3_at():
 
     kyle_phrase_3.active = False
     kyle_phrase_4.active = True
-    if krystal_phrase_4.active:
+    if krystin_phrase_4.active:
         alden_quest_1.finished = True
         alden_phrase_2.active = False
 
@@ -564,42 +564,42 @@ kyle_phrase_4 = Conversation(["Welcome, adventurer, to the town of Tripton!"])
 kyle = NPC('Kyle', [kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4], "Village Elder")
 
 
-# -- Name: Krystal -- Town: Fallville
-krystal_phrase_1 = Conversation(["Hello, I am the Village Elder of Fallville. We don't take",
+# -- Name: Krystin -- Town: Fallville
+krystin_phrase_1 = Conversation(["Hello, I am the Village Elder of Fallville. We don't take",
                                  "kindly to Triptonians around here, so tell us if",
                                  "you see any. What I don't understand is that the",
                                  "silly Triptonians blame us for their poor eyesight.",
                                  "It's all their fault, and they know it!"], active=True)
 
-krystal_phrase_2 = Conversation(["AHHH! Help! There's a m-m-monster out there!",
+krystin_phrase_2 = Conversation(["AHHH! Help! There's a m-m-monster out there!",
                                  "Someone go kill it! AHHH!"])
 
-krystal_phrase_3 = Conversation(["What, the monster is dead? Thank goodness!",
+krystin_phrase_3 = Conversation(["What, the monster is dead? Thank goodness!",
                                  "Oh, so the Triptonians killed it? Well then... I",
                                  "guess that we owe them our gratitude. Perhaps we",
                                  "should think about negotiating peace..."])
 
 
-def krystal_p3_at():
-    # Stands for "Krystal Phrase 3: After Talking"
-    global krystal_phrase_3
-    global krystal_phrase_4
+def krystin_p3_at():
+    # Stands for "Krystin Phrase 3: After Talking"
+    global krystin_phrase_3
+    global krystin_phrase_4
     global alden_quest_1
     global alden_phrase_2
 
-    krystal_phrase_3.active = False
-    krystal_phrase_4.active = True
+    krystin_phrase_3.active = False
+    krystin_phrase_4.active = True
     if kyle_phrase_4.active:
         alden_quest_1.finished = True
         alden_phrase_2.active = False
 
 
-krystal_phrase_3.after_talking = krystal_p3_at
+krystin_phrase_3.after_talking = krystin_p3_at
 
-krystal_phrase_4 = Conversation(["Greetings, hero! Welcome to Fallville."])
+krystin_phrase_4 = Conversation(["Greetings, hero! Welcome to Fallville."])
 
-krystal = NPC('Krystal', [krystal_phrase_1, krystal_phrase_2,
-                          krystal_phrase_3, krystal_phrase_4], "Village Elder")
+krystin = NPC('Krystin', [krystin_phrase_1, krystin_phrase_2,
+                          krystin_phrase_3, krystin_phrase_4], "Village Elder")
 
 
 # -- Name: Frederick -- Town: Fallville
@@ -643,17 +643,17 @@ alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of t
 
 def aldqst_us1():
     global alden_phrase_1
-    global krystal_phrase_1
+    global krystin_phrase_1
     global kyle_phrase_1
-    global krystal_phrase_2
+    global krystin_phrase_2
     global kyle_phrase_2
     global frederick_phrase_1
     global frederick_phrase_2
 
     alden_phrase_1.active = True
-    krystal_phrase_1.active = False
+    krystin_phrase_1.active = False
     kyle_phrase_1.active = False
-    krystal_phrase_2.active = True
+    krystin_phrase_2.active = True
     kyle_phrase_2.active = True
     frederick_phrase_1.active = False
     frederick_phrase_2.active = True
@@ -1227,7 +1227,7 @@ all_dialogue = [
 
     kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4,
 
-    krystal_phrase_1, krystal_phrase_2, krystal_phrase_3, krystal_phrase_4,
+    krystin_phrase_1, krystin_phrase_2, krystin_phrase_3, krystin_phrase_4,
 
     frederick_phrase_1, frederick_phrase_2, frederick_phrase_3,
 
