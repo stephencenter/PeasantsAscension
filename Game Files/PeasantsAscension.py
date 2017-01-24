@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # Peasants' Ascension v0.7 Alpha
 game_version = 'v0.7'
-# -----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 #   This file is part of Peasants' Ascension.
 #
-#	 Peasants' Ascension is free software: you can redistribute it and/or modify
+#    Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -16,13 +16,13 @@ game_version = 'v0.7'
 #
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
-#-----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
-#-----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 # Contact me via Twitter (@TheFrozenMawile) or email (ninjafurret@gmail.com)
 # for questions/feedback. My website is http://rbwnjafurret.com/
-#-----------------------------------------------------------------------------#
+# --------------------------------------------------------------------------- #
 # Notes for people reading this code:
 #  1. print('-'*25) <-- This line appears constantly in my code. It's purpose
 #     is to enhance readability and organization for people playing the game.
@@ -35,13 +35,7 @@ game_version = 'v0.7'
 #     email the error code to me. If you could provide a description of what
 #     you did to cause the bug, that'd be great. Contact information is near
 #     the top of the module.
-#-----------------------------------------------------------------------------#
-
-# A dictionary containing all information related to the player's position
-party_info = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
-              'reg_music': 'Music/Through the Forest.ogg',
-              'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False,
-              'gp': 20, 'visited_towns': [], 'reg_msg': ''}
+# --------------------------------------------------------------------------- #
 
 import sys
 import os
@@ -82,7 +76,7 @@ import ascii_art
 logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
 logging.debug("Game run")
 
-# Set up Pygame audio
+# Setup Pygame audio
 pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
@@ -109,20 +103,35 @@ sav_ran_af_stats = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's
 sav_parsto_stats = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
 sav_adorine_stats = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
 
-# NOTE 1: The save file locations can be changed in the file "settings.cfg".
+# The volume of the game, on a scale from 0 (muted) to 1.0 (loudest). Can be changed in the settings.cfg file.
+music_vol = 1.0
+sound_vol = 1.0
 
-# NOTE 2: If one of these files is missing, the entire game won't work,
-# and as such will not be recognized as a save file anymore.
-
-# NOTE 3: It is entirely possible (and actually very easy) to modify these
-# save files to change your character's stats, items, etc. However, it CAN also
-# cause the file to become corrupted if it is done incorrectly, so backup your
-# files before doing so.
-
-music_vol = 1.0  # The volume of the game, on a scale from 0 (muted) to 1.0 (loudest)
-sound_vol = 1.0  # These values can be changed in the settings.cfg file
-
+# If enabled, text will appear on screen character-by-character instead of all at once.
 do_text_scroll = False
+
+# A dictionary containing generic information about the player's party
+party_info = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
+              'reg_music': 'Music/Through the Forest.ogg',
+              'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False,
+              'gp': 20, 'visited_towns': [], 'reg_msg': ''}
+
+# This text is displayed when you start the game
+title_logo = """
+  ____                            _       _
+ |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
+ | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
+ |  __/  __/ (_| \__ \ (_| | | | | |_\__ \\
+ |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
+         _                           _
+        / \   ___  ___ ___ _ __  ___(_) ___  _ __
+       / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
+      / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
+     /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
+Peasants' Ascension v0.7 -- Programmed in Python by Stephen Center (TheFrozenMawile)
+Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
+Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
+------------------------------------------------------------------------------"""
 
 
 class PlayableCharacter:
@@ -1377,25 +1386,6 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
         parsto.__dict__ = json.load(f)
 
 
-# This is the logo that's displayed on the titlescreen
-title_logo = """\
-  ____                            _       _
- |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
- | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
- |  __/  __/ (_| \__ \ (_| | | | | |_\__ \\
- |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
-         _                           _
-        / \   ___  ___ ___ _ __  ___(_) ___  _ __
-       / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
-      / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
-     /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-Peasants' Ascension {0} -- Programmed in Python by Stephen Center (TheFrozenMawile)
-Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
-Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
-------------------------------------------------------------------------------""".format(
-    game_version)
-
-
 def title_screen():
     pygame.mixer.music.load('Music/Prologue.ogg')
     pygame.mixer.music.play(-1)
@@ -1421,9 +1411,7 @@ def title_screen():
                 pygame.mixer.music.set_volume(music_vol)
 
                 # Display the credits one line at a time with specific lengths
-                # of time in between each line.
-                # These periods of time line up with the music that should be playing
-                # at the specific time.
+                # of time in between each line. Syncs up with the music!
                 with open('../Credits.txt') as f:
                     for number, f.readline in enumerate(f):
                         print(''.join(f.readline.rstrip("\n").split(";")))
@@ -1529,12 +1517,10 @@ def title_screen():
             sys.exit()
 
 
-# Configure the properties of the command prompt so that everything fits/looks right
 def set_prompt_properties():
+    # Configure the properties of the command prompt so that everything fits/looks right
 
-    # Calculate the screen size of the player
-    screensize = ctypes.windll.user32.GetSystemMetrics(0),\
-        ctypes.windll.user32.GetSystemMetrics(1)
+    screensize = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1)
 
     class Coord(ctypes.Structure):
         _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]

@@ -113,11 +113,10 @@ How to change the settings:
 ----------------------------------------------------
 Credits:
 
-    Programmed by RbwNjaFurret
-	Ideas & Bug-testing by Starkiller106024, Flygon_Jones, and WaVe Vex
+    Programmed by TheFrozenMawile
+    Ideas & Bug-testing by Starkiller106024, Apollo Kalar, and Vexal
     Music by Eric Skiff, Ben Landis, and some others
-    Artwork by WaVe Vex
-    Sound FX by RbwNjaFurret and Flygon_Jones
+    Sound FX by TheFrozenMawile and Apollo Kalar
     
     Full credits can be found in Credits.txt
 ----------------------------------------------------
@@ -131,19 +130,3 @@ Music:
     
     These composers are very talented, and I'd highly recommend
     you listen to more of their work!
-----------------------------------------------------
-As of v0.6.5, there are:
-    27 NPCs
-    8 Quests
-    67 Unique Conversations
-    19 Towns
-    1 Cottage
-    2 Staircases
-    7 Bosses
-    152 Items
-	4 Player Classes
-	50 Spells
-	8 Regions
-	9 Pets
-	41 Different Monster Varieties
-	16 Gems
