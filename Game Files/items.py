@@ -263,16 +263,6 @@ class ElementAccessory(Accessory):
             user.name, self.name, self.element))
 
 
-class ImmunityAccessory(Accessory):
-    # Grants the player immunity to a certain status ailment
-    pass
-
-
-class TradeOffAccessory(Accessory):
-    # Doubles one stat, but halves another
-    pass
-
-
 # -- TOOLS -- #
 class MagicCompass(Item):
     def __init__(self, name, desc, buy, sell, ascart='Compass', cat='misc', imp=True):
@@ -723,7 +713,7 @@ paralyzation_potion = StatusPotion('Potion of Inducing Motion',
 
 # Fists
 fists = Weapon('Fists',
-               """Nothing beats good ol' fashioned hand-to-hand combat (+0 Attack)""",
+               """Nothing beats good ol' fashioned hand-to-hand combat (No damage bonus)""",
                0, 0, 0, 'melee', 'none', 'Fists')
                # Fists exist to prevent bugs caused by not having any
                # weapon equipped.
@@ -800,8 +790,7 @@ en_lng_bow = Weapon('Enhanced Long Bow',
                     350, 125, 0.6, 'ranged', 'ranger', 'Bow')
 
 ash_cbow = Weapon('Ashen Crossbow',
-                  'A beautifully-crafted crossbow made from the wood\
-of an ash tree. (+80% Damage)',
+                  'A beautifully-crafted crossbow made from the wood of an ash tree. (+80% Damage)',
                   500, 225, 0.8, 'ranged', 'ranger', 'Crossbow')
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
                      'An enhanced version of your typical Ashen Crossbow (+100% Damage)',
@@ -882,8 +871,7 @@ lead_bg = Weapon('Lead-Weighted Boxing Gloves',
 not allowed in standard matches (+80% Damage)',
                  500, 225, 0.8, 'melee', 'monk', 'Gloves')
 en_lead_bg = Weapon('Enhanced Lead Gloves',
-                    'An enhanced version of your typical \
-Lead-Weighted Boxing Gloves (+100% Damage)',
+                    'An enhanced version of your typical Lead-Weighted Boxing Gloves (+100% Damage)',
                     750, 325, 1, 'melee', 'monk', 'Gloves')
 
 # Starting Armor (Useless)
@@ -1091,71 +1079,52 @@ lightning_dagger = Weapon('Lightning Dagger',
 flows through the edge (+60% Damage, ELECTRIC)',
                           0, 450, 0.6, 'melee', 'assassin', 'Dagger', element='electric')
 
-# forksbane = Weapon('Forksbane')
-
 # Accessories
 # -- Elemental Accessories
-water_amulet = ElementAccessory('Aquatic Amulet',
-                                'An amulet that imbues its wearer with the power of WATER',
+water_amulet = ElementAccessory('Aquatic Amulet', 'An amulet that imbues its wearer with the power of WATER',
                                 250, 75, 'Water')
-fire_amulet = ElementAccessory('Infernal Amulet',
-                               'An amulet that imbues its wearer with the power of FIRE',
+fire_amulet = ElementAccessory('Infernal Amulet', 'An amulet that imbues its wearer with the power of FIRE',
                                250, 75, 'Fire')
-earth_amulet = ElementAccessory('Ground Amulet',
-                                'An amulet that imbues its wearer with the power of EARTH',
+earth_amulet = ElementAccessory('Ground Amulet', 'An amulet that imbues its wearer with the power of EARTH',
                                 250, 75, 'Earth')
-electric_amulet = ElementAccessory('Galvanic Amulet',
-                                   'An amulet that imbues its wearer with the power of ELECTRICITY',
+electric_amulet = ElementAccessory('Galvanic Amulet', 'An amulet that imbues its wearer with the power of ELECTRICITY',
                                    250, 75, 'Electric')
-wind_amulet = ElementAccessory('Tempestuous Amulet',
-                               'An amulet that imbues its wearer with the power of WIND',
+wind_amulet = ElementAccessory('Tempestuous Amulet', 'An amulet that imbues its wearer with the power of WIND',
                                250, 75, 'Wind')
-grass_amulet = ElementAccessory('Verdant Amulet',
-                                'An amulet that imbues its wearer with the power of GRASS',
+grass_amulet = ElementAccessory('Verdant Amulet', 'An amulet that imbues its wearer with the power of GRASS',
                                 250, 75, 'Grass')
-ice_amulet = ElementAccessory('Glacial Amulet',
-                              'An amulet that imbues its wearer with the power of ICE',
+ice_amulet = ElementAccessory('Glacial Amulet', 'An amulet that imbues its wearer with the power of ICE',
                               250, 75, 'Ice')
-life_amulet = ElementAccessory('Living Amulet',
-                               'An amulet that imbues its wearer with the power of LIFE',
+life_amulet = ElementAccessory('Living Amulet', 'An amulet that imbues its wearer with the power of LIFE',
                                250, 75, 'Life')
-death_amulet = ElementAccessory('Necrotic Amulet',
-                                'An amulet that imbues its wearer with the power of DEATH',
+death_amulet = ElementAccessory('Necrotic Amulet', 'An amulet that imbues its wearer with the power of DEATH',
                                 250, 75, 'Death')
 
 # Quest items
-message_joseph = Misc('Message from Joseph',
-                      'A neatly written message addressed to Philliard.',
+message_joseph = Misc('Message from Joseph', 'A neatly written message addressed to Philliard.',
                       0, 0, cat='q_items', imp=True)
-message_philliard = Misc('Message from Philliard',
-                         'A neatly written message addressed to Joseph.',
+
+message_philliard = Misc('Message from Philliard', 'A neatly written message addressed to Joseph.',
                          0, 0, cat='q_items', imp=True)
 
-iSound = Misc('iSound',
-              "You can't even begin to imagine how one would go about using this.",
+iSound = Misc('iSound', "You can't even begin to imagine how one would go about using this.",
               250, 75, cat='q_items', imp=False)
-    # Alternate description: Pythonia has no internet access, no electricity, and no radio.
-    # What's the point of having this again?
 
 
 # Gems & Valuables
 pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
                      0, 175, 119, -121)
-    # Alternate Description: Impossible to read, but will sell for money nonetheless
 
 ruby_gem = Valuable('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
-                    0, 175, -62, -84)  # better_than_perl=True
+                    0, 175, -62, -84)
 
-sapphire_gem = Valuable('Sapphire',
-                        'A valuable sapphire. This could probably be sold for quite a bit.',
+sapphire_gem = Valuable('Sapphire', 'A valuable sapphire. This could probably be sold for quite a bit.',
                         0, 175, -78, 102)
 
-emerald_gem = Valuable('Emerald',
-                       'A valuable emerald. This could probably be sold for quite a bit.',
+emerald_gem = Valuable('Emerald', 'A valuable emerald. This could probably be sold for quite a bit.',
                        0, 175, 26, -13)
 
-citrine_gem = Valuable('Citrine',
-                       'A valuable citrine. This could probably be sold for quite a bit.',
+citrine_gem = Valuable('Citrine', 'A valuable citrine. This could probably be sold for quite a bit.',
                        0, 175, 53, 92)
 
 jade_gem = Valuable('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
@@ -1167,12 +1136,10 @@ opal_gem = Valuable('Opal', 'A valuable opal. This could probably be sold for qu
 onyx_gem = Valuable('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
                     0, 175, 121, -56)
 
-diamond_gem = Valuable('Diamond', 'A valuable diamond. This could probably be sold for quite a \
-bit.',
+diamond_gem = Valuable('Diamond', 'A valuable diamond. This could probably be sold for quite a bit.',
                                   0, 175, -12, 124)
 
-amethyst_gem = Valuable('Amethyst', 'A valuable amethyst. This could probably be sold for quite a \
-bit.',
+amethyst_gem = Valuable('Amethyst', 'A valuable amethyst. This could probably be sold for quite a bit.',
                                     0, 175, -12, -5)
 
 topaz_gem = Valuable('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
@@ -1190,118 +1157,110 @@ zircon_gem = Valuable('Zircon', 'A valuable zircon. This could probably be sold 
 agate_gem = Valuable('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
                               0, 175, 0, -114)
 
-aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could probably be sold \
-for quite a bit.',
+aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
                           0, 175, 109, -13)
 
-valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem,
-                 opal_gem, onyx_gem, diamond_gem, amethyst_gem, topaz_gem, garnet_gem,
-                 quartz_gem, zircon_gem, agate_gem, aquamarine_gem]
+valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem, opal_gem, onyx_gem, diamond_gem,
+                 amethyst_gem, topaz_gem, garnet_gem, quartz_gem, zircon_gem, agate_gem, aquamarine_gem]
 
 # Tools
-magic_compass = MagicCompass(
-    'Magical Compass',
-    'A compass infused with the power of magic capable of detecting nearby towns.',
-    0, 0, imp=True)
+magic_compass = MagicCompass('Magical Compass',
+                             'A compass infused with the power of magic capable of detecting nearby towns.',
+                             0, 0, imp=True)
 
-divining_rod = DiviningRod('Divining Rod',
-                           'A supposedly magical stick capable of detecting nearby ores and gems.',
+divining_rod = DiviningRod('Divining Rod', 'A supposedly magical stick capable of detecting nearby ores and gems.',
                            325, 107)
 
-shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.',
-                175, 56)
+shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.', 175, 56)
 
-map_of_fast_travel = TownTeleporter('Map of Fast Travel',
-                                    'Allows quick travelling to previously visited towns.',
+map_of_fast_travel = TownTeleporter('Map of Fast Travel', 'Allows quick travelling to previously visited towns.',
                                     575, 190)
 
-boots_of_travel = InsaneSpeedBoots('Boots of Travel',  # Made with Boots of Speed and a 2000 gold recipe
-                                   'Allows insanely fast travel to any point on the map.',
-                                   7500, 3750)
+boots_of_travel = InsaneSpeedBoots('Boots of Travel', 'Allows insanely fast travel to any point on the map.',
+                                   7500, 3750) # Made with Boots of Speed and a 2000 gold recipe
 
 # Monster Drops
-shell_fragment = Misc('Shell Fragment', 'A broken fragment of a remarkable sea-shell.', 0, 5)
-crab_claw = Misc('Crab Claw', 'A reddish claw from a giant crab.', 0, 5)
-fairy_dust = Misc('Fairy Dust', 'Dust from a fairy. It has strange, magical properties.', 0, 5)
-serpent_scale = Misc('Serpent Scale', 'A rough scale from an unknown reptile.', 0, 5)
-slimey_residue = Misc('Slimy Residue', 'The slimy remains of a slimy monster.', 0, 5)
-ink_sack = Misc('Ink Sack', 'A small pouch full of an inky substance.', 0, 5)
-skeleton_bone = Misc('Skeleton Bone', 'The leg bone of a now-deceased creature.', 0, 5)
-monster_skull = Misc('Monster Skull', 'A broken skull from a strange creature.', 0, 5)
-living_bark = Misc('Living Bark', 'This bark has a fleshy texture to it.', 0, 5)
-shirt_cloth = Misc('Cloth', 'A thick, torn cloth made out of an unknown fabric.', 0, 5)
-beetle_shell = Misc('Beetle Shell', 'A bluish shell from a large beetle.', 0, 5)
-wing_piece = Misc('Wing Piece', 'A piece of wing from a flying creature.', 0, 5)
-bat_fang = Misc('Fang', 'The sharp fang of a frightening creature.', 0, 5)
-animal_fur = Misc('Animal Fur', 'A furry clump of hair from a strange animal.', 0, 5)
-golem_rock = Misc('Rock', 'A small rock that seems to glow slightly.', 0, 5)
-burnt_ash = Misc('Ash', 'The ashy remains of a once-living creature.', 0, 5)
-antennae = Misc('Antennae', 'A pair of antennae from a massive insect.', 0, 5)
-ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.', 0, 5)
-chain_link = Misc('Chain links', 'A couple joined links of chain made from steel.', 0, 5)
-unicorn_horn = Misc('Unicorn Horn', 'A tough and shiny horn from a mythical creature.', 0, 5)
-calculus_homework = Misc('Calculus Homework', 'A load of random symbols and gibberish', 0, 25)
+shell_fragment = Misc('Shell Fragment', "A broken fragment of a once-beautiful sea-creature's shell [JUNK]", 0, 5)
+crab_claw = Misc('Crab Claw', 'A reddish claw from a giant crab [JUNK]', 0, 5)
+fairy_dust = Misc('Fairy Dust', 'Dust from a fairy. It has strange, magical properties [JUNK]', 0, 5)
+serpent_scale = Misc('Serpent Scale', 'A rough scale from an unknown reptile [JUNK]', 0, 5)
+ink_sack = Misc('Ink Sack', 'A small pouch full of an inky substance [JUNK]', 0, 5)
+bone_bag = Misc('Bag of Bones', 'A bag full of various bones from a now deceased creature [JUNK]', 0, 5)
+monster_skull = Misc('Monster Skull', 'A broken skull from a strange creature [JUNK]', 0, 5)
+living_bark = Misc('Living Bark', 'This bark has a fleshy texture to it [JUNK]', 0, 5)
+ripped_cloth = Misc('Ripped Cloth', 'A thick, torn cloth made out of an unknown fabric [JUNK]', 0, 5)
+beetle_shell = Misc('Beetle Shell', 'A bluish shell from a large beetle [JUNK]', 0, 5)
+wing_piece = Misc('Wing Piece', 'A piece of wing from a flying creature [JUNK]', 0, 5)
+monster_fang = Misc('Monster Fang', 'The sharp fang of a frightening creature [JUNK]', 0, 5)
+animal_fur = Misc('Animal Fur', 'A wet clump of fur from a strange animal [JUNK]', 0, 5)
+golem_rock = Misc('Golem Rock', 'A small rock that seems to glow slightly [JUNK]', 0, 5)
+burnt_ash = Misc('Burnt Ash', 'The ashy remains of a once-living creature [JUNK]', 0, 5)
+antennae = Misc('Gooey Antennae', 'A pair of antennae from a massive, slimey insect [JUNK]', 0, 5)
+ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition [JUNK]', 0, 5)
+chain_link = Misc('Chain links', 'A couple joined links of chain made from steel [JUNK]', 0, 5)
+unicorn_horn = Misc('Unicorn Horn', 'A tough and shiny horn from a mythical creature [JUNK]', 0, 5)
+demonic_essence = Misc('Demonic Essense', 'A strange orb that exudes a terrifying aura [JUNK]', 0, 5)
+angelic_essence = Misc('Angelic Essence', 'A strange orb that radiates an incredible aura [JUNK]', 0, 5)
+eye_balls = Misc('Eyeballs', 'The visual receptors of some disgusting creature [JUNK]', 0, 5)
+mysterious_runes = Misc('Mysterious Runestone', 'Strange stones with even stranger symbols on it [JUNK]', 0, 5)
+rodent_tail = Misc('Rodent Tail', 'The detatched tail of a hideous rodent [JUNK]', 0, 5)
+serpent_tongue = Misc('Serpent Tongue', 'A dried-up tongue from a slithery serpent [JUNK]', 0, 5)
+feathers = Misc('Feathers', 'A veiny feather from an unknown avian creature [JUNK]', 0, 5)
+broken_crystal = Misc('Broken Crystal', 'A chunk of crystal too powdery to be of any value [JUNK]', 0, 5)
+slime_vial = Misc('Vial of Slime', 'A small glass vial filled with gooey slime [JUNK]', 0, 5)
+blood_vial = Misc('Vial of Blood', 'A small glass vial filled with the blood of an evil creature [JUNK]', 0, 5)
+water_vial = Misc('Vial of Water', 'A small glass vial filled with enchanted water [JUNK]', 0, 5)
 
+# Easter egg for my friend
+calculus_homework = Misc('Calculus Homework', 'A load of random symbols and gibberish [FUNKY]', 0, 25)
+graph_paper = Misc('Graph Paper', 'Useful paper for graphing points and lines [FUNKY]', 0, 25)
+ruler = Misc('Ruler', 'A piece of wood with lines on it. Neat! [FUNKY]', 0, 25)
+protractor = Misc('Protractor and Compass', 'Instruments used to make shapes and angles [FUNKY]', 0, 25)
+textbook = Misc('AtW Textbook', 'More like Algebra that sucks amiright? [FUNKY)', 0, 25)
 
-def monster_drop(level, name):
-    monster_drop_list = {'Shell Mimic': [shell_fragment],
-                         'Giant Crab': [crab_claw],
-                         'Naiad': [fairy_dust],
-                         'Sea Serpent': [serpent_scale],
-                         'Squid': [ink_sack],
-                         'Bog Slime': [slimey_residue],
-                         'Moss Ogre': [skeleton_bone],
-                         'Sludge Rat': [monster_skull],
-                         'Spriggan': [living_bark],
-                         'Vine Lizard': [serpent_scale],
-                         'Goblin Archer': [shirt_cloth],
-                         'Beetle': [beetle_shell],
-                         "Will-o'-the-wisp": [fairy_dust],
-                         'Imp': [wing_piece],
-                         'Bat': [bat_fang],
-                         'Mummy': [burnt_ash],
-                         'Sand Golem': [golem_rock],
-                         'Minubis': [animal_fur],
-                         'Fire Ant': [antennae],
-                         'Naga': [serpent_scale],
-                         'Ice Soldier': [chain_link],
-                         'Minor Yeti': [animal_fur],
-                         'Corrupt Thaumaturge': [shirt_cloth],
-                         'Arctic Wolf': [animal_fur],
-                         'Frost Bat': [bat_fang],
-                         'Troll': [monster_skull],
-                         'Rock Giant': [golem_rock],
-                         'Oread': [fairy_dust],
-                         'Tengu': [wing_piece],
-                         'Giant Worm': [bat_fang],
-                         'Zombie': [monster_skull],
-                         'Undead Archer': [chain_link],
-                         'Necromancer': [shirt_cloth],
-                         'Skeleton': [skeleton_bone],
-                         'Ghoul': [ectoplasm],
-                         'Alicorn': [unicorn_horn],
-                         'Wraith': [ectoplasm],
-                         'Griffin': [animal_fur],
-                         'Flying Serpent': [serpent_scale],
-                         'Harpy': [wing_piece],
-                         'Calculator': [calculus_homework]}
-
-    if level in range(1, 16):
-        drops = [s_elixir, s_potion, bnz_swd, wiz_hat, lth_bdy]
-
-    elif level in range(16, 27):
-        drops = [m_elixir, m_potion, lng_bow, myst_gar, stl_leg]
-
-    elif level in range(27, 38):
-        drops = [l_elixir, l_potion, rnc_stf, drg_leg, ori_hlm]
-
-    elif level > 37:
-        drops = [x_elixir, x_potion, en_myth_sb, ori_leg, elem_gar]
-
-    for x in range(4):
-        drops.extend(monster_drop_list[name])
-
-    return drops
+# Each monster can drop two different items, with the exception of the Calculator which is an easter egg monster
+monster_drop_list = {'Shell Mimic': [shell_fragment, water_vial],
+                     'Giant Crab': [crab_claw, shell_fragment],
+                     'Naiad': [fairy_dust, water_vial],
+                     'Squid': [ink_sack, slime_vial],
+                     'Bog Slime': [slime_vial, water_vial],
+                     'Moss Ogre': [bone_bag, ripped_cloth],
+                     'Sludge Rat': [monster_skull, rodent_tail],
+                     'Spriggan': [living_bark, fairy_dust],
+                     'Vine Lizard': [serpent_scale, living_bark],
+                     'Goblin Archer': [ripped_cloth, eye_balls],
+                     'Beetle': [beetle_shell, antennae],
+                     'Corrupt Thaumaturge': [ripped_cloth, mysterious_runes],
+                     'Minor Yeti': [animal_fur, monster_fang],
+                     'Fire Ant': [antennae, burnt_ash],
+                     'Necromancer': [ripped_cloth, demonic_essence],
+                     'Wraith': [ectoplasm, demonic_essence],
+                     'Ghoul': [ectoplasm, demonic_essence],
+                     "Will-o'-the-wisp": [fairy_dust, burnt_ash],
+                     'Imp': [wing_piece, fairy_dust],
+                     'Bat': [monster_fang, wing_piece],
+                     'Skeleton': [bone_bag, demonic_essence],
+                     'Undead Archer': [chain_link, bone_bag],
+                     'Frost Bat': [monster_fang, wing_piece],
+                     'Alicorn': [unicorn_horn, angelic_essence],
+                     'Mummy': [burnt_ash, ripped_cloth],
+                     'Giant Worm': [monster_fang, slime_vial],
+                     'Griffin': [animal_fur, wing_piece],
+                     'Anubis': [animal_fur, burnt_ash],
+                     'Sea Serpent': [serpent_scale, serpent_tongue],
+                     'Flying Serpent': [serpent_scale, serpent_tongue],
+                     'Harpy': [wing_piece, feathers],
+                     'Troll': [monster_skull, eye_balls],
+                     'Sand Golem': [golem_rock, broken_crystal],
+                     'Naga': [serpent_scale, eye_balls],
+                     'Rock Giant': [golem_rock, broken_crystal],
+                     'Ice Soldier': [chain_link, blood_vial],
+                     'Arctic Wolf': [animal_fur, monster_fang],
+                     'Oread': [fairy_dust, eye_balls],
+                     'Tengu': [wing_piece, feathers],
+                     'Zombie': [monster_skull, blood_vial],
+                     'Calculator': [calculus_homework, graph_paper, protractor, ruler, textbook]
+                     }
 
 
 def serialize_gems(path):
@@ -1337,9 +1296,7 @@ def deserialize_gems(path):
 #             continue
 #         if bool(gem.posx > 0) == bool(other.posx > 0):
 #             if bool(gem.posy > 0) == bool(other.posy > 0):
-#                 print(gem.name,
-#                       other.name,
-#                       round(math.hypot(gem.posx - other.posx, gem.posy - other.posy)))
+#                 print(gem.name, other.name, round(math.hypot(gem.posx - other.posx, gem.posy - other.posy)))
 
 # for gem in valuable_list:
 #     print(''.join([gem.name, ": ", str((abs(gem.posx) + abs(gem.posy))/2)]))

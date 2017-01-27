@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# Peasants' Ascension v0.7 Alpha
-game_version = 'v0.7'
+# Peasants' Ascension v1.0.0 Beta
 # --------------------------------------------------------------------------- #
 #   This file is part of Peasants' Ascension.
 #
@@ -116,6 +115,9 @@ party_info = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
               'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False,
               'gp': 20, 'visited_towns': [], 'reg_msg': ''}
 
+# The version number the game is currently updated to
+game_version = 'v1.0.0 Beta'
+
 # This text is displayed when you start the game
 title_logo = """
   ____                            _       _
@@ -128,10 +130,10 @@ title_logo = """
        / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
       / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
      /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-Peasants' Ascension v0.7 -- Programmed in Python by Stephen Center (TheFrozenMawile)
+Peasants' Ascension {0} -- Programmed using Python by TheFrozenMawile
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
-------------------------------------------------------------------------------"""
+------------------------------------------------------------------------------""".format(game_version)
 
 
 class PlayableCharacter:
@@ -160,7 +162,6 @@ class PlayableCharacter:
         self.status_ail = 'none'  # Current Status Ailment
         self.req_xp = 3           # Required XP to level up
         self.battle_move = ''     # What move the character chose during battle
-        self.dodge = 0            # Variable used to determine chance to dodge
 
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
@@ -172,59 +173,6 @@ class PlayableCharacter:
                            'dex': 1,  # Dexterity
                            'per': 1,  # Perception
                            'for': 1}  # Fortune
-
-    def player_damage(self):
-        # The formula for PCUs dealing damage
-
-        inv_name = self.name if self != player else 'player'
-
-        if inv_system.equipped[inv_name]['weapon'].type_ != 'ranged':
-
-            # Base damage is equal to the PCU's attack stat minus half the target's defense
-            # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
-            # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
-            # based on the PCU/target's elements, status ailments, weapons, and critical strikes.
-            dam_dealt = battle.temp_stats[self.name]['attk'] - (battle.monster.dfns/2)
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-
-            # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
-            if self.status_ail == 'weakened':
-                dam_dealt /= 2
-                print('{0} deals half damage because of their weakened state!'.format(self.name))
-
-            # Mages deal 1/2 damage with melee attacks
-            if self.class_ == 'mage':
-                dam_dealt /= 2
-
-        else:
-            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2)
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-
-            # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
-            if self.status_ail == 'blinded':
-                dam_dealt /= 2
-                print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
-
-        # Increase or decrease the damage depending on the PCU/monster's elements
-        dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                       battle.monster.element,
-                                       p_dmg=dam_dealt)[0]
-
-        # All attacks deal a minimum of one damage
-        if dam_dealt < 1:
-            dam_dealt = 1
-
-        # There is a 15% chance to inflict 1.5x damage
-        if random.randint(1, 100) <= 15:
-            print("It's a critical strike! 1.5x damage!")
-            dam_dealt *= 1.5
-
-        # Limit the amount of damage to 999 (as if that matters)
-        if dam_dealt > 999:
-            dam_dealt = 999
-            print('Overkill!')
-
-        return math.ceil(dam_dealt)
 
     def choose_name(self):
         while True:
@@ -577,6 +525,61 @@ Armor:
         print('-'*25)
         input('Press enter/return ')
 
+    def player_damage(self):
+        # The formula for PCUs dealing damage
+
+        inv_name = self.name if self != player else 'player'
+
+        if inv_system.equipped[inv_name]['weapon'].type_ != 'ranged':
+
+            # Base damage is equal to the PCU's attack stat minus half the target's defense
+            # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
+            # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
+            # based on the PCU/target's elements, status ailments, weapons, and critical hits.
+            dam_dealt = battle.temp_stats[self.name]['attk'] - (battle.monster.dfns/2)
+            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
+
+            # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
+            if self.status_ail == 'weakened':
+                dam_dealt /= 2
+                print('{0} deals half damage because of their weakened state!'.format(self.name))
+
+            # Mages deal 1/2 damage with melee attacks
+            if self.class_ == 'mage':
+                dam_dealt /= 2
+
+        else:
+            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2)
+            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
+
+            # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
+            if self.status_ail == 'blinded':
+                dam_dealt /= 2
+                print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
+
+        # Increase or decrease the damage depending on the PCU/monster's elements
+        dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
+                                       battle.monster.element,
+                                       p_dmg=dam_dealt)[0]
+
+        # All attacks deal a minimum of one damage
+        if dam_dealt < 1:
+            dam_dealt = 1
+
+        # There is a 15% chance to inflict 1.5x damage
+        if random.randint(1, 100) <= 15:
+                dam_dealt *= 1.5
+                print("It's a critical hit! 1.5x damage!")
+
+                sounds.critical_hit.play()
+                smart_sleep(0.5)
+
+        # Limit the amount of damage to 999 (as if that matters)
+        if dam_dealt > 999:
+            dam_dealt = 999
+
+        return math.ceil(dam_dealt)
+
     def battle_turn(self, is_boss):
         inv_name = self.name if self != player else 'player'
         monster = battle.monster
@@ -592,7 +595,6 @@ Armor:
                       "{0} is making a move!\n".format(self.name))
 
                 if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
-
                     sounds.sword_slash.play()
                     print('{0} begin to fiercely attack the {1} using their {2}...'.format(
                         self.name, monster.name, str(inv_system.equipped[inv_name]['weapon'])))
@@ -606,16 +608,18 @@ Armor:
                 smart_sleep(0.75)
 
                 # Check for attack accuracy
-                if self.dodge in range(monster.evad, 512):
+                if random.randint(1, 512) in range(monster.evad, 512):
                     dam_dealt = self.player_damage()
-                    monster.hp -= dam_dealt
-                    sounds.enemy_hit.play()
+
                     print("{0}'s attack connects with the {1}, dealing {2} damage!".format(
                         self.name, monster.name, dam_dealt))
 
+                    sounds.enemy_hit.play()
+                    monster.hp -= dam_dealt
+
                 else:
+                    print("The {0} narrowly avoids {1}'s attack!".format(monster.name, self.name))
                     sounds.attack_miss.play()
-                    print("The {0} dodges {1}'s attack with ease!".format(monster.name, self.name))
 
             # Class Ability
             elif self.move == '3':
@@ -639,17 +643,16 @@ Armor:
 
             # Check to see if the PCU is poisoned
             if self.status_ail == 'poisoned' and monster.hp > 0:
-                if random.randint(0, 3):
-                    smart_sleep(0.5)
+                smart_sleep(0.5)
 
-                    sounds.poison_damage.play()
+                sounds.poison_damage.play()
 
-                    poison_damage = math.floor(self.hp/5)
-                    print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
-                    self.hp -= poison_damage
+                poison_damage = math.floor(self.hp/5)
+                print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
+                self.hp -= poison_damage
 
-                    if self.hp <= 0:
-                        break
+                if self.hp <= 0:
+                    break
 
                 else:
                     smart_sleep(0.5)
@@ -658,17 +661,13 @@ Armor:
                     input('{0} starts to feel better! | Press enter/return '.format(self.name))
                     self.status_ail = 'none'
 
-            # Check to see if the PCU is silenced
-            elif self.status_ail != 'none' and self.status_ail != 'asleep':
-                if not random.randint(0, 3):
-
+            # There's a 1 in 4 chance for the players status effect to wear off each turn.
+            if self.status_ail != 'none' and random.randint(0, 3) == 0:
                     smart_sleep(0.5)
-
+                    self.status_ail = 'none'
                     sounds.buff_spell.play()
 
-                    input("{0}'s afflictions have worn off! | Press enter/return ".format(
-                        self.name))
-                    self.status_ail = 'none'
+                    print("{0}'s afflictions have worn off!".format(self.name))
 
             if is_boss and monster.multiphase and monster.hp <= 0:
                 monster.battle_turn(is_boss)
@@ -903,34 +902,42 @@ Pick {0}'s Move:
             print('As a monk, {0} meditates and focus their inner chi.'.format(self.name))
             print('After a brief moment of confusion from the enemy, {0} strikes, dealing'.format(self.name))
             print("an immense amount of damage in a single, powerful strike! As a result, {0}'s".format(self.name))
-            print('defenses have been lowered by 20% until the end of the battle.\n')
+            print('defenses have been lowered by 15% until the end of the battle.\n')
 
             dam_dealt = (battle.p_temp_stats['attk'] - monster.dfns/2)*2.5
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-            dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element, monster.element, p_dmg=dam_dealt)[0]
+            dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
+                                           monster.element,
+                                           p_dmg=dam_dealt)[0]
 
             if dam_dealt < 4:
                 dam_dealt = 4
 
             if random.randint(1, 100) <= 15:
-                print("It's a critical hit! 1.5x damage!")
-                print('Overkill!')
+                smart_sleep(0.5)
                 dam_dealt *= 1.5
+                sounds.critical_hit.play()
+
+                print("It's a critical hit! 1.5x damage!")
 
             if dam_dealt > 999:
                 dam_dealt = 999
 
+            smart_sleep(0.5)
+
+            dam_dealt = math.ceil(dam_dealt)
+
             print('The attack deals {0} damage to the {1}!'.format(math.ceil(dam_dealt), monster.name))
 
-            battle.temp_stats[self.name]['dfns'] /= 1.2
-            battle.temp_stats[self.name]['m_dfns'] /= 1.2
-            battle.temp_stats[self.name]['p_dfns'] /= 1.2
+            monster.hp -= dam_dealt
+
+            battle.temp_stats[self.name]['dfns'] *= 0.85
+            battle.temp_stats[self.name]['m_dfns'] *= 0.85
+            battle.temp_stats[self.name]['p_dfns'] *= 0.85
 
             battle.temp_stats[self.name]['dfns'] = math.floor(battle.temp_stats[self.name]['dfns'])
             battle.temp_stats[self.name]['m_dfns'] = math.floor(battle.temp_stats[self.name]['m_dfns'])
             battle.temp_stats[self.name]['p_dfns'] = math.floor(battle.temp_stats[self.name]['p_dfns'])
-
-            monster.hp -= math.ceil(dam_dealt)
 
             return True
 

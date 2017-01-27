@@ -1,6 +1,6 @@
 #   This file is part of Peasants' Ascension.
 #
-#	 Peasants' Ascension is free software: you can redistribute it and/or modify
+#    Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -74,6 +74,9 @@ buff_spell = Sound('Sound FX/buff_spell.wav')
 # Ally Death -- Played when a member of your party dies
 ally_death = Sound('Sound FX/ally_death.wav')
 
+# Critical Hit -- Played when someone lands a critical hit
+critical_hit = Sound('Sound FX/critical_hit.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
@@ -81,5 +84,6 @@ def change_volume():
               'foot_steps', 'aim_weapon',
               'attack_miss', 'item_pickup',
               'health_low', 'poison_damage',
-              'buff_spell', 'ally_death']:
+              'buff_spell', 'ally_death',
+              'critical_hit']:
         globals()[x].set_volume(main.sound_vol)

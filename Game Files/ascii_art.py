@@ -207,7 +207,7 @@ monster_art = {
   _/ \\_
         %s""",
 
-    "Minubis":
+    "Anubis":
     """
   'n'
   /-\\

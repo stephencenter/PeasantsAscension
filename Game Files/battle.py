@@ -597,8 +597,9 @@ def battle_inventory(user):
 
 
 def bat_stats():
-    # Makes sure that that no-one ever has negative stats,
-    # and then display their stats after they're fixed
+    # Makes sure that that no-one ever has 1) stats that are above their maximum, 2) stats that are negative,
+    #  and 3) stats that are not integers. Then display their stats after they're fixed
+
     global player
     global solou
     global xoann
@@ -625,23 +626,6 @@ def bat_stats():
     if monster.hp < 0:
         monster.hp = 0
 
-    if player.hp > player.max_hp:
-        player.hp -= (player.hp - player.max_hp)
-    if solou.hp > solou.max_hp:
-        solou.hp -= (solou.hp - solou.max_hp)
-    if xoann.hp > xoann.max_hp:
-        xoann.hp -= (xoann.hp - xoann.max_hp)
-    if randall.hp > randall.max_hp:
-        randall.hp -= (randall.hp - randall.max_hp)
-    if parsto.hp > parsto.max_hp:
-        parsto.hp -= (parsto.hp - parsto.max_hp)
-    if ran_af.hp > ran_af.max_hp:
-        ran_af.hp -= (ran_af.hp - ran_af.max_hp)
-    if adorine.hp > adorine.max_hp:
-        adorine.hp -= (adorine.hp - adorine.max_hp)
-    if monster.hp > monster.max_hp:
-        monster.hp -= (monster.hp - monster.max_hp)
-
     if player.mp < 0:
         player.mp = 0
     if solou.mp < 0:
@@ -659,6 +643,23 @@ def bat_stats():
     if monster.mp < 0:
         monster.mp = 0
 
+    if player.hp > player.max_hp:
+        player.hp -= (player.hp - player.max_hp)
+    if solou.hp > solou.max_hp:
+        solou.hp -= (solou.hp - solou.max_hp)
+    if xoann.hp > xoann.max_hp:
+        xoann.hp -= (xoann.hp - xoann.max_hp)
+    if randall.hp > randall.max_hp:
+        randall.hp -= (randall.hp - randall.max_hp)
+    if parsto.hp > parsto.max_hp:
+        parsto.hp -= (parsto.hp - parsto.max_hp)
+    if ran_af.hp > ran_af.max_hp:
+        ran_af.hp -= (ran_af.hp - ran_af.max_hp)
+    if adorine.hp > adorine.max_hp:
+        adorine.hp -= (adorine.hp - adorine.max_hp)
+    if monster.hp > monster.max_hp:
+        monster.hp -= (monster.hp - monster.max_hp)
+
     if player.mp > player.max_mp:
         player.mp -= (player.mp - player.max_mp)
     if solou.mp > solou.max_mp:
@@ -675,6 +676,21 @@ def bat_stats():
         adorine.mp -= (adorine.mp - adorine.max_mp)
     if monster.mp > monster.max_mp:
         monster.mp -= (monster.mp - monster.max_mp)
+
+    monster.hp = math.ceil(monster.hp)
+    monster.mp = math.ceil(monster.mp)
+    player.hp = math.ceil(player.hp)
+    player.mp = math.ceil(player.mp)
+    parsto.hp = math.ceil(parsto.hp)
+    parsto.mp = math.ceil(parsto.mp)
+    adorine.hp = math.ceil(adorine.hp)
+    adorine.mp = math.ceil(adorine.mp)
+    ran_af.hp = math.ceil(ran_af.hp)
+    ran_af.mp = math.ceil(ran_af.mp )
+    xoann.hp = math.ceil(xoann.hp)
+    xoann.mp = math.ceil(xoann.mp)
+    solou.hp = math.ceil(solou.hp)
+    solou.mp = math.ceil(solou.mp)
 
     print('-'*25)
 
