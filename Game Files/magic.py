@@ -197,8 +197,7 @@ class Damaging(Spell):
                 dam_dealt = 1
 
             print("-{0}'s Turn-".format(user.name))
-            print(ascii_art.player_art[user.class_.title()] %
-                  "{0} is making a move!\n".format(user.name))
+            print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
 
             if inv_system.equipped[inv_name]['weapon'].class_ == 'magic':
                 print('{0} begins to use their {1} to summon a powerful spell...'.format(
@@ -217,18 +216,21 @@ class Damaging(Spell):
 
                 # Mages have a 15% chance to get a critical hit, whereas other classes cannot
                 if random.randint(0, 100) <= (15 if user.class_ == 'mage' else -1):
-                    print("It's a critical hit! 1.5x damage!")
                     dam_dealt *= 1.5
+                    print("It's a critical hit! 1.5x damage!")
+
+                    sounds.critical_hit.play()
+                    main.smart_sleep(0.5)
 
                 print('Using the power of "{0}", {1} deals {2} damage to the {3}!'.format(
-                    self.name, user.name, dam_dealt, monsters.monster.name))
+                    self.name, user.name, dam_dealt, monsters.monster.monster_name))
 
                 monsters.monster.hp -= dam_dealt
 
             # Otherwise, the spell with miss and deal no damage
             else:
                 sounds.attack_miss.play()
-                print("The {0} dodges {1}'s attack!".format(monsters.monster.name, user.name))
+                print("The {0} narrowly dodges {1}'s spell!".format(monsters.monster.monster_name, user.name))
 
             return True
 

@@ -60,6 +60,7 @@ import bosses
 import items
 import sounds
 import towns
+import monsters
 import ascii_art
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
@@ -130,10 +131,17 @@ title_logo = """
        / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
       / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
      /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-Peasants' Ascension {0} -- Programmed using Python by TheFrozenMawile
+Peasants' Ascension {0} -- Programmed by TheFrozenMawile using Python
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
 ------------------------------------------------------------------------------""".format(game_version)
+
+battle_options = """Pick {0}'s Move:
+      [1]: Attack
+      [2]: Use Magic
+      [3]: Class Ability
+      [4]: Use Items
+      [5]: Run"""
 
 
 class PlayableCharacter:
@@ -155,13 +163,13 @@ class PlayableCharacter:
 
         self.lvl = 1              # Level
         self.exp = 0              # Experience
-        self.ext_ski = 0          # Extra Skill Points
+        self.extra_sp = 0         # Extra Skill Points
         self.ext_gol = 0          # Extra Gold Pieces
         self.ext_exp = 0          # Extra Experience
         self.element = 'none'     # Player's Element
         self.status_ail = 'none'  # Current Status Ailment
         self.req_xp = 3           # Required XP to level up
-        self.battle_move = ''     # What move the character chose during battle
+        self.move = ''            # What move the character chose during battle
 
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
@@ -207,16 +215,16 @@ class PlayableCharacter:
                     print()
                     break
 
-            def choose_class(self):
-                while True:
-                    class_ = input("""{0}, which class would you like to train as?\n\
-                  [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
-                  [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
-                  [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
-                  [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers
-                  [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
-                  [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
-            Input [#]: """.format(self.name))
+    def choose_class(self):
+        while True:
+            class_ = input("""{0}, which class would you like to train as?\n\
+          [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
+          [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
+          [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
+          [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers
+          [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
+          [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
+    Input [#]: """.format(self.name))
             print()
             try:
                 class_ = {'1': "mage",
@@ -268,7 +276,7 @@ class PlayableCharacter:
                     input('Press enter/return ')
 
                 rem_points += 5
-                extra_points += self.ext_ski
+                extra_points += self.extra_sp
                 magic.new_spells(self)
 
                 if self.class_ == 'warrior':
@@ -413,6 +421,10 @@ Input letter: """)
                 print('-'*25)
                 print('Current {0}: {1}'.format(vis_skill, self.attributes[act_skill]))
 
+                if self.extra_sp == 10 and act_skill == 'for':
+                    print("{0}'s additional skill points from Fortune has already reached the maximum of 10.")
+                    print("Instead, upgrading Fortune will provide 2x the extra experience and gold from enemies.")
+
                 while True:
                     y_n = input("Increase {0}'s {1}? | Yes or No: ".format(self.name, vis_skill))
                     y_n = y_n.lower()
@@ -460,14 +472,14 @@ Input letter: """)
                         self.attributes['per'] += 1
 
                     elif skill.startswith('f'):
-                        if self.ext_ski == 10:
-                            self.ext_gol += random.randint(0, 2)
-                            self.ext_exp += random.randint(0, 2)
+                        if self.extra_sp == 10:
+                            self.ext_gol += 2
+                            self.ext_exp += 2
 
                         else:
-                            self.ext_ski += 1
-                            self.ext_gol += random.randint(0, 1)
-                            self.ext_exp += random.randint(0, 1)
+                            self.extra_sp += 1
+                            self.ext_gol += 1
+                            self.ext_exp += 1
 
                         self.attributes['for'] += 1
 
@@ -536,7 +548,7 @@ Armor:
             # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
             # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
             # based on the PCU/target's elements, status ailments, weapons, and critical hits.
-            dam_dealt = battle.temp_stats[self.name]['attk'] - (battle.monster.dfns/2)
+            dam_dealt = battle.temp_stats[self.name]['attk'] - (monsters.monster.dfns/2)
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
 
             # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
@@ -549,7 +561,7 @@ Armor:
                 dam_dealt /= 2
 
         else:
-            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (battle.monster.p_dfns/2)
+            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (monsters.monster.p_dfns/2)
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
 
             # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
@@ -559,7 +571,7 @@ Armor:
 
         # Increase or decrease the damage depending on the PCU/monster's elements
         dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                       battle.monster.element,
+                                       monsters.monster.element,
                                        p_dmg=dam_dealt)[0]
 
         # All attacks deal a minimum of one damage
@@ -580,190 +592,145 @@ Armor:
 
         return math.ceil(dam_dealt)
 
-    def battle_turn(self, is_boss):
+    def battle_turn(self):
         inv_name = self.name if self != player else 'player'
-        monster = battle.monster
 
-        while True:
-            # "2" refers to magic, which will print this later
-            if self.move != '2':
-                print("\n-{0}'s Turn-".format(self.name))
+        # "2" refers to magic, which will print this later
+        if self.move != '2':
+            print("\n-{0}'s Turn-".format(self.name))
 
-            # Basic Attack
-            if self.move == '1' or self.move == 'q':
-                print(ascii_art.player_art[self.class_.title()] %
-                      "{0} is making a move!\n".format(self.name))
+        # Check to see if the PCU is poisoned
+        if self.status_ail == 'poisoned' and monsters.monster.hp > 0:
+            smart_sleep(0.5)
+            sounds.poison_damage.play()
+            poison_damage = math.floor(self.hp/5)
+            self.hp -= poison_damage
 
-                if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
-                    sounds.sword_slash.play()
-                    print('{0} begin to fiercely attack the {1} using their {2}...'.format(
-                        self.name, monster.name, str(inv_system.equipped[inv_name]['weapon'])))
+            print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
 
-                # Ranged weapons aren't swung, so play a different sound effect
-                else:
-                    sounds.aim_weapon.play()
-                    print('{0} aims carefully at the {1} using their {2}...'.format(
-                        self.name, monster.name, str(inv_system.equipped[inv_name]['weapon'])))
+            if self.hp <= 0:
+                return
 
-                smart_sleep(0.75)
+        # There's a 1 in 4 chance for the players status effect to wear off each turn.
+        if self.status_ail != 'none' and random.randint(0, 3) == 0:
 
-                # Check for attack accuracy
-                if random.randint(1, 512) in range(monster.evad, 512):
-                    dam_dealt = self.player_damage()
+            sounds.buff_spell.play()
 
-                    print("{0}'s attack connects with the {1}, dealing {2} damage!".format(
-                        self.name, monster.name, dam_dealt))
+            if self.status_ail == 'asleep':
+                print(ascii_art.player_art[self.class_.title()] % "{0} is no longer asleep!\n".format(self.name))
+                input('Press enter/return ')
+                self.status_ail = 'none'
 
-                    sounds.enemy_hit.play()
-                    monster.hp -= dam_dealt
-
-                else:
-                    print("The {0} narrowly avoids {1}'s attack!".format(monster.name, self.name))
-                    sounds.attack_miss.play()
-
-            # Class Ability
-            elif self.move == '3':
-                if not self.class_ability():
-                    return False
-
-            # Run away!
-            elif self.move == '5':
-                if battle.run_away(self):
-                    # Attempt to run.
-                    # If it succeeds, end the battle without giving the player a reward
-                    print('-'*25)
-                    pygame.mixer.music.load(party_info['reg_music'])
-                    pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(music_vol)
-
-                    return 'Ran'
+                return
 
             else:
-                return False
-
-            # Check to see if the PCU is poisoned
-            if self.status_ail == 'poisoned' and monster.hp > 0:
+                print("{0}'s afflictions have worn off! They are no longer {1}.".format(self.name, self.status_ail))
+                self.status_ail = 'none'
                 smart_sleep(0.5)
 
-                sounds.poison_damage.play()
+        # Basic Attack
+        if self.move == '1' or self.move == 'q':
+            print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
 
-                poison_damage = math.floor(self.hp/5)
-                print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
-                self.hp -= poison_damage
+            if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
+                sounds.sword_slash.play()
+                print('{0} begin to fiercely attack the {1} using their {2}...'.format(
+                    self.name, monsters.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
 
-                if self.hp <= 0:
-                    break
+            # Ranged weapons aren't swung, so play a different sound effect
+            else:
+                sounds.aim_weapon.play()
+                print('{0} aims carefully at the {1} using their {2}...'.format(
+                    self.name, monsters.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
 
-                else:
-                    smart_sleep(0.5)
+            smart_sleep(0.75)
 
-                    sounds.buff_spell.play()
-                    input('{0} starts to feel better! | Press enter/return '.format(self.name))
-                    self.status_ail = 'none'
+            # Check for attack accuracy
+            if random.randint(1, 512) in range(monsters.monster.evad, 512):
+                dam_dealt = self.player_damage()
 
-            # There's a 1 in 4 chance for the players status effect to wear off each turn.
-            if self.status_ail != 'none' and random.randint(0, 3) == 0:
-                    smart_sleep(0.5)
-                    self.status_ail = 'none'
-                    sounds.buff_spell.play()
+                print("{0}'s attack connects with the {1}, dealing {2} damage!".format(
+                    self.name, monsters.monster.name, dam_dealt))
 
-                    print("{0}'s afflictions have worn off!".format(self.name))
+                sounds.enemy_hit.play()
+                monsters.monster.hp -= dam_dealt
 
-            if is_boss and monster.multiphase and monster.hp <= 0:
-                monster.battle_turn(is_boss)
+            else:
+                print("The {0} narrowly avoids {1}'s attack!".format(monsters.monster.name, self.name))
+                sounds.attack_miss.play()
 
-            return True
+        # Class Ability
+        elif self.move == '3' and not self.class_ability():
+            return False
+
+        # Run away!
+        elif self.move == '5' and battle.run_away(self):
+            print('-'*25)
+            pygame.mixer.music.load(party_info['reg_music'])
+            pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(music_vol)
+
+            return 'Ran'
+
+        else:
+            return False
+
+        return True
 
     def player_choice(self):
         # Creates a lambda function that strips all non-numeric characters
         # This fixes some (possible) problems later on
         only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
 
-        print("""\
-Pick {0}'s Move:
-      [1]: Attack
-      [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
-      [5]: Run""".format(self.name))
+        print(battle_options.format(self.name))
 
         while True:
-            move = input("Input [#]: ")
-            if move != "q":
+            self.move = input("Input [#]: ")
+            if self.move != "q":
                 # Strip out all non-numeric input
-                move = only_num(move)
+                self.move = only_num(self.move)
 
-            if move.isdigit() and int(move) in range(1, 6) or \
-                    (move == 'q' and self.name == "Flygon Jones"):
+            if self.move.isdigit() and int(self.move) in range(1, 6):
 
                 # Use Magic
-                if move == '2':
+                if self.move == '2':
                     print('-'*25)
+
                     if not magic.pick_cat(self):
-                        print("""\
-Pick {0}'s Move:
-      [1]: Attack
-      [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
-      [5]: Run""".format(self.name))
+                        print(battle_options.format(self.name))
 
                         continue
 
                     input('\nPress enter/return ')
 
                 # Battle Inventory
-                elif move == '4':
+                elif self.move == '4':
                     print('-'*25)
+
                     if not battle.battle_inventory(self):
-                        print("""\
-Pick {0}'s Move:
-      [1]: Attack
-      [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
-      [5]: Run""".format(self.name))
+                        print(battle_options.format(self.name))
 
                         continue
 
                     input('\nPress enter/return ')
 
                 # Let the player repick if they try to use their class ability when they can't
-                elif move == '3':
+                elif self.move == '3':
                     if self.lvl < 5:
                         # You must be at least level 5 to use your class ability
-                        print("{0} has not yet realized their class's inner potential \
-(must be level 5 to use)\n".format(self.name))
-                        input('Press enter/return ')
-
+                        print("{0} has not yet realized their class's inner potential!".format(self.name))
                         print('-'*25)
-                        print("""\
-Pick {0}'s Move:
-      [1]: Attack
-      [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
-      [5]: Run""".format(self.name))
+                        print(battle_options.format(self.name))
 
                         continue
 
                     elif battle.temp_stats[self.name]['ability_used']:
                         # You can only use your ability once per battle.
-                        print('{0} feels drained, and are unable to call upon their class ability again.\n')
-                        input('Press enter/return ')
-
+                        print('{0} feels too drained to use their class ability again.'.format(self.name))
                         print('-'*25)
-                        print("""\
-Pick {0}'s Move:
-      [1]: Attack
-      [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
-      [5]: Run""".format(self.name))
+                        print(battle_options.format(self.name))
 
                         continue
-
-                self.move = move
 
                 return
 
@@ -942,6 +909,102 @@ Pick {0}'s Move:
             return True
 
 
+def fix_stats():
+    # Makes sure that that no-one ever has 1) stats that are above their maximum, 2) stats that are negative,
+    # and 3) stats that are not integers.
+
+    global player
+    global solou
+    global xoann
+    global randall
+    global parsto
+    global ran_af
+    global adorine
+
+    if player.hp < 0:
+        player.hp = 0
+    if solou.hp < 0:
+        solou.hp = 0
+    if xoann.hp < 0:
+        xoann.hp = 0
+    if randall.hp < 0:
+        randall.hp = 0
+    if parsto.hp < 0:
+        parsto.hp = 0
+    if ran_af.hp < 0:
+        ran_af.hp = 0
+    if adorine.hp < 0:
+        adorine.hp = 0
+    if monsters.monster.hp < 0:
+        monsters.monster.hp = 0
+
+    if player.mp < 0:
+        player.mp = 0
+    if solou.mp < 0:
+        solou.mp = 0
+    if xoann.mp < 0:
+        xoann.mp = 0
+    if randall.mp < 0:
+        randall.mp = 0
+    if parsto.mp < 0:
+        parsto.mp = 0
+    if ran_af.mp < 0:
+        ran_af.mp = 0
+    if adorine.mp < 0:
+        adorine.mp = 0
+    if monsters.monster.mp < 0:
+        monsters.monster.mp = 0
+
+    if player.hp > player.max_hp:
+        player.hp -= (player.hp - player.max_hp)
+    if solou.hp > solou.max_hp:
+        solou.hp -= (solou.hp - solou.max_hp)
+    if xoann.hp > xoann.max_hp:
+        xoann.hp -= (xoann.hp - xoann.max_hp)
+    if randall.hp > randall.max_hp:
+        randall.hp -= (randall.hp - randall.max_hp)
+    if parsto.hp > parsto.max_hp:
+        parsto.hp -= (parsto.hp - parsto.max_hp)
+    if ran_af.hp > ran_af.max_hp:
+        ran_af.hp -= (ran_af.hp - ran_af.max_hp)
+    if adorine.hp > adorine.max_hp:
+        adorine.hp -= (adorine.hp - adorine.max_hp)
+    if monsters.monster.hp > monsters.monster.max_hp:
+        monsters.monster.hp -= (monsters.monster.hp - monsters.monster.max_hp)
+
+    if player.mp > player.max_mp:
+        player.mp -= (player.mp - player.max_mp)
+    if solou.mp > solou.max_mp:
+        solou.mp -= (solou.mp - solou.max_mp)
+    if xoann.mp > xoann.max_mp:
+        xoann.mp -= (xoann.mp - xoann.max_mp)
+    if randall.mp > randall.max_mp:
+        randall.mp -= (randall.mp - randall.max_mp)
+    if parsto.mp > parsto.max_mp:
+        parsto.mp -= (parsto.mp - parsto.max_mp)
+    if ran_af.mp > ran_af.max_mp:
+        ran_af.mp -= (ran_af.mp - ran_af.max_mp)
+    if adorine.mp > adorine.max_mp:
+        adorine.mp -= (adorine.mp - adorine.max_mp)
+    if monsters.monster.mp > monsters.monster.max_mp:
+        monsters.monster.mp -= (monsters.monster.mp - monsters.monster.max_mp)
+
+    monsters.monster.hp = math.ceil(monsters.monster.hp)
+    monsters.monster.mp = math.ceil(monsters.monster.mp)
+    player.hp = math.ceil(player.hp)
+    player.mp = math.ceil(player.mp)
+    parsto.hp = math.ceil(parsto.hp)
+    parsto.mp = math.ceil(parsto.mp)
+    adorine.hp = math.ceil(adorine.hp)
+    adorine.mp = math.ceil(adorine.mp)
+    ran_af.hp = math.ceil(ran_af.hp)
+    ran_af.mp = math.ceil(ran_af.mp)
+    xoann.hp = math.ceil(xoann.hp)
+    xoann.mp = math.ceil(xoann.mp)
+    solou.hp = math.ceil(solou.hp)
+    solou.mp = math.ceil(solou.mp)
+
+
 def set_adventure_name():
     # This function asks the player for an "adventure name". This is the
     # name of the directory in which his/her save files will be stored.
@@ -959,8 +1022,15 @@ def set_adventure_name():
         temp_name = re.sub('[^\w\-_ ]', '', choice)
 
         for x, y in enumerate(temp_name):
-            if not(y == ' ' and y == ' '):
-                adventure_name = ''.join([adventure_name, y])
+            try:
+                if not(y == ' ' and temp_name[x + 1] == ' '):
+                    adventure_name = ''.join([adventure_name, y])
+
+            except IndexError:
+                pass
+
+        if adventure_name[0] == ' ':
+            adventure_name = adventure_name[1:]
 
         if not ''.join(adventure_name.split()) and ''.join(choice.split()):
             print("\nPlease choose a different name, that one definitely won't do!")

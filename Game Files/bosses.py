@@ -233,7 +233,6 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    -11, -23,  # Located at -23'S, -11'W
                    None,      # Drops no items
                    150, 150)  # Drops 150 XP and 150 GP
-terr_tarant.battle_turn = monsters.melee_ai
 
 
 def terrtar_ud():
@@ -245,6 +244,7 @@ def terrtar_ud():
     npcs.alden_phrase_2.active = True
 
 
+terr_tarant.battle_turn = monsters.melee_ai
 terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
@@ -259,7 +259,6 @@ cursed_spect = Boss('Cursed Spectre',
                     i_items.spect_wand,  # Drops a spectre wand
                     250, 250,            # Drops 250 XP and 250 GP
                     element='death', active=False)
-cursed_spect.battle_turn = monsters.magic_ai
 
 
 def cursspect_ud():
@@ -267,6 +266,7 @@ def cursspect_ud():
     npcs.rivesh_quest_1.finished = True
 
 
+cursed_spect.battle_turn = monsters.magic_ai
 cursed_spect.upon_defeating = cursspect_ud
 
 # Boss: Ent -- Position: 27'N, 15'E
@@ -281,87 +281,10 @@ giant_ent = Boss('Giant Ent',
                  i_items.enc_yw,  # Drops an enchanted yew wand
                  250, 250,        # Drops 250 XP and 250 GP
                  element='grass', active=True)
-giant_ent.battle_turn = monsters.melee_ai
 
+giant_ent.battle_turn = monsters.melee_ai
 giant_ent.upon_defeating = unimportant_boss_ud
 
-# Boss: Anti-blood Squad -- Position: -68'S, -93'W
-anti_blood_squad = Boss('Hunter Lackey #1',
-                        75, 20,
-                        30, 35,
-                        55, 50,
-                        25, 25,
-                        40, 45,
-                        15,
-                        -93, -68,
-                        None,
-                        200, 200,
-                        active=False,
-                        multiphase=3)
-
-
-def antibloodsquad_et(is_boss):
-    if monsters.monster.name == "Hunter Lackey #1" and monsters.monster.hp <= 0:
-        monsters.monster.currphase += 1
-        print('The first lackey falls dead, and the second one takes her place!')
-
-        monsters.monster.name = "Hunter Lackey #2"
-        monsters.monster.monster_name = "Hunter Lackey #2"
-        monsters.monster.hp = 75
-        monsters.monster.mp = 20
-        self.is_poisoned = False
-
-        return
-
-    elif monsters.monster.name == "Hunter Lackey #2" and monsters.monster.hp <= 0:
-        monsters.monster.currphase += 1
-        print('Seeing that his guards have fallen, Typhen is forced to defend himself!')
-
-        monsters.monster.name = "Typhen the Vampire Hunter"
-        monsters.monster.monster_name = "Typhen the Vampire Hunter"
-
-        monsters.monster.hp = 200
-        monsters.monster.max_hp = 200
-
-        monsters.monster.mp = 50
-        monsters.monster.max_mp = 50
-
-        monsters.monster.attk += 15
-        monsters.monster.dfns += 15
-        monsters.monster.p_attk += 20
-        monsters.monster.p_dfns += 15
-        monsters.monster.m_attk -= 5
-        monsters.monster.m_dfns -= 10
-        monsters.monster.spd += 10
-        monsters.monster.evad += 5
-
-        monsters.monster.level = 25
-        monsters.monster.experience = 1000
-        monsters.monster.gold = 1000
-
-        monsters.monster.items = i_items.wind_bow
-        self.is_poisoned = False
-
-        return
-
-    elif monsters.monster.hp <= 0:
-        return
-
-    monsters.ranged_ai(is_boss)
-
-anti_blood_squad.battle_turn = antibloodsquad_et
-
-
-def absquad_ud():
-    npcs.pime_phrase_3.active = False
-    npcs.pime_quest_1.finished = True
-
-anti_blood_squad.upon_defeating = absquad_ud
-
-
-# theonimbus = Boss('Theonimbus',
-
-boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent,
-             anti_blood_squad]
+boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent]
 
 defeated_bosses = []  # Make sure you can only defeat the boss one time

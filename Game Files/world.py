@@ -203,7 +203,6 @@ It's probably in your best interests that you not do that.
                     if is_battle:
                         print('-'*25)
                         monsters.spawn_monster()
-                        battle.setup_vars()
                         battle.battle_system()
 
                     else:
@@ -399,15 +398,13 @@ def rest():
     # when doing this.
     print('-'*25)
 
-    if all([
-        main.player.hp == main.player.max_hp and main.player.mp == main.player.max_mp,
-        main.solou.hp == main.solou.max_hp and main.solou.mp == main.solou.max_mp,
-        main.xoann.hp == main.xoann.max_hp and main.xoann.mp == main.xoann.max_mp,
-        main.randall.hp == main.randall.max_hp and main.randall.mp == main.randall.max_mp,
-        main.ran_af.hp == main.ran_af.max_hp and main.ran_af.mp == main.ran_af.max_mp,
-        main.parsto.hp == main.parsto.max_hp and main.parsto.mp == main.parsto.max_mp,
-        main.adorine.hp == main.adorine.max_hp and main.adorine.mp == main.adorine.max_mp
-    ]):
+    if all([main.player.hp == main.player.max_hp and main.player.mp == main.player.max_mp,
+            main.solou.hp == main.solou.max_hp and main.solou.mp == main.solou.max_mp,
+            main.xoann.hp == main.xoann.max_hp and main.xoann.mp == main.xoann.max_mp,
+            main.randall.hp == main.randall.max_hp and main.randall.mp == main.randall.max_mp,
+            main.ran_af.hp == main.ran_af.max_hp and main.ran_af.mp == main.ran_af.max_mp,
+            main.parsto.hp == main.parsto.max_hp and main.parsto.mp == main.parsto.max_mp,
+            main.adorine.hp == main.adorine.max_hp and main.adorine.mp == main.adorine.max_mp]):
 
         print('Your party feels fine and decides not to rest.')
         if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
@@ -420,87 +417,37 @@ def rest():
 
     main.smart_sleep(1)
 
-    main.player.hp += math.ceil(main.player.max_hp/3)
-    main.player.mp += math.ceil(main.player.max_mp/3)
-    main.solou.hp += math.ceil(main.solou.max_hp/3)
-    main.solou.mp += math.ceil(main.solou.max_mp/3)
-    main.xoann.hp += math.ceil(main.xoann.max_hp/3)
-    main.xoann.mp += math.ceil(main.xoann.max_mp/3)
-    main.randall.hp += math.ceil(main.randall.max_hp/3)
-    main.randall.mp += math.ceil(main.randall.max_mp/3)
-    main.ran_af.hp += math.ceil(main.ran_af.max_hp/3)
-    main.ran_af.mp += math.ceil(main.ran_af.max_mp/3)
-    main.parsto.hp += math.ceil(main.parsto.max_hp/3)
-    main.parsto.mp += math.ceil(main.parsto.max_mp/3)
-    main.adorine.hp += math.ceil(main.adorine.max_hp/3)
-    main.adorine.mp += math.ceil(main.adorine.max_mp/3)
-
-    # Make sure that the player doesn't have more than the max HP/MP
-    if main.player.hp > main.player.max_hp:
-        main.player.hp -= (main.player.hp - main.player.max_hp)
-    if main.player.mp > main.player.max_mp:
-        main.player.mp -= (main.player.mp - main.player.max_mp)
-
-    if main.solou.hp > main.solou.max_hp:
-        main.solou.hp -= (main.solou.hp - main.solou.max_hp)
-    if main.solou.mp > main.solou.max_mp:
-        main.solou.mp -= (main.solou.mp - main.solou.max_mp)
-
-    if main.xoann.hp > main.xoann.max_hp:
-        main.xoann.hp -= (main.xoann.hp - main.xoann.max_hp)
-    if main.xoann.mp > main.xoann.max_mp:
-        main.xoann.mp -= (main.xoann.mp - main.xoann.max_mp)
-
-    if main.randall.hp > main.randall.max_hp:
-        main.randall.hp -= (main.randall.hp - main.randall.max_hp)
-    if main.randall.mp > main.randall.max_mp:
-        main.randall.mp -= (main.randall.mp - main.randall.max_mp)
-
-    if main.ran_af.hp > main.ran_af.max_hp:
-        main.ran_af.hp -= (main.ran_af.hp - main.ran_af.max_hp)
-    if main.ran_af.mp > main.ran_af.max_mp:
-        main.ran_af.mp -= (main.ran_af.mp - main.ran_af.max_mp)
-
-    if main.parsto.hp > main.parsto.max_hp:
-        main.parsto.hp -= (main.parsto.hp - main.parsto.max_hp)
-    if main.parsto.mp > main.parsto.max_mp:
-        main.parsto.mp -= (main.parsto.mp - main.parsto.max_mp)
-
-    if main.adorine.hp > main.adorine.max_hp:
-        main.adorine.hp -= (main.adorine.hp - main.adorine.max_hp)
-    if main.adorine.mp > main.adorine.max_mp:
-        main.adorine.mp -= (main.adorine.mp - main.adorine.max_mp)
-
-    # Revive any dead characters
-    if main.player.status_ail == 'dead':
-        main.player.status_ail = 'none'
-
-    if main.solou.hp == 'dead':
-        main.solou.status_ail = 'none'
-
-    if main.xoann.hp == 'dead':
-        main.xoann.status_ail = 'none'
-
-    if main.randall.hp == 'dead':
-        main.randall.status_ail = 'none'
-
-    if main.ran_af.hp == 'dead':
-        main.ran_af.status_ail = 'none'
-
-    if main.parsto.hp == 'dead':
-        main.parsto.status_ail = 'none'
-
-    if main.adorine.hp == 'dead':
-        main.adorine.status_ail = 'none'
-
     is_battle = not random.randint(0, 3)
 
     if is_battle:
         monsters.spawn_monster()
-        battle.setup_vars()
         battle.battle_system(ambush=True)
 
     else:
+        main.fix_stats()
+
+        # Revive any dead characters
+        if main.player.status_ail == 'dead':
+            main.player.status_ail = 'none'
+
+        if main.solou.hp == 'dead':
+            main.solou.status_ail = 'none'
+
+        if main.xoann.hp == 'dead':
+            main.xoann.status_ail = 'none'
+
+        if main.randall.hp == 'dead':
+            main.randall.status_ail = 'none'
+
+        if main.ran_af.hp == 'dead':
+            main.ran_af.status_ail = 'none'
+
+        if main.parsto.hp == 'dead':
+            main.parsto.status_ail = 'none'
+
+        if main.adorine.hp == 'dead':
+            main.adorine.status_ail = 'none'
+
         print('You rested well and decide to continue on your way.')
         if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)

@@ -53,8 +53,7 @@ is_defending = False
 class Monster:
     # All monsters use this class. Bosses use a sub-class called
     # "Boss" (located in bosses.py) which inherits from this.
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk,
-                 m_dfns, spd, evad, lvl, element='none'):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad, lvl, element='none'):
         self.name = name  # Name
         self.hp = hp  # Health
         self.mp = mp  # Mana
@@ -68,13 +67,13 @@ class Monster:
         self.evad = evad  # Evasion
         self.lvl = lvl  # Level
         self.element = element  # Element
-        self.monster_name = ''
+        self.monster_name = ''  # The name of the monsters species (so a Fast Goblin's monster_name would be Goblin)
         self.status = ''
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
         self.is_poisoned = False
-        self.dodge = 0
         self.items = ''
+        self.status_ail = None  # Doesn't do anything, this is just to make some code in a different file work properly
 
     def physical_damage(self, mode, target):
         ise = inv_system.equipped[target.name if target != main.player else 'player']
@@ -151,7 +150,7 @@ class Monster:
                                             'muted']
                                 if x != target.status_ail])
 
-        print('The {0} is attempting to make {1} {2}...'.format(self.name, target.name, status))
+        print('The {0} is attempting to make {1} {2}...'.format(self.monster_name, target.name, status))
         main.smart_sleep(0.75)
 
         if random.randint(0, 1):
@@ -159,8 +158,7 @@ class Monster:
             target.status_ail = status
 
         else:
-            print('The {0} failed to make {1} {2}!'.format(
-                monster.monster_name, target.name, status))
+            print('The {0} failed to make {1} {2}!'.format(self.monster_name, target.name, status))
 
         self.mp -= 2
 
@@ -173,14 +171,14 @@ class Monster:
                 sounds.poison_damage.play()
 
                 poison_damage = math.floor(self.hp/6)
-                print('The {0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
+                print('The {0} took poison damage! (-{1} HP)'.format(self.monster_name, poison_damage))
                 self.hp -= poison_damage
 
             else:
                 main.smart_sleep(0.5)
 
                 sounds.buff_spell.play()
-                print('The {0} recovered from the poison!'.format(self.name))
+                print('The {0} recovered from the poison!'.format(self.monster_name))
                 self.is_poisoned = False
 
     def monst_name(self):
@@ -352,7 +350,12 @@ class Monster:
 
             exec("{0} = math.ceil({0})".format(stat))# Enemy stats must be integers
 
-        if main.party_info['reg'] == 'Glacian Plains':
+        if self.monster_name == "Calculator":
+            self.element = 'grass'
+            self.status = 'fucked'
+            self.status_msg = "was imbued with bullshit, causing severe fuckage!"
+
+        elif main.party_info['reg'] == 'Glacian Plains':
             self.element = 'ice'
             self.status = 'frostbitten'
             self.status_msg = "was imbued with frost, causing painful frostbite!"
@@ -488,7 +491,7 @@ def ranger_stats(self):
     self.evad = math.ceil(self.evad)
 
 
-def magic_ai(x):
+def magic_ai():
     global monster
 
     battle.turn_counter += 1
@@ -526,7 +529,7 @@ def magic_ai(x):
         if monster.hp > monster.max_hp:
             monster.hp = monster.max_hp
 
-        print('The {0} casts a healing spell!'.format(monster.name))
+        print('The {0} casts a healing spell!'.format(monster.monster_name))
 
         monster.mp -= monster.max_mp*0.2
 
@@ -534,50 +537,50 @@ def magic_ai(x):
         # Magic Attack
         sounds.magic_attack.play()
 
-        print('The {0} is preparing to cast a damaging spell on {1}'.format(monster.name, target.name))
+        print('The {0} is preparing to cast a damaging spell on {1}'.format(monster.monster_name, target.name))
         main.smart_sleep(0.75)
 
-        if monster.dodge in range(battle.temp_stats[target.name]['evad'], 512):
+        if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
             dam_dealt = magic.eval_element(p_elem=target.element, m_elem=monster.element,
                                            m_dmg=monster.magical_damage(target))[1]
 
-            print("The {0}'s spell succeeds, and deals {1} damage to {2}!".format(monster.name, dam_dealt, target.name))
+            print("The {0}'s spell succeeds, and deals {1} damage to {2}!".format(monster.monster_name, dam_dealt, target.name))
 
             target.hp -= dam_dealt
             sounds.enemy_hit.play()
 
         else:
             sounds.attack_miss.play()
-            print("The {0}'s spell narrowly misses {1}!".format(monster.name, target.name))
+            print("The {0}'s spell narrowly misses {1}!".format(monster.monster_name, target.name))
 
         monster.mp -= monster.max_mp*0.15
 
     else:
         # Non-magic Attack
 
-        print('The {0} {1} {2}'.format(monster.name, monster.attk_msg, target.name))
+        print('The {0} {1} {2}'.format(monster.monster_name, monster.attk_msg, target.name))
         sounds.aim_weapon.play()
 
         main.smart_sleep(0.75)
 
-        if monster.dodge in range(battle.temp_stats[target.name]['evad'], 512):
+        if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
             dam_dealt = magic.eval_element(p_elem=target.element, m_elem=monster.element,
                                            m_dmg=monster.physical_damage('pierce', target))[1]
 
-            print("The {0}'s attack lands, dealing {1} damage to {2}!".format(monster.name, dam_dealt, target.name))
+            print("The {0}'s attack lands, dealing {1} damage to {2}!".format(monster.monster_name, dam_dealt, target.name))
 
             target.hp -= dam_dealt
             sounds.enemy_hit.play()
 
         else:
             sounds.attack_miss.play()
-            print("The {0}'s attack narrowly misses {1}!".format(monster.name, target.name))
+            print("The {0}'s attack narrowly misses {1}!".format(monster.monster_name, target.name))
 
     monster.check_poison()
     monster.mp = math.ceil(monster.mp)
 
 
-def ranged_ai(x):
+def ranged_ai():
     global monster
 
     battle.turn_counter += 1
@@ -599,28 +602,28 @@ def ranged_ai(x):
     print(ascii_art.monster_art[monster.monster_name] % "The {0} is making a move!\n".format(monster.monster_name))
 
     # At the moment, Ranged monsters are only capable of attacking
-    print('The {0} {1} {2}'.format(monster.name, monster.attk_msg, target.name))
+    print('The {0} {1} {2}'.format(monster.monster_name, monster.attk_msg, target.name))
     sounds.aim_weapon.play()
 
     main.smart_sleep(0.75)
 
-    if monster.dodge in range(battle.temp_stats[target.name]['evad'], 512):
+    if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
         dam_dealt = magic.eval_element(p_elem=target.element, m_elem=monster.element,
                                        m_dmg=monster.physical_damage('pierce', target))[1]
 
-        print("The {0}'s attack lands, dealing {1} damage to {2}!".format(monster.name, dam_dealt, target.name))
+        print("The {0}'s attack lands, dealing {1} damage to {2}!".format(monster.monster_name, dam_dealt, target.name))
 
         target.hp -= dam_dealt
         sounds.enemy_hit.play()
 
     else:
         sounds.attack_miss.play()
-        print("The {0}'s attack narrowly misses {1}!".format(monster.name, target.name))
+        print("The {0}'s attack narrowly misses {1}!".format(monster.monster_name, target.name))
 
     monster.check_poison()
 
 
-def melee_ai(x):
+def melee_ai():
     global is_defending
     global monster
 
@@ -667,11 +670,11 @@ def melee_ai(x):
         monster.p_dfns = math.ceil(monster.p_dfns)
         monster.m_dfns = math.ceil(monster.m_dfns)
 
-        print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(monster.name))
+        print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(monster.monster_name))
 
     # If the monster doesn't defend, then it will attack!
     else:
-        print('The {0} {1} {2}'.format(monster.name, monster.attk_msg, target.name))
+        print('The {0} {1} {2}'.format(monster.monster_name, monster.attk_msg, target.name))
         sounds.sword_slash.play()
 
         main.smart_sleep(0.75)
@@ -680,14 +683,14 @@ def melee_ai(x):
             dam_dealt = magic.eval_element(p_elem=target.element, m_elem=monster.element,
                                            m_dmg=monster.physical_damage('melee', target))[1]
 
-            print("The {0}'s attack lands, dealing {1} damage to {2}!".format(monster.name, dam_dealt, target.name))
+            print("The {0}'s attack lands, dealing {1} damage to {2}!".format(monster.monster_name, dam_dealt, target.name))
 
             target.hp -= dam_dealt
             sounds.enemy_hit.play()
 
         else:
             sounds.attack_miss.play()
-            print("The {0}'s attack narrowly misses {1}!".format(monster.name, target.name))
+            print("The {0}'s attack narrowly misses {1}!".format(monster.monster_name, target.name))
 
     monster.check_poison()
 
