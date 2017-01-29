@@ -280,7 +280,7 @@ def pick_category():
                     elif cat == 'coord':
                         print('-'*25)
                         print(' ', '\n  '.join(inventory[cat]))
-                        input("Press enter/return when you are finished viewing these coordinates.")
+                        input("\nPress enter/return ")
                         print('-'*25)
 
                     else:
@@ -290,15 +290,16 @@ def pick_category():
 
                         else:
                             print('-'*25)
-                            input('The "{0}" category is empty. (Press Enter/Return) '.format(
-                                vis_cat))
+                            print('The {0} category is empty.'.format(vis_cat))
+                            input("\nPress enter/return ")
                             print('-'*25)
 
                     break
 
                 else:
                     print('-'*25)
-                    input('The "{0}" category is empty. (Press Enter/Return) '.format(vis_cat))
+                    print('The {0} category is empty. (Press Enter/Return) '.format(vis_cat))
+                    input("\nPress enter/return ")
                     print('-'*25)
                     break
 
@@ -632,6 +633,7 @@ Input [#] (or type "back"): """.format(str(selected)))
                     elif isinstance(selected, i.Accessory):
                         if isinstance(selected, i.ElementAccessory):
                             target.element = 'none'
+
                             print('You are no longer imbued with the {0} element.'.format(selected.element))
                             input("\nPress enter/return ")
 
@@ -643,6 +645,10 @@ Input [#] (or type "back"): """.format(str(selected)))
 
                 elif action == '2':
                     print('-'*25)
+
+                    if hasattr(item, "ascart"):
+                        print(ascii_art.item_sprites[item.ascart])
+
                     print(selected.desc)
                     input("\nPress enter/return ")
                     print('-'*25)
@@ -662,8 +668,7 @@ def view_quests():
 
         if choice.startswith('f'):  # Finished Quests
             print('-'*25)
-            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
-                        and x.finished]
+            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.finished]
 
             if dialogue:
                 while fizz:

@@ -39,7 +39,7 @@
         <entry file="file://$PROJECT_DIR$/Game Files/PeasantsAscension.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="650">
-              <caret line="104" column="0" lean-forward="true" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+              <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
               <folding>
                 <element signature="e#2104#2114#0" expanded="true" />
                 <element signature="e#5818#8859#0" expanded="false" />
@@ -59,7 +59,7 @@
         <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-7">
-              <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+              <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
               <folding>
                 <element signature="e#734#744#0" expanded="true" />
               </folding>
@@ -82,10 +82,11 @@
       <file leaf-file-name="inv_system.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1371">
-              <caret line="701" column="59" lean-forward="true" selection-start-line="701" selection-start-column="59" selection-end-line="701" selection-end-column="59" />
+            <state relative-caret-position="671">
+              <caret line="662" column="15" lean-forward="true" selection-start-line="662" selection-start-column="15" selection-end-line="662" selection-end-column="15" />
               <folding>
                 <element signature="e#730#740#0" expanded="true" />
+                <element signature="e#13676#17219#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -246,8 +247,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>monsters</find>
-      <find>fix_stats</find>
       <find>units.</find>
       <find>items</find>
       <find>battle</find>
@@ -276,6 +275,8 @@
       <find>miscvars</find>
       <find>randa;</find>
       <find>randall</find>
+      <find>category</find>
+      <find>desc</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -1013,7 +1014,7 @@
     <entry file="file://$PROJECT_DIR$/Game Files/PeasantsAscension.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="650">
-          <caret line="104" column="0" lean-forward="true" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+          <caret line="104" column="0" lean-forward="false" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
           <folding>
             <element signature="e#2104#2114#0" expanded="true" />
             <element signature="e#5818#8859#0" expanded="false" />
@@ -1169,7 +1170,7 @@
     <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-7">
-          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
           <folding>
             <element signature="e#734#744#0" expanded="true" />
           </folding>
@@ -1178,10 +1179,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1371">
-          <caret line="701" column="59" lean-forward="true" selection-start-line="701" selection-start-column="59" selection-end-line="701" selection-end-column="59" />
+        <state relative-caret-position="671">
+          <caret line="662" column="15" lean-forward="true" selection-start-line="662" selection-start-column="15" selection-end-line="662" selection-end-column="15" />
           <folding>
             <element signature="e#730#740#0" expanded="true" />
+            <element signature="e#13676#17219#0" expanded="false" />
           </folding>
         </state>
       </provider>
