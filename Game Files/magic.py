@@ -89,7 +89,7 @@ class Healing(Spell):
                 units.adorine,
                 units.ran_af,
                 units.parsto,
-                units.randall] if x.enabled
+                units.chyme] if x.enabled
             ]
 
             if len(target_options) == 1:
@@ -97,26 +97,27 @@ class Healing(Spell):
 
             else:
                 print("Select Target for {0}:".format(self.name))
-                print("     ", "\n      ".join(
-                    ["[{0}] {1}".format(int(num) + 1, character.name)
-                     for num, character in enumerate(target_options)]))
+                print("     ", "\n      ".join(["[{0}] {1}".format(int(num) + 1, character.name)
+                                               for num, character in enumerate(target_options)]))
 
                 while True:
                     target = input("Input [#]: ")
                     try:
                         target = int(target) - 1
+
                     except ValueError:
                         continue
 
                     try:
                         target = target_options[target]
+
                     except IndexError:
                         continue
 
                     break
 
             # Healing spells will always restore a minimum of user.hp*thresh.
-            # i.e. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
+            # e.g. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
             # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
             # In addition to this, the user restores an additional 2*Wisdom, unless they are a
             # Paladin in which case it it 4*Wisdom.
@@ -141,14 +142,9 @@ class Healing(Spell):
             if is_battle:
                 # Print the ASCII art and "User Turn" info if a battle is going on
                 print("-{0}'s Turn-")
-                print(ascii_art.player_art[user.class_.title()] %
-                      "{0} is making a move!\n".format(user.name))
+                print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
 
-            print('Using "{0}", {1} is healed by {2} HP!'.format(
-                self.name,
-                target.name,
-                total_heal
-            ))
+            print('Using "{0}", {1} is healed by {2} HP!'.format(self.name, target.name, total_heal))
 
             return True
 
@@ -243,9 +239,9 @@ class Buff(Spell):
     # Buffs are spells that temporarily raise the player's stats
     # during battle. They last until the battle is over, at which
     # point the player's stats will return to normal.
-    def __init__(self, name, desc, mana, req_lvl, incre, stat, a_c=('mage', 'monk')):
+    def __init__(self, name, desc, mana, req_lvl, increase, stat, a_c=('mage', 'monk')):
         Spell.__init__(self, name, desc, mana, req_lvl, a_c)
-        self.incre = incre
+        self.increase = increase
         self.stat = stat
 
     def __str__(self):
@@ -256,17 +252,13 @@ class Buff(Spell):
             Spell.use_mana(self, user)
 
             print("\n-{0}'s Turn-")
-            print(ascii_art.player_art[user.class_.title()] %
-                  "{0} is making a move!\n".format(user.name))
-
+            print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
             print('{0} raises their stats using the power of {1}!'.format(user.name, self.name))
 
             sounds.buff_spell.play()
 
-            battle.temp_stats[user.name][self.stat] *= 1 + self.incre
-            battle.temp_stats[user.name][self.stat] = math.ceil(
-                battle.temp_stats[user.name][self.stat]
-            )
+            battle.temp_stats[user.name][self.stat] *= 1 + self.increase
+            battle.temp_stats[user.name][self.stat] = math.ceil(battle.temp_stats[user.name][self.stat])
 
             return True
 
@@ -536,7 +528,8 @@ def eval_element(p_elem, m_elem, m_dmg=0, p_dmg=0):
     # Life < Death and Death < Life
     # "None" element is neutral to all elements.
 
-    p_elem = p_elem.lower()  # For backwards compatibility
+    # Set everything to be lowercase, just incase
+    p_elem = p_elem.lower()
     m_elem = m_elem.lower()
 
     element_matchup = {  # element_matchup[key][0] is the element that key is weak to
@@ -617,7 +610,7 @@ spellbook = {
         'Previous Spell': []
     },
 
-    'Randall': {
+    'Chyme': {
         'Healing': [pit_heal, min_heal],
         'Damaging': [magic_shot, purify],
         'Buffs': [m_evade, m_quick],

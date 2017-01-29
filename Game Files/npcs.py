@@ -240,7 +240,7 @@ def solou_p1_at():
     units.solou.enabled = True
     solou_phrase_1.active = False
     print('Solou the Mage has been added to your party!')
-    input('Press enter/return ')
+    input('\nPress enter/return ')
     print('-'*25)
 
 solou_phrase_1.after_talking = solou_p1_at
@@ -801,9 +801,9 @@ def ser_pol_p3_at():
     units.adorine.mp += (units.adorine.max_mp - units.adorine.mp)
     units.adorine.status_ail = 'none'
 
-    units.randall.hp += (units.randall.max_hp - units.randall.hp)
-    units.randall.mp += (units.randall.max_mp - units.randall.mp)
-    units.randall.status_ail = 'none'
+    units.chyme.hp += (units.chyme.max_hp - units.chyme.hp)
+    units.chyme.mp += (units.chyme.max_mp - units.chyme.mp)
+    units.chyme.status_ail = 'none'
 
     units.xoann.hp += (units.xoann.max_hp - units.xoann.hp)
     units.xoann.mp += (units.xoann.max_mp - units.xoann.mp)

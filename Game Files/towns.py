@@ -113,7 +113,7 @@ class Town:
                         units.adorine,
                         units.ran_af,
                         units.parsto,
-                        units.randall] if x.enabled
+                        units.chyme] if x.enabled
                     ]
 
                     if len(target_options) == 1:
@@ -344,7 +344,7 @@ class Town:
                         units.player,
                         units.solou,
                         units.xoann,
-                        units.randall,
+                        units.chyme,
                         units.ran_af,
                         units.parsto,
                         units.adorine
@@ -769,7 +769,7 @@ class Tavern:
                         units.player,
                         units.solou,
                         units.xoann,
-                        units.randall,
+                        units.chyme,
                         units.ran_af,
                         units.parsto,
                         units.adorine

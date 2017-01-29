@@ -231,7 +231,7 @@ It's probably in your best interests that you not do that.
                             units.adorine,
                             units.ran_af,
                             units.parsto,
-                            units.randall] if x.enabled
+                            units.chyme] if x.enabled
                         ]
 
                         if len(target_options) == 1:
@@ -276,7 +276,7 @@ It's probably in your best interests that you not do that.
                             units.adorine,
                             units.ran_af,
                             units.parsto,
-                            units.randall] if x.enabled
+                            units.chyme] if x.enabled
                         ]
 
                         if len(user_options) == 1:
@@ -401,7 +401,7 @@ def rest():
     if all([units.player.hp == units.player.max_hp and units.player.mp == units.player.max_mp,
             units.solou.hp == units.solou.max_hp and units.solou.mp == units.solou.max_mp,
             units.xoann.hp == units.xoann.max_hp and units.xoann.mp == units.xoann.max_mp,
-            units.randall.hp == units.randall.max_hp and units.randall.mp == units.randall.max_mp,
+            units.chyme.hp == units.chyme.max_hp and units.chyme.mp == units.chyme.max_mp,
             units.ran_af.hp == units.ran_af.max_hp and units.ran_af.mp == units.ran_af.max_mp,
             units.parsto.hp == units.parsto.max_hp and units.parsto.mp == units.parsto.max_mp,
             units.adorine.hp == units.adorine.max_hp and units.adorine.mp == units.adorine.max_mp]):
@@ -436,8 +436,8 @@ def rest():
         if units.xoann.status_ail == 'dead':
             units.xoann.status_ail = 'none'
 
-        if units.randall.status_ail == 'dead':
-            units.randall.status_ail = 'none'
+        if units.chyme.status_ail == 'dead':
+            units.chyme.status_ail = 'none'
 
         if units.ran_af.status_ail == 'dead':
             units.ran_af.status_ail = 'none'

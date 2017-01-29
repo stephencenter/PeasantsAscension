@@ -1241,7 +1241,7 @@ class Monster(Unit):
             player,
             solou,
             xoann,
-            randall,
+            chyme,
             ran_af,
             parsto,
             adorine
@@ -1327,7 +1327,7 @@ class Monster(Unit):
             player,
             solou,
             xoann,
-            randall,
+            chyme,
             ran_af,
             parsto,
             adorine
@@ -1367,7 +1367,7 @@ class Monster(Unit):
             player,
             solou,
             xoann,
-            randall,
+            chyme,
             ran_af,
             parsto,
             adorine
@@ -1447,8 +1447,8 @@ ran_af = PlayableCharacter("Ran'Af", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='monk
 # Pronounced "Parse-toe"
 parsto = PlayableCharacter("Parsto", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='ranger', enabled=False)
 
-# Pronounced "Ran-dull"
-randall = PlayableCharacter("Randall", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='paladin', enabled=False)
+# Rhymes with "Time", the Ch makes the same sound as the Ch in "chocolate"
+chyme = PlayableCharacter("Chyme", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='paladin', enabled=False)
 
 
 def create_player():
@@ -1547,7 +1547,7 @@ def spawn_monster():
             with open(a_path, mode='w', encoding='utf-8') as f:
                 json.dump(adorine.__dict__, f, indent=4, separators=(', ', ': '))
             with open(r_path, mode='w', encoding='utf-8') as f:
-                json.dump(randall.__dict__, f, indent=4, separators=(', ', ': '))
+                json.dump(chyme.__dict__, f, indent=4, separators=(', ', ': '))
             with open(f_path, mode='w', encoding='utf-8') as f:
                 json.dump(ran_af.__dict__, f, indent=4, separators=(', ', ': '))
             with open(p_path, mode='w', encoding='utf-8') as f:
@@ -1559,7 +1559,7 @@ def spawn_monster():
             global solou
             global xoann
             global adorine
-            global randall
+            global chyme
             global ran_af
             global parsto
 
@@ -1567,7 +1567,7 @@ def spawn_monster():
             solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
             xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
             adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-            randall = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+            chyme = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
             ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
             parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
 
@@ -1580,7 +1580,7 @@ def spawn_monster():
             with open(a_path, encoding='utf-8') as f:
                 adorine.__dict__ = json.load(f)
             with open(r_path, encoding='utf-8') as f:
-                randall.__dict__ = json.load(f)
+                chyme.__dict__ = json.load(f)
             with open(f_path, encoding='utf-8') as f:
                 ran_af.__dict__ = json.load(f)
             with open(p_path, encoding='utf-8') as f:
@@ -1594,7 +1594,7 @@ def fix_stats():
     global player
     global solou
     global xoann
-    global randall
+    global chyme
     global parsto
     global ran_af
     global adorine
@@ -1605,8 +1605,8 @@ def fix_stats():
         solou.hp = 0
     if xoann.hp < 0:
         xoann.hp = 0
-    if randall.hp < 0:
-        randall.hp = 0
+    if chyme.hp < 0:
+        chyme.hp = 0
     if parsto.hp < 0:
         parsto.hp = 0
     if ran_af.hp < 0:
@@ -1622,8 +1622,8 @@ def fix_stats():
         solou.mp = 0
     if xoann.mp < 0:
         xoann.mp = 0
-    if randall.mp < 0:
-        randall.mp = 0
+    if chyme.mp < 0:
+        chyme.mp = 0
     if parsto.mp < 0:
         parsto.mp = 0
     if ran_af.mp < 0:
@@ -1639,8 +1639,8 @@ def fix_stats():
         solou.hp -= (solou.hp - solou.max_hp)
     if xoann.hp > xoann.max_hp:
         xoann.hp -= (xoann.hp - xoann.max_hp)
-    if randall.hp > randall.max_hp:
-        randall.hp -= (randall.hp - randall.max_hp)
+    if chyme.hp > chyme.max_hp:
+        chyme.hp -= (chyme.hp - chyme.max_hp)
     if parsto.hp > parsto.max_hp:
         parsto.hp -= (parsto.hp - parsto.max_hp)
     if ran_af.hp > ran_af.max_hp:
@@ -1656,8 +1656,8 @@ def fix_stats():
         solou.mp -= (solou.mp - solou.max_mp)
     if xoann.mp > xoann.max_mp:
         xoann.mp -= (xoann.mp - xoann.max_mp)
-    if randall.mp > randall.max_mp:
-        randall.mp -= (randall.mp - randall.max_mp)
+    if chyme.mp > chyme.max_mp:
+        chyme.mp -= (chyme.mp - chyme.max_mp)
     if parsto.mp > parsto.max_mp:
         parsto.mp -= (parsto.mp - parsto.max_mp)
     if ran_af.mp > ran_af.max_mp:
@@ -1695,7 +1695,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     with open(a_path, mode='w', encoding='utf-8') as f:
         json.dump(adorine.__dict__, f, indent=4, separators=(', ', ': '))
     with open(r_path, mode='w', encoding='utf-8') as f:
-        json.dump(randall.__dict__, f, indent=4, separators=(', ', ': '))
+        json.dump(chyme.__dict__, f, indent=4, separators=(', ', ': '))
     with open(f_path, mode='w', encoding='utf-8') as f:
         json.dump(ran_af.__dict__, f, indent=4, separators=(', ', ': '))
     with open(p_path, mode='w', encoding='utf-8') as f:
@@ -1708,7 +1708,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     global solou
     global xoann
     global adorine
-    global randall
+    global chyme
     global ran_af
     global parsto
 
@@ -1716,7 +1716,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
     xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
     adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    randall = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    chyme = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
     ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
     parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
 
@@ -1729,7 +1729,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     with open(a_path, encoding='utf-8') as f:
         adorine.__dict__ = json.load(f)
     with open(r_path, encoding='utf-8') as f:
-        randall.__dict__ = json.load(f)
+        chyme.__dict__ = json.load(f)
     with open(f_path, encoding='utf-8') as f:
         ran_af.__dict__ = json.load(f)
     with open(p_path, encoding='utf-8') as f:

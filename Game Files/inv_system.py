@@ -85,7 +85,7 @@ equipped = {
         'access': '(None)'
     },
 
-    'Randall': {
+    'Chyme': {
         'weapon': i.stn_dag,
         'head': _c(i.straw_hat),
         'body': _c(i.cotton_shirt),
@@ -428,7 +428,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                     units.adorine,
                     units.ran_af,
                     units.parsto,
-                    units.randall] if x.enabled
+                    units.chyme] if x.enabled
                 ]
 
                 if len(target_options) == 1:
@@ -518,7 +518,7 @@ def manage_equipped():
         units.adorine,
         units.ran_af,
         units.parsto,
-        units.randall] if x.enabled
+        units.chyme] if x.enabled
     ]
 
     print("Select Character: ")

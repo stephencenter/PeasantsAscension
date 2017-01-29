@@ -91,15 +91,15 @@ def set_temp_stats():
             'ability_used': False
         },
 
-        'Randall': {
-            'attk': _c(units.randall.attk),
-            'dfns': _c(units.randall.dfns),
-            'p_attk': _c(units.randall.p_attk),
-            'p_dfns': _c(units.randall.p_dfns),
-            'm_attk': _c(units.randall.m_attk),
-            'm_dfns': _c(units.randall.m_dfns),
-            'spd': _c(units.randall.spd),
-            'evad': _c(units.randall.evad),
+        'Chyme': {
+            'attk': _c(units.chyme.attk),
+            'dfns': _c(units.chyme.dfns),
+            'p_attk': _c(units.chyme.p_attk),
+            'p_dfns': _c(units.chyme.p_dfns),
+            'm_attk': _c(units.chyme.m_attk),
+            'm_dfns': _c(units.chyme.m_dfns),
+            'spd': _c(units.chyme.spd),
+            'evad': _c(units.chyme.evad),
             'ability_used': False
         },
 
@@ -182,7 +182,7 @@ def battle_system(is_boss=False, ambush=False):
     while units.monster.hp > 0 and any([char.hp > 0 for char in [units.player,
                                                                  units.solou,
                                                                  units.xoann,
-                                                                 units.randall,
+                                                                 units.chyme,
                                                                  units.parsto,
                                                                  units.ran_af,
                                                                  units.adorine] if char.enabled]):
@@ -192,7 +192,7 @@ def battle_system(is_boss=False, ambush=False):
         for character in [x for x in [units.player,
                                       units.solou,
                                       units.xoann,
-                                      units.randall,
+                                      units.chyme,
                                       units.ran_af,
                                       units.adorine,
                                       units.parsto] if x.enabled]:
@@ -217,7 +217,7 @@ def battle_system(is_boss=False, ambush=False):
         for character in [x for x in [units.player,
                                       units.solou,
                                       units.xoann,
-                                      units.randall,
+                                      units.chyme,
                                       units.ran_af,
                                       units.adorine,
                                       units.parsto] if x.enabled]:
@@ -235,7 +235,7 @@ def battle_system(is_boss=False, ambush=False):
                             units.player,
                             units.solou,
                             units.xoann,
-                            units.randall,
+                            units.chyme,
                             units.parsto,
                             units.ran_af,
                             units.adorine], key=lambda x: x.spd):
@@ -254,7 +254,7 @@ def battle_system(is_boss=False, ambush=False):
                 if any(x.hp > 0 for x in [units.player,
                                           units.solou,
                                           units.xoann,
-                                          units.randall,
+                                          units.chyme,
                                           units.parsto,
                                           units.ran_af,
                                           units.adorine] if x.enabled):
@@ -310,7 +310,7 @@ def after_battle(is_boss):  # Assess the results of the battle
         if units.monster.hp > 0 and all([0 >= x.hp for x in [units.player,
                                                              units.solou,
                                                              units.xoann,
-                                                             units.randall,
+                                                             units.chyme,
                                                              units.ran_af,
                                                              units.parsto,
                                                              units.adorine] if x.enabled]):
@@ -340,7 +340,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     for character in [units.player,
                                       units.solou,
                                       units.xoann,
-                                      units.randall,
+                                      units.chyme,
                                       units.ran_af,
                                       units.parsto,
                                       units.adorine]:
@@ -416,7 +416,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             for character in [x for x in [units.solou,
                                           units.xoann,
                                           units.player,
-                                          units.randall,
+                                          units.chyme,
                                           units.parsto,
                                           units.ran_af,
                                           units.adorine] if x.enabled]:
@@ -512,8 +512,8 @@ def bat_stats():
                               if units.xoann.enabled else '',
                               '{0}/{1} MP'.format(units.adorine.hp, units.adorine.max_hp)
                               if units.adorine.enabled else '',
-                              '{0}/{1} MP'.format(units.randall.hp, units.randall.max_hp)
-                              if units.randall.enabled else '',
+                              '{0}/{1} MP'.format(units.chyme.hp, units.chyme.max_hp)
+                              if units.chyme.enabled else '',
                               '{0}/{1} MP'.format(units.ran_af.hp, units.ran_af.max_hp)
                               if units.ran_af.enabled else '',
                               '{0}/{1} MP'.format(units.parsto.hp, units.parsto.max_hp)
@@ -528,8 +528,8 @@ def bat_stats():
                              if units.xoann.enabled else '',
                              '{0}/{1} MP'.format(units.adorine.mp, units.adorine.max_mp)
                              if units.adorine.enabled else '',
-                             '{0}/{1} MP'.format(units.randall.mp, units.randall.max_mp)
-                             if units.randall.enabled else '',
+                             '{0}/{1} MP'.format(units.chyme.mp, units.chyme.max_mp)
+                             if units.chyme.enabled else '',
                              '{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)
                              if units.ran_af.enabled else '',
                              '{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)
@@ -566,15 +566,15 @@ def bat_stats():
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.xoann.hp, units.xoann.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)))))
 
-    if units.randall.enabled:
+    if units.chyme.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.randall.name, units.randall.hp,
-              units.randall.max_hp, units.randall.mp,
-              units.randall.max_mp, units.randall.lvl,
-              units.randall.status_ail.title(),
-              pad1=' '*(first_padding - len(units.randall.name)),
-              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.randall.hp, units.randall.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.randall.mp, units.randall.max_mp)))))
+              units.chyme.name, units.chyme.hp,
+              units.chyme.max_hp, units.chyme.mp,
+              units.chyme.max_mp, units.chyme.lvl,
+              units.chyme.status_ail.title(),
+              pad1=' '*(first_padding - len(units.chyme.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.chyme.hp, units.chyme.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.chyme.mp, units.chyme.max_mp)))))
 
     if units.parsto.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(

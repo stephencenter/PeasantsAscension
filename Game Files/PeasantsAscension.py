@@ -98,7 +98,7 @@ sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'            # Spellb
 sav_play = 'Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
 sav_solou = 'Save Files/{CHARACTER_NAME}/solou_stats.json'      # Solou's Stats
 sav_xoann = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'      # Xoann's Stats
-sav_randall = 'Save Files/{CHARACTER_NAME}/randall_stats.json'  # Randall's Stats
+sav_chyme = 'Save Files/{CHARACTER_NAME}/chyme_stats.json'      # Chyme's Stats
 sav_ran_af = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's Stats
 sav_parsto = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
 sav_adorine = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
@@ -227,7 +227,7 @@ def format_save_names():
 
     for x in sorted(['sav_acquired_gems', 'sav_def_bosses', 'sav_equip_items', 'sav_inventory','sav_misc_boss_info',
                      'sav_party_info', 'sav_spellbook', 'sav_quests_dia','sav_play', 'sav_solou', 'sav_xoann',
-                     'sav_randall','sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
+                     'sav_chyme','sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
 
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
@@ -280,7 +280,7 @@ def check_save():  # Check for save files and load the game if they're found
 
     save_file_list = [
         sav_acquired_gems, sav_def_bosses, sav_equip_items, sav_inventory, sav_misc_boss_info, sav_party_info,
-        sav_quests_dia, sav_spellbook ,sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_randall
+        sav_quests_dia, sav_spellbook ,sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_chyme
     ]
 
     for directory in dirs:
@@ -377,7 +377,7 @@ def check_save():  # Check for save files and load the game if they're found
                 bosses.deserialize_bosses(sav_misc_boss_info)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
-                units.deserialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_randall,
+                units.deserialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme,
                                          sav_ran_af, sav_parsto)
 
                 print('Load successful.')
@@ -425,7 +425,7 @@ def save_game():
                 bosses.serialize_bosses(sav_misc_boss_info)
                 npcs.serialize_dialogue(sav_quests_dia)
                 magic.serialize_sb(sav_spellbook)
-                units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_randall, sav_ran_af, sav_parsto)
+                units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
                 with open('/'.join([save_dir, adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:
                     f.write("{0} | LVL: {1} | Class: {2}".format(units.player.name,
