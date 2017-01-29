@@ -522,19 +522,21 @@ def manage_equipped():
     ]
 
     print("Select Character: ")
-    print("     ", "\n      ".join(
-        ["[{0}] {1}".format(int(num) + 1, character.name)
-         for num, character in enumerate(target_options)]))
+    print("     ", "\n      ".join(["[{0}] {1}".format(int(num) + 1, character.name)
+                                   for num, character in enumerate(target_options)]))
 
     while True:
         target = input("Input [#]: ")
+
         try:
             target = int(target) - 1
+
         except ValueError:
             continue
 
         try:
             target = target_options[target]
+
         except IndexError:
             continue
 
@@ -561,18 +563,24 @@ def manage_equipped():
 
             if selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                 print('-'*25)
+
                 return
 
             elif selected == '1':
                 selected = p_equip['weapon']
+
             elif selected == '2':
                 selected = p_equip['head']
+
             elif selected == '3':
                 selected = p_equip['body']
+
             elif selected == '4':
                 selected = p_equip['legs']
+
             elif selected == '5':
                 selected = p_equip['access']
+
             else:
                 continue
 
@@ -584,8 +592,10 @@ def manage_equipped():
 
             if isinstance(selected, i.Weapon):
                 key = 'weapon'
+
             elif isinstance(selected, i.Accessory):
                 key = 'access'
+
             elif isinstance(selected, i.Armor):
                 key = selected.part
 
@@ -634,6 +644,7 @@ Input [#] (or type "back"): """.format(str(selected)))
                 elif action == '2':
                     print('-'*25)
                     print(selected.desc)
+                    input("\nPress enter/return ")
                     print('-'*25)
 
                 elif action.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
@@ -669,9 +680,7 @@ def view_quests():
                             number = int(number) - 1
 
                         except ValueError:
-                            if number.lower() in [
-                                'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                            ]:
+                            if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                 fizz = False  # Break the loop twice
                                 break
 
@@ -690,14 +699,15 @@ def view_quests():
 
                         break
             else:
-                input('Your party has no finished quests! (Press Enter/Return) ')
+                print('Your party has no finished quests!')
+                input("\nPress enter/return")
+
             print('-'*25)
 
         elif choice.startswith('a'):  # Active Quest
             print('-'*25)
 
-            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest)
-                        and not x.finished and x.started]
+            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and not x.finished and x.started]
 
             if dialogue:
                 while fizz:
@@ -713,11 +723,10 @@ def view_quests():
 
                         try:
                             number = int(number) - 1
+
                         except ValueError:
 
-                            if number.lower() in [
-                                'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                            ]:
+                            if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
 
                                 fizz = False  # Break the loop twice
                                 break
@@ -732,14 +741,16 @@ def view_quests():
 
                         print('-'*25)
 
-                        print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
-                            quest.name, '\n     '.join([
+                        print("""{0}:\n    "{1}"\nGiven by: {2}""".format(quest.name, '\n     '.join([
                                 x for x in quest.desc]), quest.q_giver))
+
+                        input("\nPress enter/return ")
                         print('-'*25)
 
                         break
             else:
                 print('Your party has no active quests!')
+                input('\nPress enter/return ')
 
             print('-'*25)
 
@@ -752,9 +763,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
     print(item.desc)
     print('-'*25)
     while True:
-        y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(
-            item.name, item.sell))
-
+        y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(item.name, item.sell))
         y_n = y_n.lower()
 
         if y_n.startswith('y'):
@@ -764,9 +773,8 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
                     inventory[cat].remove(it)
                     main.party_info['gp'] += item.sell
 
-                    print('Your party hands the shopkeeper their {0} and receives {1} GP.'.format(
-                        item.name, item.sell))
-
+                    print('Your party hands the shopkeeper their {0} and receives {1} GP.'.format(item.name, item.sell))
+                    input('\nPress enter/return ')
                     return
 
         elif y_n.startswith('n'):
@@ -774,8 +782,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
 
 
 def tools_menu():  # Display a set of usable tools on the world map
-    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel',
-                  'Boots of Insane Speed']
+    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel', 'Boots of Insane Speed']
     available_tools = []
     spam = True
 
@@ -790,7 +797,8 @@ def tools_menu():  # Display a set of usable tools on the world map
     print('-'*25)
 
     if not available_tools:
-        print('Your party has no available tools to use...')
+        print('Your party has no available tools to use.')
+        input('\nPress enter/return ')
 
         if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
             print('-'*25)
@@ -799,24 +807,21 @@ def tools_menu():  # Display a set of usable tools on the world map
 
     while spam:
         print('Tools: \n      ', end='')
-        print('\n      '.join(['[{0}] {1}'.format(x + 1, y)
-              for x, y in enumerate(available_tools)]))
+        print('\n      '.join(['[{0}] {1}'.format(x + 1, y) for x, y in enumerate(available_tools)]))
 
         while True:
             tool = input('Input [#] (or type "exit"): ')
 
             try:
                 tool = int(tool) - 1
+
             except ValueError:
-                if tool.lower() in [
-                    'e', 'x', 'exit', 'c', 'cancel', 'b', 'back'
-                ]:
-                    spam = False  # Essentially breaks the loop twice
-                    if not towns.search_towns(
-                            main.party_info['x'],
-                            main.party_info['y'], enter=False
-                    ):
+                if tool.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    spam = False
+
+                    if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
                         print('-'*25)
+
                     break
 
                 else:
