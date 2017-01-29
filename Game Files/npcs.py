@@ -191,7 +191,7 @@ class Quest(Conversation):
 
         print("Quest Complete!")
         print("You've received {0} XP and {1} GP for completing this quest.".format(self.reward[0], self.reward[1]))
-        input('Press Enter/Return')
+        input('\nPress enter/return')
 
         main.party_info['gp'] += self.reward[1]
         units.player.exp += self.reward[0]
@@ -322,7 +322,8 @@ def azura_p1_at():
     global azura_phrase_2
     global azura_phrase_3
 
-    input('You write down the coordinates of Ambercreek. | Press enter/return ')
+    print('You write down the coordinates of Ambercreek.')
+    input("\nPress enter/return ")
     azura_phrase_2.active = False
     azura_phrase_3.active = True
 
@@ -350,8 +351,7 @@ stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                  "The Forest lies in the center, while the Shore surrounds them.",
                                  "There's a small region somewhere around here that is the",
                                  "cause of much worry and panic in this town: The Graveyard.",
-                                 "Inside lies a dangerous apparition, feared by all who have \
-seen it.",
+                                 "Inside lies a dangerous apparition, feared by all who have seen it.",
                                  "As the captain of the guard, my men and I have tried",
                                  "and failed countless times to defeat that wretched ghost!",
                                  ], active=True)
@@ -390,7 +390,8 @@ def stwqst_uc1():
     rivesh_phrase_2.active = False
     rivesh_quest_1.active = True
     print('-'*25)
-    input('You now have experience defeating ghosts! | Press Enter/Return ')
+    print('You now have experience defeating ghosts!')
+    input("\nPress enter/return ")
 
 
 stewson_quest_1.upon_starting = stwqst_us1

@@ -646,8 +646,8 @@ Input [#] (or type "back"): """.format(str(selected)))
                 elif action == '2':
                     print('-'*25)
 
-                    if hasattr(item, "ascart"):
-                        print(ascii_art.item_sprites[item.ascart])
+                    if hasattr(selected, "ascart"):
+                        print(ascii_art.item_sprites[selected.ascart])
 
                     print(selected.desc)
                     input("\nPress enter/return ")
@@ -765,6 +765,10 @@ def view_quests():
 
 def sell_item(cat, item):  # Trade player-owned objects for money (GP)
     print('-'*25)
+
+    if hasattr(item, "ascart"):
+        print(ascii_art.item_sprites[item.ascart])
+
     print(item.desc)
     print('-'*25)
     while True:

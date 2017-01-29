@@ -652,8 +652,9 @@ island floating up in the sky. Perhaps something is up there!""")
                 print('Still climbing...')
                 main.smart_sleep(1)
 
-                input("After several hours of climbing the staircase, \
-you finally arrive at the top | Press enter/return ")
+                print("After several hours of climbing the staircase, you finally arrive at the top.")
+
+                input("\nPress enter/return ")
 
                 main.party_info['x'] = 0
                 main.party_info['y'] = 0

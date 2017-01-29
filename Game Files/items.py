@@ -163,13 +163,13 @@ class Weapon(Item):
             print('-'*25)
 
             if isinstance(self.class_, list):
-                input("{0} must be a {1} or a {2} to equip this | Press enter/return ".format(
-                    user.name,
-                    self.class_[0].title(),
-                    self.class_[1].title()))
+                print("{0} must be a {1} or a {2} to equip this.".format(
+                    user.name, self.class_[0].title(), self.class_[1].title()))
+                input("\nPress enter/return ")
 
             else:
-                input("{0} must be a {1} to equip this | Press enter/return ".format(user.name, self.class_.title()))
+                print("{0} must be a {1} to equip this.".format(user.name, self.class_.title()))
+                input("\nPress enter/return ")
 
 
 class Armor(Item):
@@ -216,15 +216,14 @@ class Armor(Item):
             print('-'*25)
 
             if isinstance(self.class_, list):
-                input("{0} must be a {1} or a {2} to equip this | Press enter/return ".format(
-                    user.name,
-                    self.class_[0].title(),
-                    self.class_[1].title()))
+                print("{0} must be a {1} or a {2} to equip.".format(
+                    user.name, self.class_[0].title(), self.class_[1].title()))
+
+                input("\nPress enter/return ")
 
             else:
-                input("{0} must be a {1} to equip this | Press enter/return ".format(
-                    user.name,
-                    self.class_.title()))
+                print("{0} must be a {1} to equip this.".format(user.name, self.class_.title()))
+                input("\nPress enter/return ")
 
 
 # -- ACCESSORIES -- #

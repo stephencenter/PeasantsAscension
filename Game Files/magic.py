@@ -623,7 +623,8 @@ def pick_cat(user, is_battle=True):
     inv_name = user.name if user != units.player else 'player'
 
     if user.status_ail == 'silenced':
-        input("You find yourself unable to use spells! | Press enter/return ")
+        print("You find yourself unable to use spells!")
+        input("\nPress enter/return ")
 
         return False
 

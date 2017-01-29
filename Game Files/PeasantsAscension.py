@@ -389,7 +389,8 @@ def check_save():  # Check for save files and load the game if they're found
 
             except (OSError, ValueError):
                 logging.exception('Error loading game:')
-                input('There was an error loading your game | Press enter/return ')
+                print('There was an error loading your game.')
+                input("\nPress enter/return ")
                 print('-'*25)
                 break
 
