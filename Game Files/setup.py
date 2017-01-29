@@ -5,4 +5,4 @@ setup(
     name = "Peasants' Ascension",
     version = "v1.0.0 Beta",
     description = "A fun RPG programmed in Python",
-    executables  = [Executable("PeasantsAscension.py", base = "console")])
+    executables  = [Executable("PeasantsAscension.py", base = "console", icon = "peasant_icon.ico")])
