@@ -20,7 +20,7 @@ import time
 import math
 import pygame
 
-import monsters
+import units
 import battle
 import inv_system
 import sounds
@@ -83,13 +83,13 @@ class Healing(Spell):
             Spell.use_mana(self, user)
 
             target_options = [x for x in [
-                main.player,
-                main.solou,
-                main.xoann,
-                main.adorine,
-                main.ran_af,
-                main.parsto,
-                main.randall] if x.enabled
+                units.player,
+                units.solou,
+                units.xoann,
+                units.adorine,
+                units.ran_af,
+                units.parsto,
+                units.randall] if x.enabled
             ]
 
             if len(target_options) == 1:
@@ -171,7 +171,7 @@ class Damaging(Spell):
         return self.name
 
     def use_magic(self, user):
-        inv_name = user.name if user != main.player else 'player'
+        inv_name = user.name if user != units.player else 'player'
 
         # Spells cannot be cast if the player does not have enough mana for it
         if user.mp >= self.mana:
@@ -190,7 +190,7 @@ class Damaging(Spell):
             # Evaluate the element of the attack and the enemy
             dam_dealt = eval_element(
                 p_elem=self.element,
-                m_elem=monsters.monster.element,
+                m_elem=units.monster.element,
                 p_dmg=dam_dealt)[0]
 
             if dam_dealt < 1:
@@ -211,7 +211,7 @@ class Damaging(Spell):
 
             # If the monster's evasion (with a max of 256) is higher than the user's accuracy roll,
             # the spell will land
-            if user.dodge in range(monsters.monster.evad, 512):
+            if user.dodge in range(units.monster.evad, 512):
                 sounds.enemy_hit.play()
 
                 # Mages have a 15% chance to get a critical hit, whereas other classes cannot
@@ -223,14 +223,14 @@ class Damaging(Spell):
                     main.smart_sleep(0.5)
 
                 print('Using the power of "{0}", {1} deals {2} damage to the {3}!'.format(
-                    self.name, user.name, dam_dealt, monsters.monster.monster_name))
+                    self.name, user.name, dam_dealt, units.monster.monster_name))
 
-                monsters.monster.hp -= dam_dealt
+                units.monster.hp -= dam_dealt
 
             # Otherwise, the spell with miss and deal no damage
             else:
                 sounds.attack_miss.play()
-                print("The {0} narrowly dodges {1}'s spell!".format(monsters.monster.monster_name, user.name))
+                print("The {0} narrowly dodges {1}'s spell!".format(units.monster.monster_name, user.name))
 
             return True
 
@@ -627,7 +627,7 @@ spellbook = {
 
 
 def pick_cat(user, is_battle=True):
-    inv_name = user.name if user != main.player else 'player'
+    inv_name = user.name if user != units.player else 'player'
 
     if user.status_ail == 'silenced':
         input("You find yourself unable to use spells! | Press enter/return ")
@@ -723,7 +723,7 @@ def pick_cat(user, is_battle=True):
 
 def pick_spell(cat, user, is_battle):
     global spellbook
-    inv_name = user.name if user != main.player else 'player'
+    inv_name = user.name if user != units.player else 'player'
 
     print('-'*25)
     while True:
@@ -798,7 +798,7 @@ def new_spells(character):
 
         # Only give the character spells that they are a high enough level for
         if character.lvl >= spell.req_lvl:
-            for x in spellbook[character.name if character != main.player else 'player'][cat]:
+            for x in spellbook[character.name if character != units.player else 'player'][cat]:
                 if x.name == spell.name:
                     break
 
@@ -810,7 +810,7 @@ def new_spells(character):
 
                 sounds.item_pickup.play()
                 spellbook[
-                    character.name if character != main.player else 'player'
+                    character.name if character != units.player else 'player'
                 ][cat].append(spell)
 
                 print('{0} has learned "{1}", a new {2} spell!'.format(

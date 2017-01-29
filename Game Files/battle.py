@@ -22,7 +22,7 @@ import pygame
 from copy import copy as _c
 
 import inv_system
-import monsters
+import units
 import world
 import bosses
 import sounds
@@ -57,85 +57,85 @@ def set_temp_stats():
     global temp_stats
 
     temp_stats = {
-        main.player.name: {
-            'attk': _c(main.player.attk),
-            'dfns': _c(main.player.dfns),
-            'p_attk': _c(main.player.p_attk),
-            'p_dfns': _c(main.player.p_dfns),
-            'm_attk': _c(main.player.m_attk),
-            'm_dfns': _c(main.player.m_dfns),
-            'spd': _c(main.player.spd),
-            'evad': _c(main.player.evad),
+        units.player.name: {
+            'attk': _c(units.player.attk),
+            'dfns': _c(units.player.dfns),
+            'p_attk': _c(units.player.p_attk),
+            'p_dfns': _c(units.player.p_dfns),
+            'm_attk': _c(units.player.m_attk),
+            'm_dfns': _c(units.player.m_dfns),
+            'spd': _c(units.player.spd),
+            'evad': _c(units.player.evad),
             'ability_used': False
         },
         'Solou': {
-            'attk': _c(main.solou.attk),
-            'dfns': _c(main.solou.dfns),
-            'p_attk': _c(main.solou.p_attk),
-            'p_dfns': _c(main.solou.p_dfns),
-            'm_attk': _c(main.solou.m_attk),
-            'm_dfns': _c(main.solou.m_dfns),
-            'spd': _c(main.solou.spd),
-            'evad': _c(main.solou.evad),
+            'attk': _c(units.solou.attk),
+            'dfns': _c(units.solou.dfns),
+            'p_attk': _c(units.solou.p_attk),
+            'p_dfns': _c(units.solou.p_dfns),
+            'm_attk': _c(units.solou.m_attk),
+            'm_dfns': _c(units.solou.m_dfns),
+            'spd': _c(units.solou.spd),
+            'evad': _c(units.solou.evad),
             'ability_used': False
         },
         'Xoann': {
-            'attk': _c(main.xoann.attk),
-            'dfns': _c(main.xoann.dfns),
-            'p_attk': _c(main.xoann.p_attk),
-            'p_dfns': _c(main.xoann.p_dfns),
-            'm_attk': _c(main.xoann.m_attk),
-            'm_dfns': _c(main.xoann.m_dfns),
-            'spd': _c(main.xoann.spd),
-            'evad': _c(main.xoann.evad),
+            'attk': _c(units.xoann.attk),
+            'dfns': _c(units.xoann.dfns),
+            'p_attk': _c(units.xoann.p_attk),
+            'p_dfns': _c(units.xoann.p_dfns),
+            'm_attk': _c(units.xoann.m_attk),
+            'm_dfns': _c(units.xoann.m_dfns),
+            'spd': _c(units.xoann.spd),
+            'evad': _c(units.xoann.evad),
             'ability_used': False
         },
 
         'Randall': {
-            'attk': _c(main.randall.attk),
-            'dfns': _c(main.randall.dfns),
-            'p_attk': _c(main.randall.p_attk),
-            'p_dfns': _c(main.randall.p_dfns),
-            'm_attk': _c(main.randall.m_attk),
-            'm_dfns': _c(main.randall.m_dfns),
-            'spd': _c(main.randall.spd),
-            'evad': _c(main.randall.evad),
+            'attk': _c(units.randall.attk),
+            'dfns': _c(units.randall.dfns),
+            'p_attk': _c(units.randall.p_attk),
+            'p_dfns': _c(units.randall.p_dfns),
+            'm_attk': _c(units.randall.m_attk),
+            'm_dfns': _c(units.randall.m_dfns),
+            'spd': _c(units.randall.spd),
+            'evad': _c(units.randall.evad),
             'ability_used': False
         },
 
         'Parsto': {
-            'attk': _c(main.parsto.attk),
-            'dfns': _c(main.parsto.dfns),
-            'p_attk': _c(main.parsto.p_attk),
-            'p_dfns': _c(main.parsto.p_dfns),
-            'm_attk': _c(main.parsto.m_attk),
-            'm_dfns': _c(main.parsto.m_dfns),
-            'spd': _c(main.parsto.spd),
-            'evad': _c(main.parsto.evad),
+            'attk': _c(units.parsto.attk),
+            'dfns': _c(units.parsto.dfns),
+            'p_attk': _c(units.parsto.p_attk),
+            'p_dfns': _c(units.parsto.p_dfns),
+            'm_attk': _c(units.parsto.m_attk),
+            'm_dfns': _c(units.parsto.m_dfns),
+            'spd': _c(units.parsto.spd),
+            'evad': _c(units.parsto.evad),
             'ability_used': False
         },
 
         "Ran'af": {
-            'attk': _c(main.ran_af.attk),
-            'dfns': _c(main.ran_af.dfns),
-            'p_attk': _c(main.ran_af.p_attk),
-            'p_dfns': _c(main.ran_af.p_dfns),
-            'm_attk': _c(main.ran_af.m_attk),
-            'm_dfns': _c(main.ran_af.m_dfns),
-            'spd': _c(main.ran_af.spd),
-            'evad': _c(main.ran_af.evad),
+            'attk': _c(units.ran_af.attk),
+            'dfns': _c(units.ran_af.dfns),
+            'p_attk': _c(units.ran_af.p_attk),
+            'p_dfns': _c(units.ran_af.p_dfns),
+            'm_attk': _c(units.ran_af.m_attk),
+            'm_dfns': _c(units.ran_af.m_dfns),
+            'spd': _c(units.ran_af.spd),
+            'evad': _c(units.ran_af.evad),
             'ability_used': False
         },
 
         'Adorine': {
-            'attk': _c(main.adorine.attk),
-            'dfns': _c(main.adorine.dfns),
-            'p_attk': _c(main.adorine.p_attk),
-            'p_dfns': _c(main.adorine.p_dfns),
-            'm_attk': _c(main.adorine.m_attk),
-            'm_dfns': _c(main.adorine.m_dfns),
-            'spd': _c(main.adorine.spd),
-            'evad': _c(main.adorine.evad),
+            'attk': _c(units.adorine.attk),
+            'dfns': _c(units.adorine.dfns),
+            'p_attk': _c(units.adorine.p_attk),
+            'p_dfns': _c(units.adorine.p_dfns),
+            'm_attk': _c(units.adorine.m_attk),
+            'm_dfns': _c(units.adorine.m_dfns),
+            'spd': _c(units.adorine.spd),
+            'evad': _c(units.adorine.evad),
             'ability_used': False
         }
     }
@@ -149,24 +149,24 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
 
-        print(ascii_art.monster_art[monsters.monster.monster_name] % '')
-        print('The legendary {0} has awoken!'.format(monster.name))
+        print(ascii_art.monster_art[units.monster.monster_name] % '')
+        print('The legendary {0} has awoken!'.format(units.monster.name))
         main.smart_sleep(0.35)
 
     else:
-        print(ascii_art.monster_art[monsters.monster.monster_name] % '')
+        print(ascii_art.monster_art[units.monster.monster_name] % '')
 
-        if any(map(monsters.monster.name.startswith, vowels)):  # Remember to use proper grammar!
+        if any(map(units.monster.name.startswith, vowels)):  # Remember to use proper grammar!
             a_an = 'An '
 
         else:
             a_an = 'A '
 
         if ambush:
-            print('{0}{1} ambushed you while you were resting!'.format(a_an, monsters.monster.name))
+            print('{0}{1} ambushed you while you were resting!'.format(a_an, units.monster.name))
 
         else:
-            print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, monsters.monster.name))
+            print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, units.monster.name))
 
         pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
         pygame.mixer.music.play(-1)
@@ -179,23 +179,23 @@ def battle_system(is_boss=False, ambush=False):
     set_temp_stats()
 
     # While all active party members are alive, continue the battle
-    while monsters.monster.hp > 0 and any([char.hp > 0 for char in [main.player,
-                                                                    main.solou,
-                                                                    main.xoann,
-                                                                    main.randall,
-                                                                    main.parsto,
-                                                                    main.ran_af,
-                                                                    main.adorine] if char.enabled]):
+    while units.monster.hp > 0 and any([char.hp > 0 for char in [units.player,
+                                                                 units.solou,
+                                                                 units.xoann,
+                                                                 units.randall,
+                                                                 units.parsto,
+                                                                 units.ran_af,
+                                                                 units.adorine] if char.enabled]):
 
         # Check to see if any of your party members are have died, and alert the player
         # Then, check if any of them are asleep and do some powerful magic to make everything work
-        for character in [x for x in [main.player,
-                                      main.solou,
-                                      main.xoann,
-                                      main.randall,
-                                      main.ran_af,
-                                      main.adorine,
-                                      main.parsto] if x.enabled]:
+        for character in [x for x in [units.player,
+                                      units.solou,
+                                      units.xoann,
+                                      units.randall,
+                                      units.ran_af,
+                                      units.adorine,
+                                      units.parsto] if x.enabled]:
 
             if character.hp <= 0 and character.status_ail != 'dead':
                 print('{0} has fallen to the {1}!'.format(character.name, monster.monster_name))
@@ -214,13 +214,13 @@ def battle_system(is_boss=False, ambush=False):
         bat_stats()
 
         # If any of your party members are at less than 20% health, play a small jingle
-        for character in [x for x in [main.player,
-                                      main.solou,
-                                      main.xoann,
-                                      main.randall,
-                                      main.ran_af,
-                                      main.adorine,
-                                      main.parsto] if x.enabled]:
+        for character in [x for x in [units.player,
+                                      units.solou,
+                                      units.xoann,
+                                      units.randall,
+                                      units.ran_af,
+                                      units.adorine,
+                                      units.parsto] if x.enabled]:
 
             if 0 < character.hp <= 0.20 * character.max_hp:
                 print("Warning: {0}'s HP is low, heal as soon as possible!".format(character.name))
@@ -231,35 +231,35 @@ def battle_system(is_boss=False, ambush=False):
             character.player_choice()
 
         # Make sure each participant in the battle goes according to who's fastest
-        for unit in sorted([monsters.monster,
-                            main.player,
-                            main.solou,
-                            main.xoann,
-                            main.randall,
-                            main.parsto,
-                            main.ran_af,
-                            main.adorine], key=lambda x: x.spd):
+        for unit in sorted([units.monster,
+                            units.player,
+                            units.solou,
+                            units.xoann,
+                            units.randall,
+                            units.parsto,
+                            units.ran_af,
+                            units.adorine], key=lambda x: x.spd):
 
-            if unit == monsters.monster or unit.enabled:
-                if monsters.monster.hp <= 0:
+            if unit == units.monster or unit.enabled:
+                if units.monster.hp <= 0:
                     break
 
-                if isinstance(unit, main.PlayableCharacter) and (unit.status_ail == 'dead' or unit.move in ['2', '4']):
+                if isinstance(unit, units.PlayableCharacter) and (unit.status_ail == 'dead' or unit.move in ['2', '4']):
                     continue
 
                 if unit.status_ail != 'asleep':
                     if unit.battle_turn() == 'Ran':
                         return
 
-                if any(x.hp > 0 for x in [main.player,
-                                          main.solou,
-                                          main.xoann,
-                                          main.randall,
-                                          main.parsto,
-                                          main.ran_af,
-                                          main.adorine] if x.enabled):
+                if any(x.hp > 0 for x in [units.player,
+                                          units.solou,
+                                          units.xoann,
+                                          units.randall,
+                                          units.parsto,
+                                          units.ran_af,
+                                          units.adorine] if x.enabled):
 
-                    if monsters.monster.hp > 0 and unit.status_ail != 'asleep':
+                    if units.monster.hp > 0 and unit.status_ail != 'asleep':
                         input('\nPress enter/return ')
 
                 else:
@@ -272,7 +272,7 @@ def battle_system(is_boss=False, ambush=False):
 
 def run_away(runner):
     print(ascii_art.player_art[runner.class_.title()] % "{0} is making a move!\n".format(runner.name))
-    print('Your party starts to run away from the {0}...'.format(monsters.monster.name))
+    print('Your party starts to run away from the {0}...'.format(units.monster.name))
     sounds.foot_steps.play()
 
     main.smart_sleep(0.75)
@@ -281,11 +281,11 @@ def run_away(runner):
         # 20% chance of success
         chance = 20
 
-    elif bool(runner.spd > monsters.monster.spd) != bool(runner.evad > monsters.monster.evad):
+    elif bool(runner.spd > units.monster.spd) != bool(runner.evad > units.monster.evad):
         # 60% chance of success
         chance = 60
 
-    elif runner.spd > monsters.monster.spd and runner.evad > monsters.monster.evad:
+    elif runner.spd > units.monster.spd and runner.evad > units.monster.evad:
         # 80% chance of success
         chance = 80
 
@@ -294,7 +294,7 @@ def run_away(runner):
         chance = 40
 
     if random.randint(0, 100) <= chance:
-        print('Your party manages to escape from the {0}!'.format(monsters.monster.name))
+        print('Your party manages to escape from the {0}!'.format(units.monster.name))
         return True
 
     else:
@@ -307,18 +307,18 @@ def after_battle(is_boss):  # Assess the results of the battle
 
     while True:
         # If the monster wins...
-        if monsters.monster.hp > 0 and all([0 >= x.hp for x in [main.player,
-                                                                main.solou,
-                                                                main.xoann,
-                                                                main.randall,
-                                                                main.ran_af,
-                                                                main.parsto,
-                                                                main.adorine] if x.enabled]):
+        if units.monster.hp > 0 and all([0 >= x.hp for x in [units.player,
+                                                             units.solou,
+                                                             units.xoann,
+                                                             units.randall,
+                                                             units.ran_af,
+                                                             units.parsto,
+                                                             units.adorine] if x.enabled]):
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
 
-            print('Despite your best efforts, the {0} has killed your party.'.format(monsters.monster.name))
+            print('Despite your best efforts, the {0} has killed your party.'.format(units.monster.name))
             print('-'*25)
 
             spam = True
@@ -337,13 +337,13 @@ def after_battle(is_boss):  # Assess the results of the battle
                     main.party_info['x'] = main.party_info['prev_town'][0]
                     main.party_info['y'] = main.party_info['prev_town'][1]
 
-                    for character in [main.player,
-                                      main.solou,
-                                      main.xoann,
-                                      main.randall,
-                                      main.ran_af,
-                                      main.parsto,
-                                      main.adorine]:
+                    for character in [units.player,
+                                      units.solou,
+                                      units.xoann,
+                                      units.randall,
+                                      units.ran_af,
+                                      units.parsto,
+                                      units.adorine]:
 
                         character.hp = _c(character.max_hp)
                         character.mp = _c(character.max_mp)
@@ -372,61 +372,61 @@ def after_battle(is_boss):  # Assess the results of the battle
                             break
 
         # If the player wins...
-        elif monsters.monster.hp <= 0 < player.hp:
+        elif units.monster.hp <= 0 < units.player.hp:
             pygame.mixer.music.load('Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
 
             if not is_boss:
                 # Only do the following if the player defeated a normal enemy, and not a boss
-                print('The {0} falls to the ground, dead as a stone.'.format(monster.name))
+                print('The {0} falls to the ground, dead as a stone.'.format(units.monster.name))
 
                 # Enemies drop gold/exp based on the player/monster's levels
-                gold = 2.5*monster.lvl - main.player.lvl + random.randint(-1, 1)
+                gold = math.ceil(2.5*units.monster.lvl - units.player.lvl + random.randint(-1, 1))
 
                 if gold <= 0:
                     gold = 1
 
             else:
                 # Only do the following if the player defeated a boss
-                bosses.defeated_bosses.append(monsters.monster.name)
-                print('The almighty {0} has been slain!'.format(monsters.monster.name))
+                bosses.defeated_bosses.append(units.monster.name)
+                print('The almighty {0} has been slain!'.format(units.monster.name))
 
                 # Bosses drop a set amount of gold
-                gold = monsters.monster.gold
+                gold = units.monster.gold
 
                 # Check to see if the boss does anything special at death
-                monsters.monster.upon_defeating()
+                units.monster.upon_defeating()
 
             # If the monster has items, give them to the player
-            if monsters.monster.items:
-                cat = monsters.monster.items.cat
-                inv_system.inventory[cat].append(_c(monsters.monster.items))
+            if units.monster.items:
+                cat = units.monster.items.cat
+                inv_system.inventory[cat].append(_c(units.monster.items))
 
                 sounds.item_pickup.play()
                 input('The {0} dropped a {1}! Your party decides to take {2} | Press enter/return'.format(
-                    monsters.monster.monster_name, str(monsters.monster.items),
-                      'them' if str(monsters.monster.items).endswith('s') else 'it'))  # Grammar!!
+                    units.monster.monster_name, str(units.monster.items),
+                      'them' if str(units.monster.items).endswith('s') else 'it'))  # Grammar!!
 
             # Give the Player their GP
             main.party_info['gp'] += gold
             sounds.item_pickup.play()
             input('Your party has gained {0} GP | Press enter/return '.format(gold))
 
-            for character in [x for x in [main.solou,
-                                          main.xoann,
-                                          main.player,
-                                          main.randall,
-                                          main.parsto,
-                                          main.ran_af,
-                                          main.adorine] if x.enabled]:
+            for character in [x for x in [units.solou,
+                                          units.xoann,
+                                          units.player,
+                                          units.randall,
+                                          units.parsto,
+                                          units.ran_af,
+                                          units.adorine] if x.enabled]:
 
                 # Give the Player their XP
                 if is_boss:
-                    experience = monsters.monster.experience
+                    experience = units.monster.experience
 
                 else:
-                    experience = math.ceil((monsters.monster.lvl**1.5 + character.ext_exp)/2) + 1
+                    experience = math.ceil((units.monster.lvl**1.5 + character.ext_exp)/2) + 1
 
                 if experience <= 0:
                     experience = 1
@@ -496,123 +496,123 @@ def battle_inventory(user):
 
 
 def bat_stats():
-    main.fix_stats()
+    units.fix_stats()
 
     print('-'*25)
 
     # Sorry this section is kinda complicated. Basically, this calculates the length of certain
     # strings to see how much padding (extra spaces) is needed to make things line up.
-    first_padding = len(max([main.player.name, main.solou.name, main.xoann.name, monsters.monster.name], key=len))
+    first_padding = len(max([units.player.name, units.solou.name, units.xoann.name, units.monster.name], key=len))
 
-    second_padding = len(max(['{0}/{1} HP'.format(main.player.hp, main.player.max_hp)
-                              if main.player.enabled else '',
-                              '{0}/{1} HP'.format(main.solou.hp, main.solou.max_hp)
-                              if main.solou.enabled else '',
-                              '{0}/{1} HP'.format(main.xoann.hp, main.xoann.max_hp)
-                              if main.xoann.enabled else '',
-                              '{0}/{1} MP'.format(main.adorine.hp, main.adorine.max_hp)
-                              if main.adorine.enabled else '',
-                              '{0}/{1} MP'.format(main.randall.hp, main.randall.max_hp)
-                              if main.randall.enabled else '',
-                              '{0}/{1} MP'.format(main.ran_af.hp, main.ran_af.max_hp)
-                              if main.ran_af.enabled else '',
-                              '{0}/{1} MP'.format(main.parsto.hp, main.parsto.max_hp)
-                              if main.parsto.enabled else '',
-                              '{0}/{1} HP'.format(monsters.monster.hp, monsters.monster.max_hp)], key=len))
+    second_padding = len(max(['{0}/{1} HP'.format(units.player.hp, units.player.max_hp)
+                              if units.player.enabled else '',
+                              '{0}/{1} HP'.format(units.solou.hp, units.solou.max_hp)
+                              if units.solou.enabled else '',
+                              '{0}/{1} HP'.format(units.xoann.hp, units.xoann.max_hp)
+                              if units.xoann.enabled else '',
+                              '{0}/{1} MP'.format(units.adorine.hp, units.adorine.max_hp)
+                              if units.adorine.enabled else '',
+                              '{0}/{1} MP'.format(units.randall.hp, units.randall.max_hp)
+                              if units.randall.enabled else '',
+                              '{0}/{1} MP'.format(units.ran_af.hp, units.ran_af.max_hp)
+                              if units.ran_af.enabled else '',
+                              '{0}/{1} MP'.format(units.parsto.hp, units.parsto.max_hp)
+                              if units.parsto.enabled else '',
+                              '{0}/{1} HP'.format(units.monster.hp, units.monster.max_hp)], key=len))
 
-    third_padding = len(max(['{0}/{1} MP'.format(main.player.mp, main.player.max_mp)
-                             if main.player.enabled else '',
-                             '{0}/{1} MP'.format(main.solou.mp, main.solou.max_mp)
-                             if main.solou.enabled else '',
-                             '{0}/{1} MP'.format(main.xoann.mp, main.xoann.max_mp)
-                             if main.xoann.enabled else '',
-                             '{0}/{1} MP'.format(main.adorine.mp, main.adorine.max_mp)
-                             if main.adorine.enabled else '',
-                             '{0}/{1} MP'.format(main.randall.mp, main.randall.max_mp)
-                             if main.randall.enabled else '',
-                             '{0}/{1} MP'.format(main.ran_af.mp, main.ran_af.max_mp)
-                             if main.ran_af.enabled else '',
-                             '{0}/{1} MP'.format(main.parsto.mp, main.parsto.max_mp)
-                             if main.parsto.enabled else '',
-                             '{0}/{1} MP'.format(monsters.monster.mp, monsters.monster.max_mp)], key=len))
+    third_padding = len(max(['{0}/{1} MP'.format(units.player.mp, units.player.max_mp)
+                             if units.player.enabled else '',
+                             '{0}/{1} MP'.format(units.solou.mp, units.solou.max_mp)
+                             if units.solou.enabled else '',
+                             '{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)
+                             if units.xoann.enabled else '',
+                             '{0}/{1} MP'.format(units.adorine.mp, units.adorine.max_mp)
+                             if units.adorine.enabled else '',
+                             '{0}/{1} MP'.format(units.randall.mp, units.randall.max_mp)
+                             if units.randall.enabled else '',
+                             '{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)
+                             if units.ran_af.enabled else '',
+                             '{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)
+                             if units.parsto.enabled else '',
+                             '{0}/{1} MP'.format(units.monster.mp, units.monster.max_mp)], key=len))
 
     # Player Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-          main.player.name, main.player.hp,
-          main.player.max_hp, main.player.mp,
-          main.player.max_mp, main.player.lvl,
-          main.player.status_ail.title(),
-          pad1=' '*(first_padding - len(main.player.name)),
-          pad2=' '*(second_padding - len('{0}/{1} HP'.format(main.player.hp, main.player.max_hp))),
-          pad3=' '*(third_padding - len('{0}/{1} MP'.format(main.player.mp, main.player.max_mp)))))
+          units.player.name, units.player.hp,
+          units.player.max_hp, units.player.mp,
+          units.player.max_mp, units.player.lvl,
+          units.player.status_ail.title(),
+          pad1=' '*(first_padding - len(units.player.name)),
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.player.hp, units.player.max_hp))),
+          pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.player.mp, units.player.max_mp)))))
 
-    if main.solou.enabled:
+    if units.solou.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              main.solou.name, main.solou.hp,
-              main.solou.max_hp, main.solou.mp,
-              main.solou.max_mp, main.solou.lvl,
-              main.solou.status_ail.title(),
-              pad1=' '*(first_padding - len(main.solou.name)),
-              pad2=' '*(second_padding - len('{0}/{1} HP'.format(main.solou.hp, main.solou.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(main.solou.mp, main.solou.max_mp)))))
+              units.solou.name, units.solou.hp,
+              units.solou.max_hp, units.solou.mp,
+              units.solou.max_mp, units.solou.lvl,
+              units.solou.status_ail.title(),
+              pad1=' '*(first_padding - len(units.solou.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.solou.hp, units.solou.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.solou.mp, units.solou.max_mp)))))
 
-    if main.xoann.enabled:
+    if units.xoann.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              main.xoann.name, main.xoann.hp,
-              main.xoann.max_hp, main.xoann.mp,
-              main.xoann.max_mp, main.xoann.lvl,
-              main.xoann.status_ail.title(),
+              units.xoann.name, units.xoann.hp,
+              units.xoann.max_hp, units.xoann.mp,
+              units.xoann.max_mp, units.xoann.lvl,
+              units.xoann.status_ail.title(),
               pad1=' '*(first_padding - len(xoann.name)),
-              pad2=' '*(second_padding - len('{0}/{1} HP'.format(main.xoann.hp, main.xoann.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(main.xoann.mp, main.xoann.max_mp)))))
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.xoann.hp, units.xoann.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)))))
 
-    if main.randall.enabled:
+    if units.randall.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              main.randall.name, main.randall.hp,
-              main.randall.max_hp, main.randall.mp,
-              main.randall.max_mp, main.randall.lvl,
-              main.randall.status_ail.title(),
-              pad1=' '*(first_padding - len(main.randall.name)),
-              pad2=' '*(second_padding - len('{0}/{1} HP'.format(main.randall.hp, main.randall.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(main.randall.mp, main.randall.max_mp)))))
+              units.randall.name, units.randall.hp,
+              units.randall.max_hp, units.randall.mp,
+              units.randall.max_mp, units.randall.lvl,
+              units.randall.status_ail.title(),
+              pad1=' '*(first_padding - len(units.randall.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.randall.hp, units.randall.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.randall.mp, units.randall.max_mp)))))
 
-    if main.parsto.enabled:
+    if units.parsto.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              main.parsto.name, main.parsto.hp,
-              main.parsto.max_hp, main.parsto.mp,
-              main.parsto.max_mp, main.parsto.lvl,
-              main.parsto.status_ail.title(),
-              pad1=' '*(first_padding - len(main.parsto.name)),
-              pad2=' '*(second_padding - len('{0}/{1} HP'.format(main.parsto.hp, main.parsto.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(main.parsto.mp, main.parsto.max_mp)))))
+              units.parsto.name, units.parsto.hp,
+              units.parsto.max_hp, units.parsto.mp,
+              units.parsto.max_mp, units.parsto.lvl,
+              units.parsto.status_ail.title(),
+              pad1=' '*(first_padding - len(units.parsto.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.parsto.hp, units.parsto.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)))))
 
-    if main.adorine.enabled:
+    if units.adorine.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              main.adorine.name, main.adorine.hp,
-              main.adorine.max_hp, main.adorine.mp,
-              main.adorine.max_mp, main.adorine.lvl,
-              main.adorine.status_ail.title(),
-              pad1=' '*(first_padding - len(main.adorine.name)),
-              pad2=' '*(second_padding - len('{0}/{1} HP'.format(main.adorine.hp, main.adorine.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(main.adorine.mp, main.adorine.max_mp)))))
+              units.adorine.name, units.adorine.hp,
+              units.adorine.max_hp, units.adorine.mp,
+              units.adorine.max_mp, units.adorine.lvl,
+              units.adorine.status_ail.title(),
+              pad1=' '*(first_padding - len(units.adorine.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.adorine.hp, units.adorine.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.adorine.mp, units.adorine.max_mp)))))
 
-    if main.ran_af.enabled:
+    if units.ran_af.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              main.ran_af.name, main.ran_af.hp,
-              main.ran_af.max_hp, main.ran_af.mp,
-              main.ran_af.max_mp, main.ran_af.lvl,
-              main.ran_af.status_ail.title(),
-              pad1=' '*(first_padding - len(main.ran_af.name)),
-              pad2=' '*(second_padding - len('{0}/{1} HP'.format(main.ran_af.hp, main.ran_af.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(main.ran_af.mp, main.ran_af.max_mp)))))
+              units.ran_af.name, units.ran_af.hp,
+              units.ran_af.max_hp, units.ran_af.mp,
+              units.ran_af.max_mp, units.ran_af.lvl,
+              units.ran_af.status_ail.title(),
+              pad1=' '*(first_padding - len(units.ran_af.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.ran_af.hp, units.ran_af.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)))))
 
     # Monster Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
-          monsters.monster.name, monsters.monster.hp,
-          monsters.monster.max_hp, monsters.monster.mp,
-          monsters.monster.max_mp, monsters.monster.lvl,
-          pad1=' '*(first_padding - len(monsters.monster.name)),
-          pad2=' '*(second_padding - len('{0}/{1} HP'.format(monsters.monster.hp, monsters.monster.max_hp))),
-          pad3=' '*(third_padding - len('{0}/{1} MP'.format(monsters.monster.mp, monsters.monster.max_mp)))))
+          units.monster.name, units.monster.hp,
+          units.monster.max_hp, units.monster.mp,
+          units.monster.max_mp, units.monster.lvl,
+          pad1=' '*(first_padding - len(units.monster.name)),
+          pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.monster.hp, units.monster.max_hp))),
+          pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.monster.mp, units.monster.max_mp)))))
 
     print('-'*25)

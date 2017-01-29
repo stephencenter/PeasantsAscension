@@ -23,6 +23,7 @@ from copy import copy as _c
 import npcs
 import ascii_art
 import towns
+import units
 import items as i
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
@@ -421,17 +422,17 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                 isinstance(item, i.StatusPotion)
             ]):
                 target_options = [x for x in [
-                    main.player,
-                    main.solou,
-                    main.xoann,
-                    main.adorine,
-                    main.ran_af,
-                    main.parsto,
-                    main.randall] if x.enabled
+                    units.player,
+                    units.solou,
+                    units.xoann,
+                    units.adorine,
+                    units.ran_af,
+                    units.parsto,
+                    units.randall] if x.enabled
                 ]
 
                 if len(target_options) == 1:
-                    target = main.player
+                    target = units.player
 
                 else:
                     print("Who should {0} the {1}?".format(use_equip.lower(), item.name))
@@ -458,7 +459,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                     return
 
             else:
-                item.use_item(main.player)
+                item.use_item(units.player)
                 if item not in inventory[cat]:
                     return
 
@@ -511,13 +512,13 @@ def manage_equipped():
 
     print('-'*25)
     target_options = [x for x in [
-        main.player,
-        main.solou,
-        main.xoann,
-        main.adorine,
-        main.ran_af,
-        main.parsto,
-        main.randall] if x.enabled
+        units.player,
+        units.solou,
+        units.xoann,
+        units.adorine,
+        units.ran_af,
+        units.parsto,
+        units.randall] if x.enabled
     ]
 
     print("Select Character: ")
@@ -541,7 +542,7 @@ def manage_equipped():
 
     while True:
         if not spam:
-            p_equip = equipped[target.name if target != main.player else 'player']
+            p_equip = equipped[target.name if target != units.player else 'player']
 
         print('-'*25)
         print("""{0}'s Equipped Items:
@@ -578,6 +579,7 @@ def manage_equipped():
             if selected == '(None)':
                 print('-'*25)
                 print("You don't have anything equipped in that slot.")
+                input("\nPress enter/return ")
                 break
 
             if isinstance(selected, i.Weapon):
@@ -597,14 +599,15 @@ Input [#] (or type "back"): """.format(str(selected)))
                 if action == '1':
                     if selected.name == 'Fists':
                         print('-'*25)
-                        input("Removing those would be difficult without causing damage | \
-Press enter/return ")
+                        print("Removing those would be difficult without causing damage.")
+                        input("\nPress enter/return ")
                         print('-'*25)
 
                         continue
 
                     print('-'*25)
-                    input('You unequip the {0} | Press enter/return '.format(selected.name))
+                    print('You unequip the {0}.'.format(selected.name))
+                    input("\nPress enter/return ")
 
                     if isinstance(selected, i.Weapon):
                         inventory[selected.cat].append(p_equip[key])
@@ -612,22 +615,17 @@ Press enter/return ")
                         p_equip[key] = i.fists
 
                     elif isinstance(selected, i.Armor):
-                        inventory[selected.cat].append(
-                            p_equip[key]
-                        )
+                        inventory[selected.cat].append(p_equip[key])
 
                         p_equip[key] = '(None)'
 
                     elif isinstance(selected, i.Accessory):
                         if isinstance(selected, i.ElementAccessory):
-                            main.target.element = 'None'
-                            print('You are no longer imbued with the {0} element.'.format(
-                                selected.element))
+                            target.element = 'none'
+                            print('You are no longer imbued with the {0} element.'.format(selected.element))
+                            input("\nPress enter/return ")
 
-                        inventory[selected.cat].append(
-                            p_equip[key]
-
-                        )
+                        inventory[selected.cat].append(p_equip[key])
                         p_equip[key] = '(None)'
 
                     spam = False
@@ -828,7 +826,7 @@ def tools_menu():  # Display a set of usable tools on the world map
                 continue
 
             tool = available_tools[tool]
-            tool.use_item(main.player)
+            tool.use_item(units.player)
 
             return
 

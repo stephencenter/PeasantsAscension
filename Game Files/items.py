@@ -25,6 +25,7 @@ import inv_system
 import sounds
 import ascii_art
 import world
+import units
 
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
@@ -69,8 +70,7 @@ class Consumable(Item):
 
     def use_item(self, user, is_battle=False):
         if is_battle:
-            print(ascii_art.player_art[user.class_.title()] %
-                  "{0} is making a move!\n".format(user.name))
+            print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
 
         else:
             print('-'*25)
@@ -81,11 +81,14 @@ class Consumable(Item):
 
         if user.hp > user.max_hp:
             user.hp -= (user.hp - user.max_hp)
+
         user.mp += self.mana
 
         if user.mp > user.max_mp:
             user.mp -= (user.mp - user.max_mp)
+
         print('{0} consumes the {1}'.format(user.name, self.name))
+        input("\n Press enter/return ")
 
         for x, y in enumerate(inv_system.inventory[self.cat]):
             if y.name == self.name:
@@ -123,8 +126,7 @@ class StatusPotion(Item):
 
 class Weapon(Item):
     # Items that increase your damage by a percentage.
-    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart,
-                 element='none', cat='weapons', imp=False):
+    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart, element='none', cat='weapons', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.power = power
         self.type_ = type_
@@ -135,8 +137,7 @@ class Weapon(Item):
             self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'''])
 
         else:
-            self.desc = ' '.join([desc, '|', ' and '.join([
-                x.title() for x in self.class_]), 'ONLY'])
+            self.desc = ' '.join([desc, '|', ' and '.join([x.title() for x in self.class_]), 'ONLY'])
 
     def use_item(self, user):
         if user.class_ in self.class_ or self.class_ == 'none':
@@ -144,19 +145,19 @@ class Weapon(Item):
             # only one weapon can be equipped at a time.
             spam = copy.copy(self)
 
-            if isinstance(
-                    inv_system.equipped[user.name if user != main.player else 'player']['weapon'], Weapon
-            ):
+            if isinstance(inv_system.equipped[user.name if user != units.player else 'player']['weapon'], Weapon):
 
-                old = copy.copy(inv_system.equipped[user.name if user != main.player else 'player']['weapon'])
+                old = copy.copy(inv_system.equipped[user.name if user != units.player else 'player']['weapon'])
                 inv_system.inventory['weapons'].remove(self)
+
                 if old.name != 'Fists':
                     inv_system.inventory['weapons'].append(old)
 
-                    inv_system.equipped[user.name if user != main.player else 'player']['weapon'] = spam
+                inv_system.equipped[user.name if user != units.player else 'player']['weapon'] = spam
 
             print('-'*25)
-            input('{0} equips the {1} | Press enter/return '.format(user.name, str(self)))
+            print('{0} equips the {1}.'.format(user.name, str(self)))
+            input("\nPress enter/return ")
 
         else:
             print('-'*25)
@@ -168,15 +169,12 @@ class Weapon(Item):
                     self.class_[1].title()))
 
             else:
-                input("{0} must be a {1} to equip this | Press enter/return ".format(
-                    user.name,
-                    self.class_.title()))
+                input("{0} must be a {1} to equip this | Press enter/return ".format(user.name, self.class_.title()))
 
 
 class Armor(Item):
     # Items that give the player a percent increase in defense when hit.
-    def __init__(self, name, desc, buy, sell, defense, type_, part,
-                 class_, ascart, cat='armor', imp=False):
+    def __init__(self, name, desc, buy, sell, defense, type_, part, class_, ascart, cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.defense = defense
         self.type_ = type_
@@ -199,19 +197,20 @@ class Armor(Item):
             # reason as for weapons.
             fizz = copy.copy(self)
 
-            if isinstance(
-                    inv_system.equipped[user.name if user != main.player else 'player'][self.part], Armor
-            ):
+            if isinstance(inv_system.equipped[user.name if user != units.player else 'player'][self.part], Armor):
 
-                old = copy.copy(inv_system.equipped[user.name if user != main.player else 'player'][self.part])
+                old = copy.copy(inv_system.equipped[user.name if user != units.player else 'player'][self.part])
+
                 inv_system.inventory['armor'].append(old)
                 inv_system.inventory['armor'].remove(self)
+
             else:
-                inv_system.equipped[user.name if user != main.player else 'player'][self.part] = fizz
+                inv_system.equipped[user.name if user != units.player else 'player'][self.part] = fizz
                 inv_system.inventory['armor'].remove(self)
 
             print('-'*25)
-            input('{0} equip the {1} | Press enter/return '.format(user.name, str(self)))
+            print('{0} equips the {1}.'.format(user.name, str(self)))
+            input("\nPress enter/return ")
 
         else:
             print('-'*25)
@@ -247,20 +246,18 @@ class ElementAccessory(Accessory):
 
     def use_item(self, user):
         spam = copy.copy(self)
-        if isinstance(
-                inv_system.equipped[user.name if user != main.player else 'player']['access'], Accessory
-        ):
+        if isinstance(inv_system.equipped[user.name if user != units.player else 'player']['access'], Accessory):
 
-            old = copy.copy(inv_system.equipped[user.name if user != main.player else 'player']['access'])
+            old = copy.copy(inv_system.equipped[user.name if user != units.player else 'player']['access'])
             inv_system.inventory['access'].append(old)
 
         inv_system.inventory['access'].remove(self)
-        inv_system.equipped[user.name if user != main.player else 'player']['access'] = spam
+        inv_system.equipped[user.name if user != units.player else 'player']['access'] = spam
         user.element = self.element
 
         print('-'*25)
-        input('{0} equips the {1}. Their element is now set to {2} | Press enter/return '.format(
-            user.name, self.name, self.element))
+        print('{0} equips the {1}. Their element is now set to {2}.'.format(user.name, self.name, self.element))
+        input("\nPress enter/return ")
 
 
 # -- TOOLS -- #

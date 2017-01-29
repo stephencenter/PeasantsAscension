@@ -190,13 +190,12 @@ class Quest(Conversation):
         self.upon_completing()
 
         print("Quest Complete!")
-        print("You've received {0} XP and {1} GP for completing this quest.".format(
-            self.reward[0], self.reward[1]))
+        print("You've received {0} XP and {1} GP for completing this quest.".format(self.reward[0], self.reward[1]))
         input('Press Enter/Return')
 
-        main.player.exp += self.reward[0]
         main.party_info['gp'] += self.reward[1]
-        main.player.level_up()
+        units.player.exp += self.reward[0]
+        units.player.level_up()
 
         self.active = False
 
@@ -238,7 +237,7 @@ solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
 
 def solou_p1_at():
     # Stands for "Solou Phrase I -- After Talking
-    main.solou.enabled = True
+    units.solou.enabled = True
     solou_phrase_1.active = False
     print('Solou the Mage has been added to your party!')
     input('Press enter/return ')
@@ -786,33 +785,33 @@ ser_pol_phrase_3 = Conversation(['You are our heroes! Here, allow us to treat yo
 
 
 def ser_pol_p3_at():
-    main.player.hp += (main.player.max_hp - main.player.hp)
-    main.player.mp += (main.player.max_mp - main.player.mp)
-    main.player.status_ail = 'none'
+    units.player.hp += (units.player.max_hp - units.player.hp)
+    units.player.mp += (units.player.max_mp - units.player.mp)
+    units.player.status_ail = 'none'
 
-    main.solou.hp += (main.solou.max_hp - main.solou.hp)
-    main.solou.mp += (main.solou.max_mp - main.solou.mp)
-    main.solou.status_ail = 'none'
+    units.solou.hp += (units.solou.max_hp - units.solou.hp)
+    units.solou.mp += (units.solou.max_mp - units.solou.mp)
+    units.solou.status_ail = 'none'
 
-    main.ran_af.hp += (main.ran_af.max_hp - main.ran_af.hp)
-    main.ran_af.mp += (main.ran_af.max_mp - main.ran_af.mp)
-    main.ran_af.status_ail = 'none'
+    units.ran_af.hp += (units.ran_af.max_hp - units.ran_af.hp)
+    units.ran_af.mp += (units.ran_af.max_mp - units.ran_af.mp)
+    units.ran_af.status_ail = 'none'
 
-    main.adorine.hp += (main.adorine.max_hp - main.adorine.hp)
-    main.adorine.mp += (main.adorine.max_mp - main.adorine.mp)
-    main.adorine.status_ail = 'none'
+    units.adorine.hp += (units.adorine.max_hp - units.adorine.hp)
+    units.adorine.mp += (units.adorine.max_mp - units.adorine.mp)
+    units.adorine.status_ail = 'none'
 
-    main.randall.hp += (main.randall.max_hp - main.randall.hp)
-    main.randall.mp += (main.randall.max_mp - main.randall.mp)
-    main.randall.status_ail = 'none'
+    units.randall.hp += (units.randall.max_hp - units.randall.hp)
+    units.randall.mp += (units.randall.max_mp - units.randall.mp)
+    units.randall.status_ail = 'none'
 
-    main.xoann.hp += (main.xoann.max_hp - main.xoann.hp)
-    main.xoann.mp += (main.xoann.max_mp - main.xoann.mp)
-    main.xoann.status_ail = 'none'
+    units.xoann.hp += (units.xoann.max_hp - units.xoann.hp)
+    units.xoann.mp += (units.xoann.max_mp - units.xoann.mp)
+    units.xoann.status_ail = 'none'
 
-    main.parsto.hp += (main.parsto.max_hp - main.parsto.hp)
-    main.parsto.mp += (main.parsto.max_mp - main.parsto.mp)
-    main.parsto.status_ail = 'none'
+    units.parsto.hp += (units.parsto.max_hp - units.parsto.hp)
+    units.parsto.mp += (units.parsto.max_mp - units.parsto.mp)
+    units.parsto.status_ail = 'none'
 
     print('-'*25)
     print('Polmor and Serena get to work on healing your party.')
@@ -959,7 +958,7 @@ def pime_p1_at():
     global pime_quest_1
     global pime_phrase_1
 
-    if main.player.lvl >= 10:
+    if units.player.lvl >= 10:
         pime_quest_1.active = True
         pime_phrase_1.active = False
         pime_phrase_2.active = False

@@ -8,8 +8,8 @@
        / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \
       / ___ \\__ \ (_|  __/ | | \__ \ | (_) | | | |
      /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-Peasants' Ascension -- Programmed in Python by Stephen Center (TheFrozenMawile)
- -- v0.7.0 Alpha
+Peasants' Ascension -- Programmed by TheFrozenMawile using Python
+ -- v1.0.0 Beta
 ----------------------------------------------------
 Legal Stuff:
 
@@ -36,15 +36,15 @@ How do I install this game?
     If you downloaded the standalone version (the one without the word
     "source" in its file-name) then there is no installation required!
     If you downloaded the source-code version, then running the game will
-    require Python 3.x to be installed (preferably v3.3 or 3.4), as well
-    as the corresponding version of Pygame. 
+    require Python 3.6 to be installed, as well as the corresponding 
+	version of Pygame. 
 ----------------------------------------------------
 How to play:
 
     SETUP:
     
         1. Find the folder named "Game Files"
-        2. Run the file named "PeasantRPG.exe" in this folder
+        2. Run the file named "PeasantsAscension.exe" in this folder
         3. Play the game
         
     PLAYING THE GAME:
@@ -63,16 +63,6 @@ How to play:
         command located next to it. (i.e. [1] View Inventory).
         Simply input the number in the brackets next to the 
         command you want to use.
-----------------------------------------------------
-What exactly is the plot for this game?
-
-    Starting in v0.6.1, Peasants' Ascension has an actual plot! The full
-    backstory for the game can be read by selecting "Story"
-    from the title screen. It's a pretty stereotypical 
-    fantasy-RPG plotline, but I think it's kinda neat.
-    Basically, the objective of the game is to retrieve a magical
-    stone from the Mountains of Harconia and then use it to
-    save the King's daughter.
 ----------------------------------------------------
 What is the "Adventure Name"?
 

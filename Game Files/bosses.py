@@ -19,7 +19,7 @@ import json
 import random
 
 import npcs
-import monsters
+import units
 import battle
 import items as i_items
 import inv_system
@@ -41,28 +41,21 @@ else:
     main = sys.modules["__main__"]
 
 
-class Boss(monsters.Monster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad,
-                 lvl, pos_x, pos_y, items, gold, experience,
-                 active=True, element='none', multiphase=0, currphase=1):
-        monsters.Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk,
-                                  m_dfns, spd, evad, lvl, element)
+class Boss(units.Monster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad, lvl, pos_x, pos_y, items,
+                 gold, experience, attk_msg, active=True, element='none'):
+
+        units.Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.items = items
-        self.gold = gold
-        self.experience = experience
         self.active = active
-        self.max_stats()
+        self.lvl = lvl
+        self.element = element
+        self.experience = experience
+        self.gold = gold
+        self.attk_msg = attk_msg
         self.monster_name = copy.copy(self.name)
-        self.hp = hp
-        self.mp = mp
-        self.multiphase = multiphase
-        self.currphase = currphase
-        self.max_hp = copy.copy(self.hp)
-        self.max_mp = copy.copy(self.mp)
-        self.is_poisoned = False
-        self.dodge = 0
 
     def max_stats(self):
         self.hp = copy.copy(self.max_hp)
@@ -114,12 +107,9 @@ def check_bosses(x, y):
                 y_n = y_n.lower()
 
                 if y_n.startswith('y'):
-                    monsters.monster = boss
-                    monsters.setup_vars()
-                    battle.setup_vars()
+                    units.monster = boss
                     boss.max_stats()
                     boss.new_location()
-
                     print('-'*25)
 
                     battle.battle_system(is_boss=True)
@@ -172,8 +162,10 @@ master_slime = Boss('Master Slime',
                     1, 0,    # Located at 0'N, 1'W
                     None,    # Drops no items
                     25, 25,  # Drops 25 XP and 25 GP
+                    "jiggles ferociously and begins to attack",
                     active=False)
-master_slime.battle_turn = monsters.melee_ai
+
+master_slime.battle_turn = master_slime.melee_ai
 
 
 def mastslim_ud():
@@ -184,8 +176,8 @@ def mastslim_ud():
 
 master_slime.upon_defeating = mastslim_ud
 
-# Boss: Whispering Goblin -- Position: 4'N, -2'W  (This is for you, Jacob!)
-whisp_goblin = Boss('Whispering Goblin',
+# Boss: Goblin Chieftain -- Position: 4'N, -2'W
+whisp_goblin = Boss('Goblin Chieftain',
                     50, 10,  # 50 HP and 10 MP
                     20, 20,  # 20 Attack, 20 Defense
                     12, 15,  # 12 Pierce Attack, 15 Pierce Defense
@@ -194,9 +186,10 @@ whisp_goblin = Boss('Whispering Goblin',
                     5,       # Level 5
                     -2, 4,   # Located at 4'N, -2'W
                     None,    # Drops no items
-                    45, 45)  # Drops 45 XP and 45 GP
-whisp_goblin.battle_turn = monsters.melee_ai
+                    45, 45,  # Drops 45 XP and 45 GP
+                    "readies his great spear and begins to stab")
 
+whisp_goblin.battle_turn = whisp_goblin.melee_ai
 whisp_goblin.upon_defeating = unimportant_boss_ud
 
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
@@ -210,8 +203,8 @@ menac_phantom = Boss('Menacing Phantom',
                      -12, 8,  # Located at 8'N, -12'W
                      None,    # Drops no items
                      75, 75,  # Drops 75 XP and 75 GP
+                     "calls upon its ethereal power and casts a hex on",
                      active=False, element='death')
-menac_phantom.battle_turn = monsters.magic_ai
 
 
 def menacphan_ud():
@@ -220,6 +213,7 @@ def menacphan_ud():
     npcs.stewson_phrase_2.active = False
 
 
+menac_phantom.battle_turn = menac_phantom.magic_ai
 menac_phantom.upon_defeating = menacphan_ud
 
 # Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
@@ -227,13 +221,13 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    100, 25,   # 100 Health, 25 Mana
                    45, 30,    # 45 Attack, 30 Defense
                    25, 15,    # 25 Pierce Attack, 15 Pierce Defense
-                   15, 25,     # 15 Magic Attack, 25 Magic Defense
+                   15, 25,    # 15 Magic Attack, 25 Magic Defense
                    35, 25,    # 35 Speed, 25 Evasion
                    12,        # Level 12
                    -11, -23,  # Located at -23'S, -11'W
                    None,      # Drops no items
-                   150, 150)  # Drops 150 XP and 150 GP
-
+                   150, 150,  # Drops 150 XP and 150 GP
+                   "readies its venomous fangs and bites")
 
 def terrtar_ud():
     npcs.krystal_phrase_2.active = False
@@ -244,7 +238,7 @@ def terrtar_ud():
     npcs.alden_phrase_2.active = True
 
 
-terr_tarant.battle_turn = monsters.melee_ai
+terr_tarant.battle_turn = terr_tarant.melee_ai
 terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
@@ -258,6 +252,7 @@ cursed_spect = Boss('Cursed Spectre',
                     3, 22,               # Located at 22'N, 3'E
                     i_items.spect_wand,  # Drops a spectre wand
                     250, 250,            # Drops 250 XP and 250 GP
+                    "calls upon its ethereal power and casts a hex on",
                     element='death', active=False)
 
 
@@ -266,7 +261,7 @@ def cursspect_ud():
     npcs.rivesh_quest_1.finished = True
 
 
-cursed_spect.battle_turn = monsters.magic_ai
+cursed_spect.battle_turn = cursed_spect.magic_ai
 cursed_spect.upon_defeating = cursspect_ud
 
 # Boss: Ent -- Position: 27'N, 15'E
@@ -280,9 +275,10 @@ giant_ent = Boss('Giant Ent',
                  15, 27,          # Located at 27'N, 15'E
                  i_items.enc_yw,  # Drops an enchanted yew wand
                  250, 250,        # Drops 250 XP and 250 GP
+                 "calls upon the essense of the forest and attacks",
                  element='grass', active=True)
 
-giant_ent.battle_turn = monsters.melee_ai
+giant_ent.battle_turn = giant_ent.melee_ai
 giant_ent.upon_defeating = unimportant_boss_ud
 
 boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent]

@@ -60,7 +60,7 @@ import bosses
 import items
 import sounds
 import towns
-import monsters
+import units
 import ascii_art
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
@@ -95,13 +95,13 @@ sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'          # Quests
 sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'            # Spellbook
 
 # PCU Save Files
-sav_play_stats = 'Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
-sav_solou_stats = 'Save Files/{CHARACTER_NAME}/solou_stats.json'      # Solou's Stats
-sav_xoann_stats = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'      # Xoann's Stats
-sav_randall_stats = 'Save Files/{CHARACTER_NAME}/randall_stats.json'  # Randall's Stats
-sav_ran_af_stats = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's Stats
-sav_parsto_stats = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
-sav_adorine_stats = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
+sav_play = 'Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
+sav_solou = 'Save Files/{CHARACTER_NAME}/solou_stats.json'      # Solou's Stats
+sav_xoann = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'      # Xoann's Stats
+sav_randall = 'Save Files/{CHARACTER_NAME}/randall_stats.json'  # Randall's Stats
+sav_ran_af = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's Stats
+sav_parsto = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
+sav_adorine = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
 
 # The volume of the game, on a scale from 0 (muted) to 1.0 (loudest). Can be changed in the settings.cfg file.
 music_vol = 1.0
@@ -135,874 +135,6 @@ Peasants' Ascension {0} -- Programmed by TheFrozenMawile using Python
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
 ------------------------------------------------------------------------------""".format(game_version)
-
-battle_options = """Pick {0}'s Move:
-      [1]: Attack
-      [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
-      [5]: Run"""
-
-
-class PlayableCharacter:
-    # A class for characters whose input can be directly controlled by the player
-    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
-        self.name = name        # Name
-        self.hp = hp            # Health
-        self.mp = mp            # Mana Points
-        self.attk = attk        # Attack
-        self.dfns = dfns        # Defense
-        self.p_attk = p_attk    # Pierce Attack
-        self.p_dfns = p_dfns    # Pierce Defense
-        self.m_attk = m_attk    # Magic Attack
-        self.m_dfns = m_dfns    # Magic Defense
-        self.spd = spd          # Speed
-        self.evad = evad        # Evasion
-        self.class_ = class_    # Player Class
-        self.enabled = enabled  # Whether the party member has been recruited or not
-
-        self.lvl = 1              # Level
-        self.exp = 0              # Experience
-        self.extra_sp = 0         # Extra Skill Points
-        self.ext_gol = 0          # Extra Gold Pieces
-        self.ext_exp = 0          # Extra Experience
-        self.element = 'none'     # Player's Element
-        self.status_ail = 'none'  # Current Status Ailment
-        self.req_xp = 3           # Required XP to level up
-        self.move = ''            # What move the character chose during battle
-
-        self.max_hp = copy.copy(self.hp)
-        self.max_mp = copy.copy(self.mp)
-
-        self.attributes = {'int': 1,  # Intelligence
-                           'wis': 1,  # Wisdom
-                           'str': 1,  # Strength
-                           'con': 1,  # Constitution
-                           'dex': 1,  # Dexterity
-                           'per': 1,  # Perception
-                           'for': 1}  # Fortune
-
-    def choose_name(self):
-        while True:
-            # Ask the player for their name, and remove any pipe characters from it
-            temp_name = re.sub(r'[|]', '', input('What is your name, young adventurer? | Input Name: '))
-
-            if not ''.join(temp_name.split()):
-                continue
-
-            for x, y in enumerate(temp_name):
-                if not(y == ' ' and y == ' '):
-                    self.name = ''.join([self.name, y])
-
-            # Flygon Jones, Cynder887, and Apollo Kalar are all pseudonyms for my real-life
-            # best friend. He also happens to be one of the primary bug-testers for the game!
-            if self.name.lower() in ["flygon jones", "apollo kalar", "cynder887"]:
-                print(''.join(['Ah, ', self.name, '! My dear friend, it is great to see you again!']))
-                input('Press enter/return ')
-
-                return self.name
-
-            while True:
-                y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
-                y_n = y_n.lower()
-
-                if y_n.startswith('y'):
-                    print('-'*25)
-                    return self.name
-
-                elif y_n.startswith('n'):
-                    self.name = ''
-                    print()
-                    break
-
-    def choose_class(self):
-        while True:
-            class_ = input("""{0}, which class would you like to train as?\n\
-          [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
-          [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
-          [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
-          [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers
-          [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
-          [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
-    Input [#]: """.format(self.name))
-            print()
-            try:
-                class_ = {'1': "mage",
-                          '2': "assassin",
-                          '3': "ranger",
-                          '4': "paladin",
-                          '5': "monk",
-                          '6': "warrior"}[class_]
-
-            except KeyError:
-                continue
-
-            while True:
-                y_n = input('You wish to be of the {0} class? | Yes or No: '.format(class_.title())).lower()
-
-                if y_n.startswith('y'):
-                    print('-'*25)
-                    return class_
-
-                elif y_n.startswith('n'):
-                    print()
-                    break
-
-    def level_up(self):
-        global party_info
-        if self.exp >= self.req_xp:
-            print()
-
-            pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(music_vol)
-
-            # The player restores all their health and mana when they level up
-            self.hp = copy.copy(self.max_hp)
-            self.mp = copy.copy(self.max_mp)
-
-            rem_points = 0  # Remaining Skill Points
-            extra_points = 0  # The number of extra skill points the player will receive
-
-            while self.exp >= self.req_xp:
-                sounds.item_pickup.play()
-                self.lvl += 1
-                print("{0} has advanced to level {1}!".format(self.name, self.lvl))
-
-                if self.lvl == 5:
-                    print('\n{0} now understands the true potential of their class!'.format(self.name))
-                    print('{0} can activate this potential in the form of a "class ability"'.format(self.name))
-                    print('once per battle. Use it wisely!\n')
-                    input('Press enter/return ')
-
-                rem_points += 5
-                extra_points += self.extra_sp
-                magic.new_spells(self)
-
-                if self.class_ == 'warrior':
-                    # Total gain: 21 pts.
-                    self.p_dfns += 4
-                    self.attk += 4
-                    self.dfns += 4
-                    self.m_attk += 1
-                    self.m_dfns += 1
-                    self.spd += 1
-                    self.evad += 1
-                    self.hp += 4
-                    self.mp += 1
-
-                elif self.class_ == 'mage':
-                    # Total gain: 21 pts.
-                    self.p_dfns += 1
-                    self.attk += 1
-                    self.dfns += 1
-                    self.m_attk += 4
-                    self.m_dfns += 4
-                    self.spd += 2
-                    self.evad += 2
-                    self.hp += 2
-                    self.mp += 4
-
-                elif self.class_ == 'assassin':
-                    # Total gain: 21 pts.
-                    self.p_dfns += 2
-                    self.attk += 4
-                    self.dfns += 2
-                    self.m_attk += 2
-                    self.m_dfns += 1
-                    self.spd += 5
-                    self.evad += 2
-                    self.hp += 2
-                    self.mp += 1
-
-                elif self.class_ == 'ranger':
-                    # Total gain: 21 pts.
-                    self.p_attk += 4
-                    self.p_dfns += 2
-                    self.dfns += 1
-                    self.m_attk += 1
-                    self.m_dfns += 2
-                    self.spd += 3
-                    self.evad += 4
-                    self.hp += 2
-                    self.mp += 2
-
-                elif self.class_ == 'monk':
-                    # Total gain: 21 pts.
-                    self.p_dfns += 1
-                    self.attk += 4
-                    self.dfns += 1
-                    self.m_attk += 2
-                    self.m_dfns += 2
-                    self.spd += 3
-                    self.evad += 3
-                    self.hp += 3
-                    self.mp += 2
-
-                elif self.class_ == 'paladin':
-                    # Total gain: 21 pts.
-                    self.p_dfns += 3
-                    self.attk += 3
-                    self.dfns += 3
-                    self.m_attk += 2
-                    self.m_dfns += 3
-                    self.spd += 1
-                    self.evad += 1
-                    self.hp += 3
-                    self.mp += 2
-
-                self.exp -= self.req_xp
-                self.req_xp = math.ceil((math.pow(self.lvl*2, 2) - self.lvl))
-
-            print('-'*25)
-            self.skill_points(rem_points, extra_points)
-
-            self.max_hp = copy.copy(self.hp)
-            self.max_mp = copy.copy(self.mp)
-
-            print('-'*25)
-            save_game()
-
-            return
-
-    def skill_points(self, rem_points, extra_points):
-        global party_info
-
-        if extra_points:
-            print("{0}'s great fortune has granted them {1} additional skill points!".format(self.name, extra_points))
-            rem_points += extra_points
-
-        while rem_points > 0:
-            print('{0} has {1} skill point{2} left to spend.'.format(
-                self.name, rem_points, 's' if rem_points > 1 else ''
-            ))
-
-            skill = input("""Choose a skill to advance:
-    [I]ntelligence - Use powerful magic with higher magic stats and MP!
-    [W]isdom - Cast powerful healing magics with higher proficiency and MP!
-    [S]trength -  Smash through enemies with higher attack and defense!
-    [C]onstitution - Become a tank with higher defense stats and HP!
-    [D]exterity - Improve your aerobic ability with higher evade/speed stats!
-    [P]erception - Eliminate your enemies with ease using higher pierce and evasion!
-    [F]ortune - Increase your luck in hopes of getting more GP, XP, and skill points!
-Input letter: """)
-
-            skill = skill.lower()
-
-            if any(map(skill.startswith, ['i', 'w', 's', 'c', 'd', 'p', 'f'])):
-                if skill.startswith('i'):
-                    act_skill = 'int'
-                    vis_skill = 'Intelligence'
-
-                elif skill.startswith('w'):
-                    act_skill = 'wis'
-                    vis_skill = 'Wisdom'
-
-                elif skill.startswith('s'):
-                    act_skill = 'str'
-                    vis_skill = 'Strength'
-
-                elif skill.startswith('c'):
-                    act_skill = 'con'
-                    vis_skill = 'Constitution'
-
-                elif skill.startswith('d'):
-                    act_skill = 'dex'
-                    vis_skill = 'Dexterity'
-
-                elif skill.startswith('p'):
-                    act_skill = 'per'
-                    vis_skill = 'Perception'
-
-                else:
-                    act_skill = 'for'
-                    vis_skill = 'Fortune'
-
-                print('-'*25)
-                print('Current {0}: {1}'.format(vis_skill, self.attributes[act_skill]))
-
-                if self.extra_sp == 10 and act_skill == 'for':
-                    print("{0}'s additional skill points from Fortune has already reached the maximum of 10.")
-                    print("Instead, upgrading Fortune will provide 2x the extra experience and gold from enemies.")
-
-                while True:
-                    y_n = input("Increase {0}'s {1}? | Yes or No: ".format(self.name, vis_skill))
-                    y_n = y_n.lower()
-
-                    if not (y_n.startswith('y') or y_n.startswith('n')):
-                        continue
-
-                    if y_n.startswith('n'):
-                        print('-'*25)
-                        break
-
-                    if skill.startswith('i'):
-                        self.m_dfns += 1
-                        self.m_attk += 1
-                        self.mp += 2
-                        self.attributes['int'] += 1
-
-                    elif skill.startswith('w'):
-                        self.mp += 2
-                        self.attributes['wis'] += 1
-
-                    elif skill.startswith('s'):
-                        self.attk += 1
-                        self.p_dfns += 1
-                        self.dfns += 1
-                        self.attributes['str'] += 1
-
-                    elif skill.startswith('c'):
-                        self.max_hp += 1
-                        self.dfns += 1
-                        self.p_dfns += 1
-                        self.m_dfns += 1
-                        self.attributes['con'] += 1
-
-                    elif skill.startswith('d'):
-                        self.spd += 1
-                        self.p_attk += 1
-                        self.evad += 1
-                        self.attributes['dex'] += 1
-
-                    elif skill.startswith('p'):
-                        self.p_attk += 1
-                        self.p_dfns += 1
-                        self.evad += 1
-                        self.attributes['per'] += 1
-
-                    elif skill.startswith('f'):
-                        if self.extra_sp == 10:
-                            self.ext_gol += 2
-                            self.ext_exp += 2
-
-                        else:
-                            self.extra_sp += 1
-                            self.ext_gol += 1
-                            self.ext_exp += 1
-
-                        self.attributes['for'] += 1
-
-                    else:
-                        continue
-
-                    print('-'*25)
-                    print("{0}'s {1} has increased!".format(self.name, vis_skill))
-
-                    # Decrement remaining points
-                    rem_points -= 1
-
-                    print('-'*25) if rem_points else ''
-
-                    break
-
-        print('\n{0} is out of skill points.'.format(self.name))
-
-    def player_info(self):
-        inv_name = self.name if self != player else 'player'
-
-        print("""\
--{0}'s Stats-
-Level: {1} | Class: {2} | Element: {3}
-HP: {4}/{5} | MP: {6}/{7} | Status Ailment: {8}
-Attack: {9} | M. Attack: {10} | P. Attack {11}
-Defense: {12} | M. Defense: {13} | P. Defense {14}
-Speed: {15} | Evasion: {16}
-INT: {17} | WIS: {18} | STR: {19} | CON: {20} | DEX: {21} | PER: {22} | FOR: {23}
-Experience Pts: {24}/{25} | Gold Pieces: {26}
-
--Equipped Items-
-Weapon: {27}
-Accessory: {28}
-Armor:
-  Head: {29}
-  Body: {30}
-  Legs: {31}""".format(self.name,
-                       self.lvl, self.class_.title(), self.element.title(),
-                       self.hp, self.max_hp, self.mp, self.max_mp, self.status_ail.title(),
-                       self.attk, self.m_attk, self.p_attk,
-                       self.dfns, self.m_dfns, self.p_dfns,
-                       self.spd, self.evad,
-                       self.attributes['int'], self.attributes['wis'],
-                       self.attributes['str'], self.attributes['con'],
-                       self.attributes['dex'], self.attributes['per'],
-                       self.attributes['for'],
-                       self.exp, self.req_xp, party_info['gp'],
-                       inv_system.equipped[inv_name]['weapon'],
-                       inv_system.equipped[inv_name]['access'],
-                       inv_system.equipped[inv_name]['head'],
-                       inv_system.equipped[inv_name]['body'],
-                       inv_system.equipped[inv_name]['legs']))
-
-        print('-'*25)
-        input('Press enter/return ')
-
-    def player_damage(self):
-        # The formula for PCUs dealing damage
-
-        inv_name = self.name if self != player else 'player'
-
-        if inv_system.equipped[inv_name]['weapon'].type_ != 'ranged':
-
-            # Base damage is equal to the PCU's attack stat minus half the target's defense
-            # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
-            # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
-            # based on the PCU/target's elements, status ailments, weapons, and critical hits.
-            dam_dealt = battle.temp_stats[self.name]['attk'] - (monsters.monster.dfns/2)
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-
-            # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
-            if self.status_ail == 'weakened':
-                dam_dealt /= 2
-                print('{0} deals half damage because of their weakened state!'.format(self.name))
-
-            # Mages deal 1/2 damage with melee attacks
-            if self.class_ == 'mage':
-                dam_dealt /= 2
-
-        else:
-            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (monsters.monster.p_dfns/2)
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-
-            # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
-            if self.status_ail == 'blinded':
-                dam_dealt /= 2
-                print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
-
-        # Increase or decrease the damage depending on the PCU/monster's elements
-        dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                       monsters.monster.element,
-                                       p_dmg=dam_dealt)[0]
-
-        # All attacks deal a minimum of one damage
-        if dam_dealt < 1:
-            dam_dealt = 1
-
-        # There is a 15% chance to inflict 1.5x damage
-        if random.randint(1, 100) <= 15:
-                dam_dealt *= 1.5
-                print("It's a critical hit! 1.5x damage!")
-
-                sounds.critical_hit.play()
-                smart_sleep(0.5)
-
-        # Limit the amount of damage to 999 (as if that matters)
-        if dam_dealt > 999:
-            dam_dealt = 999
-
-        return math.ceil(dam_dealt)
-
-    def battle_turn(self):
-        inv_name = self.name if self != player else 'player'
-
-        # "2" refers to magic, which will print this later
-        if self.move != '2':
-            print("\n-{0}'s Turn-".format(self.name))
-
-        # Check to see if the PCU is poisoned
-        if self.status_ail == 'poisoned' and monsters.monster.hp > 0:
-            smart_sleep(0.5)
-            sounds.poison_damage.play()
-            poison_damage = math.floor(self.hp/5)
-            self.hp -= poison_damage
-
-            print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
-
-            if self.hp <= 0:
-                return
-
-        # There's a 1 in 4 chance for the players status effect to wear off each turn.
-        if self.status_ail != 'none' and random.randint(0, 3) == 0:
-
-            sounds.buff_spell.play()
-
-            if self.status_ail == 'asleep':
-                print(ascii_art.player_art[self.class_.title()] % "{0} is no longer asleep!\n".format(self.name))
-                input('Press enter/return ')
-                self.status_ail = 'none'
-
-                return
-
-            else:
-                print("{0}'s afflictions have worn off! They are no longer {1}.".format(self.name, self.status_ail))
-                self.status_ail = 'none'
-                smart_sleep(0.5)
-
-        # Basic Attack
-        if self.move == '1' or self.move == 'q':
-            print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
-
-            if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
-                sounds.sword_slash.play()
-                print('{0} begin to fiercely attack the {1} using their {2}...'.format(
-                    self.name, monsters.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
-
-            # Ranged weapons aren't swung, so play a different sound effect
-            else:
-                sounds.aim_weapon.play()
-                print('{0} aims carefully at the {1} using their {2}...'.format(
-                    self.name, monsters.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
-
-            smart_sleep(0.75)
-
-            # Check for attack accuracy
-            if random.randint(1, 512) in range(monsters.monster.evad, 512):
-                dam_dealt = self.player_damage()
-
-                print("{0}'s attack connects with the {1}, dealing {2} damage!".format(
-                    self.name, monsters.monster.name, dam_dealt))
-
-                sounds.enemy_hit.play()
-                monsters.monster.hp -= dam_dealt
-
-            else:
-                print("The {0} narrowly avoids {1}'s attack!".format(monsters.monster.name, self.name))
-                sounds.attack_miss.play()
-
-        # Class Ability
-        elif self.move == '3' and not self.class_ability():
-            return False
-
-        # Run away!
-        elif self.move == '5' and battle.run_away(self):
-            print('-'*25)
-            pygame.mixer.music.load(party_info['reg_music'])
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(music_vol)
-
-            return 'Ran'
-
-        else:
-            return False
-
-        return True
-
-    def player_choice(self):
-        # Creates a lambda function that strips all non-numeric characters
-        # This fixes some (possible) problems later on
-        only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
-
-        print(battle_options.format(self.name))
-
-        while True:
-            self.move = input("Input [#]: ")
-            if self.move != "q":
-                # Strip out all non-numeric input
-                self.move = only_num(self.move)
-
-            if self.move.isdigit() and int(self.move) in range(1, 6):
-
-                # Use Magic
-                if self.move == '2':
-                    print('-'*25)
-
-                    if not magic.pick_cat(self):
-                        print(battle_options.format(self.name))
-
-                        continue
-
-                    input('\nPress enter/return ')
-
-                # Battle Inventory
-                elif self.move == '4':
-                    print('-'*25)
-
-                    if not battle.battle_inventory(self):
-                        print(battle_options.format(self.name))
-
-                        continue
-
-                    input('\nPress enter/return ')
-
-                # Let the player repick if they try to use their class ability when they can't
-                elif self.move == '3':
-                    if self.lvl < 5:
-                        # You must be at least level 5 to use your class ability
-                        print("{0} has not yet realized their class's inner potential!".format(self.name))
-                        print('-'*25)
-                        print(battle_options.format(self.name))
-
-                        continue
-
-                    elif battle.temp_stats[self.name]['ability_used']:
-                        # You can only use your ability once per battle.
-                        print('{0} feels too drained to use their class ability again.'.format(self.name))
-                        print('-'*25)
-                        print(battle_options.format(self.name))
-
-                        continue
-
-                return
-
-    def class_ability(self):
-        # Class abilities are special abilities only available to characters of certain classes.
-        # Their purpose is to help make the characters more diverse, as well as encourage more
-        # strategy being used.
-
-        inv_name = self.name if self != player else 'player'
-        monster = battle.monster
-        battle.temp_stats[self.name]['ability_used'] = True
-
-        print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
-        print("{0} uses the knowledge they've gained to unleash their class ability!".format(self.name))
-
-        # Ranger Ability: Scout
-        if self.class_ == 'ranger':
-            # The ranger class identifies their enemy and prints their stats.
-            # This is really useful for defeating bosses, which are often weak to
-            # certain types and elements of attacks.
-
-            print('-'*25)
-            print('ABILITY: SCOUT')
-            print('-'*25)
-
-            print('As a Ranger, {0} identifies their enemy and focuses, increasing their pierce attack!'.format(
-                self.name))
-
-            input("Press enter/return to view your enemy's stats ")
-
-            print('-'*25)
-            print("{0}'s STATS:".format(monster.name.upper()))
-
-            print("""Attack: {0} | M. Attack: {1} | P. Attack: {2} | Speed: {3}
-    Defense: {4} | M. Defense: {5} | P. Defense: {6} | Evasion: {7}
-    Element: {8} | Elemental Weakness: {9}""".format(
-                monster.attk, monster.m_attk, monster.p_attk, monster.spd,
-                monster.dfns, monster.m_dfns, monster.p_dfns, monster.evad,
-                monster.element.title(),
-                {'fire': 'Water',
-                 'water': 'Electric',
-                 'electric': 'Earth',
-                 'earth': 'Grass',
-                 'grass': 'Wind',
-                 'wind': 'Ice',
-                 'ice': 'Fire',
-                 'none': 'None',
-                 'life': 'Death',
-                 'death': 'Life'}[monster.element]))
-
-            battle.temp_stats[self.name]['p_attk'] *= 1.35
-
-            return True
-
-        # Warrior Ability: Warrior's Spirit
-        elif self.class_ == 'warrior':
-            print('-'*25)
-            print("ABILITY: WARRIOR'S SPIRIT")
-            print('-'*25)
-            print('As a Warrior, you channel your inner-strength and restore health and defense!')
-
-            self.hp += math.ceil(max([0.35*self.max_hp, 35]))
-
-            battle.p_temp_stats['dfns'] *= 1.35
-            battle.p_temp_stats['m_dfns'] *= 1.35
-            battle.p_temp_stats['p_dfns'] *= 1.35
-
-            if self.hp > self.max_hp:
-                self.hp -= (self.hp - self.max_hp)
-            if self.mp > self.max_mp:
-                self.mp -= (self.mp - self.max_mp)
-
-            return True
-
-        # Mage Ability: Artificial Intelligence
-        elif self.class_ == "mage":
-            print('-'*25)
-            print("ABILITY: ARTIFICIAL INTELLIGENCE")
-            print('-'*25)
-            print('As a Mage, you focus intently and sharply increase your magical prowess!')
-            print('Your magic attack and defense increase, and you regain MP!')
-
-            self.mp += math.ceil(max([0.35*self.max_mp, 35]))
-
-            if self.mp > self.max_mp:
-                self.mp -= (self.mp - self.max_mp)
-
-            battle.temp_stats[self.name]['m_attk'] *= 1.35
-            battle.temp_stats[self.name]['m_dfns'] *= 1.35
-
-            return True
-
-        # Assassin Ability: Lethal Injection
-        elif self.class_ == "assassin":
-            print('-'*25)
-            print("ABILITY: LETHAL INJECTION")
-            print('-'*25)
-            print('As an Assassin, you discreetly inject poison into your enemy!')
-
-            monster.is_poisoned = True
-
-            return True
-
-        # Paladin Ability: Divine Intervention
-        elif self.class_ == "paladin":
-            print('-'*25)
-            print('ABILITY: DIVINE INTERVENTION')
-            print('-'*25)
-
-            print('As a Paladin, you call upon the power of His Divinity to aid you!')
-            print('You enemy has been turned to the "death" element, causing your')
-            print('holy spells to inflict more damage! You also regain health and MP.')
-
-            monster.element = "death"
-
-            self.hp += math.ceil(max([0.15*self.max_hp, 15]))
-            self.mp += math.ceil(max([0.15*self.max_mp, 15]))
-
-            if self.hp > self.max_hp:
-                self.hp -= (self.hp - self.max_hp)
-            if self.mp > self.max_mp:
-                self.mp -= (self.mp - self.max_mp)
-
-            return True
-
-        # Monk Ability: Chakra-smash
-        elif self.class_ == 'monk':
-            # Essentially a 2.5x crit. As an added bonus, this attack has a 15%
-            # chance to get a crit itself, resulting in a total of an 3.75x critical.
-            # This attack lowers the user defenses by 25% for three turns to balance it out.
-            # If the user is weakened, this attack ignores that and will deal full damage anyway.
-            print('-'*25)
-            print('ABILITY: CHAKRA-SMASH')
-            print('-'*25)
-
-            print('As a monk, {0} meditates and focus their inner chi.'.format(self.name))
-            print('After a brief moment of confusion from the enemy, {0} strikes, dealing'.format(self.name))
-            print("an immense amount of damage in a single, powerful strike! As a result, {0}'s".format(self.name))
-            print('defenses have been lowered by 15% until the end of the battle.\n')
-
-            dam_dealt = (battle.p_temp_stats['attk'] - monster.dfns/2)*2.5
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-            dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                           monster.element,
-                                           p_dmg=dam_dealt)[0]
-
-            if dam_dealt < 4:
-                dam_dealt = 4
-
-            if random.randint(1, 100) <= 15:
-                smart_sleep(0.5)
-                dam_dealt *= 1.5
-                sounds.critical_hit.play()
-
-                print("It's a critical hit! 1.5x damage!")
-
-            if dam_dealt > 999:
-                dam_dealt = 999
-
-            smart_sleep(0.5)
-
-            dam_dealt = math.ceil(dam_dealt)
-
-            print('The attack deals {0} damage to the {1}!'.format(math.ceil(dam_dealt), monster.name))
-
-            monster.hp -= dam_dealt
-
-            battle.temp_stats[self.name]['dfns'] *= 0.85
-            battle.temp_stats[self.name]['m_dfns'] *= 0.85
-            battle.temp_stats[self.name]['p_dfns'] *= 0.85
-
-            battle.temp_stats[self.name]['dfns'] = math.floor(battle.temp_stats[self.name]['dfns'])
-            battle.temp_stats[self.name]['m_dfns'] = math.floor(battle.temp_stats[self.name]['m_dfns'])
-            battle.temp_stats[self.name]['p_dfns'] = math.floor(battle.temp_stats[self.name]['p_dfns'])
-
-            return True
-
-
-def fix_stats():
-    # Makes sure that that no-one ever has 1) stats that are above their maximum, 2) stats that are negative,
-    # and 3) stats that are not integers.
-
-    global player
-    global solou
-    global xoann
-    global randall
-    global parsto
-    global ran_af
-    global adorine
-
-    if player.hp < 0:
-        player.hp = 0
-    if solou.hp < 0:
-        solou.hp = 0
-    if xoann.hp < 0:
-        xoann.hp = 0
-    if randall.hp < 0:
-        randall.hp = 0
-    if parsto.hp < 0:
-        parsto.hp = 0
-    if ran_af.hp < 0:
-        ran_af.hp = 0
-    if adorine.hp < 0:
-        adorine.hp = 0
-    if monsters.monster.hp < 0:
-        monsters.monster.hp = 0
-
-    if player.mp < 0:
-        player.mp = 0
-    if solou.mp < 0:
-        solou.mp = 0
-    if xoann.mp < 0:
-        xoann.mp = 0
-    if randall.mp < 0:
-        randall.mp = 0
-    if parsto.mp < 0:
-        parsto.mp = 0
-    if ran_af.mp < 0:
-        ran_af.mp = 0
-    if adorine.mp < 0:
-        adorine.mp = 0
-    if monsters.monster.mp < 0:
-        monsters.monster.mp = 0
-
-    if player.hp > player.max_hp:
-        player.hp -= (player.hp - player.max_hp)
-    if solou.hp > solou.max_hp:
-        solou.hp -= (solou.hp - solou.max_hp)
-    if xoann.hp > xoann.max_hp:
-        xoann.hp -= (xoann.hp - xoann.max_hp)
-    if randall.hp > randall.max_hp:
-        randall.hp -= (randall.hp - randall.max_hp)
-    if parsto.hp > parsto.max_hp:
-        parsto.hp -= (parsto.hp - parsto.max_hp)
-    if ran_af.hp > ran_af.max_hp:
-        ran_af.hp -= (ran_af.hp - ran_af.max_hp)
-    if adorine.hp > adorine.max_hp:
-        adorine.hp -= (adorine.hp - adorine.max_hp)
-    if monsters.monster.hp > monsters.monster.max_hp:
-        monsters.monster.hp -= (monsters.monster.hp - monsters.monster.max_hp)
-
-    if player.mp > player.max_mp:
-        player.mp -= (player.mp - player.max_mp)
-    if solou.mp > solou.max_mp:
-        solou.mp -= (solou.mp - solou.max_mp)
-    if xoann.mp > xoann.max_mp:
-        xoann.mp -= (xoann.mp - xoann.max_mp)
-    if randall.mp > randall.max_mp:
-        randall.mp -= (randall.mp - randall.max_mp)
-    if parsto.mp > parsto.max_mp:
-        parsto.mp -= (parsto.mp - parsto.max_mp)
-    if ran_af.mp > ran_af.max_mp:
-        ran_af.mp -= (ran_af.mp - ran_af.max_mp)
-    if adorine.mp > adorine.max_mp:
-        adorine.mp -= (adorine.mp - adorine.max_mp)
-    if monsters.monster.mp > monsters.monster.max_mp:
-        monsters.monster.mp -= (monsters.monster.mp - monsters.monster.max_mp)
-
-    monsters.monster.hp = math.ceil(monsters.monster.hp)
-    monsters.monster.mp = math.ceil(monsters.monster.mp)
-    player.hp = math.ceil(player.hp)
-    player.mp = math.ceil(player.mp)
-    parsto.hp = math.ceil(parsto.hp)
-    parsto.mp = math.ceil(parsto.mp)
-    adorine.hp = math.ceil(adorine.hp)
-    adorine.mp = math.ceil(adorine.mp)
-    ran_af.hp = math.ceil(ran_af.hp)
-    ran_af.mp = math.ceil(ran_af.mp)
-    xoann.hp = math.ceil(xoann.hp)
-    xoann.mp = math.ceil(xoann.mp)
-    solou.hp = math.ceil(solou.hp)
-    solou.mp = math.ceil(solou.mp)
 
 
 def set_adventure_name():
@@ -1053,7 +185,7 @@ def set_adventure_name():
                 if y_n.startswith("y"):
                     format_save_names()
 
-                    if player.name.lower() == "give me the gold":
+                    if units.player.name.lower() == "give me the gold":
                         print("Gold cheat enabled, you now have 99999 gold!")
                         party_info['gp'] = 99999
 
@@ -1076,7 +208,7 @@ def set_adventure_name():
                 if y_n.startswith("y"):
                     format_save_names()
 
-                    if player.name.lower() == "give me the gold":
+                    if units.player.name.lower() == "give me the gold":
                         print("Gold cheat enabled, you now have 99999 gold!")
                         party_info['gp'] = 99999
 
@@ -1093,92 +225,12 @@ def format_save_names():
     # Replace "{CHARACTER_NAME}" in the save-file paths to the player's adventure name.
     # e.g. "Save Files/{CHARACTER_NAME}/sav_acquired_gems" --> "Save Files/ADV/sav_acquired_gems
 
-    for x in sorted(['sav_acquired_gems', 'sav_def_bosses',
-                     'sav_equip_items', 'sav_inventory',
-                     'sav_misc_boss_info', 'sav_party_info',
-                     'sav_spellbook', 'sav_quests_dia',
-                     'sav_play_stats', 'sav_solou_stats',
-                     'sav_xoann_stats', 'sav_randall_stats',
-                     'sav_adorine_stats', 'sav_ran_af_stats',
-                     'sav_parsto_stats'], key=str.lower):
+    for x in sorted(['sav_acquired_gems', 'sav_def_bosses', 'sav_equip_items', 'sav_inventory','sav_misc_boss_info',
+                     'sav_party_info', 'sav_spellbook', 'sav_quests_dia','sav_play', 'sav_solou', 'sav_xoann',
+                     'sav_randall','sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
 
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
-
-
-def create_player():
-    global player
-    global party_info
-
-    player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-
-    # Set the player's max HP and MP
-    player.max_hp = copy.copy(player.hp)
-    player.max_mp = copy.copy(player.mp)
-
-    player.name = player.choose_name()
-    player.class_ = player.choose_class()
-    set_adventure_name()
-
-    if player.class_ == "warrior":
-        player.max_hp += 5
-        player.max_mp -= 1
-        player.dfns += 3
-        player.p_dfns += 2
-        player.attk += 3
-        player.spd -= 1
-        player.evad -= 1
-        inv_system.equipped['player']['weapon'] = copy.copy(items.wdn_sht)
-
-    elif player.class_ == "mage":
-        player.max_hp += 1
-        player.max_mp += 6
-        player.m_attk += 4
-        player.m_dfns += 3
-        inv_system.equipped['player']['weapon'] = copy.copy(items.mag_twg)
-
-    elif player.class_ == "assassin":
-        player.max_hp += 2
-        player.max_mp += 1
-        player.attk += 3
-        player.dfns += 2
-        player.spd += 4
-        player.evad += 2
-        inv_system.equipped['player']['weapon'] = copy.copy(items.stn_dag)
-
-    elif player.class_ == "ranger":
-        player.max_mp += 2
-        player.p_attk += 4
-        player.m_dfns += 2
-        player.evad += 3
-        player.spd += 3
-        inv_system.equipped['player']['weapon'] = copy.copy(items.slg_sht)
-
-    elif player.class_ == "monk":
-        player.max_hp += 2
-        player.max_mp += 2
-        player.attk += 3
-        player.m_dfns += 2
-        player.evad += 3
-        player.spd += 3
-        player.dfns -= 1
-        inv_system.equipped['player']['weapon'] = copy.copy(items.fists)
-
-    elif player.class_ == "paladin":
-        player.max_hp += 3
-        player.max_mp += 4
-        player.m_dfns += 3
-        player.m_attk += 3
-        player.dfns += 3
-        player.p_dfns += 3
-        player.attk += 3
-        player.spd -= 1
-        player.evad -= 1
-        inv_system.equipped['player']['weapon'] = copy.copy(items.rbr_mlt)
-
-    player.hp = copy.copy(player.max_hp)
-    player.mp = copy.copy(player.max_mp)
-    print('-'*25)
 
 
 def change_settings():
@@ -1218,19 +270,17 @@ def check_save():  # Check for save files and load the game if they're found
         smart_sleep(0.35)
 
         print('-'*25)
-        create_player()
+        units.create_player()
         return
 
     dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
+
     save_files = {}
     menu_info = {}
+
     save_file_list = [
-        sav_acquired_gems, sav_def_bosses,
-        sav_equip_items, sav_inventory,
-        sav_misc_boss_info, sav_party_info,
-        sav_play_stats, sav_quests_dia,
-        sav_spellbook, sav_solou_stats,
-        sav_xoann_stats
+        sav_acquired_gems, sav_def_bosses, sav_equip_items, sav_inventory, sav_misc_boss_info, sav_party_info,
+        sav_quests_dia, sav_spellbook ,sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_randall
     ]
 
     for directory in dirs:
@@ -1257,7 +307,7 @@ def check_save():  # Check for save files and load the game if they're found
         smart_sleep(0.35)
 
         print('-'*25)
-        create_player()
+        units.create_player()
 
         return
 
@@ -1292,7 +342,7 @@ def check_save():  # Check for save files and load the game if they're found
                 # Let the player create a new save file
                 if chosen.startswith("c"):
                     print('-'*25)
-                    create_player()
+                    units.create_player()
                     return
 
                 else:
@@ -1327,21 +377,14 @@ def check_save():  # Check for save files and load the game if they're found
                 bosses.deserialize_bosses(sav_misc_boss_info)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
-
-                deserialize_player(
-                    sav_play_stats,
-                    sav_solou_stats,
-                    sav_xoann_stats,
-                    sav_adorine_stats,
-                    sav_randall_stats,
-                    sav_ran_af_stats,
-                    sav_parsto_stats
-                )
+                units.deserialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_randall,
+                                         sav_ran_af, sav_parsto)
 
                 print('Load successful.')
 
                 if not towns.search_towns(party_info['x'], party_info['y'], enter=False):
                     print('-'*25)
+
                 return
 
             except (OSError, ValueError):
@@ -1382,24 +425,15 @@ def save_game():
                 bosses.serialize_bosses(sav_misc_boss_info)
                 npcs.serialize_dialogue(sav_quests_dia)
                 magic.serialize_sb(sav_spellbook)
+                units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_randall, sav_ran_af, sav_parsto)
 
-                serialize_player(
-                    sav_play_stats,
-                    sav_solou_stats,
-                    sav_xoann_stats,
-                    sav_adorine_stats,
-                    sav_randall_stats,
-                    sav_ran_af_stats,
-                    sav_parsto_stats
-                )
-
-                with open('/'.join([save_dir, adventure_name, 'menu_info.txt']),
-                          mode='w', encoding='utf-8') as f:
-                    f.write("{0} | LVL: {1} | Class: {2}".format(player.name,
-                                                                 player.lvl,
-                                                                 player.class_.title()))
+                with open('/'.join([save_dir, adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:
+                    f.write("{0} | LVL: {1} | Class: {2}".format(units.player.name,
+                                                                 units.player.lvl,
+                                                                 units.player.class_.title()))
 
                 print('Save successful.')
+
                 return
 
             except (OSError, ValueError):
@@ -1408,59 +442,6 @@ def save_game():
 
         elif y_n.startswith('n'):
             return
-
-
-def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
-    # Save the "PlayableCharacter" objects as JSON files
-
-    with open(path, mode='w', encoding='utf-8') as f:
-        json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
-    with open(s_path, mode='w', encoding='utf-8') as f:
-        json.dump(solou.__dict__, f, indent=4, separators=(', ', ': '))
-    with open(x_path, mode='w', encoding='utf-8') as f:
-        json.dump(xoann.__dict__, f, indent=4, separators=(', ', ': '))
-    with open(a_path, mode='w', encoding='utf-8') as f:
-        json.dump(adorine.__dict__, f, indent=4, separators=(', ', ': '))
-    with open(r_path, mode='w', encoding='utf-8') as f:
-        json.dump(randall.__dict__, f, indent=4, separators=(', ', ': '))
-    with open(f_path, mode='w', encoding='utf-8') as f:
-        json.dump(ran_af.__dict__, f, indent=4, separators=(', ', ': '))
-    with open(p_path, mode='w', encoding='utf-8') as f:
-        json.dump(parsto.__dict__, f, indent=4, separators=(', ', ': '))
-
-
-def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
-    # Load the JSON files and translate them into "PlayableCharacter" objects
-    global player
-    global solou
-    global xoann
-    global adorine
-    global randall
-    global ran_af
-    global parsto
-
-    player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    randall = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-
-    with open(path, encoding='utf-8') as f:
-        player.__dict__ = json.load(f)
-    with open(s_path, encoding='utf-8') as f:
-        solou.__dict__ = json.load(f)
-    with open(x_path, encoding='utf-8') as f:
-        xoann.__dict__ = json.load(f)
-    with open(a_path, encoding='utf-8') as f:
-        adorine.__dict__ = json.load(f)
-    with open(r_path, encoding='utf-8') as f:
-        randall.__dict__ = json.load(f)
-    with open(f_path, encoding='utf-8') as f:
-        ran_af.__dict__ = json.load(f)
-    with open(p_path, encoding='utf-8') as f:
-        parsto.__dict__ = json.load(f)
 
 
 def title_screen():
@@ -1686,32 +667,7 @@ def main():
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
 
-    # Establish all three characters as global variables
-    player = ''
 
-    # Pronounced "So-low"
-    solou = PlayableCharacter('Solou', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                              class_='mage', enabled=False)
-
-    # Pronounced "Zo-ann"
-    xoann = PlayableCharacter('Xoann', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                              class_='assassin', enabled=False)
-
-    # Pronounced "Adore-een"
-    adorine = PlayableCharacter('Adorine', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                                class_='warrior', enabled=False)
-
-    # Pronounced "Rahn-ahf"
-    ran_af = PlayableCharacter("Ran'Af", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                               class_='monk', enabled=False)
-
-    # Pronounced "Parse-toe"
-    parsto = PlayableCharacter("Parsto", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                               class_='ranger', enabled=False)
-
-    # Pronounced "Ran-dull"
-    randall = PlayableCharacter("Randall", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3,
-                                class_='paladin', enabled=False)
 
     # Yes, this is a try...except statement that includes functions that span
     # over 8000 lines, but it's necessary for error logging.

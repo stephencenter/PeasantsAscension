@@ -340,11 +340,11 @@ O0o"
 / \\
         %s""",
 
-    "Whispering Goblin":
+    "Goblin Chieftain":
     """
-\\ `o`
- `-|-
-  / \\
+ , `o`
+ |--|-
+ | / \\
         %s""",
     "Master Slime":
     """
@@ -449,7 +449,7 @@ O0o"
         %s"""
 }
 
-# Sprites used for items (not yet implemented!)
+# Sprites used for items
 item_sprites = {
     "Potion": Fore.RED + """
      _ _

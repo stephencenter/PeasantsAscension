@@ -26,6 +26,7 @@ import items
 import text_scroll
 import sounds
 import ascii_art
+import units
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -105,25 +106,24 @@ class Town:
                     print('-'*25)
 
                 elif choice == '4':
-                    print('-'*25)
                     target_options = [x for x in [
-                        main.player,
-                        main.solou,
-                        main.xoann,
-                        main.adorine,
-                        main.ran_af,
-                        main.parsto,
-                        main.randall] if x.enabled
+                        units.player,
+                        units.solou,
+                        units.xoann,
+                        units.adorine,
+                        units.ran_af,
+                        units.parsto,
+                        units.randall] if x.enabled
                     ]
 
                     if len(target_options) == 1:
-                        target = main.player
+                        target = units.player
 
                     else:
+                        print('-'*25)
                         print("Select Party Member:")
-                        print("     ", "\n      ".join(
-                            ["[{0}] {1}".format(int(num) + 1, character.name)
-                             for num, character in enumerate(target_options)]))
+                        print("     ", "\n      ".join(["[{0}] {1}".format(int(num) + 1, character.name)
+                                                        for num, character in enumerate(target_options)]))
 
                         while True:
                             target = input('Input [#] (or type "exit"): ')
@@ -144,7 +144,7 @@ class Town:
 
                             break
 
-                    if isinstance(target, main.PlayableCharacter):
+                    if isinstance(target, units.PlayableCharacter):
                         print('-' * 25)
                         target.player_info()
                         print('-' * 25)
@@ -305,7 +305,7 @@ class Town:
 
                             break
 
-                        elif y_n.lower().startswith("y") and main.miscvars['gp'] < 250:
+                        elif y_n.lower().startswith("y") and main.party_info['gp'] < 250:
                             print('-'*25)
                             input('Salesman: "Hey, you don\'t have enough money for that!" | [ENTER]')
                             print('-'*25)
@@ -341,13 +341,13 @@ class Town:
                     main.party_info['gp'] -= self.inn_cost
 
                     for character in [
-                        main.player,
-                        main.solou,
-                        main.xoann,
-                        main.randall,
-                        main.ran_af,
-                        main.parsto,
-                        main.adorine
+                        units.player,
+                        units.solou,
+                        units.xoann,
+                        units.randall,
+                        units.ran_af,
+                        units.parsto,
+                        units.adorine
                     ]:
 
                         character.hp = copy.copy(character.max_hp)
@@ -496,8 +496,7 @@ class Town:
                                     main.party_info['gp'] -= i.buy
 
                                     print('-'*25)
-                                    input('You purchase the {0} (-{1} \
-GP). (Press enter/return).'.format(i, i.buy))
+                                    input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(i, i.buy))
                                     print('-'*25)
 
                                 else:
@@ -767,13 +766,13 @@ class Tavern:
                     main.party_info['gp'] -= self.cost
 
                     for character in [
-                        main.player,
-                        main.solou,
-                        main.xoann,
-                        main.randall,
-                        main.ran_af,
-                        main.parsto,
-                        main.adorine
+                        units.player,
+                        units.solou,
+                        units.xoann,
+                        units.randall,
+                        units.ran_af,
+                        units.parsto,
+                        units.adorine
                     ]:
                         character.hp = copy.copy(character.max_hp)
                         character.mp = copy.copy(character.max_mp)

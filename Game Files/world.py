@@ -22,7 +22,7 @@ import math
 import pygame
 
 import battle
-import monsters
+import units
 import towns
 import bosses
 import sounds
@@ -202,7 +202,7 @@ It's probably in your best interests that you not do that.
 
                     if is_battle:
                         print('-'*25)
-                        monsters.spawn_monster()
+                        units.spawn_monster()
                         battle.battle_system()
 
                     else:
@@ -225,17 +225,17 @@ It's probably in your best interests that you not do that.
 
                     if decision.startswith('s'):
                         target_options = [x for x in [
-                            main.player,
-                            main.solou,
-                            main.xoann,
-                            main.adorine,
-                            main.ran_af,
-                            main.parsto,
-                            main.randall] if x.enabled
+                            units.player,
+                            units.solou,
+                            units.xoann,
+                            units.adorine,
+                            units.ran_af,
+                            units.parsto,
+                            units.randall] if x.enabled
                         ]
 
                         if len(target_options) == 1:
-                            target = main.player
+                            target = units.player
 
                         else:
                             print("Select Character:")
@@ -263,24 +263,24 @@ It's probably in your best interests that you not do that.
 
                                 break
 
-                        if isinstance(target, main.PlayableCharacter):
+                        if isinstance(target, units.PlayableCharacter):
                             print('-'*25)
                             target.player_info()
                             print('-'*25)
 
                     if decision.startswith('m'):
                         user_options = [x for x in [
-                            main.player,
-                            main.solou,
-                            main.xoann,
-                            main.adorine,
-                            main.ran_af,
-                            main.parsto,
-                            main.randall] if x.enabled
+                            units.player,
+                            units.solou,
+                            units.xoann,
+                            units.adorine,
+                            units.ran_af,
+                            units.parsto,
+                            units.randall] if x.enabled
                         ]
 
                         if len(user_options) == 1:
-                            user = main.player
+                            user = units.player
 
                         else:
                             print('-'*25)
@@ -304,7 +304,7 @@ It's probably in your best interests that you not do that.
                                 break
 
                         if magic.spellbook[
-                            user.name if user != main.player else 'player'
+                            user.name if user != units.player else 'player'
                         ]['Healing']:
 
                             magic.pick_spell('Healing', user, False)
@@ -398,13 +398,13 @@ def rest():
     # when doing this.
     print('-'*25)
 
-    if all([main.player.hp == main.player.max_hp and main.player.mp == main.player.max_mp,
-            main.solou.hp == main.solou.max_hp and main.solou.mp == main.solou.max_mp,
-            main.xoann.hp == main.xoann.max_hp and main.xoann.mp == main.xoann.max_mp,
-            main.randall.hp == main.randall.max_hp and main.randall.mp == main.randall.max_mp,
-            main.ran_af.hp == main.ran_af.max_hp and main.ran_af.mp == main.ran_af.max_mp,
-            main.parsto.hp == main.parsto.max_hp and main.parsto.mp == main.parsto.max_mp,
-            main.adorine.hp == main.adorine.max_hp and main.adorine.mp == main.adorine.max_mp]):
+    if all([units.player.hp == units.player.max_hp and units.player.mp == units.player.max_mp,
+            units.solou.hp == units.solou.max_hp and units.solou.mp == units.solou.max_mp,
+            units.xoann.hp == units.xoann.max_hp and units.xoann.mp == units.xoann.max_mp,
+            units.randall.hp == units.randall.max_hp and units.randall.mp == units.randall.max_mp,
+            units.ran_af.hp == units.ran_af.max_hp and units.ran_af.mp == units.ran_af.max_mp,
+            units.parsto.hp == units.parsto.max_hp and units.parsto.mp == units.parsto.max_mp,
+            units.adorine.hp == units.adorine.max_hp and units.adorine.mp == units.adorine.max_mp]):
 
         print('Your party feels fine and decides not to rest.')
         if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
@@ -420,33 +420,33 @@ def rest():
     is_battle = not random.randint(0, 3)
 
     if is_battle:
-        monsters.spawn_monster()
+        units.spawn_monster()
         battle.battle_system(ambush=True)
 
     else:
-        main.fix_stats()
+        units.fix_stats()
 
         # Revive any dead characters
-        if main.player.status_ail == 'dead':
-            main.player.status_ail = 'none'
+        if units.player.status_ail == 'dead':
+            units.player.status_ail = 'none'
 
-        if main.solou.hp == 'dead':
-            main.solou.status_ail = 'none'
+        if units.solou.status_ail == 'dead':
+            units.solou.status_ail = 'none'
 
-        if main.xoann.hp == 'dead':
-            main.xoann.status_ail = 'none'
+        if units.xoann.status_ail == 'dead':
+            units.xoann.status_ail = 'none'
 
-        if main.randall.hp == 'dead':
-            main.randall.status_ail = 'none'
+        if units.randall.status_ail == 'dead':
+            units.randall.status_ail = 'none'
 
-        if main.ran_af.hp == 'dead':
-            main.ran_af.status_ail = 'none'
+        if units.ran_af.status_ail == 'dead':
+            units.ran_af.status_ail = 'none'
 
-        if main.parsto.hp == 'dead':
-            main.parsto.status_ail = 'none'
+        if units.parsto.status_ail == 'dead':
+            units.parsto.status_ail = 'none'
 
-        if main.adorine.hp == 'dead':
-            main.adorine.status_ail = 'none'
+        if units.adorine.status_ail == 'dead':
+            units.adorine.status_ail = 'none'
 
         print('You rested well and decide to continue on your way.')
         if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
