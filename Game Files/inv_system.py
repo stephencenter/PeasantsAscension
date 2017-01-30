@@ -24,7 +24,7 @@ import npcs
 import ascii_art
 import towns
 import units
-import items as i
+import items
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -41,63 +41,63 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-inventory = {'q_items': [], 'consum': [_c(i.s_potion), _c(i.s_elixir)], 'coord': [],
+inventory = {'q_items': [], 'consum': [_c(items.s_potion), _c(items.s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'misc': [], 'access': []}
 
 equipped = {
     'player': {
         'weapon': '',
-        'head': _c(i.straw_hat),
-        'body': _c(i.cotton_shirt),
-        'legs': _c(i.sunday_trousers),
+        'head': _c(items.straw_hat),
+        'body': _c(items.cotton_shirt),
+        'legs': _c(items.sunday_trousers),
         'access': '(None)'
     },
 
     'Solou': {
-        'weapon': i.mag_twg,
-        'head': _c(i.straw_hat),
-        'body': _c(i.cotton_shirt),
-        'legs': _c(i.sunday_trousers),
+        'weapon': _c(items.mag_twg),
+        'head': _c(items.straw_hat),
+        'body': _c(items.cotton_shirt),
+        'legs': _c(items.sunday_trousers),
         'access': '(None)'
     },
 
     'Xoann': {
-        'weapon': i.stn_dag,
-        'head': _c(i.straw_hat),
-        'body': _c(i.cotton_shirt),
-        'legs': _c(i.sunday_trousers),
+        'weapon': _c(items.stn_dag),
+        'head': _c(items.straw_hat),
+        'body': _c(items.cotton_shirt),
+        'legs': _c(items.sunday_trousers),
         'access': '(None)'
     },
 
     'Parsto': {
-        'weapon': i.stn_dag,
-        'head': _c(i.straw_hat),
-        'body': _c(i.cotton_shirt),
-        'legs': _c(i.sunday_trousers),
+        'weapon': _c(items.slg_sht),
+        'head': _c(items.straw_hat),
+        'body': _c(items.cotton_shirt),
+        'legs': _c(items.sunday_trousers),
         'access': '(None)'
     },
 
     'Adorine': {
-        'weapon': i.stn_dag,
-        'head': _c(i.straw_hat),
-        'body': _c(i.cotton_shirt),
-        'legs': _c(i.sunday_trousers),
+        'weapon': _c(items.wdn_sht),
+        'head': _c(items.straw_hat),
+        'body': _c(items.cotton_shirt),
+        'legs': _c(items.sunday_trousers),
         'access': '(None)'
     },
 
     'Chyme': {
-        'weapon': i.stn_dag,
-        'head': _c(i.straw_hat),
-        'body': _c(i.cotton_shirt),
-        'legs': _c(i.sunday_trousers),
+        'weapon': _c(items.rbr_mlt),
+        'head': _c(items.straw_hat),
+        'body': _c(items.cotton_shirt),
+        'legs': _c(items.sunday_trousers),
         'access': '(None)'
     },
 
     "Ran'Af": {
-        'weapon': i.stn_dag,
-        'head': _c(i.straw_hat),
-        'body': _c(i.cotton_shirt),
-        'legs': _c(i.sunday_trousers),
+        'weapon': _c(items.fists),
+        'head': _c(items.straw_hat),
+        'body': _c(items.cotton_shirt),
+        'legs': _c(items.sunday_trousers),
         'access': '(None)'
     },
 
@@ -106,117 +106,117 @@ equipped = {
 # "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
 # what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
 
-gs_stock = {'Potions': [[i.s_potion, i.s_potion, i.m_potion,
-            i.l_potion, i.l_potion, i.x_potion],  # Health Potions
+gs_stock = {'Potions': [[items.s_potion, items.s_potion, items.m_potion,
+                         items.l_potion, items.l_potion, items.x_potion],  # Health Potions
 
-            [i.s_elixir, i.s_elixir, i.m_elixir,
-             i.l_elixir, i.l_elixir, i.x_elixir],  # Mana Potions
+            [items.s_elixir, items.s_elixir, items.m_elixir,
+             items.l_elixir, items.l_elixir, items.x_elixir],  # Mana Potions
 
-            [i.s_rejuv, i.s_rejuv, i.m_rejuv,
-             i.m_rejuv, i.l_rejuv, i.l_rejuv],  # HP + MP Potions
+            [items.s_rejuv, items.s_rejuv, items.m_rejuv,
+             items.m_rejuv, items.l_rejuv, items.l_rejuv],  # HP + MP Potions
 
-            [i.poison_potion, i.poison_potion, i.poison_potion,
-             i.poison_potion, i.poison_potion, i.poison_potion],  # Poison Potion
+            [items.poison_potion, items.poison_potion, items.poison_potion,
+             items.poison_potion, items.poison_potion, items.poison_potion],  # Poison Potion
 
-            [i.sleep_potion, i.sleep_potion, i.sleep_potion,
-             i.sleep_potion, i.sleep_potion, i.sleep_potion],  # Sleep Potion
+            [items.sleep_potion, items.sleep_potion, items.sleep_potion,
+             items.sleep_potion, items.sleep_potion, items.sleep_potion],  # Sleep Potion
 
-            [i.silence_potion, i.silence_potion, i.silence_potion,
-             i.silence_potion, i.silence_potion, i.silence_potion],  # Silence Potion
+            [items.silence_potion, items.silence_potion, items.silence_potion,
+             items.silence_potion, items.silence_potion, items.silence_potion],  # Silence Potion
 
-            [i.blindness_potion, i.blindness_potion, i.blindness_potion,
-             i.blindness_potion, i.blindness_potion, i.blindness_potion],  # Blindness Potion
+            [items.blindness_potion, items.blindness_potion, items.blindness_potion,
+             items.blindness_potion, items.blindness_potion, items.blindness_potion],  # Blindness Potion
 
-            [i.paralyzation_potion, i.paralyzation_potion, i.paralyzation_potion,
-             i.paralyzation_potion, i.paralyzation_potion, i.paralyzation_potion],  # Para. Potion
+            [items.paralyzation_potion, items.paralyzation_potion, items.paralyzation_potion,
+             items.paralyzation_potion, items.paralyzation_potion, items.paralyzation_potion],  # Para. Potion
 
-            [i.weakness_potion, i.weakness_potion, i.weakness_potion,
-             i.weakness_potion, i.weakness_potion, i.weakness_potion]  # Weakness Potion
+            [items.weakness_potion, items.weakness_potion, items.weakness_potion,
+             items.weakness_potion, items.weakness_potion, items.weakness_potion]  # Weakness Potion
             ],
 
-            'Weapons': [[i.bnz_swd, i.en_bnz_swd, i.stl_spr,
-            i.en_stl_spr, i.durs_axe, i.en_durs_axe],  # Warrior Weapons
+            'Weapons': [[items.bnz_swd, items.en_bnz_swd, items.stl_spr,
+                         items.en_stl_spr, items.durs_axe, items.en_durs_axe],  # Warrior Weapons
 
-            [i.oak_stf, i.en_oak_stf, i.arc_spb,
-             i.en_arc_spb, i.rnc_stf, i.en_rnc_stf],  # Mage Weapons
+            [items.oak_stf, items.en_oak_stf, items.arc_spb,
+             items.en_arc_spb, items.rnc_stf, items.en_rnc_stf],  # Mage Weapons
 
-            [i.ser_knf, i.en_ser_knf, i.stiletto,
-             i.en_stiletto, i.myth_sb, i.en_myth_sb],  # Assassin Weapons
+            [items.ser_knf, items.en_ser_knf, items.stiletto,
+             items.en_stiletto, items.myth_sb, items.en_myth_sb],  # Assassin Weapons
 
-            [i.sht_bow, i.en_sht_bow, i.lng_bow,
-             i.en_lng_bow, i.ash_cbow, i.en_ash_cbow],  # Ranger Weapons
+            [items.sht_bow, items.en_sht_bow, items.lng_bow,
+             items.en_lng_bow, items.ash_cbow, items.en_ash_cbow],  # Ranger Weapons
 
-            [i.holy_mace, i.en_holy_mace, i.hmr_of_mgt,
-             i.en_hmr_of_mgt, i.ngt_bane, i.en_ngt_bane],  # Paladin Weapons
+            [items.holy_mace, items.en_holy_mace, items.hmr_of_mgt,
+             items.en_hmr_of_mgt, items.ngt_bane, items.en_ngt_bane],  # Paladin Weapons
 
-            [i.brass_kncls, i.en_brass_kncls, i.bladed_gloves,
-             i.en_bladed_gloves, i.lead_bg, i.en_lead_bg]],  # Monk Weapons
+            [items.brass_kncls, items.en_brass_kncls, items.bladed_gloves,
+             items.en_bladed_gloves, items.lead_bg, items.en_lead_bg]],  # Monk Weapons
 
-            'Armor': [[i.bnz_hlm, i.en_bnz_hlm, i.stl_hlm,
-            i.en_stl_hlm, i.ori_hlm, i.ori_hlm],  # Warrior Armor -- Head
+            'Armor': [[items.bnz_hlm, items.en_bnz_hlm, items.stl_hlm,
+                       items.en_stl_hlm, items.ori_hlm, items.ori_hlm],  # Warrior Armor -- Head
 
-            [i.bnz_cst, i.en_bnz_cst, i.stl_cst,
-             i.en_stl_cst, i.ori_cst, i.ori_cst],  # Warrior Armor -- Body
+            [items.bnz_cst, items.en_bnz_cst, items.stl_cst,
+             items.en_stl_cst, items.ori_cst, items.ori_cst],  # Warrior Armor -- Body
 
-            [i.bnz_leg, i.en_bnz_leg, i.stl_leg,
-             i.en_stl_leg, i.ori_leg, i.ori_leg],  # Warrior Armor -- Legs
+            [items.bnz_leg, items.en_bnz_leg, items.stl_leg,
+             items.en_stl_leg, items.ori_leg, items.ori_leg],  # Warrior Armor -- Legs
 
-            [i.wiz_hat, i.en_wiz_hat, i.myst_hat,
-             i.en_myst_hat, i.elem_hat, i.elem_hat],  # Mage Armor -- Head
+            [items.wiz_hat, items.en_wiz_hat, items.myst_hat,
+             items.en_myst_hat, items.elem_hat, items.elem_hat],  # Mage Armor -- Head
 
-            [i.wiz_rob, i.en_wiz_rob, i.myst_rob,
-             i.en_myst_rob, i.elem_rob, i.elem_rob],  # Mage Armor -- Body
+            [items.wiz_rob, items.en_wiz_rob, items.myst_rob,
+             items.en_myst_rob, items.elem_rob, items.elem_rob],  # Mage Armor -- Body
 
-            [i.wiz_gar, i.en_wiz_gar, i.myst_gar,
-             i.en_myst_gar, i.elem_gar, i.elem_gar],  # Mage Armor -- Legs
+            [items.wiz_gar, items.en_wiz_gar, items.myst_gar,
+             items.en_myst_gar, items.elem_gar, items.elem_gar],  # Mage Armor -- Legs
 
-            [i.lth_cap, i.en_lth_cap, i.std_cwl,
-             i.en_std_cwl, i.drg_cwl, i.drg_cwl],  # Assassin + Ranged Armor -- Head
+            [items.lth_cap, items.en_lth_cap, items.std_cwl,
+             items.en_std_cwl, items.drg_cwl, items.drg_cwl],  # Assassin + Ranged Armor -- Head
 
-            [i.lth_bdy, i.en_lth_bdy, i.std_bdy,
-             i.en_std_bdy, i.drg_bdy, i.drg_bdy],  # Assassin + Ranged Armor -- Body
+            [items.lth_bdy, items.en_lth_bdy, items.std_bdy,
+             items.en_std_bdy, items.drg_bdy, items.drg_bdy],  # Assassin + Ranged Armor -- Body
 
-            [i.lth_leg, i.en_lth_leg, i.std_leg,
-             i.en_std_leg, i.drg_leg]],  # Assassin + Ranged Armor -- Legs
+            [items.lth_leg, items.en_lth_leg, items.std_leg,
+             items.en_std_leg, items.drg_leg]],  # Assassin + Ranged Armor -- Legs
 
-            'Accessories': [[i.water_amulet, i.water_amulet, i.water_amulet,
-                             i.water_amulet, i.water_amulet, i.water_amulet],
+            'Accessories': [[items.water_amulet, items.water_amulet, items.water_amulet,
+                             items.water_amulet, items.water_amulet, items.water_amulet],
 
-                            [i.fire_amulet, i.fire_amulet, i.fire_amulet,
-                             i.fire_amulet, i.fire_amulet, i.fire_amulet],
+                            [items.fire_amulet, items.fire_amulet, items.fire_amulet,
+                             items.fire_amulet, items.fire_amulet, items.fire_amulet],
 
-                            [i.earth_amulet, i.earth_amulet, i.earth_amulet,
-                             i.earth_amulet, i.earth_amulet, i.earth_amulet],
+                            [items.earth_amulet, items.earth_amulet, items.earth_amulet,
+                             items.earth_amulet, items.earth_amulet, items.earth_amulet],
 
-                            [i.electric_amulet, i.electric_amulet, i.electric_amulet,
-                             i.electric_amulet, i.electric_amulet, i.electric_amulet],
+                            [items.electric_amulet, items.electric_amulet, items.electric_amulet,
+                             items.electric_amulet, items.electric_amulet, items.electric_amulet],
 
-                            [i.wind_amulet, i.wind_amulet, i.wind_amulet,
-                             i.wind_amulet, i.wind_amulet, i.wind_amulet],
+                            [items.wind_amulet, items.wind_amulet, items.wind_amulet,
+                             items.wind_amulet, items.wind_amulet, items.wind_amulet],
 
-                            [i.grass_amulet, i.grass_amulet, i.grass_amulet,
-                             i.grass_amulet, i.grass_amulet, i.grass_amulet],
+                            [items.grass_amulet, items.grass_amulet, items.grass_amulet,
+                             items.grass_amulet, items.grass_amulet, items.grass_amulet],
 
-                            [i.ice_amulet, i.ice_amulet, i.ice_amulet,
-                             i.ice_amulet, i.ice_amulet, i.ice_amulet],
+                            [items.ice_amulet, items.ice_amulet, items.ice_amulet,
+                             items.ice_amulet, items.ice_amulet, items.ice_amulet],
 
-                            [i.life_amulet, i.life_amulet, i.life_amulet,
-                             i.life_amulet, i.life_amulet, i.life_amulet],
+                            [items.life_amulet, items.life_amulet, items.life_amulet,
+                             items.life_amulet, items.life_amulet, items.life_amulet],
 
-                            [i.death_amulet, i.death_amulet, i.death_amulet,
-                             i.death_amulet, i.death_amulet, i.death_amulet]],
+                            [items.death_amulet, items.death_amulet, items.death_amulet,
+                             items.death_amulet, items.death_amulet, items.death_amulet]],
 
-            'Other': [[i.divining_rod, i.divining_rod, i.divining_rod,
-                       i.divining_rod, i.divining_rod, i.divining_rod],
+            'Other': [[items.divining_rod, items.divining_rod, items.divining_rod,
+                       items.divining_rod, items.divining_rod, items.divining_rod],
 
-                      [i.shovel, i.shovel, i.shovel,
-                       i.shovel, i.shovel, i.shovel],
+                      [items.shovel, items.shovel, items.shovel,
+                       items.shovel, items.shovel, items.shovel],
 
-                      [i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel,
-                       i.map_of_fast_travel, i.map_of_fast_travel, i.map_of_fast_travel],
+                      [items.map_of_fast_travel, items.map_of_fast_travel, items.map_of_fast_travel,
+                       items.map_of_fast_travel, items.map_of_fast_travel, items.map_of_fast_travel],
 
-                      [i.boots_of_travel, i.boots_of_travel, i.boots_of_travel,
-                       i.boots_of_travel, i.boots_of_travel, i.boots_of_travel]]}
+                      [items.boots_of_travel, items.boots_of_travel, items.boots_of_travel,
+                       items.boots_of_travel, items.boots_of_travel, items.boots_of_travel]]}
 
 
 def pick_category():
@@ -334,27 +334,24 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             if inventory[cat]:
                 print('-'*25)
                 if not gs:
-                    print('{0}: \n      '.format(vis_cat), end='')
-                    print('\n      '.join(
-                        ['[{0}] {1}'.format(x + 1, y)
-                         for x, y in enumerate(inventory[cat])]))
+                    print(f'{vis_cat}: \n      ', end='')
+                    print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(inventory[cat])]))
 
                 else:
                     try:
-                        padding = len(max([
-                            it.name for it in inventory[cat] if not it.imp
-                        ], key=len))
+                        padding = len(max([it.name for it in inventory[cat] if not it.imp], key=len))
+
                     except ValueError:
                         padding = 1
 
-                    ext_pad = len(str(len([it.name for it in inventory[cat] if not it.imp]) + 1))
+                    extra_pad = len(str(len([it.name for it in inventory[cat] if not it.imp]) + 1))
 
-                    print('{0}: \n      '.format(vis_cat), end='')
-                    print('\n      '.join(
-                        ['[{0}] {1} {2}--> {3} GP'.format(
-                            x + 1, y, '-'*(padding - len(y.name) + (ext_pad - len(str(x + 1)))),
-                            y.sell)
-                         for x, y in enumerate([it for it in inventory[cat] if not it.imp])]))
+                    print('{0}:'.format(vis_cat))
+
+                    for x, y in enumerate([it for it in inventory[cat] if not it.imp]):
+                        full_padding = '-'*(padding - len(y.name) + (extra_pad - len(str(x + 1))))
+                        print('     ', '      '.join([f"[{x + 1}] {y} {full_padding}--> {y.sell} GP"]))
+
             else:
                 return
 
@@ -370,6 +367,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
 
                     if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
+
                     else:
                         continue
 
@@ -396,9 +394,9 @@ def pick_action(cat, item):
 
     # Loop while the item is in the inventory
     while item in inventory[cat]:
-        if (isinstance(item, i.Weapon)
-            or isinstance(item, i.Armor)
-                or isinstance(item, i.Accessory)):
+        if (isinstance(item, items.Weapon)
+            or isinstance(item, items.Armor)
+                or isinstance(item, items.Accessory)):
 
             # You equip weapons/armor/accessories
             use_equip = 'Equip'
@@ -416,11 +414,11 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
         if action == '1':
             if any([
-                isinstance(item, i.Accessory),
-                isinstance(item, i.Armor),
-                isinstance(item, i.Consumable),
-                isinstance(item, i.Weapon),
-                isinstance(item, i.StatusPotion)
+                isinstance(item, items.Accessory),
+                isinstance(item, items.Armor),
+                isinstance(item, items.Consumable),
+                isinstance(item, items.Weapon),
+                isinstance(item, items.StatusPotion)
             ]):
                 target_options = [x for x in [
                     units.player,
@@ -507,63 +505,63 @@ journey.'.format(str(item)))
 
 
 def manage_equipped():
-    global equipped
-
-    spam = False
-
     print('-'*25)
-    target_options = [x for x in [
-        units.player,
-        units.solou,
-        units.xoann,
-        units.adorine,
-        units.ran_af,
-        units.parsto,
-        units.chyme] if x.enabled
-    ]
-
-    print("Select Character: ")
-    print("     ", "\n      ".join(["[{0}] {1}".format(int(num) + 1, character.name)
-                                   for num, character in enumerate(target_options)]))
 
     while True:
-        target = input("Input [#]: ")
+        target_options = [x for x in [units.player,
+                                      units.solou,
+                                      units.xoann,
+                                      units.adorine,
+                                      units.ran_af,
+                                      units.parsto,
+                                      units.chyme] if x.enabled]
 
-        try:
-            target = int(target) - 1
+        if len(target_options) == 1:
+            target = units.player
 
-        except ValueError:
-            continue
+        else:
+            print("Select Character: ")
 
-        try:
-            target = target_options[target]
+            for num, character in enumerate(target_options):
+                print("     ", "\n      ".join([f"[{int(num) + 1}] {character.name}"]))
 
-        except IndexError:
-            continue
+            while True:
+                target = input('Input [#] (or type "exit"): ')
 
-        break
+                try:
+                    target = target_options[int(target) - 1]
 
+                except (IndexError, ValueError):
+                    if target in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        print('-'*25)
+
+                        return
+
+                    continue
+
+                break
+
+        manage_equipped_2(target)
+
+
+def manage_equipped_2(target):
     while True:
-        if not spam:
-            p_equip = equipped[target.name if target != units.player else 'player']
+        p_equip = equipped[target.name if target != units.player else 'player']
 
-        print('-'*25)
-        print("""{0}'s Equipped Items:
-      [1] Weapon ----> {1}
-      [2] Head ------> {2}
-      [3] Body ------> {3}
-      [4] Legs ------> {4}
-      [5] Accessory -> {5}""".format(target.name,
-                                     p_equip['weapon'], p_equip['head'],
-                                     p_equip['body'], p_equip['legs'],
-                                     p_equip['access']))
-        spam = True
-        while spam:
+        print('-' * 25)
+        print(f"""{target.name}'s Equipped Items:
+      [1] Weapon ----> {p_equip['weapon']}
+      [2] Head ------> {p_equip['head']}
+      [3] Body ------> {p_equip['body']}
+      [4] Legs ------> {p_equip['legs']}
+      [5] Accessory -> {p_equip['access']}""")
+
+        while True:
             selected = input('Input [#] (or type "back"): ')
             selected = selected.lower()
 
             if selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                print('-'*25)
+                print('-' * 25)
 
                 return
 
@@ -586,181 +584,145 @@ def manage_equipped():
                 continue
 
             if selected == '(None)':
-                print('-'*25)
+                print('-' * 25)
                 print("You don't have anything equipped in that slot.")
                 input("\nPress enter/return ")
+
                 break
 
-            if isinstance(selected, i.Weapon):
+            if isinstance(selected, items.Weapon):
                 key = 'weapon'
 
-            elif isinstance(selected, i.Accessory):
+            elif isinstance(selected, items.Accessory):
                 key = 'access'
 
-            elif isinstance(selected, i.Armor):
+            elif isinstance(selected, items.Armor):
                 key = selected.part
 
-            print('-'*25)
-            while True:
-                action = input("""What do you want to do with your {0}?
+            print('-' * 25)
+
+            manage_equipped_3(key, selected, p_equip)
+
+
+def manage_equipped_3(key, selected, p_equip):
+    global equipped
+
+    while True:
+        print(f"""What do you want to do with your {str(selected)}?
       [1] Unequip
-      [2] Read Description
-Input [#] (or type "back"): """.format(str(selected)))
+      [2] Read Description""")
 
-                if action == '1':
-                    if selected.name == 'Fists':
-                        print('-'*25)
-                        print("Removing those would be difficult without causing damage.")
+        while True:
+            action = input('Input [#] (or type "back"')
+
+            if action == '1':
+                if selected.name == 'Fists':
+                    print('-' * 25)
+                    print("Removing those would be difficult without causing damage.")
+                    input("\nPress enter/return ")
+                    print('-' * 25)
+
+                    break
+
+                print('-' * 25)
+                print(f'You unequip the {selected.name}.')
+                input("\nPress enter/return ")
+
+                if isinstance(selected, items.Weapon):
+                    inventory[selected.cat].append(p_equip[key])
+
+                    p_equip[key] = items.fists
+
+                elif isinstance(selected, items.Armor):
+                    inventory[selected.cat].append(p_equip[key])
+
+                    p_equip[key] = '(None)'
+
+                elif isinstance(selected, items.Accessory):
+                    if isinstance(selected, items.ElementAccessory):
+                        target.element = 'none'
+
+                        print('You are no longer imbued with the {0} element.'.format(selected.element))
                         input("\nPress enter/return ")
-                        print('-'*25)
 
-                        continue
+                    inventory[selected.cat].append(p_equip[key])
+                    p_equip[key] = '(None)'
 
-                    print('-'*25)
-                    print('You unequip the {0}.'.format(selected.name))
-                    input("\nPress enter/return ")
+                break
 
-                    if isinstance(selected, i.Weapon):
-                        inventory[selected.cat].append(p_equip[key])
+            elif action == '2':
+                print('-' * 25)
 
-                        p_equip[key] = i.fists
+                if hasattr(selected, "ascart"):
+                    print(ascii_art.item_sprites[selected.ascart])
 
-                    elif isinstance(selected, i.Armor):
-                        inventory[selected.cat].append(p_equip[key])
+                print(selected.desc)
+                input("\nPress enter/return ")
+                print('-' * 25)
 
-                        p_equip[key] = '(None)'
+                break
 
-                    elif isinstance(selected, i.Accessory):
-                        if isinstance(selected, i.ElementAccessory):
-                            target.element = 'none'
-
-                            print('You are no longer imbued with the {0} element.'.format(selected.element))
-                            input("\nPress enter/return ")
-
-                        inventory[selected.cat].append(p_equip[key])
-                        p_equip[key] = '(None)'
-
-                    spam = False
-                    break
-
-                elif action == '2':
-                    print('-'*25)
-
-                    if hasattr(selected, "ascart"):
-                        print(ascii_art.item_sprites[selected.ascart])
-
-                    print(selected.desc)
-                    input("\nPress enter/return ")
-                    print('-'*25)
-
-                elif action.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    spam = False
-                    break
+            elif action.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                return
 
 
 def view_quests():
     print('-'*25)
     while True:
         fizz = True
-        choice = input('View [f]inished or [a]ctive quests? | Input [Letter] (or type "back"): ')
+        choice = input('View [f]inished or [a]ctive quests? | Input [Letter] (or type "back"): ').lower()
 
-        choice = choice.lower()
-
+        print('-' * 25)
         if choice.startswith('f'):  # Finished Quests
-            print('-'*25)
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.finished]
 
-            if dialogue:
-                while fizz:
-                    print('Finished Quests:\n      ', end='')
-                    print('\n      '.join(['[{0}] {1}'.format(num + 1, x.name)
-                                           for num, x in enumerate([
-                                           y for y in npcs.all_dialogue
-                                           if isinstance(y, npcs.Quest) and y.finished])]))
-
-                    while True:
-                        number = input('Input [#] (or type "back"): ')
-
-                        try:
-                            number = int(number) - 1
-
-                        except ValueError:
-                            if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                                fizz = False  # Break the loop twice
-                                break
-
-                            else:
-                                continue
-
-                        if (number < 0) or (number > len(dialogue) - 1):
-                            continue
-
-                        quest = dialogue[number]
-
-                        print('-'*25)
-                        print("""{0}:\n    "{1}"\nGiven by: {2}""".format(
-                            quest.name, '\n     '.join([x for x in quest.desc]), quest.q_giver))
-                        print('-'*25)
-
-                        break
-            else:
-                print('Your party has no finished quests!')
-                input("\nPress enter/return")
-
-            print('-'*25)
-
-        elif choice.startswith('a'):  # Active Quest
-            print('-'*25)
-
+        elif choice.startswith('a'):
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and not x.finished and x.started]
-
-            if dialogue:
-                while fizz:
-                    print('Active Quests: ')
-                    print('     ', '\n     '.join(['[{0}] {1}'.format(num + 1, x)
-                                                   for num, x in
-                                                   enumerate([y for y in npcs.all_dialogue
-                                                              if isinstance(y, npcs.Quest)
-                                                              and not y.finished and y.started])]))
-
-                    while True:
-                        number = input('Input [#] (or type "back"): ')
-
-                        try:
-                            number = int(number) - 1
-
-                        except ValueError:
-
-                            if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-
-                                fizz = False  # Break the loop twice
-                                break
-
-                            else:
-                                continue
-
-                        if (number < 0) or (number > len(dialogue) - 1):
-                            continue
-
-                        quest = dialogue[number]
-
-                        print('-'*25)
-
-                        print("""{0}:\n    "{1}"\nGiven by: {2}""".format(quest.name, '\n     '.join([
-                                x for x in quest.desc]), quest.q_giver))
-
-                        input("\nPress enter/return ")
-                        print('-'*25)
-
-                        break
-            else:
-                print('Your party has no active quests!')
-                input('\nPress enter/return ')
-
-            print('-'*25)
 
         elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
             return
+
+        else:
+            continue
+
+        if dialogue:
+            while fizz:
+                print(f'{"Finished" if choice.startswith("f") else "Active"}:\n      ', end='')
+                print('\n      '.join([f'[{num + 1}] {x.name}' for num, x in enumerate(dialogue)]))
+
+                while True:
+                    number = input('Input [#] (or type "back"): ')
+
+                    try:
+                        number = int(number) - 1
+
+                    except ValueError:
+                        if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                            fizz = False  # Break the loop twice
+                            break
+
+                        else:
+                            continue
+
+                    if (number < 0) or (number > len(dialogue) - 1):
+                        continue
+
+                    quest = dialogue[number]
+
+                    print('-'*25)
+                    print(f"""QUEST NAME: {quest.name}\nGIVEN BY: {quest.q_giver}\n""")
+                    print('\n'.join([x for x in quest.desc]))
+                    input("\nPress enter/return ")
+                    print('-'*25)
+
+                    break
+
+            print('-'*25)
+
+        else:
+            print(f'Your party has no {"active" if choice.startswith("a") else "finished"} quests!')
+            input('\nPress enter/return ')
+            print('-'*25)
 
 
 def sell_item(cat, item):  # Trade player-owned objects for money (GP)
@@ -875,20 +837,20 @@ def deserialize_inv(path):
         for item in j_inventory[category]:
             if category == 'consum':
                 if 'Potion of ' in item['name']:
-                    x = i.StatusPotion('', '', '', '', '')
+                    x = items.StatusPotion('', '', '', '', '')
 
                 else:
-                    x = i.Consumable('', '', '', '')
+                    x = items.Consumable('', '', '', '')
 
             elif category == 'weapons':
-                x = i.Weapon('', '', '', '', '', '', '', '')
+                x = items.Weapon('', '', '', '', '', '', '', '')
 
             elif category == 'armor':
-                x = i.Armor('', '', '', '', '', '', '', '', '')
+                x = items.Armor('', '', '', '', '', '', '', '', '')
 
             elif category == 'access':
                 if item['acc_type'] == 'elemental':
-                    x = i.ElementAccessory('', '', '', '', '')
+                    x = items.ElementAccessory('', '', '', '', '')
 
             elif category == 'coord':
                 norm_inv[category].append(item)
@@ -896,37 +858,37 @@ def deserialize_inv(path):
 
             elif category in ['misc', 'q_items']:
                 if item['name'] == 'Magical Compass':
-                    item = i.magic_compass
+                    item = items.magic_compass
                     norm_inv[category].append(item)
                     continue
 
                 elif item['name'] == 'Divining Rod':
-                    item = i.divining_rod
+                    item = items.divining_rod
                     norm_inv[category].append(item)
                     continue
 
                 elif item['name'] == 'Shovel':
-                    item = i.shovel
+                    item = items.shovel
                     norm_inv[category].append(item)
                     continue
 
                 elif item['name'] == 'Map of Fast Travel':
-                    item = i.map_of_fast_travel
+                    item = items.map_of_fast_travel
                     norm_inv[category].append(item)
                     continue
 
                 elif item['name'] == 'Boots of Travel':
-                    item = i.boots_of_travel
+                    item = items.boots_of_travel
                     norm_inv[category].append(item)
                     continue
 
                 else:
-                    x = i.Misc('', '', '', '')
+                    x = items.Misc('', '', '', '')
             else:
                 continue
 
-            if (not isinstance(x, i.Armor)
-                    and not isinstance(x, i.Weapon)):
+            if (not isinstance(x, items.Armor)
+                    and not isinstance(x, items.Weapon)):
 
                 item_art = x.ascart
                 x.__dict__ = item
@@ -970,14 +932,14 @@ def deserialize_equip(path):
                 continue
 
             elif category == 'weapon':
-                x = i.Weapon('', '', '', '', '', '', '', '')
+                x = items.Weapon('', '', '', '', '', '', '', '')
 
             elif category == 'access':
                 if j_equipped[category]['acc_type'] == 'elemental':
-                    x = i.ElementAccessory('', '', '', '', '')
+                    x = items.ElementAccessory('', '', '', '', '')
 
             else:
-                x = i.Armor('', '', '', '', '', '', '', '', '')
+                x = items.Armor('', '', '', '', '', '', '', '', '')
 
             x.__dict__ = j_equipped[user][category]
             norm_equip[user][category] = x

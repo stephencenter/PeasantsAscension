@@ -621,6 +621,13 @@ Armor:
                 elif self.move == '4':
                     print('-'*25)
 
+                    if self.status_ail == "muted":
+                        print(f"{self.name} is muted - they cannot access their inventory!")
+                        print("\nPress enter/return ")
+                        print(self.battle_options.format(self.name))
+
+                        continue
+
                     if not battle.battle_inventory(self):
                         print(self.battle_options.format(self.name))
 
@@ -632,7 +639,9 @@ Armor:
                 elif self.move == '3':
                     if self.lvl < 5:
                         # You must be at least level 5 to use your class ability
+                        print('-'*25)
                         print("{0} has not yet realized their class's inner potential!".format(self.name))
+                        input("\nPress enter/return ")
                         print('-'*25)
                         print(self.battle_options.format(self.name))
 
@@ -654,7 +663,6 @@ Armor:
         # strategy being used.
 
         inv_name = self.name if self != player else 'player'
-        monster = battle.monster
         battle.temp_stats[self.name]['ability_used'] = True
 
         print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
@@ -670,8 +678,7 @@ Armor:
             print('ABILITY: SCOUT')
             print('-'*25)
 
-            print('As a Ranger, {0} identifies their enemy and focuses, increasing their pierce attack!'.format(
-                self.name))
+            print(f'As a Ranger, {self.name} identifies their enemy and focuses, increasing their pierce attack!')
 
             input("Press enter/return to view your enemy's stats ")
 
@@ -680,20 +687,19 @@ Armor:
 
             print("""Attack: {0} | M. Attack: {1} | P. Attack: {2} | Speed: {3}
     Defense: {4} | M. Defense: {5} | P. Defense: {6} | Evasion: {7}
-    Element: {8} | Elemental Weakness: {9}""".format(
-                monster.attk, monster.m_attk, monster.p_attk, monster.spd,
-                monster.dfns, monster.m_dfns, monster.p_dfns, monster.evad,
-                monster.element.title(),
-                {'fire': 'Water',
-                 'water': 'Electric',
-                 'electric': 'Earth',
-                 'earth': 'Grass',
-                 'grass': 'Wind',
-                 'wind': 'Ice',
-                 'ice': 'Fire',
-                 'none': 'None',
-                 'life': 'Death',
-                 'death': 'Life'}[monster.element]))
+    Element: {8} | Elemental Weakness: {9}""".format(monster.attk, monster.m_attk, monster.p_attk, monster.spd,
+                                                     monster.dfns, monster.m_dfns, monster.p_dfns, monster.evad,
+                                                     monster.element.title(),
+                                                     {'fire': 'Water',
+                                                      'water': 'Electric',
+                                                      'electric': 'Earth',
+                                                      'earth': 'Grass',
+                                                      'grass': 'Wind',
+                                                      'wind': 'Ice',
+                                                      'ice': 'Fire',
+                                                      'none': 'None',
+                                                      'life': 'Death',
+                                                      'death': 'Life'}[monster.element]))
 
             battle.temp_stats[self.name]['p_attk'] *= 1.35
 
@@ -808,7 +814,7 @@ Armor:
 
             dam_dealt = math.ceil(dam_dealt)
 
-            print('The attack deals {0} damage to the {1}!'.format(math.ceil(dam_dealt), monster.name))
+            print('The attack deals {0} damage to the {1}!'.format(dam_dealt, monster.name))
 
             monster.hp -= dam_dealt
 
@@ -839,10 +845,10 @@ class Monster(Unit):
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
-            dam_dealt = math.ceil(self.attk - (battle.temp_stats[target.name]['dfns']/2)*(1 + dr))
+            dam_dealt = self.attk - (battle.temp_stats[target.name]['dfns']/2)*(1 + dr)
 
         else:
-            dam_dealt = math.ceil(self.p_attk - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr))
+            dam_dealt = self.p_attk - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr)
 
         dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
 
@@ -856,17 +862,25 @@ class Monster(Unit):
         if dam_dealt < 1:
             dam_dealt = 1
 
-        return dam_dealt
+        if dam_dealt > 999:
+            dam_dealt = 999
+
+        return math.ceil(dam_dealt)
 
     def magical_damage(self, target):
         ise = inv_system.equipped[target.name if target != player else 'player']
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
-        dam_dealt = math.ceil(self.m_attk - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr))
+
+        dam_dealt = self.m_attk - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr)
+        dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
 
         if dam_dealt < 1:
             dam_dealt = 1
 
-        return dam_dealt
+        if dam_dealt > 999:
+            dam_dealt = 999
+
+        return math.ceil(dam_dealt)
 
     def monst_level(self): # THIS NEEDS REWORKING!!
 
@@ -1247,9 +1261,6 @@ class Monster(Unit):
             adorine
         ] if x.enabled and x.status_ail != 'dead'])
 
-        if target.spd >= self.spd:
-            print('-'*25)
-
         print('\n-Enemy Turn-')
         print(ascii_art.monster_art[self.monster_name] % "The {0} is making a move!\n".format(self.monster_name))
 
@@ -1333,9 +1344,6 @@ class Monster(Unit):
             adorine
         ] if x.enabled and x.status_ail != 'dead'])
 
-        if target.spd >= self.spd:
-            print('-'*25)
-
         print('\n-Enemy Turn-')
         print(ascii_art.monster_art[self.monster_name] % "The {0} is making a move!\n".format(self.monster_name))
 
@@ -1373,8 +1381,11 @@ class Monster(Unit):
             adorine
         ] if x.enabled and x.status_ail != 'dead'])
 
+        print('\n-Enemy Turn-')
+        print(ascii_art.monster_art[self.monster_name] % "The {0} is making a move!\n".format(self.monster_name))
+
+        # Set defense back to normal if the monster defended last turn
         if self.is_defending:
-            # Set defense back to normal
             self.is_defending = False
 
             self.dfns /= 1.5
@@ -1384,18 +1395,11 @@ class Monster(Unit):
             self.m_dfns = math.floor(self.m_dfns)
             self.p_dfns = math.floor(self.p_dfns)
 
-        if target.spd >= self.spd:
-            print('-'*25)
-
-        print('\n-Enemy Turn-')
-        print(ascii_art.monster_art[self.monster_name] % "The {0} is making a move!\n".format(self.monster_name))
-
-        # Melee monsters have a 1 in 5 (20%) chance to defend
-        if random.randint(0, 4) == 0:
+        # Melee monsters have a 1 in 6 (16.667%) chance to defend
+        elif random.randint(0, 5) == 0:
             self.is_defending = True
             sounds.buff_spell.play()
 
-            # Scaling Defense
             self.dfns *= 1.5
             self.m_dfns *= 1.5
             self.p_dfns *= 1.5
@@ -1528,63 +1532,12 @@ def create_player():
 def spawn_monster():
     global monster
 
-    monster = Monster('', 10, 5, 1, 1, 1, 1, 1, 1, 1, 1)
+    monster = Monster('', 10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
     monster.monst_name()
     monster.monst_level()
 
     if monster.evad > 256:
         monster.evad = 256
-
-        def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
-            # Save the "PlayableCharacter" objects as JSON files
-
-            with open(path, mode='w', encoding='utf-8') as f:
-                json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
-            with open(s_path, mode='w', encoding='utf-8') as f:
-                json.dump(solou.__dict__, f, indent=4, separators=(', ', ': '))
-            with open(x_path, mode='w', encoding='utf-8') as f:
-                json.dump(xoann.__dict__, f, indent=4, separators=(', ', ': '))
-            with open(a_path, mode='w', encoding='utf-8') as f:
-                json.dump(adorine.__dict__, f, indent=4, separators=(', ', ': '))
-            with open(r_path, mode='w', encoding='utf-8') as f:
-                json.dump(chyme.__dict__, f, indent=4, separators=(', ', ': '))
-            with open(f_path, mode='w', encoding='utf-8') as f:
-                json.dump(ran_af.__dict__, f, indent=4, separators=(', ', ': '))
-            with open(p_path, mode='w', encoding='utf-8') as f:
-                json.dump(parsto.__dict__, f, indent=4, separators=(', ', ': '))
-
-        def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
-            # Load the JSON files and translate them into "PlayableCharacter" objects
-            global player
-            global solou
-            global xoann
-            global adorine
-            global chyme
-            global ran_af
-            global parsto
-
-            player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-            solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-            xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-            adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-            chyme = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-            ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-            parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-
-            with open(path, encoding='utf-8') as f:
-                player.__dict__ = json.load(f)
-            with open(s_path, encoding='utf-8') as f:
-                solou.__dict__ = json.load(f)
-            with open(x_path, encoding='utf-8') as f:
-                xoann.__dict__ = json.load(f)
-            with open(a_path, encoding='utf-8') as f:
-                adorine.__dict__ = json.load(f)
-            with open(r_path, encoding='utf-8') as f:
-                chyme.__dict__ = json.load(f)
-            with open(f_path, encoding='utf-8') as f:
-                ran_af.__dict__ = json.load(f)
-            with open(p_path, encoding='utf-8') as f:
-                parsto.__dict__ = json.load(f)
 
 
 def fix_stats():

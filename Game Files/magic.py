@@ -175,7 +175,7 @@ class Damaging(Spell):
             Spell.use_mana(self, user)
 
             # Determine the power of the attack
-            dam_dealt = math.ceil(battle.temp_stats[user.name]['m_attk'] - battle.monster.m_dfns/2)
+            dam_dealt = math.ceil(battle.temp_stats[user.name]['m_attk'] - units.monster.m_dfns/2)
 
             if user.class_ == 'mage':
                 dam_dealt *= 1.5
@@ -207,7 +207,7 @@ class Damaging(Spell):
 
             # If the monster's evasion (with a max of 256) is higher than the user's accuracy roll,
             # the spell will land
-            if user.dodge in range(units.monster.evad, 512):
+            if random.randint(1, 512) in range(units.monster.evad, 512):
                 sounds.enemy_hit.play()
 
                 # Mages have a 15% chance to get a critical hit, whereas other classes cannot
@@ -623,7 +623,7 @@ def pick_cat(user, is_battle=True):
     inv_name = user.name if user != units.player else 'player'
 
     if user.status_ail == 'silenced':
-        print("You find yourself unable to use spells!")
+        print(f"{user.name} is silenced and cannot use spells!")
         input("\nPress enter/return ")
 
         return False

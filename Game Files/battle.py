@@ -142,6 +142,13 @@ def set_temp_stats():
 
 
 def battle_system(is_boss=False, ambush=False):
+    enabled_pcus = [x for x in [units.player,
+                                units.solou,
+                                units.xoann,
+                                units.chyme,
+                                units.ran_af,
+                                units.adorine,
+                                units.parsto] if x.enabled]
 
     # Bosses use a different battle music than when battling normal enemies
     if is_boss:
@@ -179,91 +186,68 @@ def battle_system(is_boss=False, ambush=False):
     set_temp_stats()
 
     # While all active party members are alive, continue the battle
-    while units.monster.hp > 0 and any([char.hp > 0 for char in [units.player,
-                                                                 units.solou,
-                                                                 units.xoann,
-                                                                 units.chyme,
-                                                                 units.parsto,
-                                                                 units.ran_af,
-                                                                 units.adorine] if char.enabled]):
+    while units.monster.hp > 0 and any([char.hp > 0 for char in enabled_pcus]):
 
         # Check to see if any of your party members are have died, and alert the player
         # Then, check if any of them are asleep and do some powerful magic to make everything work
-        for character in [x for x in [units.player,
-                                      units.solou,
-                                      units.xoann,
-                                      units.chyme,
-                                      units.ran_af,
-                                      units.adorine,
-                                      units.parsto] if x.enabled]:
-
-            if character.hp <= 0 and character.status_ail != 'dead':
-                print('{0} has fallen to the {1}!'.format(character.name, monster.monster_name))
-                sounds.ally_death.play()
-                main.smart_sleep(0.75)
-
+        for character in enabled_pcus:
             if character.enabled and character.status_ail == 'asleep':
                 character.battle_turn()
 
                 if character.status_ail == 'asleep':
-                    print(ascii_art.player_art["Asleep"] % "{0} is asleep, and cannot move!".format(character.name))
+                    print(ascii_art.player_art["Asleep"] % f"{character.name} is asleep, and cannot move!")
                     input("\nPress enter/return ")
                     sounds.poison_damage.play()
 
         # Display HP, MP, Levels, and Statuses for all battle participants
         bat_stats()
 
-        # If any of your party members are at less than 20% health, play a small jingle
-        for character in [x for x in [units.player,
-                                      units.solou,
-                                      units.xoann,
-                                      units.chyme,
-                                      units.ran_af,
-                                      units.adorine,
-                                      units.parsto] if x.enabled]:
+        for num, character in enumerate(enabled_pcus) :
 
+            # If any of your party members are at less than 20% health, play a small jingle
             if 0 < character.hp <= 0.20 * character.max_hp:
-                print("Warning: {0}'s HP is low, heal as soon as possible!".format(character.name))
+                print(f"Warning: {character.name}'s HP is low, heal as soon as possible!\n")
                 sounds.health_low.play()
-                main.smart_sleep(0.75)
+                main.smart_sleep(1)
 
-        if character.status_ail != 'asleep':
-            character.player_choice()
+            # Let each awake and alive character choose their move
+            if character.status_ail not in ['asleep', 'dead']:
+                character.player_choice()
+
+                if num + 1 < len(enabled_pcus):
+                    print('-'*25)
 
         # Make sure each participant in the battle goes according to who's fastest
-        for unit in sorted([units.monster,
-                            units.player,
-                            units.solou,
-                            units.xoann,
-                            units.chyme,
-                            units.parsto,
-                            units.ran_af,
-                            units.adorine], key=lambda x: x.spd):
+        for char in sorted([units.monster] + enabled_pcus,
+                           key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reversed=True):
 
-            if unit == units.monster or unit.enabled:
+            if char.status_ail != 'dead':
                 if units.monster.hp <= 0:
                     break
 
-                if isinstance(unit, units.PlayableCharacter) and (unit.status_ail == 'dead' or unit.move in ['2', '4']):
+                if isinstance(char, units.PlayableCharacter) and (char.status_ail == 'dead' or char.move in ['2', '4']):
                     continue
 
-                if unit.status_ail != 'asleep':
-                    if unit.battle_turn() == 'Ran':
+                if char.status_ail != 'asleep':
+                    print('-'*25)
+                    if char.battle_turn() == 'Ran':
                         return
 
-                if any(x.hp > 0 for x in [units.player,
-                                          units.solou,
-                                          units.xoann,
-                                          units.chyme,
-                                          units.parsto,
-                                          units.ran_af,
-                                          units.adorine] if x.enabled):
-
-                    if units.monster.hp > 0 and unit.status_ail != 'asleep':
+                if any(x.hp > 0 for x in enabled_pcus):
+                    if units.monster.hp > 0 and char.status_ail != 'asleep':
                         input('\nPress enter/return ')
 
                 else:
                     break
+
+            if isinstance(char, units.PlayableCharacter) and char.hp <= 0 and char.status_ail != 'dead':
+                char.hp = 0
+                char.status_ail = 'dead'
+                sounds.ally_death.play()
+
+                print("-"*25)
+                print(f'{char.name} has fallen to the {units.monster.monster_name}!')
+                input("\nPress enter/return ")
 
     else:
         if after_battle(is_boss) != 'dead':
@@ -304,16 +288,17 @@ def run_away(runner):
 
 def after_battle(is_boss):  # Assess the results of the battle
     print('-'*25)
+    enabled_pcus = [x for x in [units.player,
+                                units.solou,
+                                units.xoann,
+                                units.chyme,
+                                units.ran_af,
+                                units.adorine,
+                                units.parsto] if x.enabled]
 
     while True:
         # If the monster wins...
-        if units.monster.hp > 0 and all([0 >= x.hp for x in [units.player,
-                                                             units.solou,
-                                                             units.xoann,
-                                                             units.chyme,
-                                                             units.ran_af,
-                                                             units.parsto,
-                                                             units.adorine] if x.enabled]):
+        if units.monster.hp > 0 and all([0 >= x.hp for x in enabled_pcus]):
             pygame.mixer.music.load('Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
@@ -413,13 +398,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             sounds.item_pickup.play()
             input('Your party has gained {0} GP | Press enter/return '.format(gold))
 
-            for character in [x for x in [units.solou,
-                                          units.xoann,
-                                          units.player,
-                                          units.chyme,
-                                          units.parsto,
-                                          units.ran_af,
-                                          units.adorine] if x.enabled]:
+            for character in enabled_pcus:
 
                 # Give the Player their XP
                 if is_boss:

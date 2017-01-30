@@ -708,11 +708,10 @@ paralyzation_potion = StatusPotion('Potion of Inducing Motion',
                                    25, 10, 'paralyzed', ascart='Status')
 
 # Fists
+# Fists exist to prevent bugs caused by not having any weapon equipped.
 fists = Weapon('Fists',
                """Nothing beats good ol' fashioned hand-to-hand combat (No damage bonus)""",
                0, 0, 0, 'melee', 'none', 'Fists')
-               # Fists exist to prevent bugs caused by not having any
-               # weapon equipped.
 
 # Weapons -- Warrior
 wdn_sht = Weapon('Wooden Shortsword',

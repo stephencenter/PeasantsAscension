@@ -52,14 +52,11 @@ def text_scroll(string, spacing=0.025):
         print(string)
         return
 
-    string = ''.join([string, "\n"])  # Make sure to print a newline afterwards all other
-                                      # characters have been printed.
+    string = ''.join([string, "\n"])  # Make sure to print a newline afterwards all other characters have been printed.
     for char in string:
-        print(char, end='')  # end='' prevents print() from printing a newline
-                             # after each character
+        print(char, end='')  # end='' prevents print() from printing a newline after each character
 
-        sys.stdout.flush()  # Prevent "print" from waiting until the loop is
-                            # completed to print() "char"
+        sys.stdout.flush()  # Prevent "print" from waiting until the loop is completed to print() "char"
 
         if char != ' ':
             time.sleep(spacing)

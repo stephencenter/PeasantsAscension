@@ -355,8 +355,7 @@ class Town:
                         character.status_ail = "none"
 
                     print("Your party's HP and MP have been fully restored.")
-                    print('Your party has been relieved of your status ailment.')
-
+                    print('Your party has been relieved of their status ailments.')
                     print('-'*25)
 
                     main.save_game()
@@ -844,13 +843,13 @@ consisting of castle surrounded by reinforced stone walls, a lower-class
 outer portion comprised of smalls buildings and huts, and a middle-class
 section situated in between. As an outsider, you are forbidden to enter the
 upper two, but are welcome to do as you wish in the lower.""",
-             [npcs.stewson, npcs.jeffery, npcs.harthos, npcs.typhen],
+             [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
              -11, 13, [], inn_cost=5, gs_level=2)
 
 town4 = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
-There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.joseph],
+There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.typhen],
              19, -7, [], inn_cost=2, gs_level=2)
 
 town5 = Town('Fort Sigil', """Fort Sigil: A small village in the northern region

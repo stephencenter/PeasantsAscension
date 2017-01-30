@@ -120,7 +120,7 @@ party_info = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
 game_version = 'v1.0.0 Beta'
 
 # This text is displayed when you start the game
-title_logo = """
+title_logo = f"""
   ____                            _       _
  |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
  | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
@@ -131,10 +131,10 @@ title_logo = """
        / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
       / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
      /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-Peasants' Ascension {0} -- Programmed by TheFrozenMawile using Python
+Peasants' Ascension {game_version} -- Programmed by TheFrozenMawile using Python
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
-------------------------------------------------------------------------------""".format(game_version)
+------------------------------------------------------------------------------"""
 
 
 def set_adventure_name():
@@ -179,7 +179,7 @@ def set_adventure_name():
         # Check if the modified adventure name is identical to the original one the player proposed
         elif adventure_name != choice:
             while True:
-                y_n = input('\nI had to change some of that. Does "{0}" sound okay? | Yes or No: '.format(adventure_name))
+                y_n = input(f'\nI had to change some of that. Does "{adventure_name}" sound okay? | Yes or No: ')
                 y_n = y_n.lower()
 
                 if y_n.startswith("y"):
@@ -203,7 +203,7 @@ def set_adventure_name():
 
         else:
             while True:
-                y_n = input('You wish for your adventure to be known as "{0}"? | Yes or No: '.format(choice)).lower()
+                y_n = input(f'You wish for your adventure to be known as "{choice}"? | Yes or No: ')
 
                 if y_n.startswith("y"):
                     format_save_names()
@@ -264,10 +264,10 @@ def check_save():  # Check for save files and load the game if they're found
     print('Searching for valid save files...')
 
     if not os.path.isdir(save_dir):
-        smart_sleep(0.25)
+        smart_sleep(0.1)
 
         print('No save files found. Starting new game...')
-        smart_sleep(0.35)
+        smart_sleep(0.1)
 
         print('-'*25)
         units.create_player()
@@ -280,7 +280,7 @@ def check_save():  # Check for save files and load the game if they're found
 
     save_file_list = [
         sav_acquired_gems, sav_def_bosses, sav_equip_items, sav_inventory, sav_misc_boss_info, sav_party_info,
-        sav_quests_dia, sav_spellbook ,sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_chyme
+        sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_chyme
     ]
 
     for directory in dirs:
@@ -298,13 +298,13 @@ def check_save():  # Check for save files and load the game if they're found
             except FileNotFoundError:
                 menu_info[directory] = "Unable to load preview info"
 
-    smart_sleep(0.25)
+    smart_sleep(0.1)
 
     if not save_files:
         # If there are no found save files, then have the player make a new character
         print('No save files found. Starting new game...')
 
-        smart_sleep(0.35)
+        smart_sleep(0.1)
 
         print('-'*25)
         units.create_player()
@@ -312,7 +312,7 @@ def check_save():  # Check for save files and load the game if they're found
         return
 
     print('-'*25)
-    print('Found {0} valid save file(s): '.format(len(save_files)))
+    print(f'Found {len(save_files)} valid save file(s): ')
 
     # padding is a number that the game uses to determine how much whitespace is needed
     # to make certain visual elements line up on the screen.
@@ -322,11 +322,8 @@ def check_save():  # Check for save files and load the game if they're found
     while spam:
         # Print information about each save file and allow the player to choose which
         # file to open
-        print('     ', '\n      '.join(
-            ['[{0}] {1}{2} | {3}'.format(num + 1, dir_name,
-                                         ' '*(padding - len(dir_name)),
-                                         menu_info[dir_name])
-             for num, dir_name in enumerate([key for key in sorted(save_files)])]))
+        print('     ', '\n      '.join([f"[{num + 1}] {fol}{' '*(padding - len(fol))} | {menu_info[fol]}"
+                                       for num, fol in enumerate([key for key in sorted(save_files)])]))
 
         while True:
             chosen = input('Input [#] (or type "create new"): ')
@@ -357,8 +354,8 @@ def check_save():  # Check for save files and load the game if they're found
             format_save_names()
 
             print('-'*25)
-            print('Loading Save File: "{0}"...'.format(sorted(save_files)[chosen]))
-            smart_sleep(0.25)
+            print(f'Loading Save File: "{sorted(save_files)[chosen]}"...')
+            smart_sleep(0.1)
 
             # Attempt to open the save files and translate
             # them into objects/dictionaries
@@ -403,7 +400,7 @@ def save_game():
 
         if y_n.startswith('y'):
             print('Saving...')
-            smart_sleep(0.25)
+            smart_sleep(0.1)
 
             # Check if the save directory already exists, and create it if it doesn't
             try:
@@ -429,9 +426,9 @@ def save_game():
                 units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
                 with open('/'.join([save_dir, adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:
-                    f.write("{0} | LVL: {1} | Class: {2}".format(units.player.name,
-                                                                 units.player.lvl,
-                                                                 units.player.class_.title()))
+                    f.write("NAME: {0} | LEVEL: {1} | CLASS: {2}".format(units.player.name,
+                                                                         units.player.lvl,
+                                                                         units.player.class_.title()))
 
                 print('Save successful.')
 
@@ -439,7 +436,8 @@ def save_game():
 
             except (OSError, ValueError):
                 logging.exception('Error saving game:')
-                input('There was an error saving your game (Press enter/return)')
+                print('There was an error saving your game.')
+                input("\nPress enter/return ")
 
         elif y_n.startswith('n'):
             return
@@ -579,50 +577,40 @@ def title_screen():
 def set_prompt_properties():
     # Configure the properties of the command prompt so that everything fits/looks right
 
-    screensize = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1)
+    # Find the size of the screen
+    screen = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1)
 
     class Coord(ctypes.Structure):
         _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
 
     class ConsoleFontInfo(ctypes.Structure):
-        _fields_ = [("cbSize", ctypes.c_ulong),
-                    ("nFont", ctypes.c_ulong),
-                    ("dwFontSize", Coord),
-                    ("FontFamily", ctypes.c_uint),
-                    ("FontWeight", ctypes.c_uint),
-                    ("FaceName", ctypes.c_wchar*32)]
+        _fields_ = [("cbSize", ctypes.c_ulong), ("nFont", ctypes.c_ulong), ("dwFontSize", Coord),
+                    ("FontFamily", ctypes.c_uint), ("FontWeight", ctypes.c_uint), ("FaceName", ctypes.c_wchar*32)]
 
     font = ConsoleFontInfo()
     font.cbSize = ctypes.sizeof(ConsoleFontInfo)
     font.nFont = 12
 
     # Adjust for screen sizes
-    font.dwFontSize.X = 8 if screensize[0] < 1024 else 10 \
-        if screensize[0] < 1280 else 12 if screensize[0] < 1920 else 15
-    font.dwFontSize.Y = 14 if screensize[0] < 1024 else 18 \
-        if screensize[0] < 1280 else 22 if screensize[1] < 1080 else 28
+    font.dwFontSize.X = 8 if screen[0] < 1024 else 10 if screen[0] < 1280 else 12 if screen[0] < 1920 else 15
+    font.dwFontSize.Y = 14 if screen[0] < 1024 else 18 if screen[0] < 1280 else 22 if screen[0] < 1920 else 28
 
     font.FontFamily = 54
     font.FontWeight = 400
     font.FaceName = "Lucida Console"
 
     handle = ctypes.windll.kernel32.GetStdHandle(-11)
-    ctypes.windll.kernel32.SetCurrentConsoleFontEx(
-        handle, ctypes.c_long(False), ctypes.pointer(font))
+    ctypes.windll.kernel32.SetCurrentConsoleFontEx(handle, ctypes.c_long(False), ctypes.pointer(font))
 
-    # Calculate the proper width for the buffer size and then set the height to be 200
-    # A height of 200 should allow the player to scroll back up to read previous events if needs
-    # be.
-    # os.system("@echo off")
-    # os.system("conSize.bat {0} {1} {2} {3}".format(
-    #     math.ceil(screensize[0]/font.dwFontSize.X),
-    #     math.ceil(screensize[1]/font.dwFontSize.Y),
-    #     math.ceil(screensize[0]/font.dwFontSize.X),
-    #     200)
-    # )
+    # Calculate the proper width for the buffer size and then set the height to be 150
+    # A height of 150 should allow the player to scroll back up to read previous events if needs be.
+    os.system("@echo off")
+    os.system("conSize.bat {0} {1} {2} {3}".format(math.ceil(screen[0]/font.dwFontSize.X),
+                                                   math.ceil(screen[1]/font.dwFontSize.Y),
+                                                   math.ceil(screen[0]/font.dwFontSize.X), 150))
 
     # Set the console title
-    ctypes.windll.kernel32.SetConsoleTitleA("Peasants' Ascension {0}".format(game_version).encode())
+    ctypes.windll.kernel32.SetConsoleTitleA(f"Peasants' Ascension {game_version}".encode())
 
 
 def copy_error(text):
