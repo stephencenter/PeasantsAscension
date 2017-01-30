@@ -1091,6 +1091,13 @@ lazaro_phrase_1 = Conversation(["Greetings, adventurer from Nearton! How do I kn
 
 lazaro = NPC('Lazaro', [lazaro_phrase_1], "Oracle")
 
+# -- Name: Typhen -- Town: Overshire
+typhen_phrase_1 = Conversation(["I've heard that when you use healing spells, you restore",
+                                "additional HP based on your wisdom! Paladins supposedly get",
+                                "an even larger restoration bonus when they heal!"], active=True)
+
+typhen = NPC('Typhen', [typhen_phrase_1], "Novice Cleric")
+
 # -- Name: Jeffery -- Town: Overshire
 jeffery_phrase_1 = Conversation(["Have you heard about what happened to Princess Celeste?",
                                  "The news of her kidnapping is spreading across the kingdom",
