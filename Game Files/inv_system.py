@@ -480,13 +480,15 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
             if hasattr(item, "ascart"):
                 print(ascii_art.item_sprites[item.ascart])
 
-            input('"{0}" | [ENTER] '.format(item.desc))
+            print(f'"{item.desc}"')
+            input("\nPress enter/return ")
 
         elif action == '3':
             print('-'*25)
 
             if item.imp:
                 print('You cannot dispose of essential items.')
+                input("\nPress enter/return ")
 
             else:
                 while True:

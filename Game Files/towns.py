@@ -18,6 +18,7 @@ import time
 import copy
 import random
 import pygame
+import math
 
 import inv_system
 import world
@@ -192,7 +193,6 @@ class Town:
     def inside_town(self):
         town_words = ['i', 'g', 'u']
         watermelon_words = ['w', 'u']
-        buildings = []
 
         while True:
             spam = False
@@ -210,8 +210,7 @@ class Town:
                 buildings = town_words
 
             while not spam:
-                selected = input('What building will you enter? | Input [Letter] (or type "exit"): ')
-                selected = selected.lower()
+                selected = input('What building will you enter? | Input [Letter] (or type "exit"): ').lower()
 
                 if any(map(selected.startswith, buildings)):
                     pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
@@ -223,6 +222,9 @@ class Town:
 
                     if selected.startswith('i'):
                         self.town_inn()
+
+                    if selected.startswith('u'):
+                        self.town_houses()
 
                     if selected.startswith('w'):
                         self.watermelon()
@@ -378,7 +380,6 @@ class Town:
             for item_group in inv_system.gs_stock[category]:
                 stock[category].append(item_group[self.gs_level - 1])
 
-        stock['Other'] = [items.shovel, items.divining_rod]
         stock['All'] = []
 
         for category in stock.keys():
@@ -400,33 +401,34 @@ class Town:
             if b_s.startswith('b'):
                 print('-'*25)
                 print("""Which category of items would you like to check out?
-      [1] Potions
+      [1] Armor
       [2] Weapons
-      [3] Armor
+      [3] Potions
       [4] Accessories
-      [5] Other
+      [5] Tools
       [6] All""")
                 while True:
                     spam = input('Input [#] (or type "back"): ')
+
                     if spam == '1':
-                        item_category = 'Potions'
+                        item_category = 'Armor'
 
                     elif spam == '2':
                         item_category = 'Weapons'
 
                     elif spam == '3':
-                        item_category = 'Armor'
+                        item_category = 'Potions'
 
                     elif spam == '4':
                         item_category = 'Accessories'
 
                     elif spam == '5':
-                        item_category = 'Other'
+                        item_category = 'Tools'
 
                     elif spam == '6':
                         item_category = 'All'
 
-                    elif spam in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    elif spam in ['e', 'x', 'exit', 'b', 'back']:
                         eggs = True
                         break
 
@@ -610,6 +612,25 @@ Press enter/return ".format(vis_cat))
 
                 break
 
+    def town_houses(self):
+        while True:
+            print("-"*25)
+            print("Unlocked Houses:")
+
+            for x, y in enumerate([house for house in self.houses]):
+                print('     ', '      '.join([f"[{x + 1}] {y.owner}'s House"]))
+
+            while True:
+                chosen_house = input('Input [#] (or type "exit"): ').lower()
+
+                try:
+                    chosen_house = self.houses[int(chosen_house) - 1]
+
+                except (IndexError, ValueError):
+                    continue
+
+                chosen_house.enter_house()
+
 
 class StairwayToAethus(Town):
     def __init__(self, name, desc, people, x, y):
@@ -749,9 +770,7 @@ class Tavern:
 
         while True:
             choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
-                "It's free, y'know." if not self.cost else ' '.join(
-                    ["One Night is", str(self.cost), "GP."])))
-
+                "It's free, y'know." if not self.cost else ' '.join(["One Night is", str(self.cost), "GP."])))
             choice = choice.lower()
 
             if choice.startswith('y'):
@@ -765,21 +784,15 @@ class Tavern:
 
                     main.party_info['gp'] -= self.cost
 
-                    for character in [
-                        units.player,
-                        units.solou,
-                        units.xoann,
-                        units.chyme,
-                        units.ran_af,
-                        units.parsto,
-                        units.adorine
-                    ]:
+                    for character in [units.player, units.solou, units.xoann,
+                                      units.chyme, units.ran_af, units.parsto, units.adorine]:
+
                         character.hp = copy.copy(character.max_hp)
                         character.mp = copy.copy(character.max_mp)
                         character.status_ail = "none"
 
                     print("Your party's HP and MP have been fully restored.")
-                    print('Your party has been relieved of your status ailment.')
+                    print('Your party has been relieved of its status ailments.')
 
                     print('-'*25)
 
@@ -811,12 +824,39 @@ class House:
         self.width = width
         self.chests = chests
 
+    def enter_house(self):
+        pygame.mixer.music.load('Music/Hollow Night.ogg')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(main.music_vol)
+        print(f"Your party enters the house of {self.owner}, completely undetected.")
+        print(f"Your party quickly searches the room, and stumbles upon ", end='')
+
+        if not self.chests:
+            print("nothing of interest.")
+            print(f"Your party discreetly exits {self.owner}'s house before anyone.")
+            print("even notices you've entered.")
+            input("\nPress enter/return ")
+
+            return
+
+        elif len(self.chests) == 1:
+            print("a single locked chest.")
+            print("The contents could be very valuable!")
+            target_chest = self.chests[0]
+
+        else:
+            print(f"{len(self.chests)} locked chests.")
+
+            while True:
+                pass
+
 
 class Chest:
-    def __init__(self, contents, difficulty, chest_id):
+    def __init__(self, contents, difficulty, chest_id, opened=False):
         self.contents = contents
         self.difficulty = difficulty
         self.chest_id = chest_id
+        self.openen = opened
 
 
 # AETHUS TRANSPORTS
@@ -824,12 +864,17 @@ to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
 to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
 
 # OVERWORLD TOWNS
+nearton_h1_c1 = Chest([20], 1, "N-H1-C1")
+nearton_h1_c2 = Chest([10, items.s_rejuv], 1, "N-H1-C2")
+nearton_h1 = House("Philliard", 10, 24, [nearton_h1_c1, nearton_h1_c2])
+
 town1 = Town('Nearton', """Nearton: A small village in the central region of the Forest.
-It is in this very town where numerous brave adventurers have begun
-their journey. Nearton has a general store, an inn, and a few small houses.
-An old man is standing near one of the houses, and appears to be very
-troubled about something.""",
-             [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou], 0, 1, [])
+It is in this very town where numerous brave adventurers have begun their
+journey. Nearton is just your standard run-of-the-mill village: it has a
+general store, an inn, and a few small houses. An old man  is standing
+near one of the houses, and appears to be very troubled about something.""",
+             [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou], 0, 1,
+             [nearton_h1])
 
 town2 = Town('Southford', """Southford: A fair-size town in the central-southern region of the Forest.
 The inhabitants of this town are known for being quite wise, and may

@@ -751,7 +751,15 @@ item_sprites = {
      """ + Fore.WHITE + """>""" + Fore.YELLOW + Style.DIM + """|   |____
       |        |
       |--------|
-""" + Style.RESET_ALL + Fore.RESET
+""" + Style.RESET_ALL + Fore.RESET,
+
+    "Lockpick": """
+     ___
+    |///|
+    |---|
+    |   |
+    |___|
+"""
 }
 
 

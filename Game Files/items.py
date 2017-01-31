@@ -87,7 +87,7 @@ class Consumable(Item):
         if user.mp > user.max_mp:
             user.mp -= (user.mp - user.max_mp)
 
-        print('{0} consumes the {1}'.format(user.name, self.name))
+        print('{0} consumes the {1}.'.format(user.name, self.name))
         input("\n Press enter/return ")
 
         for x, y in enumerate(inv_system.inventory[self.cat]):
@@ -261,7 +261,7 @@ class ElementAccessory(Accessory):
 
 # -- TOOLS -- #
 class MagicCompass(Item):
-    def __init__(self, name, desc, buy, sell, ascart='Compass', cat='misc', imp=True):
+    def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Compass'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
@@ -288,7 +288,7 @@ class MagicCompass(Item):
 
 
 class DiviningRod(Item):
-    def __init__(self, name, desc, buy, sell, ascart='Div Rod', cat='misc', imp=True):
+    def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Div Rod'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
@@ -319,7 +319,7 @@ class DiviningRod(Item):
 
 
 class Shovel(Item):
-    def __init__(self, name, desc, buy, sell, ascart='Shovel', cat='misc', imp=True):
+    def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Shovel'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
@@ -354,7 +354,7 @@ class Shovel(Item):
 
 
 class InsaneSpeedBoots(Item):
-    def __init__(self, name, desc, buy, sell, cat='misc', imp=False, ascart='Boots'):
+    def __init__(self, name, desc, buy, sell, cat='tools', imp=False, ascart='Boots'):
         # This item is the most expensive purchasable object in the game.
         # It allows immediate travelling to any location on the map.
         # It's basically an insanely OP version of the Map of Fast Travelling.
@@ -542,7 +542,7 @@ they started.")
 
 
 class TownTeleporter(Item):
-    def __init__(self, name, desc, buy, sell, imp=False, cat='misc', ascart='Map'):
+    def __init__(self, name, desc, buy, sell, cat='tools', imp=False, ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
@@ -616,6 +616,20 @@ class TownTeleporter(Item):
                     break
 
 
+class LockpickKit(Item):
+    def __init__(self, name, desc, buy, sell, power, cat='tools', imp=False, ascart='Lockpick'):
+        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+        self.power = power
+
+    @staticmethod
+    def use_item(user):
+        print('-'*25)
+        print("Your party could certainly make a quick buck lockpicking chests with this thing.")
+        print("But that's illegal - you wouldn't break the law, would you?")
+        input("\nPress enter/return ")
+
+
+# -- OTHERS -- #
 class Valuable(Item):
     def __init__(self, name, desc, buy, sell, posx, posy, ascart='Gem',
                  acquired=False, cat='misc', imp=False):
@@ -625,7 +639,9 @@ class Valuable(Item):
         self.acquired = acquired
 
     def use_item(self, user):
+        print('-'*25)
         print('Your party admires the {0}. It looks very valuable.'.format(self.name))
+        input("\nPress enter/return ")
 
 
 class Misc(Item):
@@ -706,6 +722,7 @@ blindness_potion = StatusPotion('Potion of Enabling Sight',
 paralyzation_potion = StatusPotion('Potion of Inducing Motion',
                                    'A potion designed to cure minor paralysis in most of the body.',
                                    25, 10, 'paralyzed', ascart='Status')
+
 
 # Fists
 # Fists exist to prevent bugs caused by not having any weapon equipped.
@@ -1159,20 +1176,23 @@ valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, ja
                  amethyst_gem, topaz_gem, garnet_gem, quartz_gem, zircon_gem, agate_gem, aquamarine_gem]
 
 # Tools
-magic_compass = MagicCompass('Magical Compass',
-                             'A compass infused with the power of magic capable of detecting nearby towns.',
-                             0, 0, imp=True)
+magic_compass = MagicCompass('Magical Compass', 'A compass capable of detecting nearby towns.', 0, 0, imp=True)
+divining_rod = DiviningRod('Divining Rod', 'A magical stick capable of detecting nearby ores and gems.', 300, 150)
+shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.', 200, 100)
+map_of_fast_travel = TownTeleporter('Map of Fast Travel', 'Allows traveling to previously visited towns.', 2000, 100)
+boots_of_travel = InsaneSpeedBoots('Boots of Travel', 'Allows instant travel to any point on the map.', 7500, 3750)
 
-divining_rod = DiviningRod('Divining Rod', 'A supposedly magical stick capable of detecting nearby ores and gems.',
-                           325, 107)
-
-shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.', 175, 56)
-
-map_of_fast_travel = TownTeleporter('Map of Fast Travel', 'Allows quick travelling to previously visited towns.',
-                                    575, 190)
-
-boots_of_travel = InsaneSpeedBoots('Boots of Travel', 'Allows insanely fast travel to any point on the map.',
-                                   7500, 3750) # Made with Boots of Speed and a 2000 gold recipe
+# Tools -- Lockpicks
+wood_lckpck = LockpickKit('Wooden Lockpick Kit',
+                          'A wooden lockpick kit with a 10% chance to open chests.', 30, 15, 10)
+copper_lckpck = LockpickKit('Copper Lockpick Kit',
+                            'A copper lockpick kit with a 30% chance to open chests.', 200, 100, 30)
+iron_lckpck = LockpickKit('Iron Lockpick Kit',
+                          'An iron lockpick kit with a 50% chance to open chests.', 300, 150, 50)
+steel_lckpck = LockpickKit('Steel Lockpick Kit',
+                           'A steel lockpick kit with a 70% chance to open chests.', 500, 250, 70)
+mythril_lckpck = LockpickKit('Mythril Lockpick Kit',
+                             'A mythril lockpick kit with a 90% chance to open chests.', 750, 375, 90)
 
 # Monster Drops
 shell_fragment = Misc('Shell Fragment', "A broken fragment of a once-beautiful sea-creature's shell [JUNK]", 0, 5)

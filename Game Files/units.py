@@ -103,14 +103,26 @@ class PlayableCharacter:
     def choose_name(self):
         while True:
             # Ask the player for their name, and remove any pipe characters from it
-            temp_name = re.sub(r'[|]', '', input('What is your name, young adventurer? | Input Name: '))
+            choice = input('What is your name, young adventurer? | Input Name: ')
 
-            if not ''.join(temp_name.split()):
+            if not ''.join(choice.split()):
                 continue
 
+            temp_name = re.sub('[^\w\-_ ]', '', choice)
+
             for x, y in enumerate(temp_name):
-                if not(y == ' ' and y == ' '):
-                    self.name = ''.join([self.name, y])
+                try:
+                    if not (y == ' ' and temp_name[x + 1] == ' '):
+                        self.name = ''.join([self.name, y])
+
+                except IndexError:
+                    pass
+
+            if self.name[0] == ' ':
+                self.name = self.name[1:]
+
+            if not ''.join(self.name.split()) and ''.join(choice.split()):
+                continue
 
             # Flygon Jones, Cynder887, and Apollo Kalar are all pseudonyms for my real-life
             # best friend. He also happens to be one of the primary bug-testers for the game!

@@ -38,7 +38,6 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-#
 # Info for reading this file:
 #
 # This file contains all data regarding the logic behind quests, NPCs, and conversations.
@@ -52,16 +51,6 @@ else:
 # implemented) and it generally all follows the same story-arc. Side-story arcs include
 # side-storyline that spans multiple quests, such as the Graveyard storyline. Side quests are
 # single-quest story arcs that have almost nothing to do with the main plot.
-#
-# Naming style:
-#
-# If an object name ends with "_ucX", where X is an integer, then it handles what happens
-#     when a quest is completed.
-#
-# If an object name ends with "_usX", where X is an integer, then it handles what happens
-#     when a quest is started.
-#
-#
 
 
 class NPC:
@@ -82,6 +71,7 @@ class NPC:
                 try:
                     if not w.started:  # Quests
                         dialogue.append(w.sentences)
+
                     elif w.started and w.finished and w.active:
                         dialogue = [w.end_dialogue]
                         break
@@ -859,7 +849,6 @@ matthew_phrase_3 = Conversation(["No? That's okay. Just pick one up for me when 
 
 matthew_phrase_4 = Conversation(["You have? Wonderful! *He takes the iSound from your",
                                  "hand and pulls out 1250 GP*"])
-
 
 
 def matthew_p2_at():
