@@ -42,7 +42,7 @@ else:
     main = sys.modules["__main__"]
 
 inventory = {'q_items': [], 'consum': [_c(items.s_potion), _c(items.s_elixir)], 'coord': [],
-             'weapons': [], 'armor': [], 'misc': [], 'access': []}
+             'weapons': [], 'armor': [], 'tools': [], 'misc': [], 'access': []}
 
 equipped = {
     'player': {
@@ -131,8 +131,7 @@ gs_stock = {'Potions': [[items.s_potion, items.s_potion, items.m_potion,
              items.paralyzation_potion, items.paralyzation_potion, items.paralyzation_potion],  # Para. Potion
 
             [items.weakness_potion, items.weakness_potion, items.weakness_potion,
-             items.weakness_potion, items.weakness_potion, items.weakness_potion]  # Weakness Potion
-            ],
+             items.weakness_potion, items.weakness_potion, items.weakness_potion]],  # Weakness Potion
 
             'Weapons': [[items.bnz_swd, items.en_bnz_swd, items.stl_spr,
                          items.en_stl_spr, items.durs_axe, items.en_durs_axe],  # Warrior Weapons
@@ -206,7 +205,7 @@ gs_stock = {'Potions': [[items.s_potion, items.s_potion, items.m_potion,
                             [items.death_amulet, items.death_amulet, items.death_amulet,
                              items.death_amulet, items.death_amulet, items.death_amulet]],
 
-            'Other': [[items.divining_rod, items.divining_rod, items.divining_rod,
+            'Tools': [[items.divining_rod, items.divining_rod, items.divining_rod,
                        items.divining_rod, items.divining_rod, items.divining_rod],
 
                       [items.shovel, items.shovel, items.shovel,
@@ -216,7 +215,10 @@ gs_stock = {'Potions': [[items.s_potion, items.s_potion, items.m_potion,
                        items.map_of_fast_travel, items.map_of_fast_travel, items.map_of_fast_travel],
 
                       [items.boots_of_travel, items.boots_of_travel, items.boots_of_travel,
-                       items.boots_of_travel, items.boots_of_travel, items.boots_of_travel]]}
+                       items.boots_of_travel, items.boots_of_travel, items.boots_of_travel],
+
+                      [items.wood_lckpck, items.copper_lckpck, items.iron_lckpck, items.steel_lckpck,
+                       items.mythril_lckpck, items.mythril_lckpck]]}
 
 
 def pick_category():
@@ -226,18 +228,17 @@ def pick_category():
       [1] Armor
       [2] Weapons
       [3] Accessories
-      [4] Equipped Items
-      [5] Consumables
-      [6] Coordinates
-      [7] Quest Items
-      [8] Quests
-      [9] Miscellaneous""")
+      [4] Consumables
+      [5] Tools
+      [6] Quest Items
+      [7] Miscellaneous
+       |---->[I] Equipped Items
+       |---->[C] Coordinates
+       |---->[Q] Quests""")
         while True:
-            cat = input('Input [#] (or type "exit"): ')
+            cat = input('Input [#] or [L]etter (or type "exit"): ').lower()
 
-            cat = cat.lower()
-
-            if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+            if cat in ['e', 'x', 'exit', 'b', 'back']:
                 return
 
             elif cat == '1':
@@ -250,36 +251,40 @@ def pick_category():
                 cat = 'access'
                 vis_cat = 'Accessories'
             elif cat == '4':
-                cat = 'equipped_items'
-                vis_cat = 'Equipped Items'
-            elif cat == '5':
                 cat = 'consum'
                 vis_cat = 'Consumables'
+            elif cat == '5':
+                cat = 'tools'
+                vis_cat = 'Tools'
             elif cat == '6':
-                cat = 'coord'
-                vis_cat = 'Coordinates'
-            elif cat == '7':
                 cat = 'q_items'
                 vis_cat = 'Quest Items'
-            elif cat == '8':
-                cat = 'quests'
-                vis_cat = 'Quests'
-            elif cat == '9':
+            elif cat == '7':
                 cat = 'misc'
                 vis_cat = 'Miscellaneous'
+
+            elif cat == 'i':
+                cat = 'equipped_items'
+                vis_cat = 'Equipped Items'
+            elif cat == 'c':
+                cat = 'coord'
+                vis_cat = 'Coordinates'
+            elif cat == 'q':
+                cat = 'quests'
+                vis_cat = 'Quests'
+
             else:
                 continue
 
             if cat in inventory:
                 if inventory[cat]:
-
                     if cat not in ['coord', 'weapons', 'armor', 'access']:
                         pick_item(cat, vis_cat)
                         print('-'*25)
 
                     elif cat == 'coord':
                         print('-'*25)
-                        print(' ', '\n  '.join(inventory[cat]))
+                        print('Coordinates:\n', '\n'.join(inventory[cat]))
                         input("\nPress enter/return ")
                         print('-'*25)
 
@@ -298,7 +303,7 @@ def pick_category():
 
                 else:
                     print('-'*25)
-                    print('The {0} category is empty. (Press Enter/Return) '.format(vis_cat))
+                    print('The {0} category is empty.'.format(vis_cat))
                     input("\nPress enter/return ")
                     print('-'*25)
                     break
@@ -307,14 +312,14 @@ def pick_category():
                 pick_item(cat, vis_cat)
                 break
 
-            if cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(
-                    x, npcs.Quest) and x.started]:
+            if cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.started]:
                 pick_item(cat, vis_cat)
                 break
 
             else:
                 print('-'*25)
-                input("Your party has no active or completed quests. (Press Enter/Return) ")
+                print("Your party has no active or completed quests.")
+                input("\nPress enter/return ")
                 print('-'*25)
                 break
 
@@ -365,7 +370,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 except ValueError:
                     item = item.lower()
 
-                    if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    if item in ['e', 'x', 'exit', 'b', 'back']:
                         return
 
                     else:
@@ -433,29 +438,34 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                 if len(target_options) == 1:
                     target = units.player
 
+                    item.use_item(target)
+
+                    if item not in inventory[cat]:
+                        return
+
                 else:
+                    print('-'*25)
                     print("Who should {0} the {1}?".format(use_equip.lower(), item.name))
-                    print("     ", "\n      ".join(
-                        ["[{0}] {1}".format(int(num) + 1, character.name)
-                         for num, character in enumerate(target_options)]))
+                    print("     ", "\n      ".join([f"[{int(x) + 1}] {y.name}" for x, y in enumerate(target_options)]))
 
                     while True:
-                        target = input("Input [#]: ")
-                        try:
-                            target = int(target) - 1
-                        except ValueError:
-                            continue
+                        target = input('Input [#] (or type "back"): ').lower()
 
                         try:
-                            target = target_options[target]
-                        except IndexError:
+                            target = target_options[int(target) - 1]
+
+                        except (ValueError, IndexError):
+                            if target in ['e', 'exit', 'x', 'b', 'back']:
+                                break
+
                             continue
 
-                        break
+                        item.use_item(target)
 
-                item.use_item(target)
-                if item not in inventory[cat]:
-                    return
+                        if item not in inventory[cat]:
+                            return
+
+
 
             else:
                 item.use_item(units.player)
@@ -465,7 +475,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
         elif action == '2':
             # Display the item description
             print('-'*25)
-            print('-{0}-'.format(str(item).upper()))
+            print(f'-{str(item).upper()}-')
 
             if hasattr(item, "ascart"):
                 print(ascii_art.item_sprites[item.ascart])
@@ -480,27 +490,24 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
             else:
                 while True:
-                    y_n = input('Are you sure you want to get rid of this {0}\
-? | Yes or No: '.format(str(item)))
-
-                    y_n = y_n.lower()
+                    y_n = input(f'Are you sure you want to get rid of this {str(item)}? | Yes or No: ').lower()
 
                     if y_n.startswith('y'):
-                        input('Your party tosses the {0} aside and continues on their \
-journey.'.format(str(item)))
+                        input(f'Your party tosses the {str(item)} aside and continues on their journey.')
 
                         inventory[cat].remove(item)
                         return
 
                     elif y_n.startswith('n'):
-                        print('Your party decide to keep the {0} with them.'.format(str(item)))
-                        main.smart_sleep(1)
+                        print('-'*25)
+                        print(f'Your party decide to keep the {str(item)} with them.')
+                        input("\nPress enter/return ")
 
                         break
 
             print('-'*25)
 
-        elif action in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+        elif action in ['e', 'x', 'exit', 'b', 'back']:
             return
 
 
@@ -532,7 +539,7 @@ def manage_equipped():
                     target = target_options[int(target) - 1]
 
                 except (IndexError, ValueError):
-                    if target in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    if target in ['e', 'x', 'exit', 'b', 'back']:
                         print('-'*25)
 
                         return
@@ -560,7 +567,7 @@ def manage_equipped_2(target):
             selected = input('Input [#] (or type "back"): ')
             selected = selected.lower()
 
-            if selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+            if selected in ['e', 'x', 'exit', 'b', 'back']:
                 print('-' * 25)
 
                 return
@@ -662,7 +669,7 @@ def manage_equipped_3(key, selected, p_equip):
 
                 break
 
-            elif action.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+            elif action.lower() in ['e', 'x', 'exit', 'b', 'back']:
                 return
 
 
@@ -679,7 +686,7 @@ def view_quests():
         elif choice.startswith('a'):
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and not x.finished and x.started]
 
-        elif choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+        elif choice in ['e', 'x', 'exit', 'b', 'back']:
             return
 
         else:
@@ -697,7 +704,7 @@ def view_quests():
                         number = int(number) - 1
 
                     except ValueError:
-                        if number.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        if number.lower() in ['e', 'x', 'exit', 'b', 'back']:
                             fizz = False  # Break the loop twice
                             break
 
@@ -755,8 +762,8 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
 def tools_menu():  # Display a set of usable tools on the world map
     tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel', 'Boots of Insane Speed']
     available_tools = []
-    spam = True
 
+    spam = True
     for cat in inventory:
         if cat in ['coord', 'quests']:
             continue
@@ -778,7 +785,7 @@ def tools_menu():  # Display a set of usable tools on the world map
 
     while spam:
         print('Tools: \n      ', end='')
-        print('\n      '.join(['[{0}] {1}'.format(x + 1, y) for x, y in enumerate(available_tools)]))
+        print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(available_tools)]))
 
         while True:
             tool = input('Input [#] (or type "exit"): ')
@@ -787,7 +794,7 @@ def tools_menu():  # Display a set of usable tools on the world map
                 tool = int(tool) - 1
 
             except ValueError:
-                if tool.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                if tool.lower() in ['e', 'x', 'exit', 'b', 'back']:
                     spam = False
 
                     if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
@@ -856,7 +863,7 @@ def deserialize_inv(path):
                 norm_inv[category].append(item)
                 continue
 
-            elif category in ['misc', 'q_items']:
+            elif category in ['misc', 'tools', 'q_items']:
                 if item['name'] == 'Magical Compass':
                     item = items.magic_compass
                     norm_inv[category].append(item)
@@ -882,13 +889,32 @@ def deserialize_inv(path):
                     norm_inv[category].append(item)
                     continue
 
+                elif 'Lockpick' in item['name']:
+                    if item['power'] == 10:
+                        item = items.wood_lckpck
+
+                    elif item['power'] == 30:
+                        item = items.copper_lckpck
+
+                    elif item['power'] == 50:
+                        item = items.iron_lckpck
+
+                    elif item['power'] == 70:
+                        item = items.steel_lckpck
+
+                    elif item['power'] == 90:
+                        item = items.mythril_lckpck
+
+                    norm_inv[category].append(item)
+                    continue
+
                 else:
                     x = items.Misc('', '', '', '')
+
             else:
                 continue
 
-            if (not isinstance(x, items.Armor)
-                    and not isinstance(x, items.Weapon)):
+            if (not isinstance(x, items.Armor) and not isinstance(x, items.Weapon)):
 
                 item_art = x.ascart
                 x.__dict__ = item
@@ -910,6 +936,7 @@ def serialize_equip(path):
         for category in equipped[user]:
             if equipped[user][category] != '(None)':
                 j_equipped[user][category] = equipped[user][category].__dict__
+
             else:
                 j_equipped[user][category] = '(None)'
 
