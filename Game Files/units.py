@@ -466,21 +466,24 @@ Armor:
     def player_damage(self):
         # The formula for PCUs dealing damage
 
+        # Base damage is equal to the PCU's attack stat minus half the target's defense
+        # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
+        # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
+        # based on the PCU/target's elements, status ailments, weapons, armor, and critical hits.
+
         inv_name = self.name if self != player else 'player'
 
         if inv_system.equipped[inv_name]['weapon'].type_ != 'ranged':
-
-            # Base damage is equal to the PCU's attack stat minus half the target's defense
-            # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
-            # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
-            # based on the PCU/target's elements, status ailments, weapons, and critical hits.
             dam_dealt = battle.temp_stats[self.name]['attk'] - (monster.dfns/2)
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
 
             # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
             if self.status_ail == 'weakened':
                 dam_dealt /= 2
-                print('{0} deals half damage because of their weakened state!'.format(self.name))
+                print(f"{self.name}'s weakened state reduces their attack damage by half!")
+
+                sounds.debuff.play()
+                main.smart_sleep(0.5)
 
             # Mages deal 1/2 damage with melee attacks
             if self.class_ == 'mage':
@@ -493,7 +496,7 @@ Armor:
             # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
             if self.status_ail == 'blinded':
                 dam_dealt /= 2
-                print("{0}'s poor vision reduces their attack damage by half!".format(self.name))
+                print(f"{self.name}'s poor vision reduces their attack damage by half!")
 
         # Increase or decrease the damage depending on the PCU/monster's elements
         dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
@@ -506,11 +509,11 @@ Armor:
 
         # There is a 15% chance to inflict 1.5x damage
         if random.randint(1, 100) <= 15:
-                dam_dealt *= 1.5
-                print("It's a critical hit! 1.5x damage!")
+            dam_dealt *= 1.5
+            print("It's a critical hit! 1.5x damage!")
 
-                sounds.critical_hit.play()
-                main.smart_sleep(0.5)
+            sounds.critical_hit.play()
+            main.smart_sleep(0.5)
 
         # Limit the amount of damage to 999 (as if that matters)
         if dam_dealt > 999:
@@ -634,6 +637,7 @@ Armor:
                     print('-'*25)
 
                     if self.status_ail == "muted":
+                        sounds.debuff.play()
                         print(f"{self.name} is muted - they cannot access their inventory!")
                         print("\nPress enter/return ")
                         print(self.battle_options.format(self.name))

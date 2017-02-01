@@ -142,7 +142,7 @@ class Healing(Spell):
             if is_battle:
                 # Print the ASCII art and "User Turn" info if a battle is going on
                 print("-{0}'s Turn-")
-                print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
+                print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
 
             print('Using "{0}", {1} is healed by {2} HP!'.format(self.name, target.name, total_heal))
 
@@ -193,7 +193,7 @@ class Damaging(Spell):
                 dam_dealt = 1
 
             print("-{0}'s Turn-".format(user.name))
-            print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
+            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
 
             if inv_system.equipped[inv_name]['weapon'].class_ == 'magic':
                 print('{0} begins to use their {1} to summon a powerful spell...'.format(
@@ -252,8 +252,8 @@ class Buff(Spell):
             Spell.use_mana(self, user)
 
             print("\n-{0}'s Turn-")
-            print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
-            print('{0} raises their stats using the power of {1}!'.format(user.name, self.name))
+            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+            print(f'{user.name} raises their stats using the power of {self.name}!')
 
             sounds.buff_spell.play()
 
@@ -386,21 +386,21 @@ unholy_rend = Damaging('Unholy Rend',
 # -- Healing -- #
 pit_heal = Healing('Pitiful Healing',  # Every character starts with this spell
                    """Restore a downright pitiful amount of HP by using magic.
-Heals 5 HP or 5% of the target's max HP, whichever is more (Tier 1: Pitiful)""",
-                   1, 1, 5, 0.05)
+Heals 10 HP or 5% of the target's max HP, whichever is more (Tier 1: Pitiful)""",
+                   1, 1, 10, 0.05)
 
 min_heal = Healing('Minor Healing',  # The Paladin also starts with this spell
                    """Restore a small amount of HP by using magic.
-Heals 20 HP or 20% of the target's max HP, whichever is more (Tier 2: Weak)""",
-                   3, 3, 20, 0.2, a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
+Heals 25 HP or 20% of the target's max HP, whichever is more (Tier 2: Weak)""",
+                   3, 3, 25, 0.2, a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
 
 adv_heal = Healing('Advanced Healing',  # This tier and up can only be learned by Paladins and Mages
                    """Restore a large amount of HP by using magic.
-Heals 60 HP, or 50% of the target's max HP, whichever is more (Tier 3: Moderate)""",
-                   10, 15, 60, 0.5, a_c=('paladin', 'mage'))
+Heals 70 HP, or 50% of the target's max HP, whichever is more (Tier 3: Moderate)""",
+                   10, 15, 70, 0.5, a_c=('paladin', 'mage'))
 
 div_heal = Healing('Divine Healing',
-                   """Call upon the arcane arts to greatly restore your HP
+                   """Call upon the arcane arts to greatly restore your HP.
 Heals 100% of the target's HP (Tier 4: Strong)""",
                    25, 28, 0, 1, a_c=('paladin', 'mage'))
 
@@ -464,9 +464,7 @@ a_aim = Buff('Adept Aim',
              6, 17, 0.5, "p_attk", a_c=('ranger', 'mage', 'monk'))
 
 # -- Other Spells -- #
-r_affliction = Spell('Relieve Affliction',
-                     'Cure yourself of all status ailments, such as poison or weakness.',
-                     4, 5)
+r_affliction = Spell('Relieve Affliction', 'Cure yourself of all status ailments, such as poison or weakness.', 4, 5)
 
 
 def relieve_affliction(user, is_battle):
@@ -476,12 +474,10 @@ def relieve_affliction(user, is_battle):
             Spell.use_mana(r_affliction, user)
 
             if is_battle:
-                print("\n-{0}'s Turn-".format(user.name))
-                print(ascii_art.player_art[user.class_.title()] %
-                      "{0} is making a move!\n".format(user.name))
+                print(f"\n-{user.name}'s Turn-")
+                print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
 
-            print('Using the power of {0}, {1} is cured of their afflictions!'.format(
-                r_affliction.name, user.name))
+            print(f'Using the power of {r_affliction.name}, {user.name} is cured of their afflictions!')
 
             user.status_ail = 'none'
             sounds.buff_spell.play()
@@ -623,6 +619,7 @@ def pick_cat(user, is_battle=True):
     inv_name = user.name if user != units.player else 'player'
 
     if user.status_ail == 'silenced':
+        sounds.debuff.play()
         print(f"{user.name} is silenced and cannot use spells!")
         input("\nPress enter/return ")
 
@@ -673,7 +670,7 @@ def pick_cat(user, is_battle=True):
                     break
 
                 while True:
-                    y_n = input('Use {0}? | Yes or No: '.format(spell))
+                    y_n = input('Use {spell}? | Yes or No: ')
 
                     y_n = y_n.lower()
 
@@ -722,32 +719,22 @@ def pick_spell(cat, user, is_battle):
     print('-'*25)
     while True:
         padding = len(max([spell.name for spell in spellbook[inv_name][cat]], key=len))
-
         print(''.join([cat, ' Spells: \n      ']), end='')
-        print('\n      '.join(['[{0}] {1} --{2}> {3} MP'.format(
-            num + 1, spell, '-'*(padding - len(spell.name)), spell.mana)
-                               for num, spell in enumerate(spellbook[inv_name][cat])]))
+        print('\n      '.join(f"[{num + 1}] {spell} --{'-'*(padding - len(spell.name))}> {spell.mana} MP")
+              for num, spell in enumerate(spellbook[inv_name][cat]))
 
         fizz = True
         while fizz:
-            spell = input('Input [#] (or type "back"): ')
+            spell = input('Input [#] (or type "back"): ').lower()
 
             try:
-                spell = int(spell) - 1
-            except ValueError:
-
-                spell = spell.lower()
-
-                if spell in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                spell = spellbook[inv_name][cat][int(spell) - 1]
+            except (ValueError, IndexError):
+                if spell in ['e', 'x', 'exit', 'b', 'back']:
                     print('-'*25)
+
                     return False
 
-                else:
-                    continue
-
-            try:
-                spell = spellbook[inv_name][cat][spell]
-            except IndexError:
                 continue
 
             print('-'*25)
@@ -755,9 +742,7 @@ def pick_spell(cat, user, is_battle):
             print('-'*25)
 
             while True:
-                y_n = input('Use {0}? | Yes or No: '.format(str(spell)))
-
-                y_n = y_n.lower()
+                y_n = input(f'Use {spell}? | Yes or No: ').lower()
 
                 if y_n.startswith('y'):
                     spellbook[inv_name]['Previous Spell'] = [spell]
@@ -797,21 +782,15 @@ def new_spells(character):
                     break
 
             else:
-                # Almost all spells can be learned by mages, but only a few can be learned
-                # by other classes
+                # Almost all spells can be learned by mages, but only a few can be learned by other classes
                 if character.class_ not in spell.a_c:
                     continue
 
                 sounds.item_pickup.play()
-                spellbook[
-                    character.name if character != units.player else 'player'
-                ][cat].append(spell)
+                spellbook[character.name if character != units.player else 'player'][cat].append(spell)
 
-                print('{0} has learned "{1}", a new {2} spell!'.format(
-                    character.name,
-                    str(spell), cat if not cat.endswith('s') else cat[0:len(cat) - 1]))
-
-                input('  Press enter/return ')
+                print(f'{character.name} has learned "{spell}", a new {cat} spell!')
+                input('\nPress enter/return ')
 
 
 def serialize_sb(path):

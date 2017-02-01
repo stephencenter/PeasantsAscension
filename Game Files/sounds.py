@@ -86,6 +86,9 @@ lockpicking = Sound('Sound FX/lockpicking.wav')
 # Unlock Chest -- Played when succeeding to pick a lock
 unlock_chest = Sound('Sound FX/unlock_chest.wav')
 
+# Debuff -- Played when the player suffers from a debuff
+debuff = Sound('Sound FX/debuff.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
@@ -95,5 +98,6 @@ def change_volume():
               'health_low', 'poison_damage',
               'buff_spell', 'ally_death',
               'critical_hit', 'lockpicking',
-              'lockpick_break', 'unlock_chest']:
+              'lockpick_break', 'unlock_chest',
+              'debuff']:
         globals()[x].set_volume(main.sound_vol)

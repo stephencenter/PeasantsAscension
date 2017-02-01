@@ -255,8 +255,8 @@ def battle_system(is_boss=False, ambush=False):
 
 
 def run_away(runner):
-    print(ascii_art.player_art[runner.class_.title()] % "{0} is making a move!\n".format(runner.name))
-    print('Your party starts to run away from the {0}...'.format(units.monster.name))
+    print(ascii_art.player_art[runner.class_.title()] % f"{runner.name} is making a move!\n")
+    print(f'Your party starts to run away from the {units.monster.name}...')
     sounds.foot_steps.play()
 
     main.smart_sleep(0.75)
@@ -278,10 +278,12 @@ def run_away(runner):
         chance = 40
 
     if random.randint(0, 100) <= chance:
-        print('Your party manages to escape from the {0}!'.format(units.monster.name))
+        sounds.buff_spell.play()
+        print(f'Your party manages to escape from the {units.monster.name}!')
         return True
 
     else:
+        sounds.debuff.play()
         print("Your party's attempt to escape failed!")
         return False
 
