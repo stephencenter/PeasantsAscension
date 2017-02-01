@@ -495,7 +495,8 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                     y_n = input(f'Are you sure you want to get rid of this {str(item)}? | Yes or No: ').lower()
 
                     if y_n.startswith('y'):
-                        input(f'Your party tosses the {str(item)} aside and continues on their journey.')
+                        print(f'Your party tosses the {str(item)} aside and continues on their journey.')
+                        input("\nPress enter/return ")
 
                         inventory[cat].remove(item)
                         return
@@ -892,16 +893,16 @@ def deserialize_inv(path):
                     continue
 
                 elif 'Lockpick' in item['name']:
-                    if item['power'] == 10:
+                    if item['power'] == 30:
                         item = items.wood_lckpck
 
-                    elif item['power'] == 30:
+                    elif item['power'] == 45:
                         item = items.copper_lckpck
 
-                    elif item['power'] == 50:
+                    elif item['power'] == 60:
                         item = items.iron_lckpck
 
-                    elif item['power'] == 70:
+                    elif item['power'] == 75:
                         item = items.steel_lckpck
 
                     elif item['power'] == 90:

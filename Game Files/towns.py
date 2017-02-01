@@ -28,6 +28,7 @@ import text_scroll
 import sounds
 import ascii_art
 import units
+import battle
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -195,36 +196,30 @@ class Town:
         watermelon_words = ['w', 'u']
 
         while True:
-            spam = False
-
             if self.wtrmelon_store:
-                print('There is a [W]atermelon store, as well as {0} [U]nlocked houses in this town.'.format(
-                    len(self.houses)))
-
+                print('There is a [W]atermelon store and some [U]nlocked houses in this town.')
                 buildings = watermelon_words
 
             else:
-                print('There is a [G]eneral Store, an [I]nn, and {0} [U]nlocked houses in this town.'.format(
-                    len(self.houses)))
-
+                print('There is a [G]eneral Store, an [I]nn, and some [U]nlocked houses in this town.')
                 buildings = town_words
 
-            while not spam:
-                selected = input('What building will you enter? | Input [Letter] (or type "exit"): ').lower()
+            while True:
+                selected = input('Where do you want to go? | Input [L]etter (or type "exit"): ').lower()
 
                 if any(map(selected.startswith, buildings)):
                     pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
+                    if selected.startswith('u'):
+                        self.town_houses()
+
                     if selected.startswith('g'):
                         self.town_gen()
 
                     if selected.startswith('i'):
                         self.town_inn()
-
-                    if selected.startswith('u'):
-                        self.town_houses()
 
                     if selected.startswith('w'):
                         self.watermelon()
@@ -235,7 +230,7 @@ class Town:
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
-                    spam = True
+                    break
 
                 elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     return
@@ -485,11 +480,8 @@ class Town:
                         print('-'*25)
 
                         while True:
-                            confirm = input(
-                                "\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
-                                    'these' if str(i).endswith('s') else 'this', str(i), i.buy))
-
-                            confirm = confirm.lower()
+                            confirm = input("\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
+                                'these' if str(i).endswith('s') else 'this', str(i), i.buy)).lower()
 
                             if confirm.startswith('y'):
                                 if main.party_info['gp'] >= i.buy:
@@ -497,13 +489,13 @@ class Town:
                                     main.party_info['gp'] -= i.buy
 
                                     print('-'*25)
-                                    input('You purchase the {0} (-{1} GP). (Press enter/return).'.format(i, i.buy))
+                                    print(f'You purchase the {i} for {i.buy} GP.')
+                                    input("\nPress enter/return ")
                                     print('-'*25)
 
                                 else:
-                                    input('"Hey, you don\'t even have enough GP for this \
-{0}!" (Press enter/return) '.format(i))
-                                    print()
+                                    print(f'"Hey, you don\'t even have enough GP for this{i}!"')
+                                    input("\nPress enter/return ")
 
                                 break
 
@@ -627,9 +619,18 @@ Press enter/return ".format(vis_cat))
                     chosen_house = self.houses[int(chosen_house) - 1]
 
                 except (IndexError, ValueError):
+                    if chosen_house in ['e', 'x', 'exit', 'b', 'back']:
+                        return
+
                     continue
 
                 chosen_house.enter_house()
+
+                pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
+                pygame.mixer.music.play(-1)
+                pygame.mixer.music.set_volume(main.music_vol)
+
+                break
 
 
 class StairwayToAethus(Town):
@@ -818,45 +819,165 @@ class Tavern:
 
 
 class House:
-    def __init__(self, owner, height, width, chests):
+    def __init__(self, owner, chests):
         self.owner = owner
-        self.height = height
-        self.width = width
         self.chests = chests
 
     def enter_house(self):
-        pygame.mixer.music.load('Music/Hollow Night.ogg')
+        pygame.mixer.music.load('Music/Somewhere I Went Wrong.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
+
+        print('-' * 25)
         print(f"Your party enters the house of {self.owner}, completely undetected.")
-        print(f"Your party quickly searches the room, and stumbles upon ", end='')
+        while True:
+            available_chests = [c for c in self.chests if not (c.destroyed or c.opened)]
 
-        if not self.chests:
-            print("nothing of interest.")
-            print(f"Your party discreetly exits {self.owner}'s house before anyone.")
-            print("even notices you've entered.")
-            input("\nPress enter/return ")
+            lockpicks = []
+            for item in inv_system.inventory['tools']:
+                if 'Lockpick' in item.name:
+                    lockpicks.append(item)
 
-            return
+            print(f"Your party searches the room and stumbles upon ", end='')
 
-        elif len(self.chests) == 1:
-            print("a single locked chest.")
-            print("The contents could be very valuable!")
-            target_chest = self.chests[0]
+            if not available_chests:
+                print("nothing of interest. ")
+                print(f"Your party discreetly exits {self.owner}'s house before anyone even")
+                print("notices you've entered.")
+                input("\nPress enter/return ")
 
-        else:
-            print(f"{len(self.chests)} locked chests.")
+                return
 
-            while True:
-                pass
+            elif len(available_chests) == 1:
+                print(f"a single locked chest of Difficulty {available_chests[0].difficulty}.")
+                print("The contents could be very valuable!\n")
+
+                if not lockpicks:
+                    print("Unfortunately, you do not own any lockpick kits and thus cannot attempt")
+                    print(f"to open the chest. Your party discreetly exits {self.owner}'s house")
+                    print("before anyone even notices you've entered.")
+                    input("\nPress enter/return ")
+
+                    return
+
+                while True:
+                    y_n = input("Attempt to unlock the chest? | Yes or No: ").lower()
+
+                    if y_n.startswith("y"):
+                        target_chest = available_chests[0]
+                        break
+
+                    elif y_n.startswith("n"):
+                        return
+
+            else:
+                print(f"{len(available_chests)} locked chests.")
+                input("\nPress enter/return ")
+                print('-'*25)
+
+                if not lockpicks:
+                    print("Unfortunately, you do not own any lockpick kits and thus cannot attempt")
+                    print(f"to open the chest. Your party discreetly exits {self.owner}'s house")
+                    print("before anyone even notices you've entered.")
+                    input("\nPress enter/return ")
+
+                    return
+
+                print("Which chest should your party attempt to unlock?")
+
+                for num, chest in enumerate(available_chests):
+                    print(f'      [{str(num + 1)}] Locked Chest #{str(num + 1)} --> Difficulty {chest.difficulty}')
+
+                while True:
+                    target_chest = input('Input [#] (or type "exit") ')
+
+                    try:
+                        target_chest = available_chests[int(target_chest) - 1]
+
+                    except (IndexError, ValueError):
+                        if target_chest in ['e', 'x', 'exit', 'b', 'back']:
+                            return
+
+                        continue
+
+                    break
+
+            target_chest.unlock_chest(max(lockpicks, key=lambda x: x.power))
+            print('-'*25)
 
 
 class Chest:
-    def __init__(self, contents, difficulty, chest_id, opened=False):
+    def __init__(self, contents, difficulty, chest_id, tries=5, destroyed=False, opened=False):
         self.contents = contents
         self.difficulty = difficulty
         self.chest_id = chest_id
-        self.openen = opened
+        self.opened = opened
+        self.destroyed = destroyed
+        self.tries = tries
+
+    def unlock_chest(self, lockpick):
+        print('-'*25)
+        while True:
+            print(f"-{self.tries if self.tries > 1 else 'ONLY ONE'} ATTEMPT{'S' if self.tries > 1 else ''} REMAINING-")
+            print(f"Your party attempts to unlock the chest using your {lockpick.name}...")
+            sounds.lockpicking.play()
+
+            main.smart_sleep(2.5)
+
+            # To unlock a chest, the player has to successfully make it through two RNG rolls.
+            # The first roll is based on the chest's difficulty, and the second is based off the
+            # player's lockpick quality.
+            if random.randint(0, 100) < (100 - 10*(self.difficulty)):
+                if random.randint(0, 100) < lockpick.power:
+                    sounds.unlock_chest.play()
+                    print('-'*25)
+                    print("Your party's lockpicking attempts were not in vain, as the lock")
+                    print("gives way and the chest opens!")
+                    input("\nPress enter/return ")
+                    print('-'*25)
+
+                    for n, item in enumerate(self.contents):
+                        if isinstance(item, int):
+                            main.party_info['gp'] += item
+                            sounds.item_pickup.play()
+                            input(f"Your party obtained {item} gold from the chest! | Press enter/return")
+
+                        else:
+                            inv_system.inventory[item.cat].append(item)
+                            sounds.item_pickup.play()
+                            an_a = 'an' if any(map(item.name.startswith, battle.vowels)) else 'a'
+                            input(f"""Your party obtained {an_a} {item.name} from the chest! | Press enter/return""")
+
+                    self.opened = True
+                    return
+
+            sounds.lockpick_break.play()
+            print("Your party's lockpicking attempt fails.")
+            input("\nPress enter/return ")
+
+            self.tries -= 1
+
+            if self.tries > 0:
+                print('-'*25)
+                while True:
+                    y_n = input("Attempt to open the chest again? | Yes or No: ").lower()
+
+                    if y_n.startswith('y'):
+                        print('-'*25)
+                        break
+
+                    elif y_n.startswith('n'):
+                        return
+
+            else:
+                sounds.ally_death.play()
+                print('-'*25)
+                print("Your party has run out of attempts, and the chest's lock breaks.")
+                print("The chest is still locked, and the chest cannot be picked again.")
+                input("\nPress enter/return ")
+
+                self.destroyed = True
+                return
 
 
 # AETHUS TRANSPORTS
@@ -866,7 +987,10 @@ to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
 # OVERWORLD TOWNS
 nearton_h1_c1 = Chest([20], 1, "N-H1-C1")
 nearton_h1_c2 = Chest([10, items.s_rejuv], 1, "N-H1-C2")
-nearton_h1 = House("Philliard", 10, 24, [nearton_h1_c1, nearton_h1_c2])
+nearton_h1 = House("Philliard", [nearton_h1_c1, nearton_h1_c2])
+
+nearton_h2_c1 = Chest([5, items.bone_bag, items.fairy_dust, items.feathers], 1, "N-H2-C1")
+nearton_h2 = House("Alfred", [nearton_h2_c1])
 
 town1 = Town('Nearton', """Nearton: A small village in the central region of the Forest.
 It is in this very town where numerous brave adventurers have begun their
@@ -874,7 +998,7 @@ journey. Nearton is just your standard run-of-the-mill village: it has a
 general store, an inn, and a few small houses. An old man  is standing
 near one of the houses, and appears to be very troubled about something.""",
              [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou], 0, 1,
-             [nearton_h1])
+             [nearton_h1, nearton_h2])
 
 town2 = Town('Southford', """Southford: A fair-size town in the central-southern region of the Forest.
 The inhabitants of this town are known for being quite wise, and may

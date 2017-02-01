@@ -864,8 +864,7 @@ en_ngt_bane = Weapon("Enhanced Night's Bane",
 
 # Weapon -- Monk
 brass_kncls = Weapon('Brass Knuckles',
-                     'A brass adornment for your knuckles providing \
-extra punching power (+10% Damage)',
+                     'A brass adornment for your knuckles providing extra punching power (+10% Damage)',
                      50, 15, 0.1, 'melee', 'monk', 'Knuckles')
 en_brass_kncls = Weapon('Enhanced Brass Knuckles',
                         'An enhanced version of your typical Brass Knuckles (+25% Damage)',
@@ -1184,13 +1183,13 @@ boots_of_travel = InsaneSpeedBoots('Boots of Travel', 'Allows instant travel to 
 
 # Tools -- Lockpicks
 wood_lckpck = LockpickKit('Wooden Lockpick Kit',
-                          'A wooden lockpick kit with a 10% chance to open chests.', 30, 15, 10)
+                          'A wooden lockpick kit with a 30% chance to open chests.', 30, 15, 30)
 copper_lckpck = LockpickKit('Copper Lockpick Kit',
-                            'A copper lockpick kit with a 30% chance to open chests.', 200, 100, 30)
+                            'A copper lockpick kit with a 45% chance to open chests.', 200, 100, 45)
 iron_lckpck = LockpickKit('Iron Lockpick Kit',
-                          'An iron lockpick kit with a 50% chance to open chests.', 300, 150, 50)
+                          'An iron lockpick kit with a 60% chance to open chests.', 300, 150, 60)
 steel_lckpck = LockpickKit('Steel Lockpick Kit',
-                           'A steel lockpick kit with a 70% chance to open chests.', 500, 250, 70)
+                           'A steel lockpick kit with a 75% chance to open chests.', 500, 250, 75)
 mythril_lckpck = LockpickKit('Mythril Lockpick Kit',
                              'A mythril lockpick kit with a 90% chance to open chests.', 750, 375, 90)
 

@@ -77,6 +77,15 @@ ally_death = Sound('Sound FX/ally_death.wav')
 # Critical Hit -- Played when someone lands a critical hit
 critical_hit = Sound('Sound FX/critical_hit.wav')
 
+# Lockpick Break -- Played when failing to pick a lock
+lockpick_break = Sound('Sound FX/lockpick_break.wav')
+
+# Lockpicking -- Played when attempting to pick a lock
+lockpicking = Sound('Sound FX/lockpicking.wav')
+
+# Unlock Chest -- Played when succeeding to pick a lock
+unlock_chest = Sound('Sound FX/unlock_chest.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
@@ -85,5 +94,6 @@ def change_volume():
               'attack_miss', 'item_pickup',
               'health_low', 'poison_damage',
               'buff_spell', 'ally_death',
-              'critical_hit']:
+              'critical_hit', 'lockpicking',
+              'lockpick_break', 'unlock_chest']:
         globals()[x].set_volume(main.sound_vol)
