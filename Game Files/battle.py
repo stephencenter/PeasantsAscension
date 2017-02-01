@@ -219,7 +219,7 @@ def battle_system(is_boss=False, ambush=False):
 
         # Make sure each participant in the battle goes according to who's fastest
         for char in sorted([units.monster] + enabled_pcus,
-                           key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reversed=True):
+                           key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True):
 
             if char.status_ail != 'dead':
                 if units.monster.hp <= 0:

@@ -767,7 +767,7 @@ class Tavern:
 
     def town_choice(self):
         print('-'*25)
-        print('Inn Keeper: "Hello, traveler! Welcome to the {0}!"'.format(self.name))
+        print(f'Inn Keeper: "Hello, traveler! Welcome to the {self.name}!"')
 
         while True:
             choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
@@ -800,7 +800,7 @@ class Tavern:
                     main.save_game()
 
                 else:
-                    print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
+                    print('"You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
 
                 pygame.mixer.music.load(main.party_info['reg_music'])
                 pygame.mixer.music.play(-1)
@@ -1218,12 +1218,10 @@ def search_towns(pos_x, pos_y, enter=True):
                 while True:
 
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
-                        y_n = input('There is a town nearby. \
-Do you wish to investigate? | Yes or No: ')
+                        y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
 
                     else:
-                        y_n = input('The town of {0} is nearby. \
-Do you want to visit it? | Yes or No: '.format(town.name))
+                        y_n = input(f'The town of {town.name} is nearby. Do you want to visit it? | Yes or No: ')
 
                     y_n = y_n.lower()
 
@@ -1259,9 +1257,7 @@ Do you want to visit it? | Yes or No: '.format(town.name))
                     sounds.item_pickup.play()
 
                     while True:
-                        y_n = input('{0} is nearby. Do you want to visit it? | Yes or No: '.format(tavern.name))
-
-                        y_n = y_n.lower()
+                        y_n = input(f'{tavern.name} is nearby. Do you want to visit it? | Yes or No: ').lower()
 
                         if y_n.startswith('y'):
                             pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
@@ -1270,6 +1266,8 @@ Do you want to visit it? | Yes or No: '.format(town.name))
 
                             main.party_info['prev_town'][0] = tavern.x
                             main.party_info['prev_town'][1] = tavern.y
+
+                            tavern.town_choice()
 
                             return
 
