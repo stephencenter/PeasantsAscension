@@ -76,16 +76,9 @@ class Consumable(Item):
             print('-'*25)
 
         user.hp += self.heal
-
-        sounds.magic_healing.play()
-
-        if user.hp > user.max_hp:
-            user.hp -= (user.hp - user.max_hp)
-
         user.mp += self.mana
-
-        if user.mp > user.max_mp:
-            user.mp -= (user.mp - user.max_mp)
+        units.fix_stats()
+        sounds.magic_healing.play()
 
         print('{0} consumes the {1}.'.format(user.name, self.name))
         input("\n Press enter/return ")

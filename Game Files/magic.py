@@ -251,7 +251,7 @@ class Buff(Spell):
         if user.mp >= self.mana:
             Spell.use_mana(self, user)
 
-            print("\n-{0}'s Turn-")
+            print(f"\n-{user.name}'s Turn-")
             print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
             print(f'{user.name} raises their stats using the power of {self.name}!')
 
@@ -259,6 +259,7 @@ class Buff(Spell):
 
             battle.temp_stats[user.name][self.stat] *= 1 + self.increase
             battle.temp_stats[user.name][self.stat] = math.ceil(battle.temp_stats[user.name][self.stat])
+            units.fix_stats()
 
             return True
 
@@ -789,6 +790,7 @@ def new_spells(character):
                 sounds.item_pickup.play()
                 spellbook[character.name if character != units.player else 'player'][cat].append(spell)
 
+                print('-'*25)
                 print(f'{character.name} has learned "{spell}", a new {cat} spell!')
                 input('\nPress enter/return ')
 

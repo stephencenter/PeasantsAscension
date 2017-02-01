@@ -157,23 +157,23 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.set_volume(main.music_vol)
 
         print(ascii_art.monster_art[units.monster.monster_name] % '')
-        print('The legendary {0} has awoken!'.format(units.monster.name))
+        print(f'The legendary {units.monster.name} has awoken!')
         main.smart_sleep(0.35)
 
     else:
         print(ascii_art.monster_art[units.monster.monster_name] % '')
 
         if any(map(units.monster.name.startswith, vowels)):  # Remember to use proper grammar!
-            a_an = 'An '
+            an_a = 'An'
 
         else:
-            a_an = 'A '
+            an_a = 'A'
 
         if ambush:
-            print('{0}{1} ambushed you while you were resting!'.format(a_an, units.monster.name))
+            print(f'{an_a} {units.monster.name} ambushed you while you were resting!')
 
         else:
-            print('{0}{1} suddenly appeared out of nowhere!'.format(a_an, units.monster.name))
+            print(f'{an_a} {units.monster.name} suddenly appeared out of nowhere!')
 
         pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
         pygame.mixer.music.play(-1)
@@ -187,6 +187,10 @@ def battle_system(is_boss=False, ambush=False):
 
     # While all active party members are alive, continue the battle
     while units.monster.hp > 0 and any([char.hp > 0 for char in enabled_pcus]):
+
+        # A list of the battle participants sorted by speed. Updates once per turn
+        speed_enabled_pcus = sorted([units.monster] + enabled_pcus,
+                                    key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True)
 
         # Check to see if any of your party members are have died, and alert the player
         # Then, check if any of them are asleep and do some powerful magic to make everything work
@@ -202,8 +206,7 @@ def battle_system(is_boss=False, ambush=False):
         # Display HP, MP, Levels, and Statuses for all battle participants
         bat_stats()
 
-        for num, character in enumerate(enabled_pcus) :
-
+        for num, character in enumerate(enabled_pcus):
             # If any of your party members are at less than 20% health, play a small jingle
             if 0 < character.hp <= 0.20 * character.max_hp:
                 print(f"Warning: {character.name}'s HP is low, heal as soon as possible!\n")
@@ -214,13 +217,11 @@ def battle_system(is_boss=False, ambush=False):
             if character.status_ail not in ['asleep', 'dead']:
                 character.player_choice()
 
-                if num + 1 < len(enabled_pcus):
+                if num + 1 < len([x for x in enabled_pcus if x.status_ail != 'dead']):
                     print('-'*25)
 
         # Make sure each participant in the battle goes according to who's fastest
-        for char in sorted([units.monster] + enabled_pcus,
-                           key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True):
-
+        for char in speed_enabled_pcus:
             if char.status_ail != 'dead':
                 if units.monster.hp <= 0:
                     break
@@ -234,20 +235,25 @@ def battle_system(is_boss=False, ambush=False):
                         return
 
                 if any(x.hp > 0 for x in enabled_pcus):
-                    if units.monster.hp > 0 and char.status_ail != 'asleep':
+                    if units.monster.hp > 0 and char.status_ail not in ['asleep', 'dead']:
                         input('\nPress enter/return ')
+
+                    elif units.monster.hp <= 0:
+                        break
 
                 else:
                     break
 
-            if isinstance(char, units.PlayableCharacter) and char.hp <= 0 and char.status_ail != 'dead':
-                char.hp = 0
-                char.status_ail = 'dead'
-                sounds.ally_death.play()
+            # Check if any characters died on the participants turn
+            for char_2 in speed_enabled_pcus:
+                if isinstance(char_2, units.PlayableCharacter) and char_2.hp <= 0 and char_2.status_ail != 'dead':
+                    char_2.hp = 0
+                    char_2.status_ail = 'dead'
+                    sounds.ally_death.play()
 
-                print("-"*25)
-                print(f'{char.name} has fallen to the {units.monster.monster_name}!')
-                input("\nPress enter/return ")
+                    print("-"*25)
+                    print(f'{char_2.name} has fallen to the {units.monster.monster_name}!')
+                    input("\nPress enter/return ")
 
     else:
         if after_battle(is_boss) != 'dead':
@@ -305,17 +311,16 @@ def after_battle(is_boss):  # Assess the results of the battle
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
 
-            print('Despite your best efforts, the {0} has killed your party.'.format(units.monster.name))
+            print(f'Despite your best efforts, the {units.monster.name} has killed your party.')
             print('-'*25)
 
-            spam = True
+            auto_yes = False
             while True:
-                if spam:
-                    y_n = input('Do you wish to continue playing? | Yes or No: ')
-                    y_n = y_n.lower()
+                if auto_yes:
+                    y_n = 'y'
 
                 else:
-                    y_n = 'y'
+                    y_n = input('Do you wish to continue playing? | Yes or No: ').lower()
 
                 if y_n.startswith('y'):
                     # If you die, you return to the last town visited or 0'N, 0'E
@@ -343,11 +348,9 @@ def after_battle(is_boss):  # Assess the results of the battle
                     return 'dead'
 
                 elif y_n.startswith('n'):
-                    print('Are you sure you want to quit? You will lose all unsaved progress.')
 
                     while True:
-                        y_n = input("Quit? | Yes or No: ")
-
+                        y_n = input('Are you sure you want to quit and lose all unsaved progress? | Yes or No: ')
                         y_n = y_n.lower()
 
                         if y_n.startswith('y'):
@@ -355,7 +358,8 @@ def after_battle(is_boss):  # Assess the results of the battle
                             sys.exit()
 
                         elif y_n.startswith('n'):
-                            spam = False
+                            auto_yes = True
+
                             break
 
         # If the player wins...
