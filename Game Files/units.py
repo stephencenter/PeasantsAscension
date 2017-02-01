@@ -608,11 +608,16 @@ Armor:
                 # Strip out all non-numeric input
                 self.move = only_num(self.move)
 
-            if self.move.isdigit() and int(self.move) in range(1, 6):
-
                 # Use Magic
                 if self.move == '2':
                     print('-'*25)
+
+                    if self.status_ail == 'silenced':
+                        sounds.debuff.play()
+                        print(f"{self.name} is silenced and cannot use spells!")
+                        input("\nPress enter/return ")
+
+                        continue
 
                     if not magic.pick_cat(self):
                         print(self.battle_options.format(self.name))
@@ -625,9 +630,15 @@ Armor:
                 elif self.move == '4':
                     print('-'*25)
 
+                    if not inv_system.inventory['consum']:
+                        print('You have no battle-allowed items - the consumable category is empty!')
+                        print('-' * 25)
+
+                        continue
+
                     if self.status_ail == "muted":
                         sounds.debuff.play()
-                        print(f"{self.name} is muted - they cannot access their inventory!")
+                        print(f"{self.name} is muted and cannot access their inventory!")
                         print("\nPress enter/return ")
                         print(self.battle_options.format(self.name))
 
@@ -922,9 +933,6 @@ class Monster(Unit):
                                             'weakened',
                                             'blinded',
                                             'paralyzed',
-                                            'frostbitten',
-                                            'burned',
-                                            'deafened',
                                             'muted']
                                 if x != target.status_ail])
 
@@ -1135,8 +1143,8 @@ class Monster(Unit):
 
         elif main.party_info['reg'] == 'Arcadian Desert':
             self.element = 'fire'
-            self.status = 'burned'
-            self.status_msg = "was imbued with fire, causing painful burns!"
+            self.status = 'blinded'
+            self.status_msg = "brought upon a sandstorm, causing temporary blindness!"
 
         elif main.party_info['reg'] == 'Terrius Mt. Range':
             self.element = 'earth'
@@ -1150,8 +1158,8 @@ class Monster(Unit):
 
         elif main.party_info['reg'] == 'Central Forest':
             self.element = 'electric'
-            self.status = 'blinded'
-            self.status_msg = "was imbued with darkness, causing impaired vision!"
+            self.status = 'weakened'
+            self.status_msg = "drained its target's energy, causing temporary weakness!"
 
         elif main.party_info['reg'] == 'Bogthorn Marsh':
             self.element = 'grass'
@@ -1165,8 +1173,8 @@ class Monster(Unit):
 
         elif main.party_info['reg'] == 'Aethus':
             self.element = 'wind'
-            self.status = 'deafened'
-            self.status_msg = "brought upon the winds, dampening their target's hearing!"
+            self.status = 'blinded'
+            self.status_msg = "brought upon the winds, dampening their target's vision!"
 
         self.name = ' '.join([modifier, self.name]) if modifier else self.name
 
@@ -1310,7 +1318,7 @@ class Monster(Unit):
         else:
             # Non-magic Attack
 
-            print('The {0} {1} {2}'.format(self.monster_name, self.attk_msg, target.name))
+            print(f'The {self.monster_name} {self.attk_msg} {target.name}')
             sounds.aim_weapon.play()
 
             main.smart_sleep(0.75)

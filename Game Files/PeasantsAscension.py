@@ -111,10 +111,8 @@ sound_vol = 1.0
 do_text_scroll = False
 
 # A dictionary containing generic information about the player's party
-party_info = {'x': 0, 'y': 0, 'avg': '', 'reg': 'Central Forest',
-              'reg_music': 'Music/Through the Forest.ogg',
-              'h': '', 'v': '', 'prev_town': [0, 0], 'is_aethus': False,
-              'gp': 20, 'visited_towns': [], 'reg_msg': ''}
+party_info = {'reg': 'Central Forest', 'reg_music': 'Music/Through the Forest.ogg',
+              'prev_town': '', 'is_aethus': False, 'gp': 20, 'visited_towns': [], 'current_tile': world.in_for_cen}
 
 # The version number the game is currently updated to
 game_version = 'v1.0.0 Beta'
@@ -379,7 +377,7 @@ def check_save():  # Check for save files and load the game if they're found
 
                 print('Load successful.')
 
-                if not towns.search_towns(party_info['x'], party_info['y'], enter=False):
+                if not towns.search_towns(enter=False):
                     print('-'*25)
 
                 return

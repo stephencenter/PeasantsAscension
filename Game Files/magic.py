@@ -619,13 +619,6 @@ spellbook = {
 def pick_cat(user, is_battle=True):
     inv_name = user.name if user != units.player else 'player'
 
-    if user.status_ail == 'silenced':
-        sounds.debuff.play()
-        print(f"{user.name} is silenced and cannot use spells!")
-        input("\nPress enter/return ")
-
-        return False
-
     while True:
         do_continue = False
         print("""{0}'s spellbook:
@@ -691,7 +684,7 @@ def pick_cat(user, is_battle=True):
                         break
 
             else:
-                if cat.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                if cat.lower() in ['e', 'x', 'exit', 'b', 'back']:
                     print('-'*25)
                     return False
 
@@ -764,8 +757,7 @@ def pick_spell(cat, user, is_battle):
 
 
 def new_spells(character):
-    # Teach the player new spells as they level up, or low-level spells not
-    # previously in the game.
+    # Teach the player new spells as they level up, or low-level spells not previously in the game.
     global spellbook
 
     for spell in spells:
@@ -790,9 +782,7 @@ def new_spells(character):
                 sounds.item_pickup.play()
                 spellbook[character.name if character != units.player else 'player'][cat].append(spell)
 
-                print('-'*25)
-                print(f'{character.name} has learned "{spell}", a new {cat} spell!')
-                input('\nPress enter/return ')
+                input(f'{character.name} has learned "{spell}", a new {cat} spell! | Press enter/return ')
 
 
 def serialize_sb(path):

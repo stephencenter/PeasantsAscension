@@ -49,286 +49,382 @@ else:
     main = sys.modules["__main__"]
 
 
-def movement_system():
-    # Adjust the player's x/y coordinates based on inputted direction.
+class Tile:
+    def __init__(self, name, tile_id, region, desc, m_level, to_n=None, to_s=None, to_e=None, to_w=None, to_up=None,
+                 to_dn=None, town_list=(), visited=False, enterable=True, level_req=1):
 
+        self.name = name
+        self.tile_id = tile_id
+        self.region = region
+        self.desc = desc
+        self.m_level = m_level
+        self.to_n = to_n
+        self.to_s = to_s
+        self.to_e = to_e
+        self.to_w = to_w
+        self.to_up = to_up
+        self.to_dn = to_dn
+        self.visited = visited
+        self.enterable = enterable
+        self.town_list = town_list
+        self.level_req = level_req
+
+icf_desc = """Your party lies in the inner portion of the Central Forest. This very forest
+is home to thousands of people, thousands of animal species, and unfortunately
+several kinds of monsters. There are trees in all directions as far as the eye can see,
+each towering over a hundred feet tall. The ground is scattered with the occasional rock
+and a plentiful supply of leaves twigs. In other words, it's your standard forest."""
+
+in_for_s = Tile("Inner Central Forest S", "I-CF-S", "Central Forest", icf_desc + """
+There is nothing nearby of interest.""", 2,
+                to_n="I-CF-N",)
+in_for_e = Tile("Inner Central Forest E", "I-CF-E", "Central Forest", icf_desc + """
+There is nothing nearby of interest.""", 2,
+                to_w="I-CF-W")
+in_for_w = Tile("Inner Central Forest W", "I-CF-W", "Central Forest", icf_desc + """
+There is nothing nearby of interest.""", 2,
+                to_e="I-CF-E")
+
+in_for_cen = Tile("Inner Central Forest", "I-CF", "Central Forest", icf_desc + """
+To the [W]est, [E]ast, and [S]outh lie more forest, but to the [N]orth rests the
+quaint little town of Nearton. Might be wise to visit there sometime soon!""", 1,
+                  to_n="I-CF-N",
+                  to_s="I-CF-S",
+                  to_w="I-CF-W",
+                  to_e="I-CF-E")
+
+nearton_tile = Tile("Town of Nearton", "I-CF-N", "Central Forest", icf_desc + """
+The town of Nearton is mere minutes away from this point! Stopping by
+there might be a smart idea.""", 2, town_list=towns.town_nearton,
+                    to_s="I-CF")
+
+all_tiles = [nearton_tile, in_for_cen, in_for_w, in_for_e, in_for_s]
+
+def movement_system():
     pygame.mixer.music.load(main.party_info['reg_music'])
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(main.music_vol)
 
     while True:
-        towns.search_towns(main.party_info['x'], main.party_info['y'])
+        tile = main.party_info['current_tile']
+        available_dirs = []
 
-        if main.party_info['x'] >= 0:
-            main.party_info['h'] = "\u00b0E"
-        else:
-            main.party_info['h'] = "\u00b0W"
+        towns.search_towns()
 
-        if main.party_info['y'] >= 0:
-            main.party_info['v'] = "\u00b0N"
-        else:
-            main.party_info['v'] = "\u00b0S"
+        print(f"Current Location: {tile.name} Region: {tile.region}")
+        for drc in [x for x in [tile.to_n, tile.to_e, tile.to_w, tile.to_s, tile.to_dn, tile.to_up] if x is not None]:
+            if drc == tile.to_n:
+                print("To the [N]orth", end='')
+                available_dirs.append('w')
+            if drc == tile.to_s:
+                print("To the [S]outh", end='')
+                available_dirs.append('w')
+            if drc == tile.to_e:
+                print("To the [E]ast", end='')
+                available_dirs.append('w')
+            if drc == tile.to_w:
+                print("To the [W]est", end='')
+                available_dirs.append('w')
+            if drc == tile.to_up:
+                print("[U]pwards, above your party,", end='')
+                available_dirs.append('u')
+            if drc == tile.to_dn:
+                print("[D]ownwards, below your party,", end='')
+                available_dirs.append('w')
 
-        print('Current Location: <{0}{1}, {2}{3}> in the <{4}>'.format(
-                main.party_info['y'], main.party_info['v'],
-                main.party_info['x'], main.party_info['h'],
-                main.party_info['reg']))
+            for t in all_tiles:
+                if t.tile_id == drc:
+                    adj_tile = t
+
+                    break
+
+            print(f" lies the {adj_tile.name}")
 
         while True:
-            direction = input('Input Direction ([N], [S], [E], [W]) or [P]layer, [T]ools, [L]ook, [R]est: ')
-            direction = direction.lower()
-
-            if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
-                sounds.foot_steps.play()
-
-                # The in-game map is square to simplify things. The real map of the country is a lot different.
-                if direction.startswith('n'):
-
-                    if main.party_info['y'] < 125 if not main.party_info['is_aethus'] else 50:
-                        main.party_info['y'] += 1
-
-                    else:
-                        print('-'*25)
-
-                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-                            print("""\
-Continuing to walk in that direction would cause you to fall to your death.
-It's probably in your best interests that you not do that.
--------------------------""")
-
-                            continue
-
-                        if main.party_info['x'] <= 42:
-                            print('Off in the distance, you see what appears to be a large')
-                            print('island. According to your map, this island is known as')
-                            print('Durcuba. You probably shouldn\'t go there.')
-
-                        else:
-                            print('You come across the border between Hillsbrad and Harconia.')
-                            print('Despite your pleading, the border guards will not let you \
-pass.')
-
-                        print('-'*25)
-
-                        continue
-
-                elif direction.startswith('s'):
-                    if main.party_info['y'] > -125 if not main.party_info['is_aethus'] else -50:
-                        main.party_info['y'] -= 1
-
-                    else:
-                        print('-'*25)
-
-                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-                            print("""\
-Continuing to walk in that direction would cause you to fall to your death.
-It's probably in your best interests that you not do that.
--------------------------""")
-
-                            continue
-
-                        if main.party_info['x'] <= 42:
-                            print('You see a large island off in the distance. According to')
-                            print('your map, this island appears to be Thex! Unfortunately,')
-                            print("you don't have any way to cross the sea.")
-
-                        else:
-                            print('You come across the border between Maranon and Harconia.')
-                            print('Despite your pleading, the border guards will not let you \
-pass.')
-                        print('-'*25)
-
-                        continue
-
-                elif direction.startswith('w'):
-                    if main.party_info['x'] > -125 if not main.party_info['is_aethus'] else -50:
-                        main.party_info['x'] -= 1
-
-                    else:
-                        print('-'*25)
-
-                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-                            print("""Continuing to walk in that direction would cause you to fall to your death.
-It's probably in your best interests that you not do that.
--------------------------""")
-
-                            continue
-
-                        print('Ahead of you is a seemingly endless ocean. You cannot continue in this direction.')
-                        print('-'*25)
-
-                        continue
-
-                elif direction.startswith('e'):
-                    if main.party_info['x'] < 125 if not main.party_info['is_aethus'] else 50:
-                        main.party_info['x'] += 1
-
-                    else:
-                        print('-'*25)
-
-                        if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-                            print("""Continuing to walk in that direction would cause you to fall to your death.
-It's probably in your best interests that you not do that.
--------------------------""")
-
-                            continue
-
-                        if main.party_info['y'] >= 42:
-                            nation = 'Hillsbrad'
-
-                        elif main.party_info['y'] <= -42:
-                            nation = 'Maranon'
-
-                        else:
-                            nation = 'Elysium'
-
-                        print('You come across the border between {0} and Harconia.'.format(
-                            nation))
-                        print('Despite your pleading, the border guards will not let you pass.')
-                        print('-'*25)
-
-                        continue
-
-                main.party_info['avg'] = int(((abs(main.party_info['x'])) + (abs(main.party_info['y'])))/2)
-
-                if not any([check_region(),
-                           bosses.check_bosses(main.party_info['x'], main.party_info['y']),
-                           towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False)]
-                           ):
-
-                    # If none of the previous statements return True, then a battle can occur.
-                    # There is a 1 in 7 chance for a battle to occur (14.285714...%)
-                    is_battle = not random.randint(0, 6)
-
-                    if is_battle:
-                        print('-'*25)
-                        units.spawn_monster()
-                        battle.battle_system()
-
-                    else:
-                        print()
-
-                break
-
-            elif direction.startswith('p'):
-                print('-'*25)
-                print('You stop to rest for a moment.')
-
-                while True:
-                    decision = input('View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
-                    decision = decision.lower()
-
-                    if decision.startswith('i'):
-                        print('-'*25)
-                        inv_system.pick_category()
-                        print('-'*25)
-
-                    if decision.startswith('s'):
-                        target_options = [x for x in [
-                            units.player,
-                            units.solou,
-                            units.xoann,
-                            units.adorine,
-                            units.ran_af,
-                            units.parsto,
-                            units.chyme] if x.enabled
-                        ]
-
-                        if len(target_options) == 1:
-                            target = units.player
-
-                        else:
-                            print("Select Character:")
-                            print("     ", "\n      ".join(
-                                ["[{0}] {1}".format(int(num) + 1, character.name)
-                                 for num, character in enumerate(target_options)]))
-
-                            while True:
-                                target = input('Input [#] (or type "exit"): ')
-
-                                if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                                    print('-'*25)
-
-                                    break
-
-                                try:
-                                    target = int(target) - 1
-                                except ValueError:
-                                    continue
-
-                                try:
-                                    target = target_options[target]
-                                except IndexError:
-                                    continue
-
-                                break
-
-                        if isinstance(target, units.PlayableCharacter):
-                            print('-'*25)
-                            target.player_info()
-                            print('-'*25)
-
-                    if decision.startswith('m'):
-                        user_options = [x for x in [
-                            units.player,
-                            units.solou,
-                            units.xoann,
-                            units.adorine,
-                            units.ran_af,
-                            units.parsto,
-                            units.chyme] if x.enabled
-                        ]
-
-                        if len(user_options) == 1:
-                            user = units.player
-
-                        else:
-                            print('-'*25)
-                            print("Select Spellbook:")
-                            print("     ", "\n      ".join(
-                                ["[{0}] {1}'s Spells".format(int(num) + 1, character.name)
-                                 for num, character in enumerate(user_options)]))
-
-                            while True:
-                                user = input("Input [#]: ")
-                                try:
-                                    user = int(user) - 1
-                                except ValueError:
-                                    continue
-
-                                try:
-                                    user = user_options[user]
-                                except IndexError:
-                                    continue
-
-                                break
-
-                        if magic.spellbook[
-                            user.name if user != units.player else 'player'
-                        ]['Healing']:
-
-                            magic.pick_spell('Healing', user, False)
-
-                        else:
-                            print('-'*25)
-                            print('You have no overworld-allowed spells available.')
-
-                    if decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                        print('-'*25)
-                        break
-
-            elif direction.startswith('t'):
-                inv_system.tools_menu()
-                if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
-                    print('-'*25)
-
-            elif direction.startswith('l'):
-                pass
-
-            elif direction.startswith('r'):
-                rest()
-                if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
-                    print('-'*25)
+           direction = input('Input Direction ([N], [S], [E], [W], [D], [U]) or [P]layer, [T]ools, [L]ook, [R]est: ')
+
+
+
+# def OLD_movement_system():
+#     # Adjust the player's x/y coordinates based on inputted direction.
+#
+#     pygame.mixer.music.load(main.party_info['reg_music'])
+#     pygame.mixer.music.play(-1)
+#     pygame.mixer.music.set_volume(main.music_vol)
+#
+#     while True:
+#         towns.search_towns(main.party_info['x'], main.party_info['y'])
+#
+#         if main.party_info['x'] >= 0:
+#             main.party_info['h'] = "\u00b0E"
+#         else:
+#             main.party_info['h'] = "\u00b0W"
+#
+#         if main.party_info['y'] >= 0:
+#             main.party_info['v'] = "\u00b0N"
+#         else:
+#             main.party_info['v'] = "\u00b0S"
+#
+#         print('Current Location: <{0}{1}, {2}{3}> in the <{4}>'.format(
+#                 main.party_info['y'], main.party_info['v'],
+#                 main.party_info['x'], main.party_info['h'],
+#                 main.party_info['reg']))
+#
+#         while True:
+#             direction = input('Input Direction ([N], [S], [E], [W]) or [P]layer, [T]ools, [L]ook, [R]est: ')
+#             direction = direction.lower()
+#
+#             if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
+#                 sounds.foot_steps.play()
+#
+#                 # The in-game map is square to simplify things. The real map of the country is a lot different.
+#                 if direction.startswith('n'):
+#
+#                     if main.party_info['y'] < 125 if not main.party_info['is_aethus'] else 50:
+#                         main.party_info['y'] += 1
+#
+#                     else:
+#                         print('-'*25)
+#
+#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
+#                             print("""\
+# Continuing to walk in that direction would cause you to fall to your death.
+# It's probably in your best interests that you not do that.
+# -------------------------""")
+#
+#                             continue
+#
+#                         if main.party_info['x'] <= 42:
+#                             print('Off in the distance, you see what appears to be a large')
+#                             print('island. According to your map, this island is known as')
+#                             print('Durcuba. You probably shouldn\'t go there.')
+#
+#                         else:
+#                             print('You come across the border between Hillsbrad and Harconia.')
+#                             print('Despite your pleading, the border guards will not let you \
+# pass.')
+#
+#                         print('-'*25)
+#
+#                         continue
+#
+#                 elif direction.startswith('s'):
+#                     if main.party_info['y'] > -125 if not main.party_info['is_aethus'] else -50:
+#                         main.party_info['y'] -= 1
+#
+#                     else:
+#                         print('-'*25)
+#
+#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
+#                             print("""\
+# Continuing to walk in that direction would cause you to fall to your death.
+# It's probably in your best interests that you not do that.
+# -------------------------""")
+#
+#                             continue
+#
+#                         if main.party_info['x'] <= 42:
+#                             print('You see a large island off in the distance. According to')
+#                             print('your map, this island appears to be Thex! Unfortunately,')
+#                             print("you don't have any way to cross the sea.")
+#
+#                         else:
+#                             print('You come across the border between Maranon and Harconia.')
+#                             print('Despite your pleading, the border guards will not let you \
+# pass.')
+#                         print('-'*25)
+#
+#                         continue
+#
+#                 elif direction.startswith('w'):
+#                     if main.party_info['x'] > -125 if not main.party_info['is_aethus'] else -50:
+#                         main.party_info['x'] -= 1
+#
+#                     else:
+#                         print('-'*25)
+#
+#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
+#                             print("""Continuing to walk in that direction would cause you to fall to your death.
+# It's probably in your best interests that you not do that.
+# -------------------------""")
+#
+#                             continue
+#
+#                         print('Ahead of you is a seemingly endless ocean. You cannot continue in this direction.')
+#                         print('-'*25)
+#
+#                         continue
+#
+#                 elif direction.startswith('e'):
+#                     if main.party_info['x'] < 125 if not main.party_info['is_aethus'] else 50:
+#                         main.party_info['x'] += 1
+#
+#                     else:
+#                         print('-'*25)
+#
+#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
+#                             print("""Continuing to walk in that direction would cause you to fall to your death.
+# It's probably in your best interests that you not do that.
+# -------------------------""")
+#
+#                             continue
+#
+#                         if main.party_info['y'] >= 42:
+#                             nation = 'Hillsbrad'
+#
+#                         elif main.party_info['y'] <= -42:
+#                             nation = 'Maranon'
+#
+#                         else:
+#                             nation = 'Elysium'
+#
+#                         print('You come across the border between {0} and Harconia.'.format(
+#                             nation))
+#                         print('Despite your pleading, the border guards will not let you pass.')
+#                         print('-'*25)
+#
+#                         continue
+#
+#                 main.party_info['avg'] = int(((abs(main.party_info['x'])) + (abs(main.party_info['y'])))/2)
+#
+#                 if not any([check_region(),
+#                            bosses.check_bosses(main.party_info['x'], main.party_info['y']),
+#                            towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False)]
+#                            ):
+#
+#                     # If none of the previous statements return True, then a battle can occur.
+#                     # There is a 1 in 7 chance for a battle to occur (14.285714...%)
+#                     is_battle = not random.randint(0, 6)
+#
+#                     if is_battle:
+#                         print('-'*25)
+#                         units.spawn_monster()
+#                         battle.battle_system()
+#
+#                     else:
+#                         print()
+#
+#                 break
+#
+#             elif direction.startswith('p'):
+#                 print('-'*25)
+#                 print('You stop to rest for a moment.')
+#
+#                 while True:
+#                     decision = input('View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
+#                     decision = decision.lower()
+#
+#                     if decision.startswith('i'):
+#                         print('-'*25)
+#                         inv_system.pick_category()
+#                         print('-'*25)
+#
+#                     if decision.startswith('s'):
+#                         target_options = [x for x in [
+#                             units.player,
+#                             units.solou,
+#                             units.xoann,
+#                             units.adorine,
+#                             units.ran_af,
+#                             units.parsto,
+#                             units.chyme] if x.enabled
+#                         ]
+#
+#                         if len(target_options) == 1:
+#                             target = units.player
+#
+#                         else:
+#                             print("Select Character:")
+#                             print("     ", "\n      ".join(
+#                                 ["[{0}] {1}".format(int(num) + 1, character.name)
+#                                  for num, character in enumerate(target_options)]))
+#
+#                             while True:
+#                                 target = input('Input [#] (or type "exit"): ')
+#
+#                                 if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+#                                     print('-'*25)
+#
+#                                     break
+#
+#                                 try:
+#                                     target = int(target) - 1
+#                                 except ValueError:
+#                                     continue
+#
+#                                 try:
+#                                     target = target_options[target]
+#                                 except IndexError:
+#                                     continue
+#
+#                                 break
+#
+#                         if isinstance(target, units.PlayableCharacter):
+#                             print('-'*25)
+#                             target.player_info()
+#                             print('-'*25)
+#
+#                     if decision.startswith('m'):
+#                         user_options = [x for x in [
+#                             units.player,
+#                             units.solou,
+#                             units.xoann,
+#                             units.adorine,
+#                             units.ran_af,
+#                             units.parsto,
+#                             units.chyme] if x.enabled
+#                         ]
+#
+#                         if len(user_options) == 1:
+#                             user = units.player
+#
+#                         else:
+#                             print('-'*25)
+#                             print("Select Spellbook:")
+#                             print("     ", "\n      ".join(
+#                                 ["[{0}] {1}'s Spells".format(int(num) + 1, character.name)
+#                                  for num, character in enumerate(user_options)]))
+#
+#                             while True:
+#                                 user = input("Input [#]: ")
+#                                 try:
+#                                     user = int(user) - 1
+#                                 except ValueError:
+#                                     continue
+#
+#                                 try:
+#                                     user = user_options[user]
+#                                 except IndexError:
+#                                     continue
+#
+#                                 break
+#
+#                         if magic.spellbook[
+#                             user.name if user != units.player else 'player'
+#                         ]['Healing']:
+#
+#                             magic.pick_spell('Healing', user, False)
+#
+#                         else:
+#                             print('-'*25)
+#                             print('You have no overworld-allowed spells available.')
+#
+#                     if decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+#                         print('-'*25)
+#                         break
+#
+#             elif direction.startswith('t'):
+#                 inv_system.tools_menu()
+#                 if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+#                     print('-'*25)
+#
+#             elif direction.startswith('l'):
+#                 pass
+#
+#             elif direction.startswith('r'):
+#                 rest()
+#                 if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+#                     print('-'*25)
 
 
 def check_region():

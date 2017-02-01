@@ -434,46 +434,29 @@ def after_battle(is_boss):  # Assess the results of the battle
 
 
 def battle_inventory(user):
-    # The player can use items from the "consum" category of their inventory during battles.
-    if not inv_system.inventory['consum']:
-        print('You have no battle-allowed items - the consumable category is empty!')
-        print('-'*25)
-
-        return False
+    # The player can use items from the Consumables category of their inventory during battles.
 
     while True:
         print('Battle Inventory: \n      ', end='')
-        print('\n      '.join(['[{0}] {1} {2}'.format(x + 1, y, '| Item Power: ' + str(
-            max(y.heal, y.mana)) if isinstance(y, items.Consumable) else '')
-
-            for x, y in enumerate(inv_system.inventory['consum'])]))
+        print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(inv_system.inventory['consum'])]))
 
         while True:
-            item = input('Input [#] (or type "cancel"): ')
+            item = input('Input [#] (or type "exit"): ').lower()
             try:
-                item = int(item) - 1
-                if item < 0:
-                    continue
+                item = inv_system.inventory['consum'][int(item) - 1]
 
-            except ValueError:
-                item = item.lower()
-
-                if item in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+            except (ValueError, IndexError):
+                if item in ['e', 'x', 'exit', 'b', 'back']:
                     return False
 
                 else:
                     continue
-            try:
-                item = inv_system.inventory['consum'][item]
-            except IndexError:
-                continue
 
             print('\n-Player Turn-')
 
-            if isinstance(item, inv_system.i.StatusPotion):
+            if isinstance(item, items.StatusPotion):
                 if item.status != user.status_ail:
-                    print('{0} is not {1} - they have no reason to drink that.'.format(user.name, user.status))
-                    print()
+                    print(f'{user.name} is not {user.status} - they have no reason to drink that.')
                     break
 
             item.use_item(user, is_battle=True)

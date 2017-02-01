@@ -69,19 +69,20 @@ class Consumable(Item):
         self.mana = mana
 
     def use_item(self, user, is_battle=False):
-        if is_battle:
-            print(ascii_art.player_art[user.class_.title()] % "{0} is making a move!\n".format(user.name))
+        print('-'*25)
 
-        else:
-            print('-'*25)
+        if is_battle:
+            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
 
         user.hp += self.heal
         user.mp += self.mana
         units.fix_stats()
         sounds.magic_healing.play()
 
-        print('{0} consumes the {1}.'.format(user.name, self.name))
-        input("\n Press enter/return ")
+        print(f'{user.name} consumes the {self.name}.')
+
+        if not is_battle:
+            input("\nPress enter/return ")
 
         for x, y in enumerate(inv_system.inventory[self.cat]):
             if y.name == self.name:
@@ -94,27 +95,29 @@ class StatusPotion(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.status = status
 
-    def use_item(self, user):
-        if is_battle:
-            print(ascii_art.player_art[user.class_.title()] %
-                  "{0} is making a move!\n".format(user.name))
+    def use_item(self, user, is_battle=False):
+        print('-'*25)
 
-        else:
-            print('-'*25)
+        if is_battle:
+            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
 
         if user.status_ail == self.status:
-            sounds.buff_spell.play()
-            print('{0} drinks the {1} and feels much better.'.format(user.name, self.name))
-            user.status_ail = 'none'
-
             for x, y in enumerate(inv_system.inventory[self.cat]):
                 if y.name == self.name:
                     inv_system.inventory[self.cat].remove(y)
                     break
 
+            sounds.buff_spell.play()
+            user.status_ail = 'none'
+
+            print(f'{user.name} drinks the {self.name} and feels much better.')
+
+            if not is_battle:
+                input("\nPress enter/return ")
+
         else:
-            print("Drinking this potion probably wouldn't do anything.")
-            print('-'*25)
+            print(f"Drinking this {self.name} probably wouldn't do anything.")
+            input("\nPress enter/return ")
 
 
 class Weapon(Item):
@@ -130,7 +133,7 @@ class Weapon(Item):
             self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'''])
 
         else:
-            self.desc = ' '.join([desc, '|', ' and '.join([x.title() for x in self.class_]), 'ONLY'])
+            self.desc = ' '.join([desc, "[", ', '.join([x.title() for x in self.class_]), ']'])
 
     def use_item(self, user):
         if user.class_ in self.class_ or self.class_ == 'none':
@@ -156,8 +159,7 @@ class Weapon(Item):
             print('-'*25)
 
             if isinstance(self.class_, list):
-                print("{0} must be a {1} or a {2} to equip this.".format(
-                    user.name, self.class_[0].title(), self.class_[1].title()))
+                print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip this.")
                 input("\nPress enter/return ")
 
             else:
@@ -699,25 +701,24 @@ l_rejuv = Consumable('Mighty Rejuvenation Potion',
 # Potions - Status
 sleep_potion = StatusPotion('Potion of Waking Up',
                             "A potion designed to wake its partaker from a deep sleep.",
-                            25, 10, 'asleep', ascart='Status')
+                            50, 25, 'asleep', ascart='Status')
 silence_potion = StatusPotion('Potion of Allowing Speech',
                               "A potion designed to enable the usage of damaged vocal chords.",
-                              25, 10, 'silenced', ascart='Status')
+                              50, 25, 'silenced', ascart='Status')
 poison_potion = StatusPotion('Potion of Curing Disease',
                              'A potion designed to cure even the most deadly of illnesses.',
-                             25, 10, 'poisoned', ascart='Status')
+                             50, 25, 'poisoned', ascart='Status')
 weakness_potion = StatusPotion('Potion of Regaining Strength',
                                'A potion designed to help regain lost muscle-mass and stamina.',
-                               25, 10, 'weakened', ascart='Status')
+                               50, 25, 'weakened', ascart='Status')
 blindness_potion = StatusPotion('Potion of Enabling Sight',
                                 'A potion designed to help the blind regain their eyesight.',
-                                25, 10, 'blinded', ascart='Status')
+                                50, 25, 'blinded', ascart='Status')
 paralyzation_potion = StatusPotion('Potion of Inducing Motion',
                                    'A potion designed to cure minor paralysis in most of the body.',
-                                   25, 10, 'paralyzed', ascart='Status')
+                                   50, 25, 'paralyzed', ascart='Status')
 
 
-# Fists
 # Fists exist to prevent bugs caused by not having any weapon equipped.
 fists = Weapon('Fists',
                """Nothing beats good ol' fashioned hand-to-hand combat (No damage bonus)""",
