@@ -69,36 +69,57 @@ class Tile:
         self.town_list = town_list
         self.level_req = level_req
 
+# -- INNER CENTRAL FOREST -- #
 icf_desc = """Your party lies in the inner portion of the Central Forest. This very forest
-is home to thousands of people, thousands of animal species, and unfortunately
-several kinds of monsters. There are trees in all directions as far as the eye can see,
-each towering over a hundred feet tall. The ground is scattered with the occasional rock
+is home to thousands of people and animal species, and, unfortunately, several kinds
+of monsters. There are trees in all directions as far as the eye can see, each
+towering over a hundred feet tall. The ground is scattered with the occasional rock
 and a plentiful supply of leaves twigs. In other words, it's your standard forest."""
 
-in_for_s = Tile("Inner Central Forest S", "I-CF-S", "Central Forest", icf_desc + """
-There is nothing nearby of interest.""", 2,
-                to_n="I-CF-N",)
-in_for_e = Tile("Inner Central Forest E", "I-CF-E", "Central Forest", icf_desc + """
-There is nothing nearby of interest.""", 2,
-                to_w="I-CF-W")
-in_for_w = Tile("Inner Central Forest W", "I-CF-W", "Central Forest", icf_desc + """
-There is nothing nearby of interest.""", 2,
-                to_e="I-CF-E")
+in_for_n = Tile("Inner Central Forest N", "I-CF-N", "Central Forest", icf_desc, 1,
+                to_s="I-CF-C",
+                to_e="Nearton",
+                to_w="I-CF-SW")
+in_for_s = Tile("Inner Central Forest S", "I-CF-S", "Central Forest", icf_desc, 1,
+                to_n="I-CF-C",
+                to_w="Southford",
+                to_e="I-CF-SE")
+in_for_e = Tile("Inner Central Forest E", "I-CF-E", "Central Forest", icf_desc, 1,
+                to_n="Nearton",
+                to_w="I-CF-C",
+                to_s="I-CF-SE")
+in_for_w = Tile("Inner Central Forest W", "I-CF-W", "Central Forest", icf_desc, 1,
+                to_s="Southford",
+                to_e="I-CF-C",
+                to_n="I-CF-NW")
+in_for_c = Tile("Inner Central Forest C", "I-CF-C", "Central Forest", icf_desc, 1,
+                to_n="I-CF-N",
+                to_w="I-CF-W",
+                to_e="I-CF-E",
+                to_s="I-CF-S")
 
-in_for_cen = Tile("Inner Central Forest", "I-CF", "Central Forest", icf_desc + """
-To the [W]est, [E]ast, and [S]outh lie more forest, but to the [N]orth rests the
-quaint little town of Nearton. Might be wise to visit there sometime soon!""", 1,
-                  to_n="I-CF-N",
-                  to_s="I-CF-S",
-                  to_w="I-CF-W",
-                  to_e="I-CF-E")
+in_for_nw = Tile("Inner Central Forest NW", "I-CF-NW", "Central Forest", icf_desc, 2,
+                 to_s="I-CF-W",
+                 to_e="I-CF-N")
+in_for_se = Tile("Inner Central Forest SE", "I-CF-SE", "Central Forest", icf_desc, 2,
+                 to_w="I-CF-S",
+                 to_n="I-CF-E")
 
-nearton_tile = Tile("Town of Nearton", "I-CF-N", "Central Forest", icf_desc + """
+nearton_tile = Tile("Town of Nearton", "Nearton", "Central Forest", icf_desc + """
 The town of Nearton is mere minutes away from this point! Stopping by
-there might be a smart idea.""", 2, town_list=towns.town_nearton,
-                    to_s="I-CF")
+there might be a smart idea.""", 2, town_list=[towns.town_nearton],
+                    to_s="I-CF-E",
+                    to_w="I-CF-N")
 
-all_tiles = [nearton_tile, in_for_cen, in_for_w, in_for_e, in_for_s]
+southford_tile = Tile("Town of Southford", "Southford", "Central Forest", icf_desc + """
+The town of Nearton is mere minutes away from this point! Stopping by
+there might be a smart idea.""", 2, town_list=[towns.town_southford],
+                      to_e="I-CF-S",
+                      to_n="I-CF-W")
+
+icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s, in_for_n, in_for_se, in_for_nw]
+all_tiles = icf_tiles # + other tiles lists as more tiles come into existance
+
 
 def movement_system():
     pygame.mixer.music.load(main.party_info['reg_music'])
@@ -111,26 +132,31 @@ def movement_system():
 
         towns.search_towns()
 
-        print(f"Current Location: {tile.name} Region: {tile.region}")
-        for drc in [x for x in [tile.to_n, tile.to_e, tile.to_w, tile.to_s, tile.to_dn, tile.to_up] if x is not None]:
+        print(f"Current Location: [{tile.name}] | Region: [{tile.region}]")
+        for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
             if drc == tile.to_n:
-                print("To the [N]orth", end='')
-                available_dirs.append('w')
+                print("          To the [N]orth", end='')
+                available_dirs.append(['n', drc])
+
             if drc == tile.to_s:
-                print("To the [S]outh", end='')
-                available_dirs.append('w')
+                print("          To the [S]outh", end='')
+                available_dirs.append(['s', drc])
+
             if drc == tile.to_e:
-                print("To the [E]ast", end='')
-                available_dirs.append('w')
+                print("          To the [E]ast", end='')
+                available_dirs.append(['e', drc])
+
             if drc == tile.to_w:
-                print("To the [W]est", end='')
-                available_dirs.append('w')
+                print("          To the [W]est", end='')
+                available_dirs.append(['w', drc])
+
             if drc == tile.to_up:
-                print("[U]pwards, above your party,", end='')
-                available_dirs.append('u')
+                print("                 [U]pwards, above your party,", end='')
+                available_dirs.append(['u', drc])
+
             if drc == tile.to_dn:
-                print("[D]ownwards, below your party,", end='')
-                available_dirs.append('w')
+                print("                 [D]ownwards, below your party,", end='')
+                available_dirs.append(['d', drc])
 
             for t in all_tiles:
                 if t.tile_id == drc:
@@ -141,8 +167,133 @@ def movement_system():
             print(f" lies the {adj_tile.name}")
 
         while True:
-           direction = input('Input Direction ([N], [S], [E], [W], [D], [U]) or [P]layer, [T]ools, [L]ook, [R]est: ')
+            direction = input('Input Direction ([N], [S], [E], [W]) or [P]layer, [T]ools, [L]ook, [R]est: ').lower()
 
+            if any(map(direction.startswith, [x[0] for x in available_dirs])):
+                sounds.foot_steps.play()
+                main.party_info['current_tile'] = [b for b in all_tiles if b.tile_id in
+                                                   [a[1] for a in available_dirs if a[0] == direction]][0]
+                print('-'*25)
+
+                break
+
+            elif direction.startswith('p'):
+                print('-'*25)
+                print('You stop to rest for a moment.')
+
+                while True:
+                    decision = input('View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
+                    decision = decision.lower()
+
+                    if decision.startswith('i'):
+                        print('-'*25)
+                        inv_system.pick_category()
+                        print('-'*25)
+
+                    if decision.startswith('s'):
+                        target_options = [x for x in [
+                            units.player,
+                            units.solou,
+                            units.xoann,
+                            units.adorine,
+                            units.ran_af,
+                            units.parsto,
+                            units.chyme] if x.enabled
+                        ]
+
+                        if len(target_options) == 1:
+                            target = units.player
+
+                        else:
+                            print("Select Character:")
+                            print("     ", "\n      ".join(
+                                ["[{0}] {1}".format(int(num) + 1, character.name)
+                                 for num, character in enumerate(target_options)]))
+
+                            while True:
+                                target = input('Input [#] (or type "exit"): ')
+
+                                try:
+                                    target = target_options[int(target) - 1]
+
+                                except (ValueError, IndexError):
+                                    if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                        print('-'*25)
+
+                                        break
+
+                                    continue
+
+                                break
+
+                        if isinstance(target, units.PlayableCharacter):
+                            print('-'*25)
+                            target.player_info()
+                            print('-'*25)
+
+                    if decision.startswith('m'):
+                        user_options = [x for x in [
+                            units.player,
+                            units.solou,
+                            units.xoann,
+                            units.adorine,
+                            units.ran_af,
+                            units.parsto,
+                            units.chyme] if x.enabled
+                        ]
+
+                        if len(user_options) == 1:
+                            user = units.player
+
+                        else:
+                            print('-'*25)
+                            print("Select Spellbook:")
+                            print("     ", "\n      ".join(
+                                ["[{0}] {1}'s Spells".format(int(num) + 1, character.name)
+                                 for num, character in enumerate(user_options)]))
+
+                            while True:
+                                user = input("Input [#]: ")
+                                try:
+                                    user = int(user) - 1
+                                except ValueError:
+                                    continue
+
+                                try:
+                                    user = user_options[user]
+                                except IndexError:
+                                    continue
+
+                                break
+
+                        if magic.spellbook[user.name if user != units.player else 'player']['Healing']:
+                            magic.pick_spell('Healing', user, False)
+
+                        else:
+                            print('-'*25)
+                            print('You have no overworld-allowed spells available.')
+
+                    if decision in ['e', 'x', 'exit', 'b', 'back']:
+                        print('-'*25)
+                        break
+
+            elif direction.startswith('t'):
+                inv_system.tools_menu()
+                if towns.search_towns(enter=False):
+                    print('-'*25)
+
+            elif direction.startswith('l'):
+                print('-'*25)
+                print(tile.desc)
+                input("\nPress enter/return ")
+                print('-'*25)
+
+                break
+
+            elif direction.startswith('r'):
+                rest()
+                if towns.search_towns(enter=False):
+                    print('-'*25)
 
 
 # def OLD_movement_system():
@@ -305,126 +456,6 @@ def movement_system():
 #                         print()
 #
 #                 break
-#
-#             elif direction.startswith('p'):
-#                 print('-'*25)
-#                 print('You stop to rest for a moment.')
-#
-#                 while True:
-#                     decision = input('View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
-#                     decision = decision.lower()
-#
-#                     if decision.startswith('i'):
-#                         print('-'*25)
-#                         inv_system.pick_category()
-#                         print('-'*25)
-#
-#                     if decision.startswith('s'):
-#                         target_options = [x for x in [
-#                             units.player,
-#                             units.solou,
-#                             units.xoann,
-#                             units.adorine,
-#                             units.ran_af,
-#                             units.parsto,
-#                             units.chyme] if x.enabled
-#                         ]
-#
-#                         if len(target_options) == 1:
-#                             target = units.player
-#
-#                         else:
-#                             print("Select Character:")
-#                             print("     ", "\n      ".join(
-#                                 ["[{0}] {1}".format(int(num) + 1, character.name)
-#                                  for num, character in enumerate(target_options)]))
-#
-#                             while True:
-#                                 target = input('Input [#] (or type "exit"): ')
-#
-#                                 if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-#                                     print('-'*25)
-#
-#                                     break
-#
-#                                 try:
-#                                     target = int(target) - 1
-#                                 except ValueError:
-#                                     continue
-#
-#                                 try:
-#                                     target = target_options[target]
-#                                 except IndexError:
-#                                     continue
-#
-#                                 break
-#
-#                         if isinstance(target, units.PlayableCharacter):
-#                             print('-'*25)
-#                             target.player_info()
-#                             print('-'*25)
-#
-#                     if decision.startswith('m'):
-#                         user_options = [x for x in [
-#                             units.player,
-#                             units.solou,
-#                             units.xoann,
-#                             units.adorine,
-#                             units.ran_af,
-#                             units.parsto,
-#                             units.chyme] if x.enabled
-#                         ]
-#
-#                         if len(user_options) == 1:
-#                             user = units.player
-#
-#                         else:
-#                             print('-'*25)
-#                             print("Select Spellbook:")
-#                             print("     ", "\n      ".join(
-#                                 ["[{0}] {1}'s Spells".format(int(num) + 1, character.name)
-#                                  for num, character in enumerate(user_options)]))
-#
-#                             while True:
-#                                 user = input("Input [#]: ")
-#                                 try:
-#                                     user = int(user) - 1
-#                                 except ValueError:
-#                                     continue
-#
-#                                 try:
-#                                     user = user_options[user]
-#                                 except IndexError:
-#                                     continue
-#
-#                                 break
-#
-#                         if magic.spellbook[
-#                             user.name if user != units.player else 'player'
-#                         ]['Healing']:
-#
-#                             magic.pick_spell('Healing', user, False)
-#
-#                         else:
-#                             print('-'*25)
-#                             print('You have no overworld-allowed spells available.')
-#
-#                     if decision in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-#                         print('-'*25)
-#                         break
-#
-#             elif direction.startswith('t'):
-#                 inv_system.tools_menu()
-#                 if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
-#                     print('-'*25)
-#
-#             elif direction.startswith('l'):
-#                 pass
-#
-#             elif direction.startswith('r'):
-#                 rest()
-#                 if towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
-#                     print('-'*25)
 
 
 def check_region():

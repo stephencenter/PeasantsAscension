@@ -275,10 +275,9 @@ class MagicCompass(Item):
         distance = min(pos_towns, key=lambda x: x[1])
 
         print('-'*25)
-        print('The closest town to your party is {0} at ~{1} degrees away.'.format(
-            distance[0], distance[1]))
+        print(f'The closest town to your party is {distance[0]} at ~{distance[1]} degrees away.')
 
-        if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+        if not search_towns(enter=False):
             print('-'*25)
 
 
@@ -309,7 +308,7 @@ class DiviningRod(Item):
             'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
             else 'a', distance[0], distance[1]))
 
-        if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+        if not search_towns(enter=False):
             print('-'*25)
 
 
@@ -338,13 +337,13 @@ class Shovel(Item):
                 print('Using your shovel, your party manages to uncover a {0}!'.format(gem.name))
                 inv_system.inventory['misc'].append(gem)
 
-                if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+                if not search_towns(enter=False):
                     print('-'*25)
 
                 return
 
         print('Your party was unable to uncover anything.')
-        if not search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+        if not search_towns(enter=False):
             print('-'*25)
 
 
@@ -528,7 +527,7 @@ they started.")
                         if not world.check_region():
                             print('-'*25)
 
-                        search_towns(main.party_info['x'], main.party_info['y'])
+                        search_towns()
 
                         return
 
@@ -596,7 +595,7 @@ class TownTeleporter(Item):
                     print('You wave your hand over the map and then blow into it, and you suddenly')
                     print('feel a rush of air around you. You go unconscious for a few seconds and')
                     print('upon waking find yourself exactly where you intended to go.')
-                    input('Press enter/return ')
+                    input('\nPress enter/return ')
 
                     main.party_info['x'] = chosen_town[1]
                     main.party_info['y'] = chosen_town[3]
@@ -604,7 +603,7 @@ class TownTeleporter(Item):
                     main.party_info['v'] = chosen_town[4]
 
                     world.check_region()
-                    search_towns(main.party_info['x'], main.party_info['y'])
+                    search_towns()
                     return
 
                 elif y_n.lower().startswith('n'):

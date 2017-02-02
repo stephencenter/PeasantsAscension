@@ -1208,7 +1208,6 @@ def search_towns(enter=True):
 
     for town in available_towns:
         if town in main.party_info['current_tile'].town_list:
-            print('Success!')
             if enter:
                 print('-'*25)
 

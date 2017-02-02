@@ -781,7 +781,7 @@ def tools_menu():  # Display a set of usable tools on the world map
         print('Your party has no available tools to use.')
         input('\nPress enter/return ')
 
-        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+        if not towns.search_towns(enter=False):
             print('-'*25)
 
         return
@@ -800,7 +800,7 @@ def tools_menu():  # Display a set of usable tools on the world map
                 if tool.lower() in ['e', 'x', 'exit', 'b', 'back']:
                     spam = False
 
-                    if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+                    if not towns.search_towns(enter=False):
                         print('-'*25)
 
                     break

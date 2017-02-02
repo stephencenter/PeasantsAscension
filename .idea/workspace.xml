@@ -12,12 +12,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d19a7f44-3ef1-4b67-8670-56343c3a2afb" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/PeasantsAscension.py" afterPath="$PROJECT_DIR$/Game Files/PeasantsAscension.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/battle.py" afterPath="$PROJECT_DIR$/Game Files/battle.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/inv_system.py" afterPath="$PROJECT_DIR$/Game Files/inv_system.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/items.py" afterPath="$PROJECT_DIR$/Game Files/items.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/magic.py" afterPath="$PROJECT_DIR$/Game Files/magic.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/towns.py" afterPath="$PROJECT_DIR$/Game Files/towns.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/units.py" afterPath="$PROJECT_DIR$/Game Files/units.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/world.py" afterPath="$PROJECT_DIR$/Game Files/world.py" />
     </list>
     <ignored path="Pythonius.iws" />
@@ -43,17 +42,17 @@
       <file leaf-file-name="PeasantsAscension.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/PeasantsAscension.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
-              <caret line="380" column="33" lean-forward="true" selection-start-line="380" selection-start-column="33" selection-end-line="380" selection-end-column="33" />
+            <state relative-caret-position="135">
+              <caret line="99" column="66" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="690" selection-end-column="0" />
               <folding>
                 <element signature="e#2104#2114#0" expanded="true" />
-                <element signature="e#5751#8766#0" expanded="false" />
-                <element signature="e#8798#9409#0" expanded="false" />
-                <element signature="e#9439#10016#0" expanded="false" />
-                <element signature="e#16839#22396#0" expanded="false" />
-                <element signature="e#24251#24914#0" expanded="false" />
-                <element signature="e#24948#25297#0" expanded="false" />
-                <element signature="e#25841#27283#0" expanded="false" />
+                <element signature="e#5749#8764#0" expanded="false" />
+                <element signature="e#8796#9407#0" expanded="false" />
+                <element signature="e#9437#10014#0" expanded="false" />
+                <element signature="e#16837#22394#0" expanded="false" />
+                <element signature="e#24249#24912#0" expanded="false" />
+                <element signature="e#24946#25295#0" expanded="false" />
+                <element signature="e#25839#27281#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -131,14 +130,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="world.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="world.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/world.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="150" column="59" lean-forward="true" selection-start-line="150" selection-start-column="59" selection-end-line="150" selection-end-column="59" />
+            <state relative-caret-position="253">
+              <caret line="76" column="18" lean-forward="false" selection-start-line="76" selection-start-column="18" selection-end-line="76" selection-end-column="18" />
               <folding>
                 <element signature="e#876#886#0" expanded="true" />
-                <element signature="e#17067#19317#0" expanded="false" />
+                <element signature="e#18028#20278#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -147,7 +146,7 @@
       <file leaf-file-name="ascii_art.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/ascii_art.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="771">
+            <state relative-caret-position="742">
               <caret line="755" column="13" lean-forward="false" selection-start-line="755" selection-start-column="5" selection-end-line="755" selection-end-column="13" />
               <folding>
                 <element signature="e#896#911#0" expanded="true" />
@@ -156,11 +155,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="towns.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="towns.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/towns.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="1249" column="0" lean-forward="true" selection-start-line="1249" selection-start-column="0" selection-end-line="1249" selection-end-column="0" />
+            <state relative-caret-position="278">
+              <caret line="1211" column="29" lean-forward="true" selection-start-line="1211" selection-start-column="29" selection-end-line="1211" selection-end-column="29" />
               <folding>
                 <element signature="e#734#744#0" expanded="true" />
                 <element signature="e#1346#21939#0" expanded="false" />
@@ -183,7 +182,7 @@
       <file leaf-file-name="bosses.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/bosses.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="771">
+            <state relative-caret-position="742">
               <caret line="134" column="14" lean-forward="false" selection-start-line="134" selection-start-column="14" selection-end-line="134" selection-end-column="14" />
               <folding>
                 <element signature="e#732#742#0" expanded="true" />
@@ -195,7 +194,7 @@
       <file leaf-file-name="text_scroll.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/text_scroll.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
+            <state relative-caret-position="278">
               <caret line="61" column="31" lean-forward="false" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
               <folding>
                 <element signature="e#704#715#0" expanded="true" />
@@ -207,8 +206,8 @@
       <file leaf-file-name="inv_system.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3033">
-              <caret line="908" column="51" lean-forward="true" selection-start-line="908" selection-start-column="51" selection-end-line="908" selection-end-column="51" />
+            <state relative-caret-position="235">
+              <caret line="802" column="45" lean-forward="false" selection-start-line="802" selection-start-column="33" selection-end-line="802" selection-end-column="45" />
               <folding>
                 <element signature="e#730#740#0" expanded="true" />
                 <element signature="e#18576#19704#0" expanded="false" />
@@ -216,10 +215,9 @@
                 <element signature="e#21408#23307#0" expanded="false" />
                 <element signature="e#23333#25287#0" expanded="false" />
                 <element signature="e#25365#26135#0" expanded="false" />
-                <element signature="e#26210#27679#0" expanded="false" />
-                <element signature="e#27711#28126#0" expanded="false" />
-                <element signature="e#31150#31590#0" expanded="false" />
-                <element signature="e#31626#32465#0" expanded="false" />
+                <element signature="e#27623#28038#0" expanded="false" />
+                <element signature="e#31062#31502#0" expanded="false" />
+                <element signature="e#31538#32377#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -228,21 +226,20 @@
       <file leaf-file-name="items.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/items.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="165" column="34" lean-forward="false" selection-start-line="165" selection-start-column="34" selection-end-line="165" selection-end-column="34" />
+            <state relative-caret-position="235">
+              <caret line="269" column="49" lean-forward="false" selection-start-line="269" selection-start-column="37" selection-end-line="269" selection-end-column="49" />
               <folding>
                 <element signature="e#732#742#0" expanded="true" />
                 <element signature="e#1222#1751#0" expanded="false" />
                 <element signature="e#5824#6376#0" expanded="false" />
                 <element signature="e#7770#7914#0" expanded="false" />
                 <element signature="e#7956#9034#0" expanded="false" />
-                <element signature="e#9080#10066#0" expanded="false" />
-                <element signature="e#10098#11269#0" expanded="false" />
-                <element signature="e#11296#12533#0" expanded="false" />
-                <element signature="e#12570#19839#0" expanded="false" />
-                <element signature="e#19874#22753#0" expanded="false" />
-                <element signature="e#23778#24296#0" expanded="false" />
-                <element signature="e#24392#24460#0" expanded="false" />
+                <element signature="e#10029#11156#0" expanded="false" />
+                <element signature="e#11183#12332#0" expanded="false" />
+                <element signature="e#12369#19596#0" expanded="false" />
+                <element signature="e#19631#22470#0" expanded="false" />
+                <element signature="e#23495#24013#0" expanded="false" />
+                <element signature="e#24109#24177#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -259,12 +256,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>enemy turn</find>
-      <find>evad &gt; 256</find>
-      <find>potion</find>
-      <find>display</find>
-      <find>buff</find>
-      <find>has fallen to the</find>
       <find>if user.</find>
       <find>.choice</find>
       <find>player_choice</find>
@@ -284,11 +275,17 @@
       <find>town_nearton5</find>
       <find>town_nearton7</find>
       <find>town_nearton8</find>
-      <find>cancel</find>
       <find>y</find>
-      <find>self.status</find>
       <find>towns.search_</find>
       <find>town_southford0</find>
+      <find>self.status</find>
+      <find>cancel</find>
+      <find>Lockpick</find>
+      <find>search_town</find>
+      <find>success</find>
+      <find>search_towns</find>
+      <find>succes</find>
+      <find>towns.search_towns(</find>
     </findStrings>
     <replaceStrings>
       <replace>town_rymn_outpost</replace>
@@ -311,15 +308,15 @@
         <option value="$PROJECT_DIR$/Game Files/text_scroll.py" />
         <option value="$PROJECT_DIR$/Game Files/npcs.py" />
         <option value="$PROJECT_DIR$/Game Files/ascii_art.py" />
-        <option value="$PROJECT_DIR$/Game Files/inv_system.py" />
         <option value="$PROJECT_DIR$/Game Files/sounds.py" />
         <option value="$PROJECT_DIR$/Game Files/magic.py" />
         <option value="$PROJECT_DIR$/Game Files/battle.py" />
         <option value="$PROJECT_DIR$/Game Files/units.py" />
-        <option value="$PROJECT_DIR$/Game Files/PeasantsAscension.py" />
-        <option value="$PROJECT_DIR$/Game Files/towns.py" />
+        <option value="$PROJECT_DIR$/Game Files/inv_system.py" />
         <option value="$PROJECT_DIR$/Game Files/items.py" />
+        <option value="$PROJECT_DIR$/Game Files/PeasantsAscension.py" />
         <option value="$PROJECT_DIR$/Game Files/world.py" />
+        <option value="$PROJECT_DIR$/Game Files/towns.py" />
       </list>
     </option>
   </component>
@@ -686,7 +683,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.117336154" sideWeight="0.50208336" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.8012685" sideWeight="0.49791667" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16067654" sideWeight="0.49791667" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24983433" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296355" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -1009,53 +1006,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/ascii_art.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="771">
-          <caret line="755" column="13" lean-forward="false" selection-start-line="755" selection-start-column="5" selection-end-line="755" selection-end-column="13" />
-          <folding>
-            <element signature="e#896#911#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/text_scroll.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="61" column="31" lean-forward="false" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
-          <folding>
-            <element signature="e#704#715#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/sounds.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1439">
           <caret line="93" column="44" lean-forward="true" selection-start-line="93" selection-start-column="44" selection-end-line="93" selection-end-column="44" />
           <folding>
             <element signature="e#734#744#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/magic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="619" column="62" lean-forward="false" selection-start-line="619" selection-start-column="62" selection-end-line="619" selection-end-column="62" />
-          <folding>
-            <element signature="e#732#742#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="455" column="0" lean-forward="true" selection-start-line="455" selection-start-column="0" selection-end-line="455" selection-end-column="0" />
-          <folding>
-            <element signature="e#732#742#0" expanded="true" />
-            <element signature="e#9361#10304#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1093,28 +1049,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
+    <entry file="file://$PROJECT_DIR$/Game Files/battle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3033">
-          <caret line="908" column="51" lean-forward="true" selection-start-line="908" selection-start-column="51" selection-end-line="908" selection-end-column="51" />
+        <state relative-caret-position="588">
+          <caret line="455" column="0" lean-forward="true" selection-start-line="455" selection-start-column="0" selection-end-line="455" selection-end-column="0" />
           <folding>
-            <element signature="e#730#740#0" expanded="true" />
-            <element signature="e#18576#19704#0" expanded="false" />
-            <element signature="e#19742#21354#0" expanded="false" />
-            <element signature="e#21408#23307#0" expanded="false" />
-            <element signature="e#23333#25287#0" expanded="false" />
-            <element signature="e#25365#26135#0" expanded="false" />
-            <element signature="e#26210#27679#0" expanded="false" />
-            <element signature="e#27711#28126#0" expanded="false" />
-            <element signature="e#31150#31590#0" expanded="false" />
-            <element signature="e#31626#32465#0" expanded="false" />
+            <element signature="e#732#742#0" expanded="true" />
+            <element signature="e#9361#10304#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/magic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="619" column="62" lean-forward="false" selection-start-line="619" selection-start-column="62" selection-end-line="619" selection-end-column="62" />
+          <folding>
+            <element signature="e#732#742#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/ascii_art.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="742">
+          <caret line="755" column="13" lean-forward="false" selection-start-line="755" selection-start-column="5" selection-end-line="755" selection-end-column="13" />
+          <folding>
+            <element signature="e#896#911#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/bosses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="771">
+        <state relative-caret-position="742">
           <caret line="134" column="14" lean-forward="false" selection-start-line="134" selection-start-column="14" selection-end-line="134" selection-end-column="14" />
           <folding>
             <element signature="e#732#742#0" expanded="true" />
@@ -1122,48 +1090,86 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/text_scroll.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="61" column="31" lean-forward="false" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
+          <folding>
+            <element signature="e#704#715#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/items.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="165" column="34" lean-forward="false" selection-start-line="165" selection-start-column="34" selection-end-line="165" selection-end-column="34" />
+        <state relative-caret-position="235">
+          <caret line="269" column="49" lean-forward="false" selection-start-line="269" selection-start-column="37" selection-end-line="269" selection-end-column="49" />
           <folding>
             <element signature="e#732#742#0" expanded="true" />
             <element signature="e#1222#1751#0" expanded="false" />
             <element signature="e#5824#6376#0" expanded="false" />
             <element signature="e#7770#7914#0" expanded="false" />
             <element signature="e#7956#9034#0" expanded="false" />
-            <element signature="e#9080#10066#0" expanded="false" />
-            <element signature="e#10098#11269#0" expanded="false" />
-            <element signature="e#11296#12533#0" expanded="false" />
-            <element signature="e#12570#19839#0" expanded="false" />
-            <element signature="e#19874#22753#0" expanded="false" />
-            <element signature="e#23778#24296#0" expanded="false" />
-            <element signature="e#24392#24460#0" expanded="false" />
+            <element signature="e#10029#11156#0" expanded="false" />
+            <element signature="e#11183#12332#0" expanded="false" />
+            <element signature="e#12369#19596#0" expanded="false" />
+            <element signature="e#19631#22470#0" expanded="false" />
+            <element signature="e#23495#24013#0" expanded="false" />
+            <element signature="e#24109#24177#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/world.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="76" column="18" lean-forward="false" selection-start-line="76" selection-start-column="18" selection-end-line="76" selection-end-column="18" />
+          <folding>
+            <element signature="e#876#886#0" expanded="true" />
+            <element signature="e#18028#20278#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="802" column="45" lean-forward="false" selection-start-line="802" selection-start-column="33" selection-end-line="802" selection-end-column="45" />
+          <folding>
+            <element signature="e#730#740#0" expanded="true" />
+            <element signature="e#18576#19704#0" expanded="false" />
+            <element signature="e#19742#21354#0" expanded="false" />
+            <element signature="e#21408#23307#0" expanded="false" />
+            <element signature="e#23333#25287#0" expanded="false" />
+            <element signature="e#25365#26135#0" expanded="false" />
+            <element signature="e#27623#28038#0" expanded="false" />
+            <element signature="e#31062#31502#0" expanded="false" />
+            <element signature="e#31538#32377#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/PeasantsAscension.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="380" column="33" lean-forward="true" selection-start-line="380" selection-start-column="33" selection-end-line="380" selection-end-column="33" />
+        <state relative-caret-position="135">
+          <caret line="99" column="66" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="690" selection-end-column="0" />
           <folding>
             <element signature="e#2104#2114#0" expanded="true" />
-            <element signature="e#5751#8766#0" expanded="false" />
-            <element signature="e#8798#9409#0" expanded="false" />
-            <element signature="e#9439#10016#0" expanded="false" />
-            <element signature="e#16839#22396#0" expanded="false" />
-            <element signature="e#24251#24914#0" expanded="false" />
-            <element signature="e#24948#25297#0" expanded="false" />
-            <element signature="e#25841#27283#0" expanded="false" />
+            <element signature="e#5749#8764#0" expanded="false" />
+            <element signature="e#8796#9407#0" expanded="false" />
+            <element signature="e#9437#10014#0" expanded="false" />
+            <element signature="e#16837#22394#0" expanded="false" />
+            <element signature="e#24249#24912#0" expanded="false" />
+            <element signature="e#24946#25295#0" expanded="false" />
+            <element signature="e#25839#27281#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/towns.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="1249" column="0" lean-forward="true" selection-start-line="1249" selection-start-column="0" selection-end-line="1249" selection-end-column="0" />
+        <state relative-caret-position="278">
+          <caret line="1211" column="29" lean-forward="true" selection-start-line="1211" selection-start-column="29" selection-end-line="1211" selection-end-column="29" />
           <folding>
             <element signature="e#734#744#0" expanded="true" />
             <element signature="e#1346#21939#0" expanded="false" />
@@ -1178,17 +1184,6 @@
             <element signature="e#26916#29001#0" expanded="false" />
             <element signature="e#29021#32320#0" expanded="false" />
             <element signature="e#32340#35373#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/world.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="150" column="59" lean-forward="true" selection-start-line="150" selection-start-column="59" selection-end-line="150" selection-end-column="59" />
-          <folding>
-            <element signature="e#876#886#0" expanded="true" />
-            <element signature="e#17067#19317#0" expanded="false" />
           </folding>
         </state>
       </provider>

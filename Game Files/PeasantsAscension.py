@@ -112,7 +112,7 @@ do_text_scroll = False
 
 # A dictionary containing generic information about the player's party
 party_info = {'reg': 'Central Forest', 'reg_music': 'Music/Through the Forest.ogg',
-              'prev_town': '', 'is_aethus': False, 'gp': 20, 'visited_towns': [], 'current_tile': world.in_for_cen}
+              'prev_town': '', 'is_aethus': False, 'gp': 20, 'visited_towns': [], 'current_tile': world.in_for_c}
 
 # The version number the game is currently updated to
 game_version = 'v1.0.0 Beta'
