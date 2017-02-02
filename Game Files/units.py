@@ -900,15 +900,7 @@ class Monster(Unit):
 
     def monst_level(self): # THIS NEEDS REWORKING!!
 
-        self.lvl = int((1/2.5)*abs(main.party_info['avg'] - 1)) + 1
-
-        # Prevent the monster's level from being below one
-        if self.lvl < 1:
-            self.lvl = 1
-
-        # Monsters in the Aethus are 15 levels higher than monsters below
-        if main.party_info['reg'] == 'Aethus':
-            self.lvl += 15
+        self.lvl = main.party_info['current_tile'].m_level
 
         for x in range(1, self.lvl):
             self.hp += 5

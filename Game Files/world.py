@@ -76,32 +76,32 @@ of monsters. There are trees in all directions as far as the eye can see, each
 towering over a hundred feet tall. The ground is scattered with the occasional rock
 and a plentiful supply of leaves twigs. In other words, it's your standard forest."""
 
-in_for_n = Tile("Inner Central Forest N", "I-CF-N", "Central Forest", icf_desc, 1,
+in_for_n = Tile("Inner Central Forest", "I-CF-N", "Central Forest", icf_desc, 1,
                 to_s="I-CF-C",
                 to_e="Nearton",
-                to_w="I-CF-SW")
-in_for_s = Tile("Inner Central Forest S", "I-CF-S", "Central Forest", icf_desc, 1,
+                to_w="I-CF-NW")
+in_for_s = Tile("Inner Central Forest", "I-CF-S", "Central Forest", icf_desc, 1,
                 to_n="I-CF-C",
                 to_w="Southford",
                 to_e="I-CF-SE")
-in_for_e = Tile("Inner Central Forest E", "I-CF-E", "Central Forest", icf_desc, 1,
+in_for_e = Tile("Inner Central Forest", "I-CF-E", "Central Forest", icf_desc, 1,
                 to_n="Nearton",
                 to_w="I-CF-C",
                 to_s="I-CF-SE")
-in_for_w = Tile("Inner Central Forest W", "I-CF-W", "Central Forest", icf_desc, 1,
+in_for_w = Tile("Inner Central Forest", "I-CF-W", "Central Forest", icf_desc, 1,
                 to_s="Southford",
                 to_e="I-CF-C",
                 to_n="I-CF-NW")
-in_for_c = Tile("Inner Central Forest C", "I-CF-C", "Central Forest", icf_desc, 1,
+in_for_c = Tile("Inner Central Forest", "I-CF-C", "Central Forest", icf_desc, 1,
                 to_n="I-CF-N",
                 to_w="I-CF-W",
                 to_e="I-CF-E",
                 to_s="I-CF-S")
 
-in_for_nw = Tile("Inner Central Forest NW", "I-CF-NW", "Central Forest", icf_desc, 2,
+in_for_nw = Tile("Inner Central Forest", "I-CF-NW", "Central Forest", icf_desc, 2,
                  to_s="I-CF-W",
                  to_e="I-CF-N")
-in_for_se = Tile("Inner Central Forest SE", "I-CF-SE", "Central Forest", icf_desc, 2,
+in_for_se = Tile("Inner Central Forest", "I-CF-SE", "Central Forest", icf_desc, 2,
                  to_w="I-CF-S",
                  to_n="I-CF-E")
 
@@ -127,36 +127,50 @@ def movement_system():
     pygame.mixer.music.set_volume(main.music_vol)
 
     while True:
-        tile = main.party_info['current_tile']
         available_dirs = []
+        coord_change = []
 
+        mpi = main.party_info
+        tile = mpi['current_tile']
+
+        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
+        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
+        coord_z = f"{mpi['z'] if mpi['z'] != 0 else ''}'{'UP' if mpi['z'] > 0 else 'DOWN' if mpi['z'] < 0 else ''}"
+        coordinates = ''.join([coord_y, coord_x, coord_z])
         towns.search_towns()
 
-        print(f"Current Location: [{tile.name}] | Region: [{tile.region}]")
+        print(f"  -CURRENT LOCATION-")
+        print(f"Coordinates: {coordinates} Region: [{tile.region}] | Subregion [{tile.name}]")
         for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
-            if drc == tile.to_n:
-                print("          To the [N]orth", end='')
-                available_dirs.append(['n', drc])
-
-            if drc == tile.to_s:
-                print("          To the [S]outh", end='')
-                available_dirs.append(['s', drc])
-
             if drc == tile.to_e:
                 print("          To the [E]ast", end='')
                 available_dirs.append(['e', drc])
+                coord_change = ['x', 1]
 
             if drc == tile.to_w:
                 print("          To the [W]est", end='')
                 available_dirs.append(['w', drc])
+                coord_change = ['x', -1]
+
+            if drc == tile.to_n:
+                print("          To the [N]orth", end='')
+                available_dirs.append(['n', drc])
+                coord_change = ['y', 1]
+
+            if drc == tile.to_s:
+                print("          To the [S]outh", end='')
+                available_dirs.append(['s', drc])
+                coord_change = ['y', -1]
 
             if drc == tile.to_up:
                 print("                 [U]pwards, above your party,", end='')
                 available_dirs.append(['u', drc])
+                coord_change = ['z', 1]
 
             if drc == tile.to_dn:
                 print("                 [D]ownwards, below your party,", end='')
                 available_dirs.append(['d', drc])
+                coord_change = ['z', -1]
 
             for t in all_tiles:
                 if t.tile_id == drc:
@@ -173,7 +187,25 @@ def movement_system():
                 sounds.foot_steps.play()
                 main.party_info['current_tile'] = [b for b in all_tiles if b.tile_id in
                                                    [a[1] for a in available_dirs if a[0] == direction]][0]
-                print('-'*25)
+
+                for drc in [a[0] for a in available_dirs]:
+                    if drc == direction == 'e':
+                        coord_change = ['x', 1]
+                    elif drc == direction == 'w':
+                        coord_change = ['x', -1]
+                    elif drc == direction == 'n':
+                        coord_change = ['y', 1]
+                    elif drc == direction == 's':
+                        coord_change = ['y', -1]
+                    elif drc == direction == 'u':
+                        coord_change = ['z', 1]
+                    elif drc == direction == 'd':
+                        coord_change = ['z', -1]
+
+                main.party_info[coord_change[0]] += 1*coord_change[1]
+
+                if not towns.search_towns(enter=False):
+                    print('-'*25)
 
                 break
 
