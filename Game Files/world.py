@@ -51,7 +51,7 @@ else:
 
 class Tile:
     def __init__(self, name, tile_id, region, desc, m_level, to_n=None, to_s=None, to_e=None, to_w=None, to_up=None,
-                 to_dn=None, town_list=(), visited=False, enterable=True, level_req=1):
+                 to_dn=None, town_list=(), enterable=True, level_req=1):
 
         self.name = name
         self.tile_id = tile_id
@@ -64,7 +64,6 @@ class Tile:
         self.to_w = to_w
         self.to_up = to_up
         self.to_dn = to_dn
-        self.visited = visited
         self.enterable = enterable
         self.town_list = town_list
         self.level_req = level_req
@@ -135,12 +134,12 @@ def movement_system():
 
         coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
         coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
-        coord_z = f"{mpi['z'] if mpi['z'] != 0 else ''}'{'UP' if mpi['z'] > 0 else 'DOWN' if mpi['z'] < 0 else ''}"
+        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
         coordinates = ''.join([coord_y, coord_x, coord_z])
         towns.search_towns()
 
         print(f"  -CURRENT LOCATION-")
-        print(f"Coordinates: {coordinates} Region: [{tile.region}] | Subregion [{tile.name}]")
+        print(f"Coordinates: {coordinates} | Region: [{tile.region}] | Subregion [{tile.name}]")
         for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
             if drc == tile.to_e:
                 print("          To the [E]ast", end='')

@@ -150,7 +150,7 @@ def set_adventure_name():
         if not ''.join(choice.split()):
             continue
 
-        temp_name = re.sub('[^\w\-_ ]', '', choice)
+        temp_name = re.sub('[^\w\-_! ]', '', choice)
 
         for x, y in enumerate(temp_name):
             try:
@@ -294,6 +294,7 @@ def check_save():  # Check for save files and load the game if they're found
                 with open('/'.join(['Save Files', directory, "menu_info.txt"]),
                           encoding='utf-8') as f:
                     menu_info[directory] = f.read()
+
             except FileNotFoundError:
                 menu_info[directory] = "Unable to load preview info"
 
@@ -359,12 +360,17 @@ def check_save():  # Check for save files and load the game if they're found
             # Attempt to open the save files and translate
             # them into objects/dictionaries
             try:
-
                 with open(sav_def_bosses, encoding='utf-8') as f:
                     bosses.defeated_bosses = list(json.load(f))
 
                 with open(sav_party_info, encoding='utf-8') as f:
                     party_info = json.load(f)
+
+                for key in party_info:
+                    if key in ['current_tile', 'prev_town'] and party_info[key]:
+                        for tile in world.all_tiles:
+                            if party_info[key] == tile.tile_id:
+                                party_info[key] = tile
 
                 # Call functions to serialize more advanced things
                 items.deserialize_gems(sav_acquired_gems)
@@ -373,8 +379,7 @@ def check_save():  # Check for save files and load the game if they're found
                 bosses.deserialize_bosses(sav_misc_boss_info)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
-                units.deserialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme,
-                                         sav_ran_af, sav_parsto)
+                units.deserialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
                 print('Load successful.')
 
@@ -413,8 +418,20 @@ def save_game():
                 with open(sav_def_bosses, mode='w', encoding='utf-8') as f:
                     json.dump(bosses.defeated_bosses, f, indent=4, separators=(', ', ': '))
 
+                json_party_info = {}
+                for key in party_info:
+                    if key in ['current_tile', 'prev_town']:
+                        if isinstance(party_info[key], world.Tile):
+                            json_party_info[key] = party_info[key].tile_id
+
+                        else:
+                            json_party_info[key] = party_info[key]
+
+                    else:
+                        json_party_info[key] = party_info[key]
+
                 with open(sav_party_info, mode='w', encoding='utf-8') as f:
-                    json.dump(party_info, f, indent=4, separators=(', ', ': '))
+                    json.dump(json_party_info, f, indent=4, separators=(', ', ': '))
 
                 items.serialize_gems(sav_acquired_gems)
                 inv_system.serialize_equip(sav_equip_items)

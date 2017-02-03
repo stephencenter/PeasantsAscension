@@ -50,12 +50,9 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, x, y, houses, inn_cost=0, gs_level=1, wtrmelon_store=False):
+    def __init__(self, name, desc, people, houses, inn_cost=0, gs_level=1, wtrmelon_store=False):
         self.name = name  # The town's name (i.e. New York City)
         self.desc = desc  # A brief description of the town
-
-        self.x = x  # X-coordinate on map
-        self.y = y  # Y-coordinate on map
 
         self.inn_cost = inn_cost  # How much money it costs to sleep at the inn
         self.gs_level = gs_level  # The higher this value is, the better the items the store will sell
@@ -168,18 +165,14 @@ class Town:
 
                 break
 
-    def new_location(self, add=True):  # Translate the location of newly-found towns
-        if self.y >= 0:                # into a string, then add to inventory.
-            foo = "\u00b0N"
-        else:
-            foo = "\u00b0S"
+    def new_location(self, add=True):  # Translate the location of newly-found towns into a string
+        mpi = main.party_info
 
-        if self.x >= 0:
-            bar = "\u00b0E"
-        else:
-            bar = "\u00b0W"
+        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
+        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
+        coord_z = f"{mpi['z'] if mpi['z'] != 0 else ''}'{'UP' if mpi['z'] > 0 else 'DOWN' if mpi['z'] < 0 else ''}"
 
-        spam = ''.join([self.name, ': ', str(self.y), foo, ', ', str(self.x), bar])
+        spam = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
         if add:
             if spam not in inv_system.inventory['coord']:
                 inv_system.inventory['coord'].append(spam)
@@ -756,10 +749,8 @@ you notice a zipline-like structure that would be much easier and faster to use.
 
 
 class Tavern:
-    def __init__(self, name, x, y, cost):
+    def __init__(self, name, cost):
         self.name = name
-        self.x = x
-        self.y = y
         self.cost = cost
 
     def new_location(self):
@@ -997,13 +988,13 @@ It is in this very town where numerous brave adventurers have begun their
 journey. Nearton is just your standard run-of-the-mill village: it has a
 general store, an inn, and a few small houses. An old man  is standing
 near one of the houses, and appears to be very troubled about something.""",
-             [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou], 0, 1,
+             [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou],
              [nearton_h1, nearton_h2])
 
 town_southford = Town('Southford', """Southford: A fair-size town in the central-southern region of the Forest.
 The inhabitants of this town are known for being quite wise, and may
 provide you with helpful advice.""",
-             [npcs.wesley, npcs.lazaro], -2, -6, [], inn_cost=2)
+                      [npcs.wesley, npcs.lazaro], [], inn_cost=2)
 
 town_overshire = Town('Overshire', """Overshire: A city in the northwestern region of the Forest.
 Overshire is the capital of Harconia, and as such is very densely populated.
@@ -1013,47 +1004,47 @@ outer portion comprised of smalls buildings and huts, and a middle-class
 section situated in between. As an outsider, you are forbidden to enter the
 upper two, but are welcome to do as you wish in the lower.""",
              [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
-             -11, 13, [], inn_cost=5, gs_level=2)
+             [], inn_cost=5, gs_level=2)
 
 town_charsulville = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.typhen],
-             19, -7, [], inn_cost=2, gs_level=2)
+             [], inn_cost=2, gs_level=2)
 
 town_fort_sigil = Town('Fort Sigil', """Fort Sigil: A small village in the northern region
 of the Forest. The citizens of this town have worked tremendously hard to
 convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
 visitors. Perhaps there's a reason...""",
-             [npcs.seriph, npcs.rivesh], 2, 22, [], gs_level=3)
+             [npcs.seriph, npcs.rivesh], [], gs_level=3)
 
 town_tripton = Town('Tripton', """Tripton: When the town of Tripton was being built,
 the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
 two towns, particularly between the village leaders.""",
-             [npcs.kyle], -10, -24, [], inn_cost=3, gs_level=3)
+             [npcs.kyle], [], inn_cost=3, gs_level=3)
 
 town_fallville = Town('Fallville', """Fallville: When the town of Tripton was being built,
 the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
 two towns, particularly between the village leaders.""",
-             [npcs.krystin, npcs.frederick], -12, -23, [], gs_level=2)
+             [npcs.krystin, npcs.frederick], [], gs_level=2)
 
 town_parceon = Town('Parceon', """Parceon: A highly populated town renown for it's rich
 magical background. Parceon is home to the famous Sorcerers' Guild,
 a group of unbelievably skilled and wise mages. The head of the guild,
 Azura, lives in a large tower in the southwest side of the town.""",
-             [npcs.azura], 28, 24, [], gs_level=3)
+             [npcs.azura], [], gs_level=3)
 
 town_sardooth = Town('Sardooth', """Sardooth: A ghost town. There has not been a single
 permanent inhabitant of this town for more than 75 years. It is completely
 run down, with most of the buildings having been destroyed in the Harconian
 Revolution. While this town may seem interesting and historic, there is nothing
 of value here.""",
-             [], -25, 29, [])
+             [], [])
 
 town_principalia = Town('Principalia', """Principalia: Principalia is the home of
 King Harconius II. The main attraction here is the Pytheror Building, a
@@ -1067,7 +1058,7 @@ and the cottage is surrounded by a ring of 12 archer towers, each with
 100 yards from the cottage. In addition, there are numerous guards
 standing watch all around the building. One guard happens to catch
 your attention - probably because she just screamed "HALT!" at you.""",
-              [npcs.sakura], -44, 20, [])
+              [npcs.sakura], [])
 
 town_new_ekanmar = Town('New Ekanmar', """New Ekanmar: The home of the Flyscorian Embassy in
 Harconia. Prior to the Harconian Revolution, this town was the location of
@@ -1076,7 +1067,7 @@ them out, but a large number of them defected to the Harconian side and stayed.
 After the war, the citizens gave up their weapons and became a peaceful town.
 The vast majority of the inhabitants of this town are, naturally, Flyscors.
 It seems that the Flyscorian Royal Family is visiting here - perhaps you can
-talk with them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], 3, 39, [], gs_level=3)
+talk with them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], [], gs_level=3)
 
 town_ravenstone = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
 home to dozens upon dozens of different flora and fauna. Naturally,
@@ -1086,7 +1077,7 @@ section of the Sorcerers' Guild. Vegetation grows on almost
 every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""",
-              [npcs.strathius], -30, -39, [], gs_level=3)
+              [npcs.strathius], [], gs_level=3)
 
 town_ambercreek = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
 located in the Terrius Mt. Range. The Chin'toric embassy can be found
@@ -1094,7 +1085,7 @@ in the middle of this town surrounded by large stone walls and a few
 guard-towers. Sugulat, the King of Chin'tor, can often be found mining
 on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
-              [npcs.raidon, npcs.sugulat], -51, 7, [], gs_level=4, inn_cost=15)
+              [npcs.raidon, npcs.sugulat], [], gs_level=4, inn_cost=15)
 
 town_whistumn = Town('Whistumn', """Whistumn: An ancient city situated on the border
 between the Arcadian Desert and the Central Forest. The inhabitants of this town
@@ -1103,7 +1094,7 @@ skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
 on the steps of the general store.""",
-              [npcs.polmor, npcs.serena], 52, 12, [], gs_level=4, inn_cost=13)
+              [npcs.polmor, npcs.serena], [], gs_level=4, inn_cost=13)
 
 town_hatchnuk = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Harconia
 that still has cases of "Hatchnuk's Blight", a plague-like disease that
@@ -1115,7 +1106,7 @@ is far too great for people to be walking out in the open doing business togethe
 As a result, there are no buildings that you are able to enter, and no people to talk
 to. The only people who are around to speak to are the guards, but their plague-doctor-esque
 apparel and stern looks make it clear that they are not in the mood for chit-chat.""",
-              [], 63, 17, [])
+              [], [])
 
 town_cesura = Town("Cesura", """Cesura: A town of great historical significance.
 This town was named after King Cesura I, the war general during the Harconian Civil War
@@ -1128,7 +1119,7 @@ station. Construction of the town of Cesura was outsourced to Elysium, who is
 the most technologically advanced civilization on the planet by far, having
 developed and perfected the Steam Engine and later the Train before the year
 1300 A.D.""",
-              [npcs.bamdeliit], 58, 123, [], wtrmelon_store=True)
+              [npcs.bamdeliit], [], wtrmelon_store=True)
 
 town_sanguion = Town("Sanguion", """Sanguion: Sanguion is a save-haven for vampires. Vampires
 are feared throughout Harconia, so this fairly unknown town is the only place they
@@ -1137,7 +1128,7 @@ actually refuse to drink the blood of intelligent lifeforms. As a matter of fact
 non-vampires who are afraid of vampires are actually more of a threat to civilization
 than the actual vampires are! They look very friendly, although a few of them do look
 quite scared for some reason. Perhaps you should investigate.""",
-              [npcs.pime, npcs.ariver], -96, -67, [], gs_level=5, inn_cost=18)
+              [npcs.pime, npcs.ariver], [], gs_level=5, inn_cost=18)
 
 town_lantonum = Town("Lamtonum", """Lantonum: Lantonum is a small town that has the best
 forge in all of Arcadia. Nearly 2/3s of all citizens of this town are
@@ -1145,24 +1136,24 @@ experienced blacksmiths, and 90% of all ores and minerals mined
 in Chin'tor or Ambercreek are brought here. It is one of the wealthiest
 cities in all of the desert region due to its Mythril, Magestite, and
 Necrite bar exports.""",
-              [npcs.matthew], 72, 69, [], gs_level=4)
+              [npcs.matthew], [], gs_level=4)
 
 town_capwild = Town("Capwild", """Capwild: Capwild is a medium sized town situated in the
 Terrius Mt. Range. Capwild is a supplier of grains and herbs for the entire region,
 and makes extensive use of terrace farming to make up for the lack of arable land.""",
-              [], -76, 56, [], gs_level=5, inn_cost=15)
+              [], [], gs_level=5, inn_cost=15)
 
 town_rymn_outpost = Town("Rymn Outpost", """Rymn Outpost: Rymn Outpost is one of the several
 small villages established after the Thexian Incursion. All of the residents of this town
 are soldiers or family members of soldiers, with the exception a few merchants. Rymn Outpost
 is named after Rymnes, the Divinic gods of defense.""",
-              [], 47, -99, [], gs_level=5, inn_cost=17)
+              [], [], gs_level=5, inn_cost=17)
 
 cottage1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his
 flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""",
-                [npcs.alden], -12, -26, [], gs_level=-1, inn_cost=-1)
+                [npcs.alden], [], gs_level=-1, inn_cost=-1)
 
 # AETHUS TOWNS
 a_town_valenfall = Town("Valenfall", """Not much is known about the ancient city of Valenfall.
@@ -1170,21 +1161,21 @@ It's inhabitants claim that it was lifted up from the mainland several millenia 
 by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
 all of the surrounding land of Aethus around it. Valenfall is deeply intertwined with
 nature, and monuments depicting the nature deities can be seen on every corner.
-""", [npcs.fitzgerald], 5, 12, [], inn_cost=2, gs_level=4)
+""", [npcs.fitzgerald], [], inn_cost=2, gs_level=4)
 
 # OVERWORLD TAVERNS
-tavern1 = Tavern("The Traveling Merchant Inn", 5, 7, 0)
-tavern2 = Tavern("The Drunken Moon Tavern ", -51, 43, 5)
-tavern3 = Tavern("The Wandering Falcon Inn", 51, 23, 5)
-tavern4 = Tavern("The Dancing Knight Tavern", 51, -28, 5)
-tavern5 = Tavern("The Golden Watchman Tavern", -51, -32, 5)
-tavern6 = Tavern("The Smiling Rapier Inn", -40, 2, 5)
-tavern7 = Tavern("The Howling Warrior Inn", -87, -80, 10)
-tavern8 = Tavern("The Vanishing Skull Inn", 65, 76, 10)
-tavern9 = Tavern("The Brave Foal Tavern", -59, 84, 10)
-tavern10 = Tavern("The Cowardly Dagger Inn", 85, 62, 10)
-tavern11 = Tavern("The Thirsty Wizard Tavern", 7, -117, 15)
-tavern12 = Tavern("The Painted Bard Inn", -118, 5, 15)
+tavern1 = Tavern("The Traveling Merchant Inn", 0)
+tavern2 = Tavern("The Drunken Moon Tavern ", 5)
+tavern3 = Tavern("The Wandering Falcon Inn", 5)
+tavern4 = Tavern("The Dancing Knight Tavern", 5)
+tavern5 = Tavern("The Golden Watchman Tavern", 5)
+tavern6 = Tavern("The Smiling Rapier Inn", 5)
+tavern7 = Tavern("The Howling Warrior Inn", 10)
+tavern8 = Tavern("The Vanishing Skull Inn", 10)
+tavern9 = Tavern("The Brave Foal Tavern", 10)
+tavern10 = Tavern("The Cowardly Dagger Inn", 10)
+tavern11 = Tavern("The Thirsty Wizard Tavern", 15)
+tavern12 = Tavern("The Painted Bard Inn", 15)
 
 town_list = [town_nearton, town_southford, town_overshire, town_charsulville, town_fort_sigil, town_tripton,
              town_fallville, town_parceon, town_sardooth, town_principalia, town_new_ekanmar, town_ravenstone,
@@ -1228,8 +1219,7 @@ def search_towns(enter=True):
                         pygame.mixer.music.play(-1)
                         pygame.mixer.music.set_volume(main.music_vol)
 
-                        main.party_info['prev_town'][0] = town.x
-                        main.party_info['prev_town'][1] = town.y
+                        main.party_info['prev_town'] = main.party_info['current_tile']
 
                         town.new_location()
                         town.town_choice()
@@ -1260,8 +1250,7 @@ def search_towns(enter=True):
                             pygame.mixer.music.play(-1)
                             pygame.mixer.music.set_volume(main.music_vol)
 
-                            main.party_info['prev_town'][0] = tavern.x
-                            main.party_info['prev_town'][1] = tavern.y
+                            main.party_info['prev_town'] = main.party_info['current_tile']
 
                             tavern.town_choice()
 
