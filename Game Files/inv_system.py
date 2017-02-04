@@ -553,12 +553,14 @@ def manage_equipped():
 
         manage_equipped_2(target)
 
+        if len(target_options) == 1:
+            return
+
 
 def manage_equipped_2(target):
     while True:
         p_equip = equipped[target.name if target != units.player else 'player']
 
-        print('-' * 25)
         print(f"""{target.name}'s Equipped Items:
       [1] Weapon ----> {p_equip['weapon']}
       [2] Head ------> {p_equip['head']}
@@ -572,7 +574,6 @@ def manage_equipped_2(target):
 
             if selected in ['e', 'x', 'exit', 'b', 'back']:
                 print('-' * 25)
-
                 return
 
             elif selected == '1':
@@ -610,8 +611,10 @@ def manage_equipped_2(target):
                 key = selected.part
 
             print('-' * 25)
-
             manage_equipped_3(key, selected, p_equip)
+            print('-' * 25)
+
+            break
 
 
 def manage_equipped_3(key, selected, p_equip):
@@ -623,7 +626,7 @@ def manage_equipped_3(key, selected, p_equip):
       [2] Read Description""")
 
         while True:
-            action = input('Input [#] (or type "back"')
+            action = input('Input [#] (or type "back"): ')
 
             if action == '1':
                 if selected.name == 'Fists':
@@ -658,7 +661,7 @@ def manage_equipped_3(key, selected, p_equip):
                     inventory[selected.cat].append(p_equip[key])
                     p_equip[key] = '(None)'
 
-                break
+                return
 
             elif action == '2':
                 print('-' * 25)

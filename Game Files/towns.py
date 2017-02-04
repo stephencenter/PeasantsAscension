@@ -487,7 +487,7 @@ class Town:
                                     print('-'*25)
 
                                 else:
-                                    print(f'"Hey, you don\'t even have enough GP for this{i}!"')
+                                    print(f'"Hey, you don\'t even have enough GP for this {i}!"')
                                     input("\nPress enter/return ")
 
                                 break
