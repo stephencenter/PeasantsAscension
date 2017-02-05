@@ -326,8 +326,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     # If you die, you return to the last town visited or 0'N, 0'E
                     # if you haven't been to a town yet.
 
-                    main.party_info['x'] = main.party_info['prev_town'][0]
-                    main.party_info['y'] = main.party_info['prev_town'][1]
+                    main.party_info['current_tile'] = main.party_info['prev_town']
 
                     for character in [units.player,
                                       units.solou,

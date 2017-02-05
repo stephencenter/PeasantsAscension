@@ -51,7 +51,7 @@ else:
 
 class Tile:
     def __init__(self, name, tile_id, region, desc, m_level, to_n=None, to_s=None, to_e=None, to_w=None, to_up=None,
-                 to_dn=None, town_list=(), enterable=True, level_req=1):
+                 to_dn=None, town_list=(), boss_list=(), gem_list=(), enterable=True, level_req=1):
 
         self.name = name
         self.tile_id = tile_id
@@ -66,6 +66,8 @@ class Tile:
         self.to_dn = to_dn
         self.enterable = enterable
         self.town_list = town_list
+        self.boss_list = boss_list
+        self.gem_list = gem_list
         self.level_req = level_req
 
 # -- INNER CENTRAL FOREST -- #
@@ -396,8 +398,20 @@ ____     ____
 
                 main.party_info[coord_change[0]] += 1*coord_change[1]
 
-                if not towns.search_towns(enter=False):
-                    print('-'*25)
+                if not any([check_region(), bosses.check_bosses(), towns.search_towns(enter=False)]):
+                    # If none of the previous statements return True, then a battle can occur.
+                    # There is a 1 in 7 chance for a battle to occur (14.285714...%)
+                    is_battle = not random.randint(0, 6)
+
+                    if is_battle:
+                        print('-'*25)
+                        units.spawn_monster()
+
+                        units.player.hp = 1
+                        battle.battle_system()
+
+                    else:
+                        print()
 
                 break
 
@@ -520,223 +534,25 @@ ____     ____
                     print('-'*25)
 
 
-# def OLD_movement_system():
-#     # Adjust the player's x/y coordinates based on inputted direction.
-#
-#     pygame.mixer.music.load(main.party_info['reg_music'])
-#     pygame.mixer.music.play(-1)
-#     pygame.mixer.music.set_volume(main.music_vol)
-#
-#     while True:
-#         towns.search_towns(main.party_info['x'], main.party_info['y'])
-#
-#         if main.party_info['x'] >= 0:
-#             main.party_info['h'] = "\u00b0E"
-#         else:
-#             main.party_info['h'] = "\u00b0W"
-#
-#         if main.party_info['y'] >= 0:
-#             main.party_info['v'] = "\u00b0N"
-#         else:
-#             main.party_info['v'] = "\u00b0S"
-#
-#         print('Current Location: <{0}{1}, {2}{3}> in the <{4}>'.format(
-#                 main.party_info['y'], main.party_info['v'],
-#                 main.party_info['x'], main.party_info['h'],
-#                 main.party_info['reg']))
-#
-#         while True:
-#             direction = input('Input Direction ([N], [S], [E], [W]) or [P]layer, [T]ools, [L]ook, [R]est: ')
-#             direction = direction.lower()
-#
-#             if any(map(direction.startswith, ['n', 's', 'w', 'e'])):
-#                 sounds.foot_steps.play()
-#
-#                 # The in-game map is square to simplify things. The real map of the country is a lot different.
-#                 if direction.startswith('n'):
-#
-#                     if main.party_info['y'] < 125 if not main.party_info['is_aethus'] else 50:
-#                         main.party_info['y'] += 1
-#
-#                     else:
-#                         print('-'*25)
-#
-#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-#                             print("""\
-# Continuing to walk in that direction would cause you to fall to your death.
-# It's probably in your best interests that you not do that.
-# -------------------------""")
-#
-#                             continue
-#
-#                         if main.party_info['x'] <= 42:
-#                             print('Off in the distance, you see what appears to be a large')
-#                             print('island. According to your map, this island is known as')
-#                             print('Durcuba. You probably shouldn\'t go there.')
-#
-#                         else:
-#                             print('You come across the border between Hillsbrad and Harconia.')
-#                             print('Despite your pleading, the border guards will not let you \
-# pass.')
-#
-#                         print('-'*25)
-#
-#                         continue
-#
-#                 elif direction.startswith('s'):
-#                     if main.party_info['y'] > -125 if not main.party_info['is_aethus'] else -50:
-#                         main.party_info['y'] -= 1
-#
-#                     else:
-#                         print('-'*25)
-#
-#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-#                             print("""\
-# Continuing to walk in that direction would cause you to fall to your death.
-# It's probably in your best interests that you not do that.
-# -------------------------""")
-#
-#                             continue
-#
-#                         if main.party_info['x'] <= 42:
-#                             print('You see a large island off in the distance. According to')
-#                             print('your map, this island appears to be Thex! Unfortunately,')
-#                             print("you don't have any way to cross the sea.")
-#
-#                         else:
-#                             print('You come across the border between Maranon and Harconia.')
-#                             print('Despite your pleading, the border guards will not let you \
-# pass.')
-#                         print('-'*25)
-#
-#                         continue
-#
-#                 elif direction.startswith('w'):
-#                     if main.party_info['x'] > -125 if not main.party_info['is_aethus'] else -50:
-#                         main.party_info['x'] -= 1
-#
-#                     else:
-#                         print('-'*25)
-#
-#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-#                             print("""Continuing to walk in that direction would cause you to fall to your death.
-# It's probably in your best interests that you not do that.
-# -------------------------""")
-#
-#                             continue
-#
-#                         print('Ahead of you is a seemingly endless ocean. You cannot continue in this direction.')
-#                         print('-'*25)
-#
-#                         continue
-#
-#                 elif direction.startswith('e'):
-#                     if main.party_info['x'] < 125 if not main.party_info['is_aethus'] else 50:
-#                         main.party_info['x'] += 1
-#
-#                     else:
-#                         print('-'*25)
-#
-#                         if main.party_info['is_aethus']:  # Aethus is a floating island in the sky
-#                             print("""Continuing to walk in that direction would cause you to fall to your death.
-# It's probably in your best interests that you not do that.
-# -------------------------""")
-#
-#                             continue
-#
-#                         if main.party_info['y'] >= 42:
-#                             nation = 'Hillsbrad'
-#
-#                         elif main.party_info['y'] <= -42:
-#                             nation = 'Maranon'
-#
-#                         else:
-#                             nation = 'Elysium'
-#
-#                         print('You come across the border between {0} and Harconia.'.format(
-#                             nation))
-#                         print('Despite your pleading, the border guards will not let you pass.')
-#                         print('-'*25)
-#
-#                         continue
-#
-#                 main.party_info['avg'] = int(((abs(main.party_info['x'])) + (abs(main.party_info['y'])))/2)
-#
-#                 if not any([check_region(),
-#                            bosses.check_bosses(main.party_info['x'], main.party_info['y']),
-#                            towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False)]
-#                            ):
-#
-#                     # If none of the previous statements return True, then a battle can occur.
-#                     # There is a 1 in 7 chance for a battle to occur (14.285714...%)
-#                     is_battle = not random.randint(0, 6)
-#
-#                     if is_battle:
-#                         print('-'*25)
-#                         units.spawn_monster()
-#                         battle.battle_system()
-#
-#                     else:
-#                         print()
-#
-#                 break
-
-
 def check_region():
     # Check the coordinates of the player and change the region to match.
-    x, y = main.party_info['x'], main.party_info['y']
+    new_region = main.party_info['current_tile'].region
 
-    if main.party_info['is_aethus']:
-        region = 'Aethus'
-        reg_music = 'Music/Island of Peace.ogg'
-
-    else:
-        if x in range(-15, -9) and y in range(5, 11):  # Micro-region in the Forest
-            region = 'Overshire Graveyard'
-            reg_music = 'Music/Frontier.ogg'
-
-        elif x in range(-50, 51) and y in range(-50, 51):  # Center of World
-            region = 'Central Forest'
-            reg_music = 'Music/Through the Forest.ogg'
-
-        elif x in range(-115, 1) and y in range(0, 116):  # Northwest of World
-            region = 'Terrius Mt. Range'
-            reg_music = 'Music/Mountain.ogg'
-
-        elif x in range(-115, 0) and y in range(-115, 1):  # Southwest of World
-            region = 'Glacian Plains'
-            reg_music = 'Music/Arpanauts.ogg'
-
-        elif x in range(0, 126) and y in range(0, 126):  # Northeast of world
-            region = 'Arcadian Desert'
-            reg_music = 'Music/Come and Find Me.ogg'
-
-        elif x in range(0, 126) and y in range(-115, 1):  # Southeast of World
-            region = 'Bogthorn Marsh'
-            reg_music = 'Music/Digital Native.ogg'
-
-        elif -1*abs(x) in range(-125, -115) or -1*abs(y) in range(-126, -115):  # Edges of World
-            region = 'Harconian Coastline'
-            reg_music = "Music/We're all under the stars.ogg"
-
-    if main.party_info['reg'] != region:
+    if main.party_info['reg'] != new_region:
         print('-'*25)
-        print(ascii_art.locations[region])
-        print('You have left the {0} and are now entering the {1}.'.format(
-            main.party_info['reg'], region))
+        print(ascii_art.locations[new_region])
+        print(f"You have left the {main.party_info['reg']} and are now entering the {new_region}.")
 
-        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
-            print('-'*25)
-
-        main.party_info['reg'] = region
+        main.party_info['reg'] = new_region
         main.party_info['reg_music'] = reg_music
-        main.party_info['prev_town'][0] = main.party_info['x']
-        main.party_info['prev_town'][1] = main.party_info['y']
 
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
+
+        if not towns.search_towns(enter=False):
+            print('-'*25)
 
         return True
 
@@ -758,7 +574,7 @@ def rest():
             units.adorine.hp == units.adorine.max_hp and units.adorine.mp == units.adorine.max_mp]):
 
         print('Your party feels fine and decides not to rest.')
-        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+        if not towns.search_towns(enter=False):
             print('-'*25)
 
         return
@@ -800,5 +616,5 @@ def rest():
             units.adorine.status_ail = 'none'
 
         print('You rested well and decide to continue on your way.')
-        if not towns.search_towns(main.party_info['x'], main.party_info['y'], enter=False):
+        if not towns.search_towns(enter=False):
             print('-'*25)

@@ -277,7 +277,7 @@ class MagicCompass(Item):
         print('-'*25)
         print(f'The closest town to your party is {distance[0]} at ~{distance[1]} degrees away.')
 
-        if not search_towns(enter=False):
+        if not towns.search_towns(enter=False):
             print('-'*25)
 
 
@@ -345,194 +345,6 @@ class Shovel(Item):
         print('Your party was unable to uncover anything.')
         if not search_towns(enter=False):
             print('-'*25)
-
-
-class InsaneSpeedBoots(Item):
-    def __init__(self, name, desc, buy, sell, cat='tools', imp=False, ascart='Boots'):
-        # This item is the most expensive purchasable object in the game.
-        # It allows immediate travelling to any location on the map.
-        # It's basically an insanely OP version of the Map of Fast Travelling.
-
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
-
-    @staticmethod
-    def use_item(user):
-        from towns import search_towns
-
-        letters = 'abcdefghijklmnopqrstuvwxyz'
-        numbers = '1234567890'
-
-        print('-'*25)
-        print('-Fast Travel Menu-')
-        while True:
-            direction = input("Enter a direction (N, S, E, W) followed by a number: ")
-            direction = direction.lower()
-
-            direction = only_nsew(direction)
-
-            chosen_list = []
-
-            if len(direction) > 1:
-                curstring = direction[0]
-
-                for char in direction[1:]:
-                    if any(map(curstring.startswith, ''.join([letters, letters.upper()]))):
-                        if char.isalpha():
-                            curstring = ''.join([curstring, char])
-
-                        else:
-                            chosen_list.append(curstring)
-                            curstring = char
-
-                    elif any(map(curstring.startswith, numbers)):
-                        if char.isnumeric():
-                            curstring = ''.join([curstring, char])
-
-                        else:
-                            chosen_list.append(curstring)
-                            curstring = char
-
-                chosen_list.append(curstring)
-
-                if chosen_list[0].isalpha():
-                    all_directions = chosen_list[::2]
-                    all_magnitudes = chosen_list[1::2]
-                    while len(all_directions) > len(all_magnitudes):
-                        all_magnitudes.append('1')
-
-                elif chosen_list[0].isnumeric():
-                    all_magnitudes = chosen_list[::2]
-                    all_directions = chosen_list[1::2]
-                    if len(all_magnitudes) > len(all_directions):
-                        all_magnitudes.remove(all_magnitudes[-1])
-
-                all_directions = [spam[0] for spam in all_directions]
-                all_magnitudes = [int(spam) for spam in all_magnitudes]
-
-                all_vectors = list(zip(all_directions, all_magnitudes))
-
-                new_position = [main.party_info['x'], main.party_info['y']]
-
-                for vector in all_vectors:
-                    if vector[0] == 'n':
-                        new_position[1] += vector[1]
-
-                        if new_position[1] > 125:
-                            new_position[1] = 125
-
-                    if vector[0] == 's':
-                        new_position[1] -= vector[1]
-
-                        if new_position[1] < -125:
-                            new_position[1] = -125
-
-                    if vector[0] == 'w':
-                        new_position[0] -= vector[1]
-
-                        if new_position[0] < -125:
-                            new_position[0] = -125
-
-                    if vector[0] == 'e':
-                        new_position[0] += vector[1]
-
-                        if new_position[0] > 125:
-                            new_position[0] = 125
-
-                dt_vertical = str(new_position[1] - main.party_info['y'])
-                dt_horizontal = str(new_position[0] - main.party_info['x'])
-
-                if int(dt_vertical) > 0:
-                    vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 North"])
-                    dir_ = 'north'
-                elif int(dt_vertical) < 0:
-                    vert_message = ''.join([str(abs(int(dt_vertical))), "\u00b0 South"])
-                    dir_ = 'south'
-                else:
-                    vert_message = ''
-
-                if int(dt_horizontal) > 0:
-                    horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 East"])
-                    dir_ = 'east'
-                elif int(dt_horizontal) < 0:
-                    horiz_message = ''.join([str(abs(int(dt_horizontal))), "\u00b0 West"])
-                    dir_ = 'west'
-                else:
-                    horiz_message = ''
-
-                if new_position[1] >= 0:
-                    verdir = '\u00b0N'
-                else:
-                    verdir = '\u00b0S'
-
-                if new_position[0] >= 0:
-                    hordir = '\u00b0E'
-                else:
-                    hordir = '\u00b0W'
-
-                if horiz_message and vert_message:
-                    vert_message = ''.join([vert_message, ", "])
-
-                if not (horiz_message or vert_message):
-                    print("\nYour party walk quickly in a small circle, arriving precisely where \
-they started.")
-                    input('Press enter/return ')
-
-                    return
-
-                elif ((abs(int(dt_horizontal)) == 1 and abs(int(dt_vertical)) == 0)
-                        or (abs(int(dt_horizontal)) == 0 and abs(int(dt_vertical)) == 1)):
-
-                    print('\nUsing the nearly unlimited magical power of these expensive and rare')
-                    print('boots, your party heroically and valiantly takes a single step \
-{0}ward.'.format(dir_))
-                    input('Press enter/return ')
-
-                    main.party_info['x'] = new_position[0]
-                    main.party_info['y'] = new_position[1]
-                    main.party_info['v'] = verdir
-                    main.party_info['h'] = hordir
-
-                    if not world.check_region():
-                        print('-'*25)
-
-                    return
-
-                print('-'*25)
-                print('Your input has been interpreted as {0}{1}.'.format(vert_message,
-                                                                          horiz_message))
-                print('Travelling in that direction will take your party to {0}{1}, {2}{3}.'.format(
-                    new_position[1], verdir, new_position[0], hordir
-                ))
-                while True:
-                    y_n = input('Confirm fast travel? | Yes or No: ')
-                    y_n = y_n.lower()
-
-                    if y_n.startswith('y'):
-                        print('-'*25)
-                        print('Fast travelling in...')
-                        print('3')
-                        main.smart_sleep(1)
-                        print('2')
-                        main.smart_sleep(1)
-                        print('1')
-                        main.smart_sleep(1)
-                        print('Your party arrives at their destination in one piece.')
-                        input('Press enter/return ')
-
-                        main.party_info['x'] = new_position[0]
-                        main.party_info['y'] = new_position[1]
-                        main.party_info['v'] = verdir
-                        main.party_info['h'] = hordir
-
-                        if not world.check_region():
-                            print('-'*25)
-
-                        search_towns()
-
-                        return
-
-                    elif y_n.startswith('n'):
-                        return
 
 
 class TownTeleporter(Item):
@@ -625,16 +437,13 @@ class LockpickKit(Item):
 
 # -- OTHERS -- #
 class Valuable(Item):
-    def __init__(self, name, desc, buy, sell, posx, posy, ascart='Gem',
-                 acquired=False, cat='misc', imp=False):
+    def __init__(self, name, desc, buy, sell, ascart='Gem', acquired=False, cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
-        self.posx = posx
-        self.posy = posy
         self.acquired = acquired
 
     def use_item(self, user):
         print('-'*25)
-        print('Your party admires the {0}. It looks very valuable.'.format(self.name))
+        print(f'Your party admires the {self.name}. It looks very valuable.')
         input("\nPress enter/return ")
 
 
@@ -650,11 +459,6 @@ It's probably best not to try to open it and read the letter. | [ENTER] """)
 
         else:
             input("Your party cannot think of anything useful to do with this. | [ENTER] ")
-
-
-# A regular expression that replaces all non-NSEW characters with ''
-def only_nsew(string):
-    return re.compile(r'[^n^s^e^w^1^2^3^4^5^6^7^8^9^0]').sub('', string)
 
 # Potions -- Health
 s_potion = Consumable('Weak Potion',
@@ -1086,23 +890,23 @@ flows through the edge (+60% Damage, ELECTRIC)',
 # Accessories
 # -- Elemental Accessories
 water_amulet = ElementAccessory('Aquatic Amulet', 'An amulet that imbues its wearer with the power of WATER',
-                                250, 75, 'Water')
+                                375, 175, 'Water')
 fire_amulet = ElementAccessory('Infernal Amulet', 'An amulet that imbues its wearer with the power of FIRE',
-                               250, 75, 'Fire')
+                               375, 175, 'Fire')
 earth_amulet = ElementAccessory('Ground Amulet', 'An amulet that imbues its wearer with the power of EARTH',
-                                250, 75, 'Earth')
+                                375, 175, 'Earth')
 electric_amulet = ElementAccessory('Galvanic Amulet', 'An amulet that imbues its wearer with the power of ELECTRICITY',
-                                   250, 75, 'Electric')
+                                   375, 175, 'Electric')
 wind_amulet = ElementAccessory('Tempestuous Amulet', 'An amulet that imbues its wearer with the power of WIND',
-                               250, 75, 'Wind')
+                               375, 175, 'Wind')
 grass_amulet = ElementAccessory('Verdant Amulet', 'An amulet that imbues its wearer with the power of GRASS',
-                                250, 75, 'Grass')
+                                375, 175, 'Grass')
 ice_amulet = ElementAccessory('Glacial Amulet', 'An amulet that imbues its wearer with the power of ICE',
-                              250, 75, 'Ice')
+                              375, 175, 'Ice')
 life_amulet = ElementAccessory('Living Amulet', 'An amulet that imbues its wearer with the power of LIFE',
-                               250, 75, 'Life')
+                               375, 175, 'Life')
 death_amulet = ElementAccessory('Necrotic Amulet', 'An amulet that imbues its wearer with the power of DEATH',
-                                250, 75, 'Death')
+                                375, 175, 'Death')
 
 # Quest items
 message_joseph = Misc('Message from Joseph', 'A neatly written message addressed to Philliard.',
@@ -1117,52 +921,52 @@ iSound = Misc('iSound', "You can't even begin to imagine how one would go about 
 
 # Gems & Valuables
 pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
-                     0, 175, 119, -121)
+                     0, 175)
 
 ruby_gem = Valuable('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
-                    0, 175, -62, -84)
+                    0, 175)
 
 sapphire_gem = Valuable('Sapphire', 'A valuable sapphire. This could probably be sold for quite a bit.',
-                        0, 175, -78, 102)
+                        0, 175)
 
 emerald_gem = Valuable('Emerald', 'A valuable emerald. This could probably be sold for quite a bit.',
-                       0, 175, 26, -13)
+                       0, 175)
 
 citrine_gem = Valuable('Citrine', 'A valuable citrine. This could probably be sold for quite a bit.',
-                       0, 175, 53, 92)
+                       0, 175)
 
 jade_gem = Valuable('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
-                    0, 175, 81, -103)
+                    0, 175)
 
 opal_gem = Valuable('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
-                    0, 175, 25, 67)
+                    0, 175)
 
 onyx_gem = Valuable('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
-                    0, 175, 121, -56)
+                    0, 175)
 
 diamond_gem = Valuable('Diamond', 'A valuable diamond. This could probably be sold for quite a bit.',
-                                  0, 175, -12, 124)
+                                  0, 175)
 
 amethyst_gem = Valuable('Amethyst', 'A valuable amethyst. This could probably be sold for quite a bit.',
-                                    0, 175, -12, -5)
+                                    0, 175)
 
 topaz_gem = Valuable('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
-                              0, 175, 0, 0)
+                              0, 175)
 
 garnet_gem = Valuable('Garnet', 'A valuable garnet. This could probably be sold for quite a bit.',
-                                0, 175, 11, -101)
+                                0, 175)
 
 quartz_gem = Valuable('Quartz', 'A valuable quartz. This could probably be sold for quite a bit.',
-                                0, 175, 114, 52)
+                                0, 175)
 
 zircon_gem = Valuable('Zircon', 'A valuable zircon. This could probably be sold for quite a bit.',
-                                0, 175, -108, 100)
+                                0, 175)
 
 agate_gem = Valuable('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
-                              0, 175, 0, -114)
+                              0, 175)
 
 aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
-                          0, 175, 109, -13)
+                          0, 175)
 
 valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem, opal_gem, onyx_gem, diamond_gem,
                  amethyst_gem, topaz_gem, garnet_gem, quartz_gem, zircon_gem, agate_gem, aquamarine_gem]
@@ -1172,7 +976,6 @@ magic_compass = MagicCompass('Magical Compass', 'A compass capable of detecting 
 divining_rod = DiviningRod('Divining Rod', 'A magical stick capable of detecting nearby ores and gems.', 300, 150)
 shovel = Shovel('Shovel', 'A simple shovel used to excavate for hidden gems and minerals.', 200, 100)
 map_of_fast_travel = TownTeleporter('Map of Fast Travel', 'Allows traveling to previously visited towns.', 2000, 100)
-boots_of_travel = InsaneSpeedBoots('Boots of Travel', 'Allows instant travel to any point on the map.', 7500, 3750)
 
 # Tools -- Lockpicks
 wood_lckpck = LockpickKit('Wooden Lockpick Kit',
@@ -1286,24 +1089,3 @@ def deserialize_gems(path):
         for gem in valuable_list:
             if gem.name == name:
                 gem.acquired = True
-
-
-# These are bits of code used to get information about various items
-
-# total = 0
-# for x in copy.copy(globals()):
-#     if isinstance(globals()[x], Item):
-#         total += 1
-#         print(globals()[x].desc)
-# print(total)
-#
-# for gem in valuable_list:
-#     for other in valuable_list:
-#         if gem == other:
-#             continue
-#         if bool(gem.posx > 0) == bool(other.posx > 0):
-#             if bool(gem.posy > 0) == bool(other.posy > 0):
-#                 print(gem.name, other.name, round(math.hypot(gem.posx - other.posx, gem.posy - other.posy)))
-
-# for gem in valuable_list:
-#     print(''.join([gem.name, ": ", str((abs(gem.posx) + abs(gem.posy))/2)]))

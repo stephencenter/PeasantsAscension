@@ -61,31 +61,29 @@ class Boss(units.Monster):
         self.hp = copy.copy(self.max_hp)
         self.mp = copy.copy(self.max_mp)
 
-    def new_location(self, add=True):  # Translate the location of the boss
-        if self.pos_y >= 0:  # into a string, then add to inventory.
-            foo = "\u00b0N"
-        else:
-            foo = "\u00b0S"
+    def new_location(self, add=True):
+        # Translate the location of the boss into a string, and then store it in the player's inventory
+        mpi = main.party_info
 
-        if self.pos_x >= 0:
-            bar = "\u00b0E"
-        else:
-            bar = "\u00b0W"
+        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
+        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
+        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
 
-        spam = ''.join([self.name, "'s lair: ", str(self.pos_y), foo, ', ', str(self.pos_x), bar])
-        if add:
-            if spam not in inv_system.inventory['coord']:
-                inv_system.inventory['coord'].append(spam)
-                print('-'*25)
-                print("You quickly mark down the location of {0}'s lair.".format(self.name))
+        new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
+
+        if add and new_coords not in inv_system.inventory['coord']:
+            inv_system.inventory['coord'].append(spam)
+            print('-'*25)
+            print(f"You quickly mark down the location of {self.name}'s lair.")
+            input("\nPress enter/return ")
 
         else:
-            return spam
+            return new_coords
 
 
-def check_bosses(x, y):
-    for boss in boss_list:
-        if [boss.pos_x, boss.pos_y] == [x, y] and boss.name not in defeated_bosses and boss.active:
+def check_bosses():
+    for boss in main.party_info['current_tile'].boss_list:
+        if boss.name not in defeated_bosses and boss.active:
             print('-'*25)
 
             sounds.item_pickup.play()
@@ -94,15 +92,14 @@ def check_bosses(x, y):
                 print('You feel the presence of an unknown entity...')
 
             else:
-                print('You come across the lair of the {0}.'.format(boss.name))
+                print(f'You come across the lair of the {boss.name}.')
 
             while True:
-
                 if boss.new_location(add=False) not in inv_system.inventory['coord']:
                     y_n = input('Do you wish to investigate? | Yes or No: ')
 
                 else:
-                    y_n = input('Do you wish to confront the {0}? | Yes or No: '.format(boss.name))
+                    y_n = input(f'Do you wish to confront the {boss.name}? | Yes or No: ')
 
                 y_n = y_n.lower()
 
@@ -119,8 +116,6 @@ def check_bosses(x, y):
                 elif y_n.startswith('n'):
                     return True
 
-                else:
-                    continue
     else:
         return False
 

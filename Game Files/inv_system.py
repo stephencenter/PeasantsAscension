@@ -214,9 +214,6 @@ gs_stock = {'Potions': [[items.s_potion, items.s_potion, items.m_potion,
                       [items.map_of_fast_travel, items.map_of_fast_travel, items.map_of_fast_travel,
                        items.map_of_fast_travel, items.map_of_fast_travel, items.map_of_fast_travel],
 
-                      [items.boots_of_travel, items.boots_of_travel, items.boots_of_travel,
-                       items.boots_of_travel, items.boots_of_travel, items.boots_of_travel],
-
                       [items.wood_lckpck, items.copper_lckpck, items.iron_lckpck, items.steel_lckpck,
                        items.mythril_lckpck, items.mythril_lckpck]]}
 

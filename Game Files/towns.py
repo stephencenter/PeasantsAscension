@@ -65,7 +65,9 @@ class Town:
     def town_choice(self):
         print('-'*25)
         print(ascii_art.locations['Town'])
-        print('Welcome to {0}!\n{1}'.format(self.name, '-'*25))
+        print(f'Welcome to {self.name}!')
+        self.new_location()
+        print('-'*25)
 
         while True:
             print("""What do you wish to do?
@@ -170,19 +172,19 @@ class Town:
 
         coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
         coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
-        coord_z = f"{mpi['z'] if mpi['z'] != 0 else ''}'{'UP' if mpi['z'] > 0 else 'DOWN' if mpi['z'] < 0 else ''}"
+        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
 
-        spam = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
-        if add:
-            if spam not in inv_system.inventory['coord']:
-                inv_system.inventory['coord'].append(spam)
-                print('-'*25)
-                print("{0}'s location has been added to your coordinates.".format(self.name))
+        new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
 
-                main.party_info['visited_towns'].append(self.name)
+        if add and new_coords not in inv_system.inventory['coord']:
+            inv_system.inventory['coord'].append(new_coords)
+            main.party_info['visited_towns'].append(self.name)
+
+            print(f"{self.name}'s location has been added to the coordinates section of your inventory.")
+            input("\nPress enter/return ")
 
         else:
-            return spam
+            return new_coords
 
     def inside_town(self):
         town_words = ['i', 'g', 'u']
@@ -1194,72 +1196,42 @@ def search_towns(enter=True):
     # Check to see if there is a
     # town where the player is located
 
-    available_towns = town_list if not main.party_info['is_aethus'] else aethus_towns
-    available_taverns = tavern_list if not main.party_info['is_aethus'] else aethus_taverns
+    for town in main.party_info['current_tile'].town_list:
+        if enter:
+            print('-'*25)
 
-    for town in available_towns:
-        if town in main.party_info['current_tile'].town_list:
-            if enter:
-                print('-'*25)
+            sounds.item_pickup.play()
 
-                sounds.item_pickup.play()
+            while True:
+                if isinstance(town, Tavern):
+                    if town.new_location(add=False) not in inv_system.inventory['coord']:
+                        y_n = input("How convenient, a tavern is nearby! Do you wish to investigate? | Yes or No: ")
 
-                while True:
-
+                    else:
+                        y_n = input(f'{town.name} is nearby. Do you want to visit it? | Yes or No: ')
+                else:
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
                         y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
 
                     else:
                         y_n = input(f'The town of {town.name} is nearby. Do you want to visit it? | Yes or No: ')
 
-                    y_n = y_n.lower()
+                y_n = y_n.lower()
 
-                    if y_n.startswith('y'):
-                        pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
-                        pygame.mixer.music.play(-1)
-                        pygame.mixer.music.set_volume(main.music_vol)
+                if y_n.startswith('y'):
+                    pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
+                    pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(main.music_vol)
 
-                        main.party_info['prev_town'] = main.party_info['current_tile']
+                    main.party_info['prev_town'] = main.party_info['current_tile']
 
-                        town.new_location()
-                        town.town_choice()
+                    town.town_choice()
 
-                        return
+                    return
 
-                    elif y_n.startswith('n'):
-                        print('-'*25)
-                        return
+                elif y_n.startswith('n'):
+                    print('-'*25)
+                    return
 
             else:
                 return True
-
-    else:
-        for tavern in available_taverns:
-            if tavern in main.party_info['current_tile'].town_list:
-
-                if enter:
-                    print('-'*25)
-
-                    sounds.item_pickup.play()
-
-                    while True:
-                        y_n = input(f'{tavern.name} is nearby. Do you want to visit it? | Yes or No: ').lower()
-
-                        if y_n.startswith('y'):
-                            pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
-                            pygame.mixer.music.play(-1)
-                            pygame.mixer.music.set_volume(main.music_vol)
-
-                            main.party_info['prev_town'] = main.party_info['current_tile']
-
-                            tavern.town_choice()
-
-                            return
-
-                        elif y_n.startswith('n'):
-                            print('-'*25)
-
-                            return
-
-                else:
-                    return True
