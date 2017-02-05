@@ -69,7 +69,7 @@ class Unit:
         self.max_mp = copy.copy(self.mp)
 
 
-class PlayableCharacter:
+class PlayableCharacter(Unit):
     # A class for characters whose input can be directly controlled by the player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
         Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
@@ -598,15 +598,13 @@ Armor:
     def player_choice(self):
         # Creates a lambda function that strips all non-numeric characters
         # This fixes some (possible) problems later on
-        only_num = lambda x: re.compile(r'[^\d]+').sub('', x)
-
         print(self.battle_options.format(self.name))
 
         while True:
             self.move = input("Input [#]: ")
             if self.move != "q":
                 # Strip out all non-numeric input
-                self.move = only_num(self.move)
+                self.move = re.compile("[^0-9]").sub('', x, self.move)
 
                 # Use Magic
                 if self.move == '2':
@@ -960,7 +958,7 @@ class Monster(Unit):
 
     def monst_name(self):
         m_type = {'Central Forest': ['Goblin Archer', 'Spriggan', 'Imp', 'Bat',
-                                     'Beetle' if player.name != "Flygon Jones" else "Calculator",],
+                                     'Beetle' if player.name != "Flygon Jones" else "Calculator"],
 
                   'Harconian Coastline': ['Shell Mimic', 'Giant Crab', 'Naiad', 'Sea Serpent', 'Squid'],
 
@@ -970,11 +968,11 @@ class Monster(Unit):
 
                   'Arcadian Desert': ['Mummy', 'Sand Golem', 'Anubis', 'Fire Ant', 'Naga'],
 
-                  'Terrius Mt. Range': ['Troll', 'Rock Giant','Oread', 'Tengu', 'Giant Worm'],
+                  'Terrius Mt. Range': ['Troll', 'Rock Giant', 'Oread', 'Tengu', 'Giant Worm'],
 
-                  'Overshire Graveyard': ['Zombie', 'Undead Archer','Necromancer', 'Skeleton', 'Ghoul'],
+                  'Overshire Graveyard': ['Zombie', 'Undead Archer', 'Necromancer', 'Skeleton', 'Ghoul'],
 
-                  'Aethus': ['Alicorn', 'Griffin', 'Wraith','Harpy', 'Flying Serpent']
+                  'Aethus': ['Alicorn', 'Griffin', 'Wraith', 'Harpy', 'Flying Serpent']
                   }
 
         self.name = m_type[main.party_info['reg']][random.randint(0, 4)]
@@ -1121,7 +1119,7 @@ class Monster(Unit):
             if eval(stat) < 1:  # Enemy stats cannot be lower than one
                 exec("{0} = 1".format(stat))
 
-            exec("{0} = math.ceil({0})".format(stat))# Enemy stats must be integers
+            exec("{0} = math.ceil({0})".format(stat))  # Enemy stats must be integers
 
         if self.monster_name == "Calculator":
             self.element = 'grass'
@@ -1172,7 +1170,7 @@ class Monster(Unit):
 
         # Give the monster a set of items to drop if RNGsus wills it
         if not isinstance(self, bosses.Boss):
-            if random.randint(0, 4) == 0: # 20% chance
+            if random.randint(0, 4) == 0:  # 20% chance
                 self.items = random.choice(items.monster_drop_list[self.monster_name])
 
     def melee_stats(self):
@@ -1319,7 +1317,7 @@ class Monster(Unit):
                 dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element,
                                                m_dmg=self.physical_damage('pierce', target))[1]
 
-                print("The {0}'s attack lands, dealing {1} damage to {2}!".format(self.monster_name, dam_dealt, target.name))
+                print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
                 target.hp -= dam_dealt
                 sounds.enemy_hit.play()
@@ -1357,7 +1355,7 @@ class Monster(Unit):
             dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element,
                                            m_dmg=self.physical_damage('pierce', target))[1]
 
-            print("The {0}'s attack lands, dealing {1} damage to {2}!".format(self.monster_name, dam_dealt, target.name))
+            print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
             target.hp -= dam_dealt
             sounds.enemy_hit.play()
@@ -1421,7 +1419,7 @@ class Monster(Unit):
                 dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element,
                                                m_dmg=self.physical_damage('melee', target))[1]
 
-                print("The {0}'s attack lands, dealing {1} damage to {2}!".format(self.monster_name, dam_dealt, target.name))
+                print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
                 target.hp -= dam_dealt
                 sounds.enemy_hit.play()

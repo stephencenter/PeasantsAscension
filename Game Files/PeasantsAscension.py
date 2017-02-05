@@ -56,6 +56,7 @@ sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game 
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Scripts")
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Classes")
 
+# noinspection PyPep8
 import tiles
 import inv_system
 import battle
@@ -228,9 +229,9 @@ def format_save_names():
     # Replace "{CHARACTER_NAME}" in the save-file paths to the player's adventure name.
     # e.g. "Save Files/{CHARACTER_NAME}/sav_acquired_gems" --> "Save Files/ADV/sav_acquired_gems
 
-    for x in sorted(['sav_acquired_gems', 'sav_def_bosses', 'sav_equip_items', 'sav_inventory','sav_misc_boss_info',
-                     'sav_party_info', 'sav_spellbook', 'sav_quests_dia','sav_play', 'sav_solou', 'sav_xoann',
-                     'sav_chyme','sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
+    for x in sorted(['sav_acquired_gems', 'sav_def_bosses', 'sav_equip_items', 'sav_inventory', 'sav_misc_boss_info',
+                     'sav_party_info', 'sav_spellbook', 'sav_quests_dia', 'sav_play', 'sav_solou', 'sav_xoann',
+                     'sav_chyme', 'sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
 
         spam = globals()[x]
         globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
@@ -265,7 +266,6 @@ def check_save():  # Check for save files and load the game if they're found
 
     # Check each part of the save file
     print('Searching for valid save files...')
-
     if not os.path.isdir(save_dir):
         smart_sleep(0.1)
 
@@ -276,7 +276,7 @@ def check_save():  # Check for save files and load the game if they're found
         units.create_player()
         return
 
-    dirs = [d for d in os.listdir('Save Files') if os.path.isdir(os.path.join('Save Files', d))]
+    dirs = [d for d in os.listdir(save_dir) if os.path.isdir(os.path.join(save_dir, d))]
 
     save_files = {}
     menu_info = {}
@@ -295,7 +295,7 @@ def check_save():  # Check for save files and load the game if they're found
             save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in save_file_list]
 
             try:
-                with open('/'.join(['Save Files', directory, "menu_info.txt"]),
+                with open('/'.join([save_dir, directory, "menu_info.txt"]),
                           encoding='utf-8') as f:
                     menu_info[directory] = f.read()
 
@@ -676,10 +676,8 @@ def main():
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
 
-
-
-    # Yes, this is a try...except statement that includes functions that span
-    # over 8000 lines, but it's necessary for error logging.
+    # Yes, this is a try...except statement that includes functions that spans thousands of lines,
+    # but it's necessary for error logging.
     try:
         # Run the game.
         main()

@@ -1,4 +1,5 @@
 from NPCClass import *
+import towns
 
 # -- Name: Solou -- Town: Nearton
 solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
@@ -31,8 +32,7 @@ solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
                                "Hey, I've got an idea - how about I go adventuring with you? Like I said",
                                "Earlier, I've always dreamed of being a master sorceress, and joining",
                                "a mighty adventurer like yourself on your quest might help me achieve",
-                               "my dreams! I'm sure that my wizardry would be of great use to you, too!"],
-                              active=True)
+                               "my dreams! I'm sure that my wizardry would be of great use to you, too!"], active=True)
 
 
 def solou_p1_at():
@@ -56,8 +56,7 @@ solou_quest_1 = Quest(["Before I resign as page and begin adventuring with you, 
                        "crier relay the message to the citizens. The first town we must visit",
                        "is Overshire, located northwest of here. I believe it's exact coordinates",
                        "are 13\u00b0N, -11\u00b0W. It's a massive place, there's no way we can",
-                       "miss it."],
-                      "A Courier's Resignation [MAIN QUEST]",
+                       "miss it."], "A Courier's Resignation [MAIN QUEST]",
                       ["Travel over to Overshire and speak to the mayor. Overshire is located",
                        "at 13\u00b0N, -11\u00b0W, northwest of Nearton. Beware of the nearby graveyard!"],
                       "Solou", [25, 25], [], active=True)
@@ -107,8 +106,7 @@ joseph_quest_1 = Quest(["Ah, Solou! Long time no see! I see you've taken up adve
                         "whose information would prove invaluable to you. Her name is Azura, and",
                         "she is the head of the Sorcerer's guild. She has been studying tomes and",
                         "has supposedly come up with a possible solution. She lives in a town",
-                        "called Parceon, located at 24\u00b0N, 28\u00b0E."],
-                       "To Parceon! [MAIN QUEST]",
+                        "called Parceon, located at 24\u00b0N, 28\u00b0E."], "To Parceon! [MAIN QUEST]",
                        ["Visit Azura at Parceon, located at24\u00b0N, 28\u00b0E, and",
                         "tell her that Joseph sent you. She has information that will",
                         "help you on your journey."], "Joseph", [75, 75], [])
@@ -173,7 +171,7 @@ raidon_phrase_1 = Conversation(["FILLER TEXT"], active=True)
 
 raidon = NPC('Raidon', [raidon_phrase_1], "Village Shaman")
 
-#----------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # SIDE-STORY ARCS
 
 # -- Graveyard Story-arc:
@@ -315,7 +313,7 @@ rivesh_quest_1.upon_completing = rivesh_q1_uc
 rivesh = NPC('Rivesh', [rivesh_phrase_1, rivesh_phrase_2,
                         rivesh_phrase_3, rivesh_phrase_4, rivesh_quest_1], "Village Elder")
 
-#----------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # SIDEQUESTS
 
 # -- Name: Alfred -- Town: Nearton
@@ -736,6 +734,8 @@ matthew_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep c
                          "money, and you both leave the scene without speaking another",
                          "word.",
                          '-'*25], active=True)
+
+
 def matthew_q1_us():
     global matthew_phrase_1
     global matthew_phrase_2
@@ -848,7 +848,7 @@ pime_phrase_4 = Conversation(["Thank you every so much for ridding us of those v
 pime = NPC('Pime', [pime_phrase_1, pime_phrase_2, pime_quest_1, pime_phrase_3, pime_phrase_4],
            "Vampire Shaman")
 
-#----------------------------------------------------------------------------#
+# ----------------------------------------------------------------------------#
 # UNIMPORTANT CHARACTERS
 
 # -- Name: Philliard -- Town: Nearton
@@ -1119,5 +1119,3 @@ def deserialize_dialogue(path):
                         j_log[key][0], j_log[key][1], j_log[key][2]
                 else:
                     c.active = j_log[key][0]
-
-import towns

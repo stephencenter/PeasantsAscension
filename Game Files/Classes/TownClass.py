@@ -918,7 +918,7 @@ class Chest:
             # To unlock a chest, the player has to successfully make it through two RNG rolls.
             # The first roll is based on the chest's difficulty, and the second is based off the
             # player's lockpick quality.
-            if random.randint(0, 100) < (100 - 10*(self.difficulty)):
+            if random.randint(0, 100) < (100 - 10*self.difficulty):
                 if random.randint(0, 100) < lockpick.power:
                     sounds.unlock_chest.play()
                     print('-'*25)

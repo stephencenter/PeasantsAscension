@@ -31,29 +31,25 @@ The city is separated into three sectors: the upper-class inner portion
 consisting of castle surrounded by reinforced stone walls, a lower-class
 outer portion comprised of smalls buildings and huts, and a middle-class
 section situated in between. As an outsider, you are forbidden to enter the
-upper two, but are welcome to do as you wish in the lower.""",
-             [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
-             [], inn_cost=5, gs_level=2)
+upper two, but are welcome to do as you wish in the lower.""", [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
+                      [], inn_cost=5, gs_level=2)
 
 town_charsulville = Town('Charsulville', """Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
-There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.typhen],
-             [], inn_cost=2, gs_level=2)
+There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.typhen], [], inn_cost=2, gs_level=2)
 
 town_fort_sigil = Town('Fort Sigil', """Fort Sigil: A small village in the northern region
 of the Forest. The citizens of this town have worked tremendously hard to
 convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
-visitors. Perhaps there's a reason...""",
-             [npcs.seriph, npcs.rivesh], [], gs_level=3)
+visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh], [], gs_level=3)
 
 town_tripton = Town('Tripton', """Tripton: When the town of Tripton was being built,
 the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
-two towns, particularly between the village leaders.""",
-             [npcs.kyle], [], inn_cost=3, gs_level=3)
+two towns, particularly between the village leaders.""", [npcs.kyle], [], inn_cost=3, gs_level=3)
 
 town_fallville = Town('Fallville', """Fallville: When the town of Tripton was being built,
 the people working on the project failed to notice that another town,

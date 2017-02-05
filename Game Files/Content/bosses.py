@@ -1,6 +1,6 @@
 #   This file is part of Peasants' Ascension.
 #
-#	 Peasants' Ascension is free software: you can redistribute it and/or modify
+#    Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -165,6 +165,7 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    150, 150,  # Drops 150 XP and 150 GP
                    "readies its venomous fangs and bites")
 
+
 def terrtar_ud():
     npcs.krystal_phrase_2.active = False
     npcs.krystal_phrase_3.active = True
@@ -211,7 +212,7 @@ giant_ent = Boss('Giant Ent',
                  15, 27,          # Located at 27'N, 15'E
                  i_items.enc_yw,  # Drops an enchanted yew wand
                  250, 250,        # Drops 250 XP and 250 GP
-                 "calls upon the essense of the forest and attacks",
+                 "calls upon the essence of the forest and attacks",
                  element='grass', active=True)
 
 giant_ent.battle_turn = giant_ent.melee_ai

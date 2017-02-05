@@ -1,6 +1,6 @@
 #   This file is part of Peasants' Ascension.
 #
-#	 Peasants' Ascension is free software: you can redistribute it and/or modify
+#    Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -72,7 +72,7 @@ class Boss(units.Monster):
         new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
 
         if add and new_coords not in inv_system.inventory['coord']:
-            inv_system.inventory['coord'].append(spam)
+            inv_system.inventory['coord'].append(new_coords)
             print('-'*25)
             print(f"You quickly mark down the location of {self.name}'s lair.")
             input("\nPress enter/return ")

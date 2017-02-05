@@ -1,6 +1,6 @@
 # This file is part of Peasants' Ascension.
 #
-#	 Peasants' Ascension is free software: you can redistribute it and/or modify
+#    Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -347,8 +347,6 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
                         if item not in inventory[cat]:
                             return
-
-
 
             else:
                 item.use_item(units.player)
@@ -803,7 +801,7 @@ def deserialize_inv(path):
             else:
                 continue
 
-            if (not isinstance(x, items.Armor) and not isinstance(x, items.Weapon)):
+            if not isinstance(x, items.Armor) and not isinstance(x, items.Weapon):
 
                 item_art = x.ascart
                 x.__dict__ = item
