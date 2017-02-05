@@ -126,20 +126,212 @@ def movement_system():
     pygame.mixer.music.set_volume(main.music_vol)
 
     while True:
-        available_dirs = []
-        coord_change = []
+        towns.search_towns()
+
+        print(f"-CURRENT LOCATION-")
 
         mpi = main.party_info
         tile = mpi['current_tile']
 
+        no_adj_tiles = len([t for t in [tile.to_up,
+                                        tile.to_dn,
+                                        tile.to_w,
+                                        tile.to_s,
+                                        tile.to_n,
+                                        tile.to_e] if t is not None])
+
+        # Calculate which tile ascii art to display
+        if no_adj_tiles == 1:
+            if tile.to_n:
+                print("""
+    | N |
+    |   |
+    | X |
+    |___| X = Player Party\n""")
+            elif tile.to_s:
+                print("""
+     ___
+    |   |
+    | X |
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_w:
+                print("""
+________
+W     X |
+________| X = Player Party\n""")
+            elif tile.to_e:
+                print("""
+     ________
+    | X     E
+    |________ X = Player Party\n""")
+            elif tile.to_dn or tile.to_up:
+                print("""
+     ___
+    | X |
+    |___| X = Player Party\n""")
+
+        elif no_adj_tiles == 2:
+            if tile.to_n and tile.to_w:
+                print("""
+    | N |
+____|   |
+W     X |
+________| X = Player Party\n""")
+            elif tile.to_n and tile.to_e:
+                print("""
+    | N |
+    |   |____
+    | X    E
+    |________ X = Player Party\n""")
+            elif tile.to_n and tile.to_s:
+                print("""
+    | N |
+    |   |
+    | X |
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_w and tile.to_e:
+                print("""
+_____________
+W     X     E
+_____________ X = Player Party\n""")
+            elif tile.to_w and tile.to_s:
+                print("""
+________
+W     X |
+____    |
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_e and tile.to_s:
+                print("""
+     ________
+    | X     E
+    |    ____
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_up and tile.to_dn:
+                print("""
+     ___
+    | X |
+    |___| X = Player Party\n""")
+            elif tile.to_n and (tile.to_up or tile.to_dn):
+                print("""
+    | N |
+    |   |
+    | X |
+    |___| X = Player Party\n""")
+            elif tile.to_s and (tile.to_up or tile.to_dn):
+                print("""
+     ___
+    |   |
+    | X |
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_e and (tile.to_up or tile.to_dn):
+                print("""
+     ________
+    | X     E
+    |________ X = Player Party\n""")
+            elif tile.to_w and (tile.to_up or tile.to_dn):
+                print("""
+________
+W     X |
+________| X = Player Party\n""")
+
+        elif no_adj_tiles == 3:
+            if tile.to_n and tile.to_w and tile.to_e:
+                print("""
+    | N |
+____|   |____
+W     X     E
+_____________ X = Player Party\n""")
+            elif tile.to_n and tile.to_w and tile.to_s:
+                print("""
+    | N |
+____|   |
+W     X |
+____    |
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_n and tile.to_e and tile.to_s:
+                print("""
+    | N |
+    |   |____
+    | X     E
+    |    ____
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_w and tile.to_e and tile.to_s:
+                print("""
+_____________
+W     X     E
+____     ____
+    |   |
+    | S | X = Player Party\n""")
+
+            elif tile.to_w and tile.to_n and (tile.to_up or tile.to_dn):
+                print("""
+    | N |
+____|   |
+W     X |
+________| X = Player Party\n""")
+            elif tile.to_w and tile.to_s and (tile.to_up or tile.to_dn):
+                print("""
+________
+W     X |
+____    |
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_w and tile.to_e and (tile.to_up or tile.to_dn):
+                print("""
+_____________
+W     X     E
+_____________ X = Player Party\n""")
+            elif tile.to_n and tile.to_e and (tile.to_up or tile.to_dn):
+                print("""
+    | N |
+    |   |____
+    | X    E
+    |________ X = Player Party\n""")
+            elif tile.to_s and tile.to_e and (tile.to_up or tile.to_dn):
+                print("""
+     ________
+    | X     E
+    |    ____
+    |   |
+    | S | X = Player Party\n""")
+            elif tile.to_n and tile.to_s and (tile.to_up or tile.to_dn):
+                print("""
+    | N |
+    |   |
+    | X |
+    |   |
+    | S | X = Player Party\n""")
+
+        elif no_adj_tiles >= 4:
+            if tile.to_n and tile.to_w and tile.to_e and tile.to_s:
+                print("""
+    | N |
+____|   |____
+W     X     E
+____     ____
+    |   |
+    | S | X = Player Party\n""")
+
+        # Calculate the character's X, Y, and Z coordinates and create a string from them. The Z coordinate does not
+        # change nearly as often as the other two, so don't display it unless it != 0.
         coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
         coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
         coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
         coordinates = ''.join([coord_y, coord_x, coord_z])
-        towns.search_towns()
 
-        print(f"  -CURRENT LOCATION-")
         print(f"Coordinates: {coordinates} | Region: [{tile.region}] | Subregion [{tile.name}]")
+
+        # These lists will tell the game how to manipulate the players position in the next part of the function
+        available_dirs = []
+        coord_change = []
+
         for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
             if drc == tile.to_e:
                 print("          To the [E]ast", end='')
@@ -184,6 +376,7 @@ def movement_system():
 
             if any(map(direction.startswith, [x[0] for x in available_dirs])):
                 sounds.foot_steps.play()
+
                 main.party_info['current_tile'] = [b for b in all_tiles if b.tile_id in
                                                    [a[1] for a in available_dirs if a[0] == direction]][0]
 
