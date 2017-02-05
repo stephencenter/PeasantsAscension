@@ -41,7 +41,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.pre_init(frequency=44100, buffersize=2048)
 pygame.mixer.init()
 
 # This is the message that is printed if you attempt to use magic

@@ -645,47 +645,47 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
             'Weapons': [[bnz_swd, en_bnz_swd, stl_spr,
                          en_stl_spr, durs_axe, en_durs_axe],  # Warrior Weapons
 
-            [oak_stf, en_oak_stf, arc_spb,
-             en_arc_spb, rnc_stf, en_rnc_stf],  # Mage Weapons
+                        [oak_stf, en_oak_stf, arc_spb,
+                         en_arc_spb, rnc_stf, en_rnc_stf],  # Mage Weapons
 
-            [ser_knf, en_ser_knf, stiletto,
-             en_stiletto, myth_sb, en_myth_sb],  # Assassin Weapons
+                        [ser_knf, en_ser_knf, stiletto,
+                         en_stiletto, myth_sb, en_myth_sb],  # Assassin Weapons
 
-            [sht_bow, en_sht_bow, lng_bow,
-             en_lng_bow, ash_cbow, en_ash_cbow],  # Ranger Weapons
+                        [sht_bow, en_sht_bow, lng_bow,
+                         en_lng_bow, ash_cbow, en_ash_cbow],  # Ranger Weapons
 
-            [holy_mace, en_holy_mace, hmr_of_mgt,
-             en_hmr_of_mgt, ngt_bane, en_ngt_bane],  # Paladin Weapons
+                        [holy_mace, en_holy_mace, hmr_of_mgt,
+                         en_hmr_of_mgt, ngt_bane, en_ngt_bane],  # Paladin Weapons
 
-            [brass_kncls, en_brass_kncls, bladed_gloves,
-             en_bladed_gloves, lead_bg, en_lead_bg]],  # Monk Weapons
+                        [brass_kncls, en_brass_kncls, bladed_gloves,
+                         en_bladed_gloves, lead_bg, en_lead_bg]],  # Monk Weapons
 
             'Armor': [[bnz_hlm, en_bnz_hlm, stl_hlm,
                        en_stl_hlm, ori_hlm, ori_hlm],  # Warrior Armor -- Head
 
-            [bnz_cst, en_bnz_cst, stl_cst,
-             en_stl_cst, ori_cst, ori_cst],  # Warrior Armor -- Body
+                      [bnz_cst, en_bnz_cst, stl_cst,
+                       en_stl_cst, ori_cst, ori_cst],  # Warrior Armor -- Body
 
-            [bnz_leg, en_bnz_leg, stl_leg,
-             en_stl_leg, ori_leg, ori_leg],  # Warrior Armor -- Legs
+                      [bnz_leg, en_bnz_leg, stl_leg,
+                       en_stl_leg, ori_leg, ori_leg],  # Warrior Armor -- Legs
 
-            [wiz_hat, en_wiz_hat, myst_hat,
-             en_myst_hat, elem_hat, elem_hat],  # Mage Armor -- Head
+                      [wiz_hat, en_wiz_hat, myst_hat,
+                       en_myst_hat, elem_hat, elem_hat],  # Mage Armor -- Head
 
-            [wiz_rob, en_wiz_rob, myst_rob,
-             en_myst_rob, elem_rob, elem_rob],  # Mage Armor -- Body
+                      [wiz_rob, en_wiz_rob, myst_rob,
+                       en_myst_rob, elem_rob, elem_rob],  # Mage Armor -- Body
 
-            [wiz_gar, en_wiz_gar, myst_gar,
-             en_myst_gar, elem_gar, elem_gar],  # Mage Armor -- Legs
+                      [wiz_gar, en_wiz_gar, myst_gar,
+                       en_myst_gar, elem_gar, elem_gar],  # Mage Armor -- Legs
 
-            [lth_cap, en_lth_cap, std_cwl,
-             en_std_cwl, drg_cwl, drg_cwl],  # Assassin + Ranged Armor -- Head
+                      [lth_cap, en_lth_cap, std_cwl,
+                       en_std_cwl, drg_cwl, drg_cwl],  # Assassin + Ranged Armor -- Head
 
-            [lth_bdy, en_lth_bdy, std_bdy,
-             en_std_bdy, drg_bdy, drg_bdy],  # Assassin + Ranged Armor -- Body
+                      [lth_bdy, en_lth_bdy, std_bdy,
+                       en_std_bdy, drg_bdy, drg_bdy],  # Assassin + Ranged Armor -- Body
 
-            [lth_leg, en_lth_leg, std_leg,
-             en_std_leg, drg_leg]],  # Assassin + Ranged Armor -- Legs
+                      [lth_leg, en_lth_leg, std_leg,
+                       en_std_leg, drg_leg]],  # Assassin + Ranged Armor -- Legs
 
             'Accessories': [[water_amulet, water_amulet, water_amulet,
                              water_amulet, water_amulet, water_amulet],

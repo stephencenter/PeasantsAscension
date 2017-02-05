@@ -44,7 +44,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.pre_init(frequency=44100, buffersize=2048)
 pygame.mixer.init()
 
 
@@ -896,7 +896,7 @@ class Monster(Unit):
 
         return math.ceil(dam_dealt)
 
-    def monst_level(self): # THIS NEEDS REWORKING!!
+    def monst_level(self):
 
         self.lvl = main.party_info['current_tile'].m_level
 

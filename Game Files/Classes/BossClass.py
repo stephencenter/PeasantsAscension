@@ -42,12 +42,10 @@ else:
 
 
 class Boss(units.Monster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad, lvl, pos_x, pos_y, items,
-                 gold, experience, attk_msg, active=True, element='none'):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad, lvl, items, gold,
+                 experience, attk_msg, active=True, element='none'):
 
         units.Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
-        self.pos_x = pos_x
-        self.pos_y = pos_y
         self.items = items
         self.active = active
         self.lvl = lvl
@@ -61,6 +59,7 @@ class Boss(units.Monster):
         self.hp = copy.copy(self.max_hp)
         self.mp = copy.copy(self.max_mp)
 
+    # noinspection PyMethodMayBeStatic
     def new_location(self, add=True):
         # Translate the location of the boss into a string, and then store it in the player's inventory
         mpi = main.party_info
@@ -78,4 +77,5 @@ class Boss(units.Monster):
             input("\nPress enter/return ")
 
         else:
+
             return new_coords

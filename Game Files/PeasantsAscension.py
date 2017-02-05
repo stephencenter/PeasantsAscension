@@ -82,7 +82,7 @@ logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
 logging.debug("Game run")
 
 # Setup Pygame audio
-pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.pre_init(frequency=44100, buffersize=2048)
 pygame.mixer.init()
 
 # Save File information

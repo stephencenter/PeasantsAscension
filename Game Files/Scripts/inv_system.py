@@ -321,11 +321,6 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                 if len(target_options) == 1:
                     target = units.player
 
-                    item.use_item(target)
-
-                    if item not in inventory[cat]:
-                        return
-
                 else:
                     print('-'*25)
                     print("Who should {0} the {1}?".format(use_equip.lower(), item.name))
@@ -343,13 +338,15 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
                             continue
 
-                        item.use_item(target)
+                        break
 
-                        if item not in inventory[cat]:
-                            return
+                item.use_item(target)
+
+                if item not in inventory[cat]:
+                    return
 
             else:
-                item.use_item(units.player)
+                item.use_item()
                 if item not in inventory[cat]:
                     return
 

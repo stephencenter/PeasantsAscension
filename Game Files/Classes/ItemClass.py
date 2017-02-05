@@ -260,7 +260,7 @@ class MagicCompass(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item(user):
+    def use_item():
         if main.party_info['reg'] == 'Aethus':
             print('-'*25)
             print('Something about this place makes your compass needle spin wildly.')
@@ -286,7 +286,7 @@ class DiviningRod(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item(user):
+    def use_item():
         if main.party_info['reg'] == 'Aethus':
             print('-'*25)
             print("Your divining rod doesn't seem to be working properly up here.")
@@ -317,7 +317,7 @@ class Shovel(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item(user):
+    def use_item():
         if main.party_info['reg'] == 'Aethus':
             print('-'*25)
             print('The soil up here is much too tough to be broken up using a shovel.')
@@ -352,7 +352,7 @@ class TownTeleporter(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     @staticmethod
-    def use_item(user):
+    def use_item():
         from towns import town_list, aethus_towns, search_towns
 
         print('-'*25)
@@ -428,7 +428,7 @@ class LockpickKit(Item):
         self.power = power
 
     @staticmethod
-    def use_item(user):
+    def use_item():
         print('-'*25)
         print("Your party could certainly make a quick buck lockpicking chests with this thing.")
         print("But that's illegal - you wouldn't break the law, would you?")
@@ -441,7 +441,8 @@ class Valuable(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.acquired = acquired
 
-    def use_item(self, user):
+    # noinspection PyMethodMayBeStatic
+    def use_item(self):
         print('-'*25)
         print(f'Your party admires the {self.name}. It looks very valuable.')
         input("\nPress enter/return ")
@@ -451,7 +452,7 @@ class Misc(Item):
     def __init__(self, name, desc, buy, sell, ascart='Misc', cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    def use_item(self, user):
+    def use_item(self):
         print('-'*25)
         if 'Message' in self.name:
             input("""The envelop is designed in a way that makes tampering easily noticeable.

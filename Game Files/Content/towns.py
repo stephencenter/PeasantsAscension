@@ -17,8 +17,8 @@ It is in this very town where numerous brave adventurers have begun their
 journey. Nearton is just your standard run-of-the-mill village: it has a
 general store, an inn, and a few small houses. An old man  is standing
 near one of the houses, and appears to be very troubled about something.""",
-             [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou],
-             [nearton_h1, nearton_h2])
+                    [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou],
+                    [nearton_h1, nearton_h2])
 
 town_southford = Town('Southford', """Southford: A fair-size town in the central-southern region of the Forest.
 The inhabitants of this town are known for being quite wise, and may
@@ -56,20 +56,20 @@ the people working on the project failed to notice that another town,
 Fallville, just so happened to be located mere meters away from the
 new town's borders. This has led to a bit of a rivalry between the
 two towns, particularly between the village leaders.""",
-             [npcs.krystin, npcs.frederick], [], gs_level=2)
+                      [npcs.krystin, npcs.frederick], [], gs_level=2)
 
 town_parceon = Town('Parceon', """Parceon: A highly populated town renown for it's rich
 magical background. Parceon is home to the famous Sorcerers' Guild,
 a group of unbelievably skilled and wise mages. The head of the guild,
 Azura, lives in a large tower in the southwest side of the town.""",
-             [npcs.azura], [], gs_level=3)
+                    [npcs.azura], [], gs_level=3)
 
 town_sardooth = Town('Sardooth', """Sardooth: A ghost town. There has not been a single
 permanent inhabitant of this town for more than 75 years. It is completely
 run down, with most of the buildings having been destroyed in the Harconian
 Revolution. While this town may seem interesting and historic, there is nothing
 of value here.""",
-             [], [])
+                     [], [])
 
 town_principalia = Town('Principalia', """Principalia: Principalia is the home of
 King Harconius II. The main attraction here is the Pytheror Building, a
@@ -83,7 +83,7 @@ and the cottage is surrounded by a ring of 12 archer towers, each with
 100 yards from the cottage. In addition, there are numerous guards
 standing watch all around the building. One guard happens to catch
 your attention - probably because she just screamed "HALT!" at you.""",
-              [npcs.sakura], [])
+                        [npcs.sakura], [])
 
 town_new_ekanmar = Town('New Ekanmar', """New Ekanmar: The home of the Flyscorian Embassy in
 Harconia. Prior to the Harconian Revolution, this town was the location of
@@ -102,7 +102,7 @@ section of the Sorcerers' Guild. Vegetation grows on almost
 every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""",
-              [npcs.strathius], [], gs_level=3)
+                       [npcs.strathius], [], gs_level=3)
 
 town_ambercreek = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
 located in the Terrius Mt. Range. The Chin'toric embassy can be found
@@ -110,7 +110,7 @@ in the middle of this town surrounded by large stone walls and a few
 guard-towers. Sugulat, the King of Chin'tor, can often be found mining
 on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
-              [npcs.raidon, npcs.sugulat], [], gs_level=4, inn_cost=15)
+                       [npcs.raidon, npcs.sugulat], [], gs_level=4, inn_cost=15)
 
 town_whistumn = Town('Whistumn', """Whistumn: An ancient city situated on the border
 between the Arcadian Desert and the Central Forest. The inhabitants of this town
@@ -119,7 +119,7 @@ skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
 on the steps of the general store.""",
-              [npcs.polmor, npcs.serena], [], gs_level=4, inn_cost=13)
+                     [npcs.polmor, npcs.serena], [], gs_level=4, inn_cost=13)
 
 town_hatchnuk = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Harconia
 that still has cases of "Hatchnuk's Blight", a plague-like disease that
@@ -131,7 +131,7 @@ is far too great for people to be walking out in the open doing business togethe
 As a result, there are no buildings that you are able to enter, and no people to talk
 to. The only people who are around to speak to are the guards, but their plague-doctor-esque
 apparel and stern looks make it clear that they are not in the mood for chit-chat.""",
-              [], [])
+                     [], [])
 
 town_cesura = Town("Cesura", """Cesura: A town of great historical significance.
 This town was named after King Cesura I, the war general during the Harconian Civil War
@@ -144,7 +144,7 @@ station. Construction of the town of Cesura was outsourced to Elysium, who is
 the most technologically advanced civilization on the planet by far, having
 developed and perfected the Steam Engine and later the Train before the year
 1300 A.D.""",
-              [npcs.bamdeliit], [], wtrmelon_store=True)
+                   [npcs.bamdeliit], [], wtrmelon_store=True)
 
 town_sanguion = Town("Sanguion", """Sanguion: Sanguion is a save-haven for vampires. Vampires
 are feared throughout Harconia, so this fairly unknown town is the only place they
@@ -153,7 +153,7 @@ actually refuse to drink the blood of intelligent lifeforms. As a matter of fact
 non-vampires who are afraid of vampires are actually more of a threat to civilization
 than the actual vampires are! They look very friendly, although a few of them do look
 quite scared for some reason. Perhaps you should investigate.""",
-              [npcs.pime, npcs.ariver], [], gs_level=5, inn_cost=18)
+                     [npcs.pime, npcs.ariver], [], gs_level=5, inn_cost=18)
 
 town_lantonum = Town("Lamtonum", """Lantonum: Lantonum is a small town that has the best
 forge in all of Arcadia. Nearly 2/3s of all citizens of this town are
@@ -161,18 +161,18 @@ experienced blacksmiths, and 90% of all ores and minerals mined
 in Chin'tor or Ambercreek are brought here. It is one of the wealthiest
 cities in all of the desert region due to its Mythril, Magestite, and
 Necrite bar exports.""",
-              [npcs.matthew], [], gs_level=4)
+                     [npcs.matthew], [], gs_level=4)
 
 town_capwild = Town("Capwild", """Capwild: Capwild is a medium sized town situated in the
 Terrius Mt. Range. Capwild is a supplier of grains and herbs for the entire region,
 and makes extensive use of terrace farming to make up for the lack of arable land.""",
-              [], [], gs_level=5, inn_cost=15)
+                    [], [], gs_level=5, inn_cost=15)
 
 town_rymn_outpost = Town("Rymn Outpost", """Rymn Outpost: Rymn Outpost is one of the several
 small villages established after the Thexian Incursion. All of the residents of this town
 are soldiers or family members of soldiers, with the exception a few merchants. Rymn Outpost
 is named after Rymnes, the Divinic gods of defense.""",
-              [], [], gs_level=5, inn_cost=17)
+                         [], [], gs_level=5, inn_cost=17)
 
 cottage1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
 this area only has a small cottage. An old man is tending to his

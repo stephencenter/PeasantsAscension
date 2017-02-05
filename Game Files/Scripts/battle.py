@@ -37,7 +37,7 @@ import items
 #
 # input = test_input
 
-pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.pre_init(frequency=44100, buffersize=2048)
 pygame.mixer.init()
 
 temp_stats = ''

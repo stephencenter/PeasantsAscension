@@ -968,4 +968,5 @@ class Chest:
                 input("\nPress enter/return ")
 
                 self.destroyed = True
+
                 return

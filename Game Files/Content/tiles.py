@@ -21,7 +21,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-pygame.mixer.pre_init(44100, -16, 2, 2048)
+pygame.mixer.pre_init(frequency=44100, buffersize=2048)
 pygame.mixer.init()
 
 # -- INNER CENTRAL FOREST -- #
@@ -80,8 +80,8 @@ icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Central Forest", icf_de
 This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
 to help protect its citizens from the harmful monsters outside it. Weaker monsters still
 manage to make their way in though.""", 0,
-                     to_s="I-CF-N",
-                     to_n="WH-CF-ICF Bridge Exit")
+                  to_s="I-CF-N",
+                  to_n="WH-CF-ICF Bridge Exit")
 
 # -- CENTRAL FOREST TILESETS -- #
 
