@@ -75,12 +75,16 @@ icf_desc = """Your party lies in the inner portion of the Central Forest. This v
 is home to thousands of people and animal species, and, unfortunately, several kinds
 of monsters. There are trees in all directions as far as the eye can see, each
 towering over a hundred feet tall. The ground is scattered with the occasional rock
-and a plentiful supply of leaves twigs. In other words, it's your standard forest."""
+and a plentiful supply of leaves twigs. In other words, it's your standard forest.
+The Inner Central Forest makes up only a small fraction of the 150 million acre
+Central Forest, and is surrounded by a 12-foot wide moat."""
 
 in_for_n = Tile("Inner Central Forest", "I-CF-N", "Central Forest", icf_desc, 1,
                 to_s="I-CF-C",
                 to_e="Nearton",
-                to_w="I-CF-NW")
+                to_w="I-CF-NW",
+                to_n="I-CF-Bridge")
+
 in_for_s = Tile("Inner Central Forest", "I-CF-S", "Central Forest", icf_desc, 1,
                 to_n="I-CF-C",
                 to_w="Southford",
@@ -106,20 +110,39 @@ in_for_se = Tile("Inner Central Forest", "I-CF-SE", "Central Forest", icf_desc, 
                  to_w="I-CF-S",
                  to_n="I-CF-E")
 
-nearton_tile = Tile("Town of Nearton", "Nearton", "Central Forest", icf_desc + """
+nearton_tile = Tile("Town of Nearton", "Nearton", "Central Forest", icf_desc + """\n
 The town of Nearton is mere minutes away from this point! Stopping by
 there might be a smart idea.""", 2, town_list=[towns.town_nearton],
                     to_s="I-CF-E",
                     to_w="I-CF-N")
 
-southford_tile = Tile("Town of Southford", "Southford", "Central Forest", icf_desc + """
+southford_tile = Tile("Town of Southford", "Southford", "Central Forest", icf_desc + """\n
 The town of Nearton is mere minutes away from this point! Stopping by
 there might be a smart idea.""", 2, town_list=[towns.town_southford],
                       to_e="I-CF-S",
                       to_n="I-CF-W")
 
-icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s, in_for_n, in_for_se, in_for_nw]
-all_tiles = icf_tiles # + other tiles lists as more tiles come into existance
+icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Central Forest", icf_desc + """\n
+This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
+to help protect its citizens from the harmful monsters outside it. Weaker monsters still
+manage to make their way in though.""", 0,
+                     to_s="I-CF-N",
+                     to_n="WH-CF-ICF Bridge Exit")
+
+# -- CENTRAL FOREST TILESETS -- #
+
+# Inner Central Forest
+icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s, in_for_n, in_for_se, in_for_nw,
+             icf_bridge]
+
+# West of the Hythos River
+whr_tiles = []
+
+# West of the Hythos River
+ehr_tiles = []
+
+
+all_tiles = icf_tiles + whr_tiles + ehr_tiles  # + other tiles lists as more tiles come into existance
 
 
 def movement_system():
@@ -403,10 +426,9 @@ ____     ____
                     # There is a 1 in 7 chance for a battle to occur (14.285714...%)
                     is_battle = not random.randint(0, 6)
 
-                    if is_battle:
+                    if is_battle and main.party_info['current_tile'].m_level != 0:
                         print('-'*25)
                         units.spawn_monster()
-
                         units.player.hp = 1
                         battle.battle_system()
 

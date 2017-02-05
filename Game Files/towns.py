@@ -1224,6 +1224,7 @@ def search_towns(enter=True):
                     pygame.mixer.music.set_volume(main.music_vol)
 
                     main.party_info['prev_town'] = main.party_info['current_tile']
+                    main.party_info['p_town_xyz'] = main.party_info['x'], main.party_info['y'], main.party_info['z']
 
                     town.town_choice()
 

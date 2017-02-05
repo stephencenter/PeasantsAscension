@@ -946,7 +946,7 @@ class Monster(Unit):
             if random.randint(0, 9) == 0:  # 10% chance to recover per turn
                 self.is_poisoned = False
                 sounds.buff_spell.play()
-                print('The {0} recovered from the poison!'.format(self.monster_name))
+                print(f'The {self.monster_name} recovered from the poison!')
 
                 main.smart_sleep(0.5)
 
@@ -954,7 +954,7 @@ class Monster(Unit):
                 poison_damage = math.floor(self.hp/6)
                 self.hp -= poison_damage
                 sounds.poison_damage.play()
-                print('The {0} took poison damage! (-{1} HP)'.format(self.monster_name, poison_damage))
+                print(f'The {self.monster_name} took poison damage! (-{poison_damage} HP)')
 
                 main.smart_sleep(0.5)
 
@@ -1451,7 +1451,7 @@ ran_af = PlayableCharacter("Ran'Af", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='monk
 # Pronounced "Parse-toe"
 parsto = PlayableCharacter("Parsto", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='ranger', enabled=False)
 
-# Rhymes with "Time", the Ch makes the same sound as the Ch in "chocolate"
+# Rhymes with "Chime"
 chyme = PlayableCharacter("Chyme", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='paladin', enabled=False)
 
 

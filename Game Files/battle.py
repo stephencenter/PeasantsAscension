@@ -327,6 +327,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     # if you haven't been to a town yet.
 
                     main.party_info['current_tile'] = main.party_info['prev_town']
+                    main.party_info['x'], main.party_info['y'], main.party_info['z'] = main.party_info['p_town_xyz']
 
                     for character in [units.player,
                                       units.solou,
