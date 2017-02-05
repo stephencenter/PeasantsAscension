@@ -2,6 +2,8 @@ Thumbs.db
 idea/workspace.xml
 error_log.out
 Game Files/__pycache__/
-Game Files/Save Files/
-Game Files/Music
-Artwork
+Game Files/Scripts/__pycache__/
+Game Files/Classes/__pycache__/
+Game Files/Content/__pycache__/
+Game Files/Content/Save Files/
+Game Files/Content/Music

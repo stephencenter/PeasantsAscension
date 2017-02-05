@@ -23,7 +23,6 @@ from copy import copy as _c
 
 import inv_system
 import units
-import world
 import bosses
 import sounds
 import ascii_art

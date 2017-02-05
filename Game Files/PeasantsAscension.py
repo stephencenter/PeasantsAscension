@@ -52,7 +52,11 @@ import traceback
 import stat
 import pygame
 
-import world
+sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Content")
+sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Scripts")
+sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Classes")
+
+import tiles
 import inv_system
 import battle
 import magic
@@ -81,27 +85,27 @@ pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.mixer.init()
 
 # Save File information
-save_dir = 'Save Files'
+save_dir = 'Content/Save Files'
 adventure_name = ''
 
 # General Save Files
-sav_acquired_gems = 'Save Files/{CHARACTER_NAME}/acquired_gems.json'    # Acquired Gems
-sav_def_bosses = 'Save Files/{CHARACTER_NAME}/def_bosses.json'          # Defeated Bosses
-sav_equip_items = 'Save Files/{CHARACTER_NAME}/equip_items.json'        # Equipped Items
-sav_inventory = 'Save Files/{CHARACTER_NAME}/inventory.json'            # Inventory
-sav_misc_boss_info = 'Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc Boss Info
-sav_party_info = 'Save Files/{CHARACTER_NAME}/party_info.json'          # Party Info
-sav_quests_dia = 'Save Files/{CHARACTER_NAME}/quests_dia.json'          # Quests & Dialogue
-sav_spellbook = 'Save Files/{CHARACTER_NAME}/spellbook.json'            # Spellbook
+sav_acquired_gems = 'Content/Save Files/{CHARACTER_NAME}/acquired_gems.json'    # Acquired Gems
+sav_def_bosses = 'Content/Save Files/{CHARACTER_NAME}/def_bosses.json'          # Defeated Bosses
+sav_equip_items = 'Content/Save Files/{CHARACTER_NAME}/equip_items.json'        # Equipped Items
+sav_inventory = 'Content/Save Files/{CHARACTER_NAME}/inventory.json'            # Inventory
+sav_misc_boss_info = 'Content/Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc Boss Info
+sav_party_info = 'Content/Save Files/{CHARACTER_NAME}/party_info.json'          # Party Info
+sav_quests_dia = 'Content/Save Files/{CHARACTER_NAME}/quests_dia.json'          # Quests & Dialogue
+sav_spellbook = 'Content/Save Files/{CHARACTER_NAME}/spellbook.json'            # Spellbook
 
 # PCU Save Files
-sav_play = 'Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
-sav_solou = 'Save Files/{CHARACTER_NAME}/solou_stats.json'      # Solou's Stats
-sav_xoann = 'Save Files/{CHARACTER_NAME}/xoann_stats.json'      # Xoann's Stats
-sav_chyme = 'Save Files/{CHARACTER_NAME}/chyme_stats.json'      # Chyme's Stats
-sav_ran_af = 'Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's Stats
-sav_parsto = 'Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
-sav_adorine = 'Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
+sav_play = 'Content/Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
+sav_solou = 'Content/Save Files/{CHARACTER_NAME}/solou_stats.json'      # Solou's Stats
+sav_xoann = 'Content/Save Files/{CHARACTER_NAME}/xoann_stats.json'      # Xoann's Stats
+sav_chyme = 'Content/Save Files/{CHARACTER_NAME}/chyme_stats.json'      # Chyme's Stats
+sav_ran_af = 'Content/Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's Stats
+sav_parsto = 'Content/Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
+sav_adorine = 'Content/Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
 
 # The volume of the game, on a scale from 0 (muted) to 1.0 (loudest). Can be changed in the settings.cfg file.
 music_vol = 1.0
@@ -111,9 +115,9 @@ sound_vol = 1.0
 do_text_scroll = False
 
 # A dictionary containing generic information about the player's party
-party_info = {'reg': 'Central Forest', 'reg_music': 'Music/Through the Forest.ogg',
-              'prev_town': world.in_for_c, 'p_town_xyz': ['', '', ''], 'is_aethus': False, 'gp': 20,
-              'visited_towns': [], 'current_tile': world.in_for_c, 'x': 0, 'y': 0, 'z': 0}
+party_info = {'reg': 'Central Forest', 'reg_music': 'Content/Music/Through the Forest.ogg',
+              'prev_town': tiles.in_for_c, 'p_town_xyz': ['', '', ''], 'is_aethus': False, 'gp': 20,
+              'visited_towns': [], 'current_tile': tiles.in_for_c, 'x': 0, 'y': 0, 'z': 0}
 
 # The version number the game is currently updated to
 game_version = 'v1.0.0 Beta'
@@ -368,7 +372,7 @@ def check_save():  # Check for save files and load the game if they're found
 
                 for key in party_info:
                     if key in ['current_tile', 'prev_town'] and party_info[key]:
-                        for tile in world.all_tiles:
+                        for tile in tiles.all_tiles:
                             if party_info[key] == tile.tile_id:
                                 party_info[key] = tile
 
@@ -421,7 +425,7 @@ def save_game():
                 json_party_info = {}
                 for key in party_info:
                     if key in ['current_tile', 'prev_town']:
-                        if isinstance(party_info[key], world.Tile):
+                        if isinstance(party_info[key], tiles.Tile):
                             json_party_info[key] = party_info[key].tile_id
 
                         else:
@@ -460,7 +464,7 @@ def save_game():
 
 
 def title_screen():
-    pygame.mixer.music.load('Music/Prologue.ogg')
+    pygame.mixer.music.load('Content/Music/Prologue.ogg')
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(music_vol)
 
@@ -479,13 +483,13 @@ def title_screen():
             print('-'*25)
 
             try:
-                pygame.mixer.music.load('Music/Credits Music for an 8-bit RPG.ogg')
+                pygame.mixer.music.load('Content/Music/Credits Music for an 8-bit RPG.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
 
                 # Display the credits one line at a time with specific lengths
                 # of time in between each line. Syncs up with the music!
-                with open('../Credits.txt') as f:
+                with open('Content/Credits.txt') as f:
                     for number, f.readline in enumerate(f):
                         print(''.join(f.readline.rstrip("\n").split(";")))
                         smart_sleep([0.75, 1.25, 0.75, 1.25, 1, 1, 0.5, 0.5, 1, 1,
@@ -499,7 +503,7 @@ def title_screen():
 
                     smart_sleep(3)
 
-                    pygame.mixer.music.load('Music/Prologue.ogg')
+                    pygame.mixer.music.load('Content/Music/Prologue.ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(music_vol)
 
@@ -522,20 +526,20 @@ def title_screen():
             print('-'*25)
 
             try:
-                pygame.mixer.music.load('Music/CopperNickel.ogg')
+                pygame.mixer.music.load('Content/Music/CopperNickel.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
 
                 # Display each line one at a time, and require the pressing of enter
                 # on lines that aren't solely whitespace
-                with open('../peasant_plot.txt', encoding='utf-8') as f:
+                with open('Content/peasant_plot.txt', encoding='utf-8') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
                             input(''.join(f.readline.rstrip("\n").split(";")))
                         else:
                             print(''.join(f.readline.rstrip("\n").split(";")))
 
-                pygame.mixer.music.load('Music/Prologue.ogg')
+                pygame.mixer.music.load('Content/Music/Prologue.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
 
@@ -558,20 +562,20 @@ def title_screen():
             print('-'*25)
 
             try:
-                pygame.mixer.music.load('Music/CopperNickel.ogg')
+                pygame.mixer.music.load('Content/Music/CopperNickel.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
 
                 # Display each line one at a time, and require the pressing of enter
                 # on lines that aren't solely whitespace
-                with open('../peasant_lore.txt', encoding='utf-8') as f:
+                with open('Content/peasant_lore.txt', encoding='utf-8') as f:
                     for f.readline in f:
                         if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
                             input(''.join(f.readline.rstrip("\n").split(";")))
                         else:
                             print(''.join(f.readline.rstrip("\n").split(";")))
 
-                pygame.mixer.music.load('Music/Prologue.ogg')
+                pygame.mixer.music.load('Content/Music/Prologue.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(music_vol)
 
@@ -666,7 +670,7 @@ def main():
     change_settings()  # ...set the volume and save file settings...
     title_screen()  # ...display the titlescreen...
     check_save()  # ...check for save files...
-    world.movement_system()  # ...and then start the game.
+    tiles.movement_system()  # ...and then start the game.
 
 
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
