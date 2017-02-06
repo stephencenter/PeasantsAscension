@@ -1,5 +1,4 @@
 from NPCClass import *
-import towns
 
 # -- Name: Solou -- Town: Nearton
 solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
@@ -32,7 +31,8 @@ solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
                                "Hey, I've got an idea - how about I go adventuring with you? Like I said",
                                "Earlier, I've always dreamed of being a master sorceress, and joining",
                                "a mighty adventurer like yourself on your quest might help me achieve",
-                               "my dreams! I'm sure that my wizardry would be of great use to you, too!"], active=True)
+                               "my dreams! I'm sure that my wizardry would be of great use to you, too!"],
+                              "solou_p1", active=True)
 
 
 def solou_p1_at():
@@ -46,7 +46,7 @@ def solou_p1_at():
 
 solou_phrase_1.after_talking = solou_p1_at
 
-solou_phrase_2 = Conversation(["No time to chat, we gotta get back to adventuring!"])
+solou_phrase_2 = Conversation(["No time to chat, we gotta get back to adventuring!"], "solou_p2")
 
 solou_quest_1 = Quest(["Before I resign as page and begin adventuring with you, it's only",
                        "fair that I finish delivering the letters I was given. They're",
@@ -59,7 +59,7 @@ solou_quest_1 = Quest(["Before I resign as page and begin adventuring with you, 
                        "miss it."], "A Courier's Resignation [MAIN QUEST]",
                       ["Travel over to Overshire and speak to the mayor. Overshire is located",
                        "at 13\u00b0N, -11\u00b0W, northwest of Nearton. Beware of the nearby graveyard!"],
-                      "Solou", [25, 25], [], active=True)
+                      "Solou", [25, 25], [], "solou_q1", active=True)
 
 
 def solou_q1_us():
@@ -79,11 +79,11 @@ def solou_q1_uc():
 npc_solou = NPC("Solou", [solou_phrase_1, solou_phrase_2, solou_quest_1], "Page")
 
 # -- Name: Joseph -- Town: Overshire
-joseph_phrase_1 = Conversation(['Greetings, young adventurer. Welcome to Overshire.'], active=True)
+joseph_phrase_1 = Conversation(['Greetings, young adventurer. Welcome to Overshire.'], "joseph_p1", active=True)
 joseph_phrase_2 = Conversation(["Ah, Solou! Long time no see! I see you've taken up adventuring.",
                                 "It must be nice to finally put that spellbook of yours to use!",
                                 "Oh, what's this? A letter for me? Well, I'll be sure to read this",
-                                "later. Thank you for delivering this to me!"])
+                                "later. Thank you for delivering this to me!"], "joseph_p2")
 
 
 def joseph_p2_at():
@@ -96,7 +96,7 @@ def joseph_p2_at():
 joseph_phrase_2.after_talking = joseph_p2_at
 
 joseph_phrase_3 = Conversation(["Go visit my friend Azura in Parceon. She knows more about this than",
-                                "I do. Parceon is located at 24\u00b0N, 28\u00b0E in case you forgot"])
+                                "I do. Parceon is located at 24\u00b0N, 28\u00b0E in case you forgot"], "joseph_p3")
 
 joseph_quest_1 = Quest(["Ah, Solou! Long time no see! I see you've taken up adventuring.",
                         "It must be nice to finally put that spellbook of yours to use!",
@@ -109,7 +109,7 @@ joseph_quest_1 = Quest(["Ah, Solou! Long time no see! I see you've taken up adve
                         "called Parceon, located at 24\u00b0N, 28\u00b0E."], "To Parceon! [MAIN QUEST]",
                        ["Visit Azura at Parceon, located at24\u00b0N, 28\u00b0E, and",
                         "tell her that Joseph sent you. She has information that will",
-                        "help you on your journey."], "Joseph", [75, 75], [])
+                        "help you on your journey."], "Joseph", [75, 75], [], "joseph_q1")
 
 
 def joseph_q1_us():
@@ -127,7 +127,7 @@ orius = NPC("Orius", [], "Mayor of Charsulville")
 # -- Name: Azura -- Town: Parceon
 azura_phrase_1 = Conversation(["Hello, I'm Azura, leader of this town and head of the",
                                "Sorcerer's Guild. I'm quite busy right now, so please",
-                               "come back later if you wish to speak to me."], active=True)
+                               "come back later if you wish to speak to me."], "azura_p1", active=True)
 
 azura_phrase_2 = Conversation(["Hello, I'm Azura, leader of this town and head of the",
                                "Sorcerer's Guild. I'm quite busy right now, so please",
@@ -146,7 +146,7 @@ azura_phrase_2 = Conversation(["Hello, I'm Azura, leader of this town and head o
                                "problems lately. If you go help him out, then you will have",
                                "earned my trust. He lives in the town of Ambercreek, a village",
                                "right along the border of the Forest and Mountain regions.",
-                               "The town is located at -7\u00b0S, -51\u00b0W. Good luck."])
+                               "The town is located at -7\u00b0S, -51\u00b0W. Good luck."], "azura_p2")
 
 
 def azura_p1_at():
@@ -162,12 +162,12 @@ def azura_p1_at():
 azura_phrase_2.after_talking = azura_p1_at
 
 azura_phrase_3 = Conversation(["My father, Raidon, lives in the town of Ambercreek at",
-                               "-7\u00b0S, -51\u00b0W. Good luck!"])
+                               "-7\u00b0S, -51\u00b0W. Good luck!"], "azura_p3")
 
-azura = NPC('Azura', [azura_phrase_1, azura_phrase_2, azura_phrase_3], "Sorcerer's Guildmaster")
+azura = NPC('Azura', [azura_phrase_1, azura_phrase_2, azura_phrase_3], "Sorcerers' Guildmaster")
 
 # -- Name: Raidon -- Town: Ambercreek
-raidon_phrase_1 = Conversation(["FILLER TEXT"], active=True)
+raidon_phrase_1 = Conversation(["FILLER TEXT"], "raidon_p1", active=True)
 
 raidon = NPC('Raidon', [raidon_phrase_1], "Village Shaman")
 
@@ -185,11 +185,11 @@ stewson_phrase_1 = Conversation(["Our amazing Kingdom has 6 different regions:",
                                  "Inside lies a dangerous apparition, feared by all who have seen it.",
                                  "As the captain of the guard, my men and I have tried",
                                  "and failed countless times to defeat that wretched ghost!",
-                                 ], active=True)
+                                 ], "stewson_p1", active=True)
 
-stewson_phrase_2 = Conversation(["Please save us from this monstrous wraith!"])
+stewson_phrase_2 = Conversation(["Please save us from this monstrous wraith!"], "stewson_p2")
 
-stewson_phrase_3 = Conversation(["Thank you again for your help, adventurer!"])
+stewson_phrase_3 = Conversation(["Thank you again for your help, adventurer!"], "stewson_p3")
 
 stewson_quest_1 = Quest(["I wish someone would do something about this terrible",
                          "ghost... Hey! You're a strong adventurer, perhaps you",
@@ -200,7 +200,7 @@ stewson_quest_1 = Quest(["I wish someone would do something about this terrible"
                         'Stewson', [50, 75],
                         ["You... you actually defeated it?! Thank you ever so much!",
                          "Finally my men and I can rest, and the town is safe!",
-                         "Take this, it is the least our town can do for your bravery."],
+                         "Take this, it is the least our town can do for your bravery."], "stewson_q1",
                         active=True)
 
 
@@ -235,14 +235,14 @@ stewson = NPC('Stewson', [stewson_phrase_1, stewson_phrase_2, stewson_phrase_3, 
 seriph_phrase_1 = Conversation(['...You actually came to this town? And of your own',
                                 'free will, too?! I was going to say that you were either',
                                 'very brave or very stupid, but on second thought, the latter',
-                                'is far more likely.'], active=True)
+                                'is far more likely.'], "seriph_p1", active=True)
 
 seriph_phrase_2 = Conversation(["What?! You're going to try to kill the evil spirit?",
                                 "You're truly stupider than I thought. I wish you"
-                                "good luck nonetheless."])
+                                "good luck nonetheless."], "seriph_p2")
 
 seriph_phrase_3 = Conversation(["I still can't believe that you killed the evil spirit!",
-                                "We cannot thank you enough!"])
+                                "We cannot thank you enough!"], "seriph_p3")
 
 seriph = NPC('Seriph', [seriph_phrase_1, seriph_phrase_2, seriph_phrase_3], "Blacksmith")
 
@@ -259,17 +259,17 @@ rivesh_phrase_1 = Conversation(["Welcome, brave adventurer. I'm sure that you've
                                 "When they least expected it, the ghost possessed them!",
                                 "As punishment for their foolishness, the evil spirit",
                                 "now forcefully takes a victim from this town every 10 days",
-                                "and forbids its inhabitants from leaving!"], active=True)
+                                "and forbids its inhabitants from leaving!"], "rivesh_p1", active=True)
 
 rivesh_phrase_2 = Conversation(["Hey... I don't suppose that you have any experience",
                                 "with fighting ghosts, do you? No? Ok then. If you find",
                                 "someone who has defeated a very menacing phantom before,",
-                                "please request that they come help us!"], active=True)
+                                "please request that they come help us!"], "rivesh_p2", active=True)
 
 rivesh_phrase_3 = Conversation(["Help us, young adventurer! You are the only one",
-                                "who can save us from this terrible spirit!"])
+                                "who can save us from this terrible spirit!"], "rivesh_p3")
 
-rivesh_phrase_4 = Conversation(["Thanks again, hero! We are forever indebted to you!"])
+rivesh_phrase_4 = Conversation(["Thanks again, hero! We are forever indebted to you!"], "rivesh_p4")
 
 rivesh_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
                         "with fighting ghosts, do you? Wait, what's that? You",
@@ -279,7 +279,7 @@ rivesh_quest_1 = Quest(["Hey... I don't suppose that you have any experience",
                        ["Rid Fort Sigil of its curse by defeating the evil spirit at",
                        "coordinates 22\u00b0N, 3\u00b0E."], "Rivesh", [200, 200],
                        ["Y-you defeated the evil spirit? Praise Guido's beard! We are",
-                        "free of this curse! You are forever in our gratitude, young hero!"])
+                        "free of this curse! You are forever in our gratitude, young hero!"], "rivesh_q1")
 
 
 def rivesh_q1_us():
@@ -318,20 +318,19 @@ rivesh = NPC('Rivesh', [rivesh_phrase_1, rivesh_phrase_2,
 
 # -- Name: Alfred -- Town: Nearton
 alfred_phrase_1 = Conversation(["It is rumored that a mighty gel-creature lives south-east",
-                                "of this very town. I'd be careful around there if I were you."],
+                                "of this very town. I'd be careful around there if I were you."], "alfred_p1",
                                active=True)
-alfred_phrase_2 = Conversation(["Come back here when you defeat the evil",
-                                "Master Slime. Good luck!"])
+alfred_phrase_2 = Conversation(["Come back here when you defeat the evil Master Slime. Good luck!"], "alfred_p2")
 
-alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"])
+alfred_phrase_3 = Conversation(["Greetings, Hero! Good luck on your adventures!"], "alfred_p3")
 
 alfred_quest_1 = Quest(["...Actually, now that I think about it, do you think you could possibly",
-                        "dispose of this vile creature? His location is 0\u00b0N, 1\u00b0E."],
+                        "dispose of this vile creature? His location is 1\u00b0N, -1\u00b0W."],
                        'A Slimy Specimen',
-                       ["Defeat the dreaded Master Slime at location 0\u00b0N, 1\u00b0E and then",
+                       ["Defeat the dreaded Master Slime at location 1\u00b0N, -1\u00b0w and then",
                         "return to Alfred in Nearton."], 'Alfred', [30, 50],
                        ["You defeated the evil Master Slime?!",
-                        "Amazing! Take this, adventurer, you've earned it."], active=True)
+                        "Amazing! Take this, adventurer, you've earned it."], "alfred_q1", active=True)
 
 
 def alfred_q1_us():
@@ -362,16 +361,16 @@ kyle_phrase_1 = Conversation(["Greeting, traveller. I am Kyle, Tripton's Village
                               "Those stupid Fallvillians need to get away from our",
                               "land! It's they're fault they made a town that was so",
                               "easy to miss! I don't care if we have to go to war",
-                              "with those dingbats, I'm not leaving this spot!"], active=True)
+                              "with those dingbats, I'm not leaving this spot!"], "kyle_p1", active=True)
 
 kyle_phrase_2 = Conversation(["Adventurer, we have heard reports that a mighty",
                               "beast is in our land! None of our men are willing",
-                              "to risk their lives to stop it. We are doomed."])
+                              "to risk their lives to stop it. We are doomed."], "kyle_p2")
 
 kyle_phrase_3 = Conversation(["The mighty monster has fallen? Thank god!",
                               "What's this you say? The Fallvillians defeated it?",
                               "We owe them our lives. Perhaps we should think",
-                              "about negotiating peace..."])
+                              "about negotiating peace..."], "kyle_p3")
 
 
 def kyle_p3_at():
@@ -390,7 +389,7 @@ def kyle_p3_at():
 
 kyle_phrase_3.after_talking = kyle_p3_at
 
-kyle_phrase_4 = Conversation(["Welcome, adventurer, to the town of Tripton!"])
+kyle_phrase_4 = Conversation(["Welcome, adventurer, to the town of Tripton!"], "kyle_p4")
 
 kyle = NPC('Kyle', [kyle_phrase_1, kyle_phrase_2, kyle_phrase_3, kyle_phrase_4], "Village Elder")
 
@@ -400,15 +399,15 @@ krystin_phrase_1 = Conversation(["Hello, I am the Village Elder of Fallville. We
                                  "kindly to Triptonians around here, so tell us if",
                                  "you see any. What I don't understand is that the",
                                  "silly Triptonians blame us for their poor eyesight.",
-                                 "It's all their fault, and they know it!"], active=True)
+                                 "It's all their fault, and they know it!"], "krystin_p1", active=True)
 
 krystin_phrase_2 = Conversation(["AHHH! Help! There's a m-m-monster out there!",
-                                 "Someone go kill it! AHHH!"])
+                                 "Someone go kill it! AHHH!"], "krystin_p2")
 
 krystin_phrase_3 = Conversation(["What, the monster is dead? Thank goodness!",
                                  "Oh, so the Triptonians killed it? Well then... I",
                                  "guess that we owe them our gratitude. Perhaps we",
-                                 "should think about negotiating peace..."])
+                                 "should think about negotiating peace..."], "krystin_p3")
 
 
 def krystin_p3_at():
@@ -427,7 +426,7 @@ def krystin_p3_at():
 
 krystin_phrase_3.after_talking = krystin_p3_at
 
-krystin_phrase_4 = Conversation(["Greetings, hero! Welcome to Fallville."])
+krystin_phrase_4 = Conversation(["Greetings, hero! Welcome to Fallville."], "krystin_p4")
 
 krystin = NPC('Krystin', [krystin_phrase_1, krystin_phrase_2,
                           krystin_phrase_3, krystin_phrase_4], "Village Elder")
@@ -438,16 +437,14 @@ frederick_phrase_1 = Conversation(["I hear that there is a wise sage that has ta
                                    "residence in a small cottage southwest of this town.",
                                    "I would go and talk to him, but monsters have been roaming",
                                    "around the outskirts of town lately and it just isn't safe",
-                                   "to travel anymore."],
-                                  active=True)
+                                   "to travel anymore."], "frederick_p1", active=True)
 
 frederick_phrase_2 = Conversation(["There's a monster outside of town, and a big",
-                                   "one at that! I hope it goes away..."])
+                                   "one at that! I hope it goes away..."], "frederick_p2")
 
-frederick_phrase_3 = Conversation(["Thank heavens, the mighty beast has fallen."])
+frederick_phrase_3 = Conversation(["Thank heavens, the mighty beast has fallen."], "frederick_p3")
 
-frederick = NPC('Frederick', [frederick_phrase_1, frederick_phrase_2, frederick_phrase_3],
-                "Scholar")
+frederick = NPC('Frederick', [frederick_phrase_1, frederick_phrase_2, frederick_phrase_3], "Scholar")
 
 
 # -- Name: Alden -- Town: Small Cottage (1)
@@ -469,7 +466,7 @@ alden_quest_1 = Quest(["Greetings, adventurer. I'm sure that you have heard of t
                        "village's bravery."], 'Alden', [175, 200],
                       ["Welcome back, brave adventurer. I have already received word",
                        "of the monster's defeat. I thank you ever so much for helping",
-                       "us, hero."], active=True)
+                       "us, hero."], "alden_q1", active=True)
 
 
 def alden_q1_us():
@@ -503,20 +500,20 @@ alden_quest_1.upon_starting = alden_q1_us
 alden_quest_1.upon_completing = alden_q1_uc
 
 alden_phrase_1 = Conversation(["I've summoned the mighty beast. Now hurry up",
-                               "and dispose of it before it causes any damage."])
+                               "and dispose of it before it causes any damage."], "alden_p1")
 
 alden_phrase_2 = Conversation(["You've defeated him? Good, now go talk to the village",
-                               "elders! Good luck!"])
+                               "elders! Good luck!"], "alden_p2")
 
 alden_phrase_3 = Conversation(["Thanks again, hero. You've saved those towns",
-                               "a lot of trouble."])
+                               "a lot of trouble."], "alden_p3")
 
 alden = NPC('Alden', [alden_quest_1, alden_phrase_1, alden_phrase_2, alden_phrase_3], "Sage")
 
 # -- Name: Polmor -- Town: Whistumn
 polmor_phrase_1 = Conversation(['Our poor daughter! Serena and I have been working on a cure, but',
                                 'we cannot find anyone stup-I mean brave enough to gather the',
-                                'resources we need. All is lost if we cannot get the ingredients.'],
+                                'resources we need. All is lost if we cannot get the ingredients.'], "polmor_p1",
                                active=True)
 
 polmor_quest_1 = Quest(["Wait a minute... I am so stupid! According to my calculations, you",
@@ -536,7 +533,7 @@ polmor_quest_1 = Quest(["Wait a minute... I am so stupid! According to my calcul
                         "the medicine to their daughter, and she immediately begins ",
                         "feeling better.* Oh joy of joys! Our daughter is healed! How can we",
                         "ever repay you, oh noble adventurer and vanquisher of the Blight?",
-                        "Here, take this. It is the absolute least that we can do."], active=True)
+                        "Here, take this. It is the absolute least that we can do."], "polmor_q1", active=True)
 
 
 def polmor_q1_us():
@@ -553,7 +550,7 @@ def polmor_q1_us():
 
 def polmor_q1_uc():
     global serena_phrase_2
-    global ser_pol_phrase_3
+    global serena_phrase_3
     global polmor_phrase_2
 
     ser_pol_phrase_3.active = True
@@ -570,7 +567,7 @@ polmor_quest_1.upon_completing = polmor_q1_uc
 
 polmor_phrase_2 = Conversation(['Please, return once you have obtained one Monster Fang,',
                                 'one Serpent Scale, and one Fairy Dust. You must',
-                                'save our daughter!'])
+                                'save our daughter!'], "polmor_p2")
 
 
 def polmor_p2_at():
@@ -611,47 +608,7 @@ def polmor_p2_at():
 
 polmor_phrase_2.after_talking = polmor_p2_at
 
-ser_pol_phrase_3 = Conversation(['You are our heroes! Here, allow us to treat your wounds.'])
-
-
-def ser_pol_p3_at():
-    units.player.hp += (units.player.max_hp - units.player.hp)
-    units.player.mp += (units.player.max_mp - units.player.mp)
-    units.player.status_ail = 'none'
-
-    units.solou.hp += (units.solou.max_hp - units.solou.hp)
-    units.solou.mp += (units.solou.max_mp - units.solou.mp)
-    units.solou.status_ail = 'none'
-
-    units.ran_af.hp += (units.ran_af.max_hp - units.ran_af.hp)
-    units.ran_af.mp += (units.ran_af.max_mp - units.ran_af.mp)
-    units.ran_af.status_ail = 'none'
-
-    units.adorine.hp += (units.adorine.max_hp - units.adorine.hp)
-    units.adorine.mp += (units.adorine.max_mp - units.adorine.mp)
-    units.adorine.status_ail = 'none'
-
-    units.chyme.hp += (units.chyme.max_hp - units.chyme.hp)
-    units.chyme.mp += (units.chyme.max_mp - units.chyme.mp)
-    units.chyme.status_ail = 'none'
-
-    units.xoann.hp += (units.xoann.max_hp - units.xoann.hp)
-    units.xoann.mp += (units.xoann.max_mp - units.xoann.mp)
-    units.xoann.status_ail = 'none'
-
-    units.parsto.hp += (units.parsto.max_hp - units.parsto.hp)
-    units.parsto.mp += (units.parsto.max_mp - units.parsto.mp)
-    units.parsto.status_ail = 'none'
-
-    print('-'*25)
-    print('Polmor and Serena get to work on healing your party.')
-    print('Your party has been restored to full HP and healed of its status ailments.')
-
-
-ser_pol_phrase_3.after_talking = ser_pol_p3_at
-
-polmor = NPC('Polmor', [polmor_phrase_1, polmor_quest_1, polmor_phrase_2, ser_pol_phrase_3],
-             "Engineer")
+polmor = NPC('Polmor', [polmor_phrase_1, polmor_quest_1, polmor_phrase_2], "Engineer")
 
 # -- Name: Matti -- Town: Lantonum
 matthew_phrase_1 = Conversation(["*You try to talk to the man in the bar, but he is too",
@@ -659,16 +616,48 @@ matthew_phrase_1 = Conversation(["*You try to talk to the man in the bar, but he
                                  'Suddenly, a peasant walks up behind him, screams "Witch!!",',
                                  'grabs the iSound, and smashes it to bits on the floor. He',
                                  'then proceeds to set it on fire and bury the ashes in the dirt',
-                                 'behind the bar.*'], active=True)
+                                 'behind the bar.*'], "matt_p1", active=True)
 
-matthew_phrase_2 = Conversation(["Hello, friend! Have you gotten me a new iSound yet?"])
+matthew_phrase_2 = Conversation(["Hello, friend! Have you gotten me a new iSound yet?"], "matt_p2")
 
 matthew_phrase_3 = Conversation(["No? That's okay. Just pick one up for me when you",
                                  "get the chance. You can purchase them at the town",
-                                 "of Cesura, located at 123\u00b0N, 58\u00b0E."])
+                                 "of Cesura, located at 123\u00b0N, 58\u00b0E."], "matt_p3")
 
 matthew_phrase_4 = Conversation(["You have? Wonderful! *He takes the iSound from your",
-                                 "hand and pulls out 1250 GP*"])
+                                 "hand and pulls out 1250 GP*"], "matt_p4")
+
+matthew_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
+                         "iSound MP3 player a witch - this is the fifth one I've gone through",
+                         "this week! The company that makes them only sells them in Elysium, as",
+                         "nobody in Harconia could tell an MP3 player from a brick if their life",
+                         "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
+                         "train town near the border of Harconia and Elysium, and buy me a new",
+                         "iSound, I will reward you greatly. Remember: iSounds have watermelons",
+                         "on the back. If you get one with a grapefruit, then you're just paying",
+                         "a lot of money for a cheap knockoff brand. And definitely stay away",
+                         "from papaya phones. Can you do that for me?"], 'iSounds Good',
+                        ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
+                         "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E. Return to Matthew",
+                         "at Lantonum when you are finished."], "Matthew", [1250, 1250],
+                        ["Thanks, man! This latest version is supposed to be",
+                         "peasant-proof, so let's hope tha- *His statement is cut off",
+                         "as a local serf runs up and tackles him, pries the iSound",
+                         "from his hands, tosses it into a bucket of water, observes",
+                         'that it does not float, screams "WITCH", and then rushes',
+                         "over to the blacksmith's shop and throws the device into",
+                         "the forge. A bloody fight ensues, as the blacksmith attacks",
+                         'the serf for "defiling his forge with the blood of a witch".',
+                         'The serf is killed, and the town guards rush over and arrest',
+                         'the blacksmith for murdering the innocent but idiotic serf.',
+                         'You and Matthew look each other in the eyes, he hands you the',
+                         "money, and you both leave the scene without speaking another",
+                         "word."], "matt_q1", active=True)
+
+
+def matthew_p1_at():
+    global matthew_phrase_1
+    matthew_phrase_1.active = False
 
 
 def matthew_p2_at():
@@ -705,37 +694,6 @@ def matthew_p4_at():
     matthew.speak()
 
 
-matthew_quest_1 = Quest(["Dangit, that happens all the time! Those idiots keep calling my",
-                         "iSound MP3 player a witch - this is the fifth one I've gone through",
-                         "this week! The company that makes them only sells them in Elysium, as",
-                         "nobody in Harconia could tell an MP3 player from a brick if their life",
-                         "depended on it. Hey, I'll tell you want: If you go to Cesura, the",
-                         "train town near the border of Harconia and Elysium, and buy me a new",
-                         "iSound, I will reward you greatly. Remember: iSounds have watermelons",
-                         "on the back. If you get one with a grapefruit, then you're just paying",
-                         "a lot of money for a cheap knockoff brand. And definitely stay away",
-                         "from papaya phones. Can you do that for me?"],
-                        'iSounds Good',
-                        ["Retrieve a new iSound MP3 Player - whatever that is - from a shop in",
-                         "Cesura. Cesura is located at 123\u00b0N, 58\u00b0E. Return to Matthew",
-                         "at Lantonum when you are finished."],
-                        "Matthew", [1250, 1250],
-                        ["Thanks, man! This latest version is supposed to be",
-                         "peasant-proof, so let's hope tha- *His statement is cut off",
-                         "as a local serf runs up and tackles him, pries the iSound",
-                         "from his hands, tosses it into a bucket of water, observes",
-                         'that it does not float, screams "WITCH", and then rushes',
-                         "over to the blacksmith's shop and throws the device into",
-                         "the forge. A bloody fight ensues, as the blacksmith attacks",
-                         'the serf for "defiling his forge with the blood of a witch".',
-                         'The serf is killed, and the town guards rush over and arrest',
-                         'the blacksmith for murdering the innocent but idiotic serf.',
-                         'You and Matthew look each other in the eyes, he hands you the',
-                         "money, and you both leave the scene without speaking another",
-                         "word.",
-                         '-'*25], active=True)
-
-
 def matthew_q1_us():
     global matthew_phrase_1
     global matthew_phrase_2
@@ -750,19 +708,18 @@ def matthew_q1_uc():
     matthew_phrase_5.active = True
     matthew_quest_1.active = False
 
+
+matthew_phrase_5 = Conversation(["...", "*He looks quite depressed.*"], "matt_p5")
+
 matthew_quest_1.upon_starting = matthew_q1_us
 matthew_quest_1.upon_completing = matthew_q1_uc
-
-
-matthew_phrase_5 = Conversation(["...", "*He looks quite depressed.*"])
-
+matthew_phrase_1.after_talking = matthew_p1_at
 matthew_phrase_2.after_talking = matthew_p2_at
 matthew_phrase_3.after_talking = matthew_p3_at
 matthew_phrase_4.after_talking = matthew_p4_at
 
 matthew = NPC('Matthew', [matthew_phrase_1, matthew_quest_1, matthew_phrase_2,
-                          matthew_phrase_3, matthew_phrase_4, matthew_phrase_5],
-              "Interstellar Traveller")
+                          matthew_phrase_3, matthew_phrase_4, matthew_phrase_5], "Interstellar Traveller")
 
 # -- Name: Pime -- Town: Sanguion
 pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quick, come inside,",
@@ -781,7 +738,30 @@ pime_phrase_1 = Conversation(["Hello, traveller! You do not look familiar - quic
                               "society, and do not deserve this kind of treatment! Our loved",
                               "ones are dying to those monsters, and we don't have anywhere",
                               "near enough manpower to put a stop to it! What are we to do?!",
-                              ], active=True)
+                              ], "pime_p1", active=True)
+
+pime_phrase_2 = Conversation(["Perhaps you could... nevermind, we need a more experienced",
+                              "individual to help us with our plight. Come back later.",
+                              "*Pime needs someone who is at least level 10. Go level up a bit!*"], "pime_p2")
+
+
+pime_quest_1 = Quest(["Hey - you look like quite the seasoned adventurer. Maybe you could help",
+                      "us! I hope this isn't too much to ask, but could you possibly defeat",
+                      "this dreaded vampire hunter for us? He's causing us so much pain, we need",
+                      "someone to get rid of him."], "The Hated Hunter",
+                     ["Defeat Herises, the head of the Anti-blood Squad, as well as his lackeys.",
+                      "Their base is supposedly located at -68\u00b0S, -93\u00b0W, then return",
+                      "to Pime at Sanguion."], "Pime", [1000, 1000],
+                     ["Di... did you really defeat them? Amazing! You have saved us so much",
+                      "trouble! Those horrendous villains shall not hurt our tribe anymore!",
+                      "*He looks overjoyed, and gives you a great big hug. One wonders why",
+                      "the hunters attacked these people in the first place.*"], "pime_q1")
+
+pime_phrase_3 = Conversation(["Please deal with those blasted vampire hunters! Their hideout",
+                              "is located at -68\u00b0S, -93\u00b0W."], "pime_p3")
+
+pime_phrase_4 = Conversation(["Thank you every so much for ridding us of those vile",
+                              "terrorists! You are forever in our gratitude!"], "pime_p4")
 
 
 def pime_p1_at():
@@ -796,27 +776,6 @@ def pime_p1_at():
 
     else:
         pime_phrase_2.active = True
-
-
-pime_phrase_1.after_talking = pime_p1_at
-
-pime_phrase_2 = Conversation(["Perhaps you could... nevermind, we need a more experienced",
-                              "individual to help us with our plight. Come back later.",
-                              "*Pime needs someone who is at least level 10. Go level up a bit!"])
-
-pime_quest_1 = Quest(["Hey - you look like quite the seasoned adventurer. Maybe you could help",
-                      "us! I hope this isn't too much to ask, but could you possibly defeat",
-                      "this dreaded vampire hunter for us? He's causing us so much pain, we need",
-                      "someone to get rid of him."],
-                     "The Hated Hunter",
-                     ["Defeat Herises, the head of the Anti-blood Squad, as well as his lackeys.",
-                      "Their base is supposedly located at -68\u00b0S, -93\u00b0W, then return",
-                      "to Pime at Sanguion."], "Pime",
-                     [1000, 1000],
-                     ["Di... did you really defeat them? Amazing! You have saved us so much",
-                      "trouble! Those horrendous villains shall not hurt our tribe anymore!",
-                      "*He looks overjoyed, and gives you a great big hug. One wonders why",
-                      "the hunters attacked these people in the first place.*"])
 
 
 def pime_q1_us():
@@ -836,23 +795,18 @@ def pime_q1_uc():
     pime_phrase_4.active = True
 
 
+pime_phrase_1.after_talking = pime_p1_at
 pime_quest_1.upon_starting = pime_q1_us
 pime_quest_1.upon_completing = pime_q1_uc
 
-pime_phrase_3 = Conversation(["Please deal with those blasted vampire hunters! Their hideout",
-                              "is located at -68\u00b0S, -93\u00b0W."])
-
-pime_phrase_4 = Conversation(["Thank you every so much for ridding us of those vile",
-                              "terrorists! You are forever in our gratitude!"])
-
-pime = NPC('Pime', [pime_phrase_1, pime_phrase_2, pime_quest_1, pime_phrase_3, pime_phrase_4],
-           "Vampire Shaman")
+pime = NPC('Pime', [pime_phrase_1, pime_phrase_2, pime_quest_1, pime_phrase_3, pime_phrase_4], "Vampire Shaman")
 
 # ----------------------------------------------------------------------------#
 # UNIMPORTANT CHARACTERS
 
 # -- Name: Philliard -- Town: Nearton
-philliard_phrase_1 = Conversation(["Hello, adventurer!", "Welcome to the Kingdom of Harconia."], active=True)
+philliard_phrase_1 = Conversation(["Hello, adventurer!", "Welcome to the Kingdom of Harconia."],
+                                  "philliard_p1", active=True)
 
 philliard = NPC('Philliard', [philliard_phrase_1], "Scribe")
 
@@ -869,7 +823,7 @@ sondalar_phrase_1 = Conversation(["Greetings! Say, I haven't seen you in quite a
                                   "too. They will, usually for a fee, heal all your wounds and",
                                   "give you some precious time and space to write in that travel",
                                   "log you've got there. That's all I've got to say, catch up with",
-                                  "you soon hopefully!"], active=True)
+                                  "you soon hopefully!"], "sondalar_p1", active=True)
 
 sondalar = NPC('Sondalar', [sondalar_phrase_1], "Goods Peddler")
 
@@ -878,15 +832,14 @@ saar_phrase_1 = Conversation(["I haven't really explored too far away from this 
                               "In fact, the only other towns I've been to are Southford,",
                               "located at -6\u00b0S, -2\u00b0W, and Overshire, located",
                               "at 13\u00b0N, -11\u00b0W. Overshire is a pretty",
-                              "big city, though - in fact, it's the capital of our Kingdom!"],
-                             active=True)
+                              "big city, though - in fact, it's the capital of our Kingdom!"], "saar_p1", active=True)
 
 saar = NPC("Saar", [saar_phrase_1], "Bard")
 
 # -- Name: Wesley -- Town: Southford
 wesley_phrase_1 = Conversation(["Adventurers around this area say that monsters tend",
                                 "to be stronger the farther from 0\u00b0N, 0\u00b0E that you travel.",
-                                "However, monsters there also give better loot. Be careful."], active=True)
+                                "However, monsters there also give better loot. Be careful."], "wesley_p1", active=True)
 
 wesley = NPC('Wesley', [wesley_phrase_1], "Peasant")
 
@@ -898,43 +851,41 @@ lazaro_phrase_1 = Conversation(["Greetings, adventurer from Nearton! How do I kn
                                 "  \"Your position is saved whenever you cross region borders",
                                 "  or visit a town. If you die, you will return there!\"",
                                 "That's what He said. I do not understand His words, but",
-                                "I hope they serve their intended recipient well."], active=True)
+                                "I hope they serve their intended recipient well."], "lazaro_p1", active=True)
 
 lazaro = NPC('Lazaro', [lazaro_phrase_1], "Oracle")
 
 # -- Name: Typhen -- Town: Overshire
 typhen_phrase_1 = Conversation(["I've heard that when you use healing spells, you restore",
-                                "additional HP based on your wisdom! Paladins supposedly get",
-                                "an even larger restoration bonus when they heal!"], active=True)
+                                "additional HP based on your wisdom. And paladins supposedly get",
+                                "an even larger restoration bonus when they heal!", ""], "typhen_p1", active=True)
 
 typhen = NPC('Typhen', [typhen_phrase_1], "Novice Cleric")
 
 # -- Name: Jeffery -- Town: Overshire
 jeffery_phrase_1 = Conversation(["Have you heard about what happened to Princess Celeste?",
                                  "The news of her kidnapping is spreading across the kingdom",
-                                 "like wildfire! Those blasted Thexians will pay for this!"],
-                                active=True)
+                                 "like wildfire! Those blasted Thexians will pay for this!"], "jeffery_p1", active=True)
 
 jeffery = NPC('Jeffery', [jeffery_phrase_1], "Gossipping Serf")
 
 # -- Name: Harthos -- Town: Overshire
 harthos_phrase_1 = Conversation(["Welcome to Overshire, stranger! Our Kingdom's capital is",
-                                 "pretty big, so try not to get lost, haha!"], active=True)
+                                 "pretty big, so try not to get lost, haha!"], "harthos_p1", active=True)
 
 harthos = NPC("Harthos", [harthos_phrase_1], "Lumberjack")
 
 # -- Name: Ethos -- Town: Charsulville
 ethos_phrase_1 = Conversation(['Any smart adventurer would keep track of town coordinates',
                                'and powerful monsters in their inventory. If you get lost,',
-                               'check there.'], active=True)
+                               'check there.'], "ethos_p1", active=True)
 
 ethos = NPC('Ethos', [ethos_phrase_1], "Courier")
 
 # -- Name: F. Jones -- Town: New Ekanmar
 f_jones_phrase_1 = Conversation(['Hello, adventurer! My name is Fly, ruler of the',
                                  "Kingdom of Flyscoria. I'm quite busy right now, please come",
-                                 "back later if you wish to speak to me."],
-                                active=True)
+                                 "back later if you wish to speak to me."], "f_jones_p1", active=True)
 
 f_jones = NPC('F. Jones', [f_jones_phrase_1], "King of Flyscoria")
 
@@ -945,15 +896,13 @@ stravi_phrase_1 = Conversation(["Greetings, young traveller. I am Stravi, Queen 
                                 "return in a few weeks if you wish to speak to Fly and me.",
                                 "Oh, and whatever you do, do not under ANY circumstances mention",
                                 'the word "chandelier" to my husband. It makes him very',
-                                'upset for some reason.'],
-                               active=True)
+                                'upset for some reason.'], "stravi_p1", active=True)
 
 stravi = NPC('Stravi', [stravi_phrase_1], "Queen of Flyscoria")
 
 # -- Name: Caesar -- Town: New Ekanmar
 caesar_phrase_1 = Conversation(["*Caesar, Fly's pet strawberry dragon, runs away and hides behind",
-                                'his owner before you get a chance to converse with him.*'],
-                               active=True)
+                                'his owner before you get a chance to converse with him.*'], "caesar_p1", active=True)
 
 caesar = NPC('Caesar', [caesar_phrase_1], "Fly's Pet")
 
@@ -963,8 +912,7 @@ sakura_phrase_1 = Conversation(['HALT! State your business! Ah, you want to see 
                                 'that he is accepting visitors right now, though. Unless you have',
                                 'something really important to tell him, such as how to save his',
                                 "daughter, Sakura doesn't see you talking to him in your future.",
-                                "Now get out of here, Sakura is busy!"],
-                               active=True)
+                                "Now get out of here, Sakura is busy!"], "sakura_p1", active=True)
 
 sakura = NPC('Sakura', [sakura_phrase_1], "Head of the Royal Guard")
 
@@ -982,7 +930,7 @@ strathius_phrase_1 = Conversation(["Greetings, man! I'm like, Strathius, and I'm
                                    "like a total nut, and shoot like a noob. Silence is bad news",
                                    "for mages 'cuz it means you can't use magic for a bit.",
                                    "Always keep a stash of items to cure these sicknesses, or ",
-                                   "simply like, use the spell you get at level 5."], active=True)
+                                   "simply like, use the spell you get at level 5."], "strathius_p1", active=True)
 
 strathius = NPC("Strathius", [strathius_phrase_1], "Druid")
 
@@ -994,7 +942,7 @@ sugulat_phrase_1 = Conversation(["Greetings! My name is Sugulat, Emperor of Chin
                                  "gems in certain places! They can be tricky to find, though,",
                                  "so that's why I invented the Divining Rod! Simply use it,",
                                  "and it will tell you the approximate distance between",
-                                 "you and the nearest gem. You can buy it at the general store."],
+                                 "you and the nearest gem. You can buy it at the general store."], "sugalat_p1",
                                 active=True)
 
 sugulat = NPC('Sugulat', [sugulat_phrase_1], "Emperor of Chin'tor")
@@ -1002,13 +950,51 @@ sugulat = NPC('Sugulat', [sugulat_phrase_1], "Emperor of Chin'tor")
 # -- Name: Serena -- Town: Whistumn
 serena_phrase_1 = Conversation(["Oh, woe is me! My daughter has fallen ill from a terrible",
                                 """disease! They call it "Hatchnuk's Blight", and it is""",
-                                "very deadly. Oh, what am I to do? *sobs uncontrollably*"],
-                               active=True)
+                                "very deadly. Oh, what am I to do? *sobs uncontrollably*"], "serena_p1", active=True)
 
 serena_phrase_2 = Conversation(['You are a good man, trying to help our daughter! Good',
-                                'luck on your quest!'])
+                                'luck on your quest!'], "serena_p2")
 
-serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, ser_pol_phrase_3], "Scientist")
+serena_phrase_3 = Conversation(['You are our heroes! Here, allow us to treat your wounds.'], "serena_p3")
+
+
+def serena_p3_at():
+    units.player.hp += (units.player.max_hp - units.player.hp)
+    units.player.mp += (units.player.max_mp - units.player.mp)
+    units.player.status_ail = 'none'
+
+    units.solou.hp += (units.solou.max_hp - units.solou.hp)
+    units.solou.mp += (units.solou.max_mp - units.solou.mp)
+    units.solou.status_ail = 'none'
+
+    units.ran_af.hp += (units.ran_af.max_hp - units.ran_af.hp)
+    units.ran_af.mp += (units.ran_af.max_mp - units.ran_af.mp)
+    units.ran_af.status_ail = 'none'
+
+    units.adorine.hp += (units.adorine.max_hp - units.adorine.hp)
+    units.adorine.mp += (units.adorine.max_mp - units.adorine.mp)
+    units.adorine.status_ail = 'none'
+
+    units.chyme.hp += (units.chyme.max_hp - units.chyme.hp)
+    units.chyme.mp += (units.chyme.max_mp - units.chyme.mp)
+    units.chyme.status_ail = 'none'
+
+    units.xoann.hp += (units.xoann.max_hp - units.xoann.hp)
+    units.xoann.mp += (units.xoann.max_mp - units.xoann.mp)
+    units.xoann.status_ail = 'none'
+
+    units.parsto.hp += (units.parsto.max_hp - units.parsto.hp)
+    units.parsto.mp += (units.parsto.max_mp - units.parsto.mp)
+    units.parsto.status_ail = 'none'
+
+    print('-'*25)
+    print('Polmor and Serena get to work on healing your party.')
+    print('Your party has been restored to full HP and healed of its status ailments.')
+
+
+serena_phrase_3.after_talking = serena_p3_at
+
+serena = NPC('Serena', [serena_phrase_1, serena_phrase_2, serena_phrase_3], "Scientist")
 
 # -- Name: Bamdeliit -- Town: Cesura
 bamdeliit_phrase_1 = Conversation(["Hello, sir! I'm Bamdeliit, the head engineer of Cesura!",
@@ -1018,7 +1004,7 @@ bamdeliit_phrase_1 = Conversation(["Hello, sir! I'm Bamdeliit, the head engineer
                                    'By the way, do you know what "witch" means? Hythic isn\'t my',
                                    'first language, and the townsfolk keep calling me that when',
                                    'I turn on the trains. Witch is a good thing, right?'
-                                   ], active=True)
+                                   ], "bamdeliit_p1", active=True)
 
 bamdeliit = NPC('Bamdeliit', [bamdeliit_phrase_1], "Engineer")
 
@@ -1028,18 +1014,16 @@ ariver_phrase_1 = Conversation(["*Ariver mistakes you for a vampire hunter and r
                                 "closing the blinds. As you begin walking away, scratching your",
                                 "head in confusion, you see him look out the window and walk",
                                 "back outside, having determined you are not a threat at the",
-                                "moment.*"], active=True)
+                                "moment.*"], "ariver_p1", active=True)
 
 ariver = NPC('Ariver', [ariver_phrase_1], "Vampire")
-
-oralyn = NPC('Oralyn', [], '')
 
 # -- Name: Fitzgerald -- Town: Valenfall
 fitz_phrase_1 = Conversation(["*hic* Pay no attention to the behind behind the curtain!",
                               "*The man appears to be quite drunk. You also notice a",
                               "distinct lack of any curtain nearby.* *hic* Drop that, you",
                               "thief! Give me back my penny-loafers! *You slowly walk away",
-                              "from the raving drunk.*"], active=True)
+                              "from the raving drunk.*"], "fitz_p1", active=True)
 
 fitzgerald = NPC("Fitzgerald the Drunk", [fitz_phrase_1], "Raving Alcoholic")
 
@@ -1064,8 +1048,8 @@ all_dialogue = [
 
     azura_phrase_1, azura_phrase_2, azura_phrase_3,
 
-    polmor_phrase_1, polmor_phrase_2, polmor_quest_1, ser_pol_phrase_3,
-    serena_phrase_1, serena_phrase_2,
+    polmor_phrase_1, polmor_phrase_2, polmor_quest_1,
+    serena_phrase_1, serena_phrase_2, serena_phrase_3,
 
     matthew_phrase_1, matthew_quest_1, matthew_phrase_2,
     matthew_phrase_3, matthew_phrase_4, matthew_phrase_5,
@@ -1097,9 +1081,9 @@ def serialize_dialogue(path):
 
     for c in all_dialogue:
         if isinstance(c, Quest):
-            json_dialogue[str(c)] = [c.active, c.started, c.finished]
+            json_dialogue[c.conv_id] = [c.active, c.started, c.finished]
         else:
-            json_dialogue[str(c)] = [c.active]
+            json_dialogue[c.conv_id] = [c.active]
 
     with open(path, encoding='utf-8', mode='w') as f:
         json.dump(json_dialogue, f, indent=4, separators=(', ', ': '))
@@ -1113,9 +1097,11 @@ def deserialize_dialogue(path):
 
     for key in j_log:
         for c in all_dialogue[:]:
-            if key == str(c):
+            if key == c.conv_id:
                 if isinstance(c, Quest):
-                    c.active, c.started, c.finished = \
-                        j_log[key][0], j_log[key][1], j_log[key][2]
+                    c.active, c.started, c.finished = j_log[key][0], j_log[key][1], j_log[key][2]
                 else:
                     c.active = j_log[key][0]
+
+
+import towns

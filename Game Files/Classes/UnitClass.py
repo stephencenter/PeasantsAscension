@@ -44,7 +44,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-pygame.mixer.pre_init(frequency=44100, buffersize=2048)
+pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 

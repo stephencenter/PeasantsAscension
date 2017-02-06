@@ -82,7 +82,7 @@ logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
 logging.debug("Game run")
 
 # Setup Pygame audio
-pygame.mixer.pre_init(frequency=44100, buffersize=2048)
+pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 # Save File information
@@ -137,7 +137,7 @@ title_logo = f"""
      /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
 Peasants' Ascension {game_version} -- Programmed by TheFrozenMawile using Python
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
-Check here often for updates: [http://www.rbwnjafurret.com/peasantrpg/]
+Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
 ------------------------------------------------------------------------------"""
 
 
@@ -233,8 +233,7 @@ def format_save_names():
                      'sav_party_info', 'sav_spellbook', 'sav_quests_dia', 'sav_play', 'sav_solou', 'sav_xoann',
                      'sav_chyme', 'sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
 
-        spam = globals()[x]
-        globals()[x] = '/'.join([save_dir, adventure_name, spam.split('/')[2]])
+        globals()[x] = globals()[x].format(CHARACTER_NAME=adventure_name)
 
 
 def change_settings():
@@ -242,9 +241,6 @@ def change_settings():
 
     if os.path.isfile("../settings.cfg"):
         config.read("../settings.cfg")
-
-        for x in config['save_files']:
-            globals()[x] = config['save_files'][x]
 
         for x in config['volume_levels']:
             globals()[x] = float(config['volume_levels'][x])/100

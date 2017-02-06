@@ -111,32 +111,24 @@ class NPC:
 
 
 class Conversation:
-    def __init__(self, sentences, active=False):
+    def __init__(self, sentences, conv_id, active=False):
         self.sentences = sentences
         self.active = active
-
-    def __str__(self):
-        for x in globals():
-            if globals()[x] == self:
-                return x
+        self.conv_id = conv_id
 
 
 class Quest(Conversation):
-    def __init__(self, sentences, name, desc, q_giver, reward, end_dialogue,
-                 started=False, finished=False, active=False):
+    def __init__(self, sentences, name, desc, q_giver, reward, end_dialogue, conv_id, started=False,
+                 finished=False, active=False):
         Conversation.__init__(self, sentences, active)
         self.name = name  # The name of the quest
         self.desc = desc  # A brief summary of the goal of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
         self.reward = reward  # A list [experience, gold] of your reward for the quest
+        self.conv_id = conv_id
         self.started = started  # is True if the quest has been started, false otherwise
         self.finished = finished  # is True if the quest is complete, false otherwise
         self.end_dialogue = end_dialogue  # What is printed when the quest is over
-
-    def __str__(self):
-        for x in globals():
-            if globals()[x] == self:
-                return x
 
     def give_quest(self):
         print('-'*25)

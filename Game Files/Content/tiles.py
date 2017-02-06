@@ -21,7 +21,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-pygame.mixer.pre_init(frequency=44100, buffersize=2048)
+pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 # -- INNER CENTRAL FOREST -- #
@@ -513,6 +513,30 @@ ____     ____
 def check_region():
     # Check the coordinates of the player and change the region to match.
     new_region = main.party_info['current_tile'].region
+
+    if new_region == 'The Aethus':
+        reg_music = 'Music/Island of Peace.ogg'
+
+    elif new_region == 'Overshire Graveyard':
+        reg_music = 'Music/Frontier.ogg'
+
+    elif new_region == 'Central Forest':
+        reg_music = 'Music/Through the Forest.ogg'
+
+    elif new_region == 'Terrius Mt. Range':
+        reg_music = 'Music/Mountain.ogg'
+
+    elif new_region == 'Glacian Plains':
+        reg_music = 'Music/Arpanauts.ogg'
+
+    elif new_region == 'Arcadian Desert':
+        reg_music = 'Music/Come and Find Me.ogg'
+
+    elif new_region == 'Bogthorn Marsh':
+        reg_music = 'Music/Digital Native.ogg'
+
+    elif new_region == 'Harconian Coastline':
+        reg_music = "Music/We're all under the stars.ogg"
 
     if main.party_info['reg'] != new_region:
         print('-'*25)

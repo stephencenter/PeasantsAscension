@@ -79,3 +79,6 @@ class Boss(units.Monster):
         else:
 
             return new_coords
+
+    def upon_defeating(self):
+        pass

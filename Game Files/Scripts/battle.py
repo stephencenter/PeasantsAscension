@@ -37,7 +37,7 @@ import items
 #
 # input = test_input
 
-pygame.mixer.pre_init(frequency=44100, buffersize=2048)
+pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 temp_stats = ''
@@ -347,10 +347,9 @@ def after_battle(is_boss):  # Assess the results of the battle
                     return 'dead'
 
                 elif y_n.startswith('n'):
-
                     while True:
                         y_n = input('Are you sure you want to quit and lose all unsaved progress? | Yes or No: ')
-                        y_n = y_n.lower()
+                        y_n = y_n
 
                         if y_n.startswith('y'):
                             pygame.quit()
@@ -369,7 +368,7 @@ def after_battle(is_boss):  # Assess the results of the battle
 
             if not is_boss:
                 # Only do the following if the player defeated a normal enemy, and not a boss
-                print('The {0} falls to the ground, dead as a stone.'.format(units.monster.name))
+                print(f'The {units.monster.name} falls to the ground, dead as a stone.')
 
                 # Enemies drop gold/exp based on the player/monster's levels
                 gold = math.ceil(2.5*units.monster.lvl - units.player.lvl + random.randint(-1, 1))
@@ -380,7 +379,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             else:
                 # Only do the following if the player defeated a boss
                 bosses.defeated_bosses.append(units.monster.name)
-                print('The almighty {0} has been slain!'.format(units.monster.name))
+                print(f'The almighty {units.monster.name} has been slain!')
 
                 # Bosses drop a set amount of gold
                 gold = units.monster.gold
@@ -401,7 +400,7 @@ def after_battle(is_boss):  # Assess the results of the battle
             # Give the Player their GP
             main.party_info['gp'] += gold
             sounds.item_pickup.play()
-            input('Your party has gained {0} GP | Press enter/return '.format(gold))
+            input(f'Your party has gained {gold} GP | Press enter/return ')
 
             for character in enabled_pcus:
 
@@ -419,7 +418,7 @@ def after_battle(is_boss):  # Assess the results of the battle
 
                 sounds.item_pickup.play()
 
-                input('{0} gained {1} XP | Press enter/return '.format(character.name, experience))
+                input(f'{character.name} gained {experience} XP | Press enter/return ')
 
                 # Check to see if the player gained any levels
                 character.level_up()

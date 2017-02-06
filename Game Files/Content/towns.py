@@ -1,9 +1,5 @@
 from TownClass import *
 
-# AETHUS TRANSPORTS
-to_mainland = StairwayFromAethus("Old Babylon", None, None, 0, 0)
-to_aethus = StairwayToAethus("New Babylon", None, None, -84, -84)
-
 # OVERWORLD TOWNS
 nearton_h1_c1 = Chest([20], 1, "N-H1-C1")
 nearton_h1_c2 = Chest([10, items.s_rejuv], 1, "N-H1-C2")
@@ -180,7 +176,7 @@ flock in a small pasture behind the building. There doesn't appear
 be any other people near here.""",
                 [npcs.alden], [], gs_level=-1, inn_cost=-1)
 
-# AETHUS TOWNS
+
 a_town_valenfall = Town("Valenfall", """Not much is known about the ancient city of Valenfall.
 It's inhabitants claim that it was lifted up from the mainland several millenia ago
 by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
@@ -188,7 +184,7 @@ all of the surrounding land of Aethus around it. Valenfall is deeply intertwined
 nature, and monuments depicting the nature deities can be seen on every corner.
 """, [npcs.fitzgerald], [], inn_cost=2, gs_level=4)
 
-# OVERWORLD TAVERNS
+# TAVERNS
 tavern1 = Tavern("The Traveling Merchant Inn", 0)
 tavern2 = Tavern("The Drunken Moon Tavern ", 5)
 tavern3 = Tavern("The Wandering Falcon Inn", 5)
@@ -201,18 +197,6 @@ tavern9 = Tavern("The Brave Foal Tavern", 10)
 tavern10 = Tavern("The Cowardly Dagger Inn", 10)
 tavern11 = Tavern("The Thirsty Wizard Tavern", 15)
 tavern12 = Tavern("The Painted Bard Inn", 15)
-
-town_list = [town_nearton, town_southford, town_overshire, town_charsulville, town_fort_sigil, town_tripton,
-             town_fallville, town_parceon, town_sardooth, town_principalia, town_new_ekanmar, town_ravenstone,
-             town_ambercreek, town_whistumn, town_hatchnuk, town_cesura, town_sanguion, town_lantonum, town_capwild,
-             town_rymn_outpost, cottage1, to_aethus]
-
-tavern_list = [tavern1, tavern2, tavern3, tavern4, tavern5, tavern6,
-               tavern7, tavern8, tavern9, tavern10, tavern11, tavern12]
-
-aethus_towns = [to_mainland, a_town_valenfall]
-
-aethus_taverns = []
 
 
 def search_towns(enter=True):
@@ -242,7 +226,7 @@ def search_towns(enter=True):
                 y_n = y_n.lower()
 
                 if y_n.startswith('y'):
-                    pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
+                    pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
@@ -259,3 +243,6 @@ def search_towns(enter=True):
 
             else:
                 return True
+
+        else:
+            return bool(len(main.party_info['current_tile'].town_list))

@@ -201,7 +201,7 @@ class Town:
                 selected = input('Where do you want to go? | Input [L]etter (or type "exit"): ').lower()
 
                 if any(map(selected.startswith, buildings)):
-                    pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
+                    pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
@@ -219,7 +219,7 @@ class Town:
 
                     print('-'*25)
 
-                    pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
+                    pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
@@ -581,7 +581,7 @@ Press enter/return ".format(vis_cat))
                 except IndexError:
                     continue
 
-                pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
+                pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
 
@@ -591,7 +591,7 @@ Press enter/return ".format(vis_cat))
 
                 print('-'*25)
 
-                pygame.mixer.music.load('Music/Chickens (going peck peck peck).ogg')
+                pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
 
@@ -619,133 +619,11 @@ Press enter/return ".format(vis_cat))
 
                 chosen_house.enter_house()
 
-                pygame.mixer.music.load('Music/Mayhem in the Village.ogg')
+                pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(main.music_vol)
 
                 break
-
-
-class StairwayToAethus(Town):
-    def __init__(self, name, desc, people, x, y):
-        Town.__init__(self, name, desc, people, x, y, [])
-
-    def town_choice(self):
-        pygame.mixer.music.load('Music/CopperNickel.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(main.music_vol)
-
-        print('-'*25)
-
-        function = text_scroll.text_scroll if main.do_text_scroll else print
-
-        function("""\
-As you enter the town of New Babylon, you notice something rather odd. Not
-a single door in this town is open or unlocked, including those of the shops
-and other businesses. No sign of life can be seen for miles. The entire city
-seems almost... frozen. Something near the center of the town catches your
-eye - a large, golden staircase with a sign on it that reads "Stairway to Aethus".
-The staircase seems to go on for quite a while, but you can faintly see a large
-island floating up in the sky. Perhaps something is up there!""")
-        print('-'*25)
-        while True:
-            choice = input("Climb the stairs? | Yes or No: ")
-            if choice.lower().startswith('y'):
-                print('-'*25)
-                input('You begin to climb the staircase | Press enter/return ')
-                sounds.foot_steps.play()
-                print('Climbing...')
-                main.smart_sleep(1)
-                sounds.foot_steps.play()
-                print('Climbing...')
-                main.smart_sleep(1)
-                sounds.foot_steps.play()
-                print('Climbing...')
-                main.smart_sleep(1)
-                sounds.foot_steps.play()
-                print('Still climbing...')
-                main.smart_sleep(1)
-
-                print("After several hours of climbing the staircase, you finally arrive at the top.")
-
-                input("\nPress enter/return ")
-
-                main.party_info['x'] = 0
-                main.party_info['y'] = 0
-                main.party_info['avg'] = 0
-                main.party_info['reg'] = 'Aethus'
-                main.party_info['prev_town'][0] = 0
-                main.party_info['prev_town'][1] = 0
-                main.party_info['is_aethus'] = True
-                main.party_info['reg_music'] = 'Music/Island of Peace.ogg'
-
-                print('-'*25)
-                print('You have left the Glacian Plains region and are now entering the Aethus.')
-                print('-'*25)
-
-                pygame.mixer.music.load(main.party_info['reg_music'])
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
-
-                return
-
-            elif choice.lower().startswith('n'):
-                return
-
-
-class StairwayFromAethus(Town):
-    def __init__(self, name, desc, people, x, y):
-        Town.__init__(self, name, desc, people, x, y, [])
-
-    def town_choice(self):
-        pygame.mixer.music.load('Music/CopperNickel.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(main.music_vol)
-
-        print('-'*25)
-
-        function = text_scroll.text_scroll if main.do_text_scroll else print
-
-        function("""You come across the place that you entered Aethus from. It looks remarkably
-similar to the town of New Babylon from the mainland. Everything is frozen in place,
-and no people are anywhere to be seen. The staircase you came up in is in the middle of town,
-and seeing it evokes bad memories of walking up five miles of stairs. Luckily for you,
-you notice a zipline-like structure that would be much easier and faster to use.""")
-        while True:
-            choice = input("Go down the zipline? | Yes or No: ")
-
-            if choice.lower().startswith('y'):
-                print('-'*25)
-                input('You strap yourself to the zipline using a harness | Press enter/return ')
-                sounds.foot_steps.play()
-                print('Zipping...')
-                main.smart_sleep(1)
-                sounds.foot_steps.play()
-                print('Zipping...')
-                main.smart_sleep(1)
-                input("Amazing, that was much faster! | Press enter/return ")
-
-                main.party_info['x'] = -84
-                main.party_info['y'] = -84
-                main.party_info['avg'] = -84
-                main.party_info['reg'] = 'Tundra'
-                main.party_info['prev_town'][0] = -84
-                main.party_info['prev_town'][1] = -84
-                main.party_info['is_aethus'] = False
-                main.party_info['reg_music'] = 'Music/Arpanauts.ogg'
-
-                print('-'*25)
-                print('You have left the Aethus and are now entering the Tundra region.')
-                print('-'*25)
-
-                pygame.mixer.music.load(main.party_info['reg_music'])
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
-
-                return
-
-            elif choice.lower().startswith('n'):
-                return
 
 
 class Tavern:
@@ -815,7 +693,7 @@ class House:
         self.chests = chests
 
     def enter_house(self):
-        pygame.mixer.music.load('Music/Somewhere I Went Wrong.ogg')
+        pygame.mixer.music.load('Content/Music/Somewhere I Went Wrong.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
 
