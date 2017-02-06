@@ -1,6 +1,6 @@
 #   This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
+#	 Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -12,14 +12,9 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
-# ----------------------------------------------------------------------------#
+#----------------------------------------------------------------------------#
 # This file is where ALL of the Enemy and Player ASCII
 # art in the game is located.
-
-import colorama
-from colorama import init, Fore, Style
-
-init()
 
 player_art = {
     "Ranger":
@@ -451,235 +446,233 @@ O0o"
 
 # Sprites used for items
 item_sprites = {
-    "Potion": Fore.RED + """
+    "Potion": """
      _ _
      | |
     /   \\
     | P |
     \\___/
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Elixir": Fore.BLUE + """
+    "Elixir": """
      _ _
      | |
     /   \\
     | E |
     \\___/
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Rejuv": Fore.MAGENTA + """
+    "Rejuv": """
      _ _
      | |
     /   \\
     | R |
     \\___/
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Status": Fore.YELLOW + """
+    "Status": """
      _ _
      | |
     /   \\
     | S |
     \\___/
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Bow": Style.DIM + Fore.YELLOW + """
+    "Bow": """
       ______
      /      \\
-    /""" + Style.RESET_ALL + Fore.WHITE + """~~~~~~~~""" + Style.DIM + Fore.YELLOW + """\\
-""" + Style.RESET_ALL + Fore.RESET,
+    /~~~~~~~~\\
+""",
 
-    "Dagger": Style.BRIGHT + Fore.BLACK + """
+    "Dagger": """
       /\\
       ||
-     """ + Fore.RED + """_""" + Fore.BLACK + """||""" + Fore.RED + """_""" + Fore.BLACK + """
+     _||_
       ||
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Short Sword": Fore.WHITE + Style.DIM + """
+    "Short Sword": """
           /|
          //
         //
        //
-    """ + Fore.RED + """\_""" + Fore.WHITE + """//""" + Fore.RED + """_/
-     """ + Fore.YELLOW + """//
-""" + Style.RESET_ALL + Fore.RESET,
+    \_//_/
+     //
+""",
 
-    "Sword": Fore.WHITE + Style.DIM + """
+    "Sword": """
             /|
            //
           //
          //
         //
        //
-    """ + Fore.RED + """\_""" + Fore.WHITE + """//""" + Fore.RED + """_/
-     """ + Fore.YELLOW + """//
-""" + Style.RESET_ALL + Fore.RESET,
+    \_//_/
+     //
+""",
 
-    "Fists": Fore.YELLOW + """
+    "Fists": """
      ___
     /|||\\
     \\   /
      | |
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Amulet": Fore.BLACK + Style.BRIGHT + """
+    "Amulet": """
      ___
     /   \\
     |   |
      \ /
-     """ + Style.NORMAL + Fore.GREEN + """{A}
-""" + Style.RESET_ALL + Fore.RESET,
+     {A}
+""",
 
-    "Wizard Hat": Fore.BLUE + """
+    "Wizard Hat": """
         /\\
-       /""" + Fore.YELLOW + """*""" + Fore.BLUE + """ \\
-    __/  """ + Fore.YELLOW + """*""" + Fore.BLUE + """ \__
+       /* \\
+    __/  * \__
     ----------
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Spear": Fore.WHITE + """
+    "Spear": """
        ,
-    """ + Fore.RED + """~~""" + Style.DIM + Fore.YELLOW + """/
+    ~~/
      /
     /
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Axe": Fore.RED + """
-    ^""" + Style.BRIGHT + Fore.BLACK + """_/\\""" + Style.DIM + Fore.YELLOW + """
-    |""" + Style.BRIGHT + Fore.BLACK + """_  |""" + Style.DIM + Fore.YELLOW + """
-    |""" + Style.BRIGHT + Fore.BLACK + """ \/""" + Style.DIM + Fore.YELLOW + """
+    "Axe": """
+    ^_/\\
+    |_  |
+    | \/
     |
     |
     |
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Book": Fore.YELLOW + Style.DIM + """
+    "Book": """
      _____
-    |""" + Style.RESET_ALL + Fore.WHITE + """Livre""" + Fore.YELLOW + Style.DIM + """|
-    |""" + Fore.RED + Style.BRIGHT + """=====""" + Fore.YELLOW + Style.DIM + """|
+    |Livre|
+    |=====|
     |     |
     |_____|
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Compass": Fore.BLUE + """
+    "Compass": """
      _____
-    /  """ + Fore.RED + """N""" + Fore.BLUE + """  \\""" + Fore.RED + """
-    W  ^> E""" + Fore.BLUE + """
-    \__""" + Fore.RED + """S""" + Fore.BLUE + """__/
-""" + Style.RESET_ALL + Fore.RESET,
+    /  N  \\
+    W  ^> E
+    \__S__/
+""",
 
-    "Stiletto": Fore.WHITE + Style.DIM + """
+    "Stiletto": """
      |
      |
     _|_
      |
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Hammer": Style.BRIGHT + Fore.BLACK + """
+    "Hammer": """
      ________
     |        |
-    |________|""" + Style.DIM + Fore.YELLOW + """
+    |________|
         ||
         ||
         ||
         ||
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Mace": Style.BRIGHT + Fore.BLACK + """
+    "Mace": """
      ____
     |    |
-    |____|""" + Style.DIM + Fore.YELLOW + """
+    |____|
       ||
       ||
       ||
       ||
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Knuckles": Fore.WHITE + """
+    "Knuckles": """
      _  _  _  _
     / \/ \/ \/ \\
     \_/\_/\_/\_/
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Gloves": Style.BRIGHT + Fore.BLACK + """
-    |\\""" + Style.DIM + Fore.YELLOW + """_""" + Style.BRIGHT + Fore.BLACK + """/|
-    """ + Style.DIM + Fore.YELLOW + """|   |
+    "Gloves": """
+    |\\_/|
+    |   |
      | |
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Staff": Fore.RED + """
-    ~""" + Fore.YELLOW + """\\""" + Fore.BLUE + """O""" + Fore.YELLOW + """/""" + Fore.RED + """~
-      """ + Fore.YELLOW + """|
+    "Staff": """
+    ~\\O/~
       |
       |
       |
-""" + Style.RESET_ALL + Fore.RESET,
+      |
+""",
 
-    "Twig": Fore.GREEN + """
-    `""" + Fore.YELLOW + Style.DIM + """/
+    "Twig": """
+    `/
      |
      /
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Crossbow": Style.DIM + Fore.YELLOW + """
+    "Crossbow": """
      ___/\___
     /   ||   \\
-    """ + Fore.WHITE + """\\""" + Style.DIM + Fore.YELLOW + """   ||   """ + Fore.WHITE + """/
-     \\""" + Style.DIM + Fore.YELLOW + """  ||  """ + Fore.WHITE + """/
-      ~~""" + Style.DIM + Fore.YELLOW + """||""" + Fore.WHITE + """~~"""
-        + Style.DIM + Fore.YELLOW + """
+        ||   /
+     \\  ||  /
+      ~~||~~
         ||
         ||
-        ||
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Hat": Fore.YELLOW + """
+    "Hat": """
        ____
     __|____|__
     ----------
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Shirt": Style.DIM + Fore.YELLOW + """
+    "Shirt": """
      ____  ____
     |__  \/  __|
        |    |
        |    |
        |____|
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Pants": Style.DIM + Fore.YELLOW + """
+    "Pants": """
      ______
     |      |
     |  __  |
     | |  | |
     | |  | |
     | |  | |
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Helmet": Style.DIM + Fore.YELLOW + """
+    "Helmet": """
     |\_____/|
     |  ___  |
     |_/   \_|
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Robe": Fore.BLUE + """
+    "Robe": """
      ____  ____
-    |__ """ + Fore.YELLOW + """*   *""" + Fore.BLUE + """__|
-       | """ + Fore.YELLOW + """*""" + Fore.BLUE + """  |
-       |   """ + Fore.YELLOW + """*""" + Fore.BLUE + """|
+    |__ *   *__|
+       | *  |
+       |   *|
        |____|
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Robe Pants": Fore.BLUE + """
+    "Robe Pants": """
         __
-       / """ + Fore.YELLOW + """*""" + Fore.BLUE + """\\
-      /  """ + Fore.YELLOW + """*""" + Fore.BLUE + """ \\
-     / """ + Fore.YELLOW + """*  *""" + Fore.BLUE + """ \\
+       / *\\
+      /  * \\
+     / *  * \\
     |________|
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Misc": Fore.WHITE + """
+    "Misc": """
      ____
     /    \\
          |
@@ -687,71 +680,71 @@ item_sprites = {
        /
        |
        O
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Sling Shot": Fore.YELLOW + Style.DIM + """
-    |""" + Fore.WHITE + """~~~~~""" + Fore.YELLOW + """|
+    "Sling Shot": """
+    |~~~~~|
      \___/
        |
        |
        |
-""" + Style.RESET_ALL + Fore.RESET,
-    "Div Rod": Fore.RED + """
-    ~""" + Fore.YELLOW + Style.DIM + """\   /""" + Style.NORMAL + Fore.RED + """~
-      """ + Fore.YELLOW + Style.DIM + """\_/
+""",
+    "Div Rod": """
+    ~\   /~
+      \_/
        |
        |=
        |
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Gem": Fore.WHITE + """
+    "Gem": """
       _____
      /  _  \\
     |  |_|  |
      \_____/
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Shovel": Style.BRIGHT + Fore.BLACK + """
+    "Shovel": """
       __
      /  \\
-    |____|""" + Style.DIM + Fore.YELLOW + """
+    |____|
       ||
       ||
       ||
       ||
       ||
       /\\
-     /""" + Style.BRIGHT + Fore.RED + """==""" + Style.DIM + Fore.YELLOW + """\\
-""" + Style.RESET_ALL + Fore.RESET,
+     /==\\
+""",
 
-    "Cap": Style.DIM + Fore.YELLOW + """
+    "Cap": """
        ____
     ~~/    \\
      | O__O |
       \/  \/
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Wand": Style.DIM + Fore.GREEN + """
-    []""" + Fore.YELLOW + """
+    "Wand": """
+    []
     ||
     ||
     ||
     ||
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Map": Fore.YELLOW + """
+    "Map": """
     |~~~~~~~~~|
-    |  """ + Fore.RED + """>>> x  """ + Fore.YELLOW + """|
-    |   """ + Fore.WHITE + """MAP   """ + Fore.YELLOW + """|
+    |  >>> x  |
+    |   MAP   |
     |~~~~~~~~~|
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
-    "Boots": Fore.WHITE + """
-    >>""" + Fore.YELLOW + Style.DIM + """|---|
-     """ + Fore.WHITE + """>""" + Fore.YELLOW + Style.DIM + """|   |____
+    "Boots": """
+    >>|---|
+     >|   |____
       |        |
       |--------|
-""" + Style.RESET_ALL + Fore.RESET,
+""",
 
     "Lockpick": """
      ___
@@ -923,3 +916,9 @@ locations = {
  ~~~~~~~~~~~~~~~~~~~~~~~~/__-__-__-__-__-__-__\~~~~~~~~~~~~~~~~~~~~~~~~
  ~~~~~~~~~~~~~~~~~~~~~~~/______________________\~~~~~~~~~~~~~~~~~~~~~~~"""
 }
+
+# for x in locations.keys():
+#     print(locations[x])
+
+# for x in item_sprites.keys():
+#     print(item_sprites[x])
