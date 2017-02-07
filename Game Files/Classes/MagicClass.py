@@ -25,15 +25,7 @@ import battle
 import inv_system
 import sounds
 import ascii_art
-
-# THIS IF FOR AUTOMATED BUG-TESTING!!
-# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
-# def test_input(string):
-#    spam = random.choice('0123456789ynxpsewrt')
-#    print(string, spam)
-#    return spam
-#
-# input = test_input
+import magic
 
 if __name__ == "__main__":
     sys.exit()
@@ -79,7 +71,6 @@ class Healing(Spell):
 
     def use_magic(self, user, is_battle):
         if user.mp >= self.mana:
-            print()
             Spell.use_mana(self, user)
 
             target_options = [x for x in [
@@ -143,8 +134,13 @@ class Healing(Spell):
                 # Print the ASCII art and "User Turn" info if a battle is going on
                 print("-{0}'s Turn-")
                 print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+                print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
 
-            print('Using "{0}", {1} is healed by {2} HP!'.format(self.name, target.name, total_heal))
+            if not is_battle:
+                print('-'*25)
+                print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
+                input("\nPress enter/return ")
+                print('-'*25)
 
             return True
 
@@ -266,3 +262,223 @@ class Buff(Spell):
         else:
             print(out_of_mana)
             return False
+
+
+def pick_cat(user, is_battle=True):
+    inv_name = user.name if user != units.player else 'player'
+
+    while True:
+        do_continue = False
+        print("""{0}'s spellbook:
+      [1] Damaging Spells
+      [2] Buff Spells
+      [3] Healing Spells
+      [4] Use Most Recent Spell""".format(user.name))
+        spam = True
+        while spam:
+            cat = input('Input [#] (or type "exit"): ')
+
+            if cat == '1':
+                cat = 'Damaging'
+
+            elif cat == '2':
+                cat = 'Buffs'
+
+            elif cat == '3':
+                cat = 'Healing'
+
+            elif cat == '4':
+                spell = magic.spellbook[inv_name]['Previous Spell']
+                if spell:
+                    spell = spell[0]
+
+                    if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
+                        if spell.use_magic(user, is_battle):
+                            return True
+
+                        else:
+                            break
+
+                    if spell.use_magic(user):
+                        return True
+
+                    else:
+                        break
+
+                else:
+                    print('-'*25)
+                    print(f'{user.name} has no previously used spells!')
+                    print('-'*25)
+                    break
+
+                while True:
+                    y_n = input(f'Use {spell}? | Yes or No: ').lower()
+
+                    if y_n.startswith('y'):
+                        if isinstance(spell, Damaging):
+                            return spell.use_magic(user)
+
+                        else:
+                            if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
+                                return spell.use_magic(user, is_battle)
+
+                            return spell.use_magic(user)
+
+                    elif y_n.startswith('n'):
+                        spam = False
+                        do_continue = True
+                        break
+
+            else:
+                if cat.lower() in ['e', 'x', 'exit', 'b', 'back']:
+                    print('-'*25)
+                    return False
+
+                else:
+                    continue
+
+            if do_continue:
+                continue
+
+            if not magic.spellbook[inv_name][cat]:
+                print('-'*25)
+                print('You do not yet have any spells in the {0} category.'.format(cat))
+                print('-'*25)
+                continue
+
+            if pick_spell(cat, user, is_battle):
+                return True
+
+            break
+
+
+def pick_spell(cat, user, is_battle):
+    inv_name = user.name if user != units.player else 'player'
+
+    print('-'*25)
+    while True:
+        padding = len(max([spell.name for spell in magic.spellbook[inv_name][cat]], key=len))
+        print(f"{cat} Spells: \n      ", end='')
+        print('\n      '.join([f"[{num + 1}] {spell} --{'-'*(padding - len(spell.name))}> {spell.mana} MP"
+              for num, spell in enumerate(magic.spellbook[inv_name][cat])]))
+
+        while True:
+            spell = input('Input [#] (or type "back"): ').lower()
+
+            try:
+                spell = magic.spellbook[inv_name][cat][int(spell) - 1]
+
+            except (ValueError, IndexError):
+                if spell in ['e', 'x', 'exit', 'b', 'back']:
+                    print('-'*25)
+
+                    return False
+
+                continue
+
+            print('-'*25)
+            print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
+            print('-'*25)
+
+            while True:
+                y_n = input(f'Use {spell}? | Yes or No: ').lower()
+
+                if y_n.startswith('y'):
+                    magic.spellbook[inv_name]['Previous Spell'] = [spell]
+
+                    if isinstance(spell, Damaging):
+                        if is_battle:
+                            return spell.use_magic(user)
+
+                        break
+
+                    else:
+                        if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
+                            if is_battle:
+                                return spell.use_magic(user, True)
+
+                        if is_battle:
+                            return spell.use_magic(user)
+
+                        spell.use_magic(user, False)
+
+                        break
+
+                elif y_n.startswith('n'):
+                    print('-'*25)
+
+                    break
+
+            break
+
+
+def new_spells(character):
+    # Teach the player new spells as they level up, or low-level spells not previously in the game.
+    for spell in magic.all_spells:
+        if isinstance(spell, Damaging):
+            cat = 'Damaging'
+        elif isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
+            cat = 'Healing'
+        elif isinstance(spell, Buff):
+            cat = 'Buffs'
+
+        # Only give the character spells that they are a high enough level for
+        if character.lvl >= spell.req_lvl:
+            for x in magic.spellbook[character.name if character != units.player else 'player'][cat]:
+                if x.name == spell.name:
+                    break
+
+            else:
+                # Almost all spells can be learned by mages, but only a few can be learned by other classes
+                if character.class_ not in spell.a_c:
+                    continue
+
+                sounds.item_pickup.play()
+                magic.spellbook[character.name if character != units.player else 'player'][cat].append(spell)
+
+                input(f'{character.name} has learned "{spell}", a new {cat} spell! | Press enter/return ')
+
+
+def eval_element(p_elem, m_elem, m_dmg=0, p_dmg=0):
+    # Fire < Water < Electricity < Earth < Grass < Wind < Ice < Fire
+    # Life < Death and Death < Life
+    # "None" element is neutral to all elements.
+
+    # Set everything to be lowercase, just incase
+    p_elem = p_elem.lower()
+    m_elem = m_elem.lower()
+
+    element_matchup = {  # element_matchup[key][0] is the element that key is weak to
+                         # element_matchup[key][1] is the element that key is resistant to
+        'fire': ['water', 'ice'],
+        'water': ['electric', 'fire'],
+        'electric': ['earth', 'water'],
+        'earth': ['grass', 'electric'],
+        'grass': ['wind', 'earth'],
+        'wind': ['ice', 'grass'],
+        'ice': ['fire', 'wind'],
+        'life': ['death', 'life'],
+        'death': ['life', 'death']
+    }
+
+    if p_elem == 'none' or m_elem == 'none':
+        return [p_dmg, m_dmg]
+
+    if element_matchup[p_elem][1] == m_elem:
+        if p_elem == 'life' or p_elem == 'death':
+            spam = [int(p_dmg/1.5), int(m_dmg/1.5)]
+        else:
+            spam = [int(p_dmg*1.5), int(m_dmg/1.5)]
+
+        if spam[0] <= 1:
+            spam[0] = 2
+
+        return spam
+
+    elif element_matchup[p_elem][0] == m_elem or p_elem == m_elem:
+        if p_elem == 'life' or p_elem == 'death':
+            return [int(p_dmg*1.5), int(m_dmg*1.5)]
+        else:
+            return [int(p_dmg/1.5), int(m_dmg*1.5)]
+
+    return [p_dmg, m_dmg]

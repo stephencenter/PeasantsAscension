@@ -935,9 +935,9 @@ strathius_phrase_1 = Conversation(["Greetings, man! I'm like, Strathius, and I'm
 strathius = NPC("Strathius", [strathius_phrase_1], "Druid")
 
 # -- Name: Sugulat -- Town: Ambercreek
-sugulat_phrase_1 = Conversation(["Greetings! My name is Sugulat, Emperor of Chin'tor",
-                                 "and legendary digger of holes. Y'know, you look like",
-                                 "a nice guy. I'm going to tell you a little secret: If you",
+sugulat_phrase_1 = Conversation(["Greetings! My name is Sugulat, Emperor of Chin'tor and,"
+                                 "legendary digger of holes. Y'know, you look like a nice guy.",
+                                 " I'm going to tell you a little secret: If you",
                                  "buy a shovel from the general store, you can dig up valuable",
                                  "gems in certain places! They can be tricky to find, though,",
                                  "so that's why I invented the Divining Rod! Simply use it,",

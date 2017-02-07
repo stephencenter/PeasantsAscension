@@ -28,15 +28,6 @@ import ascii_art
 import units
 import battle
 
-# THIS IF FOR AUTOMATED BUG-TESTING!!
-# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
-# def test_input(string):
-#    spam = random.choice('0123456789ynxpsewrt')
-#    print(string, spam)
-#    return spam
-#
-# input = test_input
-
 if __name__ == "__main__":
     sys.exit()
 
@@ -363,9 +354,10 @@ class Town:
         # A dictionary containing objects the player can purchase
 
         stock = {}
-        for category in inv_system.gs_stock:
+        for category in items.gs_stock:
             stock[category] = []
-            for item_group in inv_system.gs_stock[category]:
+
+            for item_group in items.gs_stock[category]:
                 stock[category].append(item_group[self.gs_level - 1])
 
         stock['All'] = []
@@ -473,8 +465,8 @@ class Town:
                         print('-'*25)
 
                         while True:
-                            confirm = input("\"Ya want {0} {1}? It'll cost ya {2} GP.\" | Yes or No: ".format(
-                                'these' if str(i).endswith('s') else 'this', str(i), i.buy)).lower()
+                            spam = 'these' if str(i).endswith('s') else 'this'
+                            confirm = input(f"\"Ya want {spam} {i}? It'll cost ya {i.buy} GP.\" | Yes or No: ").lower()
 
                             if confirm.startswith('y'):
                                 if main.party_info['gp'] >= i.buy:
@@ -546,13 +538,13 @@ class Town:
 
                             else:
                                 print('-'*25)
-                                input("You don't have any items in the \"{0}\" category | \
-Press enter/return ".format(vis_cat))
+                                print(f"You don't have any items in the {vis_cat} category.")
+                                input("\nPress enter/return")
                                 print('-'*25)
 
                                 break
 
-            elif b_s in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+            elif b_s in ['e', 'x', 'exit', 'b', 'back']:
                 return
 
     def speak_to_npcs(self):

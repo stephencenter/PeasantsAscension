@@ -28,15 +28,6 @@ import sounds
 import ascii_art
 import items
 
-# THIS IF FOR AUTOMATED BUG-TESTING!!
-# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
-# def test_input(string):
-#    spam = random.choice('0123456789ynxpsewrt')
-#    print(string, spam)
-#    return spam
-#
-# input = test_input
-
 pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
@@ -174,7 +165,7 @@ def battle_system(is_boss=False, ambush=False):
         else:
             print(f'{an_a} {units.monster.name} suddenly appeared out of nowhere!')
 
-        pygame.mixer.music.load('Music/Ruari 8-bit Battle.ogg')
+        pygame.mixer.music.load('Content/Music/Ruari 8-bit Battle.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(main.music_vol)
 
@@ -254,10 +245,7 @@ def battle_system(is_boss=False, ambush=False):
                     print(f'{char_2.name} has fallen to the {units.monster.monster_name}!')
                     input("\nPress enter/return ")
 
-    else:
-        if after_battle(is_boss) != 'dead':
-            print('-'*25)
-
+    after_battle(is_boss)
 
 def run_away(runner):
     print(ascii_art.player_art[runner.class_.title()] % f"{runner.name} is making a move!\n")
@@ -306,7 +294,7 @@ def after_battle(is_boss):  # Assess the results of the battle
     while True:
         # If the monster wins...
         if units.monster.hp > 0 and all([0 >= x.hp for x in enabled_pcus]):
-            pygame.mixer.music.load('Music/Power-Up.ogg')
+            pygame.mixer.music.load('Content/Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
 
@@ -344,7 +332,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(main.music_vol)
 
-                    return 'dead'
+                    return
 
                 elif y_n.startswith('n'):
                     while True:
@@ -362,7 +350,7 @@ def after_battle(is_boss):  # Assess the results of the battle
 
         # If the player wins...
         elif units.monster.hp <= 0 < units.player.hp:
-            pygame.mixer.music.load('Music/Python_RM.ogg')
+            pygame.mixer.music.load('Content/Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
 

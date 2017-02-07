@@ -25,15 +25,7 @@ import ascii_art
 import towns
 import units
 import items
-
-# THIS IF FOR AUTOMATED BUG-TESTING!!
-# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
-# def test_input(string):
-#    spam = random.choice('0123456789ynxpsewrt')
-#    print(string, spam)
-#    return spam
-#
-# input = test_input
+import ItemClass
 
 if __name__ == "__main__":
     sys.exit()
@@ -282,9 +274,9 @@ def pick_action(cat, item):
 
     # Loop while the item is in the inventory
     while item in inventory[cat]:
-        if (isinstance(item, items.Weapon)
-            or isinstance(item, items.Armor)
-                or isinstance(item, items.Accessory)):
+        if (isinstance(item, ItemClass.Weapon)
+            or isinstance(item, ItemClass.Armor)
+                or isinstance(item, ItemClass.Accessory)):
 
             # You equip weapons/armor/accessories
             use_equip = 'Equip'
@@ -302,11 +294,11 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
         if action == '1':
             if any([
-                isinstance(item, items.Accessory),
-                isinstance(item, items.Armor),
-                isinstance(item, items.Consumable),
-                isinstance(item, items.Weapon),
-                isinstance(item, items.StatusPotion)
+                isinstance(item, ItemClass.Accessory),
+                isinstance(item, ItemClass.Armor),
+                isinstance(item, ItemClass.Consumable),
+                isinstance(item, ItemClass.Weapon),
+                isinstance(item, ItemClass.StatusPotion)
             ]):
                 target_options = [x for x in [
                     units.player,
@@ -377,6 +369,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                         input("\nPress enter/return ")
 
                         inventory[cat].remove(item)
+
                         return
 
                     elif y_n.startswith('n'):
@@ -385,8 +378,6 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
                         input("\nPress enter/return ")
 
                         break
-
-            print('-'*25)
 
         elif action in ['e', 'x', 'exit', 'b', 'back']:
             return
@@ -479,13 +470,13 @@ def manage_equipped_2(target):
 
                 break
 
-            if isinstance(selected, items.Weapon):
+            if isinstance(selected, ItemClass.Weapon):
                 key = 'weapon'
 
-            elif isinstance(selected, items.Accessory):
+            elif isinstance(selected, ItemClass.Accessory):
                 key = 'access'
 
-            elif isinstance(selected, items.Armor):
+            elif isinstance(selected, ItemClass.Armor):
                 key = selected.part
 
             print('-' * 25)
@@ -519,18 +510,18 @@ def manage_equipped_3(key, selected, p_equip):
                 print(f'You unequip the {selected.name}.')
                 input("\nPress enter/return ")
 
-                if isinstance(selected, items.Weapon):
+                if isinstance(selected, ItemClass.Weapon):
                     inventory[selected.cat].append(p_equip[key])
 
                     p_equip[key] = items.fists
 
-                elif isinstance(selected, items.Armor):
+                elif isinstance(selected, ItemClass.Armor):
                     inventory[selected.cat].append(p_equip[key])
 
                     p_equip[key] = '(None)'
 
-                elif isinstance(selected, items.Accessory):
-                    if isinstance(selected, items.ElementAccessory):
+                elif isinstance(selected, ItemClass.Accessory):
+                    if isinstance(selected, ItemClass.ElementAccessory):
                         target.element = 'none'
 
                         print('You are no longer imbued with the {0} element.'.format(selected.element))
@@ -647,7 +638,6 @@ def tools_menu():  # Display a set of usable tools on the world map
     tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel', 'Boots of Insane Speed']
     available_tools = []
 
-    spam = True
     for cat in inventory:
         if cat in ['coord', 'quests']:
             continue
@@ -656,18 +646,17 @@ def tools_menu():  # Display a set of usable tools on the world map
             if item.name in tool_names:
                 available_tools.append(item)
 
+
     print('-'*25)
 
     if not available_tools:
         print('Your party has no available tools to use.')
         input('\nPress enter/return ')
-
-        if not towns.search_towns(enter=False):
-            print('-'*25)
+        print('-'*25)
 
         return
 
-    while spam:
+    while True:
         print('Tools: \n      ', end='')
         print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(available_tools)]))
 
@@ -679,12 +668,9 @@ def tools_menu():  # Display a set of usable tools on the world map
 
             except ValueError:
                 if tool.lower() in ['e', 'x', 'exit', 'b', 'back']:
-                    spam = False
+                    print('-'*25)
 
-                    if not towns.search_towns(enter=False):
-                        print('-'*25)
-
-                    break
+                    return
 
                 else:
                     continue
@@ -695,7 +681,9 @@ def tools_menu():  # Display a set of usable tools on the world map
             tool = available_tools[tool]
             tool.use_item(units.player)
 
-            return
+            print('-' * 25)
+
+            break
 
 
 def serialize_inv(path):
@@ -728,20 +716,20 @@ def deserialize_inv(path):
         for item in j_inventory[category]:
             if category == 'consum':
                 if 'Potion of ' in item['name']:
-                    x = items.StatusPotion('', '', '', '', '')
+                    x = ItemClass.StatusPotion('', '', '', '', '')
 
                 else:
-                    x = items.Consumable('', '', '', '')
+                    x = ItemClass.Consumable('', '', '', '')
 
             elif category == 'weapons':
-                x = items.Weapon('', '', '', '', '', '', '', '')
+                x = ItemClass.Weapon('', '', '', '', '', '', '', '')
 
             elif category == 'armor':
-                x = items.Armor('', '', '', '', '', '', '', '', '')
+                x = ItemClass.Armor('', '', '', '', '', '', '', '', '')
 
             elif category == 'access':
                 if item['acc_type'] == 'elemental':
-                    x = items.ElementAccessory('', '', '', '', '')
+                    x = ItemClass.ElementAccessory('', '', '', '', '')
 
             elif category == 'coord':
                 norm_inv[category].append(item)
@@ -765,11 +753,6 @@ def deserialize_inv(path):
 
                 elif item['name'] == 'Map of Fast Travel':
                     item = items.map_of_fast_travel
-                    norm_inv[category].append(item)
-                    continue
-
-                elif item['name'] == 'Boots of Travel':
-                    item = items.boots_of_travel
                     norm_inv[category].append(item)
                     continue
 
@@ -798,7 +781,7 @@ def deserialize_inv(path):
             else:
                 continue
 
-            if not isinstance(x, items.Armor) and not isinstance(x, items.Weapon):
+            if not isinstance(x, ItemClass.Armor) and not isinstance(x, ItemClass.Weapon):
 
                 item_art = x.ascart
                 x.__dict__ = item
@@ -843,14 +826,14 @@ def deserialize_equip(path):
                 continue
 
             elif category == 'weapon':
-                x = items.Weapon('', '', '', '', '', '', '', '')
+                x = ItemClass.Weapon('', '', '', '', '', '', '', '')
 
             elif category == 'access':
                 if j_equipped[category]['acc_type'] == 'elemental':
-                    x = items.ElementAccessory('', '', '', '', '')
+                    x = ItemClass.ElementAccessory('', '', '', '', '')
 
             else:
-                x = items.Armor('', '', '', '', '', '', '', '', '')
+                x = ItemClass.Armor('', '', '', '', '', '', '', '', '')
 
             x.__dict__ = j_equipped[user][category]
             norm_equip[user][category] = x

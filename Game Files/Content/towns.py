@@ -235,14 +235,11 @@ def search_towns(enter=True):
 
                     town.town_choice()
 
-                    return
+                    return True
 
                 elif y_n.startswith('n'):
                     print('-'*25)
-                    return
-
-            else:
-                return True
+                    return True
 
         else:
             return bool(len(main.party_info['current_tile'].town_list))

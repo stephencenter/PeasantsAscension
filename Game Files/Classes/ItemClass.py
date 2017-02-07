@@ -27,16 +27,6 @@ import ascii_art
 import tiles
 import units
 
-
-# THIS IF FOR AUTOMATED BUG-TESTING!!
-# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
-# def test_input(string):
-#    spam = random.choice('0123456789ynxpsewrt')
-#    print(string, spam)
-#    return spam
-#
-# input = test_input
-
 if __name__ == "__main__":
     sys.exit()
 

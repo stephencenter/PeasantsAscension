@@ -28,15 +28,8 @@ import sounds
 import magic
 import ascii_art
 import bosses
-
-# THIS IF FOR AUTOMATED BUG-TESTING!!
-# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
-# def test_input(string):
-#     spam = random.choice('0123456789ynxpsewrt')
-#     print(string, spam)
-#     return spam
-#
-# input = test_input
+import units
+import MagicClass
 
 if __name__ == "__main__":
     sys.exit()
@@ -182,7 +175,7 @@ class PlayableCharacter(Unit):
         if self.exp >= self.req_xp:
             print()
 
-            pygame.mixer.music.load('Music/Adventures in Pixels.ogg')
+            pygame.mixer.music.load('Content/Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
 
@@ -284,7 +277,7 @@ class PlayableCharacter(Unit):
                 self.exp -= self.req_xp
                 self.req_xp = math.ceil((math.pow(self.lvl*2, 2) - self.lvl))
 
-                fix_stats()
+                units.fix_stats()
 
             print('-'*25)
             self.skill_points(rem_points, extra_points)
@@ -429,8 +422,8 @@ Input letter: """)
         print('\n{0} is out of skill points.'.format(self.name))
 
     def player_info(self):
-        inv_name = self.name if self != player else 'player'
-        fix_stats()
+        inv_name = self.name if self != units.player else 'player'
+        units.fix_stats()
 
         print(f"""-{self.name}'s Stats-
 Level: {self.lvl} | Class: {self.class_.title()} | Element: {self.element.title()}
@@ -460,10 +453,10 @@ Armor:
         # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
         # based on the PCU/target's elements, status ailments, weapons, armor, and critical hits.
 
-        inv_name = self.name if self != player else 'player'
+        inv_name = self.name if self != units.player else 'player'
 
         if inv_system.equipped[inv_name]['weapon'].type_ != 'ranged':
-            dam_dealt = battle.temp_stats[self.name]['attk'] - (monster.dfns/2)
+            dam_dealt = battle.temp_stats[self.name]['attk'] - (units.monster.dfns/2)
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
 
             # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
@@ -479,7 +472,7 @@ Armor:
                 dam_dealt /= 2
 
         else:
-            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (monster.p_dfns/2)
+            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (units.monster.p_dfns/2)
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
 
             # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
@@ -488,9 +481,9 @@ Armor:
                 print(f"{self.name}'s poor vision reduces their attack damage by half!")
 
         # Increase or decrease the damage depending on the PCU/monster's elements
-        dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                       monster.element,
-                                       p_dmg=dam_dealt)[0]
+        dam_dealt = MagicClass.eval_element(inv_system.equipped[inv_name]['weapon'].element,
+                                            units.monster.element,
+                                            p_dmg=dam_dealt)[0]
 
         # All attacks deal a minimum of one damage
         if dam_dealt < 1:
@@ -511,14 +504,14 @@ Armor:
         return math.ceil(dam_dealt)
 
     def battle_turn(self):
-        inv_name = self.name if self != player else 'player'
+        inv_name = self.name if self != units.player else 'player'
 
         # "2" refers to magic, which will print this later
         if self.move != '2':
             print("-{0}'s Turn-".format(self.name))
 
         # Check to see if the PCU is poisoned
-        if self.status_ail == 'poisoned' and monster.hp > 0:
+        if self.status_ail == 'poisoned' and units.monster.hp > 0:
             main.smart_sleep(0.5)
             sounds.poison_damage.play()
             poison_damage = math.floor(self.hp/5)
@@ -553,28 +546,28 @@ Armor:
             if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
                 sounds.sword_slash.play()
                 print('{0} begin to fiercely attack the {1} using their {2}...'.format(
-                    self.name, monster.name, str(inv_system.equipped[inv_name]['weapon'])))
+                    self.name, units.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
 
             # Ranged weapons aren't swung, so play a different sound effect
             else:
                 sounds.aim_weapon.play()
                 print('{0} aims carefully at the {1} using their {2}...'.format(
-                    self.name, monster.name, str(inv_system.equipped[inv_name]['weapon'])))
+                    self.name, units.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
 
             main.smart_sleep(0.75)
 
             # Check for attack accuracy
-            if random.randint(1, 512) in range(monster.evad, 512):
+            if random.randint(1, 512) in range(units.monster.evad, 512):
                 dam_dealt = self.player_damage()
 
                 print("{0}'s attack connects with the {1}, dealing {2} damage!".format(
-                    self.name, monster.name, dam_dealt))
+                    self.name, units.monster.name, dam_dealt))
 
                 sounds.enemy_hit.play()
-                monster.hp -= dam_dealt
+                units.monster.hp -= dam_dealt
 
             else:
-                print("The {0} narrowly avoids {1}'s attack!".format(monster.name, self.name))
+                print("The {0} narrowly avoids {1}'s attack!".format(units.monster.name, self.name))
                 sounds.attack_miss.play()
 
         # Class Ability
@@ -604,7 +597,7 @@ Armor:
             self.move = input("Input [#]: ")
             if self.move != "q":
                 # Strip out all non-numeric input
-                self.move = re.compile("[^0-9]").sub('', x, self.move)
+                self.move = re.sub("[^0-9]", '', self.move)
 
                 # Use Magic
                 if self.move == '2':
@@ -676,7 +669,7 @@ Armor:
         # Their purpose is to help make the characters more diverse, as well as encourage more
         # strategy being used.
 
-        inv_name = self.name if self != player else 'player'
+        inv_name = self.name if self != units.player else 'player'
         battle.temp_stats[self.name]['ability_used'] = True
 
         print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
@@ -697,13 +690,14 @@ Armor:
             input("Press enter/return to view your enemy's stats ")
 
             print('-'*25)
-            print("{0}'s STATS:".format(monster.name.upper()))
+            print("{0}'s STATS:".format(units.monster.name.upper()))
 
             print("""Attack: {0} | M. Attack: {1} | P. Attack: {2} | Speed: {3}
     Defense: {4} | M. Defense: {5} | P. Defense: {6} | Evasion: {7}
-    Element: {8} | Elemental Weakness: {9}""".format(monster.attk, monster.m_attk, monster.p_attk, monster.spd,
-                                                     monster.dfns, monster.m_dfns, monster.p_dfns, monster.evad,
-                                                     monster.element.title(),
+    Element: {8} | Elemental Weakness: {9}""".format(units.monster.attk, units.monster.m_attk, units.monster.p_attk,
+                                                     units.monster.spd, units.monster.dfns, units.monster.m_dfns,
+                                                     units.monster.p_dfns, units.monster.evad,
+                                                     units.monster.element.title(),
                                                      {'fire': 'Water',
                                                       'water': 'Electric',
                                                       'electric': 'Earth',
@@ -713,7 +707,7 @@ Armor:
                                                       'ice': 'Fire',
                                                       'none': 'None',
                                                       'life': 'Death',
-                                                      'death': 'Life'}[monster.element]))
+                                                      'death': 'Life'}[units.monster.element]))
 
             battle.temp_stats[self.name]['p_attk'] *= 1.35
 
@@ -764,7 +758,7 @@ Armor:
             print('-'*25)
             print('As an Assassin, you discreetly inject poison into your enemy!')
 
-            monster.is_poisoned = True
+            units.monster.is_poisoned = True
 
             return True
 
@@ -778,7 +772,7 @@ Armor:
             print('You enemy has been turned to the "death" element, causing your')
             print('holy spells to inflict more damage! You also regain health and MP.')
 
-            monster.element = "death"
+            units.monster.element = "death"
 
             self.hp += math.ceil(max([0.15*self.max_hp, 15]))
             self.mp += math.ceil(max([0.15*self.max_mp, 15]))
@@ -805,11 +799,11 @@ Armor:
             print("an immense amount of damage in a single, powerful strike! As a result, {0}'s".format(self.name))
             print('defenses have been lowered by 15% until the end of the battle.\n')
 
-            dam_dealt = (battle.p_temp_stats['attk'] - monster.dfns/2)*2.5
+            dam_dealt = (battle.p_temp_stats['attk'] - units.monster.dfns/2)*2.5
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-            dam_dealt = magic.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                           monster.element,
-                                           p_dmg=dam_dealt)[0]
+            dam_dealt = MagicClass.eval_element(inv_system.equipped[inv_name]['weapon'].element,
+                                                units.monster.element,
+                                                p_dmg=dam_dealt)[0]
 
             if dam_dealt < 4:
                 dam_dealt = 4
@@ -828,9 +822,9 @@ Armor:
 
             dam_dealt = math.ceil(dam_dealt)
 
-            print('The attack deals {0} damage to the {1}!'.format(dam_dealt, monster.name))
+            print('The attack deals {0} damage to the {1}!'.format(dam_dealt, units.monster.name))
 
-            monster.hp -= dam_dealt
+            units.monster.hp -= dam_dealt
 
             battle.temp_stats[self.name]['dfns'] *= 0.85
             battle.temp_stats[self.name]['m_dfns'] *= 0.85
@@ -855,7 +849,7 @@ class Monster(Unit):
         self.is_defending = False
 
     def physical_damage(self, mode, target):
-        ise = inv_system.equipped[target.name if target != player else 'player']
+        ise = inv_system.equipped[target.name if target != units.player else 'player']
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         if mode == 'melee':
@@ -864,7 +858,7 @@ class Monster(Unit):
         else:
             dam_dealt = self.p_attk - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr)
 
-        dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
+        dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
 
         if random.randint(1, 100) <= 15:
             dam_dealt *= 1.5
@@ -882,11 +876,11 @@ class Monster(Unit):
         return math.ceil(dam_dealt)
 
     def magical_damage(self, target):
-        ise = inv_system.equipped[target.name if target != player else 'player']
+        ise = inv_system.equipped[target.name if target != units.player else 'player']
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         dam_dealt = self.m_attk - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr)
-        dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
+        dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
 
         if dam_dealt < 1:
             dam_dealt = 1
@@ -958,7 +952,7 @@ class Monster(Unit):
 
     def monst_name(self):
         m_type = {'Central Forest': ['Goblin Archer', 'Spriggan', 'Imp', 'Bat',
-                                     'Beetle' if player.name != "Flygon Jones" else "Calculator"],
+                                     'Beetle' if units.player.name != "Flygon Jones" else "Calculator"],
 
                   'Harconian Coastline': ['Shell Mimic', 'Giant Crab', 'Naiad', 'Sea Serpent', 'Squid'],
 
@@ -1255,13 +1249,13 @@ class Monster(Unit):
         battle.turn_counter += 1
 
         target = random.choice([x for x in [
-            player,
-            solou,
-            xoann,
-            chyme,
-            ran_af,
-            parsto,
-            adorine
+            units.player,
+            units.solou,
+            units.xoann,
+            units.chyme,
+            units.ran_af,
+            units.parsto,
+            units.adorine
         ] if x.enabled and x.status_ail != 'dead'])
 
         print(f"-{self.monster_name}'s Turn-")
@@ -1291,8 +1285,8 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element,
-                                               m_dmg=self.magical_damage(target))[1]
+                dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
+                                                    m_dmg=self.magical_damage(target))[1]
 
                 print(f"The {self.monster_name}'s spell succeeds, and deals {dam_dealt} damage to {target.name}!")
 
@@ -1314,8 +1308,8 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element,
-                                               m_dmg=self.physical_damage('pierce', target))[1]
+                dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
+                                                    m_dmg=self.physical_damage('pierce', target))[1]
 
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1333,13 +1327,13 @@ class Monster(Unit):
         battle.turn_counter += 1
 
         target = random.choice([x for x in [
-            player,
-            solou,
-            xoann,
-            chyme,
-            ran_af,
-            parsto,
-            adorine
+            units.player,
+            units.solou,
+            units.xoann,
+            units.chyme,
+            units.ran_af,
+            units.parsto,
+            units.adorine
         ] if x.enabled and x.status_ail != 'dead'])
 
         print(f"-{self.monster_name}'s Turn-")
@@ -1352,8 +1346,8 @@ class Monster(Unit):
         main.smart_sleep(0.75)
 
         if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-            dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element,
-                                           m_dmg=self.physical_damage('pierce', target))[1]
+            dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
+                                                m_dmg=self.physical_damage('pierce', target))[1]
 
             print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1370,13 +1364,13 @@ class Monster(Unit):
         battle.turn_counter += 1
 
         target = random.choice([x for x in [
-            player,
-            solou,
-            xoann,
-            chyme,
-            ran_af,
-            parsto,
-            adorine
+            units.player,
+            units.solou,
+            units.xoann,
+            units.chyme,
+            units.ran_af,
+            units.parsto,
+            units.adorine
         ] if x.enabled and x.status_ail != 'dead'])
 
         print(f"-{self.monster_name}'s Turn-")
@@ -1416,8 +1410,8 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = magic.eval_element(p_elem=target.element, m_elem=self.element,
-                                               m_dmg=self.physical_damage('melee', target))[1]
+                dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
+                                                    m_dmg=self.physical_damage('melee', target))[1]
 
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
