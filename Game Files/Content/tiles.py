@@ -13,6 +13,7 @@ import bosses
 import sounds
 import inv_system
 import magic
+import MagicClass
 import ascii_art
 
 if __name__ == "__main__":
@@ -38,7 +39,6 @@ in_for_n = Tile("Inner Central Forest", "I-CF-N", "Central Forest", icf_desc, 1,
                 to_e="Nearton",
                 to_w="I-CF-NW",
                 to_n="I-CF-Bridge")
-
 in_for_s = Tile("Inner Central Forest", "I-CF-S", "Central Forest", icf_desc, 1,
                 to_n="I-CF-C",
                 to_w="Southford",
@@ -56,7 +56,6 @@ in_for_c = Tile("Inner Central Forest", "I-CF-C", "Central Forest", icf_desc, 1,
                 to_w="I-CF-W",
                 to_e="I-CF-E",
                 to_s="I-CF-S")
-
 in_for_nw = Tile("Inner Central Forest", "I-CF-NW", "Central Forest", icf_desc, 2,
                  to_s="I-CF-W",
                  to_e="I-CF-N")
@@ -80,8 +79,7 @@ icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Central Forest", icf_de
 This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
 to help protect its citizens from the harmful monsters outside it. Weaker monsters still
 manage to make their way in though.""", 0,
-                  to_s="I-CF-N",
-                  to_n="WH-CF-ICF Bridge Exit")
+                  to_s="I-CF-N")
 
 # -- CENTRAL FOREST TILESETS -- #
 
@@ -105,260 +103,27 @@ def movement_system():
     pygame.mixer.music.set_volume(main.music_vol)
 
     while True:
-        towns.search_towns()
-
-        print(f"-CURRENT LOCATION-")
-
-        mpi = main.party_info
-        tile = mpi['current_tile']
-
-        no_adj_tiles = len([t for t in [tile.to_up,
-                                        tile.to_dn,
-                                        tile.to_w,
-                                        tile.to_s,
-                                        tile.to_n,
-                                        tile.to_e] if t is not None])
-
-        # Calculate which tile ascii art to display
-        if no_adj_tiles == 1:
-            if tile.to_n:
-                print("""
-    | N |
-    |   |
-    | X |
-    |___| X = Player Party\n""")
-            elif tile.to_s:
-                print("""
-     ___
-    |   |
-    | X |
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_w:
-                print("""
-________
-W     X |
-________| X = Player Party\n""")
-            elif tile.to_e:
-                print("""
-     ________
-    | X     E
-    |________ X = Player Party\n""")
-            elif tile.to_dn or tile.to_up:
-                print("""
-     ___
-    | X |
-    |___| X = Player Party\n""")
-
-        elif no_adj_tiles == 2:
-            if tile.to_n and tile.to_w:
-                print("""
-    | N |
-____|   |
-W     X |
-________| X = Player Party\n""")
-            elif tile.to_n and tile.to_e:
-                print("""
-    | N |
-    |   |____
-    | X    E
-    |________ X = Player Party\n""")
-            elif tile.to_n and tile.to_s:
-                print("""
-    | N |
-    |   |
-    | X |
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_w and tile.to_e:
-                print("""
-_____________
-W     X     E
-_____________ X = Player Party\n""")
-            elif tile.to_w and tile.to_s:
-                print("""
-________
-W     X |
-____    |
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_e and tile.to_s:
-                print("""
-     ________
-    | X     E
-    |    ____
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_up and tile.to_dn:
-                print("""
-     ___
-    | X |
-    |___| X = Player Party\n""")
-            elif tile.to_n and (tile.to_up or tile.to_dn):
-                print("""
-    | N |
-    |   |
-    | X |
-    |___| X = Player Party\n""")
-            elif tile.to_s and (tile.to_up or tile.to_dn):
-                print("""
-     ___
-    |   |
-    | X |
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_e and (tile.to_up or tile.to_dn):
-                print("""
-     ________
-    | X     E
-    |________ X = Player Party\n""")
-            elif tile.to_w and (tile.to_up or tile.to_dn):
-                print("""
-________
-W     X |
-________| X = Player Party\n""")
-
-        elif no_adj_tiles == 3:
-            if tile.to_n and tile.to_w and tile.to_e:
-                print("""
-    | N |
-____|   |____
-W     X     E
-_____________ X = Player Party\n""")
-            elif tile.to_n and tile.to_w and tile.to_s:
-                print("""
-    | N |
-____|   |
-W     X |
-____    |
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_n and tile.to_e and tile.to_s:
-                print("""
-    | N |
-    |   |____
-    | X     E
-    |    ____
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_w and tile.to_e and tile.to_s:
-                print("""
-_____________
-W     X     E
-____     ____
-    |   |
-    | S | X = Player Party\n""")
-
-            elif tile.to_w and tile.to_n and (tile.to_up or tile.to_dn):
-                print("""
-    | N |
-____|   |
-W     X |
-________| X = Player Party\n""")
-            elif tile.to_w and tile.to_s and (tile.to_up or tile.to_dn):
-                print("""
-________
-W     X |
-____    |
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_w and tile.to_e and (tile.to_up or tile.to_dn):
-                print("""
-_____________
-W     X     E
-_____________ X = Player Party\n""")
-            elif tile.to_n and tile.to_e and (tile.to_up or tile.to_dn):
-                print("""
-    | N |
-    |   |____
-    | X    E
-    |________ X = Player Party\n""")
-            elif tile.to_s and tile.to_e and (tile.to_up or tile.to_dn):
-                print("""
-     ________
-    | X     E
-    |    ____
-    |   |
-    | S | X = Player Party\n""")
-            elif tile.to_n and tile.to_s and (tile.to_up or tile.to_dn):
-                print("""
-    | N |
-    |   |
-    | X |
-    |   |
-    | S | X = Player Party\n""")
-
-        elif no_adj_tiles >= 4:
-            if tile.to_n and tile.to_w and tile.to_e and tile.to_s:
-                print("""
-    | N |
-____|   |____
-W     X     E
-____     ____
-    |   |
-    | S | X = Player Party\n""")
-
-        # Calculate the character's X, Y, and Z coordinates and create a string from them. The Z coordinate does not
-        # change nearly as often as the other two, so don't display it unless it != 0.
-        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
-        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
-        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
-        coordinates = ''.join([coord_y, coord_x, coord_z])
-
-        print(f"Coordinates: {coordinates} | Region: [{tile.region}] | Subregion [{tile.name}]")
+        if not towns.search_towns():
+            print('-'*25)
 
         # These lists will tell the game how to manipulate the players position in the next part of the function
-        available_dirs = []
-        coord_change = []
-
-        for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
-            if drc == tile.to_e:
-                print("          To the [E]ast", end='')
-                available_dirs.append(['e', drc])
-                coord_change = ['x', 1]
-
-            if drc == tile.to_w:
-                print("          To the [W]est", end='')
-                available_dirs.append(['w', drc])
-                coord_change = ['x', -1]
-
-            if drc == tile.to_n:
-                print("          To the [N]orth", end='')
-                available_dirs.append(['n', drc])
-                coord_change = ['y', 1]
-
-            if drc == tile.to_s:
-                print("          To the [S]outh", end='')
-                available_dirs.append(['s', drc])
-                coord_change = ['y', -1]
-
-            if drc == tile.to_up:
-                print("                 [U]pwards, above your party,", end='')
-                available_dirs.append(['u', drc])
-                coord_change = ['z', 1]
-
-            if drc == tile.to_dn:
-                print("                 [D]ownwards, below your party,", end='')
-                available_dirs.append(['d', drc])
-                coord_change = ['z', -1]
-
-            for t in all_tiles:
-                if t.tile_id == drc:
-                    adj_tile = t
-
-                    break
-
-            print(f" lies the {adj_tile.name}")
+        coord_change, available_dirs = movement_hud()
 
         while True:
-            direction = input('Input Direction ([N], [S], [E], [W]) or [P]layer, [T]ools, [L]ook, [R]est: ').lower()
+            direction = input('Input Direction ([N], [S], [E], [W]) or [P]arty, [T]ools, [L]ook, [R]est: ')
 
+            # Truncate the player's input to be only the first character, and then make it lowercase
+            if direction:
+                direction = direction[0].lower()
+
+            # If the player's input is in a list of available direcitonal inputs, then:
             if any(map(direction.startswith, [x[0] for x in available_dirs])):
                 sounds.foot_steps.play()
 
                 main.party_info['current_tile'] = [b for b in all_tiles if b.tile_id in
                                                    [a[1] for a in available_dirs if a[0] == direction]][0]
 
+                # Translate the player's directional input into a coordinate change
                 for drc in [a[0] for a in available_dirs]:
                     if drc == direction == 'e':
                         coord_change = ['x', 1]
@@ -373,141 +138,43 @@ ____     ____
                     elif drc == direction == 'd':
                         coord_change = ['z', -1]
 
+                # Change the player's coordinates
+                # This is purely visual - tiles are completely independent of coordinates
                 main.party_info[coord_change[0]] += 1*coord_change[1]
 
+                # If none of these fucntions return True, then a battle can occur.
                 if not any([check_region(), bosses.check_bosses(), towns.search_towns(enter=False)]):
-                    # If none of the previous statements return True, then a battle can occur.
+
                     # There is a 1 in 7 chance for a battle to occur (14.285714...%)
                     is_battle = not random.randint(0, 6)
 
-                    if is_battle and main.party_info['current_tile'].m_level != 0:
+                    # Certain tiles can have battling disabled on them
+                    if is_battle and main.party_info['current_tile'].m_level != -1:
                         print('-'*25)
                         units.spawn_monster()
-                        units.player.hp = 1
                         battle.battle_system()
-
-                    else:
-                        print()
 
                 break
 
             elif direction.startswith('p'):
-                print('-'*25)
-                print('You stop to rest for a moment.')
+                player_info()
 
-                while True:
-                    decision = input('View [i]nventory, [s]tats, or [m]agic? | Input Letter (or type "exit"): ')
-                    decision = decision.lower()
-
-                    if decision.startswith('i'):
-                        print('-'*25)
-                        inv_system.pick_category()
-                        print('-'*25)
-
-                    if decision.startswith('s'):
-                        target_options = [x for x in [
-                            units.player,
-                            units.solou,
-                            units.xoann,
-                            units.adorine,
-                            units.ran_af,
-                            units.parsto,
-                            units.chyme] if x.enabled
-                        ]
-
-                        if len(target_options) == 1:
-                            target = units.player
-
-                        else:
-                            print("Select Character:")
-                            print("     ", "\n      ".join(
-                                ["[{0}] {1}".format(int(num) + 1, character.name)
-                                 for num, character in enumerate(target_options)]))
-
-                            while True:
-                                target = input('Input [#] (or type "exit"): ')
-
-                                try:
-                                    target = target_options[int(target) - 1]
-
-                                except (ValueError, IndexError):
-                                    if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                                        print('-'*25)
-
-                                        break
-
-                                    continue
-
-                                break
-
-                        if isinstance(target, units.PlayableCharacter):
-                            print('-'*25)
-                            target.player_info()
-                            print('-'*25)
-
-                    if decision.startswith('m'):
-                        user_options = [x for x in [
-                            units.player,
-                            units.solou,
-                            units.xoann,
-                            units.adorine,
-                            units.ran_af,
-                            units.parsto,
-                            units.chyme] if x.enabled
-                        ]
-
-                        if len(user_options) == 1:
-                            user = units.player
-
-                        else:
-                            print('-'*25)
-                            print("Select Spellbook:")
-                            print("     ", "\n      ".join(
-                                ["[{0}] {1}'s Spells".format(int(num) + 1, character.name)
-                                 for num, character in enumerate(user_options)]))
-
-                            while True:
-                                user = input("Input [#]: ")
-                                try:
-                                    user = int(user) - 1
-                                except ValueError:
-                                    continue
-
-                                try:
-                                    user = user_options[user]
-                                except IndexError:
-                                    continue
-
-                                break
-
-                        if magic.spellbook[user.name if user != units.player else 'player']['Healing']:
-                            magic.pick_spell('Healing', user, False)
-
-                        else:
-                            print('-'*25)
-                            print('You have no overworld-allowed spells available.')
-
-                    if decision in ['e', 'x', 'exit', 'b', 'back']:
-                        print('-'*25)
-                        break
+                movement_hud()
 
             elif direction.startswith('t'):
                 inv_system.tools_menu()
-                if towns.search_towns(enter=False):
-                    print('-'*25)
+
+                movement_hud()
 
             elif direction.startswith('l'):
-                print('-'*25)
-                print(tile.desc)
-                input("\nPress enter/return ")
-                print('-'*25)
+                tile_description()
 
-                break
+                movement_hud()
 
             elif direction.startswith('r'):
                 rest()
-                if towns.search_towns(enter=False):
-                    print('-'*25)
+
+                movement_hud()
 
 
 def check_region():
@@ -560,6 +227,165 @@ def check_region():
         return False
 
 
+def movement_hud():
+    available_dirs = []
+    mpi = main.party_info
+    tile = mpi['current_tile']
+
+    print(f"-CURRENT LOCATION-")
+    print(mpi['current_tile'].generate_ascii())
+
+    # Calculate the character's X, Y, and Z coordinates and create a string from them. The Z coordinate does not
+    # change nearly as often as the other two, so don't display it unless it != 0.
+    coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
+    coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
+    coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
+
+    coordinates = ''.join([coord_y, coord_x, coord_z])
+
+    print(f"Coordinates: {coordinates} | Region: [{tile.region}] | Subregion [{tile.name}]")
+
+    for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
+        if drc == tile.to_e:
+            print("          To the [E]ast", end='')
+            available_dirs.append(['e', drc])
+            coord_change = ['x', 1]
+
+        if drc == tile.to_w:
+            print("          To the [W]est", end='')
+            available_dirs.append(['w', drc])
+            coord_change = ['x', -1]
+
+        if drc == tile.to_n:
+            print("          To the [N]orth", end='')
+            available_dirs.append(['n', drc])
+            coord_change = ['y', 1]
+
+        if drc == tile.to_s:
+            print("          To the [S]outh", end='')
+            available_dirs.append(['s', drc])
+            coord_change = ['y', -1]
+
+        if drc == tile.to_up:
+            print("                 [U]pwards, above your party,", end='')
+            available_dirs.append(['u', drc])
+            coord_change = ['z', 1]
+
+        if drc == tile.to_dn:
+            print("                 [D]ownwards, below your party,", end='')
+            available_dirs.append(['d', drc])
+            coord_change = ['z', -1]
+
+        for t in all_tiles:
+            if t.tile_id == drc:
+                adj_tile = t
+
+                break
+
+        print(f" lies the {adj_tile.name}")
+
+    return coord_change, available_dirs
+
+
+def player_info():
+    print('-' * 25)
+    print('You stop to rest for a moment.')
+
+    while True:
+        decision = input('View [I]nventory, [S]tats, or use [M]agic? | Input Letter (or type "exit"): ').lower()
+
+        if decision.startswith('i'):
+            print('-' * 25)
+            inv_system.pick_category()
+            print('-' * 25)
+
+        if decision.startswith('s'):
+            target_options = [x for x in [units.player,
+                                          units.solou,
+                                          units.xoann,
+                                          units.adorine,
+                                          units.ran_af,
+                                          units.parsto,
+                                          units.chyme] if x.enabled]
+
+            if len(target_options) == 1:
+                target = units.player
+
+            else:
+                print("Select Character:")
+                print("     ", "\n      ".join(
+                    [f"[{int(num) + 1}] {character.name}" for num, character in enumerate(target_options)]))
+
+                while True:
+                    target = input('Input [#] (or type "exit"): ').lower()
+
+                    try:
+                        target = target_options[int(target) - 1]
+
+                    except (ValueError, IndexError):
+                        if target in ['e', 'x', 'exit', 'b', 'back']:
+                            print('-' * 25)
+
+                            break
+
+                        continue
+
+                    break
+
+            if isinstance(target, units.PlayableCharacter):
+                print('-' * 25)
+                target.player_info()
+                print('-' * 25)
+
+        if decision.startswith('m'):
+            target_options = [x for x in [units.player,
+                                          units.solou,
+                                          units.xoann,
+                                          units.adorine,
+                                          units.ran_af,
+                                          units.parsto,
+                                          units.chyme] if x.enabled]
+
+            if len(target_options) == 1:
+                target = units.player
+
+            else:
+                print('-' * 25)
+                print("Select Spellbook:")
+                print("     ", "\n      ".join(
+                    [f"[{int(num) + 1}] {character.name}'s Spells" for num, character in enumerate(target_options)]))
+
+                while True:
+                    target = input("Input [#]: ")
+                    try:
+                        target = target_options[int(target) - 1]
+
+                    except (ValueError, IndexError):
+                        continue
+
+                    break
+
+            if magic.spellbook[target.name if target != units.player else 'player']['Healing']:
+                MagicClass.pick_spell('Healing', target, False)
+
+            else:
+                print('-' * 25)
+                print(f'{target.name} has no overworld-allowed spells in their spellbook.')
+                input("\Press enter/return ")
+
+        if decision in ['e', 'x', 'exit', 'b', 'back']:
+            print('-' * 25)
+
+            return
+
+
+def tile_description():
+    print('-' * 25)
+    print(main.party_info['current_tile'].desc)
+    input("\nPress enter/return ")
+    print('-' * 25)
+
+
 def rest():
     # Attempt to re-gain health on the world map. There is a chance to get ambushed by an enemy
     # when doing this.
@@ -574,8 +400,8 @@ def rest():
             units.adorine.hp == units.adorine.max_hp and units.adorine.mp == units.adorine.max_mp]):
 
         print('Your party feels fine and decides not to rest.')
-        if not towns.search_towns(enter=False):
-            print('-'*25)
+        input("\nPress enter/return ")
+        print('-'*25)
 
         return
 
