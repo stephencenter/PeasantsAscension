@@ -646,7 +646,6 @@ def tools_menu():  # Display a set of usable tools on the world map
             if item.name in tool_names:
                 available_tools.append(item)
 
-
     print('-'*25)
 
     if not available_tools:

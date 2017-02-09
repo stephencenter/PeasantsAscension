@@ -78,12 +78,12 @@ class PlayableCharacter(Unit):
         self.req_xp = 3           # Required XP to level up
         self.move = ''            # What move the character chose during battle
 
-        self.attributes = {'int': 1,  # Intelligence
-                           'wis': 1,  # Wisdom
-                           'str': 1,  # Strength
-                           'con': 1,  # Constitution
-                           'dex': 1,  # Dexterity
-                           'per': 1,  # Perception
+        self.attributes = {'int': 1,  # Intelligence, for Mages
+                           'wis': 1,  # Wisdom, for Paladins
+                           'str': 1,  # Strength, for Warriors
+                           'con': 1,  # Constitution, for Monks
+                           'dex': 1,  # Dexterity, for Assassins
+                           'per': 1,  # Perception, for Rangers
                            'for': 1}  # Fortune
 
         self.battle_options = """Pick {0}'s Move:
@@ -1263,10 +1263,6 @@ class Monster(Unit):
 
         print(f"-{self.monster_name}'s Turn-")
         print(ascii_art.monster_art[self.monster_name] % f"The {self.monster_name} is making a move!\n")
-
-        self.give_status(target)
-
-        return
 
         # 16.67% chance for the enemy to give a status ailment
         if target.status_ail == "none" and random.randint(0, 5) == 0 and self.mp >= self.max_mp*0.1:

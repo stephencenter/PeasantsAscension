@@ -1,6 +1,6 @@
 #   This file is part of Peasants' Ascension.
 #
-#	 Peasants' Ascension is free software: you can redistribute it and/or modify
+#    Peasants' Ascension is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -12,7 +12,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
-#----------------------------------------------------------------------------#
+# ----------------------------------------------------------------------------#
 # This file is where ALL of the Enemy and Player ASCII
 # art in the game is located.
 
