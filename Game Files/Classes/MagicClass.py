@@ -177,7 +177,6 @@ class Damaging(Spell):
                 dam_dealt *= 1.5
 
             dam_dealt *= 1 + self.damage
-            dam_dealt = math.ceil(dam_dealt)
 
             # Evaluate the element of the attack and the enemy
             dam_dealt = eval_element(
@@ -185,10 +184,7 @@ class Damaging(Spell):
                 m_elem=units.monster.element,
                 p_dmg=dam_dealt)[0]
 
-            if dam_dealt < 1:
-                dam_dealt = 1
-
-            print("-{0}'s Turn-".format(user.name))
+            print(f"-{user.name}'s Turn-")
             print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
 
             if inv_system.equipped[inv_name]['weapon'].class_ == 'magic':
@@ -196,7 +192,7 @@ class Damaging(Spell):
                     user.name, inv_system.equipped[inv_name]['weapon']))
 
             else:
-                print('{0} attempts to summon a powerful spell...'.format(user.name))
+                print(f'{user.name} attempts to summon a powerful spell...')
 
             sounds.magic_attack.play()
             main.smart_sleep(0.75)
@@ -214,6 +210,14 @@ class Damaging(Spell):
                     sounds.critical_hit.play()
                     main.smart_sleep(0.5)
 
+                dam_dealt = math.ceil(dam_dealt)
+
+                if dam_dealt < 1:
+                    dam_dealt = 1
+
+                if dam_dealt > 999:
+                    dam_dealt = 999
+
                 print('Using the power of "{0}", {1} deals {2} damage to the {3}!'.format(
                     self.name, user.name, dam_dealt, units.monster.monster_name))
 
@@ -222,7 +226,7 @@ class Damaging(Spell):
             # Otherwise, the spell with miss and deal no damage
             else:
                 sounds.attack_miss.play()
-                print("The {0} narrowly dodges {1}'s spell!".format(units.monster.monster_name, user.name))
+                print(f"The {units.monster.monster_name} narrowly dodges {user.name}'s spell!")
 
             return True
 

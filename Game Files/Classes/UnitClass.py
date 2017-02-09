@@ -87,10 +87,10 @@ class PlayableCharacter(Unit):
                            'for': 1}  # Fortune
 
         self.battle_options = """Pick {0}'s Move:
-      [1]: Attack
+      [1]: Standard Attack
       [2]: Use Magic
-      [3]: Class Ability
-      [4]: Use Items
+      [3]: Use Items
+      [4]: Use Ultimate
       [5]: Run"""
 
     def choose_name(self):
@@ -505,10 +505,9 @@ Armor:
 
     def battle_turn(self):
         inv_name = self.name if self != units.player else 'player'
+        player_weapon = inv_system.equipped[inv_name]['weapon']
 
-        # "2" refers to magic, which will print this later
-        if self.move != '2':
-            print("-{0}'s Turn-".format(self.name))
+        print(f"-{self.name}'s Turn-")
 
         # Check to see if the PCU is poisoned
         if self.status_ail == 'poisoned' and units.monster.hp > 0:
@@ -517,7 +516,7 @@ Armor:
             poison_damage = math.floor(self.hp/5)
             self.hp -= poison_damage
 
-            print('{0} took poison damage! (-{1} HP)'.format(self.name, poison_damage))
+            print(f'{self.name} took poison damage! (-{poison_damage} HP)')
 
             if self.hp <= 0:
                 return
@@ -526,33 +525,22 @@ Armor:
         if self.status_ail != 'none' and random.randint(0, 3) == 0:
 
             sounds.buff_spell.play()
-
-            if self.status_ail == 'asleep':
-                print(ascii_art.player_art[self.class_.title()] % "{0} is no longer asleep!\n".format(self.name))
-                input('Press enter/return ')
-                self.status_ail = 'none'
-
-                return
-
-            else:
-                print("{0}'s afflictions have worn off! They are no longer {1}.".format(self.name, self.status_ail))
-                self.status_ail = 'none'
-                main.smart_sleep(0.5)
+            print(f"{self.name}'s afflictions have worn off! They are no longer {self.status_ail}.")
+            self.status_ail = 'none'
+            main.smart_sleep(0.5)
 
         # Basic Attack
-        if self.move == '1' or self.move == 'q':
-            print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
+        if self.move == '1':
+            print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
 
             if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
                 sounds.sword_slash.play()
-                print('{0} begin to fiercely attack the {1} using their {2}...'.format(
-                    self.name, units.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
+                print(f'{self.name} begins to fiercely attack the {units.monster.name} using their {player_weapon}...')
 
             # Ranged weapons aren't swung, so play a different sound effect
             else:
                 sounds.aim_weapon.play()
-                print('{0} aims carefully at the {1} using their {2}...'.format(
-                    self.name, units.monster.name, str(inv_system.equipped[inv_name]['weapon'])))
+                print(f'{self.name} aims carefully at the {units.monster.name} using their {player_weapon}...')
 
             main.smart_sleep(0.75)
 
@@ -560,23 +548,21 @@ Armor:
             if random.randint(1, 512) in range(units.monster.evad, 512):
                 dam_dealt = self.player_damage()
 
-                print("{0}'s attack connects with the {1}, dealing {2} damage!".format(
-                    self.name, units.monster.name, dam_dealt))
+                print(f"{self.name}'s attack connects with the {units.monster.name}, dealing {dam_dealt} damage!")
 
                 sounds.enemy_hit.play()
                 units.monster.hp -= dam_dealt
 
             else:
-                print("The {0} narrowly avoids {1}'s attack!".format(units.monster.name, self.name))
+                print(f"The {units.monster.name} narrowly avoids {self.name}'s attack!")
                 sounds.attack_miss.play()
 
         # Class Ability
-        elif self.move == '3' and not self.class_ability():
+        elif self.move == '4' and not self.class_ability():
             return False
 
         # Run away!
         elif self.move == '5' and battle.run_away(self):
-            print('-'*25)
             pygame.mixer.music.load(main.party_info['reg_music'])
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
@@ -595,74 +581,90 @@ Armor:
 
         while True:
             self.move = input("Input [#]: ")
-            if self.move != "q":
-                # Strip out all non-numeric input
-                self.move = re.sub("[^0-9]", '', self.move)
 
-                # Use Magic
-                if self.move == '2':
+            try:
+                self.move = re.sub("[^0-9][^QWEDR]", '', self.move)[0].lower()
+
+            except IndexError:
+                continue
+
+            if self.move in ['1', 'q']:
+                self.move = '1'
+
+            # Use Magic
+            elif self.move in ['2', 'w']:
+                self.move = '2'
+                print('-'*25)
+
+                if self.status_ail == 'silenced':
+                    sounds.debuff.play()
+                    print(f"{self.name} is silenced and cannot use spells!")
+                    input("\nPress enter/return ")
+
+                    continue
+
+                if not magic.pick_cat(self):
+                    print(self.battle_options.format(self.name))
+
+                    continue
+
+                input('\nPress enter/return ')
+
+            elif self.move in ['3', 'e']:
+                self.move = '3'
+                print('-'*25)
+
+                if not inv_system.inventory['consum']:
+                    print('Your party has no battle-allowed items - the consumable category is empty!')
+                    print("\nPress enter/return ")
+                    print(self.battle_options.format(self.name))
+
+                    continue
+
+                if self.status_ail == "muted":
+                    sounds.debuff.play()
+                    print(f"{self.name} is muted and cannot access their inventory!")
+                    print("\nPress enter/return ")
+                    print(self.battle_options.format(self.name))
+
+                    continue
+
+                if not battle.battle_inventory(self):
+                    print(self.battle_options.format(self.name))
+
+                    continue
+
+                input('\nPress enter/return ')
+
+            # Let the player repick if they try to use their class ability when they can't
+            elif self.move in ['4', 'r']:
+                self.move = '5'
+                if self.lvl < 5:
+                    # You must be at least level 5 to use your class ability
                     print('-'*25)
-
-                    if self.status_ail == 'silenced':
-                        sounds.debuff.play()
-                        print(f"{self.name} is silenced and cannot use spells!")
-                        input("\nPress enter/return ")
-
-                        continue
-
-                    if not magic.pick_cat(self):
-                        print(self.battle_options.format(self.name))
-
-                        continue
-
-                    input('\nPress enter/return ')
-
-                # Battle Inventory
-                elif self.move == '4':
+                    print(f"{self.name} has not yet realized their class's inner potential!")
+                    input("\nPress enter/return ")
                     print('-'*25)
+                    print(self.battle_options.format(self.name))
 
-                    if not inv_system.inventory['consum']:
-                        print('You have no battle-allowed items - the consumable category is empty!')
-                        print('-' * 25)
+                    continue
 
-                        continue
+                elif battle.temp_stats[self.name]['ability_used']:
+                    # You can only use your ability once per battle.
+                    print('{self.name} feels too drained to use their class ability again.')
+                    print('-'*25)
+                    print(self.battle_options.format(self.name))
 
-                    if self.status_ail == "muted":
-                        sounds.debuff.play()
-                        print(f"{self.name} is muted and cannot access their inventory!")
-                        print("\nPress enter/return ")
-                        print(self.battle_options.format(self.name))
+                    continue
 
-                        continue
+            # Battle Inventory
+            elif self.move in ['5', 'd']:
+                self.move = '5'
 
-                    if not battle.battle_inventory(self):
-                        print(self.battle_options.format(self.name))
+            else:
+                continue
 
-                        continue
-
-                    input('\nPress enter/return ')
-
-                # Let the player repick if they try to use their class ability when they can't
-                elif self.move == '3':
-                    if self.lvl < 5:
-                        # You must be at least level 5 to use your class ability
-                        print('-'*25)
-                        print("{0} has not yet realized their class's inner potential!".format(self.name))
-                        input("\nPress enter/return ")
-                        print('-'*25)
-                        print(self.battle_options.format(self.name))
-
-                        continue
-
-                    elif battle.temp_stats[self.name]['ability_used']:
-                        # You can only use your ability once per battle.
-                        print('{0} feels too drained to use their class ability again.'.format(self.name))
-                        print('-'*25)
-                        print(self.battle_options.format(self.name))
-
-                        continue
-
-                return
+            return
 
     def class_ability(self):
         # Class abilities are special abilities only available to characters of certain classes.
@@ -911,26 +913,27 @@ class Monster(Unit):
 
     def give_status(self, target):
         # Attempt to give the target a status ailment
-        status = random.choice([x for x in ['asleep',
-                                            'poisoned',
+        status = random.choice([x for x in ['poisoned',
                                             'silenced',
                                             'weakened',
                                             'blinded',
                                             'paralyzed',
-                                            'muted']
-                                if x != target.status_ail])
+                                            'muted'] if x != target.status_ail])
 
-        print('The {0} is attempting to make {1} {2}...'.format(self.monster_name, target.name, status))
+        print(f'The {self.monster_name} is attempting to make {target.name} {status}...')
         main.smart_sleep(0.75)
 
-        if random.randint(0, 1):
-            print('{0} is now {1}!'.format(target.name, status))
+        # There's a 50% chance that the status spell will work
+        if random.randint(0, 1) == 1:
+            sounds.buff_spell.play()
+            print(f'{target.name} is now {status}!')
             target.status_ail = status
 
         else:
-            print('The {0} failed to make {1} {2}!'.format(self.monster_name, target.name, status))
+            sounds.debuff.play()
+            print(f'The {self.monster_name} failed to make {target.name} {status}!')
 
-        self.mp -= 2
+        self.mp -= self.max_mp*0.1
 
     def check_poison(self):
         # Check whether the monster is poisoned or not.
@@ -1152,8 +1155,8 @@ class Monster(Unit):
 
         elif main.party_info['reg'] == 'Overshire Graveyard':
             self.element = 'death'
-            self.status = 'asleep'
-            self.status_msg = "knocked their target unconscious using noxious fumes!"
+            self.status = 'poisoned'
+            self.status_msg = "poisoned their target using noxious fumes!"
 
         elif main.party_info['reg'] == 'Aethus':
             self.element = 'wind'
@@ -1261,24 +1264,32 @@ class Monster(Unit):
         print(f"-{self.monster_name}'s Turn-")
         print(ascii_art.monster_art[self.monster_name] % f"The {self.monster_name} is making a move!\n")
 
+        self.give_status(target)
+
+        return
+
         # 16.67% chance for the enemy to give a status ailment
-        if target.status_ail == "none" and random.randint(0, 5) == 0:
+        if target.status_ail == "none" and random.randint(0, 5) == 0 and self.mp >= self.max_mp*0.1:
             self.give_status(target)
 
+        # Magic heal
         elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
-            # Magic heal
+            print(f'The {self.monster_name} is attempting to cast a healing spell on itself...')
+            main.smart_sleep(0.75)
+            print(f'The {self.monster_name} heals itself for {max([self.hp*0.2, 20])} HP!')
+
             sounds.magic_healing.play()
 
             self.hp += max([self.hp*0.2, 20])
+
             if self.hp > self.max_hp:
                 self.hp -= (self.hp - self.max_hp)
 
-            print(f'The {self.monster_name} casts a healing spell!')
-
             self.mp -= self.max_mp*0.2
 
+        # Magic Attack
         elif self.mp >= self.max_mp*0.15:
-            # Magic Attack
+
             sounds.magic_attack.play()
 
             print(f'The {self.monster_name} is preparing to cast a damaging spell on {target.name}!')
@@ -1299,8 +1310,8 @@ class Monster(Unit):
 
             self.mp -= self.max_mp*0.15
 
+        # Non-magic Attack
         else:
-            # Non-magic Attack
 
             print(f'The {self.monster_name} {self.attk_msg} {target.name}')
             sounds.aim_weapon.play()

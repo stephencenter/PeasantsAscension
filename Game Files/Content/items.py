@@ -42,9 +42,6 @@ l_rejuv = Consumable('Mighty Rejuvenation Potion',
                      225, 80, heal=100, mana=100, ascart='Rejuv')
 
 # Potions - Status
-sleep_potion = StatusPotion('Potion of Waking Up',
-                            "A potion designed to wake its partaker from a deep sleep.",
-                            50, 25, 'asleep', ascart='Status')
 silence_potion = StatusPotion('Potion of Allowing Speech',
                               "A potion designed to enable the usage of damaged vocal chords.",
                               50, 25, 'silenced', ascart='Status')
@@ -626,9 +623,6 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
 
             [poison_potion, poison_potion, poison_potion,
              poison_potion, poison_potion, poison_potion],  # Poison Potion
-
-            [sleep_potion, sleep_potion, sleep_potion,
-             sleep_potion, sleep_potion, sleep_potion],  # Sleep Potion
 
             [silence_potion, silence_potion, silence_potion,
              silence_potion, silence_potion, silence_potion],  # Silence Potion

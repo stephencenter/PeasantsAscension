@@ -182,17 +182,6 @@ def battle_system(is_boss=False, ambush=False):
         speed_enabled_pcus = sorted([units.monster] + enabled_pcus,
                                     key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True)
 
-        # Check to see if any of your party members are have died, and alert the player
-        # Then, check if any of them are asleep and do some powerful magic to make everything work
-        for character in enabled_pcus:
-            if character.enabled and character.status_ail == 'asleep':
-                character.battle_turn()
-
-                if character.status_ail == 'asleep':
-                    print(ascii_art.player_art["Asleep"] % f"{character.name} is asleep, and cannot move!")
-                    input("\nPress enter/return ")
-                    sounds.poison_damage.play()
-
         # Display HP, MP, Levels, and Statuses for all battle participants
         bat_stats()
 
@@ -204,7 +193,7 @@ def battle_system(is_boss=False, ambush=False):
                 main.smart_sleep(1)
 
             # Let each awake and alive character choose their move
-            if character.status_ail not in ['asleep', 'dead']:
+            if character.status_ail != 'dead':
                 character.player_choice()
 
                 if num + 1 < len([x for x in enabled_pcus if x.status_ail != 'dead']):
@@ -216,16 +205,15 @@ def battle_system(is_boss=False, ambush=False):
                 if units.monster.hp <= 0:
                     break
 
-                if isinstance(char, units.PlayableCharacter) and (char.status_ail == 'dead' or char.move in ['2', '4']):
+                if isinstance(char, units.PlayableCharacter) and (char.status_ail == 'dead' or char.move in ['2', '3']):
                     continue
 
-                if char.status_ail != 'asleep':
-                    print('-'*25)
-                    if char.battle_turn() == 'Ran':
-                        return
+                print('-'*25)
+                if char.battle_turn() == 'Ran':
+                    return
 
                 if any(x.hp > 0 for x in enabled_pcus):
-                    if units.monster.hp > 0 and char.status_ail not in ['asleep', 'dead']:
+                    if units.monster.hp > 0 and char.status_ail != 'dead':
                         input('\nPress enter/return ')
 
                     elif units.monster.hp <= 0:
@@ -246,6 +234,7 @@ def battle_system(is_boss=False, ambush=False):
                     input("\nPress enter/return ")
 
     after_battle(is_boss)
+
 
 def run_away(runner):
     print(ascii_art.player_art[runner.class_.title()] % f"{runner.name} is making a move!\n")
@@ -273,6 +262,7 @@ def run_away(runner):
     if random.randint(0, 100) <= chance:
         sounds.buff_spell.play()
         print(f'Your party manages to escape from the {units.monster.name}!')
+        input("\nPress enter/return ")
         return True
 
     else:
