@@ -460,7 +460,6 @@ def title_screen():
     while True:
         # Give the user a choice of keys to press to do specific actions
         choice = input('[P]lay Game | [C]redits | [S]tory | [L]ore | [E]xit  |  Input Letter: ')
-
         choice = choice.lower()
 
         if choice.startswith('p'):
@@ -663,8 +662,6 @@ def main():
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
     import npcs
 
-    # Yes, this is a try...except statement that includes functions that spans thousands of lines,
-    # but it's necessary for error logging.
     try:
         # Run the game.
         main()

@@ -27,7 +27,7 @@ Legal Stuff:
     along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 ----------------------------------------------------
 Downloads for both the standalone and source-code versions of this game
-are available at http://rbwnjafurret.com/peasantrpg . We also have 
+are available at <http://reddit.com/r/PeasantsAscension/>. We also have 
 articles about programming, technology, and video games, so check it
 out if you enjoy those things! ;)
 ----------------------------------------------------

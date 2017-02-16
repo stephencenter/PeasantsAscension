@@ -481,9 +481,7 @@ Armor:
                 print(f"{self.name}'s poor vision reduces their attack damage by half!")
 
         # Increase or decrease the damage depending on the PCU/monster's elements
-        dam_dealt = MagicClass.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                            units.monster.element,
-                                            p_dmg=dam_dealt)[0]
+        dam_dealt = eval_element(self, units.monster, dam_dealt)
 
         # All attacks deal a minimum of one damage
         if dam_dealt < 1:
@@ -803,9 +801,7 @@ Armor:
 
             dam_dealt = (battle.p_temp_stats['attk'] - units.monster.dfns/2)*2.5
             dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-            dam_dealt = MagicClass.eval_element(inv_system.equipped[inv_name]['weapon'].element,
-                                                units.monster.element,
-                                                p_dmg=dam_dealt)[0]
+            dam_dealt = eval_element(self, units.monster, dam_dealt)
 
             if dam_dealt < 4:
                 dam_dealt = 4
@@ -860,14 +856,14 @@ class Monster(Unit):
         else:
             dam_dealt = self.p_attk - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr)
 
-        dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
-
         if random.randint(1, 100) <= 15:
             dam_dealt *= 1.5
             print("It's a critical hit! 1.5x damage!")
 
             sounds.critical_hit.play()
             main.smart_sleep(0.5)
+
+        dam_dealt = eval_element(self, target, dam_dealt)
 
         if dam_dealt < 1:
             dam_dealt = 1
@@ -882,7 +878,7 @@ class Monster(Unit):
         dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
 
         dam_dealt = self.m_attk - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr)
-        dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element, m_dmg=dam_dealt)[1]
+        dam_dealt = eval_element(self, target, dam_dealt)
 
         if dam_dealt < 1:
             dam_dealt = 1
@@ -893,7 +889,6 @@ class Monster(Unit):
         return math.ceil(dam_dealt)
 
     def monst_level(self):
-
         self.lvl = main.party_info['current_tile'].m_level
 
         for x in range(1, self.lvl):
@@ -1292,8 +1287,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
-                                                    m_dmg=self.magical_damage(target))[1]
+                dam_dealt = self.magical_damage(target)
 
                 print(f"The {self.monster_name}'s spell succeeds, and deals {dam_dealt} damage to {target.name}!")
 
@@ -1315,8 +1309,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
-                                                    m_dmg=self.physical_damage('pierce', target))[1]
+                dam_dealt = self.physical_damage('pierce', target)
 
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1353,8 +1346,7 @@ class Monster(Unit):
         main.smart_sleep(0.75)
 
         if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-            dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
-                                                m_dmg=self.physical_damage('pierce', target))[1]
+            dam_dealt = self.physical_damage('pierce', target)
 
             print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1363,7 +1355,7 @@ class Monster(Unit):
 
         else:
             sounds.attack_miss.play()
-            print("The {0}'s attack narrowly misses {1}!".format(self.monster_name, target.name))
+            print(f"The {self.monster_name}'s attack narrowly misses {target.name}!")
 
             self.check_poison()
 
@@ -1417,8 +1409,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = MagicClass.eval_element(p_elem=target.element, m_elem=self.element,
-                                                    m_dmg=self.physical_damage('melee', target))[1]
+                dam_dealt = self.physical_damage('melee', target)
 
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1427,6 +1418,49 @@ class Monster(Unit):
 
             else:
                 sounds.attack_miss.play()
-                print("The {0}'s attack narrowly misses {1}!".format(self.monster_name, target.name))
+                print(f"The {self.monster_name}'s attack narrowly misses {target.name}!")
 
             self.check_poison()
+
+
+def deal_damage(attacker, target, damage_type, do_crits=True):
+    # This will contain a universal damage formula shared by the three damage types (magical, physical, piercing)
+    pass
+
+
+def eval_element(attacker, target, damage):
+    # Fire < Water < Electricity < Earth < Wind < Grass < Ice < Fire
+    # Life < Death and Death < Life
+    # "None" element is neutral to all elements
+    # All other interactions are neutral
+
+    # Set everything to be lowercase, just incase
+    a_elem = attacker.element.lower()
+    t_elem = target.element.lower()
+
+    # element_matchup[key][0] is the element that key is weak to
+    # element_matchup[key][1] is the element that key is resistant to
+    element_matchup = {
+        'fire': ['water', 'ice'],
+        'water': ['electric', 'fire'],
+        'electric': ['earth', 'water'],
+        'earth': ['grass', 'electric'],
+        'wind': ['ice', 'earth'],
+        'grass': ['wind', 'wind'],
+        'ice': ['fire', 'grass'],
+        'life': ['life', 'death'],
+        'death': ['death', 'life']
+    }
+
+    # If either the attacker or the target have no element, OR the target and the attacker both have the same element,
+    # then do not modify the damage (1x multiplier)
+    if (a_elem == 'none' or t_elem == 'none') or (a_elem == t_elem):
+        return damage
+
+    if element_matchup[a_elem][1] == t_elem:
+        return math.ceil(damage*1.5)
+
+    elif element_matchup[a_elem][0] == t_elem:
+        return math.ceil(damage/1.5)
+
+    return damage
