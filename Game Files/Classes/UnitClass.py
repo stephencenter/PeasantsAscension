@@ -30,6 +30,7 @@ import ascii_art
 import bosses
 import units
 import MagicClass
+import AbilityClass
 
 if __name__ == "__main__":
     sys.exit()
@@ -89,8 +90,8 @@ class PlayableCharacter(Unit):
         self.battle_options = """Pick {0}'s Move:
       [1]: Standard Attack
       [2]: Use Magic
-      [3]: Use Items
-      [4]: Use Ultimate
+      [3]: Use Abilities
+      [4]: Use Items
       [5]: Run"""
 
     def choose_name(self):
@@ -500,8 +501,8 @@ Armor:
                 print(f"The {units.monster.name} narrowly avoids {self.name}'s attack!")
                 sounds.attack_miss.play()
 
-        # Class Ability
-        elif self.move == '4' and not self.class_ability():
+        # Use Abilities (WIP)
+        elif self.move == '4':
             return False
 
         # Run away!
@@ -531,6 +532,7 @@ Armor:
             except IndexError:
                 continue
 
+            # Standard Attack
             if self.move in ['1', 'q']:
                 self.move = '1'
 
@@ -553,7 +555,12 @@ Armor:
 
                 input('\nPress enter/return ')
 
+            # Use Abilities
             elif self.move in ['3', 'e']:
+                self.move = '3'
+
+            # Use Items
+            elif self.move in ['4', 'r']:
                 self.move = '3'
                 print('-'*25)
 
@@ -579,28 +586,7 @@ Armor:
 
                 input('\nPress enter/return ')
 
-            # Let the player repick if they try to use their class ability when they can't
-            elif self.move in ['4', 'r']:
-                self.move = '5'
-                if self.lvl < 5:
-                    # You must be at least level 5 to use your class ability
-                    print('-'*25)
-                    print(f"{self.name} has not yet realized their class's inner potential!")
-                    input("\nPress enter/return ")
-                    print('-'*25)
-                    print(self.battle_options.format(self.name))
-
-                    continue
-
-                elif battle.temp_stats[self.name]['ability_used']:
-                    # You can only use your ability once per battle.
-                    print('{self.name} feels too drained to use their class ability again.')
-                    print('-'*25)
-                    print(self.battle_options.format(self.name))
-
-                    continue
-
-            # Battle Inventory
+            # Run
             elif self.move in ['5', 'd']:
                 self.move = '5'
 
@@ -608,61 +594,6 @@ Armor:
                 continue
 
             return
-
-    def class_ability(self):
-        # Class abilities are special abilities only available to characters of certain classes.
-        # Their purpose is to help make the characters more diverse, as well as encourage more
-        # strategy being used.
-
-        print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
-        print(f"{self.name} uses the knowledge they've gained to unleash their class ability!")
-
-        # Ranger Ability: Scout -- NEEDS REWORK!
-        if self.class_ == 'ranger':
-            return True
-
-        # Warrior Ability: Warrior's Spirit -- NEEDS REWORK (SUGGESTION - PARRY)
-        elif self.class_ == 'warrior':
-            return True
-
-        # Mage Ability: Artificial Intelligence -- NEEDS REWORK!
-        elif self.class_ == "mage":
-            return True
-
-        # Assassin Ability: Lethal Injection - NEEDS REWORK (SUGGESTION - WEAKER, STACKING POISON)
-        elif self.class_ == "assassin":
-            return True
-
-        # Paladin Ability: Divine Intervention -- NEEDS REWORK!
-        elif self.class_ == "paladin":
-            return True
-
-        # Monk Ability: Chakra-smash
-        elif self.class_ == 'monk':
-            # A 2.5x crit that lowers the target's armor
-            print('-'*25)
-            print('ABILITY: CHAKRA-SMASH')
-            print('-'*25)
-
-            print(f"""As a monk, {self.name} meditates and focuses their inner chi.
-            After a short moment, {self.name} strikes, dealing an immense amount of damage
-            in a single, undodgeable strike! The attack also lowers the enemy's defense.""")
-
-            main.smart_sleep(0.75)
-            dam_dealt = math.ceil(deal_damage(self, units.monster, "physical")*2.5)
-            units.monster.hp -= dam_dealt
-
-            print(f'The attack deals {dam_dealt} damage to the {monster.name}!')
-
-            monster.dfns *= 0.9
-            monster.p_dfns *= 0.9
-            monster.m_dfns *= 0.9
-
-            monster.dfns = math.ceil(monster.dfns)
-            monster.p_dfns = math.ceil(monster.p_dfns)
-            monster.m_dfns = math.ceil(monster.m_dfns)
-
-            return True
 
 
 class Monster(Unit):
