@@ -20,6 +20,7 @@ import time
 import math
 import pygame
 
+import UnitClass
 import units
 import battle
 import inv_system
@@ -167,22 +168,10 @@ class Damaging(Spell):
 
         # Spells cannot be cast if the player does not have enough mana for it
         if user.mp >= self.mana:
-            print()
             Spell.use_mana(self, user)
 
             # Determine the power of the attack
-            dam_dealt = math.ceil(battle.temp_stats[user.name]['m_attk'] - units.monster.m_dfns/2)
-
-            if user.class_ == 'mage':
-                dam_dealt *= 1.5
-
-            dam_dealt *= 1 + self.damage
-
-            # Evaluate the element of the attack and the enemy
-            dam_dealt = eval_element(
-                p_elem=self.element,
-                m_elem=units.monster.element,
-                p_dmg=dam_dealt)[0]
+            dam_dealt = UnitClass.deal_damage(user, units.monster, "magical", spell_power=self.damage)
 
             print(f"-{user.name}'s Turn-")
             print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")

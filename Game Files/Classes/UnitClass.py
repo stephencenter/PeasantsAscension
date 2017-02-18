@@ -445,62 +445,6 @@ Armor:
 
         input('\nPress enter/return ')
 
-    def player_damage(self):
-        # The formula for PCUs dealing damage
-
-        # Base damage is equal to the PCU's attack stat minus half the target's defense
-        # For example, if the PCU's attack stat is 20, and the target has 10 defense, the
-        # attack will deal 20 - (10/2) = 15 damage. This number is then further modified
-        # based on the PCU/target's elements, status ailments, weapons, armor, and critical hits.
-
-        inv_name = self.name if self != units.player else 'player'
-
-        if inv_system.equipped[inv_name]['weapon'].type_ != 'ranged':
-            dam_dealt = battle.temp_stats[self.name]['attk'] - (units.monster.dfns/2)
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-
-            # PCUs deal 1/2 damage with melee attacks when given the weakened status ailment
-            if self.status_ail == 'weakened':
-                dam_dealt /= 2
-                print(f"{self.name}'s weakened state reduces their attack damage by half!")
-
-                sounds.debuff.play()
-                main.smart_sleep(0.5)
-
-            # Mages deal 1/2 damage with melee attacks
-            if self.class_ == 'mage':
-                dam_dealt /= 2
-
-        else:
-            dam_dealt = battle.temp_stats[self.name]['p_attk'] - (units.monster.p_dfns/2)
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-
-            # PCUs deal 1/2 damage with ranged attacks when given the blinded status ailment
-            if self.status_ail == 'blinded':
-                dam_dealt /= 2
-                print(f"{self.name}'s poor vision reduces their attack damage by half!")
-
-        # Increase or decrease the damage depending on the PCU/monster's elements
-        dam_dealt = eval_element(self, units.monster, dam_dealt)
-
-        # All attacks deal a minimum of one damage
-        if dam_dealt < 1:
-            dam_dealt = 1
-
-        # There is a 15% chance to inflict 1.5x damage
-        if random.randint(1, 100) <= 15:
-            dam_dealt *= 1.5
-            print("It's a critical hit! 1.5x damage!")
-
-            sounds.critical_hit.play()
-            main.smart_sleep(0.5)
-
-        # Limit the amount of damage to 999 (as if that matters)
-        if dam_dealt > 999:
-            dam_dealt = 999
-
-        return math.ceil(dam_dealt)
-
     def battle_turn(self):
         inv_name = self.name if self != units.player else 'player'
         player_weapon = inv_system.equipped[inv_name]['weapon']
@@ -533,19 +477,20 @@ Armor:
 
             if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
                 sounds.sword_slash.play()
-                print(f'{self.name} begins to fiercely attack the {units.monster.name} using their {player_weapon}...')
+                print(f'{self.name} fiercely attacks the {units.monster.name} using their {player_weapon}...')
 
-            # Ranged weapons aren't swung, so play a different sound effect
+                dam_dealt = deal_damage(self, units.monster, "physical")
+
             else:
                 sounds.aim_weapon.play()
                 print(f'{self.name} aims carefully at the {units.monster.name} using their {player_weapon}...')
+
+                dam_dealt = deal_damage(self, units.monster, "piercing")
 
             main.smart_sleep(0.75)
 
             # Check for attack accuracy
             if random.randint(1, 512) in range(units.monster.evad, 512):
-                dam_dealt = self.player_damage()
-
                 print(f"{self.name}'s attack connects with the {units.monster.name}, dealing {dam_dealt} damage!")
 
                 sounds.enemy_hit.play()
@@ -669,168 +614,53 @@ Armor:
         # Their purpose is to help make the characters more diverse, as well as encourage more
         # strategy being used.
 
-        inv_name = self.name if self != units.player else 'player'
-        battle.temp_stats[self.name]['ability_used'] = True
+        print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
+        print(f"{self.name} uses the knowledge they've gained to unleash their class ability!")
 
-        print(ascii_art.player_art[self.class_.title()] % "{0} is making a move!\n".format(self.name))
-        print("{0} uses the knowledge they've gained to unleash their class ability!".format(self.name))
-
-        # Ranger Ability: Scout
+        # Ranger Ability: Scout -- NEEDS REWORK!
         if self.class_ == 'ranger':
-            # The ranger class identifies their enemy and prints their stats.
-            # This is really useful for defeating bosses, which are often weak to
-            # certain types and elements of attacks.
-
-            print('-'*25)
-            print('ABILITY: SCOUT')
-            print('-'*25)
-
-            print(f'As a Ranger, {self.name} identifies their enemy and focuses, increasing their pierce attack!')
-
-            input("Press enter/return to view your enemy's stats ")
-
-            print('-'*25)
-            print("{0}'s STATS:".format(units.monster.name.upper()))
-
-            print("""Attack: {0} | M. Attack: {1} | P. Attack: {2} | Speed: {3}
-    Defense: {4} | M. Defense: {5} | P. Defense: {6} | Evasion: {7}
-    Element: {8} | Elemental Weakness: {9}""".format(units.monster.attk, units.monster.m_attk, units.monster.p_attk,
-                                                     units.monster.spd, units.monster.dfns, units.monster.m_dfns,
-                                                     units.monster.p_dfns, units.monster.evad,
-                                                     units.monster.element.title(),
-                                                     {'fire': 'Water',
-                                                      'water': 'Electric',
-                                                      'electric': 'Earth',
-                                                      'earth': 'Grass',
-                                                      'grass': 'Wind',
-                                                      'wind': 'Ice',
-                                                      'ice': 'Fire',
-                                                      'none': 'None',
-                                                      'life': 'Death',
-                                                      'death': 'Life'}[units.monster.element]))
-
-            battle.temp_stats[self.name]['p_attk'] *= 1.35
-
             return True
 
-        # Warrior Ability: Warrior's Spirit
+        # Warrior Ability: Warrior's Spirit -- NEEDS REWORK (SUGGESTION - PARRY)
         elif self.class_ == 'warrior':
-            print('-'*25)
-            print("ABILITY: WARRIOR'S SPIRIT")
-            print('-'*25)
-            print('As a Warrior, you channel your inner-strength and restore health and defense!')
-
-            self.hp += math.ceil(max([0.35*self.max_hp, 35]))
-
-            battle.p_temp_stats['dfns'] *= 1.35
-            battle.p_temp_stats['m_dfns'] *= 1.35
-            battle.p_temp_stats['p_dfns'] *= 1.35
-
-            if self.hp > self.max_hp:
-                self.hp -= (self.hp - self.max_hp)
-            if self.mp > self.max_mp:
-                self.mp -= (self.mp - self.max_mp)
-
             return True
 
-        # Mage Ability: Artificial Intelligence
+        # Mage Ability: Artificial Intelligence -- NEEDS REWORK!
         elif self.class_ == "mage":
-            print('-'*25)
-            print("ABILITY: ARTIFICIAL INTELLIGENCE")
-            print('-'*25)
-            print('As a Mage, you focus intently and sharply increase your magical prowess!')
-            print('Your magic attack and defense increase, and you regain MP!')
-
-            self.mp += math.ceil(max([0.35*self.max_mp, 35]))
-
-            if self.mp > self.max_mp:
-                self.mp -= (self.mp - self.max_mp)
-
-            battle.temp_stats[self.name]['m_attk'] *= 1.35
-            battle.temp_stats[self.name]['m_dfns'] *= 1.35
-
             return True
 
-        # Assassin Ability: Lethal Injection
+        # Assassin Ability: Lethal Injection - NEEDS REWORK (SUGGESTION - WEAKER, STACKING POISON)
         elif self.class_ == "assassin":
-            print('-'*25)
-            print("ABILITY: LETHAL INJECTION")
-            print('-'*25)
-            print('As an Assassin, you discreetly inject poison into your enemy!')
-
-            units.monster.is_poisoned = True
-
             return True
 
-        # Paladin Ability: Divine Intervention
+        # Paladin Ability: Divine Intervention -- NEEDS REWORK!
         elif self.class_ == "paladin":
-            print('-'*25)
-            print('ABILITY: DIVINE INTERVENTION')
-            print('-'*25)
-
-            print('As a Paladin, you call upon the power of His Divinity to aid you!')
-            print('You enemy has been turned to the "death" element, causing your')
-            print('holy spells to inflict more damage! You also regain health and MP.')
-
-            units.monster.element = "death"
-
-            self.hp += math.ceil(max([0.15*self.max_hp, 15]))
-            self.mp += math.ceil(max([0.15*self.max_mp, 15]))
-
-            if self.hp > self.max_hp:
-                self.hp -= (self.hp - self.max_hp)
-            if self.mp > self.max_mp:
-                self.mp -= (self.mp - self.max_mp)
-
             return True
 
         # Monk Ability: Chakra-smash
         elif self.class_ == 'monk':
-            # Essentially a 2.5x crit. As an added bonus, this attack has a 15%
-            # chance to get a crit itself, resulting in a total of an 3.75x critical.
-            # This attack lowers the user defenses by 25% for three turns to balance it out.
-            # If the user is weakened, this attack ignores that and will deal full damage anyway.
+            # A 2.5x crit that lowers the target's armor
             print('-'*25)
             print('ABILITY: CHAKRA-SMASH')
             print('-'*25)
 
-            print('As a monk, {0} meditates and focus their inner chi.'.format(self.name))
-            print('After a brief moment of confusion from the enemy, {0} strikes, dealing'.format(self.name))
-            print("an immense amount of damage in a single, powerful strike! As a result, {0}'s".format(self.name))
-            print('defenses have been lowered by 15% until the end of the battle.\n')
+            print(f"""As a monk, {self.name} meditates and focuses their inner chi.
+            After a short moment, {self.name} strikes, dealing an immense amount of damage
+            in a single, undodgeable strike! The attack also lowers the enemy's defense.""")
 
-            dam_dealt = (battle.p_temp_stats['attk'] - units.monster.dfns/2)*2.5
-            dam_dealt *= (inv_system.equipped[inv_name]['weapon'].power + 1)
-            dam_dealt = eval_element(self, units.monster, dam_dealt)
-
-            if dam_dealt < 4:
-                dam_dealt = 4
-
-            if random.randint(1, 100) <= 15:
-                main.smart_sleep(0.5)
-                dam_dealt *= 1.5
-                sounds.critical_hit.play()
-
-                print("It's a critical hit! 1.5x damage!")
-
-            if dam_dealt > 999:
-                dam_dealt = 999
-
-            main.smart_sleep(0.5)
-
-            dam_dealt = math.ceil(dam_dealt)
-
-            print('The attack deals {0} damage to the {1}!'.format(dam_dealt, units.monster.name))
-
+            main.smart_sleep(0.75)
+            dam_dealt = math.ceil(deal_damage(self, units.monster, "physical")*2.5)
             units.monster.hp -= dam_dealt
 
-            battle.temp_stats[self.name]['dfns'] *= 0.85
-            battle.temp_stats[self.name]['m_dfns'] *= 0.85
-            battle.temp_stats[self.name]['p_dfns'] *= 0.85
+            print(f'The attack deals {dam_dealt} damage to the {monster.name}!')
 
-            battle.temp_stats[self.name]['dfns'] = math.floor(battle.temp_stats[self.name]['dfns'])
-            battle.temp_stats[self.name]['m_dfns'] = math.floor(battle.temp_stats[self.name]['m_dfns'])
-            battle.temp_stats[self.name]['p_dfns'] = math.floor(battle.temp_stats[self.name]['p_dfns'])
+            monster.dfns *= 0.9
+            monster.p_dfns *= 0.9
+            monster.m_dfns *= 0.9
+
+            monster.dfns = math.ceil(monster.dfns)
+            monster.p_dfns = math.ceil(monster.p_dfns)
+            monster.m_dfns = math.ceil(monster.m_dfns)
 
             return True
 
@@ -845,48 +675,7 @@ class Monster(Unit):
         self.items = ''         # The item that the monster will drop if RNGsus wills it
         self.is_poisoned = False
         self.is_defending = False
-
-    def physical_damage(self, mode, target):
-        ise = inv_system.equipped[target.name if target != units.player else 'player']
-        dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
-
-        if mode == 'melee':
-            dam_dealt = self.attk - (battle.temp_stats[target.name]['dfns']/2)*(1 + dr)
-
-        else:
-            dam_dealt = self.p_attk - (battle.temp_stats[target.name]['p_dfns']/2)*(1 + dr)
-
-        if random.randint(1, 100) <= 15:
-            dam_dealt *= 1.5
-            print("It's a critical hit! 1.5x damage!")
-
-            sounds.critical_hit.play()
-            main.smart_sleep(0.5)
-
-        dam_dealt = eval_element(self, target, dam_dealt)
-
-        if dam_dealt < 1:
-            dam_dealt = 1
-
-        if dam_dealt > 999:
-            dam_dealt = 999
-
-        return math.ceil(dam_dealt)
-
-    def magical_damage(self, target):
-        ise = inv_system.equipped[target.name if target != units.player else 'player']
-        dr = sum([ise[armor].defense for armor in ise if isinstance(ise[armor], items.Armor)])
-
-        dam_dealt = self.m_attk - (battle.temp_stats[target.name]['m_dfns']/2)*(1 + dr)
-        dam_dealt = eval_element(self, target, dam_dealt)
-
-        if dam_dealt < 1:
-            dam_dealt = 1
-
-        if dam_dealt > 999:
-            dam_dealt = 999
-
-        return math.ceil(dam_dealt)
+        self.class_ = None
 
     def monst_level(self):
         self.lvl = main.party_info['current_tile'].m_level
@@ -1192,6 +981,8 @@ class Monster(Unit):
         self.spd *= 0.5
         self.spd = math.ceil(self.spd)
 
+        self.class_ = 'warrior'
+
     def magic_stats(self):
         # Set stats for Mage-class monsters
         self.mp *= 1.5
@@ -1215,6 +1006,8 @@ class Monster(Unit):
 
         self.m_dfns *= 1.5
         self.m_dfns = math.ceil(self.m_dfns)
+
+        self.class_ = 'mage'
 
     def ranger_stats(self):
         # Set stats for Ranger-class monsters
@@ -1242,6 +1035,8 @@ class Monster(Unit):
 
         self.evad *= 1.5
         self.evad = math.ceil(self.evad)
+
+        self.class_ = 'ranger'
 
     def magic_ai(self):
         battle.turn_counter += 1
@@ -1287,7 +1082,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = self.magical_damage(target)
+                dam_dealt = deal_damage(self, target, "magical")
 
                 print(f"The {self.monster_name}'s spell succeeds, and deals {dam_dealt} damage to {target.name}!")
 
@@ -1309,7 +1104,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = self.physical_damage('pierce', target)
+                dam_dealt = deal_damage(self, target, "physical")
 
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1318,7 +1113,7 @@ class Monster(Unit):
 
             else:
                 sounds.attack_miss.play()
-                print("The {0}'s attack narrowly misses {1}!".format(self.monster_name, target.name))
+                print(f"The {self.monster_name}'s attack narrowly misses {target.name}!")
 
             self.check_poison()
             self.mp = math.ceil(self.mp)
@@ -1346,7 +1141,7 @@ class Monster(Unit):
         main.smart_sleep(0.75)
 
         if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-            dam_dealt = self.physical_damage('pierce', target)
+            dam_dealt = deal_damage(self, target, 'piercing')
 
             print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1409,7 +1204,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = self.physical_damage('melee', target)
+                dam_dealt = deal_damage(self, target, "physical")
 
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
@@ -1423,9 +1218,87 @@ class Monster(Unit):
             self.check_poison()
 
 
-def deal_damage(attacker, target, damage_type, do_crits=True):
-    # This will contain a universal damage formula shared by the three damage types (magical, physical, piercing)
-    pass
+def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
+    # Attacker - the Unit that is attacking
+    # Target - the Unit that is being attacked
+    # Damage Type - the type of damage being dealt (magical, physical, or piercing)
+    # Absolute - Whether or not the damage should be affected by crits, armor, status ailments, etc.
+
+    if isinstance(attacker, PlayableCharacter):
+        t_equip = inv_system.equipped[attacker.name if attacker != units.player else 'player']
+        weapon_dmg = t_equip['weapon'].power
+
+        attack = battle.temp_stats[attacker.name]['attk']
+        p_attack = battle.temp_stats[attacker.name]['p_attk']
+        m_attack = battle.temp_stats[attacker.name]['m_attk']
+
+    else:
+        attack = units.monster.attk
+        p_attack = units.monster.p_attk
+        m_attack = units.monster.m_attk
+
+        weapon_dmg = 0
+
+    if isinstance(target, PlayableCharacter):
+        t_equip = inv_system.equipped[target.name if target != units.player else 'player']
+        resist = sum([t_equip[armor].defense for armor in t_equip if isinstance(t_equip[armor], items.Armor)])
+
+        defense = battle.temp_stats[target.name]['dfns']
+        p_defense = battle.temp_stats[target.name]['p_dfns']
+        m_defense = battle.temp_stats[target.name]['m_dfns']
+
+    else:
+        defense = units.monster.dfns
+        p_defense = units.monster.p_dfns
+        m_defense = units.monster.p_attk
+
+        resist = 0
+
+    if absolute:
+        target.hp -= absolute
+
+    else:
+        if damage_type == 'physical':
+            dam_dealt = (attack - defense/2)*(1 + resist)*(1 + weapon_dmg)
+
+            # Mages deal half damage with non-magical attacks
+            if attacker.class_ == 'mage':
+                dam_dealt /= 2
+
+        elif damage_type == 'piercing':
+            dam_dealt = (p_attack - p_defense/2)*(1 + resist)*(1 + weapon_dmg)
+
+            if attacker.status_ail == 'blinded':
+                dam_dealt /= 2
+                print(f"{attacker.name}'s poor vision reduces their attack damage by half!")
+
+            # Mages deal half damage with non-magical attacks
+            if attacker.class_ == 'mage':
+                dam_dealt /= 2
+
+        elif damage_type == 'magical':
+            dam_dealt = (m_attack - m_defense/2)*(1 + resist)*(1 + spell_power)
+
+            # Mages deal 1.5x damage with magical attacks
+            if attacker.class_ == 'mage':
+                dam_dealt *= 1.5
+
+        if random.randint(1, 100) <= 15:
+            dam_dealt *= 1.5
+
+            print("It's a critical hit! 1.5x damage!")
+            sounds.critical_hit.play()
+            main.smart_sleep(0.5)
+
+        dam_dealt = eval_element(attacker, target, dam_dealt)
+
+        if dam_dealt < 1:
+            dam_dealt = 1
+
+        if dam_dealt > 999:
+            dam_dealt = 999
+
+        return math.ceil(dam_dealt)
 
 
 def eval_element(attacker, target, damage):

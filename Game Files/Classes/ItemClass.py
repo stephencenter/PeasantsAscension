@@ -142,18 +142,19 @@ class Weapon(Item):
                 inv_system.equipped[user.name if user != units.player else 'player']['weapon'] = spam
 
             print('-'*25)
-            print('{0} equips the {1}.'.format(user.name, str(self)))
+            print(f'{user.name} equips the {self}.')
             input("\nPress enter/return ")
 
         else:
             print('-'*25)
 
             if isinstance(self.class_, list):
-                print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip this.")
+                print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
+
                 input("\nPress enter/return ")
 
             else:
-                print("{0} must be a {1} to equip this.".format(user.name, self.class_.title()))
+                print(f"{user.name} must be a {self.class_.title()} to equip this.")
                 input("\nPress enter/return ")
 
 
@@ -194,20 +195,19 @@ class Armor(Item):
                 inv_system.inventory['armor'].remove(self)
 
             print('-'*25)
-            print('{0} equips the {1}.'.format(user.name, str(self)))
+            print(f'{user.name} equips the {self}.')
             input("\nPress enter/return ")
 
         else:
             print('-'*25)
 
             if isinstance(self.class_, list):
-                print("{0} must be a {1} or a {2} to equip.".format(
-                    user.name, self.class_[0].title(), self.class_[1].title()))
+                print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
 
                 input("\nPress enter/return ")
 
             else:
-                print("{0} must be a {1} to equip this.".format(user.name, self.class_.title()))
+                print(f"{user.name} must be a {self.class_.title()} to equip this.")
                 input("\nPress enter/return ")
 
 
