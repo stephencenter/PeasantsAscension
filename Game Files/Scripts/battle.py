@@ -34,6 +34,8 @@ pygame.mixer.init()
 temp_stats = ''
 vowels = 'AEIOU'
 turn_counter = 0
+m_list = []
+enabled_pcus = []
 
 if __name__ == "__main__":
     sys.exit()
@@ -132,6 +134,9 @@ def set_temp_stats():
 
 
 def battle_system(is_boss=False, ambush=False):
+    global m_list
+    global enabled_pcus
+
     enabled_pcus = [x for x in [units.player,
                                 units.solou,
                                 units.xoann,
@@ -140,6 +145,9 @@ def battle_system(is_boss=False, ambush=False):
                                 units.adorine,
                                 units.parsto] if x.enabled]
 
+    m_list = random.sample([units.monster_2, units.monster_3], random.randint(0, 2))
+    m_list.append(units.monster)
+
     # Bosses use a different battle music than when battling normal enemies
     if is_boss:
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
@@ -147,7 +155,16 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.set_volume(main.music_vol)
 
         print(ascii_art.monster_art[units.monster.monster_name] % '')
-        print(f'The legendary {units.monster.name} has awoken!')
+
+        if len(m_list) == 3:
+            print(f'The legendary {units.monster.name} and 2 other monsters have awoken!')
+
+        elif len(m_list) == 2:
+            print(f'The legendary {units.monster.name} and 1 other monster have awoken!')
+
+        else:
+            print(f'The legendary {units.monster.name} has awoken!')
+
         main.smart_sleep(0.35)
 
     else:
@@ -159,11 +176,26 @@ def battle_system(is_boss=False, ambush=False):
         else:
             an_a = 'A'
 
-        if ambush:
-            print(f'{an_a} {units.monster.name} ambushed you while you were resting!')
+        if len(m_list) == 3:
+            if ambush:
+                print(f'{an_a} {units.monster.name} and 2 other monsters ambushed you while you were resting!')
+
+            else:
+                print(f'{an_a} {units.monster.name} and 2 other monsters suddenly appeared out of nowhere!')
+
+        elif len(m_list) == 2:
+            if ambush:
+                print(f'{an_a} {units.monster.name} and 1 other monster ambushed you while you were resting!')
+
+            else:
+                print(f'{an_a} {units.monster.name} and 1 other monster suddenly appeared out of nowhere!')
 
         else:
-            print(f'{an_a} {units.monster.name} suddenly appeared out of nowhere!')
+            if ambush:
+                print(f'{an_a} {units.monster.name} ambushed you while you were resting!')
+
+            else:
+                print(f'{an_a} {units.monster.name} suddenly appeared out of nowhere!')
 
         pygame.mixer.music.load('Content/Music/Ruari 8-bit Battle.ogg')
         pygame.mixer.music.play(-1)
@@ -176,10 +208,9 @@ def battle_system(is_boss=False, ambush=False):
     set_temp_stats()
 
     # While all active party members are alive, continue the battle
-    while units.monster.hp > 0 and any([char.hp > 0 for char in enabled_pcus]):
-
+    while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
         # A list of the battle participants sorted by speed. Updates once per turn
-        speed_enabled_pcus = sorted([units.monster] + enabled_pcus,
+        speed_enabled_pcus = sorted(m_list + enabled_pcus,
                                     key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True)
 
         # Display HP, MP, Levels, and Statuses for all battle participants
@@ -446,7 +477,7 @@ def bat_stats():
 
     # Sorry this section is kinda complicated. Basically, this calculates the length of certain
     # strings to see how much padding (extra spaces) is needed to make things line up.
-    first_padding = len(max([units.player.name, units.solou.name, units.xoann.name, units.monster.name], key=len))
+    first_padding = max([len(x.name) for x in enabled_pcus + m_list])
 
     second_padding = len(max(['{0}/{1} HP'.format(units.player.hp, units.player.max_hp)
                               if units.player.enabled else '',
@@ -462,6 +493,10 @@ def bat_stats():
                               if units.ran_af.enabled else '',
                               '{0}/{1} MP'.format(units.parsto.hp, units.parsto.max_hp)
                               if units.parsto.enabled else '',
+                              '{0}/{1} HP'.format(units.monster_2.hp, units.monster_2.max_hp)
+                              if units.monster_2 in m_list else '',
+                              '{0}/{1} HP'.format(units.monster_3.hp, units.monster_3.max_hp)
+                              if units.monster_3 in m_list else '',
                               '{0}/{1} HP'.format(units.monster.hp, units.monster.max_hp)], key=len))
 
     third_padding = len(max(['{0}/{1} MP'.format(units.player.mp, units.player.max_mp)
@@ -478,8 +513,11 @@ def bat_stats():
                              if units.ran_af.enabled else '',
                              '{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)
                              if units.parsto.enabled else '',
+                             '{0}/{1} HP'.format(units.monster_2.mp, units.monster_2.max_mp)
+                             if units.monster_2 in m_list else '',
+                             '{0}/{1} HP'.format(units.monster_3.mp, units.monster_3.max_mp)
+                             if units.monster_3 in m_list else '',
                              '{0}/{1} MP'.format(units.monster.mp, units.monster.max_mp)], key=len))
-
     # Player Stats
     print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
           units.player.name, units.player.hp,
@@ -551,12 +589,13 @@ def bat_stats():
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)))))
 
     # Monster Stats
-    print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
-          units.monster.name, units.monster.hp,
-          units.monster.max_hp, units.monster.mp,
-          units.monster.max_mp, units.monster.lvl,
-          pad1=' '*(first_padding - len(units.monster.name)),
-          pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.monster.hp, units.monster.max_hp))),
-          pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.monster.mp, units.monster.max_mp)))))
+    for each_monster in m_list:
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
+              each_monster.name, each_monster.hp,
+              each_monster.max_hp, each_monster.mp,
+              each_monster.max_mp, each_monster.lvl,
+              pad1=' '*(first_padding - len(each_monster.name)),
+              pad2=' '*(second_padding - len('{0}/{1} HP'.format(each_monster.hp, each_monster.max_hp))),
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(each_monster.mp, each_monster.max_mp)))))
 
     print('-'*25)

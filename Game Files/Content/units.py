@@ -17,6 +17,8 @@ from UnitClass import *
 
 player = ''
 monster = ''
+monster_2 = ''
+monster_3 = ''
 
 # Pronounced "So-low"
 solou = PlayableCharacter('Solou', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='mage', enabled=False)
@@ -112,11 +114,10 @@ def create_player():
 
 
 def spawn_monster():
-    global monster
-
-    monster = Monster('', 10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
-    monster.monst_name()
-    monster.monst_level()
+    for unit in ['monster', 'monster_2', 'monster_3']:
+        globals()[unit] = Monster('', 10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
+        globals()[unit].monst_name()
+        globals()[unit].monst_level()
 
 
 def fix_stats():
@@ -252,8 +253,40 @@ def fix_stats():
         if monster.evad > 256:
             monster.evad = 256
 
+        monster_2.hp = math.ceil(monster_2.hp)
+        monster_2.mp = math.ceil(monster_2.mp)
+
+        if monster_2.hp < 0:
+            monster_2.hp = 0
+        if monster_2.mp < 0:
+            monster_2.mp = 0
+
+        if monster_2.hp > monster_2.max_hp:
+            monster_2.hp -= (monster_2.hp - monster_2.max_hp)
+        if monster_2.mp > monster_2.max_mp:
+            monster_2.mp -= (monster_2.mp - monster_2.max_mp)
+
+        if monster_2.evad > 256:
+            monster_2.evad = 256
+
+        monster_3.hp = math.ceil(monster_3.hp)
+        monster_3.mp = math.ceil(monster_3.mp)
+
+        if monster_3.hp < 0:
+            monster_3.hp = 0
+        if monster_3.mp < 0:
+            monster_3.mp = 0
+
+        if monster_3.hp > monster_3.max_hp:
+            monster_3.hp -= (monster_3.hp - monster_3.max_hp)
+        if monster_3.mp > monster_3.max_mp:
+            monster_3.mp -= (monster_3.mp - monster_3.max_mp)
+
+        if monster_3.evad > 256:
+            monster_3.evad = 256
+
     except AttributeError:
-        if not isinstance(monster, str):
+        if not any([isinstance(monster, str), isinstance(monster_2, str), isinstance(monster_3, str)]):
             raise
 
 

@@ -4,6 +4,7 @@ import copy
 
 import units
 import UnitClass
+import battle
 
 if __name__ == "__main__":
     sys.exit()
@@ -27,7 +28,7 @@ class Ability:
         pass
 
 
-# 8 of 24 designed
+# 11 of 24 designed
 # 3 of 24 implemented
 
 # -- WARRIOR ABILITES, scales with Strength -- #
@@ -38,7 +39,16 @@ parry = Ability("Parry", """The user will move last this turn. If they are attac
 take no damage and will reflect [50 + Strength]% damage to the attacker.""", 5)
 parry.use_ability = use_parry
 
-warrior_abilities = [parry]
+
+def use_roll_call(user):
+    pass
+
+
+roll_call = Ability("Roll Call", """Each of the user's allies have their physical defense increased by "
+[(5 + Strength) x Number of allies]""", 5)
+roll_call.use_ability = use_roll_call
+
+warrior_abilities = [parry, roll_call]
 
 
 # -- MONK ABILITIES, scales with Constitution -- #
@@ -90,7 +100,16 @@ backstab.use_ability = use_backstab
 
 assassin_abilities = [inject_poison, backstab]
 
+
 # -- MAGE ABILITIES, scales with Intelligence -- #
+def use_skill_shot(user):
+    pass
+
+
+skill_shot = Ability("Skill Shot", """Deals damage to the target equal to [User's Level + Target's level].
+If the user's level is lower than the enemy's level, the user's mana is restored by [5 + Intelligence].""", 2)
+skill_shot.use_ability = use_skill_shot
+
 mage_abilities = []
 
 
@@ -123,6 +142,8 @@ Defense: {units.monster.dfns} | M. Defense: {units.monster.m_dfns} | P. Defense:
 Evasion: {units.monster.evad} | Speed: {units.monster.spd,}
 Element: {units.monster.element.title()} | Elemental Weakness: {monster_weakness}""")
 
+    battle.temp_stats[user.name]['p_attack'] += (5 + user.attributes['per'])
+
 
 scout = Ability("Scout", """Scouts the enemy, revealing their stats and elemental weakness. Also increases Pierce
 attack by [5 + Perception]%. Stacks with multiple uses.""", 1)
@@ -150,4 +171,13 @@ unholy_binds = Ability("Unholy Binds", """Sets the enemy's element to Death, cau
 do more damage. Also restores [5 + Wisdom] mana.""", 5)
 unholy_binds.use_ability = use_unholy_binds
 
-paladin_abilities = [tip_the_scales, unholy_binds]
+
+def use_judgement(user):
+    pass
+
+
+judgement = Ability("Judgement", """Applies DOOM to the target, guaranteeing their death in 7 turns. If the target
+dies before the 7 turns is up, the user restores [5 + Wisdom] HP.""", 5)
+judgement.use_ability = use_judgement
+
+paladin_abilities = [tip_the_scales, unholy_binds, judgement]
