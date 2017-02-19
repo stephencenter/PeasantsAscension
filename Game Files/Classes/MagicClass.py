@@ -39,8 +39,7 @@ pygame.mixer.init()
 
 # This is the message that is printed if you attempt to use magic
 # without the required amount of mana.
-out_of_mana = """-------------------------
-You don't have enough mana to cast that spell!"""
+out_of_mana = "-------------------------\n{0} doesn't have enough mana to cast {1}."
 
 
 class Spell:
@@ -129,7 +128,6 @@ class Damaging(Spell):
         Spell.use_mana(self, user)
         target = user.target
 
-
         print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
         print(f'{user.name} attempts to summon a powerful spell...')
 
@@ -164,9 +162,13 @@ class Buff(Spell):
         Spell.use_mana(self, user)
         target = user.target
 
-        print(f"\n-{user.name}'s Turn-")
         print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
-        print(f"{user.name} raises {target.name}'s stats using the power of {self.name}!")
+
+        if user == target:
+            print(f"{user.name} raises their stats using the power of {self.name}!")
+
+        else:
+            print(f"{user.name} raises {target.name}'s stats using the power of {self.name}!")
 
         sounds.buff_spell.play()
 
@@ -208,29 +210,20 @@ def pick_cat(user, is_battle=True):
                         user.c_spell = spell
 
                         if isinstance(spell, Healing) or isinstance(spell, Buff):
-                            user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                            user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
 
-                        else:
-                            user.target = user.choose_target(f"caast {spell.name} on")
-
-                        if user.target:
                             return True
 
-                        return False
+                        else:
+                            user.choose_target(f"cast {spell.name} on")
+
+                            break
 
                     else:
-                        if isinstance(spell, Healing) or isinstance(spell, Buff):
-                            spell.use_magic(user, is_battle)
-                            user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                        user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                        spell.use_magic(user, is_battle)
 
-                        else:
-                            spell.use_magic(user)
-                            user.target = user.choose_target(f"cast {spell.name} on")
-
-                        if user.target:
-                            return True
-
-                        return False
+                        break
 
                 else:
                     print('-'*25)
@@ -268,9 +261,10 @@ def pick_spell(cat, user, is_battle):
     print('-'*25)
     while True:
         padding = len(max([spell.name for spell in magic.spellbook[inv_name][cat]], key=len))
-        print(f"{cat} Spells: \n      ", end='')
-        print('\n      '.join([f"[{x + 1}] {y} --{'-'*(padding - len(y.name))}> {y.mana} MP"
-              for x, y in enumerate(magic.spellbook[inv_name][cat])]))
+        print(f"{cat} Spells [{user.name} has {user.mp} mana remaining]:")
+
+        for x, y in enumerate(magic.spellbook[inv_name][cat]):
+            print(f"      [{x + 1}] {y} --{'-'*(padding - len(y.name))}> {y.mana} MP")
 
         while True:
             spell = input('Input [#] (or type "back"): ').lower()
@@ -287,8 +281,9 @@ def pick_spell(cat, user, is_battle):
                 continue
 
             if spell.mana > user.mp:
-                print(out_of_mana)
-                continue
+                print(out_of_mana.format(user.name, spell.name))
+
+                break
 
             magic.spellbook[inv_name]['Previous Spell'] = [spell]
 
@@ -296,29 +291,20 @@ def pick_spell(cat, user, is_battle):
                 user.c_spell = spell
 
                 if isinstance(spell, Healing) or isinstance(spell, Buff):
-                    user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                    user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
 
-                else:
-                    user.target = user.choose_target(f"caast {spell.name} on")
-
-                if user.target:
                     return True
 
-                return False
+                else:
+                    user.choose_target(f"cast {spell.name} on")
+
+                    break
 
             else:
-                if isinstance(spell, Healing) or isinstance(spell, Buff):
-                    spell.use_magic(user, is_battle)
-                    user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                spell.use_magic(user, is_battle)
 
-                else:
-                    spell.use_magic(user)
-                    user.target = user.choose_target(f"cast {spell.name} on")
-
-                if user.target:
-                    return True
-
-                return False
+                break
 
 
 def new_spells(character):

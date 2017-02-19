@@ -547,7 +547,7 @@ Armor:
             # Standard Attack
             if self.move in ['1', 'q']:
                 self.move = '1'
-                self.target = self.choose_target("Attack")
+                self.choose_target("Attack")
 
             # Use Magic
             elif self.move in ['2', 'w']:
@@ -610,25 +610,38 @@ Armor:
             return
 
     def choose_target(self, action_name, ally=False, enemy=True):
+        pcu_list = [x for x in [units.player,
+                                units.solou,
+                                units.xoann,
+                                units.chyme,
+                                units.ran_af,
+                                units.adorine,
+                                units.parsto] if x.enabled]
+
         if enemy and not ally:
             if len([x for x in battle.m_list if x.hp > 0]) == 1:
-                return [x for x in battle.m_list if x.hp > 0][0]
+                self.target = [x for x in battle.m_list if x.hp > 0][0]
+
+                return
 
             this_list = [x for x in battle.m_list if x.hp > 0]
 
         if ally and not enemy:
-            if len(battle.enabled_pcus) == 1:
-                return battle.enabled_pcus[0]
+            if len(pcu_list) == 1:
+                self.target = pcu_list[0]
 
-            this_list = battle.enabled_pcus
+                return
+
+            this_list = pcu_list
 
         elif ally and enemy:
-            this_list = battle.enabled_pcus + [x for x in battle.m_list if x.hp > 0]
+            this_list = pcu_list + [x for x in battle.m_list if x.hp > 0]
 
         print('-'*25)
         print(f"Who should {self.name} {action_name}?")
-        for x, target in enumerate(this_list):
-            print(f"      [{x + 1}] {target.name}")
+
+        for x, y in enumerate(this_list):
+            print(f"      [{x + 1}] {y.name}")
 
         while True:
             chosen = input("Input [#]: ").lower()
@@ -639,7 +652,7 @@ Armor:
             except (ValueError, IndexError):
                 continue
 
-            return chosen
+            self.target = chosen
 
 
 class Monster(Unit):
