@@ -341,3 +341,10 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
         ran_af.__dict__ = json.load(f)
     with open(p_path, encoding='utf-8') as f:
         parsto.__dict__ = json.load(f)
+
+    player.battle_options = """Pick {0}'s Move:
+      [1]: Standard Attack
+      [2]: Use Magic
+      [3]: Use Abilities
+      [4]: Use Items
+      [5]: Run"""

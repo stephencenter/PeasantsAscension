@@ -71,84 +71,46 @@ class Healing(Spell):
         return self.name
 
     def use_magic(self, user, is_battle):
-        if user.mp >= self.mana:
-            Spell.use_mana(self, user)
+        Spell.use_mana(self, user)
+        target = user.target
 
-            target_options = [x for x in [
-                units.player,
-                units.solou,
-                units.xoann,
-                units.adorine,
-                units.ran_af,
-                units.parsto,
-                units.chyme] if x.enabled
-            ]
-
-            if len(target_options) == 1:
-                target = user
+        # Healing spells will always restore a minimum of user.hp*thresh.
+        # e.g. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
+        # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
+        # In addition to this, the user restores an additional 2*Wisdom, unless they are a
+        # Paladin in which case it it 4*Wisdom.
+        if self.health < target.hp*self.thresh:
+            if user.class_ == 'paladin':
+                total_heal = target.hp*self.thresh + 4*user.attributes['wis']
 
             else:
-                print("Select Target for {0}:".format(self.name))
-                print("     ", "\n      ".join(["[{0}] {1}".format(int(num) + 1, character.name)
-                                               for num, character in enumerate(target_options)]))
-
-                while True:
-                    target = input("Input [#]: ")
-                    try:
-                        target = int(target) - 1
-
-                    except ValueError:
-                        continue
-
-                    try:
-                        target = target_options[target]
-
-                    except IndexError:
-                        continue
-
-                    break
-
-            # Healing spells will always restore a minimum of user.hp*thresh.
-            # e.g. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
-            # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
-            # In addition to this, the user restores an additional 2*Wisdom, unless they are a
-            # Paladin in which case it it 4*Wisdom.
-            if self.health < target.hp*self.thresh:
-                total_heal = target.hp*self.thresh + \
-                    (4*user.attributes['wis'] if user.class_ == 'paladin' else 2*user.attributes['wis'])
-
-                target.hp += total_heal
-                target.hp = math.ceil(target.hp)
-
-            else:
-                total_heal = self.health + (2*user.attributes['wis'] if user.class_ !=
-                                            'paladin' else 4*user.attributes['wis'])
-                target.hp += total_heal
-
-            # Handle HP higher than max due to overheal
-            if target.hp > target.max_hp:
-                target.hp -= (target.hp - target.max_hp)
-
-            sounds.magic_healing.play()
-
-            if is_battle:
-                # Print the ASCII art and "User Turn" info if a battle is going on
-                print("-{0}'s Turn-")
-                print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
-                print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
-
-            if not is_battle:
-                print('-'*25)
-                print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
-                input("\nPress enter/return ")
-                print('-'*25)
-
-            return True
+                total_heal = 2*user.attributes['wis']
 
         else:
-            # Disallow the usage of spells if the player has insufficent MP
-            print(out_of_mana)
-            return False
+            if user.class_ == 'paladin':
+                total_heal = self.health + 4*user.attributes['wis']
+
+            else:
+                total_heal = self.health + 2*user.attributes['wis']
+
+        target.hp += total_heal
+
+        if target.hp > target.max_hp:
+            target.hp -= (target.hp - target.max_hp)
+
+        target.hp = math.ceil(target.hp)
+
+        sounds.magic_healing.play()
+
+        if is_battle:
+            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+            print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
+
+        else:
+            print('-'*25)
+            print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
+            input("\nPress enter/return ")
+            print('-'*25)
 
 
 class Damaging(Spell):
@@ -164,64 +126,26 @@ class Damaging(Spell):
         return self.name
 
     def use_magic(self, user):
-        inv_name = user.name if user != units.player else 'player'
+        Spell.use_mana(self, user)
+        target = user.target
 
-        # Spells cannot be cast if the player does not have enough mana for it
-        if user.mp >= self.mana:
-            Spell.use_mana(self, user)
 
-            # Determine the power of the attack
-            dam_dealt = UnitClass.deal_damage(user, units.monster, "magical", spell_power=self.damage)
+        print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+        print(f'{user.name} attempts to summon a powerful spell...')
 
-            print(f"-{user.name}'s Turn-")
-            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+        sounds.magic_attack.play()
+        main.smart_sleep(0.75)
+        dam_dealt = UnitClass.deal_damage(user, target, "magical", spell_power=self.damage)
 
-            if inv_system.equipped[inv_name]['weapon'].class_ == 'magic':
-                print('{0} begins to use their {1} to summon a powerful spell...'.format(
-                    user.name, inv_system.equipped[inv_name]['weapon']))
-
-            else:
-                print(f'{user.name} attempts to summon a powerful spell...')
-
-            sounds.magic_attack.play()
-            main.smart_sleep(0.75)
-
-            # If the monster's evasion (with a max of 256) is higher than the user's accuracy roll,
-            # the spell will land
-            if random.randint(1, 512) in range(units.monster.evad, 512):
-                sounds.enemy_hit.play()
-
-                # Mages have a 15% chance to get a critical hit, whereas other classes cannot
-                if random.randint(0, 100) <= (15 if user.class_ == 'mage' else -1):
-                    dam_dealt *= 1.5
-                    print("It's a critical hit! 1.5x damage!")
-
-                    sounds.critical_hit.play()
-                    main.smart_sleep(0.5)
-
-                dam_dealt = math.ceil(dam_dealt)
-
-                if dam_dealt < 1:
-                    dam_dealt = 1
-
-                if dam_dealt > 999:
-                    dam_dealt = 999
-
-                print('Using the power of "{0}", {1} deals {2} damage to the {3}!'.format(
-                    self.name, user.name, dam_dealt, units.monster.monster_name))
-
-                units.monster.hp -= dam_dealt
-
-            # Otherwise, the spell with miss and deal no damage
-            else:
-                sounds.attack_miss.play()
-                print(f"The {units.monster.monster_name} narrowly dodges {user.name}'s spell!")
-
-            return True
+        # If the monster's evasion (with a max of 256) is higher than the user's accuracy roll, the spell will land
+        if random.randint(1, 512) in range(target.evad, 512):
+            sounds.enemy_hit.play()
+            target.hp -= dam_dealt
+            print(f'Using the power of {self.name}, {user.name} deals {dam_dealt} damage to the {target.monster_name}!')
 
         else:
-            print(out_of_mana)
-            return False
+            sounds.attack_miss.play()
+            print(f"The {target.monster_name} narrowly dodges {user.name}'s spell!")
 
 
 class Buff(Spell):
@@ -237,24 +161,18 @@ class Buff(Spell):
         return self.name
 
     def use_magic(self, user):
-        if user.mp >= self.mana:
-            Spell.use_mana(self, user)
+        Spell.use_mana(self, user)
+        target = user.target
 
-            print(f"\n-{user.name}'s Turn-")
-            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
-            print(f'{user.name} raises their stats using the power of {self.name}!')
+        print(f"\n-{user.name}'s Turn-")
+        print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+        print(f"{user.name} raises {target.name}'s stats using the power of {self.name}!")
 
-            sounds.buff_spell.play()
+        sounds.buff_spell.play()
 
-            battle.temp_stats[user.name][self.stat] *= 1 + self.increase
-            battle.temp_stats[user.name][self.stat] = math.ceil(battle.temp_stats[user.name][self.stat])
-            units.fix_stats()
-
-            return True
-
-        else:
-            print(out_of_mana)
-            return False
+        battle.temp_stats[target.name][self.stat] *= 1 + self.increase
+        battle.temp_stats[target.name][self.stat] = math.ceil(battle.temp_stats[user.name][self.stat])
+        units.fix_stats()
 
 
 def pick_cat(user, is_battle=True):
@@ -282,45 +200,44 @@ def pick_cat(user, is_battle=True):
 
             elif cat == '4':
                 spell = magic.spellbook[inv_name]['Previous Spell']
+
                 if spell:
                     spell = spell[0]
 
-                    if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                        if spell.use_magic(user, is_battle):
-                            return True
+                    if is_battle:
+                        user.c_spell = spell
+
+                        if isinstance(spell, Healing) or isinstance(spell, Buff):
+                            user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
 
                         else:
-                            break
+                            user.target = user.choose_target(f"caast {spell.name} on")
 
-                    if spell.use_magic(user):
-                        return True
+                        if user.target:
+                            return True
+
+                        return False
 
                     else:
-                        break
+                        if isinstance(spell, Healing) or isinstance(spell, Buff):
+                            spell.use_magic(user, is_battle)
+                            user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+
+                        else:
+                            spell.use_magic(user)
+                            user.target = user.choose_target(f"cast {spell.name} on")
+
+                        if user.target:
+                            return True
+
+                        return False
 
                 else:
                     print('-'*25)
                     print(f'{user.name} has no previously used spells!')
                     print('-'*25)
+
                     break
-
-                while True:
-                    y_n = input(f'Use {spell}? | Yes or No: ').lower()
-
-                    if y_n.startswith('y'):
-                        if isinstance(spell, Damaging):
-                            return spell.use_magic(user)
-
-                        else:
-                            if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                                return spell.use_magic(user, is_battle)
-
-                            return spell.use_magic(user)
-
-                    elif y_n.startswith('n'):
-                        spam = False
-                        do_continue = True
-                        break
 
             else:
                 if cat.lower() in ['e', 'x', 'exit', 'b', 'back']:
@@ -352,8 +269,8 @@ def pick_spell(cat, user, is_battle):
     while True:
         padding = len(max([spell.name for spell in magic.spellbook[inv_name][cat]], key=len))
         print(f"{cat} Spells: \n      ", end='')
-        print('\n      '.join([f"[{num + 1}] {spell} --{'-'*(padding - len(spell.name))}> {spell.mana} MP"
-              for num, spell in enumerate(magic.spellbook[inv_name][cat])]))
+        print('\n      '.join([f"[{x + 1}] {y} --{'-'*(padding - len(y.name))}> {y.mana} MP"
+              for x, y in enumerate(magic.spellbook[inv_name][cat])]))
 
         while True:
             spell = input('Input [#] (or type "back"): ').lower()
@@ -369,40 +286,39 @@ def pick_spell(cat, user, is_battle):
 
                 continue
 
-            print('-'*25)
-            print(''.join([str(spell), ': ', spell.desc, ' | ', str(spell.mana), ' MP']))
-            print('-'*25)
+            if spell.mana > user.mp:
+                print(out_of_mana)
+                continue
 
-            while True:
-                y_n = input(f'Use {spell}? | Yes or No: ').lower()
+            magic.spellbook[inv_name]['Previous Spell'] = [spell]
 
-                if y_n.startswith('y'):
-                    magic.spellbook[inv_name]['Previous Spell'] = [spell]
+            if is_battle:
+                user.c_spell = spell
 
-                    if isinstance(spell, Damaging):
-                        if is_battle:
-                            return spell.use_magic(user)
+                if isinstance(spell, Healing) or isinstance(spell, Buff):
+                    user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
 
-                        break
+                else:
+                    user.target = user.choose_target(f"caast {spell.name} on")
 
-                    else:
-                        if isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                            if is_battle:
-                                return spell.use_magic(user, True)
+                if user.target:
+                    return True
 
-                        if is_battle:
-                            return spell.use_magic(user)
+                return False
 
-                        spell.use_magic(user, False)
+            else:
+                if isinstance(spell, Healing) or isinstance(spell, Buff):
+                    spell.use_magic(user, is_battle)
+                    user.target = user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
 
-                        break
+                else:
+                    spell.use_magic(user)
+                    user.target = user.choose_target(f"cast {spell.name} on")
 
-                elif y_n.startswith('n'):
-                    print('-'*25)
+                if user.target:
+                    return True
 
-                    break
-
-            break
+                return False
 
 
 def new_spells(character):

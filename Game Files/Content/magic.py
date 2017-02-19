@@ -210,40 +210,6 @@ a_aim = Buff('Adept Aim',
              "Temporarily raise your pierce attack by a large amount. (Moderate)",
              6, 17, 0.5, "p_attk", a_c=('ranger', 'mage', 'monk'))
 
-# -- Other Spells -- #
-r_affliction = Spell('Relieve Affliction', 'Cure yourself of all status ailments, such as poison or weakness.', 4, 5)
-
-
-def relieve_affliction(user, is_battle):
-    if user.mp >= r_affliction.mana:
-        if user.status_ail != 'none':
-
-            Spell.use_mana(r_affliction, user)
-
-            if is_battle:
-                print(f"\n-{user.name}'s Turn-")
-                print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
-
-            print(f'Using the power of {r_affliction.name}, {user.name} is cured of their afflictions!')
-
-            user.status_ail = 'none'
-            sounds.buff_spell.play()
-
-            return True
-
-        else:
-            print('-'*25)
-            print("{0} doesn't have any status ailments.".format(user.name))
-            print('-'*25)
-            return False
-
-    else:
-        print(out_of_mana)
-        return False
-
-
-r_affliction.use_magic = relieve_affliction
-
 all_spells = [
     pit_heal, min_heal, adv_heal, div_heal,  # Healing Spells (Level 1, 3, 15, 28)
     magic_shot, magic_burst, magic_blast,    # Neutral-typed Spells (Level 1, 11, 23)
@@ -260,9 +226,7 @@ all_spells = [
     m_quick, m_evade, a_quick, a_evade,       # Movement Spells (Level 1, 10)
     m_defend, m_shield, a_defend, a_shield,   # Defense Spells (Level 3, 13)
     m_stren, m_power, a_stren, a_power,       # Attack Spells (Level 6, 16)
-    m_aim, m_block, a_aim, a_block,           # Pierce Spells (Level 7, 17)
-
-    r_affliction]  # Relieve Affliction (Level 5)
+    m_aim, m_block, a_aim, a_block]           # Pierce Spells (Level 7, 17)
 
 spellbook = {
     'player': {
@@ -351,14 +315,6 @@ def deserialize_sb(path):
                     x = Damaging('', '', '', '', '', '')
 
                 elif category == 'Healing':
-                    if spell['name'] == 'Relieve Affliction':
-                        x = Spell('', '', '', '')
-                        x.__dict__ = spell
-                        x.use_magic = relieve_affliction
-                        norm_sb[user][category].append(x)
-
-                        continue
-
                     x = Healing('', '', '', '', '', '')
 
                 elif category == 'Buffs':

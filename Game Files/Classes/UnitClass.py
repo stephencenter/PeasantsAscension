@@ -68,16 +68,19 @@ class PlayableCharacter(Unit):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
         Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
-        self.class_ = class_      # Player Class
-        self.element = 'none'     # Player's Element
+        self.class_ = class_      # PCU's Class
+        self.element = 'none'     # PCU's Element
         self.status_ail = 'none'  # Current Status Ailment
-        self.enabled = enabled    # Whether the party member has been recruited or not
+        self.enabled = enabled    # Whether the PCU has been recruited or not
         self.exp = 0              # Experience
         self.extra_sp = 0         # Extra Skill Points
         self.ext_gol = 0          # Extra Gold Pieces
         self.ext_exp = 0          # Extra Experience
         self.req_xp = 3           # Required XP to level up
         self.move = ''            # What move the character chose during battle
+        self.target = ''          # The target of the PCU's current action
+        self.c_ability = ''       # The ability that the PCU is currently casting
+        self.c_spell = ''         # The spell that the PCU is currently casting
 
         self.attributes = {'int': 1,  # Intelligence, for Mages
                            'wis': 1,  # Wisdom, for Paladins
@@ -480,15 +483,17 @@ Armor:
                 sounds.sword_slash.play()
                 print(f'{self.name} fiercely attacks the {units.monster.name} using their {player_weapon}...')
 
-                dam_dealt = deal_damage(self, units.monster, "physical")
-
             else:
                 sounds.aim_weapon.play()
                 print(f'{self.name} aims carefully at the {units.monster.name} using their {player_weapon}...')
 
-                dam_dealt = deal_damage(self, units.monster, "piercing")
-
             main.smart_sleep(0.75)
+
+            if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
+                dam_dealt = deal_damage(self, units.monster, "physical")
+
+            else:
+                dam_dealt = deal_damage(self, units.monster, "piercing")
 
             # Check for attack accuracy
             if random.randint(1, 512) in range(units.monster.evad, 512):
@@ -501,8 +506,15 @@ Armor:
                 print(f"The {units.monster.name} narrowly avoids {self.name}'s attack!")
                 sounds.attack_miss.play()
 
+        if self.move == '2':
+            if isinstance(self.c_spell, MagicClass.Healing):
+                self.c_spell.use_magic(self, True)
+
+            else:
+                self.c_spell.use_magic(self)
+
         # Use Abilities (WIP)
-        elif self.move == '4':
+        elif self.move == '3':
             return False
 
         # Run away!
@@ -535,16 +547,17 @@ Armor:
             # Standard Attack
             if self.move in ['1', 'q']:
                 self.move = '1'
+                self.target = self.choose_target("Attack")
 
             # Use Magic
             elif self.move in ['2', 'w']:
-                self.move = '2'
                 print('-'*25)
 
                 if self.status_ail == 'silenced':
                     sounds.debuff.play()
                     print(f"{self.name} is silenced and cannot use spells!")
                     input("\nPress enter/return ")
+                    print(self.battle_options.format(self.name))
 
                     continue
 
@@ -553,7 +566,7 @@ Armor:
 
                     continue
 
-                input('\nPress enter/return ')
+                self.move = '2'
 
             # Use Abilities
             elif self.move in ['3', 'e']:
@@ -561,7 +574,6 @@ Armor:
 
             # Use Items
             elif self.move in ['4', 'r']:
-                self.move = '3'
                 print('-'*25)
 
                 if not inv_system.inventory['consum']:
@@ -586,6 +598,8 @@ Armor:
 
                 input('\nPress enter/return ')
 
+                self.move = '3'
+
             # Run
             elif self.move in ['5', 'd']:
                 self.move = '5'
@@ -594,6 +608,38 @@ Armor:
                 continue
 
             return
+
+    def choose_target(self, action_name, ally=False, enemy=True):
+        if enemy and not ally:
+            if len([x for x in battle.m_list if x.hp > 0]) == 1:
+                return [x for x in battle.m_list if x.hp > 0][0]
+
+            this_list = [x for x in battle.m_list if x.hp > 0]
+
+        if ally and not enemy:
+            if len(battle.enabled_pcus) == 1:
+                return battle.enabled_pcus[0]
+
+            this_list = battle.enabled_pcus
+
+        elif ally and enemy:
+            this_list = battle.enabled_pcus + [x for x in battle.m_list if x.hp > 0]
+
+        print('-'*25)
+        print(f"Who should {self.name} {action_name}?")
+        for x, target in enumerate(this_list):
+            print(f"      [{x + 1}] {target.name}")
+
+        while True:
+            chosen = input("Input [#]: ").lower()
+
+            try:
+                chosen = this_list[int(chosen) - 1]
+
+            except (ValueError, IndexError):
+                continue
+
+            return chosen
 
 
 class Monster(Unit):
@@ -798,35 +844,23 @@ class Monster(Unit):
         elif modifier == 'Obtuse':  # Low ranged stats
             self.p_attk /= 1.2
             self.p_dfns /= 1.2
-
-        else:
-            if modifier == 'Strong' and self.m_attk < self.attk and self.m_dfns < self.dfns:
-                # High melee stats
-                self.attk *= 1.2
-                self.dfns *= 1.2
-
-            elif modifier == 'Weak':
-                # Low melee stats
-                self.attk /= 1.2
-                self.dfns /= 1.2
-
-            elif modifier == 'Mystic' and self.m_attk > self.attk and self.m_dfns > self.dfns:
-                # High magic stats
-                self.m_attk *= 1.2
-                self.m_dfns *= 1.2
-                self.mp *= 1.2
-
-            elif modifier == 'Foolish':
-                # Low magic stats
-                self.m_attk /= 1.2
-                self.m_dfns /= 1.2
-
-            else:
-                modifier = ''
+        elif modifier == 'Strong':  # High melee stats
+            self.attk *= 1.2
+            self.dfns *= 1.2
+        elif modifier == 'Weak':  # Low melee stats
+            self.attk /= 1.2
+            self.dfns /= 1.2
+        elif modifier == 'Mystic':  # High magic stats
+            self.m_attk *= 1.2
+            self.m_dfns *= 1.2
+            self.mp *= 1.2
+        elif modifier == 'Foolish':  # Low magic stats
+            self.m_attk /= 1.2
+            self.m_dfns /= 1.2
 
         # Adjust for problems that may happen with enemy stats
         for stat in ['self.attk', 'self.dfns', 'self.p_attk', 'self.p_dfns', 'self.m_attk', 'self.m_dfns',
-                     'self.spd', 'self.evad']:
+                     'self.spd', 'self.evad', 'self.mp', 'self.max_mp', 'self.hp', 'self.max_hp']:
 
             if eval(stat) < 1:  # Enemy stats cannot be lower than one
                 exec("{0} = 1".format(stat))
@@ -1012,13 +1046,12 @@ class Monster(Unit):
             print(f'The {self.monster_name} is preparing to cast a damaging spell on {target.name}!')
             main.smart_sleep(0.75)
 
+            dam_dealt = deal_damage(self, target, "magical")
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = deal_damage(self, target, "magical")
-
-                print(f"The {self.monster_name}'s spell succeeds, and deals {dam_dealt} damage to {target.name}!")
+                sounds.enemy_hit.play()
+                print(f"The {self.monster_name}'s spell succeeds and deals {dam_dealt} damage to {target.name}!")
 
                 target.hp -= dam_dealt
-                sounds.enemy_hit.play()
 
             else:
                 sounds.attack_miss.play()
@@ -1028,19 +1061,17 @@ class Monster(Unit):
 
         # Non-magic Attack
         else:
-
-            print(f'The {self.monster_name} {self.attk_msg} {target.name}')
             sounds.aim_weapon.play()
+            print(f'The {self.monster_name} {self.attk_msg} {target.name}')
 
             main.smart_sleep(0.75)
 
+            dam_dealt = deal_damage(self, target, "piercing")
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = deal_damage(self, target, "physical")
-
+                sounds.enemy_hit.play()
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
                 target.hp -= dam_dealt
-                sounds.enemy_hit.play()
 
             else:
                 sounds.attack_miss.play()
@@ -1101,19 +1132,8 @@ class Monster(Unit):
         print(f"-{self.monster_name}'s Turn-")
         print(ascii_art.monster_art[self.monster_name] % "The {0} is making a move!\n".format(self.monster_name))
 
-        # Set defense back to normal if the monster defended last turn
-        if self.is_defending:
-            self.is_defending = False
-
-            self.dfns /= 1.5
-            self.m_dfns /= 1.5
-            self.p_dfns /= 1.5
-            self.dfns = math.floor(self.dfns)
-            self.m_dfns = math.floor(self.m_dfns)
-            self.p_dfns = math.floor(self.p_dfns)
-
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
-        elif random.randint(0, 5) == 0:
+        if random.randint(0, 5) == 0 and not self.is_defending:
             self.is_defending = True
             sounds.buff_spell.play()
 
@@ -1127,20 +1147,29 @@ class Monster(Unit):
 
             print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(self.monster_name))
 
-        # If the monster doesn't defend, then it will attack!
-        else:
-            print(f'The {self.monster_name} {self.attk_msg} {target.name}!')
-            sounds.sword_slash.play()
+        # Set defense back to normal if the monster defended last turn
+        elif self.is_defending:
+            self.is_defending = False
 
+            self.dfns /= 1.5
+            self.m_dfns /= 1.5
+            self.p_dfns /= 1.5
+            self.dfns = math.floor(self.dfns)
+            self.m_dfns = math.floor(self.m_dfns)
+            self.p_dfns = math.floor(self.p_dfns)
+
+        # If the monster doesn't defend, then it will attack!
+        if not self.is_defending:
+            sounds.sword_slash.play()
+            print(f'The {self.monster_name} {self.attk_msg} {target.name}!')
             main.smart_sleep(0.75)
 
+            dam_dealt = deal_damage(self, target, "physical")
             if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-                dam_dealt = deal_damage(self, target, "physical")
-
+                sounds.enemy_hit.play()
                 print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
 
                 target.hp -= dam_dealt
-                sounds.enemy_hit.play()
 
             else:
                 sounds.attack_miss.play()
@@ -1216,9 +1245,9 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
 
         if random.randint(1, 100) <= 15:
             dam_dealt *= 1.5
-
-            print("It's a critical hit! 1.5x damage!")
             sounds.critical_hit.play()
+            print("It's a critical hit! 1.5x damage!")
+
             main.smart_sleep(0.5)
 
         dam_dealt = eval_element(attacker, target, dam_dealt)

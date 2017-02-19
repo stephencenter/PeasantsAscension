@@ -210,8 +210,8 @@ def battle_system(is_boss=False, ambush=False):
     # While all active party members are alive, continue the battle
     while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
         # A list of the battle participants sorted by speed. Updates once per turn
-        speed_enabled_pcus = sorted(m_list + enabled_pcus,
-                                    key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True)
+        speed_list = sorted(m_list + enabled_pcus,
+                            key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True)
 
         # Display HP, MP, Levels, and Statuses for all battle participants
         bat_stats()
@@ -231,37 +231,44 @@ def battle_system(is_boss=False, ambush=False):
                     print('-'*25)
 
         # Make sure each participant in the battle goes according to who's fastest
-        for char in speed_enabled_pcus:
+        for char in speed_list:
             if char.status_ail != 'dead':
-                if units.monster.hp <= 0:
+                if all(x.hp <= 0 for x in m_list):
                     break
 
-                if isinstance(char, units.PlayableCharacter) and (char.status_ail == 'dead' or char.move in ['2', '3']):
-                    continue
-
                 print('-'*25)
+
                 if char.battle_turn() == 'Ran':
                     return
 
                 if any(x.hp > 0 for x in enabled_pcus):
-                    if units.monster.hp > 0 and char.status_ail != 'dead':
+                    if any(x.hp > 0 for x in m_list) and char.status_ail != 'dead':
                         input('\nPress enter/return ')
 
-                    elif units.monster.hp <= 0:
+                    elif all(x.hp <= 0 for x in m_list):
                         break
 
                 else:
                     break
 
             # Check if any characters died on the participants turn
-            for char_2 in speed_enabled_pcus:
+            for char_2 in speed_list:
                 if isinstance(char_2, units.PlayableCharacter) and char_2.hp <= 0 and char_2.status_ail != 'dead':
                     char_2.hp = 0
                     char_2.status_ail = 'dead'
                     sounds.ally_death.play()
 
                     print("-"*25)
-                    print(f'{char_2.name} has fallen to the {units.monster.monster_name}!')
+                    print(f'{char_2.name} has fallen to the monsters!')
+                    input("\nPress enter/return ")
+
+                if isinstance(char_2, units.Monster) and char_2.hp <= 0 and char_2.status_ail != 'dead':
+                    char_2.hp = 0
+                    char_2.status_ail = 'dead'
+                    sounds.buff_spell.play()
+
+                    print("-"*25)
+                    print(f'The {char_2.name} was defeated by your party!')
                     input("\nPress enter/return ")
 
     after_battle(is_boss)
@@ -304,13 +311,6 @@ def run_away(runner):
 
 def after_battle(is_boss):  # Assess the results of the battle
     print('-'*25)
-    enabled_pcus = [x for x in [units.player,
-                                units.solou,
-                                units.xoann,
-                                units.chyme,
-                                units.ran_af,
-                                units.adorine,
-                                units.parsto] if x.enabled]
 
     while True:
         # If the monster wins...
@@ -590,10 +590,11 @@ def bat_stats():
 
     # Monster Stats
     for each_monster in m_list:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5}".format(
+        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               each_monster.name, each_monster.hp,
               each_monster.max_hp, each_monster.mp,
               each_monster.max_mp, each_monster.lvl,
+              each_monster.status_ail.title(),
               pad1=' '*(first_padding - len(each_monster.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(each_monster.hp, each_monster.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(each_monster.mp, each_monster.max_mp)))))
