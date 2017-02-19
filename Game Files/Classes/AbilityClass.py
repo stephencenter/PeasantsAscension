@@ -69,8 +69,8 @@ def use_chakra_smash(user):
     # A 2.5x crit that lowers the target's armor
 
     main.smart_sleep(0.75)
-    dam_dealt = math.ceil(deal_damage(user, units.monster, "physical")*2.5)
-    units.monster.hp -= dam_dealt
+    dam_dealt = math.ceil(deal_damage(user, user.target, "physical")*2.5)
+    user.target.hp -= dam_dealt
 
     print(f'The attack deals {dam_dealt} damage to the {monster.name}!')
 
@@ -204,13 +204,13 @@ def use_scout(user):
                         'ice': 'Fire',
                         'none': 'None',
                         'light': 'Dark',
-                        'dark': 'Light'}[units.monster.element]
+                        'dark': 'Light'}[user.target.element]
 
-    print(f"""{units.monster.name.upper()}'s STATS:
-Attack: {units.monster.attk} | M. Attack: {units.monster.m_attk} | P. Attack: {units.monster.p_attk}
-Defense: {units.monster.dfns} | M. Defense: {units.monster.m_dfns} | P. Defense: {units.monster.p_dfns}
-Evasion: {units.monster.evad} | Speed: {units.monster.spd,}
-Element: {units.monster.element.title()} | Elemental Weakness: {monster_weakness}""")
+    print(f"""{user.target.name.upper()}'s STATS:
+Attack: {user.target.attk} | M. Attack: {user.target.m_attk} | P. Attack: {user.target.p_attk}
+Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {user.target.p_dfns}
+Evasion: {user.target.evad} | Speed: {user.target.spd,}
+Element: {user.target.element.title()} | Elemental Weakness: {monster_weakness}""")
 
     battle.temp_stats[user.name]['p_attack'] += (5 + user.attributes['per'])
 
@@ -243,7 +243,7 @@ tip_the_scales.after_turn = after_tip_the_scales
 
 
 def use_unholy_binds(user):
-    units.monster.element = "death"
+    user.target.element = "dark"
     user.mana += (5 + user.attributes['wis'])
 
 
