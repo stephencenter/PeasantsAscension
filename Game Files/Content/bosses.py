@@ -70,7 +70,7 @@ menac_phantom = Boss('Menacing Phantom',
                      None,    # Drops no items
                      75, 75,  # Drops 75 XP and 75 GP
                      "calls upon its ethereal power and casts a hex on",
-                     active=False, element='death')
+                     active=False, element='dark')
 
 
 def menacphan_ud():
@@ -115,10 +115,10 @@ cursed_spect = Boss('Cursed Spectre',
                     50, 35,              # 50 Magic Attack, 35 Magic Defense
                     25, 20,              # 25 Speed, 20 Evasion
                     15,                  # Level 15
-                    i_items.spect_wand,  # Drops a spectre wand
+                    None,  # Drops a spectre wand
                     250, 250,            # Drops 250 XP and 250 GP
                     "calls upon its ethereal power and casts a hex on",
-                    element='death', active=False)
+                    element='dark', active=False)
 
 
 def cursspect_ud():
@@ -137,7 +137,7 @@ giant_ent = Boss('Giant Ent',
                  20, 15,          # 20 Magic Attack, 15 Magic Defense
                  15, 5,           # 15 Speed, 5 Evasion
                  15,              # Level 15
-                 i_items.enc_yw,  # Drops an enchanted yew wand
+                 None,  # Drops an enchanted yew wand
                  250, 250,        # Drops 250 XP and 250 GP
                  "calls upon the essence of the forest and attacks",
                  element='grass', active=True)

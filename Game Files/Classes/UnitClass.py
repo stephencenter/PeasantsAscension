@@ -1276,7 +1276,7 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
 
 def eval_element(attacker, target, damage):
     # Fire < Water < Electricity < Earth < Wind < Grass < Ice < Fire
-    # Life < Death and Death < Life
+    # Light < Dark and Dark < Light
     # "None" element is neutral to all elements
     # All other interactions are neutral
 
@@ -1294,8 +1294,8 @@ def eval_element(attacker, target, damage):
         'wind': ['ice', 'earth'],
         'grass': ['wind', 'wind'],
         'ice': ['fire', 'grass'],
-        'life': ['life', 'death'],
-        'death': ['death', 'life']
+        'light': ['light', 'dark'],
+        'dark': ['dark', 'light']
     }
 
     # If either the attacker or the target have no element, OR the target and the attacker both have the same element,

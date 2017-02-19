@@ -409,36 +409,6 @@ drg_leg = Armor('Dragonhide Leggings',
                 'Tough leggings crafted from high-quality dragonskin (+25% ARMOR)',
                 475, 225, 0.25, 'melee', 'legs', ['assassin', 'ranger'], 'Pants')
 
-# Unique Drops -- Weapons
-ice_blade = Weapon('Blade of Frost',
-                   'A stunning blade enchanted with the power of ice (+50% Damage, ICE)',
-                   0, 225, 0.5, 'melee', 'warrior', 'Sword', element='ice')
-
-enc_yw = Weapon('Enchanted Yew Wand',
-                'A yewen wand of remarkable craftsmanship (+25% Damage, GRASS)',
-                0, 225, 0.5, 'magic', 'mage', 'Twig', element='grass')
-
-spect_wand = Weapon('Spectre Wand',
-                    'A ghastly wand made of an indescribable material (+25% Damage, DEATH)',
-                    0, 225, 0.5, 'magic', 'mage', 'Wand', element='death')
-
-muramasa = Weapon('Blade of Muramasa',
-                  'A blade crafted by the great Muramasa (+60% Damage, DEATH)',
-                  0, 500, 0.6, 'melee', ['warrior', 'assassin'], 'Sword', element='death')
-
-masamune = Weapon('Blade of Masamune',
-                  'A blade crafted by the great Masamune (+60% Damage, LIFE)',
-                  0, 500, 0.6, 'melee', ['warrior', 'assassin'], 'Sword', element='life')
-
-wind_bow = Weapon('Bow of Echoes',
-                  'A finely made bow that harnesses the power of wind (+60% Damage, WIND)',
-                  0, 450, 0.6, 'ranged', 'ranger', 'Bow', element='wind')
-
-lightning_dagger = Weapon('Lightning Dagger',
-                          'A blade in the shape of a lightning bolt. A powerful current \n\
-flows through the edge (+60% Damage, ELECTRIC)',
-                          0, 450, 0.6, 'melee', 'assassin', 'Dagger', element='electric')
-
 # Accessories
 # -- Elemental Accessories
 water_amulet = ElementAccessory('Aquatic Amulet', 'An amulet that imbues its wearer with the power of WATER',
@@ -455,10 +425,10 @@ grass_amulet = ElementAccessory('Verdant Amulet', 'An amulet that imbues its wea
                                 375, 175, 'Grass')
 ice_amulet = ElementAccessory('Glacial Amulet', 'An amulet that imbues its wearer with the power of ICE',
                               375, 175, 'Ice')
-life_amulet = ElementAccessory('Living Amulet', 'An amulet that imbues its wearer with the power of LIFE',
-                               375, 175, 'Life')
-death_amulet = ElementAccessory('Necrotic Amulet', 'An amulet that imbues its wearer with the power of DEATH',
-                                375, 175, 'Death')
+light_amulet = ElementAccessory('Divine Amulet', 'An amulet that imbues its wearer with the power of LIGHT',
+                                375, 175, 'Light')
+dark_amulet = ElementAccessory('Umbral Amulet', 'An amulet that imbues its wearer with the power of DARKNESS',
+                               375, 175, 'Dark')
 
 # Quest items
 message_joseph = Misc('Message from Joseph', 'A neatly written message addressed to Philliard.',
@@ -717,11 +687,11 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                             [ice_amulet, ice_amulet, ice_amulet,
                              ice_amulet, ice_amulet, ice_amulet],
 
-                            [life_amulet, life_amulet, life_amulet,
-                             life_amulet, life_amulet, life_amulet],
+                            [light_amulet, light_amulet, light_amulet,
+                             light_amulet, light_amulet, light_amulet],
 
-                            [death_amulet, death_amulet, death_amulet,
-                             death_amulet, death_amulet, death_amulet]],
+                            [dark_amulet, dark_amulet, dark_amulet,
+                             dark_amulet, dark_amulet, dark_amulet]],
 
             'Tools': [[divining_rod, divining_rod, divining_rod,
                        divining_rod, divining_rod, divining_rod],

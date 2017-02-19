@@ -28,7 +28,7 @@ class Ability:
         pass
 
 
-# 11 of 24 designed
+# 13 of 24 designed
 # 3 of 24 implemented
 
 # -- WARRIOR ABILITES, scales with Strength -- #
@@ -36,7 +36,7 @@ def use_parry(user):
     pass
 
 parry = Ability("Parry", """The user will move last this turn. If they are attacked, they will
-take no damage and will reflect [50 + Strength]% damage to the attacker.""", 5)
+take no damage and will reflect [50 + Strength]% of the damage to the attacker.""", 5)
 parry.use_ability = use_parry
 
 
@@ -47,8 +47,6 @@ def use_roll_call(user):
 roll_call = Ability("Roll Call", """Each of the user's allies have their physical defense increased by "
 [(5 + Strength) x Number of allies]""", 5)
 roll_call.use_ability = use_roll_call
-
-warrior_abilities = [parry, roll_call]
 
 
 # -- MONK ABILITIES, scales with Constitution -- #
@@ -73,11 +71,9 @@ def use_chakra_smash(user):
 
 
 chakra_smash = Ability("Chakra Smash", """Deals a 2.5x critical strike to the enemy, lowering their defensive stats
-by [5 + Constitution]%. The armor reduction lasts indefinitely and stacks
+by [5 + Constitution]. The armor reduction lasts indefinitely and stacks
 with multiple uses.""", 5)
 chakra_smash.use_ability = use_chakra_smash
-
-monk_abilities = [chakra_smash]
 
 
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
@@ -98,8 +94,6 @@ def use_backstab(user):
 backstab = Ability("Backstab", """The user will move first and deal a [125 + Dexterity]% critical strike.""", 2)
 backstab.use_ability = use_backstab
 
-assassin_abilities = [inject_poison, backstab]
-
 
 # -- MAGE ABILITIES, scales with Intelligence -- #
 def use_skill_shot(user):
@@ -110,7 +104,24 @@ skill_shot = Ability("Skill Shot", """Deals damage to the target equal to [User'
 If the user's level is lower than the enemy's level, the user's mana is restored by [5 + Intelligence].""", 2)
 skill_shot.use_ability = use_skill_shot
 
-mage_abilities = []
+
+def use_polymorph(user):
+    pass
+
+
+polymorph = Ability("Polymorph", """Turns the enemy unit into a frog for one turn, reducing their attack
+stats, speed, and evasion to 0. The user's magic attack is also increased by
+[5 + Intelligence]. Stacks with multiple uses.""", 5)
+polymorph.use_ability = use_polymorph
+
+
+def use_spell_shield(user):
+    pass
+
+
+spell_shield = Ability("Spell Shield", """Places a protective barrier around your party that lowers incoming
+magical damage by [20 + Intelligence]% for 5 turns.""", 5)
+spell_shield.use_ability = use_spell_shield
 
 
 # -- RANGER ABILITIES, scales with Perception -- #
@@ -118,7 +129,7 @@ def use_roll(user):
     pass
 
 
-roll = Ability("Roll", """The user does a quick tuck-and-roll, disorienting the enemy and increasing their evasion
+roll = Ability("Roll", """The user does a quick tuck-and-roll, disorienting the enemy and increasing the user's evasion
 to 256 for one turn. Also increases their speed by [25 + Perception]. Stacks
 with multiple uses.""", 3)
 roll.use_ability = use_roll
@@ -133,8 +144,8 @@ def use_scout(user):
                         'grass': 'Ice',
                         'ice': 'Fire',
                         'none': 'None',
-                        'life': 'Death',
-                        'death': 'Life'}[units.monster.element]
+                        'light': 'Dark',
+                        'dark': 'Light'}[units.monster.element]
 
     print(f"""{units.monster.name.upper()}'s STATS:
 Attack: {units.monster.attk} | M. Attack: {units.monster.m_attk} | P. Attack: {units.monster.p_attk}
@@ -148,8 +159,6 @@ Element: {units.monster.element.title()} | Elemental Weakness: {monster_weakness
 scout = Ability("Scout", """Scouts the enemy, revealing their stats and elemental weakness. Also increases Pierce
 attack by [5 + Perception]%. Stacks with multiple uses.""", 1)
 scout.use_ability = use_scout
-
-ranger_abilities = [roll, scout]
 
 
 # -- PALADIN ABILITIES, scales with Wisdom -- #
@@ -167,7 +176,7 @@ def use_unholy_binds(user):
     user.mana += (5 + user.attributes['wis'])
 
 
-unholy_binds = Ability("Unholy Binds", """Sets the enemy's element to Death, causing your holy spells to
+unholy_binds = Ability("Unholy Binds", """Sets the enemy's element to Darkness, causing your Light spells to
 do more damage. Also restores [5 + Wisdom] mana.""", 5)
 unholy_binds.use_ability = use_unholy_binds
 
@@ -180,4 +189,15 @@ judgement = Ability("Judgement", """Applies DOOM to the target, guaranteeing the
 dies before the 7 turns is up, the user restores [5 + Wisdom] HP.""", 5)
 judgement.use_ability = use_judgement
 
-paladin_abilities = [tip_the_scales, unholy_binds, judgement]
+class_abilities = {
+    'paladin': [tip_the_scales, unholy_binds, judgement],
+    'mage': [skill_shot, polymorph, spell_shield],
+    'warrior': [roll_call, parry],
+    'assassin': [inject_poison, backstab],
+    'ranger': [scout, roll],
+    'monk': [chakra_smash]
+
+}
+
+print(sum(len(x) for x in class_abilities.values()))
+

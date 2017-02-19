@@ -107,28 +107,28 @@ cyclone = Damaging('Cyclone',
                    "Demolish all that stand in your path with a terrifying tornado! (Strong)",
                    23, 26, 1, "wind")
 
-# Life
+# Light
 purify = Damaging('Purify',  # Paladins start with this spell
                   "Call upon His Divinity to cast out evil creatures! (Weak)",
-                  3, 5, 0.25, "life", a_c=('paladin', 'mage'))
+                  3, 5, 0.25, "light", a_c=('paladin', 'mage'))
 smite = Damaging('Holy Smite',
                  "Strike down unholy beings using His Divinity's power! (Moderate)",
-                 11, 15, 0.5, "life", a_c=('paladin', 'mage'))
+                 11, 15, 0.5, "light", a_c=('paladin', 'mage'))
 moonbeam = Damaging('Moonbeam',
                     "Utterly destroy evil creatures with holy rays from the moon! (Strong)",
-                    23, 27, 1, "life", a_c=('paladin', 'mage'))
+                    23, 27, 1, "light", a_c=('paladin', 'mage'))
 
 
-# Death
+# Dark
 curse = Damaging('Evil Curse',
                  "Call upon His Wickedness to harm holy creatures! (Weak)",
-                 3, 5, 0.25, "death")
+                 3, 5, 0.25, "dark")
 desecration = Damaging('Desecration',
                        "Defile holy spirits with an evil aura! (Moderate)",
-                       11, 15, 0.5, "death")
+                       11, 15, 0.5, "dark")
 unholy_rend = Damaging('Unholy Rend',
                        "Annihilate holy creatures with a searing blow! (Strong)",
-                       23, 27, 1, "death")
+                       23, 27, 1, "dark")
 
 # -- Healing -- #
 pit_heal = Healing('Pitiful Healing',  # Every character starts with this spell
@@ -220,8 +220,8 @@ all_spells = [
     mud_toss, rock_slam, earthquake,         # Earth Spells (Level 4, 14, 26)
     icicle_dagger, hail_storm, blizzard,     # Ice Spells (Level 4, 14, 26)
     m_gust, microburst, cyclone,             # Wind Spells (Level 4, 14, 26)
-    purify, smite, moonbeam,                 # Life Spells (Level 5, 15, 27)
-    curse, desecration, unholy_rend,         # Death Spells (Level 5, 15, 27)
+    purify, smite, moonbeam,                 # Light Spells (Level 5, 15, 27)
+    curse, desecration, unholy_rend,         # Dark Spells (Level 5, 15, 27)
 
     m_quick, m_evade, a_quick, a_evade,       # Movement Spells (Level 1, 10)
     m_defend, m_shield, a_defend, a_shield,   # Defense Spells (Level 3, 13)
