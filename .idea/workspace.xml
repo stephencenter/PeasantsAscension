@@ -5,7 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d19a7f44-3ef1-4b67-8670-56343c3a2afb" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Classes/AbilityClass.py" afterPath="$PROJECT_DIR$/Game Files/Classes/AbilityClass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Classes/BossClass.py" afterPath="$PROJECT_DIR$/Game Files/Classes/BossClass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Classes/ItemClass.py" afterPath="$PROJECT_DIR$/Game Files/Classes/ItemClass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Classes/MagicClass.py" afterPath="$PROJECT_DIR$/Game Files/Classes/MagicClass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Classes/NPCClass.py" afterPath="$PROJECT_DIR$/Game Files/Classes/NPCClass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Classes/TownClass.py" afterPath="$PROJECT_DIR$/Game Files/Classes/TownClass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Classes/UnitClass.py" afterPath="$PROJECT_DIR$/Game Files/Classes/UnitClass.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Content/bosses.py" afterPath="$PROJECT_DIR$/Game Files/Content/bosses.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Content/items.py" afterPath="$PROJECT_DIR$/Game Files/Content/items.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Content/magic.py" afterPath="$PROJECT_DIR$/Game Files/Content/magic.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Content/npcs.py" afterPath="$PROJECT_DIR$/Game Files/Content/npcs.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Content/tiles.py" afterPath="$PROJECT_DIR$/Game Files/Content/tiles.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Content/towns.py" afterPath="$PROJECT_DIR$/Game Files/Content/towns.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Content/units.py" afterPath="$PROJECT_DIR$/Game Files/Content/units.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/PeasantsAscension.py" afterPath="$PROJECT_DIR$/Game Files/PeasantsAscension.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Scripts/battle.py" afterPath="$PROJECT_DIR$/Game Files/Scripts/battle.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Scripts/inv_system.py" afterPath="$PROJECT_DIR$/Game Files/Scripts/inv_system.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Game Files/Scripts/text_scroll.py" afterPath="$PROJECT_DIR$/Game Files/Scripts/text_scroll.py" />
     </list>
     <ignored path="Pythonius.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,21 +49,43 @@
       <file leaf-file-name="PeasantsAscension.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/PeasantsAscension.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-357">
-              <caret line="117" column="17" lean-forward="true" selection-start-line="117" selection-start-column="17" selection-end-line="117" selection-end-column="17" />
+            <state relative-caret-position="216">
+              <caret line="474" column="49" lean-forward="false" selection-start-line="474" selection-start-column="49" selection-end-line="474" selection-end-column="49" />
               <folding>
                 <element signature="e#2104#2114#0" expanded="true" />
-                <element signature="e#6049#9065#0" expanded="false" />
-                <element signature="e#9097#9677#0" expanded="false" />
-                <element signature="e#9707#10193#0" expanded="false" />
-                <element signature="e#10277#15209#0" expanded="false" />
-                <element signature="e#15233#17702#0" expanded="false" />
-                <element signature="e#17729#23356#0" expanded="false" />
-                <element signature="e#23392#25182#0" expanded="false" />
-                <element signature="e#25211#25874#0" expanded="false" />
-                <element signature="e#25908#26257#0" expanded="false" />
-                <element signature="e#26276#26709#0" expanded="false" />
-                <element signature="e#26801#28102#0" expanded="false" />
+                <element signature="e#5980#8996#0" expanded="false" />
+                <element signature="e#9028#9608#0" expanded="false" />
+                <element signature="e#9638#10124#0" expanded="false" />
+                <element signature="e#15164#17633#0" expanded="false" />
+                <element signature="e#23323#25113#0" expanded="false" />
+                <element signature="e#25142#25805#0" expanded="false" />
+                <element signature="e#25839#26188#0" expanded="false" />
+                <element signature="e#26207#26640#0" expanded="false" />
+                <element signature="e#26732#28033#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="setup.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Game Files/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="text_scroll.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Game Files/Scripts/text_scroll.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="316">
+              <caret line="21" column="22" lean-forward="false" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
+              <folding>
+                <element signature="e#706#717#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -53,36 +94,36 @@
       <file leaf-file-name="AbilityClass.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Game Files/Classes/AbilityClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="80" column="42" lean-forward="true" selection-start-line="80" selection-start-column="42" selection-end-line="80" selection-end-column="42" />
+            <state relative-caret-position="661">
+              <caret line="113" column="0" lean-forward="true" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#804#808#0" expanded="false" />
-                <element signature="e#838#842#0" expanded="false" />
-                <element signature="e#1121#1125#0" expanded="false" />
-                <element signature="e#1159#1163#0" expanded="false" />
-                <element signature="e#2026#2030#0" expanded="false" />
-                <element signature="e#2427#2431#0" expanded="false" />
-                <element signature="e#2469#2473#0" expanded="false" />
-                <element signature="e#2825#2829#0" expanded="false" />
-                <element signature="e#2862#2866#0" expanded="false" />
-                <element signature="e#3212#3216#0" expanded="false" />
-                <element signature="e#3251#3255#0" expanded="false" />
-                <element signature="e#3625#3629#0" expanded="false" />
-                <element signature="e#3663#3667#0" expanded="false" />
-                <element signature="e#4028#4032#0" expanded="false" />
-                <element signature="e#4069#4073#0" expanded="false" />
-                <element signature="e#4412#4416#0" expanded="false" />
-                <element signature="e#4445#4449#0" expanded="false" />
-                <element signature="e#5684#5688#0" expanded="false" />
-                <element signature="e#6015#6019#0" expanded="false" />
-                <element signature="e#6058#6062#0" expanded="false" />
-                <element signature="e#6370#6444#0" expanded="false" />
-                <element signature="e#6481#6485#0" expanded="false" />
-                <element signature="e#6778#6782#0" expanded="false" />
-                <element signature="e#6816#6820#0" expanded="false" />
-                <element signature="e#7148#7152#0" expanded="false" />
-                <element signature="e#7185#7189#0" expanded="false" />
+                <element signature="e#779#783#0" expanded="false" />
+                <element signature="e#813#817#0" expanded="false" />
+                <element signature="e#1096#1100#0" expanded="false" />
+                <element signature="e#1134#1138#0" expanded="false" />
+                <element signature="e#2051#2055#0" expanded="false" />
+                <element signature="e#2925#2929#0" expanded="false" />
+                <element signature="e#2967#2971#0" expanded="false" />
+                <element signature="e#3323#3327#0" expanded="false" />
+                <element signature="e#3360#3364#0" expanded="false" />
+                <element signature="e#3710#3714#0" expanded="false" />
+                <element signature="e#3749#3753#0" expanded="false" />
+                <element signature="e#4122#4126#0" expanded="false" />
+                <element signature="e#4160#4164#0" expanded="false" />
+                <element signature="e#4525#4529#0" expanded="false" />
+                <element signature="e#4566#4570#0" expanded="false" />
+                <element signature="e#4909#4913#0" expanded="false" />
+                <element signature="e#4942#4946#0" expanded="false" />
+                <element signature="e#6181#6185#0" expanded="false" />
+                <element signature="e#6512#6516#0" expanded="false" />
+                <element signature="e#6555#6559#0" expanded="false" />
+                <element signature="e#6867#6941#0" expanded="false" />
+                <element signature="e#6978#6982#0" expanded="false" />
+                <element signature="e#7275#7279#0" expanded="false" />
+                <element signature="e#7313#7317#0" expanded="false" />
+                <element signature="e#7645#7649#0" expanded="false" />
+                <element signature="e#7682#7686#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -91,9 +132,11 @@
       <file leaf-file-name="BossClass.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Classes/BossClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="628">
+              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <folding>
+                <element signature="e#734#744#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -101,9 +144,11 @@
       <file leaf-file-name="bosses.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Content/bosses.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="120" column="33" lean-forward="false" selection-start-line="120" selection-start-column="33" selection-end-line="120" selection-end-column="33" />
-              <folding />
+            <state relative-caret-position="350">
+              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <folding>
+                <element signature="e#734#757#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -111,19 +156,18 @@
       <file leaf-file-name="ItemClass.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Classes/ItemClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="106" column="0" lean-forward="true" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+            <state relative-caret-position="181">
+              <caret line="20" column="16" lean-forward="false" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
               <folding>
-                <element signature="e#734#744#0" expanded="true" />
-                <element signature="e#7446#7590#0" expanded="false" />
-                <element signature="e#7632#8710#0" expanded="false" />
-                <element signature="e#8756#9675#0" expanded="false" />
-                <element signature="e#9707#10830#0" expanded="false" />
-                <element signature="e#10857#12002#0" expanded="false" />
-                <element signature="e#12037#14872#0" expanded="false" />
-                <element signature="e#14904#15370#0" expanded="false" />
-                <element signature="e#15413#15813#0" expanded="false" />
-                <element signature="e#15838#16347#0" expanded="false" />
+                <element signature="e#7373#7517#0" expanded="false" />
+                <element signature="e#7559#8637#0" expanded="false" />
+                <element signature="e#8683#8873#0" expanded="false" />
+                <element signature="e#8905#9095#0" expanded="false" />
+                <element signature="e#9122#9311#0" expanded="false" />
+                <element signature="e#9346#9533#0" expanded="false" />
+                <element signature="e#9565#10031#0" expanded="false" />
+                <element signature="e#10074#10474#0" expanded="false" />
+                <element signature="e#10499#11008#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -132,9 +176,11 @@
       <file leaf-file-name="items.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Content/items.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="528">
-              <caret line="702" column="37" lean-forward="false" selection-start-line="702" selection-start-column="37" selection-end-line="702" selection-end-column="37" />
-              <folding />
+            <state relative-caret-position="400">
+              <caret line="16" column="11" lean-forward="true" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+              <folding>
+                <element signature="e#734#757#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -142,12 +188,11 @@
       <file leaf-file-name="MagicClass.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Classes/MagicClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="764">
-              <caret line="141" column="42" lean-forward="false" selection-start-line="141" selection-start-column="42" selection-end-line="141" selection-end-column="42" />
+            <state relative-caret-position="25">
+              <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
               <folding>
-                <element signature="e#734#744#0" expanded="true" />
-                <element signature="e#1271#1678#0" expanded="false" />
-                <element signature="e#9854#10987#0" expanded="false" />
+                <element signature="e#1229#1636#0" expanded="false" />
+                <element signature="e#9812#10945#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -156,9 +201,11 @@
       <file leaf-file-name="magic.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Content/magic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="653">
-              <caret line="117" column="29" lean-forward="false" selection-start-line="117" selection-start-column="29" selection-end-line="117" selection-end-column="29" />
-              <folding />
+            <state relative-caret-position="425">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+              <folding>
+                <element signature="e#734#758#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -166,8 +213,8 @@
       <file leaf-file-name="NPCClass.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Classes/NPCClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="144" column="0" lean-forward="true" selection-start-line="144" selection-start-column="0" selection-end-line="144" selection-end-column="0" />
+            <state relative-caret-position="609">
+              <caret line="147" column="0" lean-forward="true" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
               <folding>
                 <element signature="e#729#739#0" expanded="true" />
               </folding>
@@ -178,57 +225,56 @@
       <file leaf-file-name="npcs.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Content/npcs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="955" column="88" lean-forward="false" selection-start-line="955" selection-start-column="86" selection-end-line="955" selection-end-column="88" />
+            <state relative-caret-position="300">
+              <caret line="18" column="11" lean-forward="false" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
               <folding>
-                <element signature="e#822#3745#0" expanded="false" />
-                <element signature="e#3827#4081#0" expanded="false" />
-                <element signature="e#4248#5004#0" expanded="false" />
-                <element signature="e#5774#6119#0" expanded="false" />
-                <element signature="e#6329#6503#0" expanded="false" />
-                <element signature="e#6542#7361#0" expanded="false" />
-                <element signature="e#7683#7802#0" expanded="false" />
-                <element signature="e#8073#8296#0" expanded="false" />
-                <element signature="e#8354#9980#0" expanded="false" />
-                <element signature="e#10019#10228#0" expanded="false" />
-                <element signature="e#10305#10430#0" expanded="false" />
-                <element signature="e#31033#31523#0" expanded="false" />
-                <element signature="e#31683#31903#0" expanded="false" />
-                <element signature="e#31949#32068#0" expanded="false" />
-                <element signature="e#32106#33022#0" expanded="false" />
-                <element signature="e#33064#33297#0" expanded="false" />
-                <element signature="e#33348#34400#0" expanded="false" />
-                <element signature="e#34453#34512#0" expanded="false" />
-                <element signature="e#34540#34920#0" expanded="false" />
-                <element signature="e#34948#35007#0" expanded="false" />
-                <element signature="e#35035#35179#0" expanded="false" />
-                <element signature="e#35207#35330#0" expanded="false" />
-                <element signature="e#35358#35478#0" expanded="false" />
-                <element signature="e#36098#37646#0" expanded="false" />
-                <element signature="e#37702#37952#0" expanded="false" />
-                <element signature="e#37988#38308#0" expanded="false" />
-                <element signature="e#38351#38571#0" expanded="false" />
-                <element signature="e#38616#38955#0" expanded="false" />
-                <element signature="e#39349#39606#0" expanded="false" />
-                <element signature="e#39631#39784#0" expanded="false" />
-                <element signature="e#39809#39918#0" expanded="false" />
-                <element signature="e#41925#42338#0" expanded="false" />
-                <element signature="e#42478#42730#0" expanded="false" />
-                <element signature="e#42881#43528#0" expanded="false" />
-                <element signature="e#43678#43925#0" expanded="false" />
-                <element signature="e#44084#44331#0" expanded="false" />
-                <element signature="e#44496#44634#0" expanded="false" />
-                <element signature="e#44793#44994#0" expanded="false" />
-                <element signature="e#45146#45368#0" expanded="false" />
-                <element signature="e#45536#46136#0" expanded="false" />
-                <element signature="e#46300#46460#0" expanded="false" />
-                <element signature="e#46615#47152#0" expanded="false" />
-                <element signature="e#47326#48619#0" expanded="false" />
-                <element signature="e#49694#49938#0" expanded="false" />
-                <element signature="e#49998#50110#0" expanded="false" />
-                <element signature="e#51769#52432#0" expanded="false" />
-                <element signature="e#52595#53085#0" expanded="false" />
-                <element signature="e#53238#53627#0" expanded="false" />
+                <element signature="e#734#756#0" expanded="true" />
+                <element signature="e#866#3789#0" expanded="false" />
+                <element signature="e#3871#4125#0" expanded="false" />
+                <element signature="e#4292#5048#0" expanded="false" />
+                <element signature="e#5818#6163#0" expanded="false" />
+                <element signature="e#6373#6547#0" expanded="false" />
+                <element signature="e#6586#7405#0" expanded="false" />
+                <element signature="e#8117#8340#0" expanded="false" />
+                <element signature="e#8398#10024#0" expanded="false" />
+                <element signature="e#10063#10272#0" expanded="false" />
+                <element signature="e#10349#10474#0" expanded="false" />
+                <element signature="e#31075#31565#0" expanded="false" />
+                <element signature="e#31725#31945#0" expanded="false" />
+                <element signature="e#31991#32110#0" expanded="false" />
+                <element signature="e#32148#33064#0" expanded="false" />
+                <element signature="e#33106#33339#0" expanded="false" />
+                <element signature="e#33390#34442#0" expanded="false" />
+                <element signature="e#34495#34554#0" expanded="false" />
+                <element signature="e#34582#34962#0" expanded="false" />
+                <element signature="e#34990#35049#0" expanded="false" />
+                <element signature="e#35077#35221#0" expanded="false" />
+                <element signature="e#35249#35372#0" expanded="false" />
+                <element signature="e#35400#35520#0" expanded="false" />
+                <element signature="e#36140#37688#0" expanded="false" />
+                <element signature="e#37744#37994#0" expanded="false" />
+                <element signature="e#38030#38350#0" expanded="false" />
+                <element signature="e#38393#38613#0" expanded="false" />
+                <element signature="e#38658#38997#0" expanded="false" />
+                <element signature="e#39391#39648#0" expanded="false" />
+                <element signature="e#39851#39960#0" expanded="false" />
+                <element signature="e#41967#42380#0" expanded="false" />
+                <element signature="e#42520#42772#0" expanded="false" />
+                <element signature="e#42923#43570#0" expanded="false" />
+                <element signature="e#43720#43967#0" expanded="false" />
+                <element signature="e#44126#44373#0" expanded="false" />
+                <element signature="e#44538#44676#0" expanded="false" />
+                <element signature="e#44835#45036#0" expanded="false" />
+                <element signature="e#45188#45410#0" expanded="false" />
+                <element signature="e#45578#46178#0" expanded="false" />
+                <element signature="e#46342#46502#0" expanded="false" />
+                <element signature="e#46657#47194#0" expanded="false" />
+                <element signature="e#47368#48661#0" expanded="false" />
+                <element signature="e#49736#49980#0" expanded="false" />
+                <element signature="e#50040#50152#0" expanded="false" />
+                <element signature="e#51811#52474#0" expanded="false" />
+                <element signature="e#52637#53127#0" expanded="false" />
+                <element signature="e#53280#53669#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -247,34 +293,32 @@
       <file leaf-file-name="UnitClass.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Classes/UnitClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="553">
-              <caret line="1297" column="22" lean-forward="false" selection-start-line="1297" selection-start-column="22" selection-end-line="1297" selection-end-column="22" />
+            <state relative-caret-position="321">
+              <caret line="33" column="0" lean-forward="true" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding>
                 <element signature="e#734#747#0" expanded="true" />
-                <element signature="e#1137#1967#0" expanded="false" />
-                <element signature="e#5367#6741#0" expanded="false" />
-                <element signature="e#6775#10864#0" expanded="false" />
-                <element signature="e#10928#15783#0" expanded="false" />
-                <element signature="e#15820#16940#0" expanded="false" />
-                <element signature="e#17266#17554#0" expanded="false" />
-                <element signature="e#17714#17910#0" expanded="false" />
-                <element signature="e#21199#22070#0" expanded="false" />
-                <element signature="e#23599#44018#0" expanded="false" />
-                <element signature="e#23823#24317#0" expanded="false" />
-                <element signature="e#24354#24776#0" expanded="false" />
-                <element signature="e#24821#25749#0" expanded="false" />
-                <element signature="e#25787#26426#0" expanded="false" />
-                <element signature="e#35848#36508#0" expanded="false" />
-                <element signature="e#36545#37139#0" expanded="false" />
-                <element signature="e#37177#37831#0" expanded="false" />
-                <element signature="e#40637#41805#0" expanded="false" />
-                <element signature="e#42446#42860#0" expanded="false" />
-                <element signature="e#42977#43240#0" expanded="false" />
-                <element signature="e#44100#46875#0" expanded="false" />
-                <element signature="e#44429#44743#0" expanded="false" />
-                <element signature="e#44763#44894#0" expanded="false" />
-                <element signature="e#44950#45323#0" expanded="false" />
-                <element signature="e#45343#45473#0" expanded="false" />
+                <element signature="e#1091#1921#0" expanded="false" />
+                <element signature="e#5321#6695#0" expanded="false" />
+                <element signature="e#6729#10818#0" expanded="false" />
+                <element signature="e#10882#15737#0" expanded="false" />
+                <element signature="e#15774#16894#0" expanded="false" />
+                <element signature="e#17220#17508#0" expanded="false" />
+                <element signature="e#17668#17864#0" expanded="false" />
+                <element signature="e#21153#22024#0" expanded="false" />
+                <element signature="e#23777#24271#0" expanded="false" />
+                <element signature="e#24308#24730#0" expanded="false" />
+                <element signature="e#24775#25703#0" expanded="false" />
+                <element signature="e#25741#26380#0" expanded="false" />
+                <element signature="e#35748#36408#0" expanded="false" />
+                <element signature="e#36445#37039#0" expanded="false" />
+                <element signature="e#37077#37731#0" expanded="false" />
+                <element signature="e#40537#41705#0" expanded="false" />
+                <element signature="e#42346#42760#0" expanded="false" />
+                <element signature="e#42877#43140#0" expanded="false" />
+                <element signature="e#44329#44643#0" expanded="false" />
+                <element signature="e#44663#44794#0" expanded="false" />
+                <element signature="e#44850#45223#0" expanded="false" />
+                <element signature="e#45243#45373#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -283,11 +327,11 @@
       <file leaf-file-name="units.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Content/units.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="317" column="16" lean-forward="true" selection-start-line="317" selection-start-column="16" selection-end-line="317" selection-end-column="16" />
+            <state relative-caret-position="425">
+              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding>
-                <element signature="e#3895#8973#0" expanded="false" />
-                <element signature="e#9056#10008#0" expanded="false" />
+                <element signature="e#734#757#0" expanded="true" />
+                <element signature="e#3907#8985#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -308,16 +352,13 @@
       <file leaf-file-name="tiles.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Content/tiles.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="26" column="13" lean-forward="true" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+            <state relative-caret-position="216">
+              <caret line="329" column="53" lean-forward="false" selection-start-line="329" selection-start-column="53" selection-end-line="329" selection-end-column="53" />
               <folding>
-                <element signature="e#4305#7418#0" expanded="false" />
-                <element signature="e#7445#8899#0" expanded="false" />
-                <element signature="e#8926#11057#0" expanded="false" />
-                <element signature="e#11083#14287#0" expanded="false" />
-                <element signature="e#11456#12767#0" expanded="false" />
-                <element signature="e#14318#14436#0" expanded="false" />
-                <element signature="e#14455#16505#0" expanded="false" />
+                <element signature="e#734#757#0" expanded="true" />
+                <element signature="e#4281#7394#0" expanded="false" />
+                <element signature="e#14294#14412#0" expanded="false" />
+                <element signature="e#14431#16481#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -326,18 +367,17 @@
       <file leaf-file-name="TownClass.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Classes/TownClass.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+            <state relative-caret-position="191">
+              <caret line="20" column="17" lean-forward="false" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
               <folding>
-                <element signature="e#734#744#0" expanded="true" />
-                <element signature="e#1771#5303#0" expanded="false" />
-                <element signature="e#5412#6172#0" expanded="false" />
-                <element signature="e#6209#7776#0" expanded="false" />
-                <element signature="e#7826#10944#0" expanded="false" />
-                <element signature="e#10978#12614#0" expanded="false" />
-                <element signature="e#19604#20841#0" expanded="false" />
-                <element signature="e#20878#21737#0" expanded="false" />
-                <element signature="e#21758#23799#0" expanded="false" />
+                <element signature="e#1722#5254#0" expanded="false" />
+                <element signature="e#5363#6123#0" expanded="false" />
+                <element signature="e#6160#7727#0" expanded="false" />
+                <element signature="e#7777#10895#0" expanded="false" />
+                <element signature="e#10929#12565#0" expanded="false" />
+                <element signature="e#19555#20792#0" expanded="false" />
+                <element signature="e#20829#21688#0" expanded="false" />
+                <element signature="e#21709#23750#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -346,9 +386,11 @@
       <file leaf-file-name="towns.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Content/towns.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="162" column="50" lean-forward="false" selection-start-line="162" selection-start-column="50" selection-end-line="162" selection-end-column="50" />
-              <folding />
+            <state relative-caret-position="475">
+              <caret line="19" column="31" lean-forward="true" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+              <folding>
+                <element signature="e#734#757#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -356,15 +398,14 @@
       <file leaf-file-name="battle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Scripts/battle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="143" column="45" lean-forward="true" selection-start-line="143" selection-start-column="45" selection-end-line="143" selection-end-column="45" />
+            <state relative-caret-position="206">
+              <caret line="445" column="35" lean-forward="false" selection-start-line="445" selection-start-column="35" selection-end-line="445" selection-end-column="35" />
               <folding>
                 <element signature="e#734#744#0" expanded="true" />
-                <element signature="e#1179#4276#0" expanded="false" />
-                <element signature="e#7460#8058#0" expanded="false" />
-                <element signature="e#9679#10661#0" expanded="false" />
-                <element signature="e#10731#15774#0" expanded="false" />
-                <element signature="e#15809#16779#0" expanded="false" />
+                <element signature="e#1157#4254#0" expanded="false" />
+                <element signature="e#7438#8036#0" expanded="false" />
+                <element signature="e#9657#10639#0" expanded="false" />
+                <element signature="e#10709#15752#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -383,11 +424,11 @@
       <file leaf-file-name="inv_system.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Game Files/Scripts/inv_system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14975">
-              <caret line="656" column="0" lean-forward="false" selection-start-line="656" selection-start-column="0" selection-end-line="656" selection-end-column="0" />
+            <state relative-caret-position="516">
+              <caret line="793" column="26" lean-forward="true" selection-start-line="793" selection-start-column="26" selection-end-line="793" selection-end-column="26" />
               <folding>
                 <element signature="e#732#742#0" expanded="true" />
-                <element signature="e#1178#2618#0" expanded="false" />
+                <element signature="e#1127#2567#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -404,8 +445,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>press enter</find>
-      <find>asleep</find>
       <find>[1]: Attack</find>
       <find>eval_element</find>
       <find>math.ceil</find>
@@ -427,13 +466,15 @@
       <find>target</find>
       <find>return</find>
       <find>target =</find>
+      <find>battle.pcu_list</find>
+      <find>'s turn</find>
+      <find>units.monster</find>
+      <find>target =</find>
       <find>death</find>
       <find>relieve</find>
+      <find>serena_phrase</find>
       <find>life</find>
-      <find>'s turn</find>
-      <find>battle.pcu_list</find>
-      <find>target =</find>
-      <find>units.monster</find>
+      <find>bosses</find>
     </findStrings>
     <replaceStrings>
       <replace>town_rymn_outpost</replace>
@@ -473,31 +514,31 @@
         <option value="$PROJECT_DIR$/Game Files/TownClass.py" />
         <option value="$PROJECT_DIR$/Game Files/UnitClass.py" />
         <option value="$PROJECT_DIR$/Game Files/Content/sounds.py" />
-        <option value="$PROJECT_DIR$/Game Files/Scripts/text_scroll.py" />
         <option value="$PROJECT_DIR$/Game Files/Scripts/setup.py" />
         <option value="$PROJECT_DIR$/Game Files/auto_debug.py" />
         <option value="$PROJECT_DIR$/Game Files/Scripts/auto_debug.py" />
         <option value="$PROJECT_DIR$/Game Files/Classes/TileClass.py" />
-        <option value="$PROJECT_DIR$/Game Files/Classes/BossClass.py" />
-        <option value="$PROJECT_DIR$/Game Files/Classes/NPCClass.py" />
-        <option value="$PROJECT_DIR$/Game Files/Classes/TownClass.py" />
-        <option value="$PROJECT_DIR$/Game Files/Content/npcs.py" />
-        <option value="$PROJECT_DIR$/Game Files/Content/towns.py" />
         <option value="$PROJECT_DIR$/Game Files/Content/ascii_art.py" />
         <option value="$PROJECT_DIR$/Game Files/Scripts/auto_debugger.py" />
-        <option value="$PROJECT_DIR$/Game Files/Scripts/inv_system.py" />
-        <option value="$PROJECT_DIR$/Game Files/Content/tiles.py" />
-        <option value="$PROJECT_DIR$/Game Files/PeasantsAscension.py" />
-        <option value="$PROJECT_DIR$/Game Files/Classes/ItemClass.py" />
         <option value="$PROJECT_DIR$/Game Files/Scripts/AbilityClass.py" />
-        <option value="$PROJECT_DIR$/Game Files/Content/units.py" />
-        <option value="$PROJECT_DIR$/Game Files/Scripts/battle.py" />
-        <option value="$PROJECT_DIR$/Game Files/Classes/MagicClass.py" />
-        <option value="$PROJECT_DIR$/Game Files/Content/items.py" />
-        <option value="$PROJECT_DIR$/Game Files/Classes/UnitClass.py" />
         <option value="$PROJECT_DIR$/Game Files/Content/peasant_lore.txt" />
+        <option value="$PROJECT_DIR$/Game Files/Scripts/battle.py" />
+        <option value="$PROJECT_DIR$/Game Files/Scripts/inv_system.py" />
+        <option value="$PROJECT_DIR$/Game Files/Classes/MagicClass.py" />
+        <option value="$PROJECT_DIR$/Game Files/Classes/NPCClass.py" />
+        <option value="$PROJECT_DIR$/Game Files/Classes/BossClass.py" />
         <option value="$PROJECT_DIR$/Game Files/Content/bosses.py" />
+        <option value="$PROJECT_DIR$/Game Files/Classes/ItemClass.py" />
+        <option value="$PROJECT_DIR$/Game Files/Content/items.py" />
         <option value="$PROJECT_DIR$/Game Files/Content/magic.py" />
+        <option value="$PROJECT_DIR$/Game Files/Content/npcs.py" />
+        <option value="$PROJECT_DIR$/Game Files/PeasantsAscension.py" />
+        <option value="$PROJECT_DIR$/Game Files/Scripts/text_scroll.py" />
+        <option value="$PROJECT_DIR$/Game Files/Content/tiles.py" />
+        <option value="$PROJECT_DIR$/Game Files/Classes/TownClass.py" />
+        <option value="$PROJECT_DIR$/Game Files/Content/units.py" />
+        <option value="$PROJECT_DIR$/Game Files/Content/towns.py" />
+        <option value="$PROJECT_DIR$/Game Files/Classes/UnitClass.py" />
         <option value="$PROJECT_DIR$/Game Files/Classes/AbilityClass.py" />
       </list>
     </option>
@@ -516,12 +557,15 @@
             <id />
           </State>
           <State>
+            <id>General</id>
+          </State>
+          <State>
             <id>Python</id>
           </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>HTML</id>
+            <id>SyntaxError</id>
           </State>
         </selected-state>
       </profile-state>
@@ -863,11 +907,11 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15677084" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32849163" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4027484" sideWeight="0.50416666" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2843552" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21564482" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.6818182" sideWeight="0.49583334" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16384777" sideWeight="0.49583334" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24983433" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296355" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -902,7 +946,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Game Files/sounds.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/ascii_art.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/inv_system.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/text_scroll.py" />
@@ -924,29 +967,11 @@
     <entry file="file://$PROJECT_DIR$/Game Files/TownClass.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/UnitClass.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/Scripts/setup.py" />
-    <entry file="file://$PROJECT_DIR$/Game Files/Scripts/text_scroll.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="762">
-          <caret line="89" column="0" lean-forward="true" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/auto_debug.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/Scripts/auto_debug.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/Content/quests.py" />
     <entry file="file://$PROJECT_DIR$/Game Files/build/exe.win-amd64-3.6/pygame/pygame_icon.svg" />
     <entry file="file://$PROJECT_DIR$/Game Files/build/exe.win-amd64-3.6/pygame/install.html" />
-    <entry file="file://$PROJECT_DIR$/Game Files/Scripts/inv_system.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14975">
-          <caret line="656" column="0" lean-forward="false" selection-start-line="656" selection-start-column="0" selection-end-line="656" selection-end-column="0" />
-          <folding>
-            <element signature="e#732#742#0" expanded="true" />
-            <element signature="e#1178#2618#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/Scripts/auto_debugger.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="600">
@@ -965,55 +990,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/PeasantsAscension.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-357">
-          <caret line="117" column="17" lean-forward="true" selection-start-line="117" selection-start-column="17" selection-end-line="117" selection-end-column="17" />
-          <folding>
-            <element signature="e#2104#2114#0" expanded="true" />
-            <element signature="e#6049#9065#0" expanded="false" />
-            <element signature="e#9097#9677#0" expanded="false" />
-            <element signature="e#9707#10193#0" expanded="false" />
-            <element signature="e#10277#15209#0" expanded="false" />
-            <element signature="e#15233#17702#0" expanded="false" />
-            <element signature="e#17729#23356#0" expanded="false" />
-            <element signature="e#23392#25182#0" expanded="false" />
-            <element signature="e#25211#25874#0" expanded="false" />
-            <element signature="e#25908#26257#0" expanded="false" />
-            <element signature="e#26276#26709#0" expanded="false" />
-            <element signature="e#26801#28102#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/Content/sounds.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-89">
           <caret line="71" column="10" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Classes/BossClass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Content/items.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="702" column="37" lean-forward="false" selection-start-line="702" selection-start-column="37" selection-end-line="702" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Content/bosses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="120" column="33" lean-forward="false" selection-start-line="120" selection-start-column="33" selection-end-line="120" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1023,45 +1003,6 @@
         <state relative-caret-position="393">
           <caret line="143" column="89" lean-forward="false" selection-start-line="143" selection-start-column="89" selection-end-line="143" selection-end-column="89" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Content/magic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="653">
-          <caret line="117" column="29" lean-forward="false" selection-start-line="117" selection-start-column="29" selection-end-line="117" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Classes/ItemClass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="106" column="0" lean-forward="true" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
-          <folding>
-            <element signature="e#734#744#0" expanded="true" />
-            <element signature="e#7446#7590#0" expanded="false" />
-            <element signature="e#7632#8710#0" expanded="false" />
-            <element signature="e#8756#9675#0" expanded="false" />
-            <element signature="e#9707#10830#0" expanded="false" />
-            <element signature="e#10857#12002#0" expanded="false" />
-            <element signature="e#12037#14872#0" expanded="false" />
-            <element signature="e#14904#15370#0" expanded="false" />
-            <element signature="e#15413#15813#0" expanded="false" />
-            <element signature="e#15838#16347#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Classes/MagicClass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="764">
-          <caret line="141" column="42" lean-forward="false" selection-start-line="141" selection-start-column="42" selection-end-line="141" selection-end-column="42" />
-          <folding>
-            <element signature="e#734#744#0" expanded="true" />
-            <element signature="e#1271#1678#0" expanded="false" />
-            <element signature="e#9854#10987#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1075,51 +1016,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Content/units.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="317" column="16" lean-forward="true" selection-start-line="317" selection-start-column="16" selection-end-line="317" selection-end-column="16" />
-          <folding>
-            <element signature="e#3895#8973#0" expanded="false" />
-            <element signature="e#9056#10008#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Classes/UnitClass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="553">
-          <caret line="1297" column="22" lean-forward="false" selection-start-line="1297" selection-start-column="22" selection-end-line="1297" selection-end-column="22" />
-          <folding>
-            <element signature="e#734#747#0" expanded="true" />
-            <element signature="e#1137#1967#0" expanded="false" />
-            <element signature="e#5367#6741#0" expanded="false" />
-            <element signature="e#6775#10864#0" expanded="false" />
-            <element signature="e#10928#15783#0" expanded="false" />
-            <element signature="e#15820#16940#0" expanded="false" />
-            <element signature="e#17266#17554#0" expanded="false" />
-            <element signature="e#17714#17910#0" expanded="false" />
-            <element signature="e#21199#22070#0" expanded="false" />
-            <element signature="e#23599#44018#0" expanded="false" />
-            <element signature="e#23823#24317#0" expanded="false" />
-            <element signature="e#24354#24776#0" expanded="false" />
-            <element signature="e#24821#25749#0" expanded="false" />
-            <element signature="e#25787#26426#0" expanded="false" />
-            <element signature="e#35848#36508#0" expanded="false" />
-            <element signature="e#36545#37139#0" expanded="false" />
-            <element signature="e#37177#37831#0" expanded="false" />
-            <element signature="e#40637#41805#0" expanded="false" />
-            <element signature="e#42446#42860#0" expanded="false" />
-            <element signature="e#42977#43240#0" expanded="false" />
-            <element signature="e#44100#46875#0" expanded="false" />
-            <element signature="e#44429#44743#0" expanded="false" />
-            <element signature="e#44763#44894#0" expanded="false" />
-            <element signature="e#44950#45323#0" expanded="false" />
-            <element signature="e#45343#45473#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/Content/ascii_art.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
@@ -1128,162 +1024,320 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Content/npcs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="955" column="88" lean-forward="false" selection-start-line="955" selection-start-column="86" selection-end-line="955" selection-end-column="88" />
-          <folding>
-            <element signature="e#822#3745#0" expanded="false" />
-            <element signature="e#3827#4081#0" expanded="false" />
-            <element signature="e#4248#5004#0" expanded="false" />
-            <element signature="e#5774#6119#0" expanded="false" />
-            <element signature="e#6329#6503#0" expanded="false" />
-            <element signature="e#6542#7361#0" expanded="false" />
-            <element signature="e#7683#7802#0" expanded="false" />
-            <element signature="e#8073#8296#0" expanded="false" />
-            <element signature="e#8354#9980#0" expanded="false" />
-            <element signature="e#10019#10228#0" expanded="false" />
-            <element signature="e#10305#10430#0" expanded="false" />
-            <element signature="e#31033#31523#0" expanded="false" />
-            <element signature="e#31683#31903#0" expanded="false" />
-            <element signature="e#31949#32068#0" expanded="false" />
-            <element signature="e#32106#33022#0" expanded="false" />
-            <element signature="e#33064#33297#0" expanded="false" />
-            <element signature="e#33348#34400#0" expanded="false" />
-            <element signature="e#34453#34512#0" expanded="false" />
-            <element signature="e#34540#34920#0" expanded="false" />
-            <element signature="e#34948#35007#0" expanded="false" />
-            <element signature="e#35035#35179#0" expanded="false" />
-            <element signature="e#35207#35330#0" expanded="false" />
-            <element signature="e#35358#35478#0" expanded="false" />
-            <element signature="e#36098#37646#0" expanded="false" />
-            <element signature="e#37702#37952#0" expanded="false" />
-            <element signature="e#37988#38308#0" expanded="false" />
-            <element signature="e#38351#38571#0" expanded="false" />
-            <element signature="e#38616#38955#0" expanded="false" />
-            <element signature="e#39349#39606#0" expanded="false" />
-            <element signature="e#39631#39784#0" expanded="false" />
-            <element signature="e#39809#39918#0" expanded="false" />
-            <element signature="e#41925#42338#0" expanded="false" />
-            <element signature="e#42478#42730#0" expanded="false" />
-            <element signature="e#42881#43528#0" expanded="false" />
-            <element signature="e#43678#43925#0" expanded="false" />
-            <element signature="e#44084#44331#0" expanded="false" />
-            <element signature="e#44496#44634#0" expanded="false" />
-            <element signature="e#44793#44994#0" expanded="false" />
-            <element signature="e#45146#45368#0" expanded="false" />
-            <element signature="e#45536#46136#0" expanded="false" />
-            <element signature="e#46300#46460#0" expanded="false" />
-            <element signature="e#46615#47152#0" expanded="false" />
-            <element signature="e#47326#48619#0" expanded="false" />
-            <element signature="e#49694#49938#0" expanded="false" />
-            <element signature="e#49998#50110#0" expanded="false" />
-            <element signature="e#51769#52432#0" expanded="false" />
-            <element signature="e#52595#53085#0" expanded="false" />
-            <element signature="e#53238#53627#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/Classes/NPCClass.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="144" column="0" lean-forward="true" selection-start-line="144" selection-start-column="0" selection-end-line="144" selection-end-column="0" />
+        <state relative-caret-position="609">
+          <caret line="147" column="0" lean-forward="true" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
           <folding>
             <element signature="e#729#739#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Content/towns.py">
+    <entry file="file://$PROJECT_DIR$/Game Files/Classes/MagicClass.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="162" column="50" lean-forward="false" selection-start-line="162" selection-start-column="50" selection-end-line="162" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Classes/TownClass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="6" column="1" lean-forward="true" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+        <state relative-caret-position="25">
+          <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
           <folding>
-            <element signature="e#734#744#0" expanded="true" />
-            <element signature="e#1771#5303#0" expanded="false" />
-            <element signature="e#5412#6172#0" expanded="false" />
-            <element signature="e#6209#7776#0" expanded="false" />
-            <element signature="e#7826#10944#0" expanded="false" />
-            <element signature="e#10978#12614#0" expanded="false" />
-            <element signature="e#19604#20841#0" expanded="false" />
-            <element signature="e#20878#21737#0" expanded="false" />
-            <element signature="e#21758#23799#0" expanded="false" />
+            <element signature="e#1229#1636#0" expanded="false" />
+            <element signature="e#9812#10945#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Game Files/Content/tiles.py">
+    <entry file="file://$PROJECT_DIR$/Game Files/Scripts/inv_system.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="26" column="13" lean-forward="true" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+        <state relative-caret-position="516">
+          <caret line="793" column="26" lean-forward="true" selection-start-line="793" selection-start-column="26" selection-end-line="793" selection-end-column="26" />
           <folding>
-            <element signature="e#4305#7418#0" expanded="false" />
-            <element signature="e#7445#8899#0" expanded="false" />
-            <element signature="e#8926#11057#0" expanded="false" />
-            <element signature="e#11083#14287#0" expanded="false" />
-            <element signature="e#11456#12767#0" expanded="false" />
-            <element signature="e#14318#14436#0" expanded="false" />
-            <element signature="e#14455#16505#0" expanded="false" />
+            <element signature="e#732#742#0" expanded="true" />
+            <element signature="e#1127#2567#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/Scripts/battle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="143" column="45" lean-forward="true" selection-start-line="143" selection-start-column="45" selection-end-line="143" selection-end-column="45" />
+        <state relative-caret-position="206">
+          <caret line="445" column="35" lean-forward="false" selection-start-line="445" selection-start-column="35" selection-end-line="445" selection-end-column="35" />
           <folding>
             <element signature="e#734#744#0" expanded="true" />
-            <element signature="e#1179#4276#0" expanded="false" />
-            <element signature="e#7460#8058#0" expanded="false" />
-            <element signature="e#9679#10661#0" expanded="false" />
-            <element signature="e#10731#15774#0" expanded="false" />
-            <element signature="e#15809#16779#0" expanded="false" />
+            <element signature="e#1157#4254#0" expanded="false" />
+            <element signature="e#7438#8036#0" expanded="false" />
+            <element signature="e#9657#10639#0" expanded="false" />
+            <element signature="e#10709#15752#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Content/bosses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding>
+            <element signature="e#734#757#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Classes/ItemClass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="20" column="16" lean-forward="false" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+          <folding>
+            <element signature="e#7373#7517#0" expanded="false" />
+            <element signature="e#7559#8637#0" expanded="false" />
+            <element signature="e#8683#8873#0" expanded="false" />
+            <element signature="e#8905#9095#0" expanded="false" />
+            <element signature="e#9122#9311#0" expanded="false" />
+            <element signature="e#9346#9533#0" expanded="false" />
+            <element signature="e#9565#10031#0" expanded="false" />
+            <element signature="e#10074#10474#0" expanded="false" />
+            <element signature="e#10499#11008#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Content/items.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="16" column="11" lean-forward="true" selection-start-line="16" selection-start-column="11" selection-end-line="16" selection-end-column="11" />
+          <folding>
+            <element signature="e#734#757#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Content/magic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="e#734#758#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Content/npcs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="18" column="11" lean-forward="false" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
+          <folding>
+            <element signature="e#734#756#0" expanded="true" />
+            <element signature="e#866#3789#0" expanded="false" />
+            <element signature="e#3871#4125#0" expanded="false" />
+            <element signature="e#4292#5048#0" expanded="false" />
+            <element signature="e#5818#6163#0" expanded="false" />
+            <element signature="e#6373#6547#0" expanded="false" />
+            <element signature="e#6586#7405#0" expanded="false" />
+            <element signature="e#8117#8340#0" expanded="false" />
+            <element signature="e#8398#10024#0" expanded="false" />
+            <element signature="e#10063#10272#0" expanded="false" />
+            <element signature="e#10349#10474#0" expanded="false" />
+            <element signature="e#31075#31565#0" expanded="false" />
+            <element signature="e#31725#31945#0" expanded="false" />
+            <element signature="e#31991#32110#0" expanded="false" />
+            <element signature="e#32148#33064#0" expanded="false" />
+            <element signature="e#33106#33339#0" expanded="false" />
+            <element signature="e#33390#34442#0" expanded="false" />
+            <element signature="e#34495#34554#0" expanded="false" />
+            <element signature="e#34582#34962#0" expanded="false" />
+            <element signature="e#34990#35049#0" expanded="false" />
+            <element signature="e#35077#35221#0" expanded="false" />
+            <element signature="e#35249#35372#0" expanded="false" />
+            <element signature="e#35400#35520#0" expanded="false" />
+            <element signature="e#36140#37688#0" expanded="false" />
+            <element signature="e#37744#37994#0" expanded="false" />
+            <element signature="e#38030#38350#0" expanded="false" />
+            <element signature="e#38393#38613#0" expanded="false" />
+            <element signature="e#38658#38997#0" expanded="false" />
+            <element signature="e#39391#39648#0" expanded="false" />
+            <element signature="e#39851#39960#0" expanded="false" />
+            <element signature="e#41967#42380#0" expanded="false" />
+            <element signature="e#42520#42772#0" expanded="false" />
+            <element signature="e#42923#43570#0" expanded="false" />
+            <element signature="e#43720#43967#0" expanded="false" />
+            <element signature="e#44126#44373#0" expanded="false" />
+            <element signature="e#44538#44676#0" expanded="false" />
+            <element signature="e#44835#45036#0" expanded="false" />
+            <element signature="e#45188#45410#0" expanded="false" />
+            <element signature="e#45578#46178#0" expanded="false" />
+            <element signature="e#46342#46502#0" expanded="false" />
+            <element signature="e#46657#47194#0" expanded="false" />
+            <element signature="e#47368#48661#0" expanded="false" />
+            <element signature="e#49736#49980#0" expanded="false" />
+            <element signature="e#50040#50152#0" expanded="false" />
+            <element signature="e#51811#52474#0" expanded="false" />
+            <element signature="e#52637#53127#0" expanded="false" />
+            <element signature="e#53280#53669#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/PeasantsAscension.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="474" column="49" lean-forward="false" selection-start-line="474" selection-start-column="49" selection-end-line="474" selection-end-column="49" />
+          <folding>
+            <element signature="e#2104#2114#0" expanded="true" />
+            <element signature="e#5980#8996#0" expanded="false" />
+            <element signature="e#9028#9608#0" expanded="false" />
+            <element signature="e#9638#10124#0" expanded="false" />
+            <element signature="e#15164#17633#0" expanded="false" />
+            <element signature="e#23323#25113#0" expanded="false" />
+            <element signature="e#25142#25805#0" expanded="false" />
+            <element signature="e#25839#26188#0" expanded="false" />
+            <element signature="e#26207#26640#0" expanded="false" />
+            <element signature="e#26732#28033#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Scripts/text_scroll.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="21" column="22" lean-forward="false" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
+          <folding>
+            <element signature="e#706#717#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Content/tiles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="329" column="53" lean-forward="false" selection-start-line="329" selection-start-column="53" selection-end-line="329" selection-end-column="53" />
+          <folding>
+            <element signature="e#734#757#0" expanded="true" />
+            <element signature="e#4281#7394#0" expanded="false" />
+            <element signature="e#14294#14412#0" expanded="false" />
+            <element signature="e#14431#16481#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Classes/TownClass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="20" column="17" lean-forward="false" selection-start-line="20" selection-start-column="17" selection-end-line="20" selection-end-column="17" />
+          <folding>
+            <element signature="e#1722#5254#0" expanded="false" />
+            <element signature="e#5363#6123#0" expanded="false" />
+            <element signature="e#6160#7727#0" expanded="false" />
+            <element signature="e#7777#10895#0" expanded="false" />
+            <element signature="e#10929#12565#0" expanded="false" />
+            <element signature="e#19555#20792#0" expanded="false" />
+            <element signature="e#20829#21688#0" expanded="false" />
+            <element signature="e#21709#23750#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Content/units.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="e#734#757#0" expanded="true" />
+            <element signature="e#3907#8985#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Content/towns.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="19" column="31" lean-forward="true" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+          <folding>
+            <element signature="e#734#757#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Classes/BossClass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="628">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding>
+            <element signature="e#734#744#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Game Files/Classes/UnitClass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="33" column="0" lean-forward="true" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="e#734#747#0" expanded="true" />
+            <element signature="e#1091#1921#0" expanded="false" />
+            <element signature="e#5321#6695#0" expanded="false" />
+            <element signature="e#6729#10818#0" expanded="false" />
+            <element signature="e#10882#15737#0" expanded="false" />
+            <element signature="e#15774#16894#0" expanded="false" />
+            <element signature="e#17220#17508#0" expanded="false" />
+            <element signature="e#17668#17864#0" expanded="false" />
+            <element signature="e#21153#22024#0" expanded="false" />
+            <element signature="e#23777#24271#0" expanded="false" />
+            <element signature="e#24308#24730#0" expanded="false" />
+            <element signature="e#24775#25703#0" expanded="false" />
+            <element signature="e#25741#26380#0" expanded="false" />
+            <element signature="e#35748#36408#0" expanded="false" />
+            <element signature="e#36445#37039#0" expanded="false" />
+            <element signature="e#37077#37731#0" expanded="false" />
+            <element signature="e#40537#41705#0" expanded="false" />
+            <element signature="e#42346#42760#0" expanded="false" />
+            <element signature="e#42877#43140#0" expanded="false" />
+            <element signature="e#44329#44643#0" expanded="false" />
+            <element signature="e#44663#44794#0" expanded="false" />
+            <element signature="e#44850#45223#0" expanded="false" />
+            <element signature="e#45243#45373#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Game Files/Classes/AbilityClass.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="80" column="42" lean-forward="true" selection-start-line="80" selection-start-column="42" selection-end-line="80" selection-end-column="42" />
+        <state relative-caret-position="661">
+          <caret line="113" column="0" lean-forward="true" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#804#808#0" expanded="false" />
-            <element signature="e#838#842#0" expanded="false" />
-            <element signature="e#1121#1125#0" expanded="false" />
-            <element signature="e#1159#1163#0" expanded="false" />
-            <element signature="e#2026#2030#0" expanded="false" />
-            <element signature="e#2427#2431#0" expanded="false" />
-            <element signature="e#2469#2473#0" expanded="false" />
-            <element signature="e#2825#2829#0" expanded="false" />
-            <element signature="e#2862#2866#0" expanded="false" />
-            <element signature="e#3212#3216#0" expanded="false" />
-            <element signature="e#3251#3255#0" expanded="false" />
-            <element signature="e#3625#3629#0" expanded="false" />
-            <element signature="e#3663#3667#0" expanded="false" />
-            <element signature="e#4028#4032#0" expanded="false" />
-            <element signature="e#4069#4073#0" expanded="false" />
-            <element signature="e#4412#4416#0" expanded="false" />
-            <element signature="e#4445#4449#0" expanded="false" />
-            <element signature="e#5684#5688#0" expanded="false" />
-            <element signature="e#6015#6019#0" expanded="false" />
-            <element signature="e#6058#6062#0" expanded="false" />
-            <element signature="e#6370#6444#0" expanded="false" />
-            <element signature="e#6481#6485#0" expanded="false" />
-            <element signature="e#6778#6782#0" expanded="false" />
-            <element signature="e#6816#6820#0" expanded="false" />
-            <element signature="e#7148#7152#0" expanded="false" />
-            <element signature="e#7185#7189#0" expanded="false" />
+            <element signature="e#779#783#0" expanded="false" />
+            <element signature="e#813#817#0" expanded="false" />
+            <element signature="e#1096#1100#0" expanded="false" />
+            <element signature="e#1134#1138#0" expanded="false" />
+            <element signature="e#2051#2055#0" expanded="false" />
+            <element signature="e#2925#2929#0" expanded="false" />
+            <element signature="e#2967#2971#0" expanded="false" />
+            <element signature="e#3323#3327#0" expanded="false" />
+            <element signature="e#3360#3364#0" expanded="false" />
+            <element signature="e#3710#3714#0" expanded="false" />
+            <element signature="e#3749#3753#0" expanded="false" />
+            <element signature="e#4122#4126#0" expanded="false" />
+            <element signature="e#4160#4164#0" expanded="false" />
+            <element signature="e#4525#4529#0" expanded="false" />
+            <element signature="e#4566#4570#0" expanded="false" />
+            <element signature="e#4909#4913#0" expanded="false" />
+            <element signature="e#4942#4946#0" expanded="false" />
+            <element signature="e#6181#6185#0" expanded="false" />
+            <element signature="e#6512#6516#0" expanded="false" />
+            <element signature="e#6555#6559#0" expanded="false" />
+            <element signature="e#6867#6941#0" expanded="false" />
+            <element signature="e#6978#6982#0" expanded="false" />
+            <element signature="e#7275#7279#0" expanded="false" />
+            <element signature="e#7313#7317#0" expanded="false" />
+            <element signature="e#7645#7649#0" expanded="false" />
+            <element signature="e#7682#7686#0" expanded="false" />
           </folding>
         </state>
       </provider>

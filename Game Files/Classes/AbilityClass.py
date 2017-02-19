@@ -1,8 +1,6 @@
 import math
 import sys
-import copy
 
-import units
 import UnitClass
 import battle
 
@@ -69,18 +67,18 @@ def use_chakra_smash(user):
     # A 2.5x crit that lowers the target's armor
 
     main.smart_sleep(0.75)
-    dam_dealt = math.ceil(deal_damage(user, user.target, "physical")*2.5)
+    dam_dealt = math.ceil(UnitClass.deal_damage(user, user.target, "physical")*2.5)
     user.target.hp -= dam_dealt
 
-    print(f'The attack deals {dam_dealt} damage to the {monster.name}!')
+    print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
 
-    monster.dfns *= 0.9
-    monster.p_dfns *= 0.9
-    monster.m_dfns *= 0.9
+    user.target.dfns *= 0.9
+    user.target.p_dfns *= 0.9
+    user.target.m_dfns *= 0.9
 
-    monster.dfns = math.ceil(monster.dfns)
-    monster.p_dfns = math.ceil(monster.p_dfns)
-    monster.m_dfns = math.ceil(monster.m_dfns)
+    user.target.dfns = math.ceil(user.target.dfns)
+    user.target.p_dfns = math.ceil(user.target.p_dfns)
+    user.target.m_dfns = math.ceil(user.target.m_dfns)
 
     return True
 
@@ -95,6 +93,23 @@ by [5 + Constitution]. The armor reduction lasts indefinitely and stacks
 with multiple uses.""", 5)
 chakra_smash.use_ability = use_chakra_smash
 chakra_smash.after_turn = after_chakra_smash
+
+
+def use_pressure_point(user):
+    pass
+
+
+def after_pressure_point(user):
+    pass
+
+
+pressure_point = Ability("Pressure Point", """\
+The user identifies the target's weak spots, causing all attacks on the
+target enemy to be critical strikes for the next two turns. Also increases
+max HP by [1 + Constitution]%. Does not increase current HP. Stacks with
+multiple uses.""", 5)
+pressure_point.use_ability = use_pressure_point
+pressure_point.after_turn = after_pressure_point
 
 
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
@@ -140,7 +155,7 @@ def after_skill_shot(user):
 
 skill_shot = Ability("Skill Shot", """\
 The user launches a splash-damage attack at the enemy team equal to the sum of
-their levels. If the user is higher level than the highest-levelled opponenet,
+their levels. If the user is higher level than the highest-levelled opponent,
 Skill Shot does [50 + Intelligence]% more damage.""", 2)
 skill_shot.use_ability = use_skill_shot
 skill_shot.after_turn = after_skill_shot

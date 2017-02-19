@@ -14,6 +14,11 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 from BossClass import *
+import npcs
+import sounds
+import units
+import battle
+import json
 
 if __name__ == "__main__":
     sys.exit()
@@ -96,8 +101,8 @@ terr_tarant = Boss('Terrible Tarantuloid',
 
 
 def terrtar_ud():
-    npcs.krystal_phrase_2.active = False
-    npcs.krystal_phrase_3.active = True
+    npcs.krystin_phrase_2.active = False
+    npcs.krystin_phrase_3.active = True
     npcs.kyle_phrase_2.active = False
     npcs.kyle_phrase_3.active = True
     npcs.alden_phrase_1.active = False

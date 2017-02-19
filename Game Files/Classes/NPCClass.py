@@ -14,13 +14,7 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import json
-import copy
-import random
 
-import bosses
-import inv_system
-import items
 import units
 
 if __name__ == "__main__":
@@ -157,3 +151,9 @@ class Quest(Conversation):
         units.player.level_up()
 
         self.active = False
+
+    def upon_starting(self):
+        pass
+
+    def upon_completing(self):
+        pass

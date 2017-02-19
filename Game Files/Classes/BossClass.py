@@ -15,15 +15,9 @@
 
 import sys
 import copy
-import json
-import random
 
-import npcs
-import units
-import battle
-import items as i_items
+import UnitClass
 import inv_system
-import sounds
 
 if __name__ == "__main__":
     sys.exit()
@@ -32,11 +26,11 @@ else:
     main = sys.modules["__main__"]
 
 
-class Boss(units.Monster):
+class Boss(UnitClass.Monster):
     def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad, lvl, items, gold,
                  experience, attk_msg, active=True, element='none'):
 
-        units.Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+        UnitClass.Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
         self.items = items
         self.active = active
         self.lvl = lvl

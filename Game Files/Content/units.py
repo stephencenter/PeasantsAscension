@@ -14,6 +14,7 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 from UnitClass import *
+import json
 
 player = ''
 monster = ''

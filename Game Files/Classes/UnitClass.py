@@ -14,7 +14,6 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import random
-import json
 import copy
 import sys
 import pygame
@@ -27,10 +26,8 @@ import battle
 import sounds
 import magic
 import ascii_art
-import bosses
 import units
 import MagicClass
-import AbilityClass
 
 if __name__ == "__main__":
     sys.exit()
@@ -928,9 +925,8 @@ class Monster(Unit):
         self.name = ' '.join([modifier, self.name]) if modifier else self.name
 
         # Give the monster a set of items to drop if RNGsus wills it
-        if not isinstance(self, bosses.Boss):
-            if random.randint(0, 4) == 0:  # 20% chance
-                self.items = random.choice(items.monster_drop_list[self.monster_name])
+        if random.randint(0, 4) == 0:  # 20% chance
+            self.items = random.choice(items.monster_drop_list[self.monster_name])
 
     def melee_stats(self):
         # Set stats for melee-class monsters

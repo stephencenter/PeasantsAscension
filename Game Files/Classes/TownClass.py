@@ -14,14 +14,11 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import time
 import copy
 import random
 import pygame
-import math
 
 import inv_system
-import npcs
 import items
 import sounds
 import ascii_art
@@ -34,7 +31,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-pygame.mixer.pre_init(frequency=44100, buffer=1024)
+pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 

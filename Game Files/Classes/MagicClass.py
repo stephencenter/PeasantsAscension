@@ -14,16 +14,13 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import json
 import random
-import time
 import math
 import pygame
 
 import UnitClass
 import units
 import battle
-import inv_system
 import sounds
 import ascii_art
 import magic

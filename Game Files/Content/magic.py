@@ -14,6 +14,7 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 from MagicClass import *
+import json
 
 # -- Damaging Spells -- #
 # Neutral

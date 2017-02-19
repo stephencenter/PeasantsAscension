@@ -15,9 +15,7 @@
 
 import sys
 import random
-import time
 import math
-import re
 import pygame
 from copy import copy as _c
 
@@ -544,7 +542,7 @@ def bat_stats():
               units.xoann.max_hp, units.xoann.mp,
               units.xoann.max_mp, units.xoann.lvl,
               units.xoann.status_ail.title(),
-              pad1=' '*(first_padding - len(xoann.name)),
+              pad1=' '*(first_padding - len(units.xoann.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.xoann.hp, units.xoann.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)))))
 

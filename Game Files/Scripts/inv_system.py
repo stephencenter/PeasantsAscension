@@ -15,14 +15,10 @@
 
 import sys
 import json
-import time
-import math
-import random
 from copy import copy as _c
 
 import npcs
 import ascii_art
-import towns
 import units
 import items
 import ItemClass
@@ -486,6 +482,7 @@ def manage_equipped_2(target):
             break
 
 
+# NEEDS REWORDING
 def manage_equipped_3(key, selected, p_equip):
     global equipped
 

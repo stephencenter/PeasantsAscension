@@ -14,6 +14,9 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 from NPCClass import *
+import bosses
+import inv_system
+import json
 
 # -- Name: Solou -- Town: Nearton
 solou_phrase_1 = Conversation(["H-hello! My name is Solou, wizard in training!",
@@ -128,11 +131,11 @@ joseph_quest_1 = Quest(["Ah, Solou! Long time no see! I see you've taken up adve
 
 
 def joseph_q1_us():
-    global joseph_phrase_2
+    global joseph_phrase_3
     global joseph_phrase_1
 
     joseph_phrase_1.active = False
-    jospeh_phrase_3.active = True
+    joseph_phrase_3.active = True
 
 joseph = NPC('Joseph', [joseph_phrase_1, joseph_quest_1, joseph_phrase_2, joseph_phrase_3], "Mayor of Overshire")
 
@@ -500,7 +503,7 @@ def alden_q1_us():
     krystin_phrase_2.active = True
     frederick_phrase_1.active = False
     frederick_phrase_2.active = True
-    bosses.terr_tarrant.active = True
+    bosses.terr_tarant.active = True
 
 
 def alden_q1_uc():
@@ -568,7 +571,7 @@ def polmor_q1_uc():
     global serena_phrase_3
     global polmor_phrase_2
 
-    ser_pol_phrase_3.active = True
+    serena_phrase_3.active = True
     serena_phrase_2.active = False
     polmor_phrase_2.active = False
     polmor_quest_1.active = False
@@ -1117,6 +1120,3 @@ def deserialize_dialogue(path):
                     c.active, c.started, c.finished = j_log[key][0], j_log[key][1], j_log[key][2]
                 else:
                     c.active = j_log[key][0]
-
-
-import towns

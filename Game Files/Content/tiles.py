@@ -17,8 +17,6 @@ from TileClass import *
 
 import sys
 import random
-import time
-import math
 import pygame
 
 import battle

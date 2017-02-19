@@ -15,16 +15,10 @@
 
 import sys
 import copy
-import random
-import math
-import json
-import time
-import re
 
 import inv_system
 import sounds
 import ascii_art
-import tiles
 import units
 
 if __name__ == "__main__":
@@ -249,167 +243,32 @@ class MagicCompass(Item):
     def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Compass'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    @staticmethod
-    def use_item():
-        if main.party_info['reg'] == 'Aethus':
-            print('-'*25)
-            print('Something about this place makes your compass needle spin wildly.')
-            print('-'*25)
-            return
-
-        from towns import town_list, search_towns
-
-        pos_towns = [tuple([town.name, round(math.hypot(town.x - main.party_info['x'],
-                                                        town.y - main.party_info['y']))])
-                     for town in town_list]
-        distance = min(pos_towns, key=lambda x: x[1])
-
-        print('-'*25)
-        print(f'The closest town to your party is {distance[0]} at ~{distance[1]} degrees away.')
-
-        if not towns.search_towns(enter=False):
-            print('-'*25)
+    def use_item(self):
+        pass
 
 
 class DiviningRod(Item):
     def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Div Rod'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    @staticmethod
-    def use_item():
-        if main.party_info['reg'] == 'Aethus':
-            print('-'*25)
-            print("Your divining rod doesn't seem to be working properly up here.")
-            print('-'*25)
-            return
-
-        from towns import search_towns
-        pos_gems = [tuple([gem.name, round(math.hypot(gem.posx - main.party_info['x'],
-                                                      gem.posy - main.party_info['y']))])
-                    for gem in valuable_list if not gem.acquired]
-
-        if not pos_gems:
-            return print('Your party is unable to detect any gems.')
-
-        distance = min(pos_gems, key=lambda x: x[1])
-
-        print('-'*25)
-        print('The closest gem to your party is {0} {1} at ~{2} degrees away.'.format(
-            'an' if any([distance[0].startswith(x) for x in 'AEIOU'])
-            else 'a', distance[0], distance[1]))
-
-        if not search_towns(enter=False):
-            print('-'*25)
+    def use_item(self):
+        pass
 
 
 class Shovel(Item):
     def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Shovel'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    @staticmethod
-    def use_item():
-        if main.party_info['reg'] == 'Aethus':
-            print('-'*25)
-            print('The soil up here is much too tough to be broken up using a shovel.')
-            print('-'*25)
-            return
-
-        from towns import search_towns
-        print('-'*25)
-        print('Your party begins to search using your shovel...')
-        main.smart_sleep(1)
-
-        for gem in valuable_list:
-            if (main.party_info['x'], main.party_info['y']) == (gem.posx, gem.posy) \
-                    and not gem.acquired:
-
-                gem.acquired = True
-                print('Using your shovel, your party manages to uncover a {0}!'.format(gem.name))
-                inv_system.inventory['misc'].append(gem)
-
-                if not search_towns(enter=False):
-                    print('-'*25)
-
-                return
-
-        print('Your party was unable to uncover anything.')
-        if not search_towns(enter=False):
-            print('-'*25)
+    def use_item(self):
+        pass
 
 
 class TownTeleporter(Item):
     def __init__(self, name, desc, buy, sell, cat='tools', imp=False, ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
-    @staticmethod
-    def use_item():
-        from towns import town_list, aethus_towns, search_towns
-
-        print('-'*25)
-
-        if not main.party_info['is_aethus']:
-            town_list = town_list
-
-        else:
-            town_list = aethus_towns
-
-        available = []
-
-        for town in town_list:
-            for visited in main.party_info['visited_towns']:
-                if town.name == visited:
-                    available.append((town.name,
-                                      town.x, "\u00b0E" if town.x >= 0 else "\u00b0W",
-                                      town.y, "\u00b0N" if town.y >= 1 else "\u00b0S"))
-
-        if not available:
-            print('Your party has not visited any towns yet, thus the map fails to respond.')
-            return
-
-        available = sorted(available, key=lambda x: x[0])
-
-        print("Available Towns:\n      ", sep='', end='')
-        print("\n      ".join(["[{0}] {1}: {2}, {3}".format(num + 1, town[0],
-                                                            ''.join([str(town[3]), town[4]]),
-                                                            ''.join([str(town[1]), town[2]]))
-                              for num, town in enumerate(available)]))
-        while True:
-            chosen = input('Input [#] (or type "exit"): ')
-
-            try:
-                chosen = int(chosen) - 1
-
-            except ValueError:
-                if chosen.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                    return
-
-            try:
-                chosen_town = available[chosen]
-            except IndexError:
-                continue
-
-            while True:
-                y_n = input('Fast travel to {0}, located at {1}{2}, {3}{4}? | Yes or No: '.format(
-                    chosen_town[0], chosen_town[3], chosen_town[4], chosen_town[1], chosen_town[2]
-                ))
-
-                if y_n.lower().startswith('y'):
-                    print('You wave your hand over the map and then blow into it, and you suddenly')
-                    print('feel a rush of air around you. You go unconscious for a few seconds and')
-                    print('upon waking find yourself exactly where you intended to go.')
-                    input('\nPress enter/return ')
-
-                    main.party_info['x'] = chosen_town[1]
-                    main.party_info['y'] = chosen_town[3]
-                    main.party_info['h'] = chosen_town[2]
-                    main.party_info['v'] = chosen_town[4]
-
-                    tiles.check_region()
-                    search_towns()
-                    return
-
-                elif y_n.lower().startswith('n'):
-                    break
+    def use_item(self):
+        pass
 
 
 class LockpickKit(Item):

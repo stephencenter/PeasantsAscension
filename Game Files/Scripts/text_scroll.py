@@ -15,7 +15,6 @@
 
 import time
 import sys
-import random
 import msvcrt
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!

@@ -38,18 +38,15 @@
 
 import sys
 import os
-import random
 import math
 import time
 import json
-import copy
 import configparser
 import ctypes
 import re
 import logging
 import msvcrt
 import traceback
-import stat
 import pygame
 
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Content")
@@ -59,14 +56,12 @@ sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game 
 # noinspection PyPep8
 import tiles
 import inv_system
-import battle
 import magic
 import bosses
 import items
 import sounds
 import towns
 import units
-import ascii_art
 
 # Log everything and send it to stderr.
 logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)

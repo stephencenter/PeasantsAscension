@@ -14,6 +14,7 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 from TownClass import *
+import npcs
 
 # OVERWORLD TOWNS
 nearton_h1_c1 = Chest([20], 1, "N-H1-C1")
@@ -231,6 +232,7 @@ def search_towns(enter=True):
 
                     else:
                         y_n = input(f'{town.name} is nearby. Do you want to visit it? | Yes or No: ')
+
                 else:
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
                         y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
