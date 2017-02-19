@@ -16,11 +16,12 @@ else:
 # Abilites are similar to magic, except they are tied to classes and are level-independent. They also
 # cost Action Points to use instead of Mana, and tend to have much more specific functions.
 class Ability:
-    def __init__(self, name, desc, ap_cost, duration=0):
+    def __init__(self, name, desc, ap_cost, duration=0, priority=0):
         self.name = name
         self.desc = desc
         self.ap_cost = ap_cost
-        self.duration = 0
+        self.duration = duration
+        self.priortiy = priority
 
     def use_ability(self, user):
         pass
