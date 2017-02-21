@@ -270,10 +270,7 @@ def pick_action(cat, item):
 
     # Loop while the item is in the inventory
     while item in inventory[cat]:
-        if (isinstance(item, ItemClass.Weapon)
-            or isinstance(item, ItemClass.Armor)
-                or isinstance(item, ItemClass.Accessory)):
-
+        if any([isinstance(item, class_) for class_ in [ItemClass.Weapon, ItemClass.Armor, ItemClass.Accessory]]):
             # You equip weapons/armor/accessories
             use_equip = 'Equip'
 
@@ -282,53 +279,21 @@ def pick_action(cat, item):
             use_equip = 'Use'
 
         print('-'*25)
-        action = input("""What do you want to do with your {0}?
-      [1] {1}
+        action = input(f"""What should your party do with the {item}?
+      [1] {use_equip}
       [2] Read Description
       [3] Drop
-Input [#] (or type "back"): """.format(str(item), use_equip))
+Input [#] (or type "back"): """)
 
         if action == '1':
-            if any([
-                isinstance(item, ItemClass.Accessory),
-                isinstance(item, ItemClass.Armor),
-                isinstance(item, ItemClass.Consumable),
-                isinstance(item, ItemClass.Weapon),
-                isinstance(item, ItemClass.StatusPotion)
-            ]):
-                target_options = [x for x in [
-                    units.player,
-                    units.solou,
-                    units.xoann,
-                    units.adorine,
-                    units.ran_af,
-                    units.parsto,
-                    units.chyme] if x.enabled
-                ]
+            if any([isinstance(item, class_) for class_ in [ItemClass.Accessory,
+                                                            ItemClass.Armor,
+                                                            ItemClass.Consumable,
+                                                            ItemClass.Weapon,
+                                                            ItemClass.StatusPotion]]):
 
-                if len(target_options) == 1:
-                    target = units.player
-
-                else:
-                    print('-'*25)
-                    print("Who should {0} the {1}?".format(use_equip.lower(), item.name))
-                    print("     ", "\n      ".join([f"[{int(x) + 1}] {y.name}" for x, y in enumerate(target_options)]))
-
-                    while True:
-                        target = input('Input [#] (or type "back"): ').lower()
-
-                        try:
-                            target = target_options[int(target) - 1]
-
-                        except (ValueError, IndexError):
-                            if target in ['e', 'exit', 'x', 'b', 'back']:
-                                break
-
-                            continue
-
-                        break
-
-                item.use_item(target)
+                units.player.choose_target(f"Who should {use_equip} the {item.name}?", ally=True, enemy=False)
+                item.use_item(units.player.target)
 
                 if item not in inventory[cat]:
                     return
@@ -353,15 +318,15 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
             print('-'*25)
 
             if item.imp:
-                print('You cannot dispose of essential items.')
+                print('Essential Items cannot be thrown away.')
                 input("\nPress enter/return ")
 
             else:
                 while True:
-                    y_n = input(f'Are you sure you want to get rid of this {str(item)}? | Yes or No: ').lower()
+                    y_n = input(f'Are you sure your party should get rid of the {item}? | Yes or No: ').lower()
 
                     if y_n.startswith('y'):
-                        print(f'Your party tosses the {str(item)} aside and continues on their journey.')
+                        print(f'Your party tosses the {item} aside and continues on their journey.')
                         input("\nPress enter/return ")
 
                         inventory[cat].remove(item)
@@ -370,7 +335,7 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 
                     elif y_n.startswith('n'):
                         print('-'*25)
-                        print(f'Your party decide to keep the {str(item)} with them.')
+                        print(f'Your party decide to keep the {item} with them.')
                         input("\nPress enter/return ")
 
                         break
@@ -382,44 +347,8 @@ Input [#] (or type "back"): """.format(str(item), use_equip))
 def manage_equipped():
     print('-'*25)
 
-    while True:
-        target_options = [x for x in [units.player,
-                                      units.solou,
-                                      units.xoann,
-                                      units.adorine,
-                                      units.ran_af,
-                                      units.parsto,
-                                      units.chyme] if x.enabled]
-
-        if len(target_options) == 1:
-            target = units.player
-
-        else:
-            print("Select Character: ")
-
-            for num, character in enumerate(target_options):
-                print("     ", "\n      ".join([f"[{int(num) + 1}] {character.name}"]))
-
-            while True:
-                target = input('Input [#] (or type "exit"): ')
-
-                try:
-                    target = target_options[int(target) - 1]
-
-                except (IndexError, ValueError):
-                    if target in ['e', 'x', 'exit', 'b', 'back']:
-                        print('-'*25)
-
-                        return
-
-                    continue
-
-                break
-
-        manage_equipped_2(target)
-
-        if len(target_options) == 1:
-            return
+    units.player.choose_target("Choose party member to view equipment for:", ally=True, enemy=False)
+    manage_equipped_2(units.player.target)
 
 
 def manage_equipped_2(target):
@@ -461,7 +390,7 @@ def manage_equipped_2(target):
 
             if selected == '(None)':
                 print('-' * 25)
-                print("You don't have anything equipped in that slot.")
+                print(f"{target.name} doesn't have anything equipped in that slot.")
                 input("\nPress enter/return ")
 
                 break
@@ -476,18 +405,18 @@ def manage_equipped_2(target):
                 key = selected.part
 
             print('-' * 25)
-            manage_equipped_3(key, selected, p_equip)
+            manage_equipped_3(key, selected, p_equip, target)
             print('-' * 25)
 
             break
 
 
 # NEEDS REWORDING
-def manage_equipped_3(key, selected, p_equip):
+def manage_equipped_3(key, selected, p_equip, target):
     global equipped
 
     while True:
-        print(f"""What do you want to do with your {str(selected)}?
+        print(f"""What should {target.name} do with their {selected}?
       [1] Unequip
       [2] Read Description""")
 
@@ -504,7 +433,7 @@ def manage_equipped_3(key, selected, p_equip):
                     break
 
                 print('-' * 25)
-                print(f'You unequip the {selected.name}.')
+                print(f'{target.name} unequips the {selected.name}.')
                 input("\nPress enter/return ")
 
                 if isinstance(selected, ItemClass.Weapon):
@@ -521,7 +450,7 @@ def manage_equipped_3(key, selected, p_equip):
                     if isinstance(selected, ItemClass.ElementAccessory):
                         target.element = 'none'
 
-                        print('You are no longer imbued with the {0} element.'.format(selected.element))
+                        print(f'{target.name} is no longer imbued with the {selected.element} element.')
                         input("\nPress enter/return ")
 
                     inventory[selected.cat].append(p_equip[key])
@@ -613,8 +542,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
     print(item.desc)
     print('-'*25)
     while True:
-        y_n = input('Do you wish to sell this {0} for {1} GP? | Yes or No: '.format(item.name, item.sell))
-        y_n = y_n.lower()
+        y_n = input('Should your party sell the {item.name} for {item.sell} GP? | Yes or No: ').lower()
 
         if y_n.startswith('y'):
             for num, it in enumerate(inventory[cat]):
@@ -623,8 +551,9 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
                     inventory[cat].remove(it)
                     main.party_info['gp'] += item.sell
 
-                    print('Your party hands the shopkeeper their {0} and receives {1} GP.'.format(item.name, item.sell))
+                    print('Your party hands the shopkeeper their {item.name} and receives {item.sell} GP.')
                     input('\nPress enter/return ')
+
                     return
 
         elif y_n.startswith('n'):

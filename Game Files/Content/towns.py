@@ -228,17 +228,17 @@ def search_towns(enter=True):
             while True:
                 if isinstance(town, Tavern):
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
-                        y_n = input("How convenient, a tavern is nearby! Do you wish to investigate? | Yes or No: ")
+                        y_n = input("How convenient, a tavern is nearby! Should your party investigate? | Yes or No: ")
 
                     else:
-                        y_n = input(f'{town.name} is nearby. Do you want to visit it? | Yes or No: ')
+                        y_n = input(f'{town.name} is nearby. Should your party give it a visit? | Yes or No: ')
 
                 else:
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
-                        y_n = input('There is a town nearby. Do you wish to investigate? | Yes or No: ')
+                        y_n = input('There is a town nearby. Should your party investigate? | Yes or No: ')
 
                     else:
-                        y_n = input(f'The town of {town.name} is nearby. Do you want to visit it? | Yes or No: ')
+                        y_n = input(f'{town.name} is nearby. Should your party give it a visit? | Yes or No: ')
 
                 y_n = y_n.lower()
 

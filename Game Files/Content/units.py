@@ -107,6 +107,8 @@ def create_player():
         player.attk += 3
         player.spd -= 1
         player.evad -= 1
+        magic.spellbook['player']['Healing'].append(magic.min_heal)
+        magic.spellbook['player']['Damaging'].append(magic.purify)
         inv_system.equipped['player']['weapon'] = copy.copy(items.rbr_mlt)
 
     player.hp = copy.copy(player.max_hp)

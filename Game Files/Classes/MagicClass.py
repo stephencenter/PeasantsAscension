@@ -207,17 +207,17 @@ def pick_cat(user, is_battle=True):
                         user.c_spell = spell
 
                         if isinstance(spell, Healing) or isinstance(spell, Buff):
-                            user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                            user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
 
                             return True
 
                         else:
-                            user.choose_target(f"cast {spell.name} on")
+                            user.choose_target(f"Who should {user.name} cast {spell.name} on?")
 
                             break
 
                     else:
-                        user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                        user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
                         spell.use_magic(user, is_battle)
 
                         break
@@ -225,6 +225,7 @@ def pick_cat(user, is_battle=True):
                 else:
                     print('-'*25)
                     print(f'{user.name} has no previously used spells!')
+                    input("\nPress enter/return ")
                     print('-'*25)
 
                     break
@@ -242,7 +243,7 @@ def pick_cat(user, is_battle=True):
 
             if not magic.spellbook[inv_name][cat]:
                 print('-'*25)
-                print('You do not yet have any spells in the {0} category.'.format(cat))
+                print(f'You do not yet have any spells in the {cat} category.')
                 print('-'*25)
                 continue
 
@@ -288,17 +289,17 @@ def pick_spell(cat, user, is_battle):
                 user.c_spell = spell
 
                 if isinstance(spell, Healing) or isinstance(spell, Buff):
-                    user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                    user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
 
                     return True
 
                 else:
-                    user.choose_target(f"cast {spell.name} on")
+                    user.choose_target(f"Who should {user.name} cast {spell.name} on?")
 
-                    break
+                    return True
 
             else:
-                user.choose_target(f"cast {spell.name} on", ally=True, enemy=False)
+                user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
                 spell.use_magic(user, is_battle)
 
                 break

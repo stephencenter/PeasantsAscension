@@ -544,7 +544,7 @@ Armor:
             # Standard Attack
             if self.move in ['1', 'q']:
                 self.move = '1'
-                self.choose_target("Attack")
+                self.choose_target(f"Who should {user.name} attack?")
 
             # Use Magic
             elif self.move in ['2', 'w']:
@@ -606,7 +606,7 @@ Armor:
 
             return
 
-    def choose_target(self, action_name, ally=False, enemy=True):
+    def choose_target(self, action_desc, ally=False, enemy=True):
         pcu_list = [x for x in [units.player,
                                 units.solou,
                                 units.xoann,
@@ -635,7 +635,7 @@ Armor:
             this_list = pcu_list + [x for x in battle.m_list if x.hp > 0]
 
         print('-'*25)
-        print(f"Who should {self.name} {action_name}?")
+        print(action_desc)
 
         for x, y in enumerate(this_list):
             print(f"      [{x + 1}] {y.name}")
@@ -650,6 +650,8 @@ Armor:
                 continue
 
             self.target = chosen
+
+            return
 
 
 class Monster(Unit):
