@@ -511,7 +511,7 @@ class Town:
                             cat = 'armor'
                             vis_cat = 'Armor'
                         elif cat == '2':
-                            cat = 'consum'
+                            cat = 'consumables'
                             vis_cat = 'Consumables'
                         elif cat == '3':
                             cat = 'weapons'

@@ -29,7 +29,7 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-inventory = {'q_items': [], 'consum': [_c(items.s_potion), _c(items.s_elixir)], 'coord': [],
+inventory = {'q_items': [], 'consumables': [_c(items.s_potion), _c(items.s_elixir)], 'coord': [],
              'weapons': [], 'armor': [], 'tools': [], 'misc': [], 'access': []}
 
 equipped = {
@@ -122,7 +122,7 @@ def pick_category():
                 cat = 'access'
                 vis_cat = 'Accessories'
             elif cat == '4':
-                cat = 'consum'
+                cat = 'consumables'
                 vis_cat = 'Consumables'
             elif cat == '5':
                 cat = 'tools'
@@ -639,7 +639,7 @@ def deserialize_inv(path):
         norm_inv[category] = []
 
         for item in j_inventory[category]:
-            if category == 'consum':
+            if category == 'consumables':
                 if 'Potion of ' in item['name']:
                     x = ItemClass.StatusPotion('', '', '', '', '')
 

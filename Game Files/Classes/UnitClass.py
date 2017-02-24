@@ -428,7 +428,7 @@ Input letter: """)
 
         print(f"""-{self.name}'s Stats-
 Level: {self.lvl} | Class: {self.class_.title()} | Element: {self.element.title()}
-HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Status Ailment: {self.status_ail.title()}
+HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Status Ailment: {self.status_ail.upper()}
 Attack: {self.attk} | M. Attack: {self.m_attk} | P. Attack {self.p_attk}
 Defense: {self.dfns} | M. Defense: {self.m_dfns} | P. Defense {self.p_dfns}
 Speed: {self.spd} | Evasion: {self.evad}
@@ -476,31 +476,31 @@ Armor:
         if self.move == '1':
             print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
 
-            if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
+            if inv_system.equipped[inv_name]['weapon'].type_ == 'melee':
                 sounds.sword_slash.play()
-                print(f'{self.name} fiercely attacks the {units.monster.name} using their {player_weapon}...')
+                print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon}...')
 
             else:
                 sounds.aim_weapon.play()
-                print(f'{self.name} aims carefully at the {units.monster.name} using their {player_weapon}...')
+                print(f'{self.name} aims carefully at the {self.target.name} using their {player_weapon}...')
 
             main.smart_sleep(0.75)
 
-            if inv_system.equipped[inv_name]['weapon'].type_ in ['melee', 'magic']:
-                dam_dealt = deal_damage(self, units.monster, "physical")
+            if inv_system.equipped[inv_name]['weapon'].type_ == 'melee':
+                dam_dealt = deal_damage(self, self.target, "physical")
 
             else:
-                dam_dealt = deal_damage(self, units.monster, "piercing")
+                dam_dealt = deal_damage(self, self.target, "piercing")
 
             # Check for attack accuracy
-            if random.randint(1, 512) in range(units.monster.evad, 512):
-                print(f"{self.name}'s attack connects with the {units.monster.name}, dealing {dam_dealt} damage!")
+            if random.randint(1, 512) in range(self.target.evad, 512):
+                print(f"{self.name}'s attack connects with the {self.target.name}, dealing {dam_dealt} damage!")
 
                 sounds.enemy_hit.play()
-                units.monster.hp -= dam_dealt
+                self.target.hp -= dam_dealt
 
             else:
-                print(f"The {units.monster.name} narrowly avoids {self.name}'s attack!")
+                print(f"The {self.target.name} narrowly avoids {self.name}'s attack!")
                 sounds.attack_miss.play()
 
         if self.move == '2':
@@ -544,7 +544,7 @@ Armor:
             # Standard Attack
             if self.move in ['1', 'q']:
                 self.move = '1'
-                self.choose_target(f"Who should {user.name} attack?")
+                self.choose_target(f"Who should {self.name} attack?")
 
             # Use Magic
             elif self.move in ['2', 'w']:
@@ -573,7 +573,7 @@ Armor:
             elif self.move in ['4', 'r']:
                 print('-'*25)
 
-                if not inv_system.inventory['consum']:
+                if not inv_system.inventory['consumables']:
                     print('Your party has no battle-allowed items - the consumable category is empty!')
                     print("\nPress enter/return ")
                     print(self.battle_options.format(self.name))
@@ -606,24 +606,26 @@ Armor:
 
             return
 
-    def choose_target(self, action_desc, ally=False, enemy=True):
+    def choose_target(self, action_desc, ally=False, enemy=True, allow_dead=False):
         pcu_list = [x for x in [units.player,
                                 units.solou,
                                 units.xoann,
                                 units.chyme,
                                 units.ran_af,
                                 units.adorine,
-                                units.parsto] if x.enabled]
+                                units.parsto] if x.enabled and (True if allow_dead and 'dead' else
+                                                                False if not allow_dead and 'dead'
+                                                                else True)]
 
         if enemy and not ally:
-            if len([x for x in battle.m_list if x.hp > 0]) == 1:
-                self.target = [x for x in battle.m_list if x.hp > 0][0]
+            if len([x for x in battle.m_list if x.status_ail != 'dead']) == 1:
+                self.target = [x for x in battle.m_list if x.status_ail != 'dead'][0]
 
                 return
 
-            this_list = [x for x in battle.m_list if x.hp > 0]
+            this_list = [x for x in battle.m_list if x.status_ail != 'dead']
 
-        if ally and not enemy:
+        elif ally and not enemy:
             if len(pcu_list) == 1:
                 self.target = pcu_list[0]
 
@@ -632,7 +634,10 @@ Armor:
             this_list = pcu_list
 
         elif ally and enemy:
-            this_list = pcu_list + [x for x in battle.m_list if x.hp > 0]
+            this_list = pcu_list + [x for x in battle.m_list if x.status_ail != 'dead']
+
+        else:
+            raise Exception('Incorrect arguments - at least one of "ally" or "enemy" must be true.')
 
         print('-'*25)
         print(action_desc)
@@ -644,12 +649,10 @@ Armor:
             chosen = input("Input [#]: ").lower()
 
             try:
-                chosen = this_list[int(chosen) - 1]
+                self.target = this_list[int(chosen) - 1]
 
             except (ValueError, IndexError):
                 continue
-
-            self.target = chosen
 
             return
 
@@ -1204,9 +1207,9 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
         m_attack = battle.temp_stats[attacker.name]['m_attk']
 
     else:
-        attack = units.monster.attk
-        p_attack = units.monster.p_attk
-        m_attack = units.monster.m_attk
+        attack = attacker.attk
+        p_attack = attacker.p_attk
+        m_attack = attacker.m_attk
 
         weapon_dmg = 0
 
@@ -1219,9 +1222,9 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
         m_defense = battle.temp_stats[target.name]['m_dfns']
 
     else:
-        defense = units.monster.dfns
-        p_defense = units.monster.p_dfns
-        m_defense = units.monster.p_attk
+        defense = target.dfns
+        p_defense = target.p_dfns
+        m_defense = target.p_attk
 
         resist = 0
 

@@ -143,8 +143,13 @@ def battle_system(is_boss=False, ambush=False):
                                 units.adorine,
                                 units.parsto] if x.enabled]
 
-    m_list = random.sample([units.monster_2, units.monster_3], random.randint(0, 2))
+    # Add monsters to the battle.
+    m_list = list()
     m_list.append(units.monster)
+    if random.randint(0, 1):
+        m_list.append(units.monster_2)
+        if random.randint(0, 1):
+            m_list.append(units.monster_3)
 
     # Bosses use a different battle music than when battling normal enemies
     if is_boss:
@@ -208,8 +213,8 @@ def battle_system(is_boss=False, ambush=False):
     # While all active party members are alive, continue the battle
     while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
         # A list of the battle participants sorted by speed. Updates once per turn
-        speed_list = sorted(m_list + enabled_pcus,
-                            key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd, reverse=True)
+        speed_list = sorted(m_list + enabled_pcus, key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd,
+                            reverse=True)
 
         # Display HP, MP, Levels, and Statuses for all battle participants
         bat_stats()
@@ -283,11 +288,13 @@ def run_away(runner):
         # 20% chance of success
         chance = 20
 
-    elif bool(runner.spd > units.monster.spd) != bool(runner.evad > units.monster.evad):
+    elif bool(runner.spd > sorted(m_list, key=lambda x: x.spd, reversed=True)[0]) != \
+            bool(runner.evad > sorted(m_list, key=lambda x: x.evad, reversed=True)[0]):
         # 60% chance of success
         chance = 60
 
-    elif runner.spd > units.monster.spd and runner.evad > units.monster.evad:
+    elif runner.spd > sorted(m_list, key=lambda x: x.spd, reversed=True)[0] and \
+            runner.evad > sorted(m_list, key=lambda x: x.evad, reversed=True)[0]:
         # 80% chance of success
         chance = 80
 
@@ -307,12 +314,18 @@ def run_away(runner):
         return False
 
 
-def after_battle(is_boss):  # Assess the results of the battle
+def after_battle(is_boss):
+    # Assess the results of the battle
     print('-'*25)
+
+    for unit in enabled_pcus + m_list:
+        if unit.hp <= 0 and unit.status_ail != 'dead':
+            unit.hp = 0
+            unit.status_ail = 'dead'
 
     while True:
         # If the monster wins...
-        if units.monster.hp > 0 and all([0 >= x.hp for x in enabled_pcus]):
+        if any([m.status_ail != 'dead' for m in m_list]) and all([x.status_ail == 'dead' for x in enabled_pcus]):
             pygame.mixer.music.load('Content/Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
@@ -368,7 +381,7 @@ def after_battle(is_boss):  # Assess the results of the battle
                             break
 
         # If the player wins...
-        elif units.monster.hp <= 0 < units.player.hp:
+        elif all([m.status_ail == 'dead' for m in m_list]) and any([x.status_ail != 'dead' for x in enabled_pcus]):
             pygame.mixer.music.load('Content/Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(main.music_vol)
@@ -437,18 +450,24 @@ def after_battle(is_boss):  # Assess the results of the battle
 
             return
 
+        else:
+            units.player.hp = 1
+            units.player.status_ail = 'none'
+
+            continue
+
 
 def battle_inventory(user):
     # The player can use items from the Consumables category of their inventory during battles.
 
     while True:
         print('Battle Inventory: \n      ', end='')
-        print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(inv_system.inventory['consum'])]))
+        print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(inv_system.inventory['consumables'])]))
 
         while True:
             item = input('Input [#] (or type "exit"): ').lower()
             try:
-                item = inv_system.inventory['consum'][int(item) - 1]
+                item = inv_system.inventory['consumables'][int(item) - 1]
 
             except (ValueError, IndexError):
                 if item in ['e', 'x', 'exit', 'b', 'back']:
@@ -521,7 +540,7 @@ def bat_stats():
           units.player.name, units.player.hp,
           units.player.max_hp, units.player.mp,
           units.player.max_mp, units.player.lvl,
-          units.player.status_ail.title(),
+          units.player.status_ail.upper(),
           pad1=' '*(first_padding - len(units.player.name)),
           pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.player.hp, units.player.max_hp))),
           pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.player.mp, units.player.max_mp)))))
@@ -531,7 +550,7 @@ def bat_stats():
               units.solou.name, units.solou.hp,
               units.solou.max_hp, units.solou.mp,
               units.solou.max_mp, units.solou.lvl,
-              units.solou.status_ail.title(),
+              units.solou.status_ail.upper(),
               pad1=' '*(first_padding - len(units.solou.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.solou.hp, units.solou.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.solou.mp, units.solou.max_mp)))))
@@ -541,7 +560,7 @@ def bat_stats():
               units.xoann.name, units.xoann.hp,
               units.xoann.max_hp, units.xoann.mp,
               units.xoann.max_mp, units.xoann.lvl,
-              units.xoann.status_ail.title(),
+              units.xoann.status_ail.upper(),
               pad1=' '*(first_padding - len(units.xoann.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.xoann.hp, units.xoann.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)))))
@@ -551,7 +570,7 @@ def bat_stats():
               units.chyme.name, units.chyme.hp,
               units.chyme.max_hp, units.chyme.mp,
               units.chyme.max_mp, units.chyme.lvl,
-              units.chyme.status_ail.title(),
+              units.chyme.status_ail.upper(),
               pad1=' '*(first_padding - len(units.chyme.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.chyme.hp, units.chyme.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.chyme.mp, units.chyme.max_mp)))))
@@ -561,7 +580,7 @@ def bat_stats():
               units.parsto.name, units.parsto.hp,
               units.parsto.max_hp, units.parsto.mp,
               units.parsto.max_mp, units.parsto.lvl,
-              units.parsto.status_ail.title(),
+              units.parsto.status_ail.upper(),
               pad1=' '*(first_padding - len(units.parsto.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.parsto.hp, units.parsto.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)))))
@@ -571,7 +590,7 @@ def bat_stats():
               units.adorine.name, units.adorine.hp,
               units.adorine.max_hp, units.adorine.mp,
               units.adorine.max_mp, units.adorine.lvl,
-              units.adorine.status_ail.title(),
+              units.adorine.status_ail.upper(),
               pad1=' '*(first_padding - len(units.adorine.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.adorine.hp, units.adorine.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.adorine.mp, units.adorine.max_mp)))))
@@ -581,7 +600,7 @@ def bat_stats():
               units.ran_af.name, units.ran_af.hp,
               units.ran_af.max_hp, units.ran_af.mp,
               units.ran_af.max_mp, units.ran_af.lvl,
-              units.ran_af.status_ail.title(),
+              units.ran_af.status_ail.upper(),
               pad1=' '*(first_padding - len(units.ran_af.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.ran_af.hp, units.ran_af.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)))))
@@ -592,7 +611,7 @@ def bat_stats():
               each_monster.name, each_monster.hp,
               each_monster.max_hp, each_monster.mp,
               each_monster.max_mp, each_monster.lvl,
-              each_monster.status_ail.title(),
+              each_monster.status_ail.upper(),
               pad1=' '*(first_padding - len(each_monster.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(each_monster.hp, each_monster.max_hp))),
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(each_monster.mp, each_monster.max_mp)))))

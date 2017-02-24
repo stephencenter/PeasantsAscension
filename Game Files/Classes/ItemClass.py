@@ -46,8 +46,7 @@ class Item:
 
 class Consumable(Item):
     # Items that restore your HP, MP, or both
-    def __init__(self, name, desc, buy, sell,
-                 cat='consum', imp=False, heal=0, mana=0, ascart='Potion'):
+    def __init__(self, name, desc, buy, sell, cat='consumables', imp=False, heal=0, mana=0, ascart='Potion'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.heal = heal
         self.mana = mana
@@ -75,7 +74,7 @@ class Consumable(Item):
 
 
 class StatusPotion(Item):
-    def __init__(self, name, desc, buy, sell, status, cat='consum', imp=False, ascart='Potion'):
+    def __init__(self, name, desc, buy, sell, status, cat='consumables', imp=False, ascart='Potion'):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.status = status
 
@@ -154,19 +153,18 @@ class Weapon(Item):
 
 class Armor(Item):
     # Items that give the player a percent increase in defense when hit.
-    def __init__(self, name, desc, buy, sell, defense, type_, part, class_, ascart, cat='armor', imp=False):
+    def __init__(self, name, desc, buy, sell, defense, part, class_, ascart, cat='armor', imp=False):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
         self.defense = defense
-        self.type_ = type_
         self.part = part
         self.class_ = class_
 
         if self.class_ != 'none':
             if isinstance(self.class_, str):
-                self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'''])
+                self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'])
+
             else:
-                self.desc = ' '.join([desc, '|', ' and '.join([
-                    x.title() for x in self.class_]), 'ONLY'])
+                self.desc = ' '.join([desc, '|', ' and '.join([x.title() for x in self.class_]), 'ONLY'])
 
         else:
             self.desc = ' '.join([desc, '|', "ANY CLASS"])

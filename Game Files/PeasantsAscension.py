@@ -454,7 +454,7 @@ def title_screen():
 
     while True:
         # Give the user a choice of keys to press to do specific actions
-        choice = input('[P]lay Game | [C]redits | [S]tory | [L]ore | [E]xit  |  Input Letter: ')
+        choice = input('[P]lay Game | [C]redits | [S]tory | [L]ore | [E]xit | Input Letter: ')
         choice = choice.lower()
 
         if choice.startswith('p'):
