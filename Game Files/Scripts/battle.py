@@ -17,6 +17,7 @@ import sys
 import random
 import math
 import pygame
+import re
 from copy import copy as _c
 
 import inv_system
@@ -288,13 +289,13 @@ def run_away(runner):
         # 20% chance of success
         chance = 20
 
-    elif bool(runner.spd > sorted(m_list, key=lambda x: x.spd, reversed=True)[0]) != \
-            bool(runner.evad > sorted(m_list, key=lambda x: x.evad, reversed=True)[0]):
+    elif bool(runner.spd > sorted(m_list, key=lambda x: x.spd, reverse=True)[0].spd) != \
+            bool(runner.evad > sorted(m_list, key=lambda x: x.evad, reverse=True)[0].spd):
         # 60% chance of success
         chance = 60
 
-    elif runner.spd > sorted(m_list, key=lambda x: x.spd, reversed=True)[0] and \
-            runner.evad > sorted(m_list, key=lambda x: x.evad, reversed=True)[0]:
+    elif runner.spd > sorted(m_list, key=lambda x: x.spd, reverse=True)[0].spd and \
+            runner.evad > sorted(m_list, key=lambda x: x.evad, reverse=True)[0].spd:
         # 80% chance of success
         chance = 80
 
@@ -536,84 +537,91 @@ def bat_stats():
                              if units.monster_3 in m_list else '',
                              '{0}/{1} MP'.format(units.monster.mp, units.monster.max_mp)], key=len))
     # Player Stats
-    print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+    print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
           units.player.name, units.player.hp,
           units.player.max_hp, units.player.mp,
           units.player.max_mp, units.player.lvl,
           units.player.status_ail.upper(),
           pad1=' '*(first_padding - len(units.player.name)),
           pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.player.hp, units.player.max_hp))),
-          pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.player.mp, units.player.max_mp)))))
+          pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.player.mp, units.player.max_mp)))),
+            "red" if units.player.status_ail == 'dead' else 'clear'))
 
     if units.solou.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               units.solou.name, units.solou.hp,
               units.solou.max_hp, units.solou.mp,
               units.solou.max_mp, units.solou.lvl,
               units.solou.status_ail.upper(),
               pad1=' '*(first_padding - len(units.solou.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.solou.hp, units.solou.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.solou.mp, units.solou.max_mp)))))
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.solou.mp, units.solou.max_mp)))),
+            "red" if units.solou.status_ail == 'dead' else 'clear'))
 
     if units.xoann.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               units.xoann.name, units.xoann.hp,
               units.xoann.max_hp, units.xoann.mp,
               units.xoann.max_mp, units.xoann.lvl,
               units.xoann.status_ail.upper(),
               pad1=' '*(first_padding - len(units.xoann.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.xoann.hp, units.xoann.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)))))
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)))),
+            "red" if units.xoann.status_ail == 'dead' else 'clear'))
 
     if units.chyme.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               units.chyme.name, units.chyme.hp,
               units.chyme.max_hp, units.chyme.mp,
               units.chyme.max_mp, units.chyme.lvl,
               units.chyme.status_ail.upper(),
               pad1=' '*(first_padding - len(units.chyme.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.chyme.hp, units.chyme.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.chyme.mp, units.chyme.max_mp)))))
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.chyme.mp, units.chyme.max_mp)))),
+            "red" if units.chyme.status_ail == 'dead' else 'clear'))
 
     if units.parsto.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               units.parsto.name, units.parsto.hp,
               units.parsto.max_hp, units.parsto.mp,
               units.parsto.max_mp, units.parsto.lvl,
               units.parsto.status_ail.upper(),
               pad1=' '*(first_padding - len(units.parsto.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.parsto.hp, units.parsto.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)))))
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)))),
+            "red" if units.parsto.status_ail == 'dead' else 'clear'))
 
     if units.adorine.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               units.adorine.name, units.adorine.hp,
               units.adorine.max_hp, units.adorine.mp,
               units.adorine.max_mp, units.adorine.lvl,
               units.adorine.status_ail.upper(),
               pad1=' '*(first_padding - len(units.adorine.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.adorine.hp, units.adorine.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.adorine.mp, units.adorine.max_mp)))))
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.adorine.mp, units.adorine.max_mp)))),
+            "red" if units.adorine.status_ail == 'dead' else 'clear'))
 
     if units.ran_af.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               units.ran_af.name, units.ran_af.hp,
               units.ran_af.max_hp, units.ran_af.mp,
               units.ran_af.max_mp, units.ran_af.lvl,
               units.ran_af.status_ail.upper(),
               pad1=' '*(first_padding - len(units.ran_af.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(units.ran_af.hp, units.ran_af.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)))))
-
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)))),
+            "red" if units.ran_af.status_ail == 'dead' else 'clear'))
     # Monster Stats
     for each_monster in m_list:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               each_monster.name, each_monster.hp,
               each_monster.max_hp, each_monster.mp,
               each_monster.max_mp, each_monster.lvl,
               each_monster.status_ail.upper(),
               pad1=' '*(first_padding - len(each_monster.name)),
               pad2=' '*(second_padding - len('{0}/{1} HP'.format(each_monster.hp, each_monster.max_hp))),
-              pad3=' '*(third_padding - len('{0}/{1} MP'.format(each_monster.mp, each_monster.max_mp)))))
+              pad3=' '*(third_padding - len('{0}/{1} MP'.format(each_monster.mp, each_monster.max_mp)))),
+            "red" if each_monster.status_ail == 'dead' else 'clear'))
 
     print('-'*25)

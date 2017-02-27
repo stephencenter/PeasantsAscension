@@ -60,12 +60,10 @@ import magic
 import bosses
 import items
 import sounds
-import towns
 import units
 
 # Log everything and send it to stderr.
-logging.basicConfig(filename='../error_log.out', level=logging.DEBUG)
-logging.debug("Game run")
+logging.basicConfig(filename='../error_log.out', level=logging.DEBUG, format="\n%(message)s")
 
 # Setup Pygame audio
 pygame.mixer.pre_init(frequency=44100)
@@ -104,7 +102,8 @@ do_text_scroll = False
 # A dictionary containing generic information about the player's party
 party_info = {'reg': 'Central Forest', 'reg_music': 'Content/Music/Through the Forest.ogg',
               'prev_town': tiles.in_for_c, 'p_town_xyz': ['', '', ''], 'is_aethus': False, 'gp': 20,
-              'visited_towns': [], 'current_tile': tiles.in_for_c, 'x': 0, 'y': 0, 'z': 0}
+              'visited_towns': [], 'current_tile': tiles.in_for_c, 'x': 0, 'y': 0, 'z': 0,
+              'steps_without_battle': 0}
 
 # The version number the game is currently updated to
 game_version = 'v1.0.0 Beta'
@@ -125,6 +124,16 @@ Peasants' Ascension {game_version} -- Programmed by TheFrozenMawile using Python
 Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
 ------------------------------------------------------------------------------"""
+
+
+class YouDontSurfException(Exception):
+    # Joke exception, used just for testing the error logger
+    @staticmethod
+    def bullshit_shirt():
+        # Used `raise YouDontSurfException(YouDontSurfException.bullshit_shirt())
+        # This is so I don't have to type out the whole meme when I want to use this
+        return "that's a stupid fucking shirt you don't surf you've never surfed lying little shit with your bullshit \
+shirt fuck you"
 
 
 def set_adventure_name():
@@ -665,7 +674,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
     except Exception as e:
         # If an exception is raised and not caught, log the error message.
         # raise # Uncomment this if you're using the auto-input debugger
-        logging.exception('Got exception of main handler:')
+        logging.exception(f'Got exception of main handler on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         pygame.mixer.music.stop()
         print(traceback.format_exc())
 

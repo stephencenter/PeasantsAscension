@@ -128,7 +128,7 @@ class PlayableCharacter(Unit):
                 print(''.join(['Ah, ', self.name, '! My dear friend, it is great to see you again!']))
                 input('Press enter/return ')
 
-                return self.name
+                return
 
             while True:
                 y_n = input(f'So, your name is {self.name}? | Yes or No: ')
@@ -136,11 +136,12 @@ class PlayableCharacter(Unit):
 
                 if y_n.startswith('y'):
                     print('-'*25)
-                    return self.name
+                    return
 
                 elif y_n.startswith('n'):
                     self.name = ''
                     print()
+
                     break
 
     def choose_class(self):
@@ -170,7 +171,9 @@ Input [#]: """)
 
                 if y_n.startswith('y'):
                     print('-'*25)
-                    return class_
+                    self.class_ = class_
+
+                    return
 
                 elif y_n.startswith('n'):
                     print()

@@ -1,14 +1,14 @@
 import math
 import sys
 
-import UnitClass
-import battle
+import ascii_art
+# import UnitClass
 
-if __name__ == "__main__":
-    sys.exit()
-
-else:
-    main = sys.modules["__main__"]
+# if __name__ == "__main__":
+#     sys.exit()
+#
+# else:
+#     main = sys.modules["__main__"]
 
 
 # Abilites are similar to magic, except they are tied to classes and are level-independent. They also
@@ -40,9 +40,9 @@ def after_parry(user):
     pass
 
 
-parry = Ability("Parry", """\
+parry = Ability("Parry", f"""\
 The user will move last this turn. If they are attacked, they will take no
-damage and will reflect [50 + Strength]% of the damage to the attacker.""", 5)
+damage and will reflect {ascii_art.colorize('[50 + Strength]', 'red')}% of the damage to the attacker.""", 5)
 parry.use_ability = use_parry
 parry.after_turn = after_parry
 
@@ -55,9 +55,9 @@ def after_roll_call(user):
     pass
 
 
-roll_call = Ability("Roll Call", """\
+roll_call = Ability("Roll Call", f"""\
 The user rally's their allies to fight, causing the physical defense of each
-one to increase by [(5 + Strength) x Number of allies]""", 5)
+one to increase by {ascii_art.colorize('[(5 + Strength) x Number of allies]', 'red')}.""", 5)
 roll_call.use_ability = use_roll_call
 roll_call.after_turn = after_roll_call
 
@@ -87,9 +87,9 @@ def after_chakra_smash(user):
     pass
 
 
-chakra_smash = Ability("Chakra Smash", """\
+chakra_smash = Ability("Chakra Smash", f"""\
 Deals a 2.5x critical strike to the enemy, lowering their defensive stats
-by [5 + Constitution]. The armor reduction lasts indefinitely and stacks
+by {ascii_art.colorize('[5 + Constitution]', 'magenta')}. The armor reduction lasts indefinitely and stacks
 with multiple uses.""", 5)
 chakra_smash.use_ability = use_chakra_smash
 chakra_smash.after_turn = after_chakra_smash
@@ -103,10 +103,10 @@ def after_pressure_point(user):
     pass
 
 
-pressure_point = Ability("Pressure Point", """\
+pressure_point = Ability("Pressure Point", f"""\
 The user identifies the target's weak spots, causing all attacks on the
 target enemy to be critical strikes for the next two turns. Also increases
-max HP by [1 + Constitution]%. Does not increase current HP. Stacks with
+max HP by {ascii_art.colorize('[1 + Constitution]', 'magenta')}%. Does not increase current HP. Stacks with
 multiple uses.""", 5)
 pressure_point.use_ability = use_pressure_point
 pressure_point.after_turn = after_pressure_point
@@ -120,11 +120,11 @@ def after_aura_swap(user):
     pass
 
 
-aura_swap = Ability("Aura Swap", """\
+aura_swap = Ability("Aura Swap", f"""\
 The user selects two targets and swaps their HP values. Can be used on both
 allies and enemies, and can swap between both allies and enemies. For every
 10% of maximum HP that this alters, the user's evasion goes up by
-[5 + Constitution].""", 5)
+{ascii_art.colorize('[5 + Constitution]', 'magenta')}. Stacks with multiple uses. Evasion has a cap of 256.""", 5)
 aura_swap.use_ability = use_aura_swap
 aura_swap.after_turn = after_aura_swap
 
@@ -138,8 +138,8 @@ def after_inject_poison(user):
     pass
 
 
-inject_poison = Ability("Inject Poison", """\
-Injects a poison into the enemy target that deals [2 + Dexterity] magical
+inject_poison = Ability("Inject Poison", f"""\
+Injects a poison into the enemy target that deals {ascii_art.colorize('[2 + Dexterity]', 'green')} magical
 damage per turn. Stacks with multiple uses, with each stack increasing damage
 dealt per turn by 2.""", 5)
 inject_poison.use_ability = use_inject_poison
@@ -154,8 +154,8 @@ def after_backstab(user):
     pass
 
 
-backstab = Ability("Backstab", """\
-The user sneaks up on their opponent and deals a [125 + Dexterity]% critical
+backstab = Ability("Backstab", f"""\
+The user sneaks up on their opponent and deals a {ascii_art.colorize('[125 + Dexterity]', 'green')}% critical
 strike. This move has increased priority and will always go first.""", 2)
 backstab.use_ability = use_backstab
 backstab.after_turn = after_backstab
@@ -170,10 +170,10 @@ def after_skill_shot(user):
     pass
 
 
-skill_shot = Ability("Skill Shot", """\
+skill_shot = Ability("Skill Shot", f"""\
 The user launches a splash-damage attack at the enemy team equal to the sum of
 their levels. If the user is higher level than the highest-levelled opponent,
-Skill Shot does [50 + Intelligence]% more damage.""", 2)
+Skill Shot does {ascii_art.colorize('[50 + Intelligence]', 'blue')}% more damage.""", 2)
 skill_shot.use_ability = use_skill_shot
 skill_shot.after_turn = after_skill_shot
 
@@ -186,10 +186,10 @@ def after_polymorph(user):
     pass
 
 
-polymorph = Ability("Polymorph", """\
+polymorph = Ability("Polymorph", f"""\
 Turns the enemy unit into a harmless frog for one turn, silencing them and
 reducing their attack stats, speed, and evasion to 0. The user's magic attack
-is also increased by [5 + Intelligence]. Stacks with multiple uses.""", 5)
+is also increased by {ascii_art.colorize('[5 + Intelligence]', 'blue')}. Stacks with multiple uses.""", 5)
 polymorph.use_ability = use_polymorph
 polymorph.after_turn = after_polymorph
 
@@ -202,9 +202,9 @@ def after_spell_shield(user):
     pass
 
 
-spell_shield = Ability("Spell Shield", """\
+spell_shield = Ability("Spell Shield", f"""\
 Places a protective barrier around your party that lowers incoming magical
-damage by [20 + Intelligence]% for 5 turns.""", 5)
+damage by {ascii_art.colorize('[20 + Intelligence]', 'blue')}% for 5 turns.""", 5)
 spell_shield.use_ability = use_spell_shield
 spell_shield.after_turn = after_spell_shield
 
@@ -217,8 +217,8 @@ def after_mana_drain(user):
     pass
 
 
-mana_drain = Ability("Mana Drain", """\
-Depletes the target's current mana by [5 + Intelligence]% of their maximum
+mana_drain = Ability("Mana Drain", f"""\
+Depletes the target's current mana by {ascii_art.colorize('[5 + Intelligence]', 'blue')}% of their maximum
 mana pool, while restoring the same amount to the user.""", 5)
 mana_drain.use_ability = use_mana_drain
 mana_drain.after_turn = after_mana_drain
@@ -233,10 +233,10 @@ def after_roll(user):
     pass
 
 
-roll = Ability("Roll", """\
+roll = Ability("Roll", f"""\
 The user does a quick tuck-and-roll, disorienting the enemy and increasing
 the user's evasion to 256 for one turn. Also increases their speed by
-[25 + Perception]. Stacks with multiple uses.""", 3)
+{ascii_art.colorize('[25 + Perception]', 'cyan')}. Stacks with multiple uses.""", 3)
 roll.use_ability = use_roll
 roll.after_Turn = after_roll
 
@@ -266,9 +266,9 @@ def after_scout(user):
     pass
 
 
-scout = Ability("Scout", """\
+scout = Ability("Scout", f"""\
 Scouts the enemy, revealing their stats and elemental weakness. Also increases
-Pierce attack by [5 + Perception]%. Stacks with multiple uses.""", 1)
+Pierce attack by {ascii_art.colorize('[5 + Perception]', 'cyan')}%. Stacks with multiple uses.""", 1)
 scout.use_ability = use_scout
 scout.after_turn = after_scout
 
@@ -282,8 +282,8 @@ def after_tip_the_scales(user):
     pass
 
 
-tip_the_scales = Ability("Tip the Scales", """\
-The user and their allies are healed for [15 + Wisdom] HP each, while dealing
+tip_the_scales = Ability("Tip the Scales", f"""\
+The user and their allies are healed for {ascii_art.colorize('[15 + Wisdom]', 'yellow')} HP each, while dealing
 the same in magical damage to the enemy.""", 5)
 tip_the_scales.use_ability = use_tip_the_scales
 tip_the_scales.after_turn = after_tip_the_scales
@@ -298,9 +298,9 @@ def after_unholy_binds(user):
     pass
 
 
-unholy_binds = Ability("Unholy Binds", """\
+unholy_binds = Ability("Unholy Binds", f"""\
 Sets the enemy's element to Darkness, causing Light spells to deal more
-damage to it. Also restores [5 + Wisdom] mana.""", 5)
+damage to it. Also restores {ascii_art.colorize('[5 + Wisdom]', 'yellow')} mana.""", 5)
 unholy_binds.use_ability = use_unholy_binds
 unholy_binds.after_turn = after_unholy_binds
 
@@ -313,10 +313,10 @@ def after_judgement(user):
     pass
 
 
-judgement = Ability("Judgement", """\
+judgement = Ability("Judgement", f"""\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the target
 dies before the 7 turns is up, the one who dealt the killing blow restores
-[10 + Wisdom] HP.""", 5)
+{ascii_art.colorize('[10 + Wisdom]', 'yellow')} HP.""", 5)
 judgement.use_ability = use_judgement
 judgement.after_turn = after_judgement
 
@@ -329,17 +329,17 @@ def after_canonize(user):
     pass
 
 
-canonize = Ability("Canonize", """\
+canonize = Ability("Canonize", f"""\
 Declares the target ally a holy figure, rendering them immune to physical
 damage, converting their element to Light, and causing all offensive light
-and dark magic casted on them to heal for [50 + Wisdom]% HP instead of
+and dark magic casted on them to heal for {ascii_art.colorize('[50 + Wisdom]', 'yellow')}% HP instead of
 damaging. Lasts 2 turns. Does not stack with multiple uses.""", 5)
 canonize.use_ability = use_canonize
 canonize.after_turn = after_canonize
 
 class_abilities = {
-    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],
-    'mage': [mana_drain, polymorph, spell_shield, skill_shot],
+    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # Done
+    'mage': [mana_drain, polymorph, spell_shield, skill_shot],       # Done
     'warrior': [roll_call, parry],
     'assassin': [inject_poison, backstab],
     'ranger': [scout, roll],
@@ -348,3 +348,7 @@ class_abilities = {
 }
 
 # print(sum(len(x) for x in class_abilities.values()))
+for x in class_abilities.values():
+    for y in x:
+        print(y.desc)
+        input()

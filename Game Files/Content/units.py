@@ -49,8 +49,8 @@ def create_player():
     player.max_hp = copy.copy(player.hp)
     player.max_mp = copy.copy(player.mp)
 
-    player.name = player.choose_name()
-    player.class_ = player.choose_class()
+    player.choose_name()
+    player.choose_class()
     main.set_adventure_name()
 
     if player.class_ == "warrior":
@@ -295,7 +295,6 @@ def fix_stats():
 
 def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     # Save the "PlayableCharacter" objects as JSON files
-    print(type(player))
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
     with open(s_path, mode='w', encoding='utf-8') as f:

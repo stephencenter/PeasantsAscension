@@ -158,14 +158,26 @@ def movement_system():
                 # If none of these fucntions return True, then a battle can occur.
                 if not any([check_region(), bosses.check_bosses(), towns.search_towns(enter=False)]):
 
-                    # There is a 1 in 7 chance for a battle to occur (14.285714...%)
-                    is_battle = not random.randint(0, 6)
+                    # There is a 1 in 4 chance for a battle to occur (25%)
+                    # However, a battle cannot occur if the number of steps since the last battle is less than three,
+                    # and is guaranteed to occur if the number of steps is above 10.
+                    is_battle = random.randint(0, 3) == 0
+
+                    if main.party_info['steps_without_battle'] > 10:
+                        is_battle = True
+
+                    elif main.party_info['steps_without_battle'] < 3:
+                        is_battle = False
 
                     # Certain tiles can have battling disabled on them
                     if is_battle and main.party_info['current_tile'].m_level != -1:
                         print('-'*25)
                         units.spawn_monster()
                         battle.battle_system()
+                        main.party_info['steps_without_battle'] = 0
+
+                    else:
+                        main.party_info['steps_without_battle'] += 1
 
                 break
 
