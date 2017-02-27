@@ -334,7 +334,9 @@ def check_save():  # Check for save files and load the game if they're found
             try:
                 # Sort the save file names in alphanumerical order
                 adventure_name = sorted(save_files)[chosen]
+
             except IndexError:
+
                 continue
 
             format_save_names()
@@ -369,9 +371,6 @@ def check_save():  # Check for save files and load the game if they're found
 
                 print('Load successful.')
 
-                if not towns.search_towns(enter=False):
-                    print('-'*25)
-
                 return
 
             except (OSError, ValueError):
@@ -379,6 +378,8 @@ def check_save():  # Check for save files and load the game if they're found
                 print('There was an error loading your game.')
                 input("\nPress enter/return ")
                 print('-'*25)
+                adventure_name = ''
+
                 break
 
 

@@ -38,6 +38,13 @@ else:
 pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
+battle_options = """Pick {0}'s Move:
+      [1]: Standard Attack
+      [2]: Use Magic
+      [3]: Use Abilities
+      [4]: Use Items
+      [5]: Run"""
+
 
 class Unit:
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad):
@@ -78,6 +85,8 @@ class PlayableCharacter(Unit):
         self.target = ''          # The target of the PCU's current action
         self.c_ability = ''       # The ability that the PCU is currently casting
         self.c_spell = ''         # The spell that the PCU is currently casting
+        self.ap = 10              # The number of "Action Points" that the user has remaining
+        self.max_ap = 10          # The number of maximum Action Points the user can have at one time
 
         self.attributes = {'int': 1,  # Intelligence, for Mages
                            'wis': 1,  # Wisdom, for Paladins
@@ -87,12 +96,7 @@ class PlayableCharacter(Unit):
                            'per': 1,  # Perception, for Rangers
                            'for': 1}  # Fortune
 
-        self.battle_options = """Pick {0}'s Move:
-      [1]: Standard Attack
-      [2]: Use Magic
-      [3]: Use Abilities
-      [4]: Use Items
-      [5]: Run"""
+        self.ability_vars = {}  # This dictionary will contain numerous variables that interact with abilties in battle
 
     def choose_name(self):
         while True:
@@ -127,7 +131,7 @@ class PlayableCharacter(Unit):
                 return self.name
 
             while True:
-                y_n = input('So, your name is {0}? | Yes or No: '.format(self.name))
+                y_n = input(f'So, your name is {self.name}? | Yes or No: ')
                 y_n = y_n.lower()
 
                 if y_n.startswith('y'):
@@ -141,14 +145,14 @@ class PlayableCharacter(Unit):
 
     def choose_class(self):
         while True:
-            class_ = input("""{0}, which class would you like to train as?\n\
-          [1] Mage: Master of the arcane arts capable of using all spells, but has low defense
-          [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes
-          [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage
-          [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers
-          [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells
-          [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP
-    Input [#]: """.format(self.name))
+            class_ = input(f"""{self.name}, which class would you like to train as?
+      [1] Mage: Master of the arcane arts capable of using all spells, but has low defense.
+      [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes.
+      [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage.
+      [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers.
+      [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells.
+      [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP.
+Input [#]: """)
             print()
             try:
                 class_ = {'1': "mage",
@@ -162,7 +166,7 @@ class PlayableCharacter(Unit):
                 continue
 
             while True:
-                y_n = input('You wish to be of the {0} class? | Yes or No: '.format(class_.title())).lower()
+                y_n = input(f'You wish to be of the {class_.title()} class? | Yes or No: ').lower()
 
                 if y_n.startswith('y'):
                     print('-'*25)
@@ -191,13 +195,7 @@ class PlayableCharacter(Unit):
             while self.exp >= self.req_xp:
                 sounds.item_pickup.play()
                 self.lvl += 1
-                print("{0} has advanced to level {1}!".format(self.name, self.lvl))
-
-                if self.lvl == 5:
-                    print('\n{0} now understands the true potential of their class!'.format(self.name))
-                    print('{0} can activate this potential in the form of a "class ability"'.format(self.name))
-                    print('once per battle. Use it wisely!\n')
-                    input('Press enter/return ')
+                print(f"{self.name} has advanced to level {self.lvl}!")
 
                 rem_points += 5
                 extra_points += self.extra_sp
@@ -293,23 +291,21 @@ class PlayableCharacter(Unit):
 
     def skill_points(self, rem_points, extra_points):
         if extra_points:
-            print("{0}'s great fortune has granted them {1} additional skill points!".format(self.name, extra_points))
+            print(f"{self.name}'s great fortune has granted them {extra_points} additional skill points!")
             rem_points += extra_points
 
         while rem_points > 0:
-            print('{0} has {1} skill point{2} left to spend.'.format(
-                self.name, rem_points, 's' if rem_points > 1 else ''
-            ))
+            print(f"{self.name} has {rem_points} skill point{'s' if rem_points > 1 else ''} left to spend.")
 
-            skill = input("""Choose a skill to advance:
-    [I]ntelligence - Use powerful magic with higher magic stats and MP!
-    [W]isdom - Cast powerful healing magics with higher proficiency and MP!
-    [S]trength -  Smash through enemies with higher attack and defense!
-    [C]onstitution - Become a tank with higher defense stats and HP!
-    [D]exterity - Improve your aerobic ability with higher evade/speed stats!
-    [P]erception - Eliminate your enemies with ease using higher pierce and evasion!
-    [F]ortune - Increase your luck in hopes of getting more GP, XP, and skill points!
-Input letter: """)
+            skill = input("""Choose a skill to increase:
+      [I]ntelligence - The attribute of Mages. Increases magic stats and MP.
+      [W]isdom - The attribute of Paladins. Improves healing spells and increases MP.
+      [S]trength -  The attribute of Warriors. Increases physical attack and defense.
+      [C]onstitution - The attribute of Monks. Increases defensive stats and HP.
+      [D]exterity - The attribute of Assassins. Increases evasion, speed and physical attack.
+      [P]erception - The attribute of Rangers. Increases pierce stats and evasion.
+      [F]ortune - No class affiliation. Increases GP, XP, and Skill Point gain.
+Input [L]etter: """)
 
             skill = skill.lower()
 
@@ -343,14 +339,14 @@ Input letter: """)
                     vis_skill = 'Fortune'
 
                 print('-'*25)
-                print('Current {0}: {1}'.format(vis_skill, self.attributes[act_skill]))
+                print(f'Current {vis_skill}: {self.attributes[act_skill]}')
 
                 if self.extra_sp == 10 and act_skill == 'for':
-                    print("{0}'s additional skill points from Fortune has already reached the maximum of 10.")
+                    print(f"{self.name}'s additional skill points from Fortune has already reached the maximum of 10.")
                     print("Instead, upgrading Fortune will provide 2x the extra experience and gold from enemies.")
 
                 while True:
-                    y_n = input("Increase {0}'s {1}? | Yes or No: ".format(self.name, vis_skill))
+                    y_n = input(f"Increase {self.name}'s {vis_skill}? | Yes or No: ")
                     y_n = y_n.lower()
 
                     if not (y_n.startswith('y') or y_n.startswith('n')):
@@ -360,58 +356,14 @@ Input letter: """)
                         print('-'*25)
                         break
 
-                    if skill.startswith('i'):
-                        self.m_dfns += 1
-                        self.m_attk += 1
-                        self.mp += 2
-                        self.attributes['int'] += 1
-
-                    elif skill.startswith('w'):
-                        self.mp += 2
-                        self.attributes['wis'] += 1
-
-                    elif skill.startswith('s'):
-                        self.attk += 1
-                        self.p_dfns += 1
-                        self.dfns += 1
-                        self.attributes['str'] += 1
-
-                    elif skill.startswith('c'):
-                        self.max_hp += 1
-                        self.dfns += 1
-                        self.p_dfns += 1
-                        self.m_dfns += 1
-                        self.attributes['con'] += 1
-
-                    elif skill.startswith('d'):
-                        self.spd += 1
-                        self.p_attk += 1
-                        self.evad += 1
-                        self.attributes['dex'] += 1
-
-                    elif skill.startswith('p'):
-                        self.p_attk += 1
-                        self.p_dfns += 1
-                        self.evad += 1
-                        self.attributes['per'] += 1
-
-                    elif skill.startswith('f'):
-                        if self.extra_sp == 10:
-                            self.ext_gol += 2
-                            self.ext_exp += 2
-
-                        else:
-                            self.extra_sp += 1
-                            self.ext_gol += 1
-                            self.ext_exp += 1
-
-                        self.attributes['for'] += 1
+                    if any(map(skill.startswith, ['d', 'c', 'i', 'w', 'p', 'f', 's'])):
+                        self.increase_attribute(skill)
 
                     else:
                         continue
 
                     print('-'*25)
-                    print("{0}'s {1} has increased!".format(self.name, vis_skill))
+                    print(f"{self.name}'s {vis_skill} has increased!")
 
                     # Decrement remaining points
                     rem_points -= 1
@@ -420,7 +372,7 @@ Input letter: """)
 
                     break
 
-        print('\n{0} is out of skill points.'.format(self.name))
+        print(f'\n{self.name} is out of skill points.')
 
     def player_info(self):
         inv_name = self.name if self != units.player else 'player'
@@ -528,9 +480,7 @@ Armor:
         return True
 
     def player_choice(self):
-        # Creates a lambda function that strips all non-numeric characters
-        # This fixes some (possible) problems later on
-        print(self.battle_options.format(self.name))
+        print(battle_options.format(self.name))
 
         while True:
             self.move = input("Input [#]: ")
@@ -554,12 +504,12 @@ Armor:
                     sounds.debuff.play()
                     print(f"{self.name} is silenced and cannot use spells!")
                     input("\nPress enter/return ")
-                    print(self.battle_options.format(self.name))
+                    print(battle_options.format(self.name))
 
                     continue
 
                 if not magic.pick_cat(self):
-                    print(self.battle_options.format(self.name))
+                    print(battle_options.format(self.name))
 
                     continue
 
@@ -576,7 +526,7 @@ Armor:
                 if not inv_system.inventory['consumables']:
                     print('Your party has no battle-allowed items - the consumable category is empty!')
                     print("\nPress enter/return ")
-                    print(self.battle_options.format(self.name))
+                    print(battle_options.format(self.name))
 
                     continue
 
@@ -584,12 +534,12 @@ Armor:
                     sounds.debuff.play()
                     print(f"{self.name} is muted and cannot access their inventory!")
                     print("\nPress enter/return ")
-                    print(self.battle_options.format(self.name))
+                    print(battle_options.format(self.name))
 
                     continue
 
                 if not battle.battle_inventory(self):
-                    print(self.battle_options.format(self.name))
+                    print(battle_options.format(self.name))
 
                     continue
 
@@ -656,6 +606,54 @@ Armor:
 
             return
 
+    def increase_attribute(self, attribute):
+        if attribute.startswith('i'):
+            self.m_dfns += 1
+            self.m_attk += 1
+            self.mp += 2
+            self.attributes['int'] += 1
+
+        elif attribute.startswith('w'):
+            self.mp += 2
+            self.attributes['wis'] += 1
+
+        elif attribute.startswith('s'):
+            self.attk += 1
+            self.p_dfns += 1
+            self.dfns += 1
+            self.attributes['str'] += 1
+
+        elif attribute.startswith('c'):
+            self.max_hp += 1
+            self.dfns += 1
+            self.p_dfns += 1
+            self.m_dfns += 1
+            self.attributes['con'] += 1
+
+        elif attribute.startswith('d'):
+            self.attk += 1
+            self.spd += 1
+            self.evad += 1
+            self.attributes['dex'] += 1
+
+        elif attribute.startswith('p'):
+            self.p_attk += 1
+            self.p_dfns += 1
+            self.evad += 1
+            self.attributes['per'] += 1
+
+        elif attribute.startswith('f'):
+            if self.extra_sp == 10:
+                self.ext_gol += 2
+                self.ext_exp += 2
+
+            else:
+                self.extra_sp += 1
+                self.ext_gol += 1
+                self.ext_exp += 1
+
+            self.attributes['for'] += 1
+
 
 class Monster(Unit):
     # All monsters use this class. Bosses use a sub-class called
@@ -668,6 +666,7 @@ class Monster(Unit):
         self.is_poisoned = False
         self.is_defending = False
         self.class_ = None
+        self.ability_vars = {}  # This dictionary will contain numerous variables that interact with abilties in battle
 
     def monst_level(self):
         self.lvl = main.party_info['current_tile'].m_level
@@ -878,9 +877,9 @@ class Monster(Unit):
                      'self.spd', 'self.evad', 'self.mp', 'self.max_mp', 'self.hp', 'self.max_hp']:
 
             if eval(stat) < 1:  # Enemy stats cannot be lower than one
-                exec("{0} = 1".format(stat))
+                exec(f"{stat} = 1")
 
-            exec("{0} = math.ceil({0})".format(stat))  # Enemy stats must be integers
+            exec(f"{stat} = math.ceil({stat})")  # Enemy stats must be integers
 
         if self.monster_name == "Calculator":
             self.element = 'grass'
@@ -1144,30 +1143,30 @@ class Monster(Unit):
         ] if x.enabled and x.status_ail != 'dead'])
 
         print(f"-{self.monster_name}'s Turn-")
-        print(ascii_art.monster_art[self.monster_name] % "The {0} is making a move!\n".format(self.monster_name))
+        print(ascii_art.monster_art[self.monster_name] % f"The {self.monster_name} is making a move!\n")
 
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
         if random.randint(0, 5) == 0 and not self.is_defending:
             self.is_defending = True
             sounds.buff_spell.play()
 
-            self.dfns *= 1.5
-            self.m_dfns *= 1.5
-            self.p_dfns *= 1.5
+            self.dfns *= 2
+            self.m_dfns *= 2
+            self.p_dfns *= 2
 
             self.dfns = math.ceil(self.dfns)
             self.p_dfns = math.ceil(self.p_dfns)
             self.m_dfns = math.ceil(self.m_dfns)
 
-            print("The {0} defends itself from further attacks! (Enemy Defense Raised!)".format(self.monster_name))
+            print(f"The {self.monster_name} defends itself from attacks for one turn!")
 
         # Set defense back to normal if the monster defended last turn
         elif self.is_defending:
             self.is_defending = False
 
-            self.dfns /= 1.5
-            self.m_dfns /= 1.5
-            self.p_dfns /= 1.5
+            self.dfns /= 2
+            self.m_dfns /= 2
+            self.p_dfns /= 2
             self.dfns = math.floor(self.dfns)
             self.m_dfns = math.floor(self.m_dfns)
             self.p_dfns = math.floor(self.p_dfns)

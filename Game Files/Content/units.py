@@ -295,7 +295,7 @@ def fix_stats():
 
 def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     # Save the "PlayableCharacter" objects as JSON files
-
+    print(type(player))
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
     with open(s_path, mode='w', encoding='utf-8') as f:
@@ -323,12 +323,12 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     global parsto
 
     player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    chyme = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
-    parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
+    solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
+    xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
+    adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
+    chyme = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
+    ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
+    parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
 
     with open(path, encoding='utf-8') as f:
         player.__dict__ = json.load(f)

@@ -28,7 +28,7 @@ class Ability:
         pass
 
 
-# 14 of 24 designed
+# 17 of 24 designed
 # 3 of 24 implemented
 
 # -- WARRIOR ABILITES, scales with Strength -- #
@@ -72,9 +72,9 @@ def use_chakra_smash(user):
 
     print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
 
-    user.target.dfns *= 0.9
-    user.target.p_dfns *= 0.9
-    user.target.m_dfns *= 0.9
+    user.target.dfns -= 5 + user.attributes['con']
+    user.target.p_dfns -= 5 + user.attributes['con']
+    user.target.m_dfns -= 5 + user.attributes['con']
 
     user.target.dfns = math.ceil(user.target.dfns)
     user.target.p_dfns = math.ceil(user.target.p_dfns)
@@ -110,6 +110,23 @@ max HP by [1 + Constitution]%. Does not increase current HP. Stacks with
 multiple uses.""", 5)
 pressure_point.use_ability = use_pressure_point
 pressure_point.after_turn = after_pressure_point
+
+
+def use_aura_swap(user):
+    pass
+
+
+def after_aura_swap(user):
+    pass
+
+
+aura_swap = Ability("Aura Swap", """\
+The user selects two targets and swaps their HP values. Can be used on both
+allies and enemies, and can swap between both allies and enemies. For every
+10% of maximum HP that this alters, the user's evasion goes up by
+[5 + Constitution].""", 5)
+aura_swap.use_ability = use_aura_swap
+aura_swap.after_turn = after_aura_swap
 
 
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
@@ -170,9 +187,9 @@ def after_polymorph(user):
 
 
 polymorph = Ability("Polymorph", """\
-Turns the enemy unit into a harmless frog for one turn, reducing their attack
-stats, speed, and evasion to 0. The user's magic attack is also increased by
-[5 + Intelligence]. Stacks with multiple uses.""", 5)
+Turns the enemy unit into a harmless frog for one turn, silencing them and
+reducing their attack stats, speed, and evasion to 0. The user's magic attack
+is also increased by [5 + Intelligence]. Stacks with multiple uses.""", 5)
 polymorph.use_ability = use_polymorph
 polymorph.after_turn = after_polymorph
 
@@ -190,6 +207,21 @@ Places a protective barrier around your party that lowers incoming magical
 damage by [20 + Intelligence]% for 5 turns.""", 5)
 spell_shield.use_ability = use_spell_shield
 spell_shield.after_turn = after_spell_shield
+
+
+def use_mana_drain(user):
+    pass
+
+
+def after_mana_drain(user):
+    pass
+
+
+mana_drain = Ability("Mana Drain", """\
+Depletes the target's current mana by [5 + Intelligence]% of their maximum
+mana pool, while restoring the same amount to the user.""", 5)
+mana_drain.use_ability = use_mana_drain
+mana_drain.after_turn = after_mana_drain
 
 
 # -- RANGER ABILITIES, scales with Perception -- #
@@ -284,7 +316,7 @@ def after_judgement(user):
 judgement = Ability("Judgement", """\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the target
 dies before the 7 turns is up, the one who dealt the killing blow restores
-[5 + Wisdom] HP.""", 5)
+[10 + Wisdom] HP.""", 5)
 judgement.use_ability = use_judgement
 judgement.after_turn = after_judgement
 
@@ -301,19 +333,18 @@ canonize = Ability("Canonize", """\
 Declares the target ally a holy figure, rendering them immune to physical
 damage, converting their element to Light, and causing all offensive light
 and dark magic casted on them to heal for [50 + Wisdom]% HP instead of
-damaging. Lasts 2 turns.""", 5)
+damaging. Lasts 2 turns. Does not stack with multiple uses.""", 5)
 canonize.use_ability = use_canonize
 canonize.after_turn = after_canonize
 
 class_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],
-    'mage': [skill_shot, polymorph, spell_shield],
+    'mage': [mana_drain, polymorph, spell_shield, skill_shot],
     'warrior': [roll_call, parry],
     'assassin': [inject_poison, backstab],
     'ranger': [scout, roll],
-    'monk': [chakra_smash]
+    'monk': [chakra_smash, pressure_point, aura_swap]
 
 }
 
 # print(sum(len(x) for x in class_abilities.values()))
-
