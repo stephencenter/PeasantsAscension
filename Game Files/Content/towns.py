@@ -13,8 +13,21 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-from TownClass import *
+import sys
+
+import pygame
+
+import inv_system
+import items
 import npcs
+import sounds
+from TownClass import Town, Tavern, Chest, House
+
+if __name__ == "__main__":
+    sys.exit()
+
+else:
+    main = sys.modules["__main__"]
 
 # OVERWORLD TOWNS
 nearton_h1_c1 = Chest([20], 1, "N-H1-C1")
@@ -149,7 +162,7 @@ An interesting thing to note is that Cesura is the only town that has a train
 station. Construction of the town of Cesura was outsourced to Elysium, who is
 the most technologically advanced civilization on the planet by far, having
 developed and perfected the Steam Engine and later the Train before the year
-1300 A.D.""", [npcs.bamdeliit], [], wtrmelon_store=True)
+1300 A.D.""", [npcs.morrison], [], wtrmelon_store=True)
 
 town_sanguion = Town("Sanguion", """Sanguion: Sanguion is a safe-haven for vampires. Vampires
 are feared throughout Harconia, so this fairly unknown town is the only place they

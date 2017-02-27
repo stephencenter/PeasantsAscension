@@ -13,19 +13,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import random
 import math
-import pygame
-import re
+import random
+import sys
 from copy import copy as _c
 
-import inv_system
-import units
-import bosses
-import sounds
+import pygame
+
 import ascii_art
+import inv_system
 import items
+import sounds
+import units
 
 pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
@@ -399,7 +398,7 @@ def after_battle(is_boss):
 
             else:
                 # Only do the following if the player defeated a boss
-                bosses.defeated_bosses.append(units.monster.name)
+                units.defeated_bosses.append(units.monster.name)
                 print(f'The almighty {units.monster.name} has been slain!')
 
                 # Bosses drop a set amount of gold

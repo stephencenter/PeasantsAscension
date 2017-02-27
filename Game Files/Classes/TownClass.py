@@ -13,17 +13,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import copy
 import random
+import sys
+
 import pygame
 
+import ascii_art
+import battle
 import inv_system
 import items
 import sounds
-import ascii_art
 import units
-import battle
 
 if __name__ == "__main__":
     sys.exit()
@@ -620,8 +621,24 @@ class Tavern:
         self.name = name
         self.cost = cost
 
-    def new_location(self):
-        pass
+    def new_location(self, add=True):  # Translate the location of newly-found towns into a string
+        mpi = main.party_info
+
+        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
+        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
+        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
+
+        new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
+
+        if add and new_coords not in inv_system.inventory['coord']:
+            inv_system.inventory['coord'].append(new_coords)
+            main.party_info['visited_towns'].append(self.name)
+
+            print(f"{self.name}'s location has been added to the coordinates section of your inventory.")
+            input("\nPress enter/return ")
+
+        else:
+            return new_coords
 
     def town_choice(self):
         print('-'*25)

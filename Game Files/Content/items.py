@@ -13,8 +13,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-from ItemClass import *
 import json
+
+from ItemClass import Consumable, MagicCompass, DiviningRod, Weapon, Armor, StatusPotion, \
+    Misc, Valuable, Shovel, ElementAccessory, TownTeleporter, LockpickKit
 
 # Potions -- Health
 s_potion = Consumable('Weak Potion',

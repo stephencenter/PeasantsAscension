@@ -36,17 +36,18 @@
 #     the top of the module.
 # --------------------------------------------------------------------------- #
 
-import sys
-import os
-import math
-import time
-import json
 import configparser
 import ctypes
-import re
+import json
 import logging
+import math
 import msvcrt
+import os
+import re
+import sys
+import time
 import traceback
+
 import pygame
 
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Content")
@@ -57,7 +58,6 @@ sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game 
 import tiles
 import inv_system
 import magic
-import bosses
 import items
 import sounds
 import units
@@ -358,7 +358,7 @@ def check_save():  # Check for save files and load the game if they're found
             # them into objects/dictionaries
             try:
                 with open(sav_def_bosses, encoding='utf-8') as f:
-                    bosses.defeated_bosses = list(json.load(f))
+                    units.defeated_bosses = list(json.load(f))
 
                 with open(sav_party_info, encoding='utf-8') as f:
                     party_info = json.load(f)
@@ -373,7 +373,7 @@ def check_save():  # Check for save files and load the game if they're found
                 items.deserialize_gems(sav_acquired_gems)
                 inv_system.deserialize_equip(sav_equip_items)
                 inv_system.deserialize_inv(sav_inventory)
-                bosses.deserialize_bosses(sav_misc_boss_info)
+                units.deserialize_bosses(sav_misc_boss_info)
                 npcs.deserialize_dialogue(sav_quests_dia)
                 magic.deserialize_sb(sav_spellbook)
                 units.deserialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
@@ -412,7 +412,7 @@ def save_game():
 
             try:
                 with open(sav_def_bosses, mode='w', encoding='utf-8') as f:
-                    json.dump(bosses.defeated_bosses, f, indent=4, separators=(', ', ': '))
+                    json.dump(units.defeated_bosses, f, indent=4, separators=(', ', ': '))
 
                 json_party_info = {}
                 for key in party_info:
@@ -432,9 +432,9 @@ def save_game():
                 items.serialize_gems(sav_acquired_gems)
                 inv_system.serialize_equip(sav_equip_items)
                 inv_system.serialize_inv(sav_inventory)
-                bosses.serialize_bosses(sav_misc_boss_info)
                 npcs.serialize_dialogue(sav_quests_dia)
                 magic.serialize_sb(sav_spellbook)
+                units.serialize_bosses(sav_misc_boss_info)
                 units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
                 with open('/'.join([save_dir, adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:

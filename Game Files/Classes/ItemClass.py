@@ -13,12 +13,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import copy
+import sys
 
+import ascii_art
 import inv_system
 import sounds
-import ascii_art
 import units
 
 if __name__ == "__main__":

@@ -656,6 +656,9 @@ def deserialize_inv(path):
                 if item['acc_type'] == 'elemental':
                     x = ItemClass.ElementAccessory('', '', '', '', '')
 
+                else:
+                    continue
+
             elif category == 'coord':
                 norm_inv[category].append(item)
                 continue

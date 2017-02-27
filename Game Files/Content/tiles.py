@@ -13,21 +13,19 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-from TileClass import *
-
-import sys
 import random
+import sys
+
 import pygame
 
+import ascii_art
 import battle
-import units
-import towns
-import bosses
-import sounds
 import inv_system
 import magic
-import MagicClass
-import ascii_art
+import sounds
+import towns
+import units
+from TileClass import Tile
 
 if __name__ == "__main__":
     sys.exit()
@@ -156,7 +154,7 @@ def movement_system():
                 main.party_info[coord_change[0]] += 1*coord_change[1]
 
                 # If none of these fucntions return True, then a battle can occur.
-                if not any([check_region(), bosses.check_bosses(), towns.search_towns(enter=False)]):
+                if not any([check_region(), units.check_bosses(), towns.search_towns(enter=False)]):
 
                     # There is a 1 in 4 chance for a battle to occur (25%)
                     # However, a battle cannot occur if the number of steps since the last battle is less than three,
@@ -391,7 +389,7 @@ def player_info():
                     break
 
             if magic.spellbook[target.name if target != units.player else 'player']['Healing']:
-                MagicClass.pick_spell('Healing', target, False)
+                magic.pick_spell('Healing', target, False)
 
             else:
                 print('-' * 25)

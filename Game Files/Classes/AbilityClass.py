@@ -2,13 +2,14 @@ import math
 import sys
 
 import ascii_art
-# import UnitClass
+import battle
+import units
 
-# if __name__ == "__main__":
-#     sys.exit()
-#
-# else:
-#     main = sys.modules["__main__"]
+if __name__ == "__main__":
+    sys.exit()
+
+else:
+    main = sys.modules["__main__"]
 
 
 # Abilites are similar to magic, except they are tied to classes and are level-independent. They also
@@ -67,7 +68,7 @@ def use_chakra_smash(user):
     # A 2.5x crit that lowers the target's armor
 
     main.smart_sleep(0.75)
-    dam_dealt = math.ceil(UnitClass.deal_damage(user, user.target, "physical")*2.5)
+    dam_dealt = math.ceil(units.deal_damage(user, user.target, "physical")*2.5)
     user.target.hp -= dam_dealt
 
     print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
