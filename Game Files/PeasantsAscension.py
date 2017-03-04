@@ -109,7 +109,7 @@ party_info = {'reg': 'Central Forest', 'reg_music': 'Content/Music/Through the F
 game_version = 'v1.0.0 Beta'
 
 # This text is displayed when you start the game
-title_logo = f"""
+title_logo = f"""\
   ____                            _       _
  |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
  | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
