@@ -384,12 +384,13 @@ def check_save():  # Check for save files and load the game if they're found
 
             except (OSError, ValueError):
                 logging.exception('Error loading game:')
-                print('There was an error loading your game.')
+                print('There was an error loading your game. Please reload game.')
+                print('Error message can be found in error_log.out')
                 input("\nPress enter/return ")
-                print('-'*25)
-                adventure_name = ''
 
-                break
+                # A file failing to load screws up some internal values, so the entire game needs to be restarted
+                pygame.quit()
+                sys.exit()
 
 
 def save_game():
@@ -448,7 +449,7 @@ def save_game():
 
             except (OSError, ValueError):
                 logging.exception('Error saving game:')
-                print('There was an error saving your game.')
+                print('There was an error saving your game. Error message can be found in error_log.out')
                 input("\nPress enter/return ")
 
         elif y_n.startswith('n'):
@@ -670,6 +671,10 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
     try:
         # Run the game.
         main()
+
+    # These exceptions will only occur if I explicitly tell them to, and in these cases I do not want them silenced
+    except YouDontSurfException:
+        raise
 
     except Exception as e:
         # If an exception is raised and not caught, log the error message.
