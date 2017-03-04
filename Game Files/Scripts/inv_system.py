@@ -232,28 +232,22 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
                 return
 
             while True:
-                item = input('Input [#] (or type "back"): ')
-                try:
-                    item = int(item) - 1
-                    if item < 0:
-                        continue
-
-                except ValueError:
-                    item = item.lower()
-
-                    if item in ['e', 'x', 'exit', 'b', 'back']:
-                        return
-
-                    else:
-                        continue
+                item = input('Input [#] (or type "back"): ').lower()
 
                 try:
                     if gs:
-                        item = [x for x in inventory[cat] if not x.imp][item]
-                    else:
-                        item = inventory[cat][item]
+                        item = [x for x in inventory[cat] if not x.imp][int(item) - 1]
 
-                except IndexError:
+                    else:
+                        item = inventory[cat][int(item) - 1]
+
+                    if item < 0:
+                        continue
+
+                except (IndexError, ValueError):
+                    if item in ['e', 'x', 'exit', 'b', 'back']:
+                        return
+
                     continue
 
                 if gs:
@@ -363,8 +357,7 @@ def manage_equipped_2(target):
       [5] Accessory -> {p_equip['access']}""")
 
         while True:
-            selected = input('Input [#] (or type "back"): ')
-            selected = selected.lower()
+            selected = input('Input [#] (or type "back"): ').lower()
 
             if selected in ['e', 'x', 'exit', 'b', 'back']:
                 print('-' * 25)
@@ -421,7 +414,7 @@ def manage_equipped_3(key, selected, p_equip, target):
       [2] Read Description""")
 
         while True:
-            action = input('Input [#] (or type "back"): ')
+            action = input('Input [#] (or type "back"): ').lower()
 
             if action == '1':
                 if selected.name == 'Fists':
@@ -470,7 +463,7 @@ def manage_equipped_3(key, selected, p_equip, target):
 
                 break
 
-            elif action.lower() in ['e', 'x', 'exit', 'b', 'back']:
+            elif action in ['e', 'x', 'exit', 'b', 'back']:
                 return
 
 
@@ -499,23 +492,17 @@ def view_quests():
                 print('\n      '.join([f'[{num + 1}] {x.name}' for num, x in enumerate(dialogue)]))
 
                 while True:
-                    number = input('Input [#] (or type "back"): ')
+                    quest = input('Input [#] (or type "back"): ').lower()
 
                     try:
-                        number = int(number) - 1
+                        quest = dialogue[int(quest) - 1]
 
-                    except ValueError:
-                        if number.lower() in ['e', 'x', 'exit', 'b', 'back']:
+                    except (IndexError, ValueError):
+                        if quest in ['e', 'x', 'exit', 'b', 'back']:
                             fizz = False  # Break the loop twice
                             break
 
-                        else:
-                            continue
-
-                    if (number < 0) or (number > len(dialogue) - 1):
                         continue
-
-                    quest = dialogue[number]
 
                     print('-'*25)
                     print(f"""QUEST NAME: {quest.name}\nGIVEN BY: {quest.q_giver}\n""")
@@ -586,24 +573,19 @@ def tools_menu():  # Display a set of usable tools on the world map
         print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(available_tools)]))
 
         while True:
-            tool = input('Input [#] (or type "exit"): ')
+            tool = input('Input [#] (or type "exit"): ').lower()
 
             try:
-                tool = int(tool) - 1
+                tool = available_tools[int(tool) - 1]
 
-            except ValueError:
-                if tool.lower() in ['e', 'x', 'exit', 'b', 'back']:
+            except (IndexError, ValueError):
+                if tool in ['e', 'x', 'exit', 'b', 'back']:
                     print('-'*25)
 
                     return
 
-                else:
-                    continue
-
-            if (tool < 0) or (tool > len(available_tools) - 1):
                 continue
 
-            tool = available_tools[tool]
             tool.use_item(units.player)
 
             print('-' * 25)

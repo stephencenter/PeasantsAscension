@@ -178,8 +178,7 @@ def set_adventure_name():
         # Check if the modified adventure name is identical to the original one the player proposed
         elif adventure_name != choice:
             while True:
-                y_n = input(f'\nI had to change some of that. Does "{adventure_name}" sound okay? | Yes or No: ')
-                y_n = y_n.lower()
+                y_n = input(f'\nI had to change some of that. Is "{adventure_name}" okay? | Yes or No: ').lower()
 
                 if y_n.startswith("y"):
                     format_save_names()
@@ -321,30 +320,18 @@ def check_save():  # Check for save files and load the game if they're found
                                        for num, fol in enumerate([key for key in sorted(save_files)])]))
 
         while True:
-            chosen = input('Input [#] (or type "create new"): ')
+            chosen = input('Input [#] (or type "create new"): ').lower()
+
             try:
                 # Account for the fact that list indices start at 0
-                chosen = int(chosen) - 1
-                if chosen < 0:
-                    continue
+                chosen = sorted(save_files)[int(chosen) - 1]
 
-            except ValueError:
-                chosen = chosen.lower()
-
+            except (ValueError, IndexError):
                 # Let the player create a new save file
                 if chosen.startswith("c"):
                     print('-'*25)
                     units.create_player()
                     return
-
-                else:
-                    continue
-
-            try:
-                # Sort the save file names in alphanumerical order
-                adventure_name = sorted(save_files)[chosen]
-
-            except IndexError:
 
                 continue
 
@@ -395,9 +382,7 @@ def check_save():  # Check for save files and load the game if they're found
 
 def save_game():
     while True:
-        y_n = input('Do you wish to save your progress? | Yes or No: ')
-
-        y_n = y_n.lower()
+        y_n = input('Do you wish to save your progress? | Yes or No: ').lower()
 
         if y_n.startswith('y'):
             print('Saving...')
@@ -465,8 +450,7 @@ def title_screen():
 
     while True:
         # Give the user a choice of keys to press to do specific actions
-        choice = input('[P]lay Game | [C]redits | [S]tory | [L]ore | [E]xit | Input Letter: ')
-        choice = choice.lower()
+        choice = input('[P]lay Game | [C]redits | [S]tory | [L]ore | [E]xit | Input Letter: ').lower()
 
         if choice.startswith('p'):
             return
@@ -691,8 +675,8 @@ The error message can be immediately copied to your clipboard if you wish.''')
         # The player is given the option to copy it instead of just being forced, because
         # I personally hate programs that overwrite your clipboard without permission.
         while True:
-            c = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ')
-            if c.lower() == "copy":
+            c = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ').lower()
+            if c == "copy":
                 copy_error(traceback.format_exc())
                 print('-'*25)
                 print('The error message has been copied to your clipboard.')
@@ -700,5 +684,5 @@ The error message can be immediately copied to your clipboard if you wish.''')
 
                 raise
 
-            elif c.lower() == '':
+            elif c == '':
                 raise

@@ -114,20 +114,16 @@ class Town:
                                                         for num, character in enumerate(target_options)]))
 
                         while True:
-                            target = input('Input [#] (or type "exit"): ')
-
-                            if target.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                                print('-'*25)
-                                break
+                            target = input('Input [#] (or type "exit"): ').lower()
 
                             try:
-                                target = int(target) - 1
-                            except ValueError:
-                                continue
+                                target = target_options[int(target) - 1]
 
-                            try:
-                                target = target_options[target]
-                            except IndexError:
+                            except (IndexError, ValueError):
+                                if target in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                    print('-'*25)
+                                    break
+
                                 continue
 
                             break
@@ -236,8 +232,7 @@ class Town:
         print('-'*25)
 
         while True:
-            print('You have {0} GP'.format(main.party_info['gp']))
-            print("""
+            print(f"""Shopkeeper Inventory | You have {main.party_info['gp']} GP
       [1] iSheet ---------> 1000000 GP
       [2] uPhone ---------> 1000000 GP
       [3] wePad ----------> 1000000 GP
@@ -248,13 +243,13 @@ class Town:
 
             spam = True
             while spam:
-                choice = input('Input [#] (or type "exit") ')
+                choice = input('Input [#] (or type "exit") ').lower()
 
                 try:
                     choice = int(choice)
 
                 except ValueError:
-                    if choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    if choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                         return
 
                 if choice in [1, 2, 3, 4, 5, 6]:
@@ -268,9 +263,9 @@ class Town:
                     print('-'*25)
 
                     while True:
-                        y_n = input("Do you want to buy an iSound for 250 GP? | Yes or No: ")
+                        y_n = input("Do you want to buy an iSound for 250 GP? | Yes or No: ").lower()
 
-                        if y_n.lower().startswith("y") and main.party_info['gp'] >= 250:
+                        if y_n.startswith("y") and main.party_info['gp'] >= 250:
                             print('-'*25)
                             input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
                             input('It has been added to the Quest Items page of your inventory | [ENTER] ')
@@ -284,14 +279,14 @@ class Town:
 
                             break
 
-                        elif y_n.lower().startswith("y") and main.party_info['gp'] < 250:
+                        elif y_n.startswith("y") and main.party_info['gp'] < 250:
                             print('-'*25)
                             input('Salesman: "Hey, you don\'t have enough money for that!" | [ENTER]')
                             print('-'*25)
 
                             break
 
-                        elif y_n.lower().startswith("n"):
+                        elif y_n.startswith("n"):
                             print('-'*25)
                             spam = False
 
@@ -304,9 +299,7 @@ class Town:
         while True:
             choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
                 "It's free, y'know." if not self.inn_cost else ' '.join(
-                    ["One Night is", str(self.inn_cost), "GP."])))
-
-            choice = choice.lower()
+                    ["One Night is", str(self.inn_cost), "GP."]))).lower()
 
             if choice.startswith('y'):
                 print()
@@ -372,9 +365,7 @@ class Town:
 
         while True:
             eggs = False
-            b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ')
-
-            b_s = b_s.lower()
+            b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ').lower()
 
             if b_s.startswith('b'):
                 print('-'*25)
@@ -434,26 +425,17 @@ class Town:
                         for num, item in enumerate(stock[item_category])]))
 
                     while True:
-                        purchase = input('Input [#] (or type "back"): ')
+                        purchase = input('Input [#] (or type "back"): ').lower()
+
                         try:
-                            purchase = int(purchase) - 1
-                            if purchase < 0:
-                                continue
+                            i = stock[item_category][int(purchase) - 1]
 
-                        except ValueError:
-                            purchase = purchase.lower()
-
+                        except (IndexError, ValueError):
                             if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                                 print('-'*25)
                                 fizz = False
                                 break
 
-                            else:
-                                continue
-
-                        try:
-                            i = stock[item_category][purchase]
-                        except IndexError:
                             continue
 
                         print('-'*25)
@@ -500,9 +482,7 @@ class Town:
       [4] Accessories
       [5] Miscellaneous""")
                     while True:
-                        cat = input('Input [#] (or type "back"): ')
-
-                        cat = cat.lower()
+                        cat = input('Input [#] (or type "back"): ').lower()
 
                         if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                             print('-'*25)
@@ -551,24 +531,17 @@ class Town:
                 ['[{0}] {1}'.format(x + 1, npc) for x, npc in enumerate(self.people)]))
 
             while True:
-                npc = input('Input [#] (or type "exit"): ')
+                npc = input('Input [#] (or type "exit"): ').lower()
 
                 try:
-                    npc = int(npc) - 1
+                    npc = self.people[int(npc) - 1]
                     if npc < 0:
                         continue
-                except ValueError:
 
-                    npc = npc.lower()
-
+                except (IndexError, ValueError):
                     if npc in ['e', 'x', 'exit', 'b', 'back', 'c', 'cancel']:
                         return
-                    else:
-                        continue
 
-                try:
-                    npc = self.people[npc]
-                except IndexError:
                     continue
 
                 pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')

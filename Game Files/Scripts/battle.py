@@ -466,6 +466,7 @@ def battle_inventory(user):
 
         while True:
             item = input('Input [#] (or type "exit"): ').lower()
+
             try:
                 item = inv_system.inventory['consumables'][int(item) - 1]
 
@@ -473,8 +474,7 @@ def battle_inventory(user):
                 if item in ['e', 'x', 'exit', 'b', 'back']:
                     return False
 
-                else:
-                    continue
+                continue
 
             print('\n-Player Turn-')
 

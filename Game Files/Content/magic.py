@@ -179,11 +179,11 @@ def pick_cat(user, is_battle=True):
 
     while True:
         do_continue = False
-        print("""{0}'s spellbook:
+        print(f"""{user.name}'s spellbook:
       [1] Damaging Spells
       [2] Buff Spells
       [3] Healing Spells
-      [4] Use Most Recent Spell""".format(user.name))
+      [4] Use Most Recent Spell""")
         spam = True
         while spam:
             cat = input('Input [#] (or type "exit"): ')
