@@ -40,7 +40,6 @@ import configparser
 import ctypes
 import json
 import logging
-import math
 import msvcrt
 import os
 import re
@@ -297,10 +296,8 @@ def check_save():  # Check for save files and load the game if they're found
     if not save_files:
         # If there are no found save files, then have the player make a new character
         print('No save files found. Starting new game...')
-
-        smart_sleep(0.1)
-
         print('-'*25)
+        smart_sleep(0.1)
         units.create_player()
 
         return
@@ -316,15 +313,15 @@ def check_save():  # Check for save files and load the game if they're found
     while spam:
         # Print information about each save file and allow the player to choose which
         # file to open
-        print('     ', '\n      '.join([f"[{num + 1}] {fol}{' '*(padding - len(fol))} | {menu_info[fol]}"
-                                       for num, fol in enumerate([key for key in sorted(save_files)])]))
+        for num, fol in enumerate([key for key in sorted(save_files)]):
+            print(f"      [{num + 1}] {fol}{' '*(padding - len(fol))} | {menu_info[fol]}")
 
         while True:
             chosen = input('Input [#] (or type "create new"): ').lower()
 
             try:
                 # Account for the fact that list indices start at 0
-                chosen = sorted(save_files)[int(chosen) - 1]
+                adventure_name = sorted(save_files)[int(chosen) - 1]
 
             except (ValueError, IndexError):
                 # Let the player create a new save file
@@ -338,7 +335,7 @@ def check_save():  # Check for save files and load the game if they're found
             format_save_names()
 
             print('-'*25)
-            print(f'Loading Save File: "{sorted(save_files)[chosen]}"...')
+            print(f'Loading Save File: "{sorted(save_files)[int(chosen) - 1]}"...')
             smart_sleep(0.1)
 
             # Attempt to open the save files and translate
@@ -370,9 +367,9 @@ def check_save():  # Check for save files and load the game if they're found
                 return
 
             except (OSError, ValueError):
-                logging.exception('Error loading game:')
+                logging.exception(f'Error loading game on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
                 print('There was an error loading your game. Please reload game.')
-                print('Error message can be found in error_log.out')
+                print('Error message can be found in the error_log.out file.')
                 input("\nPress enter/return ")
 
                 # A file failing to load screws up some internal values, so the entire game needs to be restarted
@@ -380,17 +377,21 @@ def check_save():  # Check for save files and load the game if they're found
                 sys.exit()
 
 
-def save_game():
+def save_game(verbose=True):
+    # Save important game data to .json files
+    # If verbose == True, then this function will print everything and use smart_sleep() functions
+    # When set to False, this function can be used to auto-save the game
     while True:
-        y_n = input('Do you wish to save your progress? | Yes or No: ').lower()
+        y_n = input('Do you wish to save your progress? | Yes or No: ').lower() if verbose else 'y'
 
         if y_n.startswith('y'):
-            print('Saving...')
-            smart_sleep(0.1)
+            print('Saving...') if verbose else ''
+            smart_sleep(0.1) if verbose else ''
 
             # Check if the save directory already exists, and create it if it doesn't
             try:
                 os.makedirs('/'.join([save_dir, adventure_name]))
+
             except FileExistsError:
                 pass
 
@@ -428,14 +429,14 @@ def save_game():
                                                                          units.player.lvl,
                                                                          units.player.class_.title()))
 
-                print('Save successful.')
+                print('Save successful.') if verbose else ''
 
                 return
 
             except (OSError, ValueError):
-                logging.exception('Error saving game:')
-                print('There was an error saving your game. Error message can be found in error_log.out')
-                input("\nPress enter/return ")
+                logging.exception(f'Error saving game on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
+                print('There was an error in saving. Error message can be found in error_log.out') if verbose else ''
+                input("\nPress enter/return ") if verbose else ''
 
         elif y_n.startswith('n'):
             return
@@ -485,13 +486,16 @@ def title_screen():
 
             except FileNotFoundError:
                 # Display this is the Credits.txt file couldn't be found
-                print('The "Credits.txt" file could not be found.')
+                logging.exception(f'Error finding credits.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
+                print('The "credits.txt" file could not be found.')
+                input("\nPress enter/return ")
 
             except OSError:
                 # If there is a problem opening the Credits.txt file, but it does exist,
                 # display this message and log the error
-                logging.exception('Error loading Credits.txt:')
-                print('There was a problem opening "Credits.txt".')
+                logging.exception(f'Error loading credits.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
+                print('There was a problem opening "credits.txt".')
+                input("\nPress enter/return ")
 
             print(title_logo)
 
@@ -521,13 +525,16 @@ def title_screen():
 
             except FileNotFoundError:
                 # Display this is the peasant_plot.txt file couldn't be found
+                logging.exception(f'Error finding peasant_plot.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
                 print('The "peasant_plot.txt" file could not be found.')
+                input("\nPress enter/return ")
 
             except OSError:
                 # If there is a problem opening the peasant_plot.txt file, but it does exist,
                 # display this message and log the error
-                logging.exception('Error loading peasant_plot.txt:')
+                logging.exception(f'Error loading peasant_plot.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
                 print('There was an problem opening "peasant_plot.txt".')
+                input("\nPress enter/return ")
 
             print('-'*25)
 
@@ -556,10 +563,11 @@ def title_screen():
                 pygame.mixer.music.set_volume(music_vol)
 
             except FileNotFoundError:
+                logging.exception(f'Error finding peasant_lore.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
                 print('The "peasant_lore.txt" file could not be found.')
 
             except OSError:
-                logging.exception('Error loading peasant_lore.txt:')
+                logging.exception(f'Error loading peasant_lore.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
                 print('There was an problem opening "peasant_lore.txt".')
 
             print('-'*25)
@@ -571,8 +579,6 @@ def title_screen():
 
 
 def set_prompt_properties():
-    # Configure the properties of the command prompt so that everything fits/looks right
-
     # Find the size of the screen
     screen = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1)
 
@@ -597,13 +603,6 @@ def set_prompt_properties():
 
     handle = ctypes.windll.kernel32.GetStdHandle(-11)
     ctypes.windll.kernel32.SetCurrentConsoleFontEx(handle, ctypes.c_long(False), ctypes.pointer(font))
-
-    # Calculate the proper width for the buffer size and then set the height to be 150
-    # A height of 150 should allow the player to scroll back up to read previous events if needs be.
-    os.system("@echo off")
-    os.system("conSize.bat {0} {1} {2} {3}".format(math.ceil(screen[0]/font.dwFontSize.X),
-                                                   math.ceil(screen[1]/font.dwFontSize.Y),
-                                                   math.ceil(screen[0]/font.dwFontSize.X), 150))
 
     # Set the console title
     ctypes.windll.kernel32.SetConsoleTitleA(f"Peasants' Ascension {game_version}".encode())
@@ -658,31 +657,31 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
 
     # These exceptions will only occur if I explicitly tell them to, and in these cases I do not want them silenced
     except YouDontSurfException:
+        logging.exception(f'Player was unable to surf on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         raise
 
     except Exception as e:
         # If an exception is raised and not caught, log the error message.
         # raise # Uncomment this if you're using the auto-input debugger
         logging.exception(f'Got exception of main handler on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
-        pygame.mixer.music.stop()
-        print(traceback.format_exc())
 
-        print('''Peasants' Ascension encountered an error and crashed! The error message above should
-be sent as soon as possible to TheFrozenMawile (ninjafurret@gmail.com) to make sure the bug gets fixed.
-The error message can be immediately copied to your clipboard if you wish.''')
+        print(traceback.format_exc())
+        print("""\
+Peasants' Ascension encountered an error and crashed! Send the error message
+shown above to TheFrozenMawile (ninjafurret@gmail.com) to make sure the bug
+gets fixed.""")
         print('-'*25)
 
-        # The player is given the option to copy it instead of just being forced, because
-        # I personally hate programs that overwrite your clipboard without permission.
+        pygame.mixer.music.stop()
         while True:
-            c = input('Type in "copy" to copy to your clipboard, or simply press enter to exit: ').lower()
+            c = input('Type in "copy" to copy the error to your clipboard, or simply press enter to exit: ').lower()
             if c == "copy":
                 copy_error(traceback.format_exc())
                 print('-'*25)
                 print('The error message has been copied to your clipboard.')
-                input('Press enter/return to exit ')
+                input('\nPress enter/return ')
 
                 raise
 
-            elif c == '':
+            elif not c:
                 raise

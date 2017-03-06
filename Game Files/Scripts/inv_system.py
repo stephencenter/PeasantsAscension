@@ -95,7 +95,7 @@ equipped = {
 def pick_category():
     global inventory
     while True:
-        print("""Categories:
+        print("""Inventory Categories:
       [1] Armor
       [2] Weapons
       [3] Accessories
@@ -166,7 +166,7 @@ def pick_category():
 
                         else:
                             print('-'*25)
-                            print('The {0} category is empty.'.format(vis_cat))
+                            print(f'The {vis_cat} category is empty.')
                             input("\nPress enter/return ")
                             print('-'*25)
 
@@ -174,7 +174,7 @@ def pick_category():
 
                 else:
                     print('-'*25)
-                    print('The {0} category is empty.'.format(vis_cat))
+                    print(f'The {vis_cat} category is empty.')
                     input("\nPress enter/return ")
                     print('-'*25)
                     break
@@ -202,61 +202,52 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             view_quests()
             return
 
-        elif cat == 'equipped_items':
+        if cat == 'equipped_items':
             manage_equipped()
             return
 
-        else:
-            if inventory[cat]:
-                print('-'*25)
-                if not gs:
-                    print(f'{vis_cat}: \n      ', end='')
-                    print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(inventory[cat])]))
-
-                else:
-                    try:
-                        padding = len(max([it.name for it in inventory[cat] if not it.imp], key=len))
-
-                    except ValueError:
-                        padding = 1
-
-                    extra_pad = len(str(len([it.name for it in inventory[cat] if not it.imp]) + 1))
-
-                    print('{0}:'.format(vis_cat))
-
-                    for x, y in enumerate([it for it in inventory[cat] if not it.imp]):
-                        full_padding = '-'*(padding - len(y.name) + (extra_pad - len(str(x + 1))))
-                        print('     ', '      '.join([f"[{x + 1}] {y} {full_padding}--> {y.sell} GP"]))
+        if inventory[cat]:
+            print('-'*25)
+            if not gs:
+                print(f"{vis_cat}: ")
+                for x, y in enumerate(inventory[cat]):
+                    print(f'      [{x + 1}] {y}')
 
             else:
-                return
-
-            while True:
-                item = input('Input [#] (or type "back"): ').lower()
-
                 try:
-                    if gs:
-                        item = [x for x in inventory[cat] if not x.imp][int(item) - 1]
+                    padding = len(max([it.name for it in inventory[cat] if not it.imp], key=len))
 
-                    else:
-                        item = inventory[cat][int(item) - 1]
+                except ValueError:
+                    padding = 1
 
-                    if item < 0:
-                        continue
+                extra_pad = len(str(len([it.name for it in inventory[cat] if not it.imp]) + 1))
 
-                except (IndexError, ValueError):
-                    if item in ['e', 'x', 'exit', 'b', 'back']:
-                        return
+                print(f'{vis_cat}:')
 
-                    continue
+                for x, y in enumerate([it for it in inventory[cat] if not it.imp]):
+                    full_padding = '-'*(padding - len(y.name) + (extra_pad - len(str(x + 1))))
+                    print('     ', '      '.join([f"[{x + 1}] {y} {full_padding}--> {y.sell} GP"]))
 
+        else:
+            return
+
+        while True:
+            item = input('Input [#] (or type "back"): ').lower()
+
+            try:
                 if gs:
-                    sell_item(cat, item)
+                    sell_item(cat, [x for x in inventory[cat] if not x.imp][int(item) - 1])
 
                 else:
-                    pick_action(cat, item)
+                    pick_action(cat, inventory[cat][int(item) - 1])
 
-                break
+            except (IndexError, ValueError):
+                if item in ['e', 'x', 'exit', 'b', 'back']:
+                    return
+
+                continue
+
+            break
 
 
 def pick_action(cat, item):
@@ -339,13 +330,12 @@ Input [#] (or type "back"): """)
 
 
 def manage_equipped():
-    print('-'*25)
-
     units.player.choose_target("Choose party member to view equipment for:", ally=True, enemy=False)
     manage_equipped_2(units.player.target)
 
 
 def manage_equipped_2(target):
+    print('-' * 25)
     while True:
         p_equip = equipped[target.name if target != units.player else 'player']
 
@@ -397,6 +387,9 @@ def manage_equipped_2(target):
             elif isinstance(selected, ItemClass.Armor):
                 key = selected.part
 
+            else:
+                continue
+
             print('-' * 25)
             manage_equipped_3(key, selected, p_equip, target)
             print('-' * 25)
@@ -404,7 +397,6 @@ def manage_equipped_2(target):
             break
 
 
-# NEEDS REWORDING
 def manage_equipped_3(key, selected, p_equip, target):
     global equipped
 
@@ -488,8 +480,14 @@ def view_quests():
 
         if dialogue:
             while fizz:
-                print(f'{"Finished" if choice.startswith("f") else "Active"}:\n      ', end='')
-                print('\n      '.join([f'[{num + 1}] {x.name}' for num, x in enumerate(dialogue)]))
+                if choice.startswith("f"):
+                    print("Finished:")
+
+                else:
+                    print("Active:")
+
+                for num, x in enumerate(dialogue):
+                    print(f'      [{num + 1}] {x.name}')
 
                 while True:
                     quest = input('Input [#] (or type "back"): ').lower()
@@ -505,8 +503,12 @@ def view_quests():
                         continue
 
                     print('-'*25)
-                    print(f"""QUEST NAME: {quest.name}\nGIVEN BY: {quest.q_giver}\n""")
-                    print('\n'.join([x for x in quest.desc]))
+                    print(f"QUEST NAME: {quest.name}")
+                    print(f"GIVEN BY: {quest.q_giver}")
+
+                    for x in quest.desc:
+                        print(x)
+
                     input("\nPress enter/return ")
                     print('-'*25)
 
@@ -529,7 +531,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
     print(item.desc)
     print('-'*25)
     while True:
-        y_n = input('Should your party sell the {item.name} for {item.sell} GP? | Yes or No: ').lower()
+        y_n = input(f'Should your party sell the {item.name} for {item.sell} GP? | Yes or No: ').lower()
 
         if y_n.startswith('y'):
             for num, it in enumerate(inventory[cat]):
@@ -538,59 +540,13 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
                     inventory[cat].remove(it)
                     main.party_info['gp'] += item.sell
 
-                    print('Your party hands the shopkeeper their {item.name} and receives {item.sell} GP.')
+                    print(f'Your party hands the shopkeeper their {item.name} and receives {item.sell} GP.')
                     input('\nPress enter/return ')
 
                     return
 
         elif y_n.startswith('n'):
             return
-
-
-def tools_menu():  # Display a set of usable tools on the world map
-    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel', 'Boots of Insane Speed']
-    available_tools = []
-
-    for cat in inventory:
-        if cat in ['coord', 'quests']:
-            continue
-
-        for item in set(inventory[cat]):
-            if item.name in tool_names:
-                available_tools.append(item)
-
-    print('-'*25)
-
-    if not available_tools:
-        print('Your party has no available tools to use.')
-        input('\nPress enter/return ')
-        print('-'*25)
-
-        return
-
-    while True:
-        print('Tools: \n      ', end='')
-        print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(available_tools)]))
-
-        while True:
-            tool = input('Input [#] (or type "exit"): ').lower()
-
-            try:
-                tool = available_tools[int(tool) - 1]
-
-            except (IndexError, ValueError):
-                if tool in ['e', 'x', 'exit', 'b', 'back']:
-                    print('-'*25)
-
-                    return
-
-                continue
-
-            tool.use_item(units.player)
-
-            print('-' * 25)
-
-            break
 
 
 def serialize_inv(path):

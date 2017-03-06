@@ -232,7 +232,7 @@ class ElementAccessory(Accessory):
         user.element = self.element
 
         print('-'*25)
-        print('{0} equips the {1}. Their element is now set to {2}.'.format(user.name, self.name, self.element))
+        print(f'{user.name} equips the {self.name}. Their element is now set to {self.element}.')
         input("\nPress enter/return ")
 
 

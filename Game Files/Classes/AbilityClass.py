@@ -1,15 +1,15 @@
 import math
-# import sys
+import sys
 
 import ascii_art
-# import battle
-# import units
+import battle
+import units
 
-# if __name__ == "__main__":
-#     sys.exit()
-#
-# else:
-#     main = sys.modules["__main__"]
+if __name__ == "__main__":
+    sys.exit()
+
+else:
+    main = sys.modules["__main__"]
 
 
 # Abilites are similar to magic, except they are tied to classes and are level-independent. They also
@@ -349,7 +349,7 @@ class_abilities = {
 }
 
 # print(sum(len(x) for x in class_abilities.values()))
-for x in class_abilities.values():
-    for y in x:
-        print(y.desc)
-        input()
+# for x in class_abilities.values():
+#     for y in x:
+#         print(y.desc)
+#         input()

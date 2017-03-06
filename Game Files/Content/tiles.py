@@ -121,32 +121,32 @@ def movement_system():
         coord_change, available_dirs = movement_hud()
 
         while True:
-            direction = input('Input Direction ([N], [S], [E], [W]) or [P]arty, [T]ools, [L]ook, [R]est: ')
+            command = input('Input Command (type "help" to view command list): ')
 
             # Truncate the player's input to be only the first character, and then make it lowercase
-            if direction:
-                direction = direction[0].lower()
+            if command:
+                command = command[0].lower()
 
             # If the player's input is in a list of available direcitonal inputs, then:
-            if any(map(direction.startswith, [x[0] for x in available_dirs])):
+            if any(map(command.startswith, [x[0] for x in available_dirs])):
                 sounds.foot_steps.play()
 
                 main.party_info['current_tile'] = [b for b in all_tiles if b.tile_id in
-                                                   [a[1] for a in available_dirs if a[0] == direction]][0]
+                                                   [a[1] for a in available_dirs if a[0] == command]][0]
 
-                # Translate the player's directional input into a coordinate change
+                # Translate the player's commandal input into a coordinate change
                 for drc in [a[0] for a in available_dirs]:
-                    if drc == direction == 'e':
+                    if drc == command == 'e':
                         coord_change = ['x', 1]
-                    elif drc == direction == 'w':
+                    elif drc == command == 'w':
                         coord_change = ['x', -1]
-                    elif drc == direction == 'n':
+                    elif drc == command == 'n':
                         coord_change = ['y', 1]
-                    elif drc == direction == 's':
+                    elif drc == command == 's':
                         coord_change = ['y', -1]
-                    elif drc == direction == 'u':
+                    elif drc == command == 'u':
                         coord_change = ['z', 1]
-                    elif drc == direction == 'd':
+                    elif drc == command == 'd':
                         coord_change = ['z', -1]
 
                 # Change the player's coordinates
@@ -179,25 +179,31 @@ def movement_system():
 
                 break
 
-            elif direction.startswith('p'):
-                player_info()
+            elif command.startswith('p'):
+                stats_command()
 
-                movement_hud()
+            elif command.startswith('m'):
+                magic_command()
 
-            elif direction.startswith('t'):
-                inv_system.tools_menu()
+            elif command.startswith('i'):
+                inv_command()
 
-                movement_hud()
+            elif command.startswith('t'):
+                tools_command()
 
-            elif direction.startswith('l'):
-                tile_description()
+            elif command.startswith('l'):
+                look_command()
 
-                movement_hud()
+            elif command.startswith('r'):
+                rest_command()
 
-            elif direction.startswith('r'):
-                rest()
+            elif command.startswith('h'):
+                help_command()
 
-                movement_hud()
+            else:
+                continue
+
+            movement_hud()
 
 
 def check_region():
@@ -252,6 +258,7 @@ def check_region():
 
 def movement_hud():
     available_dirs = []
+    coord_change = ['x', 0]
     mpi = main.party_info
     tile = mpi['current_tile']
 
@@ -270,32 +277,32 @@ def movement_hud():
 
     for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
         if drc == tile.to_e:
-            print("          To the [E]ast", end='')
+            print("    To the [E]ast", end='')
             available_dirs.append(['e', drc])
             coord_change = ['x', 1]
 
         if drc == tile.to_w:
-            print("          To the [W]est", end='')
+            print("    To the [W]est", end='')
             available_dirs.append(['w', drc])
             coord_change = ['x', -1]
 
         if drc == tile.to_n:
-            print("          To the [N]orth", end='')
+            print("    To the [N]orth", end='')
             available_dirs.append(['n', drc])
             coord_change = ['y', 1]
 
         if drc == tile.to_s:
-            print("          To the [S]outh", end='')
+            print("    To the [S]outh", end='')
             available_dirs.append(['s', drc])
             coord_change = ['y', -1]
 
         if drc == tile.to_up:
-            print("                 [U]pwards, above your party,", end='')
+            print("    [U]pwards, above your party,", end='')
             available_dirs.append(['u', drc])
             coord_change = ['z', 1]
 
         if drc == tile.to_dn:
-            print("                 [D]ownwards, below your party,", end='')
+            print("    [D]ownwards, below your party,", end='')
             available_dirs.append(['d', drc])
             coord_change = ['z', -1]
 
@@ -310,106 +317,116 @@ def movement_hud():
     return coord_change, available_dirs
 
 
-def player_info():
+def help_command():
+    print('-'*25)
+    print("""Command List:
+[NSEW] - Moves your party if the selected direction is unobstructed
+[L]ook - Displays a description of your current location
+[P]arty Stats - Displays the stats of a specific party member
+[T]ool Menu - Allows you to quickly use tools without opening your inventory
+[M]agic - Allows you to use healing spells outside of battle
+[R]est - Heals your party member while in the overworld
+[I]nventory - Displays your inventory and lets you equip/use items
+
+Type the letter in brackets while on the overworld to use the command""")
+
+    input("\nPress enter/return ")
+
+
+def stats_command():
     print('-' * 25)
     print('You stop to rest for a moment.')
 
-    while True:
-        decision = input('View [I]nventory, [S]tats, or use [M]agic? | Input Letter (or type "exit"): ').lower()
+    target_options = [x for x in [units.player,
+                                  units.solou,
+                                  units.xoann,
+                                  units.adorine,
+                                  units.ran_af,
+                                  units.parsto,
+                                  units.chyme] if x.enabled]
 
-        if decision.startswith('i'):
-            print('-' * 25)
-            inv_system.pick_category()
-            print('-' * 25)
+    if len(target_options) == 1:
+        target = units.player
 
-        if decision.startswith('s'):
-            target_options = [x for x in [units.player,
-                                          units.solou,
-                                          units.xoann,
-                                          units.adorine,
-                                          units.ran_af,
-                                          units.parsto,
-                                          units.chyme] if x.enabled]
+    else:
+        print("Select Character:")
 
-            if len(target_options) == 1:
-                target = units.player
+        for num, character in enumerate(target_options):
+            print(f"      [{int(num) + 1}] {character.name}")
 
-            else:
-                print("Select Character:")
-                print("     ", "\n      ".join(
-                    [f"[{int(num) + 1}] {character.name}" for num, character in enumerate(target_options)]))
+        while True:
+            target = input('Input [#] (or type "exit"): ').lower()
 
-                while True:
-                    target = input('Input [#] (or type "exit"): ').lower()
+            try:
+                target = target_options[int(target) - 1]
 
-                    try:
-                        target = target_options[int(target) - 1]
-
-                    except (ValueError, IndexError):
-                        if target in ['e', 'x', 'exit', 'b', 'back']:
-                            print('-' * 25)
-
-                            break
-
-                        continue
+            except (ValueError, IndexError):
+                if target in ['e', 'x', 'exit', 'b', 'back']:
+                    print('-' * 25)
 
                     break
 
-            if isinstance(target, units.PlayableCharacter):
-                print('-' * 25)
-                target.player_info()
-                print('-' * 25)
+                continue
 
-        if decision.startswith('m'):
-            target_options = [x for x in [units.player,
-                                          units.solou,
-                                          units.xoann,
-                                          units.adorine,
-                                          units.ran_af,
-                                          units.parsto,
-                                          units.chyme] if x.enabled]
+            break
 
-            if len(target_options) == 1:
-                target = units.player
-
-            else:
-                print('-' * 25)
-                print("Select Spellbook:")
-                print("     ", "\n      ".join(
-                    [f"[{int(num) + 1}] {character.name}'s Spells" for num, character in enumerate(target_options)]))
-
-                while True:
-                    target = input("Input [#]: ")
-                    try:
-                        target = target_options[int(target) - 1]
-
-                    except (ValueError, IndexError):
-                        continue
-
-                    break
-
-            if magic.spellbook[target.name if target != units.player else 'player']['Healing']:
-                magic.pick_spell('Healing', target, False)
-
-            else:
-                print('-' * 25)
-                print(f'{target.name} has no overworld-allowed spells in their spellbook.')
-                input("\Press enter/return ")
-
-        if decision in ['e', 'x', 'exit', 'b', 'back']:
-            print('-' * 25)
-
-            return
+    if isinstance(target, units.PlayableCharacter):
+        print('-' * 25)
+        target.player_info()
+        print('-' * 25)
 
 
-def tile_description():
+def inv_command():
+    inv_system.pick_category()
+    print('-' * 25)
+
+
+def magic_command():
+    target_options = [x for x in [units.player,
+                                  units.solou,
+                                  units.xoann,
+                                  units.adorine,
+                                  units.ran_af,
+                                  units.parsto,
+                                  units.chyme] if x.enabled]
+
+    if len(target_options) == 1:
+        target = units.player
+
+    else:
+        print('-' * 25)
+        print("Select Spellbook:")
+
+        for num, character in enumerate(target_options):
+            print(f"      [{int(num) + 1}] {character.name}'s Spells")
+
+        while True:
+            target = input("Input [#]: ")
+            try:
+                target = target_options[int(target) - 1]
+
+            except (ValueError, IndexError):
+                continue
+
+            break
+
+    if magic.spellbook[target.name if target != units.player else 'player']['Healing']:
+        magic.pick_spell('Healing', target, False)
+
+    else:
+        print('-' * 25)
+        print(f'{target.name} has no overworld-allowed spells in their spellbook.')
+        input("\Press enter/return ")
+
+
+def look_command():
     print('-' * 25)
     print(main.party_info['current_tile'].desc)
     input("\nPress enter/return ")
     print('-' * 25)
 
 
-def rest():
+def rest_command():
     # Attempt to re-gain health on the world map. There is a chance to get ambushed by an enemy
     # when doing this.
     print('-'*25)
@@ -467,3 +484,51 @@ def rest():
         print('You rested well and decide to continue on your way.')
         if not towns.search_towns(enter=False):
             print('-'*25)
+
+
+def tools_command():
+    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel', 'Boots of Insane Speed']
+    available_tools = []
+
+    for cat in inv_system.inventory:
+        if cat in ['coord', 'quests']:
+            continue
+
+        for item in inv_system.inventory[cat]:
+            if item.name in tool_names:
+                available_tools.append(item)
+
+    print('-' * 25)
+
+    if not available_tools:
+        print('Your party has no available tools to use.')
+        input('\nPress enter/return ')
+        print('-' * 25)
+
+        return
+
+    while True:
+        print('Tools: ')
+
+        for x, y in enumerate(available_tools):
+            print(f"      [{x + 1}] {y}")
+
+        while True:
+            tool = input('Input [#] (or type "exit"): ').lower()
+
+            try:
+                tool = available_tools[int(tool) - 1]
+
+            except (IndexError, ValueError):
+                if tool in ['e', 'x', 'exit', 'b', 'back']:
+                    print('-' * 25)
+
+                    return
+
+                continue
+
+            tool.use_item(units.player)
+
+            print('-' * 25)
+
+            break

@@ -54,9 +54,10 @@ def solou_c1_at():
     units.solou.enabled = True
     solou_convo_1.active = False
     solou_convo_2.active = True
+
+    input('-'*25)
     print("Solou the Mage has been added to your party!")
     input('\nPress enter/return ')
-    print('-'*25)
 
 solou_convo_1.after_talking = solou_c1_at
 
@@ -84,11 +85,6 @@ def solou_q1_us():
 
 
 solou_quest_1.upon_starting = solou_q1_us
-
-
-def solou_q1_uc():
-    pass
-
 
 npc_solou = NPC("Solou", [solou_convo_1, solou_convo_2, solou_quest_1], "Page")
 
@@ -325,7 +321,7 @@ rivesh = NPC('Rivesh', [rivesh_convo_1, rivesh_convo_2, rivesh_convo_3, rivesh_c
 # -- Name: Alfred -- Town: Nearton
 alfred_convo_1 = Conversation([
     "It is rumored that a mighty gel-creature lives south-east of this very town.",
-    "I'd be careful around there if I were you."], "alfred_c1",active=True)
+    "I'd be careful around there if I were you."], "alfred_c1", active=True)
 
 alfred_convo_2 = Conversation(["Come back here when you defeat the evil Master Slime. Good luck!"], "alfred_c2")
 
@@ -424,6 +420,7 @@ def krystin_c3_at():
 
     krystin_convo_3.active = False
     krystin_convo_4.active = True
+
     if kyle_convo_4.active:
         alden_quest_1.finished = True
         alden_convo_2.active = False
@@ -502,7 +499,7 @@ alden_quest_1.upon_completing = alden_q1_uc
 alden_convo_1 = Conversation(["I've summoned the mighty beast. Now hurry up and dispose of it before it causes",
                               "any damage."], "alden_c1")
 
-alden_convo_2 = Conversation( ["You've defeated him? Good, now go talk to the village elders! Good luck!"], "alden_c2")
+alden_convo_2 = Conversation(["You've defeated him? Good, now go talk to the village elders! Good luck!"], "alden_c2")
 
 alden_convo_3 = Conversation(["Thanks again, hero. You've saved those towns a lot of trouble."], "alden_c3")
 
@@ -1084,6 +1081,7 @@ def serialize_dialogue(path):
     for c in all_dialogue:
         if isinstance(c, Quest):
             json_dialogue[c.conv_id] = [c.active, c.started, c.finished]
+
         else:
             json_dialogue[c.conv_id] = [c.active]
 

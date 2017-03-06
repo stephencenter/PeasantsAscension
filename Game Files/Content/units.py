@@ -14,6 +14,7 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
+import json
 import math
 import random
 import re
@@ -21,6 +22,7 @@ import sys
 
 import pygame
 
+import AbilityClass
 import ascii_art
 import battle
 import inv_system
@@ -28,7 +30,6 @@ import items
 import magic
 import npcs
 import sounds
-import json
 
 if __name__ == "__main__":
     sys.exit()
@@ -45,17 +46,6 @@ battle_options = """Pick {0}'s Move:
       [3]: Use Abilities
       [4]: Use Items
       [5]: Run"""
-
-player = ''
-solou = ''
-xoann = ''
-adorine = ''
-ran_af = ''
-parsto = ''
-chyme = ''
-monster = ''
-monster_2 = ''
-monster_3 = ''
 
 
 class Unit:
@@ -94,11 +84,12 @@ class PlayableCharacter(Unit):
         self.ext_exp = 0          # Extra Experience
         self.req_xp = 3           # Required XP to level up
         self.move = ''            # What move the character chose during battle
-        self.target = ''          # The target of the PCU's current action
-        self.c_ability = ''       # The ability that the PCU is currently casting
-        self.c_spell = ''         # The spell that the PCU is currently casting
         self.ap = 10              # The number of "Action Points" that the user has remaining
         self.max_ap = 10          # The number of maximum Action Points the user can have at one time
+
+        self.target = Monster('', '', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
+        self.c_ability = AbilityClass.Ability('', '', '')  # The ability that the PCU is currently casting
+        self.c_spell = magic.Spell('', '', '', '')  # The spell that the PCU is currently casting
 
         self.attributes = {'int': 1,  # Intelligence, for Mages
                            'wis': 1,  # Wisdom, for Paladins
@@ -137,8 +128,9 @@ class PlayableCharacter(Unit):
             # Flygon Jones, Cynder887, and Apollo Kalar are all pseudonyms for my real-life
             # best friend. He also happens to be one of the primary bug-testers for the game!
             if self.name.lower() in ["flygon jones", "apollo kalar", "cynder887"]:
-                print(''.join(['Ah, ', self.name, '! My dear friend, it is great to see you again!']))
-                input('Press enter/return ')
+                print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
+                input('\nPress enter/return ')
+                print('-'*25)
 
                 return
 
@@ -162,11 +154,11 @@ class PlayableCharacter(Unit):
       [1] Mage: Master of the arcane arts capable of using all spells, but has low defense.
       [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes.
       [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage.
-      [4] Paladin: Heavy-armor user who excel at holy and healing magic and uses hammers.
+      [4] Paladin: Heavy-armor user who excels at holy and healing magic and uses hammers.
       [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells.
       [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP.
 Input [#]: """)
-            print()
+
             try:
                 class_ = {'1': "mage",
                           '2': "assassin",
@@ -175,8 +167,71 @@ Input [#]: """)
                           '5': "monk",
                           '6': "warrior"}[class_]
 
+                class_desc = {'mage': """\
+    -Can use abilities that scale off Intelligence
+    -Capable of learning every spell
+    -Magic damage scales with equipped weapon
+    -Deals Pierce Damage with Standard Attacks
+    -Deals 50% damage with Standard Attacks
+    -High Magic Attack, Magic Defense, and MP
+    -Average HP, Speed, and Evasion
+    -Low Pierce/Physical Attack and Pierce/Physical Defense""",
+
+                              'assassin': """\
+    -Can use abilities that scale off Dexterity
+    -Physical damage scales with equipped weapon
+    -Deals Physical Damage with Standard Attacks
+    -Deals 75% damage with Magical Spells
+    -High Speed and Physical Attack
+    -Above-average Evasion
+    -Average HP, Pierce Defense, and Physical Defense
+    -Low Magic Defense, MP, and Magic Attack""",
+
+                              'ranger': """\
+    -Can use abilities that scale off Perception
+    -Pierce Damage scales with equipped weapon
+    -Deals Pierce Damage with Standard Attacks
+    -Deals 75% damage with Magical Spells
+    -High Pierce Attack and Evasion
+    -Above-average Speed
+    -Average MP, HP, and Pierce Defense
+    -Low Defense and Magic Attack""",
+
+                              'paladin': """\
+    -Can use abilities that scale off Wisdom
+    -Healing spell HP bonus from Wisdom is 4*Wisdom instead of 2*Wisdom
+    -Can learn all Healing spells and offensive Light spells
+    -Physical Damage scales with equipped weapon
+    -Deals Physical Damage with Standard Attacks
+    -Above-average HP, Physical/Pierce/Magic defense, and Physical Attack
+    -Average Magic-attack and MP
+    -Low Speed and Evasion""",
+
+                              'monk': """\
+    -Can use abilities that scale off Constitution
+    -Capable of learning all Buff spells
+    -Physical damage scales with equipped weapon
+    -Deals Physical damage with Standard Attacks
+    -Deals 75% damage with Magical Spells
+    -Above-average Physical Attack, Speed, Evasion, and HP
+    -Average MP and Magical Attack
+    -Low Pierce Defense and Physical Defense""",
+
+                              'warrior': """\
+    -Can use abilities that scale off Strength
+    -Physical damage scales with equipped weapon
+    -Deals Physical Damage with Standard Attacks
+    -Deals 75% damage with Magical Spells
+    -High Pierce Defense, Physical Attack and Defense, and HP
+    -Low Magic Attack and Defense, Low Speed and Evasion, and Low MP"""}[class_]
+
             except KeyError:
                 continue
+
+            print('-'*25)
+            print(f"Information about {class_.title()}s: ")
+            print(class_desc)
+            print('-'*25)
 
             while True:
                 y_n = input(f'You wish to be of the {class_.title()} class? | Yes or No: ').lower()
@@ -217,7 +272,6 @@ Input [#]: """)
                 magic.new_spells(self)
 
                 if self.class_ == 'warrior':
-                    # Total gain: 21 pts.
                     self.p_dfns += 4
                     self.attk += 4
                     self.dfns += 4
@@ -229,7 +283,6 @@ Input [#]: """)
                     self.mp += 1
 
                 elif self.class_ == 'mage':
-                    # Total gain: 21 pts.
                     self.p_dfns += 1
                     self.attk += 1
                     self.dfns += 1
@@ -241,19 +294,17 @@ Input [#]: """)
                     self.mp += 4
 
                 elif self.class_ == 'assassin':
-                    # Total gain: 21 pts.
                     self.p_dfns += 2
                     self.attk += 4
                     self.dfns += 2
-                    self.m_attk += 2
+                    self.m_attk += 1
                     self.m_dfns += 1
                     self.spd += 5
-                    self.evad += 2
+                    self.evad += 3
                     self.hp += 2
                     self.mp += 1
 
                 elif self.class_ == 'ranger':
-                    # Total gain: 21 pts.
                     self.p_attk += 4
                     self.p_dfns += 2
                     self.dfns += 1
@@ -265,7 +316,6 @@ Input [#]: """)
                     self.mp += 2
 
                 elif self.class_ == 'monk':
-                    # Total gain: 21 pts.
                     self.p_dfns += 1
                     self.attk += 4
                     self.dfns += 1
@@ -277,7 +327,6 @@ Input [#]: """)
                     self.mp += 2
 
                 elif self.class_ == 'paladin':
-                    # Total gain: 21 pts.
                     self.p_dfns += 3
                     self.attk += 3
                     self.dfns += 3
@@ -471,15 +520,11 @@ Armor:
                 sounds.attack_miss.play()
 
         if self.move == '2':
-            if isinstance(self.c_spell, magic.Healing):
-                self.c_spell.use_magic(self, True)
+            self.c_spell.use_magic(self, True)
 
-            else:
-                self.c_spell.use_magic(self)
-
-        # Use Abilities (WIP)
         elif self.move == '3':
-            return False
+            # Does nothing, still a WIP
+            return
 
         # Run away!
         elif self.move == '5' and battle.run_away(self):
@@ -489,10 +534,7 @@ Armor:
 
             return 'Ran'
 
-        else:
-            return False
-
-        return True
+        return
 
     def player_choice(self):
         print(battle_options.format(self.name))
@@ -571,16 +613,14 @@ Armor:
 
             return
 
-    def choose_target(self, action_desc, ally=False, enemy=True, allow_dead=False):
+    def choose_target(self, action_desc, ally=False, enemy=True):
         pcu_list = [x for x in [player,
                                 solou,
                                 xoann,
                                 chyme,
                                 ran_af,
                                 adorine,
-                                parsto] if x.enabled and (True if allow_dead and 'dead' else
-                                                          False if not allow_dead and 'dead'
-                                                          else True)]
+                                parsto] if x.enabled]
 
         if enemy and not ally:
             if len([x for x in battle.m_list if x.status_ail != 'dead']) == 1:
@@ -1478,9 +1518,9 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
         elif damage_type == 'magical':
             dam_dealt = (m_attack - m_defense/2)*(1 + resist)*(1 + spell_power)
 
-            # Mages deal 1.5x damage with magical attacks
-            if attacker.class_ == 'mage':
-                dam_dealt *= 1.5
+            # Classes that aren't mages or paladins deal 0.75x damage with magical attacks
+            if attacker.class_ not in ['mage', 'paladin']:
+                dam_dealt *= 0.75
 
         else:
             raise Exception('Incorrect value for "damage_type" - must be physical, piercing, or magical')
@@ -1634,6 +1674,8 @@ def create_player():
     player.hp = copy.copy(player.max_hp)
     player.mp = copy.copy(player.max_mp)
     print('-'*25)
+
+    main.save_game(verbose=False)
 
 
 def spawn_monster():
@@ -1823,6 +1865,14 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     solou.target = ''
     chyme.target = ''
 
+    player.c_spell = ''
+    parsto.c_spell = ''
+    adorine.c_spell = ''
+    ran_af.c_spell = ''
+    xoann.c_spell = ''
+    solou.c_spell = ''
+    chyme.c_spell = ''
+
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
     with open(s_path, mode='w', encoding='utf-8') as f:
@@ -1893,3 +1943,14 @@ def deserialize_bosses(path):
         for boss in boss_list:
             if key == boss.name:
                 boss.active = json_bosslist[key]
+
+player = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+solou = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+xoann = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+adorine = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+ran_af = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+parsto = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+chyme = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+monster = Monster('', '', '', '', '', '', '', '', '', '', '')
+monster_2 = Monster('', '', '', '', '', '', '', '', '', '', '')
+monster_3 = Monster('', '', '', '', '', '', '', '', '', '', '')

@@ -52,8 +52,12 @@ class Spell:
 
     def use_mana(self, user):
         user.mp -= self.mana
+
         if user.mp < 0:
             user.mp = 0
+
+    def use_magic(self, user, is_battle):
+        pass
 
 
 class Healing(Spell):
@@ -121,7 +125,7 @@ class Damaging(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic(self, user):
+    def use_magic(self, user, is_battle=True):
         Spell.use_mana(self, user)
         target = user.target
 
@@ -155,7 +159,7 @@ class Buff(Spell):
     def __str__(self):
         return self.name
 
-    def use_magic(self, user):
+    def use_magic(self, user, is_battle=True):
         Spell.use_mana(self, user)
         target = user.target
 

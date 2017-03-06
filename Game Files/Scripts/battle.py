@@ -461,8 +461,10 @@ def battle_inventory(user):
     # The player can use items from the Consumables category of their inventory during battles.
 
     while True:
-        print('Battle Inventory: \n      ', end='')
-        print('\n      '.join([f'[{x + 1}] {y}' for x, y in enumerate(inv_system.inventory['consumables'])]))
+        print('Battle Inventory: ')
+
+        for x, y in enumerate(inv_system.inventory['consumables']):
+            print(f'[{x + 1}] {y}')
 
         while True:
             item = input('Input [#] (or type "exit"): ').lower()
@@ -496,45 +498,27 @@ def bat_stats():
     # strings to see how much padding (extra spaces) is needed to make things line up.
     first_padding = max([len(x.name) for x in enabled_pcus + m_list])
 
-    second_padding = len(max(['{0}/{1} HP'.format(units.player.hp, units.player.max_hp)
-                              if units.player.enabled else '',
-                              '{0}/{1} HP'.format(units.solou.hp, units.solou.max_hp)
-                              if units.solou.enabled else '',
-                              '{0}/{1} HP'.format(units.xoann.hp, units.xoann.max_hp)
-                              if units.xoann.enabled else '',
-                              '{0}/{1} MP'.format(units.adorine.hp, units.adorine.max_hp)
-                              if units.adorine.enabled else '',
-                              '{0}/{1} MP'.format(units.chyme.hp, units.chyme.max_hp)
-                              if units.chyme.enabled else '',
-                              '{0}/{1} MP'.format(units.ran_af.hp, units.ran_af.max_hp)
-                              if units.ran_af.enabled else '',
-                              '{0}/{1} MP'.format(units.parsto.hp, units.parsto.max_hp)
-                              if units.parsto.enabled else '',
-                              '{0}/{1} HP'.format(units.monster_2.hp, units.monster_2.max_hp)
-                              if units.monster_2 in m_list else '',
-                              '{0}/{1} HP'.format(units.monster_3.hp, units.monster_3.max_hp)
-                              if units.monster_3 in m_list else '',
-                              '{0}/{1} HP'.format(units.monster.hp, units.monster.max_hp)], key=len))
+    second_padding = len(max([f'{units.player.hp}/{units.player.max_hp} HP' if units.player.enabled else '',
+                              f'{units.solou.hp}/{units.solou.max_hp} HP' if units.solou.enabled else '',
+                              f'{units.xoann.hp}/{units.xoann.max_hp} HP' if units.xoann.enabled else '',
+                              f'{units.adorine.hp}/{units.adorine.max_hp} HP' if units.adorine.enabled else '',
+                              f'{units.chyme.hp}/{units.chyme.max_hp} HP' if units.chyme.enabled else '',
+                              f'{units.ran_af.hp}/{units.ran_af.max_hp} HP' if units.ran_af.enabled else '',
+                              f'{units.parsto.hp}/{units.parsto.max_hp} HP' if units.parsto.enabled else '',
+                              f'{units.monster_2.hp}/{units.monster_2.max_hp} HP' if units.monster_2 in m_list else '',
+                              f'{units.monster_3.hp}/{units.monster_3.max_hp} HP' if units.monster_3 in m_list else '',
+                              f'{units.monster.hp}/{units.monster.max_hp} HP'], key=len))
 
-    third_padding = len(max(['{0}/{1} MP'.format(units.player.mp, units.player.max_mp)
-                             if units.player.enabled else '',
-                             '{0}/{1} MP'.format(units.solou.mp, units.solou.max_mp)
-                             if units.solou.enabled else '',
-                             '{0}/{1} MP'.format(units.xoann.mp, units.xoann.max_mp)
-                             if units.xoann.enabled else '',
-                             '{0}/{1} MP'.format(units.adorine.mp, units.adorine.max_mp)
-                             if units.adorine.enabled else '',
-                             '{0}/{1} MP'.format(units.chyme.mp, units.chyme.max_mp)
-                             if units.chyme.enabled else '',
-                             '{0}/{1} MP'.format(units.ran_af.mp, units.ran_af.max_mp)
-                             if units.ran_af.enabled else '',
-                             '{0}/{1} MP'.format(units.parsto.mp, units.parsto.max_mp)
-                             if units.parsto.enabled else '',
-                             '{0}/{1} HP'.format(units.monster_2.mp, units.monster_2.max_mp)
-                             if units.monster_2 in m_list else '',
-                             '{0}/{1} HP'.format(units.monster_3.mp, units.monster_3.max_mp)
-                             if units.monster_3 in m_list else '',
-                             '{0}/{1} MP'.format(units.monster.mp, units.monster.max_mp)], key=len))
+    third_padding = len(max([f'{units.player.mp}/{units.player.max_mp} MP' if units.player.enabled else '',
+                             f'{units.solou.mp}/{units.solou.max_mp} MP' if units.solou.enabled else '',
+                             f'{units.xoann.mp}/{units.xoann.max_mp} MP' if units.xoann.enabled else '',
+                             f'{units.adorine.mp}/{units.adorine.max_mp} MP' if units.adorine.enabled else '',
+                             f'{units.chyme.mp}/{units.chyme.max_mp} MP' if units.chyme.enabled else '',
+                             f'{units.ran_af.mp}/{units.ran_af.max_mp} MP' if units.ran_af.enabled else '',
+                             f'{units.parsto.mp}/{units.parsto.max_mp} MP' if units.parsto.enabled else '',
+                             f'{units.monster_2.mp}/{units.monster_2.max_mp} MP' if units.monster_2 in m_list else '',
+                             f'{units.monster_3.mp}/{units.monster_3.max_mp} MP' if units.monster_3 in m_list else '',
+                             f'{units.monster.mp}/{units.monster.max_mp} MP'], key=len))
     # Player Stats
     print(ascii_art.colorize("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
           units.player.name, units.player.hp,

@@ -110,8 +110,9 @@ class Town:
                     else:
                         print('-'*25)
                         print("Select Party Member:")
-                        print("     ", "\n      ".join(["[{0}] {1}".format(int(num) + 1, character.name)
-                                                        for num, character in enumerate(target_options)]))
+
+                        for num, character in enumerate(target_options):
+                            print(f"[{int(num) + 1}] {character.name}")
 
                         while True:
                             target = input('Input [#] (or type "exit"): ').lower()
@@ -295,11 +296,10 @@ class Town:
     def town_inn(self):
         print('-'*25)
         print('Inn Keeper: "Greetings, Traveler!"')
+        cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
 
         while True:
-            choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
-                "It's free, y'know." if not self.inn_cost else ' '.join(
-                    ["One Night is", str(self.inn_cost), "GP."]))).lower()
+            choice = input(f'"Would you like to stay at our inn? {cost_string}" | Yes or No: ').lower()
 
             if choice.startswith('y'):
                 print()
@@ -309,7 +309,6 @@ class Town:
                     print('Sleeping...')
 
                     main.smart_sleep(1)
-
                     main.party_info['gp'] -= self.inn_cost
 
                     for character in [
@@ -327,13 +326,16 @@ class Town:
                         character.status_ail = "none"
 
                     print("Your party's HP and MP have been fully restored.")
-                    print('Your party has been relieved of their status ailments.')
+                    print('Your party has been relieved of all status ailments.')
+                    input("\nPress enter/return ")
                     print('-'*25)
 
                     main.save_game()
 
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
+                    input("\nPress enter/return ")
+                    print('-'*25)
 
                 return
 
@@ -377,27 +379,27 @@ class Town:
       [5] Tools
       [6] All""")
                 while True:
-                    spam = input('Input [#] (or type "back"): ')
+                    chosen_cat = input('Input [#] (or type "back"): ')
 
-                    if spam == '1':
-                        item_category = 'Armor'
+                    if chosen_cat == '1':
+                        item_cat = 'Armor'
 
-                    elif spam == '2':
-                        item_category = 'Weapons'
+                    elif chosen_cat == '2':
+                        item_cat = 'Weapons'
 
-                    elif spam == '3':
-                        item_category = 'Potions'
+                    elif chosen_cat == '3':
+                        item_cat = 'Potions'
 
-                    elif spam == '4':
-                        item_category = 'Accessories'
+                    elif chosen_cat == '4':
+                        item_cat = 'Accessories'
 
-                    elif spam == '5':
-                        item_category = 'Tools'
+                    elif chosen_cat == '5':
+                        item_cat = 'Tools'
 
-                    elif spam == '6':
-                        item_category = 'All'
+                    elif chosen_cat == '6':
+                        item_cat = 'All'
 
-                    elif spam in ['e', 'x', 'exit', 'b', 'back']:
+                    elif chosen_cat in ['e', 'x', 'exit', 'b', 'back']:
                         eggs = True
                         break
 
@@ -414,21 +416,17 @@ class Town:
                 fizz = True
 
                 while fizz:
+                    padding = len(max([item.name for item in stock[item_cat]], key=len))
+                    print(f"{item_cat} [Your party has {main.party_info['gp']} GP]: ")
 
-                    print('You have {0} GP'.format(main.party_info['gp']))
-                    print('"Well, here\'s what I have in my stock for that category: "')
-
-                    padding = len(max([item.name for item in stock[item_category]], key=len))
-                    print('-'*25, '\n', item_category, ':\n      ', end='', sep='')
-                    print('\n      '.join(['[{0}] {1} {2}--> {3} GP'.format(
-                        num + 1, item, '-'*(padding - len(item.name)), item.buy)
-                        for num, item in enumerate(stock[item_category])]))
+                    for num, item in enumerate(stock[item_cat]):
+                        print(f"      [{num + 1}] {item} {(padding - len(item.name))*'-'}--> {item.buy} GP")
 
                     while True:
                         purchase = input('Input [#] (or type "back"): ').lower()
 
                         try:
-                            i = stock[item_category][int(purchase) - 1]
+                            i = stock[item_cat][int(purchase) - 1]
 
                         except (IndexError, ValueError):
                             if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
@@ -439,9 +437,9 @@ class Town:
                             continue
 
                         print('-'*25)
-                        print('-{0}-'.format(str(i).upper()))
+                        print(f'-{str(i).upper()}-')
                         print(ascii_art.item_sprites[i.ascart])
-                        print('"{0}"'.format(i.desc))
+                        print(f'"{i.desc}"')
                         print('-'*25)
 
                         while True:
@@ -475,7 +473,7 @@ class Town:
                 print('-'*25)
                 spam = True
                 while spam:
-                    print("""Categories:
+                    print("""Sellable Categories:
       [1] Armor
       [2] Consumables
       [3] Weapons
@@ -535,8 +533,6 @@ class Town:
 
                 try:
                     npc = self.people[int(npc) - 1]
-                    if npc < 0:
-                        continue
 
                 except (IndexError, ValueError):
                     if npc in ['e', 'x', 'exit', 'b', 'back', 'c', 'cancel']:
@@ -590,9 +586,9 @@ class Town:
 
 
 class Tavern:
-    def __init__(self, name, cost):
+    def __init__(self, name, inn_cost):
         self.name = name
-        self.cost = cost
+        self.inn_cost = inn_cost
 
     def new_location(self, add=True):  # Translate the location of newly-found towns into a string
         mpi = main.party_info
@@ -617,21 +613,21 @@ class Tavern:
         print('-'*25)
         print(f'Inn Keeper: "Hello, traveler! Welcome to the {self.name}!"')
 
+        cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
+
         while True:
-            choice = input('"Would you like to stay at our inn? {0}" | Yes or No: '.format(
-                "It's free, y'know." if not self.cost else ' '.join(["One Night is", str(self.cost), "GP."])))
-            choice = choice.lower()
+            choice = input(f'"Would you like to stay at our inn? {cost_string}" | Yes or No: ').lower()
 
             if choice.startswith('y'):
                 print()
-                if main.party_info['gp'] >= self.cost:
+                if main.party_info['gp'] >= self.inn_cost:
 
                     print('"Good night, traveler."')
                     print('Sleeping...')
 
                     main.smart_sleep(1)
 
-                    main.party_info['gp'] -= self.cost
+                    main.party_info['gp'] -= self.inn_cost
 
                     for character in [units.player, units.solou, units.xoann,
                                       units.chyme, units.ran_af, units.parsto, units.adorine]:

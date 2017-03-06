@@ -91,8 +91,7 @@ class NPC:
             elif isinstance(y, Quest) and y.finished:
                 y.completion()
 
-            if hasattr(y, "after_talking"):
-                y.after_talking()
+            y.after_talking()
 
 
 class Conversation:
@@ -100,6 +99,9 @@ class Conversation:
         self.sentences = sentences
         self.active = active
         self.conv_id = conv_id
+
+    def after_talking(self):
+        pass
 
 
 class Quest(Conversation):
