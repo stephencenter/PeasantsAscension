@@ -107,10 +107,10 @@ class Healing(Spell):
             print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
 
         else:
-            print('-'*25)
+            print('-'*save_load.divider_size)
             print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
             input("\nPress enter/return ")
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
 
 class Damaging(Spell):
@@ -227,16 +227,16 @@ def pick_cat(user, is_battle=True):
                         break
 
                 else:
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     print(f'{user.name} has no previously used spells!')
                     input("\nPress enter/return ")
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     break
 
             else:
                 if cat.lower() in ['e', 'x', 'exit', 'b', 'back']:
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     return False
 
                 else:
@@ -246,9 +246,9 @@ def pick_cat(user, is_battle=True):
                 continue
 
             if not spellbook[inv_name][cat]:
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 print(f'You do not yet have any spells in the {cat} category.')
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 continue
 
             if pick_spell(cat, user, is_battle):
@@ -260,7 +260,7 @@ def pick_cat(user, is_battle=True):
 def pick_spell(cat, user, is_battle):
     inv_name = user.name if user != units.player else 'player'
 
-    print('-'*25)
+    print('-'*save_load.divider_size)
     while True:
         padding = len(max([spell.name for spell in spellbook[inv_name][cat]], key=len))
         print(f"{cat} Spells [{user.name} has {user.mp} mana remaining]:")
@@ -276,7 +276,7 @@ def pick_spell(cat, user, is_battle):
 
             except (ValueError, IndexError):
                 if spell in ['e', 'x', 'exit', 'b', 'back']:
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     return False
 

@@ -55,7 +55,7 @@ def solou_c1_at():
     solou_convo_1.active = False
     solou_convo_2.active = True
 
-    input('-'*25)
+    input('-'*save_load.divider_size)
     print("Solou the Mage has been added to your party!")
     input('\nPress enter/return ')
 
@@ -225,7 +225,7 @@ def stewson_q1__uc():
     stewson_convo_3.active = True
     rivesh_convo_2.active = False
     rivesh_quest_1.active = True
-    print('-'*25)
+    print('-'*save_load.divider_size)
     print('You now have experience defeating ghosts!')
     input("\nPress enter/return ")
 
@@ -553,7 +553,7 @@ def polmor_q1_uc():
     polmor_convo_2.active = False
     polmor_quest_1.active = False
 
-    print('-'*25)
+    print('-'*save_load.divider_size)
     print('Serena and Polmor will now heal you for free if you visit them!')
 
 
@@ -597,7 +597,7 @@ def polmor_c2_at():
                 any_dust = False
 
         polmor_quest_1.finished = True
-        print('-'*25)
+        print('-'*save_load.divider_size)
         polmor.speak()
 
 
@@ -981,7 +981,7 @@ def serena_c3_at():
     units.parsto.mp += (units.parsto.max_mp - units.parsto.mp)
     units.parsto.status_ail = 'none'
 
-    print('-'*25)
+    print('-'*save_load.divider_size)
     print('Polmor and Serena get to work on healing your party.')
     print('Your party has been restored to full HP and healed of its status ailments.')
     input("\nPress enter/return ")

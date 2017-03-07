@@ -52,7 +52,7 @@ class Consumable(Item):
         self.mana = mana
 
     def use_item(self, user, is_battle=False):
-        print('-'*25)
+        print('-'*save_load.divider_size)
 
         if is_battle:
             print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
@@ -79,7 +79,7 @@ class StatusPotion(Item):
         self.status = status
 
     def use_item(self, user, is_battle=False):
-        print('-'*25)
+        print('-'*save_load.divider_size)
 
         if is_battle:
             print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
@@ -134,12 +134,12 @@ class Weapon(Item):
 
                 inv_system.equipped[user.name if user != units.player else 'player']['weapon'] = spam
 
-            print('-'*25)
+            print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self}.')
             input("\nPress enter/return ")
 
         else:
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
             if isinstance(self.class_, list):
                 print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
@@ -186,12 +186,12 @@ class Armor(Item):
                 inv_system.equipped[user.name if user != units.player else 'player'][self.part] = fizz
                 inv_system.inventory['armor'].remove(self)
 
-            print('-'*25)
+            print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self}.')
             input("\nPress enter/return ")
 
         else:
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
             if isinstance(self.class_, list):
                 print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
@@ -231,7 +231,7 @@ class ElementAccessory(Accessory):
         inv_system.equipped[user.name if user != units.player else 'player']['access'] = spam
         user.element = self.element
 
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print(f'{user.name} equips the {self.name}. Their element is now set to {self.element}.')
         input("\nPress enter/return ")
 
@@ -276,7 +276,7 @@ class LockpickKit(Item):
 
     @staticmethod
     def use_item():
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print("Your party could certainly make a quick buck lockpicking chests with this thing.")
         print("But that's illegal - you wouldn't break the law, would you?")
         input("\nPress enter/return ")
@@ -290,7 +290,7 @@ class Valuable(Item):
 
     # noinspection PyMethodMayBeStatic
     def use_item(self):
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print(f'Your party admires the {self.name}. It looks very valuable.')
         input("\nPress enter/return ")
 
@@ -300,7 +300,7 @@ class Misc(Item):
         Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
 
     def use_item(self):
-        print('-'*25)
+        print('-'*save_load.divider_size)
         if 'Message' in self.name:
             input("""The envelop is designed in a way that makes tampering easily noticeable.
 It's probably best not to try to open it and read the letter. | [ENTER] """)

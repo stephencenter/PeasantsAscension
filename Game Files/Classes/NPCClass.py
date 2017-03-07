@@ -70,7 +70,7 @@ class NPC:
             padding = len(max(y, key=len))
 
             for z in y:
-                if z != '-'*25:
+                if z != '-'*save_load.divider_size:
                     input(''.join([self.name.title(), ': ', z, ' '*(padding - len(z)), ' | [ENTER] ']))
 
                 else:
@@ -79,7 +79,7 @@ class NPC:
             dialogue.remove(y)
 
             if dialogue:
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
             for obj in self.conversations:
                 if (isinstance(obj, Quest) and obj.end_dialogue == y) or obj.sentences == y:
@@ -118,9 +118,9 @@ class Quest(Conversation):
         self.end_dialogue = end_dialogue  # What is printed when the quest is over
 
     def give_quest(self):
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print(''.join([self.name, ': \n  ', '\n  '.join([x for x in self.desc])]))
-        print('-'*25)
+        print('-'*save_load.divider_size)
 
         print(f'{self.q_giver} is offering you the quest "{self.name}".')
 
@@ -128,7 +128,7 @@ class Quest(Conversation):
             accept = input('Do you accept this quest? | Yes or No: ').lower()
 
             if accept.startswith('y'):
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 print(f'{self.q_giver}: "Terrific! Thank you for your help!"')
                 self.started = True
                 self.upon_starting()
@@ -136,7 +136,7 @@ class Quest(Conversation):
                 return
 
             elif accept.startswith('n'):
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 print(f'{self.q_giver}: "Oh... That\'s fine. Come back later if you change your mind."')
 
                 return

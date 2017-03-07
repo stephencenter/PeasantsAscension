@@ -25,6 +25,7 @@ import inv_system
 import items
 import sounds
 import units
+import save_load
 
 if __name__ == "__main__":
     sys.exit()
@@ -50,11 +51,11 @@ class Town:
         self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest
 
     def town_choice(self):
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print(ascii_art.locations['Town'])
         print(f'Welcome to {self.name}!')
         self.new_location()
-        print('-'*25)
+        print('-'*save_load.divider_size)
 
         while True:
             print("""What do you wish to do?
@@ -68,22 +69,22 @@ class Town:
                 choice = input('Input [#] (or type "exit"): ')
 
                 if choice == '1':
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     input(''.join([self.desc, '\n\nPress Enter/Return ']))
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                 elif choice == '2':
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     if self.gs_level != -1 or self.inn_cost != -1 or self.wtrmelon_store:
                         self.inside_town()
 
                     else:
                         print("There don't appear to be any unlocked buildings to enter.")
 
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                 elif choice == '3':
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     if self.people:
                         self.speak_to_npcs()
@@ -91,7 +92,7 @@ class Town:
                     else:
                         print("There doesn't appear to be anyone to talk to.")
 
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                 elif choice == '4':
                     target_options = [x for x in [
@@ -108,7 +109,7 @@ class Town:
                         target = units.player
 
                     else:
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
                         print("Select Party Member:")
 
                         for num, character in enumerate(target_options):
@@ -122,7 +123,7 @@ class Town:
 
                             except (IndexError, ValueError):
                                 if target in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                                    print('-'*25)
+                                    print('-'*save_load.divider_size)
                                     break
 
                                 continue
@@ -135,15 +136,15 @@ class Town:
                         print('-' * 25)
 
                 elif choice == '5':
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     inv_system.pick_category()
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                 elif choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
                     pygame.mixer.music.load(main.party_info['reg_music'])
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(main.music_vol)
-                    print('-'*25)
+                    pygame.mixer.music.set_volume(save_load.music_vol)
+                    print('-'*save_load.divider_size)
                     return
 
                 else:
@@ -189,7 +190,7 @@ class Town:
                 if any(map(selected.startswith, buildings)):
                     pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(main.music_vol)
+                    pygame.mixer.music.set_volume(save_load.music_vol)
 
                     if selected.startswith('u'):
                         self.town_houses()
@@ -203,11 +204,11 @@ class Town:
                     if selected.startswith('w'):
                         self.watermelon()
 
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(main.music_vol)
+                    pygame.mixer.music.set_volume(save_load.music_vol)
 
                     break
 
@@ -216,7 +217,7 @@ class Town:
 
     @staticmethod
     def watermelon():
-        print('-'*25)
+        print('-'*save_load.divider_size)
         for sentence in [
             'Greetings, sir! Welcome to the Watermelon Inc. Store! We sell the latest',
             'Watermelon brand products, including the iSheet, the uPhone, and our most',
@@ -227,10 +228,10 @@ class Town:
 
             input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
 
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print('You understood absolutely none of what he said, but you get the feeling')
         input('that he wants you to buy something. | Press enter/return ')
-        print('-'*25)
+        print('-'*save_load.divider_size)
 
         while True:
             print(f"""Shopkeeper Inventory | You have {main.party_info['gp']} GP
@@ -254,25 +255,25 @@ class Town:
                         return
 
                 if choice in [1, 2, 3, 4, 5, 6]:
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     input('Salesman: Yeah right, as if you actually have that much money | [ENTER] ')
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     break
 
                 elif choice == 7:
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     while True:
                         y_n = input("Do you want to buy an iSound for 250 GP? | Yes or No: ").lower()
 
                         if y_n.startswith("y") and main.party_info['gp'] >= 250:
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
                             input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
                             input('It has been added to the Quest Items page of your inventory | [ENTER] ')
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
                             input('Salesman: Thank you, come back again!" | [ENTER] ')
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
 
                             main.party_info['gp'] -= 250
                             inv_system.inventory['q_items'].append(copy.copy(items.iSound))
@@ -281,20 +282,20 @@ class Town:
                             break
 
                         elif y_n.startswith("y") and main.party_info['gp'] < 250:
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
                             input('Salesman: "Hey, you don\'t have enough money for that!" | [ENTER]')
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
 
                             break
 
                         elif y_n.startswith("n"):
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
                             spam = False
 
                             break
 
     def town_inn(self):
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print('Inn Keeper: "Greetings, Traveler!"')
         cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
 
@@ -328,14 +329,14 @@ class Town:
                     print("Your party's HP and MP have been fully restored.")
                     print('Your party has been relieved of all status ailments.')
                     input("\nPress enter/return ")
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
-                    main.save_game()
+                    save_load.save_game()
 
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
                     input("\nPress enter/return ")
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                 return
 
@@ -362,7 +363,7 @@ class Town:
             for item in stock[category]:
                 stock['All'].append(item)
 
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print('Merchant: "Welcome, Traveler!"')
 
         while True:
@@ -370,7 +371,7 @@ class Town:
             b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ').lower()
 
             if b_s.startswith('b'):
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 print("""Which category of items would you like to check out?
       [1] Armor
       [2] Weapons
@@ -406,7 +407,7 @@ class Town:
                     else:
                         continue
 
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     break
 
@@ -430,17 +431,17 @@ class Town:
 
                         except (IndexError, ValueError):
                             if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                                print('-'*25)
+                                print('-'*save_load.divider_size)
                                 fizz = False
                                 break
 
                             continue
 
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
                         print(f'-{str(i).upper()}-')
                         print(ascii_art.item_sprites[i.ascart])
                         print(f'"{i.desc}"')
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
 
                         while True:
                             spam = 'these' if str(i).endswith('s') else 'this'
@@ -451,10 +452,10 @@ class Town:
                                     inv_system.inventory[i.cat].append(i)
                                     main.party_info['gp'] -= i.buy
 
-                                    print('-'*25)
+                                    print('-'*save_load.divider_size)
                                     print(f'You purchase the {i} for {i.buy} GP.')
                                     input("\nPress enter/return ")
-                                    print('-'*25)
+                                    print('-'*save_load.divider_size)
 
                                 else:
                                     print(f'"Hey, you don\'t even have enough GP for this {i}!"')
@@ -470,7 +471,7 @@ class Town:
                         break
 
             elif b_s.startswith('s'):
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 spam = True
                 while spam:
                     print("""Sellable Categories:
@@ -483,7 +484,7 @@ class Town:
                         cat = input('Input [#] (or type "back"): ').lower()
 
                         if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
                             spam = False
                             break
                         elif cat == '1':
@@ -508,15 +509,15 @@ class Town:
 
                             if inv_system.inventory[cat]:
                                 inv_system.pick_item(cat, vis_cat, gs=True)
-                                print('-'*25)
+                                print('-'*save_load.divider_size)
 
                                 break
 
                             else:
-                                print('-'*25)
+                                print('-'*save_load.divider_size)
                                 print(f"You don't have any items in the {vis_cat} category.")
                                 input("\nPress enter/return")
-                                print('-'*25)
+                                print('-'*save_load.divider_size)
 
                                 break
 
@@ -542,17 +543,17 @@ class Town:
 
                 pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
+                pygame.mixer.music.set_volume(save_load.music_vol)
 
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
                 npc.speak()
 
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
                 pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
+                pygame.mixer.music.set_volume(save_load.music_vol)
 
                 break
 
@@ -580,7 +581,7 @@ class Town:
 
                 pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
+                pygame.mixer.music.set_volume(save_load.music_vol)
 
                 break
 
@@ -610,7 +611,7 @@ class Tavern:
             return new_coords
 
     def town_choice(self):
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print(f'Inn Keeper: "Hello, traveler! Welcome to the {self.name}!"')
 
         cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
@@ -639,25 +640,25 @@ class Tavern:
                     print("Your party's HP and MP have been fully restored.")
                     print('Your party has been relieved of its status ailments.')
 
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
-                    main.save_game()
+                    save_load.save_game()
 
                 else:
                     print('"You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
 
                 pygame.mixer.music.load(main.party_info['reg_music'])
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
-                print('-'*25)
+                pygame.mixer.music.set_volume(save_load.music_vol)
+                print('-'*save_load.divider_size)
 
                 return
 
             elif choice.startswith('n'):
                 pygame.mixer.music.load(main.party_info['reg_music'])
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(main.music_vol)
-                print('-'*25)
+                pygame.mixer.music.set_volume(save_load.music_vol)
+                print('-'*save_load.divider_size)
 
                 return
 
@@ -670,7 +671,7 @@ class House:
     def enter_house(self):
         pygame.mixer.music.load('Content/Music/Somewhere I Went Wrong.ogg')
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(main.music_vol)
+        pygame.mixer.music.set_volume(save_load.music_vol)
 
         print('-' * 25)
         print(f"Your party enters the house of {self.owner}, completely undetected.")
@@ -717,7 +718,7 @@ class House:
             else:
                 print(f"{len(available_chests)} locked chests.")
                 input("\nPress enter/return ")
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
                 if not lockpicks:
                     print("Unfortunately, you do not own any lockpick kits and thus cannot attempt")
@@ -747,7 +748,7 @@ class House:
                     break
 
             target_chest.unlock_chest(max(lockpicks, key=lambda x: x.power))
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
 
 class Chest:
@@ -760,7 +761,7 @@ class Chest:
         self.tries = tries
 
     def unlock_chest(self, lockpick):
-        print('-'*25)
+        print('-'*save_load.divider_size)
         while True:
             print(f"-{self.tries if self.tries > 1 else 'ONLY ONE'} ATTEMPT{'S' if self.tries > 1 else ''} REMAINING-")
             print(f"Your party attempts to unlock the chest using your {lockpick.name}...")
@@ -774,11 +775,11 @@ class Chest:
             if random.randint(0, 100) < (100 - 10*self.difficulty):
                 if random.randint(0, 100) < lockpick.power:
                     sounds.unlock_chest.play()
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     print("Your party's lockpicking attempts were not in vain, as the lock")
                     print("gives way and the chest opens!")
                     input("\nPress enter/return ")
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     for n, item in enumerate(self.contents):
                         if isinstance(item, int):
@@ -802,12 +803,12 @@ class Chest:
             self.tries -= 1
 
             if self.tries > 0:
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 while True:
                     y_n = input("Attempt to open the chest again? | Yes or No: ").lower()
 
                     if y_n.startswith('y'):
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
                         break
 
                     elif y_n.startswith('n'):
@@ -815,7 +816,7 @@ class Chest:
 
             else:
                 sounds.ally_death.play()
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 print("Your party has run out of attempts, and the chest's lock breaks.")
                 print("The chest is still locked, and the chest cannot be picked again.")
                 input("\nPress enter/return ")

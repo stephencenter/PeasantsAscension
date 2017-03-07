@@ -172,9 +172,9 @@ def after_skill_shot(user):
 
 
 skill_shot = Ability("Skill Shot", f"""\
-The user launches a splash-damage attack at the enemy team equal to the sum of
-their levels. If the user is higher level than the highest-levelled opponent,
-Skill Shot does {ascii_art.colorize('[50 + Intelligence]', 'blue')}% more damage.""", 2)
+The user launches a splash-damage attack at the enemy team equal to 50% of the
+sum of their levels. If the user is higher level than the highest-levelled
+opponent, Skill Shot does {ascii_art.colorize('[50 + Intelligence]', 'blue')}% more damage.""", 2)
 skill_shot.use_ability = use_skill_shot
 skill_shot.after_turn = after_skill_shot
 
@@ -331,10 +331,10 @@ def after_canonize(user):
 
 
 canonize = Ability("Canonize", f"""\
-Declares the target ally a holy figure, rendering them immune to physical
-damage, converting their element to Light, and causing all offensive light
-and dark magic casted on them to heal for {ascii_art.colorize('[50 + Wisdom]', 'yellow')}% HP instead of
-damaging. Lasts 2 turns. Does not stack with multiple uses.""", 5)
+Declares the target ally a holy figure, converting their defensive element to
+Light and causing all enemy light and dark magic casted on them to heal for
+{ascii_art.colorize('[25 + Wisdom]', 'yellow')}% HP instead of damaging. Lasts 2 turns. Does not stack with
+ multiple uses - repeat uses only refresh the buff duration.""", 5)
 canonize.use_ability = use_canonize
 canonize.after_turn = after_canonize
 
@@ -344,7 +344,15 @@ class_abilities = {
     'warrior': [roll_call, parry],
     'assassin': [inject_poison, backstab],
     'ranger': [scout, roll],
-    'monk': [chakra_smash, pressure_point, aura_swap]
+    'monk': [chakra_smash, pressure_point, aura_swap],
+
+    'player': [],
+    'solou': [],
+    'ran_af': [],
+    'chyme': [],
+    'parsto': [],
+    'xoann': [],
+    'adorine': []
 
 }
 

@@ -22,6 +22,7 @@ import ascii_art
 import battle
 import inv_system
 import magic
+import save_load
 import sounds
 import towns
 import units
@@ -111,11 +112,11 @@ all_tiles = icf_tiles + whr_tiles + ehr_tiles  # + other tiles lists as more til
 def movement_system():
     pygame.mixer.music.load(main.party_info['reg_music'])
     pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(main.music_vol)
+    pygame.mixer.music.set_volume(save_load.music_vol)
 
     while True:
         if not towns.search_towns():
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
         # These lists will tell the game how to manipulate the players position in the next part of the function
         coord_change, available_dirs = movement_hud()
@@ -169,7 +170,7 @@ def movement_system():
 
                     # Certain tiles can have battling disabled on them
                     if is_battle and main.party_info['current_tile'].m_level != -1:
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
                         units.spawn_monster()
                         battle.battle_system()
                         main.party_info['steps_without_battle'] = 0
@@ -235,7 +236,7 @@ def check_region():
         reg_music = "Music/We're all under the stars.ogg"
 
     if main.party_info['reg'] != new_region:
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print(ascii_art.locations[new_region])
         print(f"You have left the {main.party_info['reg']} and are now entering the {new_region}.")
 
@@ -245,10 +246,10 @@ def check_region():
         # Change the music & play it
         pygame.mixer.music.load(reg_music)
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(main.music_vol)
+        pygame.mixer.music.set_volume(save_load.music_vol)
 
         if not towns.search_towns(enter=False):
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
         return True
 
@@ -318,7 +319,7 @@ def movement_hud():
 
 
 def help_command():
-    print('-'*25)
+    print('-'*save_load.divider_size)
     print("""Command List:
 [NSEW] - Moves your party if the selected direction is unobstructed
 [L]ook - Displays a description of your current location
@@ -429,7 +430,7 @@ def look_command():
 def rest_command():
     # Attempt to re-gain health on the world map. There is a chance to get ambushed by an enemy
     # when doing this.
-    print('-'*25)
+    print('-'*save_load.divider_size)
 
     if all([units.player.hp == units.player.max_hp and units.player.mp == units.player.max_mp,
             units.solou.hp == units.solou.max_hp and units.solou.mp == units.solou.max_mp,
@@ -441,7 +442,7 @@ def rest_command():
 
         print('Your party feels fine and decides not to rest.')
         input("\nPress enter/return ")
-        print('-'*25)
+        print('-'*save_load.divider_size)
 
         return
 
@@ -483,7 +484,7 @@ def rest_command():
 
         print('You rested well and decide to continue on your way.')
         if not towns.search_towns(enter=False):
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
 
 def tools_command():

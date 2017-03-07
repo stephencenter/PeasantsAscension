@@ -29,6 +29,7 @@ import inv_system
 import items
 import magic
 import npcs
+import save_load
 import sounds
 
 if __name__ == "__main__":
@@ -130,7 +131,7 @@ class PlayableCharacter(Unit):
             if self.name.lower() in ["flygon jones", "apollo kalar", "cynder887"]:
                 print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
                 input('\nPress enter/return ')
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
                 return
 
@@ -139,7 +140,7 @@ class PlayableCharacter(Unit):
                 y_n = y_n.lower()
 
                 if y_n.startswith('y'):
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     return
 
                 elif y_n.startswith('n'):
@@ -228,16 +229,16 @@ Input [#]: """)
             except KeyError:
                 continue
 
-            print('-'*25)
+            print('-'*save_load.divider_size)
             print(f"Information about {class_.title()}s: ")
             print(class_desc)
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
             while True:
                 y_n = input(f'You wish to be of the {class_.title()} class? | Yes or No: ').lower()
 
                 if y_n.startswith('y'):
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     self.class_ = class_
 
                     return
@@ -252,7 +253,7 @@ Input [#]: """)
 
             pygame.mixer.music.load('Content/Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(main.music_vol)
+            pygame.mixer.music.set_volume(save_load.music_vol)
 
             # The player restores all their health and mana when they level up
             self.hp = copy.copy(self.max_hp)
@@ -342,14 +343,14 @@ Input [#]: """)
 
                 fix_stats()
 
-            print('-'*25)
+            print('-'*save_load.divider_size)
             self.skill_points(rem_points, extra_points)
 
             self.max_hp = copy.copy(self.hp)
             self.max_mp = copy.copy(self.mp)
 
-            print('-'*25)
-            main.save_game()
+            print('-'*save_load.divider_size)
+            save_load.save_game()
 
             return
 
@@ -402,7 +403,7 @@ Input [L]etter: """)
                     act_skill = 'for'
                     vis_skill = 'Fortune'
 
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 print(f'Current {vis_skill}: {self.attributes[act_skill]}')
 
                 if self.extra_sp == 10 and act_skill == 'for':
@@ -417,7 +418,7 @@ Input [L]etter: """)
                         continue
 
                     if y_n.startswith('n'):
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
                         break
 
                     if any(map(skill.startswith, ['d', 'c', 'i', 'w', 'p', 'f', 's'])):
@@ -426,13 +427,13 @@ Input [L]etter: """)
                     else:
                         continue
 
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     print(f"{self.name}'s {vis_skill} has increased!")
 
                     # Decrement remaining points
                     rem_points -= 1
 
-                    print('-'*25) if rem_points else ''
+                    print('-'*save_load.divider_size) if rem_points else ''
 
                     break
 
@@ -530,7 +531,7 @@ Armor:
         elif self.move == '5' and battle.run_away(self):
             pygame.mixer.music.load(main.party_info['reg_music'])
             pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(main.music_vol)
+            pygame.mixer.music.set_volume(save_load.music_vol)
 
             return 'Ran'
 
@@ -555,7 +556,7 @@ Armor:
 
             # Use Magic
             elif self.move in ['2', 'w']:
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
                 if self.status_ail == 'silenced':
                     sounds.debuff.play()
@@ -578,7 +579,7 @@ Armor:
 
             # Use Items
             elif self.move in ['4', 'r']:
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
                 if not inv_system.inventory['consumables']:
                     print('Your party has no battle-allowed items - the consumable category is empty!')
@@ -644,7 +645,7 @@ Armor:
         else:
             raise Exception('Incorrect arguments - at least one of "ally" or "enemy" must be true.')
 
-        print('-'*25)
+        print('-'*save_load.divider_size)
         print(action_desc)
 
         for x, y in enumerate(this_list):
@@ -1277,7 +1278,7 @@ class Boss(Monster):
 
         if add and new_coords not in inv_system.inventory['coord']:
             inv_system.inventory['coord'].append(new_coords)
-            print('-'*25)
+            print('-'*save_load.divider_size)
             print(f"You quickly mark down the location of {self.name}'s lair.")
             input("\nPress enter/return ")
 
@@ -1421,7 +1422,7 @@ def check_bosses():
 
     for boss in main.party_info['current_tile'].boss_list:
         if boss.name not in defeated_bosses and boss.active:
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
             sounds.item_pickup.play()
 
@@ -1444,7 +1445,7 @@ def check_bosses():
                     monster = boss
                     boss.max_stats()
                     boss.new_location()
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     battle.battle_system(is_boss=True)
 
@@ -1673,9 +1674,9 @@ def create_player():
 
     player.hp = copy.copy(player.max_hp)
     player.mp = copy.copy(player.max_mp)
-    print('-'*25)
+    print('-'*save_load.divider_size)
 
-    main.save_game(verbose=False)
+    save_load.save_game(verbose=False)
 
 
 def spawn_monster():

@@ -23,6 +23,7 @@ import pygame
 import ascii_art
 import inv_system
 import items
+import save_load
 import sounds
 import units
 
@@ -155,7 +156,7 @@ def battle_system(is_boss=False, ambush=False):
     if is_boss:
         pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(main.music_vol)
+        pygame.mixer.music.set_volume(save_load.music_vol)
 
         print(ascii_art.monster_art[units.monster.monster_name] % '')
 
@@ -202,7 +203,7 @@ def battle_system(is_boss=False, ambush=False):
 
         pygame.mixer.music.load('Content/Music/Ruari 8-bit Battle.ogg')
         pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(main.music_vol)
+        pygame.mixer.music.set_volume(save_load.music_vol)
 
         main.smart_sleep(1)
 
@@ -231,7 +232,7 @@ def battle_system(is_boss=False, ambush=False):
                 character.player_choice()
 
                 if num + 1 < len([x for x in enabled_pcus if x.status_ail != 'dead']):
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
         # Make sure each participant in the battle goes according to who's fastest
         for char in speed_list:
@@ -239,7 +240,7 @@ def battle_system(is_boss=False, ambush=False):
                 if all(x.hp <= 0 for x in m_list):
                     break
 
-                print('-'*25)
+                print('-'*save_load.divider_size)
 
                 if char.battle_turn() == 'Ran':
                     return
@@ -316,7 +317,7 @@ def run_away(runner):
 
 def after_battle(is_boss):
     # Assess the results of the battle
-    print('-'*25)
+    print('-'*save_load.divider_size)
 
     for unit in enabled_pcus + m_list:
         if unit.hp <= 0 and unit.status_ail != 'dead':
@@ -328,10 +329,10 @@ def after_battle(is_boss):
         if any([m.status_ail != 'dead' for m in m_list]) and all([x.status_ail == 'dead' for x in enabled_pcus]):
             pygame.mixer.music.load('Content/Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(main.music_vol)
+            pygame.mixer.music.set_volume(save_load.music_vol)
 
             print(f'Despite your best efforts, the {units.monster.name} has killed your party.')
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
             auto_yes = False
             while True:
@@ -362,7 +363,7 @@ def after_battle(is_boss):
 
                     pygame.mixer.music.load(main.party_info['reg_music'])
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(main.music_vol)
+                    pygame.mixer.music.set_volume(save_load.music_vol)
 
                     return
 
@@ -384,7 +385,7 @@ def after_battle(is_boss):
         elif all([m.status_ail == 'dead' for m in m_list]) and any([x.status_ail != 'dead' for x in enabled_pcus]):
             pygame.mixer.music.load('Content/Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(main.music_vol)
+            pygame.mixer.music.set_volume(save_load.music_vol)
 
             if not is_boss:
                 # Only do the following if the player defeated a normal enemy, and not a boss
@@ -445,8 +446,8 @@ def after_battle(is_boss):
 
             pygame.mixer.music.load(main.party_info['reg_music'])
             pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(main.music_vol)
-            pygame.mixer.music.set_volume(main.music_vol)
+            pygame.mixer.music.set_volume(save_load.music_vol)
+            pygame.mixer.music.set_volume(save_load.music_vol)
 
             return
 
@@ -492,7 +493,7 @@ def battle_inventory(user):
 def bat_stats():
     units.fix_stats()
 
-    print('-'*25)
+    print('-'*save_load.divider_size)
 
     # Sorry this section is kinda complicated. Basically, this calculates the length of certain
     # strings to see how much padding (extra spaces) is needed to make things line up.
@@ -607,4 +608,4 @@ def bat_stats():
               pad3=' '*(third_padding - len('{0}/{1} MP'.format(each_monster.mp, each_monster.max_mp)))),
             "red" if each_monster.status_ail == 'dead' else 'clear'))
 
-    print('-'*25)
+    print('-'*save_load.divider_size)

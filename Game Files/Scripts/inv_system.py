@@ -13,8 +13,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
 import json
+import sys
 from copy import copy as _c
 
 import npcs
@@ -151,32 +151,32 @@ def pick_category():
                 if inventory[cat]:
                     if cat not in ['coord', 'weapons', 'armor', 'access']:
                         pick_item(cat, vis_cat)
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
 
                     elif cat == 'coord':
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
                         print('Coordinates:\n', '\n'.join(inventory[cat]))
                         input("\nPress enter/return ")
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
 
                     else:
                         if [x for x in inventory[cat]]:
                             pick_item(cat, vis_cat)
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
 
                         else:
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
                             print(f'The {vis_cat} category is empty.')
                             input("\nPress enter/return ")
-                            print('-'*25)
+                            print('-'*save_load.divider_size)
 
                     break
 
                 else:
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     print(f'The {vis_cat} category is empty.')
                     input("\nPress enter/return ")
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     break
 
             elif cat == 'equipped_items':
@@ -188,10 +188,10 @@ def pick_category():
                 break
 
             else:
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 print("Your party has no active or completed quests.")
                 input("\nPress enter/return ")
-                print('-'*25)
+                print('-'*save_load.divider_size)
                 break
 
 
@@ -207,7 +207,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             return
 
         if inventory[cat]:
-            print('-'*25)
+            print('-'*save_load.divider_size)
             if not gs:
                 print(f"{vis_cat}: ")
                 for x, y in enumerate(inventory[cat]):
@@ -263,7 +263,7 @@ def pick_action(cat, item):
             # You use other items
             use_equip = 'Use'
 
-        print('-'*25)
+        print('-'*save_load.divider_size)
         action = input(f"""What should your party do with the {item}?
       [1] {use_equip}
       [2] Read Description
@@ -290,7 +290,7 @@ Input [#] (or type "back"): """)
 
         elif action == '2':
             # Display the item description
-            print('-'*25)
+            print('-'*save_load.divider_size)
             print(f'-{str(item).upper()}-')
 
             if hasattr(item, "ascart"):
@@ -300,7 +300,7 @@ Input [#] (or type "back"): """)
             input("\nPress enter/return ")
 
         elif action == '3':
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
             if item.imp:
                 print('Essential Items cannot be thrown away.')
@@ -319,7 +319,7 @@ Input [#] (or type "back"): """)
                         return
 
                     elif y_n.startswith('n'):
-                        print('-'*25)
+                        print('-'*save_load.divider_size)
                         print(f'Your party decide to keep the {item} with them.')
                         input("\nPress enter/return ")
 
@@ -460,7 +460,7 @@ def manage_equipped_3(key, selected, p_equip, target):
 
 
 def view_quests():
-    print('-'*25)
+    print('-'*save_load.divider_size)
     while True:
         fizz = True
         choice = input('View [f]inished or [a]ctive quests? | Input [Letter] (or type "back"): ').lower()
@@ -502,7 +502,7 @@ def view_quests():
 
                         continue
 
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     print(f"QUEST NAME: {quest.name}")
                     print(f"GIVEN BY: {quest.q_giver}")
 
@@ -510,26 +510,26 @@ def view_quests():
                         print(x)
 
                     input("\nPress enter/return ")
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
 
                     break
 
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
         else:
             print(f'Your party has no {"active" if choice.startswith("a") else "finished"} quests!')
             input('\nPress enter/return ')
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
 
 def sell_item(cat, item):  # Trade player-owned objects for money (GP)
-    print('-'*25)
+    print('-'*save_load.divider_size)
 
     if hasattr(item, "ascart"):
         print(ascii_art.item_sprites[item.ascart])
 
     print(item.desc)
-    print('-'*25)
+    print('-'*save_load.divider_size)
     while True:
         y_n = input(f'Should your party sell the {item.name} for {item.sell} GP? | Yes or No: ').lower()
 

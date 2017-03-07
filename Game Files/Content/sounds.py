@@ -18,6 +18,8 @@ import sys
 from pygame import mixer
 from pygame.mixer import Sound
 
+import save_load
+
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
 # def test_input(string):
@@ -77,7 +79,7 @@ ally_death = Sound('Content/Sound FX/ally_death.wav')
 # Critical Hit -- Played when someone lands a critical hit
 critical_hit = Sound('Content/Sound FX/critical_hit.wav')
 
-# Lockpick Break -- Played when failing to pick a lock
+# Lockpick Break -- Played when failing to pick a lock (Stolen from Oblivion)
 lockpick_break = Sound('Content/Sound FX/lockpick_break.wav')
 
 # Lockpicking -- Played when attempting to pick a lock
@@ -89,6 +91,12 @@ unlock_chest = Sound('Content/Sound FX/unlock_chest.wav')
 # Debuff -- Played when the player suffers from a debuff
 debuff = Sound('Content/Sound FX/debuff.wav')
 
+# Eerie Sound - No current use
+eerie_sound = Sound('Content/Sound FX/eerie_sound.wav')
+
+# Random encounter -- No current use, will probably be used when encountering an enemy on the overworld
+random_enc = Sound('Content/Sound FX/random_encounter.wav')
+
 
 def change_volume():
     for x in ['sword_slash', 'magic_attack',
@@ -99,5 +107,6 @@ def change_volume():
               'buff_spell', 'ally_death',
               'critical_hit', 'lockpicking',
               'lockpick_break', 'unlock_chest',
-              'debuff']:
-        globals()[x].set_volume(main.sound_vol)
+              'debuff', 'eerie_sound',
+              'random_enc']:
+        globals()[x].set_volume(save_load.sound_vol)

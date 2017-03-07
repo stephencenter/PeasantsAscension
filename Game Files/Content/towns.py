@@ -21,6 +21,7 @@ import inv_system
 import items
 import npcs
 import sounds
+import save_load
 from TownClass import Town, Tavern, Chest, House
 
 if __name__ == "__main__":
@@ -219,7 +220,7 @@ def search_towns(enter=True):
 
     for town in main.party_info['current_tile'].town_list:
         if enter:
-            print('-'*25)
+            print('-'*save_load.divider_size)
 
             sounds.item_pickup.play()
 
@@ -243,7 +244,7 @@ def search_towns(enter=True):
                 if y_n.startswith('y'):
                     pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(main.music_vol)
+                    pygame.mixer.music.set_volume(save_load.music_vol)
 
                     main.party_info['prev_town'] = main.party_info['current_tile']
                     main.party_info['p_town_xyz'] = main.party_info['x'], main.party_info['y'], main.party_info['z']
@@ -253,7 +254,7 @@ def search_towns(enter=True):
                     return True
 
                 elif y_n.startswith('n'):
-                    print('-'*25)
+                    print('-'*save_load.divider_size)
                     return True
 
         else:

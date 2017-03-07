@@ -47,7 +47,7 @@ def text_scroll(string, spacing=0.025):
 
     """
 
-    if string == '-'*25:
+    if string == '-'*save_load.divider_size:
         print(string)
         return
 

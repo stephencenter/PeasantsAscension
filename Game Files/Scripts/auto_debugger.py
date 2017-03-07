@@ -2,8 +2,8 @@
 THIS MODULE IS DESIGNED TO REPLACE THE DEFAULT input() FUNCTION WITH AN AUTOMATIC INPUTTER,
 ALLOWING THE GAME TO BASICALLY CHECK ITSELF FOR BUGS.
 """
-import random
 import copy
+import random
 
 do_debug = False  # Set to True if you want the game to run the auto_debugger
 
