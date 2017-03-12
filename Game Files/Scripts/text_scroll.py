@@ -16,6 +16,7 @@
 import time
 import sys
 import msvcrt
+import save_load
 
 # THIS IF FOR AUTOMATED BUG-TESTING!!
 # THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
@@ -43,7 +44,7 @@ def text_scroll(string, spacing=0.025):
     Examples:
 
     spam = input_ts('Please type anything you want and then press enter: ')
-    text_scroll('You entered "{0}". That\'s sort of interesting, I suppose...'.format(spam))
+    text_scroll(f'You entered "{spam}". That\'s sort of interesting, I suppose...')
 
     """
 

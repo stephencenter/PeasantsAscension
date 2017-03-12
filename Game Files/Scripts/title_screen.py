@@ -75,8 +75,8 @@ def show_credits():
         # Display the credits one line at a time with specific lengths
         # of time in between each line. Syncs up with the music!
         with open('Content/Credits.txt') as f:
-            for number, f.readline in enumerate(f):
-                print(''.join(f.readline.rstrip("\n").split(";")))
+            for number, line in enumerate(f):
+                print(''.join(line.split("\n")))
                 main.smart_sleep([0.75, 1.25, 0.75, 1.25, 1, 1, 0.5, 0.5, 1, 1,
                                   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -120,11 +120,12 @@ def show_backstory():
         # Display each line one at a time, and require the pressing of enter
         # on lines that aren't solely whitespace
         with open('Content/peasant_plot.txt', encoding='utf-8') as f:
-            for f.readline in f:
-                if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
-                    input(''.join(f.readline.rstrip("\n").split(";")))
+            for line in f:
+                if ''.join(char for char in line.split(" ") if char.isalnum()):
+                    input(''.join(line.split("\n")))
+
                 else:
-                    print(''.join(f.readline.rstrip("\n").split(";")))
+                    print(''.join(line.split("\n")))
 
         pygame.mixer.music.load('Content/Music/Prologue.ogg')
         pygame.mixer.music.play(-1)
@@ -160,11 +161,11 @@ def show_lore():
         # Display each line one at a time, and require the pressing of enter
         # on lines that aren't solely whitespace
         with open('Content/peasant_lore.txt', encoding='utf-8') as f:
-            for f.readline in f:
-                if ''.join(char for char in f.readline.split(" ") if char.isalnum()):
-                    input(''.join(f.readline.rstrip("\n").split(";")))
+            for line in f:
+                if ''.join(char for char in line.split(" ") if char.isalnum()):
+                    input(''.join(line.split("\n")))
                 else:
-                    print(''.join(f.readline.rstrip("\n").split(";")))
+                    print(''.join(line.split("\n")))
 
         pygame.mixer.music.load('Content/Music/Prologue.ogg')
         pygame.mixer.music.play(-1)

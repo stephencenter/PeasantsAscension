@@ -31,23 +31,23 @@ save_dir = 'Content/Save Files'
 adventure_name = ''
 
 # General Save Files
-sav_acquired_gems = 'Content/Save Files/{CHARACTER_NAME}/acquired_gems.json'    # Acquired Gems
-sav_def_bosses = 'Content/Save Files/{CHARACTER_NAME}/def_bosses.json'          # Defeated Bosses
-sav_equip_items = 'Content/Save Files/{CHARACTER_NAME}/equip_items.json'        # Equipped Items
-sav_inventory = 'Content/Save Files/{CHARACTER_NAME}/inventory.json'            # Inventory
-sav_misc_boss_info = 'Content/Save Files/{CHARACTER_NAME}/misc_boss_info.json'  # Misc Boss Info
-sav_party_info = 'Content/Save Files/{CHARACTER_NAME}/party_info.json'          # Party Info
-sav_quests_dia = 'Content/Save Files/{CHARACTER_NAME}/quests_dia.json'          # Quests & Dialogue
-sav_spellbook = 'Content/Save Files/{CHARACTER_NAME}/spellbook.json'            # Spellbook
+sav_acquired_gems = 'Content/Save Files//{ADVENTURE_NAME}/acquired_gems.json'    # Acquired Gems
+sav_def_bosses = 'Content/Save Files/{ADVENTURE_NAME}/def_bosses.json'          # Defeated Bosses
+sav_equip_items = 'Content/Save Files/{ADVENTURE_NAME}/equip_items.json'        # Equipped Items
+sav_inventory = 'Content/Save Files/{ADVENTURE_NAME}/inventory.json'            # Inventory
+sav_misc_boss_info = 'Content/Save Files/{ADVENTURE_NAME}/misc_boss_info.json'  # Misc Boss Info
+sav_party_info = 'Content/Save Files/{ADVENTURE_NAME}/party_info.json'          # Party Info
+sav_quests_dia = 'Content/Save Files/{ADVENTURE_NAME}/quests_dia.json'          # Quests & Dialogue
+sav_spellbook = 'Content/Save Files/{ADVENTURE_NAME}/spellbook.json'            # Spellbook
 
 # PCU Save Files
-sav_play = 'Content/Save Files/{CHARACTER_NAME}/play_stats.json'        # Player Stats
-sav_solou = 'Content/Save Files/{CHARACTER_NAME}/solou_stats.json'      # Solou's Stats
-sav_xoann = 'Content/Save Files/{CHARACTER_NAME}/xoann_stats.json'      # Xoann's Stats
-sav_chyme = 'Content/Save Files/{CHARACTER_NAME}/chyme_stats.json'      # Chyme's Stats
-sav_ran_af = 'Content/Save Files/{CHARACTER_NAME}/ran_af_stats.json'    # Ran'af's Stats
-sav_parsto = 'Content/Save Files/{CHARACTER_NAME}/parsto_stats.json'    # Parsto's Stats
-sav_adorine = 'Content/Save Files/{CHARACTER_NAME}/adorine_stats.json'  # Adorine's Stats
+sav_play = 'Content/Save Files/{ADVENTURE_NAME}/play_stats.json'        # Player Stats
+sav_solou = 'Content/Save Files/{ADVENTURE_NAME}/solou_stats.json'      # Solou's Stats
+sav_xoann = 'Content/Save Files/{ADVENTURE_NAME}/xoann_stats.json'      # Xoann's Stats
+sav_chyme = 'Content/Save Files/{ADVENTURE_NAME}/chyme_stats.json'      # Chyme's Stats
+sav_ran_af = 'Content/Save Files/{ADVENTURE_NAME}/ran_af_stats.json'    # Ran'af's Stats
+sav_parsto = 'Content/Save Files/{ADVENTURE_NAME}/parsto_stats.json'    # Parsto's Stats
+sav_adorine = 'Content/Save Files/{ADVENTURE_NAME}/adorine_stats.json'  # Adorine's Stats
 
 # The volume of the game, on a scale from 0 (muted) to 1.0 (loudest). Can be changed in the settings.cfg file.
 music_vol = 1.0
@@ -143,14 +143,14 @@ def set_adventure_name():
 
 
 def format_save_names():
-    # Replace "{CHARACTER_NAME}" in the save-file paths to the player's adventure name.
-    # e.g. "Save Files/{CHARACTER_NAME}/sav_acquired_gems" --> "Save Files/ADV/sav_acquired_gems
+    # Replace "{ADVENTURE_NAME}" in the save-file paths to the player's adventure name.
+    # e.g. "Save Files/{ADVENTURE_NAME}/sav_acquired_gems" --> "Save Files/ADV/sav_acquired_gems
 
     for x in sorted(['sav_acquired_gems', 'sav_def_bosses', 'sav_equip_items', 'sav_inventory', 'sav_misc_boss_info',
                      'sav_party_info', 'sav_spellbook', 'sav_quests_dia', 'sav_play', 'sav_solou', 'sav_xoann',
                      'sav_chyme', 'sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
 
-        globals()[x] = globals()[x].format(CHARACTER_NAME=adventure_name)
+        globals()[x] = globals()[x].format(ADVENTURE_NAME=adventure_name)
 
 
 def change_settings():
@@ -230,9 +230,9 @@ def load_game():  # Check for save files and load the game if they're found
 
     for directory in dirs:
         # If all save-file components exist...
-        if all(map(os.path.isfile, [x.format(CHARACTER_NAME=directory) for x in save_file_list])):
+        if all(map(os.path.isfile, [x.format(ADVENTURE_NAME=directory) for x in save_file_list])):
             # ...then set the dictionary key equal to the newly-formatted save file names
-            save_files[directory] = [x.format(CHARACTER_NAME=directory) for x in save_file_list]
+            save_files[directory] = [x.format(ADVENTURE_NAME=directory) for x in save_file_list]
 
             try:
                 with open('/'.join([save_dir, directory, "menu_info.txt"]),
@@ -320,9 +320,7 @@ def serialize_all(verbose=True):
         units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
         with open('/'.join([save_dir, adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:
-            f.write("NAME: {0} | LEVEL: {1} | CLASS: {2}".format(units.player.name,
-                                                                 units.player.lvl,
-                                                                 units.player.class_.title()))
+            f.write(f"NAME: {units.player.name} | LEVEL: {units.player.lvl} | CLASS: {units.player.class_.title()}")
 
         print('Save successful.') if verbose else ''
 
@@ -368,5 +366,4 @@ def deserialize_all():
         input("\nPress enter/return ")
 
         # A file failing to load screws up some internal values, so the entire game needs to be reloaded
-        pygame.quit()
-        sys.exit()
+        raise

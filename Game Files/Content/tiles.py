@@ -207,6 +207,7 @@ def movement_system():
             movement_hud()
 
 
+# noinspection PyUnboundLocalVariable
 def check_region():
     # Check the coordinates of the player and change the region to match.
     new_region = main.party_info['current_tile'].region

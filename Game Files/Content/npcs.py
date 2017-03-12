@@ -17,6 +17,7 @@ import json
 
 import inv_system
 import units
+import save_load
 from NPCClass import NPC, Conversation, Quest
 
 # -- Name: Solou -- Town: Nearton
@@ -778,7 +779,7 @@ def pime_q1_us():
 
     pime_convo_1.active = False
     pime_convo_3.active = True
-    units.anti_blood_squad.active = True
+    # units.anti_blood_squad.active = True
 
 
 def pime_q1_uc():

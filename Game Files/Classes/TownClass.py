@@ -526,8 +526,10 @@ class Town:
 
     def speak_to_npcs(self):
         while True:
-            print('NPCs:\n     ', '\n      '.join(
-                ['[{0}] {1}'.format(x + 1, npc) for x, npc in enumerate(self.people)]))
+            print('NPCs: ')
+
+            for x, npc in enumerate(self.people):
+                print(f"      [{x + 1}] {npc}")
 
             while True:
                 npc = input('Input [#] (or type "exit"): ').lower()

@@ -21,6 +21,7 @@ import npcs
 import ascii_art
 import units
 import items
+import save_load
 import ItemClass
 
 if __name__ == "__main__":
@@ -92,6 +93,7 @@ equipped = {
 }
 
 
+# noinspection PyUnboundLocalVariable
 def pick_category():
     global inventory
     while True:
