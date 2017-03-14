@@ -102,10 +102,6 @@ def set_adventure_name():
                 if y_n.startswith("y"):
                     format_save_names()
 
-                    if units.player.name.lower() == "give me the gold":
-                        print("Gold cheat enabled, you now have 99999 gold!")
-                        main.party_info['gp'] = 99999
-
                     return
 
                 elif y_n.startswith("n"):
@@ -124,10 +120,6 @@ def set_adventure_name():
 
                 if y_n.startswith("y"):
                     format_save_names()
-
-                    if units.player.name.lower() == "give me the gold":
-                        print("Gold cheat enabled, you now have 99999 gold!")
-                        main.party_info['gp'] = 99999
 
                     return
 
@@ -330,11 +322,8 @@ def deserialize_all():
         with open(sav_party_info, encoding='utf-8') as f:
             main.party_info = json.load(f)
 
-        for key in main.party_info:
-            if key in ['current_tile', 'prev_town'] and main.party_info[key]:
-                for tile in tiles.all_tiles:
-                    if main.party_info[key] == tile.tile_id:
-                        main.party_info[key] = tile
+        main.party_info['current_tile'] = tiles.find_tile_with_id(main.party_info['current_tile'])
+        main.party_info['prev_town'] = tiles.find_tile_with_id(main.party_info['prev_town'])
 
         # Call functions to serialize more advanced things
         items.deserialize_gems(sav_acquired_gems)

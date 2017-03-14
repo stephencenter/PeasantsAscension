@@ -51,6 +51,7 @@ class Tile:
             |   |
             | X |
             |___| X = Player Party\n"""
+
             elif self.to_s:
                 return """
              ___
@@ -58,16 +59,19 @@ class Tile:
             | X |
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_w:
                 return """
         ________
         W     X |
         ________| X = Player Party\n"""
+
             elif self.to_e:
                 return """
              ________
             | X     E
             |________ X = Player Party\n"""
+
             elif self.to_dn or self.to_up:
                 return """
              ___
@@ -81,12 +85,14 @@ class Tile:
         ____|   |
         W     X |
         ________| X = Player Party\n"""
+
             elif self.to_n and self.to_e:
                 return """
             | N |
             |   |____
             | X    E
             |________ X = Player Party\n"""
+
             elif self.to_n and self.to_s:
                 return """
             | N |
@@ -94,11 +100,13 @@ class Tile:
             | X |
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_w and self.to_e:
                 return """
         _____________
         W     X     E
         _____________ X = Player Party\n"""
+
             elif self.to_w and self.to_s:
                 return """
         ________
@@ -106,6 +114,7 @@ class Tile:
         ____    |
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_e and self.to_s:
                 return """
              ________
@@ -113,17 +122,20 @@ class Tile:
             |    ____
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_up and self.to_dn:
                 return """
              ___
             | X |
             |___| X = Player Party\n"""
+
             elif self.to_n and (self.to_up or self.to_dn):
                 return """
             | N |
             |   |
             | X |
             |___| X = Player Party\n"""
+
             elif self.to_s and (self.to_up or self.to_dn):
                 return """
              ___
@@ -131,11 +143,13 @@ class Tile:
             | X |
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_e and (self.to_up or self.to_dn):
                 return """
              ________
             | X     E
             |________ X = Player Party\n"""
+
             elif self.to_w and (self.to_up or self.to_dn):
                 return """
         ________
@@ -149,6 +163,7 @@ class Tile:
         ____|   |____
         W     X     E
         _____________ X = Player Party\n"""
+
             elif self.to_n and self.to_w and self.to_s:
                 return """
             | N |
@@ -157,6 +172,7 @@ class Tile:
         ____    |
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_n and self.to_e and self.to_s:
                 return """
             | N |
@@ -165,6 +181,7 @@ class Tile:
             |    ____
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_w and self.to_e and self.to_s:
                 return """
         _____________
@@ -179,6 +196,7 @@ class Tile:
         ____|   |
         W     X |
         ________| X = Player Party\n"""
+
             elif self.to_w and self.to_s and (self.to_up or self.to_dn):
                 return """
         ________
@@ -186,17 +204,20 @@ class Tile:
         ____    |
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_w and self.to_e and (self.to_up or self.to_dn):
                 return """
         _____________
         W     X     E
         _____________ X = Player Party\n"""
+
             elif self.to_n and self.to_e and (self.to_up or self.to_dn):
                 return """
             | N |
             |   |____
             | X    E
             |________ X = Player Party\n"""
+
             elif self.to_s and self.to_e and (self.to_up or self.to_dn):
                 return """
              ________
@@ -204,6 +225,7 @@ class Tile:
             |    ____
             |   |
             | S | X = Player Party\n"""
+
             elif self.to_n and self.to_s and (self.to_up or self.to_dn):
                 return """
             | N |

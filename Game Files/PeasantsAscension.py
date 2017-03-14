@@ -42,6 +42,7 @@ import msvcrt
 import sys
 import time
 import traceback
+
 import pygame
 
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Content")
@@ -87,18 +88,19 @@ def set_prompt_properties():
         _fields_ = [("cbSize", ctypes.c_ulong), ("nFont", ctypes.c_ulong), ("dwFontSize", Coord),
                     ("FontFamily", ctypes.c_uint), ("FontWeight", ctypes.c_uint), ("FaceName", ctypes.c_wchar*32)]
 
+    # Set font information
     font = ConsoleFontInfo()
     font.cbSize = ctypes.sizeof(ConsoleFontInfo)
     font.nFont = 12
+    font.FontFamily = 54
+    font.FontWeight = 400
 
     # Adjust for screen sizes
     font.dwFontSize.X = 8 if screen[0] < 1024 else 10 if screen[0] < 1280 else 12 if screen[0] < 1920 else 15
     font.dwFontSize.Y = 14 if screen[0] < 1024 else 18 if screen[0] < 1280 else 22 if screen[0] < 1920 else 28
 
-    font.FontFamily = 54
-    font.FontWeight = 400
+    # Lucidia Console is a popular monospaced font, meaning that every single character is the exact same width
     font.FaceName = "Lucida Console"
-
     handle = ctypes.windll.kernel32.GetStdHandle(-11)
     ctypes.windll.kernel32.SetCurrentConsoleFontEx(handle, ctypes.c_long(False), ctypes.pointer(font))
 

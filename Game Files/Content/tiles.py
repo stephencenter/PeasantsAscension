@@ -159,61 +159,13 @@ def movement_system():
         coord_change, available_dirs = movement_hud()
 
         while True:
-            command = input('Input Command (type "help" to view command list): ')
+            command = input('Input Command (type "help" to view command list): ').lower()
 
-            # Truncate the player's input to be only the first character, and then make it lowercase
-            if command:
-                command = command[0].lower()
+            if command == "debug-menu":
+                debug_command()
 
-            # If the player's input is in a list of available direcitonal inputs, then:
-            if any(map(command.startswith, [x[0] for x in available_dirs])):
-                sounds.foot_steps.play()
-
-                main.party_info['current_tile'] = [b for b in all_tiles if b.tile_id in
-                                                   [a[1] for a in available_dirs if a[0] == command]][0]
-
-                # Translate the player's commandal input into a coordinate change
-                for drc in [a[0] for a in available_dirs]:
-                    if drc == command == 'e':
-                        coord_change = ['x', 1]
-                    elif drc == command == 'w':
-                        coord_change = ['x', -1]
-                    elif drc == command == 'n':
-                        coord_change = ['y', 1]
-                    elif drc == command == 's':
-                        coord_change = ['y', -1]
-                    elif drc == command == 'u':
-                        coord_change = ['z', 1]
-                    elif drc == command == 'd':
-                        coord_change = ['z', -1]
-
-                # Change the player's coordinates
-                # This is purely visual - tiles are completely independent of coordinates
-                main.party_info[coord_change[0]] += 1*coord_change[1]
-
-                # If none of these fucntions return True, then a battle can occur.
-                if not any([check_region(), units.check_bosses(), towns.search_towns(enter=False)]):
-
-                    # There is a 1 in 4 chance for a battle to occur (25%)
-                    # However, a battle cannot occur if the number of steps since the last battle is less than three,
-                    # and is guaranteed to occur if the number of steps is above 10.
-                    is_battle = random.randint(0, 3) == 0
-
-                    if main.party_info['steps_without_battle'] > 10:
-                        is_battle = True
-
-                    elif main.party_info['steps_without_battle'] < 3:
-                        is_battle = False
-
-                    # Certain tiles can have battling disabled on them
-                    if is_battle and main.party_info['current_tile'].m_level != -1:
-                        print('-'*save_load.divider_size)
-                        units.spawn_monster()
-                        battle.battle_system()
-                        main.party_info['steps_without_battle'] = 0
-
-                    else:
-                        main.party_info['steps_without_battle'] += 1
+            elif any(map(command.startswith, [x[0] for x in available_dirs])):
+                move_command(coord_change, available_dirs, command)
 
                 break
 
@@ -356,17 +308,67 @@ def movement_hud():
     return coord_change, available_dirs
 
 
+def move_command(coord_change, available_dirs, command):
+    sounds.foot_steps.play()
+
+    main.party_info['current_tile'] = [b for b in all_tiles if b.tile_id in
+                                       [a[1] for a in available_dirs if a[0] == command]][0]
+
+    # Translate the player's commandal input into a coordinate change
+    for drc in [a[0] for a in available_dirs]:
+        if drc == command == 'e':
+            coord_change = ['x', 1]
+        elif drc == command == 'w':
+            coord_change = ['x', -1]
+        elif drc == command == 'n':
+            coord_change = ['y', 1]
+        elif drc == command == 's':
+            coord_change = ['y', -1]
+        elif drc == command == 'u':
+            coord_change = ['z', 1]
+        elif drc == command == 'd':
+            coord_change = ['z', -1]
+
+    # Change the player's coordinates
+    # This is purely visual - tiles are completely independent of coordinates
+    main.party_info[coord_change[0]] += 1 * coord_change[1]
+
+    # If none of these fucntions return True, then a battle can occur.
+    if not any([check_region(), units.check_bosses(), towns.search_towns(enter=False)]):
+
+        # There is a 1 in 4 chance for a battle to occur (25%)
+        # However, a battle cannot occur if the number of steps since the last battle is less than three,
+        # and is guaranteed to occur if the number of steps is above 10.
+        is_battle = random.randint(0, 3) == 0
+
+        if main.party_info['steps_without_battle'] > 10:
+            is_battle = True
+
+        elif main.party_info['steps_without_battle'] < 3:
+            is_battle = False
+
+        # Certain tiles can have battling disabled on them
+        if is_battle and main.party_info['current_tile'].m_level != -1:
+            print('-' * save_load.divider_size)
+            units.spawn_monster()
+            battle.battle_system()
+            main.party_info['steps_without_battle'] = 0
+
+        else:
+            main.party_info['steps_without_battle'] += 1
+
+
 def help_command():
     print('-'*save_load.divider_size)
     print("""Command List:
-[NSEW] - Moves your party if the selected direction is unobstructed
-[L]ook - Displays a description of your current location
-[P]arty Stats - Displays the stats of a specific party member
-[T]ool Menu - Allows you to quickly use tools without opening your inventory
-[M]agic - Allows you to use healing spells outside of battle
-[R]est - Heals your party member while in the overworld
-[I]nventory - Displays your inventory and lets you equip/use items
-
+ [NSEW] - Moves your party if the selected direction is unobstructed
+ [L]ook - Displays a description of your current location
+ [P]arty Stats - Displays the stats of a specific party member
+ [T]ool Menu - Allows you to quickly use tools without opening your inventory
+ [M]agic - Allows you to use healing spells outside of battle
+ [R]est - Heals your party member while in the overworld
+ [I]nventory - Displays your inventory and lets you equip/use items
+ [H]elp - Reopen this list of commands
 Type the letter in brackets while on the overworld to use the command""")
 
     input("\nPress enter/return ")
@@ -421,41 +423,15 @@ def inv_command():
 
 
 def magic_command():
-    target_options = [x for x in [units.player,
-                                  units.solou,
-                                  units.xoann,
-                                  units.adorine,
-                                  units.ran_af,
-                                  units.parsto,
-                                  units.chyme] if x.enabled]
+    units.player.choose_target("Choose Spellbook:", ally=True, enemy=False)
 
-    if len(target_options) == 1:
-        target = units.player
+    if magic.spellbook[units.player.target.name if units.player.target != units.player else 'player']['Healing']:
+        magic.pick_spell('Healing', units.player.target, False)
 
     else:
         print('-' * 25)
-        print("Select Spellbook:")
-
-        for num, character in enumerate(target_options):
-            print(f"      [{int(num) + 1}] {character.name}'s Spells")
-
-        while True:
-            target = input("Input [#]: ")
-            try:
-                target = target_options[int(target) - 1]
-
-            except (ValueError, IndexError):
-                continue
-
-            break
-
-    if magic.spellbook[target.name if target != units.player else 'player']['Healing']:
-        magic.pick_spell('Healing', target, False)
-
-    else:
-        print('-' * 25)
-        print(f'{target.name} has no overworld-allowed spells in their spellbook.')
-        input("\Press enter/return ")
+        print(f'{units.player.target.name} has no overworld spells in their spellbook.')
+        input("\nPress enter/return ")
 
 
 def look_command():
@@ -573,73 +549,26 @@ def tools_command():
             break
 
 
-def find_tile_with_coords(new_coords):
-    # This function uses a simple algorithm to crawl the world map and find a tile with the specific coordinates
-    # NOTE: Tiles are NOT matched to a specific pair of coordinates, in order to maintain modularity and allow
-    # for cool one-way paths and Lost Woods-esque areas. This means that if your party's coordinates somehow desync
-    # from your party's current tile (something only possible via manual editing of save files), this function
-    # will return unexpected results.
+def debug_command():
+    # Opens the debug menu. Allows the player to enter in Python Code in order to manipulate in-game variables.
+    # Extremely powerful, but can potentially ruin the game state if the player doesn't know what they're doing.
+    # Use with caution.
+    print('-'*save_load.divider_size)
+    print('-DEBUG MENU-')
+    while True:
+        command = input('Input command (or type "exit"): ')
 
-    current_tile = main.party_info['current_tile']
-    current_coords = [main.party_info['x'], main.party_info['y'], main.party_info['z']]
-    multi = [0, 0, 0]
+        if command in ['e', 'x', 'exit', 'b', 'back']:
+            print('-' * 25)
 
-    while current_coords != new_coords:
-        print(f"Current Tile: {current_tile.tile_id}")
-        print(f"Current Coords: {current_coords}")
-        print(f"Current Multi: {multi}")
-        main.smart_sleep(3)
+            break
 
-        for num, coord in enumerate(current_coords):
-            if new_coords[num] > coord:
-                print(f"{new_coords[num]} is higher than {coord}")
-                multi[num] = 1
+        try:
+            print(ascii_art.colorize(f">{command}", 'green'))
+            exec(command)
 
-            elif new_coords[num] < coord:
-                print(f"{new_coords[num]} is lower than {coord}")
-                multi[num] = -1
-
-            else:
-                multi[num] = 0
-
-        if multi[0] == 1 and current_tile.to_e:
-            current_tile = find_tile_with_id(current_tile.to_e)
-            current_coords[0] += 1
-            continue
-
-        elif multi[0] == -1 and current_tile.to_w:
-            current_tile = find_tile_with_id(current_tile.to_w)
-            current_coords[0] -= 1
-
-            continue
-
-        elif multi[1] == 1 and current_tile.to_n:
-            current_tile = find_tile_with_id(current_tile.to_n)
-            current_coords[1] += 1
-
-            continue
-
-        elif multi[1] == -1 and current_tile.to_s:
-            current_tile = find_tile_with_id(current_tile.to_s)
-            current_coords[1] -= 1
-
-            continue
-
-        elif multi[2] == 1 and current_tile.to_up:
-            current_tile = find_tile_with_id(current_tile.to_up)
-            current_coords[2] += 1
-
-            continue
-
-        elif multi[2] == -1 and current_tile.to_dn:
-            current_tile = find_tile_with_id(current_tile.to_dn)
-            current_coords[2] -= 1
-
-            continue
-
-        print('-'*25)
-
-    return current_tile, current_coords
+        except:
+            print(ascii_art.colorize(f">Invalid Command, `{command}`", 'red'))
 
 
 def find_tile_with_id(tile_id):

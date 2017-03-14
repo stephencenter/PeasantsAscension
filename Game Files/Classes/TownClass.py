@@ -122,7 +122,7 @@ class Town:
                                 target = target_options[int(target) - 1]
 
                             except (IndexError, ValueError):
-                                if target in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                                if target in ['e', 'x', 'exit', 'b', 'back']:
                                     print('-'*save_load.divider_size)
                                     break
 
@@ -140,7 +140,7 @@ class Town:
                     inv_system.pick_category()
                     print('-'*save_load.divider_size)
 
-                elif choice.lower() in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                elif choice.lower() in ['e', 'x', 'exit', 'b', 'back']:
                     pygame.mixer.music.load(main.party_info['reg_music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(save_load.music_vol)
@@ -212,7 +212,7 @@ class Town:
 
                     break
 
-                elif selected in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                elif selected in ['e', 'x', 'exit', 'b', 'back']:
                     return
 
     @staticmethod
@@ -251,7 +251,7 @@ class Town:
                     choice = int(choice)
 
                 except ValueError:
-                    if choice in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                    if choice in ['e', 'x', 'exit', 'b', 'back']:
                         return
 
                 if choice in [1, 2, 3, 4, 5, 6]:
@@ -430,7 +430,7 @@ class Town:
                             i = stock[item_cat][int(purchase) - 1]
 
                         except (IndexError, ValueError):
-                            if purchase in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                            if purchase in ['e', 'x', 'exit', 'b', 'back']:
                                 print('-'*save_load.divider_size)
                                 fizz = False
                                 break
@@ -483,7 +483,7 @@ class Town:
                     while True:
                         cat = input('Input [#] (or type "back"): ').lower()
 
-                        if cat in ['e', 'x', 'exit', 'c', 'cancel', 'b', 'back']:
+                        if cat in ['e', 'x', 'exit', 'b', 'back']:
                             print('-'*save_load.divider_size)
                             spam = False
                             break
@@ -538,7 +538,7 @@ class Town:
                     npc = self.people[int(npc) - 1]
 
                 except (IndexError, ValueError):
-                    if npc in ['e', 'x', 'exit', 'b', 'back', 'c', 'cancel']:
+                    if npc in ['e', 'x', 'exit', 'b', 'back']:
                         return
 
                     continue

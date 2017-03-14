@@ -15,12 +15,10 @@ else:
 # Abilites are similar to magic, except they are tied to classes and are level-independent. They also
 # cost Action Points to use instead of Mana, and tend to have much more specific functions.
 class Ability:
-    def __init__(self, name, desc, ap_cost, duration=0, priority=0):
+    def __init__(self, name, desc, ap_cost):
         self.name = name
         self.desc = desc
         self.ap_cost = ap_cost
-        self.duration = duration
-        self.priortiy = priority
 
     def use_ability(self, user):
         pass
@@ -338,15 +336,32 @@ Light and causing all enemy light and dark magic casted on them to heal for
 canonize.use_ability = use_canonize
 canonize.after_turn = after_canonize
 
+
+# --ULTIMATE ABILITIES-- Unique to each party member and do not scale with attributes
+def use_ascend(user):
+    pass
+
+
+def after_ascend(user):
+    pass
+
+ascend = Ability("Ascend", """\
+ULTIMATE ABILITY: The user ascends to a higher plane of being, raising their
+main attribute by 25% + [10% per turn since the battle started]. Caps at 75%.
+Can only be used once per battle, and therefore does not stack with multiple
+uses.""", 0)
+ascend.use_ability = use_ascend
+ascend.after_turn = after_ascend
+
 class_abilities = {
-    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # Done
-    'mage': [mana_drain, polymorph, spell_shield, skill_shot],       # Done
+    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # Designed
+    'mage': [mana_drain, polymorph, spell_shield, skill_shot],       # Designed
     'warrior': [roll_call, parry],
     'assassin': [inject_poison, backstab],
     'ranger': [scout, roll],
     'monk': [chakra_smash, pressure_point, aura_swap],
 
-    'player': [],
+    'player': [ascend],  # Designed
     'solou': [],
     'ran_af': [],
     'chyme': [],
