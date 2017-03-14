@@ -77,13 +77,15 @@ in_for_se = Tile("Inner Central Forest", "I-CF-SE", "Central Forest", icf_desc, 
 
 nearton_tile = Tile("Town of Nearton", "Nearton", "Central Forest", icf_desc + """\n
 The town of Nearton is mere minutes away from this point! Stopping by
-there might be a smart idea.""", 2, town_list=[towns.town_nearton],
+there might be a smart idea.""", 2,
+                    town_list=[towns.town_nearton],
                     to_s="I-CF-E",
                     to_w="I-CF-N")
 
 southford_tile = Tile("Town of Southford", "Southford", "Central Forest", icf_desc + """\n
 The town of Nearton is mere minutes away from this point! Stopping by
-there might be a smart idea.""", 2, town_list=[towns.town_southford],
+there might be a smart idea.""", 2,
+                      town_list=[towns.town_southford],
                       to_e="I-CF-S",
                       to_n="I-CF-W")
 
@@ -91,22 +93,57 @@ icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Central Forest", icf_de
 This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
 to help protect its citizens from the harmful monsters outside it. Weaker monsters still
 manage to make their way in though.""", 0,
-                  to_s="I-CF-N")
+                  to_s="I-CF-N",
+                  to_n="W-CF-2")
+
+# -- WEST OF THE HYTHOS RIVER -- #
+whr_desc = """The Central Forest is divided into two smaller regions by the
+immeasurably-large Hythos River. Your party lies to the West of this river,
+in an area aptly-referred to as "West of the Hythos River". Known to the
+denizens as "West Hythos", this land is home to dozens of towns and - despite
+the efforts of the Harconian Militia - uncountable swaths of evils beasts.
+While not nearly as dense tree-wise as the Inner Forest, West Hythos more than
+makes makes up for it in size. Around 70% of the 150-million acre Central
+Forest lies right here in West Hythos. Without a compass it would be incredibly
+difficult to maintain ones whereabouts here."""
+
+whr_tile2 = Tile("West of the Hythos River", "W-CF-1", "Central Forest", whr_desc, 3,
+                 to_e="W-CF-2",
+                 to_n="W-CF-4")
+whr_tile1 = Tile("West of the Hythos River", "W-CF-2", "Central Forest", whr_desc, 3,
+                 to_s="I-CF-Bridge",
+                 to_w="W-CF-1",
+                 to_e="W-CF-3",
+                 to_n="W-CF-5")
+whr_tile3 = Tile("West of the Hythos River", "W-CF-3", "Central Forest", whr_desc, 3,
+                 to_w="W-CF-2",
+                 to_n="W-CF-6")
+whr_tile4 = Tile("West of the Hythos River", "W-CF-4", "Central Forest", whr_desc, 4,
+                 to_s="W-CF-1",
+                 to_e="W-CF-5")
+whr_tile5 = Tile("West of the Hythos River", "W-CF-5", "Central Forest", whr_desc, 3,
+                 to_s="W-CF-2",
+                 to_w="W-CF-4",
+                 to_e="W-CF-6")
+whr_tile6 = Tile("West of the Hythos River", "W-CF-6", "Central Forest", whr_desc, 4,
+                 to_s="W-CF-3",
+                 to_w="W-CF-5")
+
 
 # -- CENTRAL FOREST TILESETS -- #
 
 # Inner Central Forest
-icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s, in_for_n, in_for_se, in_for_nw,
-             icf_bridge]
+icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s,
+             in_for_n, in_for_se, in_for_nw, icf_bridge]
 
 # West of the Hythos River
-whr_tiles = []
+whr_tiles = [whr_tile1, whr_tile2, whr_tile3, whr_tile4, whr_tile5, whr_tile6]
 
-# West of the Hythos River
+# East of the Hythos River
 ehr_tiles = []
 
 
-all_tiles = icf_tiles + whr_tiles + ehr_tiles  # + other tiles lists as more tiles come into existance
+all_tiles = icf_tiles + whr_tiles + ehr_tiles  # + other tiles lists as more tiles come into existence
 
 
 def movement_system():
@@ -534,3 +571,83 @@ def tools_command():
             print('-' * 25)
 
             break
+
+
+def find_tile_with_coords(new_coords):
+    # This function uses a simple algorithm to crawl the world map and find a tile with the specific coordinates
+    # NOTE: Tiles are NOT matched to a specific pair of coordinates, in order to maintain modularity and allow
+    # for cool one-way paths and Lost Woods-esque areas. This means that if your party's coordinates somehow desync
+    # from your party's current tile (something only possible via manual editing of save files), this function
+    # will return unexpected results.
+
+    current_tile = main.party_info['current_tile']
+    current_coords = [main.party_info['x'], main.party_info['y'], main.party_info['z']]
+    multi = [0, 0, 0]
+
+    while current_coords != new_coords:
+        print(f"Current Tile: {current_tile.tile_id}")
+        print(f"Current Coords: {current_coords}")
+        print(f"Current Multi: {multi}")
+        main.smart_sleep(3)
+
+        for num, coord in enumerate(current_coords):
+            if new_coords[num] > coord:
+                print(f"{new_coords[num]} is higher than {coord}")
+                multi[num] = 1
+
+            elif new_coords[num] < coord:
+                print(f"{new_coords[num]} is lower than {coord}")
+                multi[num] = -1
+
+            else:
+                multi[num] = 0
+
+        if multi[0] == 1 and current_tile.to_e:
+            current_tile = find_tile_with_id(current_tile.to_e)
+            current_coords[0] += 1
+            continue
+
+        elif multi[0] == -1 and current_tile.to_w:
+            current_tile = find_tile_with_id(current_tile.to_w)
+            current_coords[0] -= 1
+
+            continue
+
+        elif multi[1] == 1 and current_tile.to_n:
+            current_tile = find_tile_with_id(current_tile.to_n)
+            current_coords[1] += 1
+
+            continue
+
+        elif multi[1] == -1 and current_tile.to_s:
+            current_tile = find_tile_with_id(current_tile.to_s)
+            current_coords[1] -= 1
+
+            continue
+
+        elif multi[2] == 1 and current_tile.to_up:
+            current_tile = find_tile_with_id(current_tile.to_up)
+            current_coords[2] += 1
+
+            continue
+
+        elif multi[2] == -1 and current_tile.to_dn:
+            current_tile = find_tile_with_id(current_tile.to_dn)
+            current_coords[2] -= 1
+
+            continue
+
+        print('-'*25)
+
+    return current_tile, current_coords
+
+
+def find_tile_with_id(tile_id):
+    # A very simple function that scans through a list of all existing Tile objects and returns the first
+    # one it finds with the inputted tile_id
+
+    for tile in all_tiles:
+        if tile.tile_id == tile_id:
+            return tile
+
+    return False

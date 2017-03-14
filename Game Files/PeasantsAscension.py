@@ -42,14 +42,12 @@ import msvcrt
 import sys
 import time
 import traceback
-
 import pygame
 
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Content")
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Scripts")
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Classes")
 
-# noinspection PyPep8
 import tiles
 import title_screen
 import save_load

@@ -136,8 +136,7 @@ class PlayableCharacter(Unit):
                 return
 
             while True:
-                y_n = input(f'So, your name is {self.name}? | Yes or No: ')
-                y_n = y_n.lower()
+                y_n = input(f'So, your name is {self.name}? | Yes or No: ').lower()
 
                 if y_n.startswith('y'):
                     print('-'*save_load.divider_size)

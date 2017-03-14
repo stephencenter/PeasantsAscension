@@ -3,7 +3,6 @@ import sys
 import time
 
 import pygame
-
 import save_load
 
 if __name__ == "__main__":

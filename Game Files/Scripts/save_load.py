@@ -49,14 +49,10 @@ sav_ran_af = 'Content/Save Files/{ADVENTURE_NAME}/ran_af_stats.json'    # Ran'af
 sav_parsto = 'Content/Save Files/{ADVENTURE_NAME}/parsto_stats.json'    # Parsto's Stats
 sav_adorine = 'Content/Save Files/{ADVENTURE_NAME}/adorine_stats.json'  # Adorine's Stats
 
-# The volume of the game, on a scale from 0 (muted) to 1.0 (loudest). Can be changed in the settings.cfg file.
-music_vol = 1.0
-sound_vol = 1.0
-
-# If enabled, text will appear on screen character-by-character instead of all at once.
-do_text_scroll = False
-
-divider_size = 25
+# Game Settings. Can be changed in the settings.cfg file.
+music_vol = 1.0  # The volume of the game's Music, on a scale from 0 (muted) to 1.0 (loudest).
+sound_vol = 1.0  # The volume of the game's SFX, on a scale from 0 (muted) to 1.0 (loudest).
+divider_size = 25  # The number of dashes used for dividers between different UI elements
 
 
 def set_adventure_name():
@@ -161,12 +157,6 @@ def change_settings():
 
         for x in config['volume_levels']:
             globals()[x] = float(config['volume_levels'][x])/100
-
-        for x in config['do_text_scroll']:
-            if config['do_text_scroll'][x] in ['False', 'True']:
-                globals()[x] = eval(config['do_text_scroll'][x])
-            else:
-                globals()[x] = True
 
         for x in config['divider_size']:
             globals()[x] = int(config['divider_size'][x])
