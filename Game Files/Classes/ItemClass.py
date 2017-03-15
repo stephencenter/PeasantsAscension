@@ -113,11 +113,15 @@ class Weapon(Item):
         self.class_ = class_
         self.element = element
 
-        if isinstance(self.class_, str):
-            self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'''])
+        if self.class_ != 'none':
+            if isinstance(self.class_, str):
+                self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'])
+
+            else:
+                self.desc = ' '.join([desc, '|', ' and '.join([x.title() for x in self.class_]), 'ONLY'])
 
         else:
-            self.desc = ' '.join([desc, "[", ', '.join([x.title() for x in self.class_]), ']'])
+            self.desc = ' '.join([desc, '|', "ANY CLASS"])
 
     def use_item(self, user):
         if user.class_ in self.class_ or self.class_ == 'none':
@@ -136,7 +140,7 @@ class Weapon(Item):
                 inv_system.equipped[user.name if user != units.player else 'player']['weapon'] = spam
 
             print('-'*save_load.divider_size)
-            print(f'{user.name} equips the {self}.')
+            print(f'{user.name} equips the {self.name}.')
             input("\nPress enter/return ")
 
         else:
@@ -188,7 +192,7 @@ class Armor(Item):
                 inv_system.inventory['armor'].remove(self)
 
             print('-'*save_load.divider_size)
-            print(f'{user.name} equips the {self}.')
+            print(f'{user.name} equips the {self.name}.')
             input("\nPress enter/return ")
 
         else:
@@ -196,7 +200,6 @@ class Armor(Item):
 
             if isinstance(self.class_, list):
                 print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
-
                 input("\nPress enter/return ")
 
             else:

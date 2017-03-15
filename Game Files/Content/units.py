@@ -1611,7 +1611,7 @@ def create_player():
 
     player.choose_name()
     player.choose_class()
-    main.set_adventure_name()
+    save_load.set_adventure_name()
 
     if player.class_ == "warrior":
         player.max_hp += 5
@@ -1872,6 +1872,14 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     xoann.c_spell = ''
     solou.c_spell = ''
     chyme.c_spell = ''
+
+    player.c_ability = ''
+    parsto.c_ability = ''
+    adorine.c_ability = ''
+    ran_af.c_ability = ''
+    xoann.c_ability = ''
+    solou.c_ability = ''
+    chyme.c_ability = ''
 
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(player.__dict__, f, indent=4, separators=(', ', ': '))
