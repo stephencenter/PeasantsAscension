@@ -712,8 +712,7 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
 
 def serialize_gems(path):
     with open(path, mode='w') as j:
-        json.dump([gem.name for gem in valuable_list if gem.acquired],
-                  j, indent=4, separators=(', ', ': '))
+        json.dump([gem.name for gem in valuable_list if gem.acquired], j, indent=4, separators=(', ', ': '))
 
 
 def deserialize_gems(path):

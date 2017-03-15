@@ -471,7 +471,7 @@ def battle_inventory(user):
             try:
                 item = inv_system.inventory['consumables'][int(item) - 1]
 
-            except (ValueError, IndexError):
+            except (IndexError, ValueError):
                 if item in ['e', 'x', 'exit', 'b', 'back']:
                     return False
 

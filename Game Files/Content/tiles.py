@@ -194,21 +194,6 @@ whr_tiles_q_b = [whr_tile_1b, whr_tile_2b, whr_tile_3b, whr_tile_4b, whr_tile_5b
 all_tiles = icf_tiles + whr_tiles_q_a + whr_tiles_q_b  # + other tiles lists as more tiles come into existence
 
 
-class NeedsName:
-    def __init__(self):
-        raise Exception("A tile is missing a name!")
-
-
-class NeedsDesc:
-    def __init__(self):
-        raise Exception("A tile is missing a description!")
-
-
-class NeedsEnemyLevel:
-    def __init__(self):
-        raise Exception("A tile is missing an enemy level!")
-
-
 def find_tile_with_id(tile_id):
     # A very simple function that scans through a list of all existing Tile objects and returns the first
     # one it finds with the inputted tile_id
@@ -226,7 +211,6 @@ for item in copy.copy(locals()):
 
 for item2 in copy.copy(locals()):
     if isinstance(locals()[item2], Tile):
-        for direction in [locals()[item2].to_s, locals()[item2].to_n,
-                          locals()[item2].to_e, locals()[item2].to_w]:
+        for direction in [locals()[item2].to_s, locals()[item2].to_n, locals()[item2].to_e, locals()[item2].to_w]:
             if direction and not find_tile_with_id(direction):
                 print(f"{locals()[item2].tile_id} has an invalid direction ({direction})")

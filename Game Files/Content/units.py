@@ -656,7 +656,7 @@ Armor:
             try:
                 self.target = this_list[int(chosen) - 1]
 
-            except (ValueError, IndexError):
+            except (IndexError, ValueError):
                 continue
 
             return
@@ -1850,7 +1850,7 @@ def fix_stats():
         if monster_3.evad > 256:
             monster_3.evad = 256
 
-    except AttributeError:
+    except (AttributeError, TypeError):
         if not any([isinstance(monster, str), isinstance(monster_2, str), isinstance(monster_3, str)]):
             raise
 
@@ -1959,6 +1959,6 @@ adorine = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 ran_af = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 parsto = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 chyme = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
-monster = Monster('', '', '', '', '', '', '', '', '', '', '')
-monster_2 = Monster('', '', '', '', '', '', '', '', '', '', '')
-monster_3 = Monster('', '', '', '', '', '', '', '', '', '', '')
+monster = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+monster_2 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+monster_3 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)

@@ -311,7 +311,7 @@ Type the letter in brackets while on the overworld to use the command""")
 
 
 def stats_command():
-    print('-' * 25)
+    print('-'*save_load.divider_size)
     print('You stop to rest for a moment.')
 
     target_options = [x for x in [units.player,
@@ -337,9 +337,9 @@ def stats_command():
             try:
                 target = target_options[int(target) - 1]
 
-            except (ValueError, IndexError):
+            except (IndexError, ValueError):
                 if target in ['e', 'x', 'exit', 'b', 'back']:
-                    print('-' * 25)
+                    print('-'*save_load.divider_size)
 
                     break
 
@@ -348,14 +348,14 @@ def stats_command():
             break
 
     if isinstance(target, units.PlayableCharacter):
-        print('-' * 25)
+        print('-'*save_load.divider_size)
         target.player_info()
-        print('-' * 25)
+        print('-'*save_load.divider_size)
 
 
 def inv_command():
     inv_system.pick_category()
-    print('-' * 25)
+    print('-'*save_load.divider_size)
 
 
 def magic_command():
@@ -365,16 +365,16 @@ def magic_command():
         magic.pick_spell('Healing', units.player.target, False)
 
     else:
-        print('-' * 25)
+        print('-'*save_load.divider_size)
         print(f'{units.player.target.name} has no overworld spells in their spellbook.')
         input("\nPress enter/return ")
 
 
 def look_command():
-    print('-' * 25)
+    print('-'*save_load.divider_size)
     print(party_info['current_tile'].desc)
     input("\nPress enter/return ")
-    print('-' * 25)
+    print('-'*save_load.divider_size)
 
 
 def rest_command():
@@ -449,12 +449,12 @@ def tools_command():
             if item.name in tool_names:
                 available_tools.append(item)
 
-    print('-' * 25)
+    print('-'*save_load.divider_size)
 
     if not available_tools:
         print('Your party has no available tools to use.')
         input('\nPress enter/return ')
-        print('-' * 25)
+        print('-'*save_load.divider_size)
 
         return
 
@@ -472,7 +472,7 @@ def tools_command():
 
             except (IndexError, ValueError):
                 if tool in ['e', 'x', 'exit', 'b', 'back']:
-                    print('-' * 25)
+                    print('-'*save_load.divider_size)
 
                     return
 
@@ -480,7 +480,7 @@ def tools_command():
 
             tool.use_item(units.player)
 
-            print('-' * 25)
+            print('-'*save_load.divider_size)
 
             break
 
@@ -495,7 +495,7 @@ def debug_command():
         command = input('Input command (or type "exit"): ')
 
         if command in ['e', 'x', 'exit', 'b', 'back']:
-            print('-' * 25)
+            print('-'*save_load.divider_size)
 
             break
 

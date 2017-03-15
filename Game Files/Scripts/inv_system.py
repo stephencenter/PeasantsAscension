@@ -337,7 +337,7 @@ def manage_equipped():
 
 
 def manage_equipped_2(target):
-    print('-' * 25)
+    print('-'*save_load.divider_size)
     while True:
         p_equip = equipped[target.name if target != units.player else 'player']
 
@@ -352,7 +352,7 @@ def manage_equipped_2(target):
             selected = input('Input [#] (or type "back"): ').lower()
 
             if selected in ['e', 'x', 'exit', 'b', 'back']:
-                print('-' * 25)
+                print('-'*save_load.divider_size)
                 return
 
             elif selected == '1':
@@ -374,7 +374,7 @@ def manage_equipped_2(target):
                 continue
 
             if selected == '(None)':
-                print('-' * 25)
+                print('-'*save_load.divider_size)
                 print(f"{target.name} doesn't have anything equipped in that slot.")
                 input("\nPress enter/return ")
 
@@ -392,9 +392,9 @@ def manage_equipped_2(target):
             else:
                 continue
 
-            print('-' * 25)
+            print('-'*save_load.divider_size)
             manage_equipped_3(key, selected, p_equip, target)
-            print('-' * 25)
+            print('-'*save_load.divider_size)
 
             break
 
@@ -412,14 +412,14 @@ def manage_equipped_3(key, selected, p_equip, target):
 
             if action == '1':
                 if selected.name == 'Fists':
-                    print('-' * 25)
+                    print('-'*save_load.divider_size)
                     print("Removing those would be difficult without causing damage.")
                     input("\nPress enter/return ")
-                    print('-' * 25)
+                    print('-'*save_load.divider_size)
 
                     break
 
-                print('-' * 25)
+                print('-'*save_load.divider_size)
                 print(f'{target.name} unequips the {selected.name}.')
                 input("\nPress enter/return ")
 
@@ -446,14 +446,14 @@ def manage_equipped_3(key, selected, p_equip, target):
                 return
 
             elif action == '2':
-                print('-' * 25)
+                print('-'*save_load.divider_size)
 
                 if hasattr(selected, "ascart"):
                     print(ascii_art.item_sprites[selected.ascart])
 
                 print(selected.desc)
                 input("\nPress enter/return ")
-                print('-' * 25)
+                print('-'*save_load.divider_size)
 
                 break
 
@@ -467,7 +467,7 @@ def view_quests():
         fizz = True
         choice = input('View [f]inished or [a]ctive quests? | Input [Letter] (or type "back"): ').lower()
 
-        print('-' * 25)
+        print('-'*save_load.divider_size)
         if choice.startswith('f'):  # Finished Quests
             dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.finished]
 

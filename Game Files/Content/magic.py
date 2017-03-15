@@ -275,7 +275,7 @@ def pick_spell(cat, user, is_battle):
             try:
                 spell = spellbook[inv_name][cat][int(spell) - 1]
 
-            except (ValueError, IndexError):
+            except (IndexError, ValueError):
                 if spell in ['e', 'x', 'exit', 'b', 'back']:
                     print('-'*save_load.divider_size)
 

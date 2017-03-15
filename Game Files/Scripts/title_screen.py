@@ -107,9 +107,9 @@ def show_credits():
 
 def show_backstory():
     # Display the storyline of the game
-    print('-' * 25)
+    print('-'*save_load.divider_size)
     input('Press enter/return after each line to advance the text ')
-    print('-' * 25)
+    print('-'*save_load.divider_size)
 
     try:
         pygame.mixer.music.load('Content/Music/CopperNickel.ogg')
@@ -143,14 +143,14 @@ def show_backstory():
         print('There was an problem opening "peasant_plot.txt".')
         input("\nPress enter/return ")
 
-    print('-' * 25)
+    print('-'*save_load.divider_size)
 
 
 def show_lore():
     # Display side-story lore and the history of Pythonia
-    print('-' * 25)
+    print('-'*save_load.divider_size)
     input('Press enter/return after each line to advance the text ')
-    print('-' * 25)
+    print('-'*save_load.divider_size)
 
     try:
         pygame.mixer.music.load('Content/Music/CopperNickel.ogg')
@@ -178,4 +178,4 @@ def show_lore():
         logging.exception(f'Error loading peasant_lore.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         print('There was an problem opening "peasant_lore.txt".')
 
-    print('-' * 25)
+    print('-'*save_load.divider_size)

@@ -95,45 +95,10 @@ class Town:
                     print('-'*save_load.divider_size)
 
                 elif choice == '4':
-                    target_options = [x for x in [
-                        units.player,
-                        units.solou,
-                        units.xoann,
-                        units.adorine,
-                        units.ran_af,
-                        units.parsto,
-                        units.chyme] if x.enabled
-                    ]
-
-                    if len(target_options) == 1:
-                        target = units.player
-
-                    else:
-                        print('-'*save_load.divider_size)
-                        print("Select Party Member:")
-
-                        for num, character in enumerate(target_options):
-                            print(f"[{int(num) + 1}] {character.name}")
-
-                        while True:
-                            target = input('Input [#] (or type "exit"): ').lower()
-
-                            try:
-                                target = target_options[int(target) - 1]
-
-                            except (IndexError, ValueError):
-                                if target in ['e', 'x', 'exit', 'b', 'back']:
-                                    print('-'*save_load.divider_size)
-                                    break
-
-                                continue
-
-                            break
-
-                    if isinstance(target, units.PlayableCharacter):
-                        print('-' * 25)
-                        target.player_info()
-                        print('-' * 25)
+                    units.player.choose_target("Select Party Member: ", ally=True, enemy=False)
+                    print('-'*save_load.divider_size)
+                    units.player.target.player_info()
+                    print('-'*save_load.divider_size)
 
                 elif choice == '5':
                     print('-'*save_load.divider_size)
@@ -675,7 +640,7 @@ class House:
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
-        print('-' * 25)
+        print('-'*save_load.divider_size)
         print(f"Your party enters the house of {self.owner}, completely undetected.")
         while True:
             available_chests = [c for c in self.chests if not (c.destroyed or c.opened)]

@@ -14,6 +14,7 @@ import magic
 import npcs
 import sounds
 import tiles
+import towns
 import units
 
 if __name__ == "__main__":
@@ -39,6 +40,7 @@ sav_misc_boss_info = 'Content/Save Files/{ADVENTURE_NAME}/misc_boss_info.json'  
 sav_party_info = 'Content/Save Files/{ADVENTURE_NAME}/party_info.json'          # Party Info
 sav_quests_dia = 'Content/Save Files/{ADVENTURE_NAME}/quests_dia.json'          # Quests & Dialogue
 sav_spellbook = 'Content/Save Files/{ADVENTURE_NAME}/spellbook.json'            # Spellbook
+sav_chests = 'Content/Save Files/{ADVENTURE_NAME}/chests.json'                  # Chest Info
 
 # PCU Save Files
 sav_play = 'Content/Save Files/{ADVENTURE_NAME}/play_stats.json'        # Player Stats
@@ -136,7 +138,7 @@ def format_save_names():
 
     for x in sorted(['sav_acquired_gems', 'sav_def_bosses', 'sav_equip_items', 'sav_inventory', 'sav_misc_boss_info',
                      'sav_party_info', 'sav_spellbook', 'sav_quests_dia', 'sav_play', 'sav_solou', 'sav_xoann',
-                     'sav_chyme', 'sav_adorine', 'sav_ran_af', 'sav_parsto'], key=str.lower):
+                     'sav_chyme', 'sav_adorine', 'sav_ran_af', 'sav_parsto', 'sav_chests'], key=str.lower):
 
         globals()[x] = globals()[x].format(ADVENTURE_NAME=adventure_name)
 
@@ -207,7 +209,8 @@ def load_game():  # Check for save files and load the game if they're found
 
     save_file_list = [
         sav_acquired_gems, sav_def_bosses, sav_equip_items, sav_inventory, sav_misc_boss_info, sav_party_info,
-        sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_chyme
+        sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_chyme,
+        sav_chests
     ]
 
     for directory in dirs:
@@ -254,7 +257,7 @@ def load_game():  # Check for save files and load the game if they're found
             # Account for the fact that list indices start at 0
             adventure_name = sorted(save_files)[int(chosen) - 1]
 
-        except (ValueError, IndexError):
+        except (IndexError, ValueError):
             # Let the player create a new save file
             if chosen.startswith("c"):
                 print('-'*divider_size)
@@ -299,6 +302,7 @@ def serialize_all(verbose=True):
         npcs.serialize_dialogue(sav_quests_dia)
         magic.serialize_sb(sav_spellbook)
         units.serialize_bosses(sav_misc_boss_info)
+        towns.serialize_chests(sav_chests)
         units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
         with open('/'.join([save_dir, adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:
@@ -332,6 +336,7 @@ def deserialize_all():
         units.deserialize_bosses(sav_misc_boss_info)
         npcs.deserialize_dialogue(sav_quests_dia)
         magic.deserialize_sb(sav_spellbook)
+        towns.deserialize_chests(sav_chests)
         units.deserialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
         print('Load successful.')

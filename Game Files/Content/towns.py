@@ -13,6 +13,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import sys
 
 import pygame
@@ -20,8 +21,8 @@ import pygame
 import inv_system
 import items
 import npcs
-import sounds
 import save_load
+import sounds
 from TownClass import Town, Tavern, Chest, House
 
 if __name__ == "__main__":
@@ -43,13 +44,15 @@ Nearton: A small village in the central region of the Forest. It is in this
 very town where numerous brave adventurers have begun their journey. Nearton
 is just your standard run-of-the-mill village: it has a general store, an inn,
 and a few small houses. An old man  is standing near one of the houses, and
-appears to be very troubled about something.""",
-                    [npcs.philliard, npcs.alfred, npcs.sondalar, npcs.saar, npcs.npc_solou], [nearton_h1, nearton_h2])
+appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, npcs.saar, npcs.npc_solou],
+                                                 [nearton_h1, nearton_h2])
+
+southford_h1_c1 = Chest([35], 2, "")
 
 town_southford = Town('Southford', """\
 Southford: A fair-size town in the South-East of the Inner Central Forest.
 The inhabitants of this town are known for being quite wise, and may
-provide you with helpful advice.""", [npcs.wesley, npcs.lazaro], [], inn_cost=2)
+provide you with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], [], inn_cost=2)
 
 town_overshire = Town('Overshire', """\
 Overshire: A city in the northwestern region of the Forest. Overshire is the
@@ -199,6 +202,13 @@ all of the surrounding land of Aethus around it. Valenfall is deeply intertwined
 nature, and monuments depicting the nature deities can be seen on every corner.
 """, [npcs.fitzgerald], [], inn_cost=2, gs_level=4)
 
+# These three lists are used to serialize chest data. It's easier than having to constantly add chests to lists
+all_towns = [town_nearton, town_southford, town_ambercreek, town_capwild, town_cesura, town_charsulville,
+             town_fallville, town_hatchnuk, town_rymn_outpost, town_lantonum, town_fort_sigil ,town_sanguion,
+             town_ravenstone, town_principalia, town_whistumn, town_new_ekanmar, town_overshire, town_sardooth]
+all_houses = [house for sublist in [town.houses for town in all_towns] for house in sublist]
+all_chests = [chest for sublist in [house.chests for house in all_houses] for chest in sublist]
+
 # TAVERNS
 tavern1 = Tavern("The Traveling Merchant Inn", 0)
 tavern2 = Tavern("The Drunken Moon Tavern ", 5)
@@ -259,3 +269,31 @@ def search_towns(enter=True):
 
         else:
             return bool(len(main.party_info['current_tile'].town_list))
+
+
+def find_chest_with_id(chest_id):
+    # A very simple function that scans through a list of all existing Chest objects and returns the first
+    # one it finds with the inputted chest_id
+
+    for chest in all_chests:
+        if chest.chest_id == chest_id:
+            return chest
+
+    return False
+
+
+def serialize_chests(path):
+    with open(path, mode='w') as j:
+        json.dump([(c.chest_id, c.destroyed, c.opened) for c in all_chests], j, indent=4, separators=(', ', ': '))
+
+
+def deserialize_chests(path):
+    with open(path, encoding='utf-8') as j:
+        json_chests = json.load(j)
+
+    for j_chest in json_chests:
+        find_chest_with_id(j_chest[0]).destroyed = j_chest[1]
+        find_chest_with_id(j_chest[0]).opened = j_chest[2]
+
+
+

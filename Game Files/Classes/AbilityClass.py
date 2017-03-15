@@ -28,7 +28,7 @@ class Ability:
         pass
 
 
-# 18 of 30 designed
+# 19 of 30 designed
 # 3 of 30 implemented
 
 # -- WARRIOR ABILITES, scales with Strength -- #
@@ -129,6 +129,24 @@ aura_swap.before_ability = before_aura_swap
 aura_swap.use_ability = use_aura_swap
 
 
+def before_berserkers_rage(user):
+    pass
+
+
+def use_berserkers_rage(user):
+    pass
+
+
+berserkers_rage = Ability("Berserker's Rage", f"""\
+The user realigns their chakras, converting their own pain into an offensive
+weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
+for every 1% of HP the user is missing. If the user's current HP is below
+[5 + 0.5*Constitution]%, this ability will lifesteal for 25% of the damage
+dealt.""", 5)
+berserkers_rage.before_ability = before_berserkers_rage
+berserkers_rage.use_ability = use_berserkers_rage
+
+
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
 def before_inject_poison(user):
     pass
@@ -204,7 +222,8 @@ def use_spell_shield(user):
 
 spell_shield = Ability("Spell Shield", f"""\
 Places a protective barrier around your party that lowers incoming magical
-damage by {ascii_art.colorize('[20 + Intelligence]', 'blue')}% for 5 turns.""", 5)
+damage by {ascii_art.colorize('[20 + Intelligence]', 'blue')}% for 4 turns. Does not stack with multiple
+uses - repeat uses only refresh the buff duration.""", 5)
 spell_shield.before_ability = before_spell_shield
 spell_shield.use_ability = use_spell_shield
 
@@ -360,7 +379,7 @@ class_abilities = {
     'warrior': [roll_call, parry],
     'assassin': [inject_poison, backstab],
     'ranger': [scout, roll],
-    'monk': [chakra_smash, pressure_point, aura_swap],
+    'monk': [chakra_smash, pressure_point, aura_swap, berserkers_rage],  # Designed
 
     'player': [ascend],  # Designed
     'solou': [],
