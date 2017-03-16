@@ -41,21 +41,24 @@ Central Forest, and is surrounded by a 12-foot wide moat."""
 
 in_for_n = Tile("Inner Central Forest", "I-CF-N", "Central Forest", icf_desc, 1,
                 to_s="I-CF-C",
-                to_e="Nearton",
+                to_e="I-CF-NE",
                 to_w="I-CF-NW",
                 to_n="I-CF-Bridge")
 in_for_s = Tile("Inner Central Forest", "I-CF-S", "Central Forest", icf_desc, 1,
                 to_n="I-CF-C",
-                to_w="Southford",
-                to_e="I-CF-SE")
+                to_w="I-CF-SW",
+                to_e="I-CF-SE",
+                to_s="I-CF-SS")
 in_for_e = Tile("Inner Central Forest", "I-CF-E", "Central Forest", icf_desc, 1,
-                to_n="Nearton",
+                to_n="I-CF-NE",
                 to_w="I-CF-C",
-                to_s="I-CF-SE")
+                to_s="I-CF-SE",
+                to_e="I-CF-EE")
 in_for_w = Tile("Inner Central Forest", "I-CF-W", "Central Forest", icf_desc, 1,
-                to_s="Southford",
+                to_s="I-CF-SW",
                 to_e="I-CF-C",
-                to_n="I-CF-NW")
+                to_n="I-CF-NW",
+                to_w="I-CF-WW")
 in_for_c = Tile("Inner Central Forest", "I-CF-C", "Central Forest", icf_desc, 1,
                 to_n="I-CF-N",
                 to_w="I-CF-W",
@@ -63,24 +66,106 @@ in_for_c = Tile("Inner Central Forest", "I-CF-C", "Central Forest", icf_desc, 1,
                 to_s="I-CF-S")
 in_for_nw = Tile("Inner Central Forest", "I-CF-NW", "Central Forest", icf_desc, 2,
                  to_s="I-CF-W",
-                 to_e="I-CF-N")
+                 to_e="I-CF-N",
+                 to_w="I-CF-NWW")
 in_for_se = Tile("Inner Central Forest", "I-CF-SE", "Central Forest", icf_desc, 2,
                  to_w="I-CF-S",
-                 to_n="I-CF-E")
+                 to_n="I-CF-E",
+                 to_s="I-CF-SSE",
+                 to_e="I-CF-SEE")
+in_for_sw = Tile("Inner Central Forest", "I-CF-SW", "Central Forest", icf_desc, 2,
+                 to_e="I-CF-S",
+                 to_n="I-CF-W",
+                 to_s="I-CF-SSW",
+                 to_w="I-CF-SWW")
+in_for_ww = Tile("Inner Central Forest", "I-CF-WW", "Central Forest", icf_desc, 2,
+                 to_e="I-CF-W",
+                 to_n="I-CF-NWW",
+                 to_s="I-CF-SWW",
+                 to_w="I-CF-WWW")
+in_for_www = Tile("Inner Central Forest", "I-CF-WWW", "Central Forest", icf_desc, 3,
+                  to_e="I-CF-WW",
+                  to_n="I-CF-NWWW",
+                  to_s="I-CF-SWWW")
+in_for_ee = Tile("Inner Central Forest", "I-CF-EE", "Central Forest", icf_desc, 2,
+                 to_e="I-CF-EEE",
+                 to_w="I-CF-E",
+                 to_n="I-CF-NEE",
+                 to_s="I-CF-SEE")
+in_for_eee = Tile("Inner Central Forest", "I-CF-EEE", "Central Forest", icf_desc, 2,
+                  to_w="I-CF-EE",
+                  to_s="I-CF-SEEE",
+                  to_n="I-CF-NEEE")
+in_for_ss = Tile("Inner Central Forest", "I-CF-SS", "Central Forest", icf_desc, 2,
+                 to_n="I-CF-S",
+                 to_w="I-CF-SSW",
+                 to_e="I-CF-SSE")
+in_for_ssw = Tile("Inner Central Forest", "I-CF-SSW", "Central Forest", icf_desc, 2,
+                  to_e="I-CF-SS",
+                  to_n="I-CF-SW",
+                  to_w="I-CF-SSWW")
+in_for_sww = Tile("Inner Central Forest", "I-CF-SWW", "Central Forest", icf_desc, 2,
+                  to_n="I-CF-WW",
+                  to_e="I-CF-SW",
+                  to_s="I-CF-SSWW",
+                  to_w="I-CF-SWWW")
+in_for_swww = Tile("Inner Central Forest", "I-CF-SWWW", "Central Forest", icf_desc, 3,
+                   to_n="I-CF-WWW",
+                   to_e="I-CF-SWW",
+                   to_s="I-CF-SSWWW")
+in_for_sswww = Tile("Inner Central Forest", "I-CF-SSWWW", "Central Forest", icf_desc, 3,
+                    to_n="I-CF-SWWW",
+                    to_e="I-CF-SSWW")
+in_for_nww = Tile("Inner Central Forest", "I-CF-NWW", "Central Forest", icf_desc, 2,
+                  to_w="I-CF-NWWW",
+                  to_s="I-CF-WW",
+                  to_e="I-CF-NW")
+in_for_nwww = Tile("Inner Central Forest", "I-CF-NWWW", "Central Forest", icf_desc, 3,
+                   to_e="I-CF-NWW",
+                   to_s="I-CF-WWW")
+in_for_nee = Tile("Inner Central Forest", "I-CF-NEE", "Central Forest", icf_desc, 2,
+                  to_e="I-CF-NEEE",
+                  to_s="I-CF-EE",
+                  to_w="I-CF-NE")
+in_for_neee = Tile("Inner Central Forest", "I-CF-NEEE", "Central Forest", icf_desc, 3,
+                   to_w="I-CF-NEE",
+                   to_s="I-CF-EEE")
+in_for_sse = Tile("Inner Central Forest", "I-CF-SSE", "Central Forest", icf_desc, 2,
+                  to_n="I-CF-SE",
+                  to_w="I-CF-SS",
+                  to_e="I-CF-SSEE")
+in_for_see = Tile("Inner Central Forest", "I-CF-SEE", "Central Forest", icf_desc, 2,
+                  to_w="I-CF-SE",
+                  to_n="I-CF-EE",
+                  to_s="I-CF-SSEE",
+                  to_e="I-CF-SEEE")
+in_for_ssee = Tile("Inner Central Forest", "I-CF-SSEE", "Central Forest", icf_desc, 3,
+                   to_n="I-CF-SEE",
+                   to_w="I-CF-SSE",
+                   to_e="I-CF-SSEEE")
+in_for_seee = Tile("Inner Central Forest", "I-CF-SEEE", "Central Forest", icf_desc, 3,
+                   to_n="I-CF-EEE",
+                   to_w="I-CF-SEE",
+                   to_s="I-CF-SSEEE")
+in_for_sseee = Tile("Inner Central Forest", "I-CF-SSEEE", "Central Forest", icf_desc, 3,
+                    to_n="I-CF-SEEE",
+                    to_w="I-CF-SSEE")
 
-nearton_tile = Tile("Town of Nearton", "Nearton", "Central Forest", icf_desc + """\n
+nearton_tile = Tile("Town of Nearton", "I-CF-NE", "Central Forest", icf_desc + """\n
 The town of Nearton is mere minutes away from this point! Stopping by
 there might be a smart idea.""", 2,
                     town_list=[towns.town_nearton],
                     to_s="I-CF-E",
-                    to_w="I-CF-N")
+                    to_w="I-CF-N",
+                    to_e="I-CF-NEE")
 
-southford_tile = Tile("Town of Southford", "Southford", "Central Forest", icf_desc + """\n
-The town of Nearton is mere minutes away from this point! Stopping by
+southford_tile = Tile("Town of Southford", "I-CF-SSWW", "Central Forest", icf_desc + """\n
+The town of Southford is mere minutes away from this point! Stopping by
 there might be a smart idea.""", 2,
                       town_list=[towns.town_southford],
-                      to_e="I-CF-S",
-                      to_n="I-CF-W")
+                      to_e="I-CF-SSW",
+                      to_n="I-CF-SWW",
+                      to_w="I-CF-SSWWW")
 
 icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Central Forest", icf_desc + """\n
 This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
@@ -129,7 +214,8 @@ whr_tile_6a = Tile("West of the Hythos River", "W-CF-6A", "Central Forest", whr_
                    to_n="W-CF-9A")
 whr_tile_7a = Tile("West of the Hythos River", "W-CF-7A", "Central Forest", whr_desc, 4,
                    to_s="W-CF-4A",
-                   to_e="W-CF-8A")
+                   to_e="W-CF-8A",
+                   to_w="W-CF-9B")
 whr_tile_8a = Tile("West of the Hythos River", "W-CF-8A", "Central Forest", whr_desc, 4,
                    to_s="W-CF-5A",
                    to_w="W-CF-7A",
@@ -172,16 +258,18 @@ whr_tile_8b = Tile("West of the Hythos River", "W-CF-8B", "Central Forest", whr_
                    to_w="W-CF-7B",
                    to_e="W-CF-9B")
 whr_tile_9b = Tile("West of the Hythos River", "W-CF-9B", "Central Forest", whr_desc, 3,
-                   to_s="W-CF-3B",
-                   to_e="W-CF-4A",
-                   to_w="W-CF-5B")
+                   to_s="W-CF-6B",
+                   to_e="W-CF-7A",
+                   to_w="W-CF-8B")
 
 
 # -- CENTRAL FOREST TILESETS -- #
 
 # Inner Central Forest
-icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s,
-             in_for_n, in_for_se, in_for_nw, icf_bridge]
+icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s, in_for_n, in_for_se, in_for_nw,
+             icf_bridge, in_for_ww, in_for_www, in_for_ee, in_for_eee, in_for_ss, in_for_sw, in_for_ssw, in_for_sww,
+             in_for_swww, in_for_sswww, in_for_nww, in_for_nwww, in_for_nee, in_for_neee, in_for_sse, in_for_see,
+             in_for_ssee, in_for_seee, in_for_sseee]
 
 # West of the Hythos River
 whr_tiles_q_a = [whr_tile_1a, whr_tile_2a, whr_tile_3a, whr_tile_4a, whr_tile_5a,
@@ -204,13 +292,51 @@ def find_tile_with_id(tile_id):
 
     return False
 
-# These two loops run checks on the world map, checking for errors in order to prevent crashes
+# These loops run checks on the world map, checking for errors in order to prevent crashes and weird behaviors
 for item in copy.copy(locals()):
     if isinstance(locals()[item], Tile) and locals()[item] not in all_tiles:
-        print(f"{locals()[item].tile_id} is not in all_tiles")
+        print(f"{locals()[item].tile_id} is not in all_tiles!")
 
-for item2 in copy.copy(locals()):
-    if isinstance(locals()[item2], Tile):
-        for direction in [locals()[item2].to_s, locals()[item2].to_n, locals()[item2].to_e, locals()[item2].to_w]:
-            if direction and not find_tile_with_id(direction):
-                print(f"{locals()[item2].tile_id} has an invalid direction ({direction})")
+for item2 in all_tiles:
+    for direction in [item2.to_s, item2.to_n, item2.to_e, item2.to_w]:
+        if direction and not find_tile_with_id(direction):
+            print(f"{item2.tile_id} has an invalid direction ({direction})!")
+
+for item3 in all_tiles:
+    if item3 != find_tile_with_id(item3.tile_id):
+        print(f"{item3.tile_id} is being used as a Tile ID for multiple tiles!")
+
+
+for item4 in all_tiles:
+    for direction in [item4.to_s, item4.to_n, item4.to_e, item4.to_w]:
+        if direction == item4.tile_id and not item4.allow_recursion:
+            print(f"{item4.tile_id} leads to itself - is this intended?")
+
+for item5 in all_tiles:
+    if any([item5.to_s and not find_tile_with_id(item5.to_s).to_n,
+            item5.to_n and not find_tile_with_id(item5.to_n).to_s,
+            item5.to_w and not find_tile_with_id(item5.to_w).to_e,
+            item5.to_e and not find_tile_with_id(item5.to_e).to_w]) and not item5.allow_oneway:
+        print(f"{item5.tile_id} has one-way passages - is this intended?")
+
+for item6 in all_tiles:
+    is_error = False
+
+    if item6.to_s and find_tile_with_id(item6.to_s).to_n and not item6.allow_noneuclidean:
+        if item6.tile_id != find_tile_with_id(item6.to_s).to_n and not item6.allow_noneuclidean:
+            is_error = True
+
+    if item6.to_n and find_tile_with_id(item6.to_n).to_s and not item6.allow_noneuclidean:
+        if item6.tile_id != find_tile_with_id(item6.to_n).to_s and not item6.allow_noneuclidean:
+            is_error = True
+
+    if item6.to_w and find_tile_with_id(item6.to_w).to_e and not item6.allow_noneuclidean:
+        if item6.tile_id != find_tile_with_id(item6.to_w).to_e and not item6.allow_noneuclidean:
+            is_error = True
+
+    if item6.to_e and find_tile_with_id(item6.to_e).to_w and not item6.allow_noneuclidean:
+        if item6.tile_id != find_tile_with_id(item6.to_e).to_w and not item6.allow_noneuclidean:
+            is_error = True
+
+    if is_error:
+        print(f"{item6.tile_id} has non-euclidean passages - is this intended?")

@@ -14,7 +14,9 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import logging
 import sys
+import time
 
 import pygame
 
@@ -23,6 +25,7 @@ import items
 import npcs
 import save_load
 import sounds
+import tiles
 from TownClass import Town, Tavern, Chest, House
 
 if __name__ == "__main__":
@@ -204,7 +207,7 @@ nature, and monuments depicting the nature deities can be seen on every corner.
 
 # These three lists are used to serialize chest data. It's easier than having to constantly add chests to lists
 all_towns = [town_nearton, town_southford, town_ambercreek, town_capwild, town_cesura, town_charsulville,
-             town_fallville, town_hatchnuk, town_rymn_outpost, town_lantonum, town_fort_sigil ,town_sanguion,
+             town_fallville, town_hatchnuk, town_rymn_outpost, town_lantonum, town_fort_sigil, town_sanguion,
              town_ravenstone, town_principalia, town_whistumn, town_new_ekanmar, town_overshire, town_sardooth]
 all_houses = [house for sublist in [town.houses for town in all_towns] for house in sublist]
 all_chests = [chest for sublist in [house.chests for house in all_houses] for chest in sublist]
@@ -227,6 +230,14 @@ tavern12 = Tavern("The Painted Bard Inn", 15)
 def search_towns(enter=True):
     # Check to see if there is a
     # town where the player is located
+
+    if not isinstance(main.party_info['current_tile'], tiles.Tile):
+        logging.exception(f"""Error gathering tile data on {time.strftime('%m/%d/%Y at %H:%M:%S')}: """)
+
+        main.party_info['current_tile'] = tiles.in_for_c
+        main.party_info['x'], main.party_info['y'], main.party_info['z'] = 0, 0, 0
+        print("There was an error gathering tile data - your party has been relocated to 0'N, 0'E.")
+        input("\nPress enter/return ")
 
     for town in main.party_info['current_tile'].town_list:
         if enter:

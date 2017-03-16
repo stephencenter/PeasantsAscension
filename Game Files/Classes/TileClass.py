@@ -17,7 +17,8 @@
 
 class Tile:
     def __init__(self, name, tile_id, region, desc, m_level, to_n=None, to_s=None, to_e=None, to_w=None, to_up=None,
-                 to_dn=None, town_list=(), boss_list=(), gem_list=(), enterable=True, level_req=1):
+                 to_dn=None, town_list=(), boss_list=(), gem_list=(), allow_recursion=False, allow_oneway=False,
+                 allow_noneuclidean=False):
         self.name = name
         self.tile_id = tile_id
         self.region = region
@@ -29,11 +30,23 @@ class Tile:
         self.to_w = to_w
         self.to_up = to_up
         self.to_dn = to_dn
-        self.enterable = enterable
         self.town_list = town_list
         self.boss_list = boss_list
         self.gem_list = gem_list
-        self.level_req = level_req
+
+        # Allowing Recusion means that tiles can enter back into themselves. For example, tile_1.to_s = tile_1
+        self.allow_recursion = allow_recursion
+
+        # Allowing one-way paths means that tiles can have passages into other tiles that do not allow returning in the
+        # direction one came from. For example, tile_1.to_s = tile_2; tile_2.to_n = None
+        self.allow_oneway = allow_oneway
+
+        # Allowing Non-euclidean geometry means that tiles can have passages that lead to different tiles when returning
+        # in the direction one came from. For example, tile_1.to_s = tile_2, tile_2.to_n = tile_3
+        self.allow_noneuclidean = allow_noneuclidean
+
+        # NOTE: The above three restrictions are NOT hard restrictions! They simply give an alert when starting up the
+        # game if one attempts to, for example, use non-euclidean geometry with allow_noneuclidean set to False.
 
     def generate_ascii(self):
         no_adj_tiles = len([t for t in [self.to_up,

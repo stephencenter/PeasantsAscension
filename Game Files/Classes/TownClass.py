@@ -26,6 +26,7 @@ import items
 import sounds
 import units
 import save_load
+import text_scroll
 
 if __name__ == "__main__":
     sys.exit()
@@ -271,10 +272,14 @@ class Town:
                 print()
                 if main.party_info['gp'] >= self.inn_cost:
 
-                    print('"Good night, Traveler."')
-                    print('Sleeping...')
+                    print('"Goodnight, Traveler."')
+                    print('Sleeping', end='')
 
-                    main.smart_sleep(1)
+                    sys.stdout.flush()
+
+                    text_scroll.text_scroll('...', spacing=1)
+                    print()
+
                     main.party_info['gp'] -= self.inn_cost
 
                     for character in [
@@ -590,7 +595,7 @@ class Tavern:
                 print()
                 if main.party_info['gp'] >= self.inn_cost:
 
-                    print('"Good night, traveler."')
+                    print('"Goodnight, Traveler."')
                     print('Sleeping...')
 
                     main.smart_sleep(1)
