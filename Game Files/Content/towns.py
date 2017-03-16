@@ -67,41 +67,53 @@ between. As an outsider, you are forbidden to enter the upper two, but are
 welcome to do as you wish in the lower.""", [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
                       [], inn_cost=5, gs_level=2)
 
-town_charsulville = Town('Charsulville', """Charsulville: A plain village in the south east
+town_charsulville = Town('Charsulville', """\
+Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
 There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.typhen], [], inn_cost=2, gs_level=2)
 
-town_fort_sigil = Town('Fort Sigil', """Fort Sigil: A small village in the northern region
+town_fort_sigil = Town('Fort Sigil', """\
+Fort Sigil: A small village in the northern region
 of the Forest. The citizens of this town have worked tremendously hard to
 convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
 visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh], [], gs_level=3)
 
-town_tripton = Town('Tripton', """Tripton: When the town of Tripton was being built,
-the people working on the project failed to notice that another town,
-Fallville, just so happened to be located mere meters away from the
-new town's borders. This has led to a bit of a rivalry between the
-two towns, particularly between the village leaders.""", [npcs.kyle], [], inn_cost=3, gs_level=3)
+town_tripton = Town('Tripton', """\
+Tripton: When the town of Tripton was being built, the people working on the
+project failed to notice that another town, Fallville, just so happened to be
+located mere meters away from the new town's borders. Merchants in Tripton
+became very successful, as their superior bartering tactics allowed them to
+easily steal business from Fallvillian merchants. This has led to a bitter,
+and sometimes violent, rivalry between the two towns, particularly between the
+village leaders.""", [npcs.kyle], [], inn_cost=3, gs_level=3)
 
-town_fallville = Town('Fallville', """Fallville: When the town of Tripton was being built,
-the people working on the project failed to notice that another town,
-Fallville, just so happened to be located mere meters away from the
-new town's borders. This has led to a bit of a rivalry between the
-two towns, particularly between the village leaders.""", [npcs.krystin, npcs.frederick], [], gs_level=2)
+town_fallville = Town('Fallville', """\
+Fallville: When the town of Tripton was being built, the people working on the
+project failed to notice that another town, Fallville, just so happened to be
+located mere meters away from the new town's borders. Merchants in Tripton
+became very successful, as their superior bartering tactics allowed them to
+easily steal business from Fallvillian merchants. This has led to a bitter,
+and sometimes violent, rivalry between the two towns, particularly between the
+village leaders.""", [npcs.krystin, npcs.frederick], [], gs_level=2)
 
-town_parceon = Town('Parceon', """Parceon: A highly populated town renown for it's rich
-magical background. Parceon is home to the famous Sorcerers' Guild,
-a group of unbelievably skilled and wise mages. The head of the guild,
-Azura, lives in a large tower in the southwest side of the town.""", [npcs.azura], [], gs_level=3)
+town_parceon = Town('Parceon', """\
+Parceon: A highly populated town renown for it's rich magical background.
+Parceon is home to the famous Sorcerers' Guild, a group of unbelievably
+skilled and wise mages who work together to establish and enforce magical law.
+The head of the guild, Azura, lives in a large tower in the southwest side of
+the town.""", [npcs.azura], [], gs_level=3)
 
-town_sardooth = Town('Sardooth', """Sardooth: A ghost town. There has not been a single
+town_sardooth = Town('Sardooth', """\
+Sardooth: A ghost town. There has not been a single
 permanent inhabitant of this town for more than 75 years. It is completely
 run down, with most of the buildings having been destroyed in the Harconian
 Revolution. While this town may seem interesting and historic, there is nothing
 of value here.""", [], [])
 
-town_principalia = Town('Principalia', """Principalia: Principalia is the home of
+town_principalia = Town('Principalia', """\
+Principalia: Principalia is the home of
 King Harconius II. The main attraction here is the Pytheror Building, a
 medium-large cottage that the original King Harconius I had lived in
 centuries ago. Every Monarch to date has decided to instead live in
@@ -114,7 +126,8 @@ and the cottage is surrounded by a ring of 12 archer towers, each with
 standing watch all around the building. One guard happens to catch
 your attention - probably because she just screamed "HALT!" at you.""", [npcs.sakura], [])
 
-town_new_ekanmar = Town('New Ekanmar', """New Ekanmar: The home of the Flyscorian Embassy in
+town_new_ekanmar = Town('New Ekanmar', """\
+New Ekanmar: The home of the Flyscorian Embassy in
 Harconia. Prior to the Harconian Revolution, this town was the location of
 a large portion of Flyscoria's troops in Harconia. The Harconians drove much of
 them out, but a large number of them defected to the Harconian side and stayed.
@@ -123,7 +136,8 @@ The vast majority of the inhabitants of this town are, naturally, Flyscors.
 It seems that the Flyscorian Royal Family is visiting here - perhaps you can
 talk with them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], [], gs_level=3)
 
-town_ravenstone = Town('Ravenstone', """Ravenstone: Ravenstone is a natural sanctuary,
+town_ravenstone = Town('Ravenstone', """\
+Ravenstone: Ravenstone is a natural sanctuary,
 home to dozens upon dozens of different flora and fauna. Naturally,
 the majority population of Ravenstone consists of Druids and
 other nature-magicians. Ravenstone is also the home of the Druids'
@@ -132,7 +146,8 @@ every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
 35% of the population are various species of animals.""", [npcs.strathius], [], gs_level=3)
 
-town_ambercreek = Town('Ambercreek', """Ambercreek: Ambercreek is a large mining town
+town_ambercreek = Town('Ambercreek', """\
+Ambercreek: Ambercreek is a large mining town
 located in the Terrius Mt. Range. The Chin'toric embassy can be found
 in the middle of this town surrounded by large stone walls and a few
 guard-towers. Sugulat, the King of Chin'tor, can often be found mining
@@ -140,7 +155,8 @@ on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
                        [npcs.raidon, npcs.sugulat], [], gs_level=4, inn_cost=15)
 
-town_whistumn = Town('Whistumn', """Whistumn: An ancient city situated on the border
+town_whistumn = Town('Whistumn', """\
+Whistumn: An ancient city situated on the border
 between the Arcadian Desert and the Central Forest. The inhabitants of this town
 are known for their skepticism and reasoning. Many of them are scientists and are
 skilled mathematicians and engineers. This town has an ongoing rivalry with
@@ -148,7 +164,8 @@ the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
 on the steps of the general store.""", [npcs.polmor, npcs.serena], [], gs_level=4, inn_cost=13)
 
-town_hatchnuk = Town("Hatchnuk", """Hatchnuk: Hatchnuk is the only remaining town in Harconia
+town_hatchnuk = Town("Hatchnuk", """\
+Hatchnuk: Hatchnuk is the only remaining town in Harconia
 that still has cases of "Hatchnuk's Blight", a plague-like disease that
 killed hundreds of thousands of people during the 10th and 11th centuries.
 Something about the strand that infects Hatchnuk seems to make it completely
@@ -159,7 +176,8 @@ As a result, there are no buildings that you are able to enter, and no people to
 to. The only people who are around to speak to are the guards, but their plague-doctor-esque
 apparel and stern looks make it clear that they are not in the mood for chit-chat.""", [], [])
 
-town_cesura = Town("Cesura", """Cesura: A town of great historical significance.
+town_cesura = Town("Cesura", """\
+Cesura: A town of great historical significance.
 This town was named after King Cesura I, the war general during the Harconian Civil War
 who helped to reunite the nation's six regions. Cesura was built on top of the site
 of the Battle of Parchak, the definitive battle in the Civil War that Cesura used
@@ -169,40 +187,48 @@ An interesting thing to note is that Cesura is the only town that has a train
 station. Construction of the town of Cesura was outsourced to Elysium, who is
 the most technologically advanced civilization on the planet by far, having
 developed and perfected the Steam Engine and later the Train before the year
-1300 A.D.""", [npcs.morrison], [], wtrmelon_store=True)
+1300 A.D.""", [npcs.morrison], [], watermelon=True)
 
-town_sanguion = Town("Sanguion", """Sanguion: Sanguion is a safe-haven for vampires. Vampires
-are feared throughout Harconia, so this fairly unknown town is the only place they
-can go without being persecuted. The vampires in this town are peaceful, and
-actually refuse to drink the blood of intelligent lifeforms.""", [npcs.pime, npcs.ariver], [], gs_level=5, inn_cost=18)
+town_sanguion = Town("Sanguion", """\
+Sanguion: Sanguion is a safe-haven for vampires. Vampires are feared throughout
+Harconia, so this fairly unknown town is the only place they can go without
+being persecuted. The vampires in this town are peaceful, and actually refuse
+to drink the blood of intelligent lifeforms. Beware, though, as not all
+vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.ariver], [], gs_level=5, inn_cost=18)
 
-town_lantonum = Town("Lamtonum", """Lantonum: Lantonum is a small town that has the best
-forge in all of Arcadia. Nearly 2/3s of all citizens of this town are
-experienced blacksmiths, and 90% of all ores and minerals mined
-in Chin'tor or Ambercreek are brought here. It is one of the wealthiest
-cities in all of the desert region due to its Mythril, Magestite, and
-Necrite bar exports.""", [npcs.matthew], [], gs_level=4)
+town_lantonum = Town("Lamtonum", """\
+Lantonum: Lantonum is a small town that has the best forge in all of Arcadia.
+Nearly 2/3s of all citizens of this town are experienced blacksmiths, and 90%
+of all ores and minerals mined in Chin'tor or Ambercreek are brought here. It
+is one of the wealthiest cities in all of the desert region due to its Mythril,
+Magestite, and Necrite bar exports.""", [npcs.matthew], [], gs_level=4)
 
-town_capwild = Town("Capwild", """Capwild: Capwild is a medium sized town situated in the
-Terrius Mt. Range. Capwild is a supplier of grains and herbs for the entire region,
-and makes extensive use of terrace farming to make up for the lack of arable land.""", [], [], gs_level=5, inn_cost=15)
+town_capwild = Town("Capwild", """\
+Capwild: Capwild is a medium sized town situated in the Terrius Mt. Range.
+Capwild is a supplier of grains and herbs for the entire region, and makes
+extensive use of terrace farming to make up for the lack of arable land.
+Further investigation reveals that water mages have created self-sustaining
+irrigation systems as well, further enhancing Capwild's farming capabilities.""", [], [], gs_level=5, inn_cost=15)
 
-town_rymn_outpost = Town("Rymn Outpost", """Rymn Outpost: Rymn Outpost is one of the several
-small villages established after the Thexian Incursion. All of the residents of this town
-are soldiers or family members of soldiers, with the exception a few merchants. Rymn Outpost
+town_rymn_outpost = Town("Rymn Outpost", """\
+Rymn Outpost: Rymn Outpost is one of the several small villages established
+after the Thexian Incursion. All of the residents of this town are soldiers or
+family members of soldiers, with the exception a few merchants. Rymn Outpost
 is named after Rymnes, the Divinic gods of defense.""", [], [], gs_level=5, inn_cost=17)
 
-cottage1 = Town('Small Cottage', """Small Cottage: As the name would suggest,
-this area only has a small cottage. An old man is tending to his
-flock in a small pasture behind the building. There doesn't appear
-be any other people near here.""", [npcs.alden], [], gs_level=-1, inn_cost=-1)
+cottage1 = Town('Small Cottage', """\
+Small Cottage: As the name would suggest, his area only has a small cottage.
+An old man is tending to his flock in a small pasture behind the building.
+There doesn't appear be any other people near here.""", [npcs.alden], [], gs_level=-1, inn_cost=-1)
 
 
-a_town_valenfall = Town("Valenfall", """Not much is known about the ancient city of Valenfall.
-It's inhabitants claim that it was lifted up from the mainland several millenia ago
-by his Divinity. The gods supposedly used Valenfall as the cornerstone, constructing
-all of the surrounding land of Aethus around it. Valenfall is deeply intertwined with
-nature, and monuments depicting the nature deities can be seen on every corner.
+a_town_valenfall = Town("Valenfall", """\
+Valenfall: Not much is known about the ancient city of Valenfall. It's
+inhabitants claim that it was lifted up from the mainland several millenia ago
+by his Divinity. The gods supposedly used Valenfall as the cornerstone,
+constructing all of the surrounding land of Aethus around it. Valenfall is
+deeply intertwined with nature, and monuments depicting the nature deities can
+be seen on every corner.
 """, [npcs.fitzgerald], [], inn_cost=2, gs_level=4)
 
 # These three lists are used to serialize chest data. It's easier than having to constantly add chests to lists

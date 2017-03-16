@@ -39,7 +39,7 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, houses, inn_cost=0, gs_level=1, wtrmelon_store=False):
+    def __init__(self, name, desc, people, houses, inn_cost=0, gs_level=1, watermelon=False):
         self.name = name  # The town's name (i.e. New York City)
         self.desc = desc  # A brief description of the town
 
@@ -49,7 +49,7 @@ class Town:
         self.people = people  # A list that contains the NPCs you can talk to
         self.houses = houses  # A list that contains random buildings you can enter
 
-        self.wtrmelon_store = wtrmelon_store  # Only used for one specific quest
+        self.watermelon = watermelon  # Only used for one specific quest
 
     def town_choice(self):
         print('-'*save_load.divider_size)
@@ -76,7 +76,7 @@ class Town:
 
                 elif choice == '2':
                     print('-'*save_load.divider_size)
-                    if self.gs_level != -1 or self.inn_cost != -1 or self.wtrmelon_store:
+                    if self.gs_level != -1 or self.inn_cost != -1 or self.watermelon:
                         self.inside_town()
 
                     else:
@@ -142,7 +142,7 @@ class Town:
         watermelon_words = ['w', 'u']
 
         while True:
-            if self.wtrmelon_store:
+            if self.watermelon:
                 print('There is a [W]atermelon store and some [U]nlocked houses in this town.')
                 buildings = watermelon_words
 
