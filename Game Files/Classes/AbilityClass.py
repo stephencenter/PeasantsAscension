@@ -28,7 +28,7 @@ class Ability:
         pass
 
 
-# 19 of 30 designed
+# 21 of 30 designed
 # 3 of 30 implemented
 
 # -- WARRIOR ABILITES, scales with Strength -- #
@@ -41,8 +41,9 @@ def use_parry(user):
 
 
 parry = Ability("Parry", f"""\
-The user will move last this turn. If they are attacked, they will take no
-damage and will reflect {ascii_art.colorize('[50 + Strength]', 'red')}% of the damage to the attacker.""", 5)
+The user readies themselves for an enemy attack. If they are attacked during
+the next turn, they will take no damage  damage and will reflect
+{ascii_art.colorize('[75 + Strength]', 'red')}% of the damage they would have taken to the attacker.""", 5)
 parry.before_ability = before_parry
 parry.use_ability = use_parry
 
@@ -62,16 +63,32 @@ roll_call.before_ability = before_roll_call
 roll_call.use_ability = use_roll_call
 
 
+def before_great_cleave(user):
+    pass
+
+
+def use_great_cleave(user):
+    pass
+
+
+great_cleave = Ability("Great Cleave", f"""\
+The users deals a 1.5x critical strike to an enemy unit. If this attack
+results in that unit's death, the user gets to target an additional unit
+for a second attack that deals [200 + Strength]% damage.""", 2)
+great_cleave.before_ability = before_great_cleave
+great_cleave.use_ability = use_great_cleave
+
+
 # -- MONK ABILITIES, scales with Constitution -- #
 def before_chakra_smash(user):
     pass
 
 
 def use_chakra_smash(user):
-    # A 2.5x crit that lowers the target's armor
+    # A 2x crit that lowers the target's armor
 
     main.smart_sleep(0.75)
-    dam_dealt = math.ceil(units.deal_damage(user, user.target, "physical")*2.5)
+    dam_dealt = math.ceil(units.deal_damage(user, user.target, "physical")*2)
     user.target.hp -= dam_dealt
 
     print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
@@ -88,28 +105,28 @@ def use_chakra_smash(user):
 
 
 chakra_smash = Ability("Chakra Smash", f"""\
-Deals a 2.5x critical strike to the enemy, lowering their defensive stats
+Deals a 2x critical strike to the enemy, lowering their defensive stats
 by {ascii_art.colorize('[5 + Constitution]', 'magenta')}. The armor reduction lasts indefinitely and stacks
 with multiple uses.""", 5)
 chakra_smash.before_ability = before_chakra_smash
 chakra_smash.use_ability = use_chakra_smash
 
 
-def before_pressure_point(user):
+def before_shared_experience(user):
     pass
 
 
-def use_pressure_point(user):
+def use_shared_experience(user):
     pass
 
 
-pressure_point = Ability("Pressure Point", f"""\
-The user identifies the target's weak spots, causing all attacks on the
-target enemy to be critical strikes for the next two turns. Also increases
-max HP by {ascii_art.colorize('[1 + Constitution]', 'magenta')}%. Does not increase current HP. Stacks with
-multiple uses.""", 5)
-pressure_point.before_ability = before_pressure_point
-pressure_point.use_ability = use_pressure_point
+shared_experience = Ability("Shared Experience", f"""\
+The user disregards any sense of good judgement they had, throwing themself
+wrecklessly at the enemy. Deals {ascii_art.colorize('[25 + Constitution]', 'magenta')}% of the target's current HP
+in magical damage, while also damaging the user for half the value. The
+self-damage is non-lethal, meaning that the user cannot die from it.""", 5)
+shared_experience.before_ability = before_shared_experience
+shared_experience.use_ability = use_shared_experience
 
 
 def before_aura_swap(user):
@@ -159,7 +176,7 @@ def use_inject_poison(user):
 inject_poison = Ability("Inject Poison", f"""\
 Injects a poison into the enemy target that deals {ascii_art.colorize('[2 + Dexterity]', 'green')} magical
 damage per turn. Stacks with multiple uses, with each stack increasing damage
-dealt per turn by 2.""", 5)
+dealt per turn by 2% of the target's maximum HP.""", 5)
 inject_poison.before_ability = before_inject_poison
 inject_poison.use_ability = use_inject_poison
 
@@ -174,7 +191,10 @@ def use_backstab(user):
 
 backstab = Ability("Backstab", f"""\
 The user sneaks up on their opponent and deals a {ascii_art.colorize('[125 + Dexterity]', 'green')}% critical
-strike. This move has increased priority and will always go first.""", 2)
+strike. If the target was previously affected by Inject Poison, the user's
+weapon will become poisoned, causing it to apply one stack of Inject Poison on
+every attack for the remainder of the battle. The weapon's poison cannot be
+buffed through repeat uses.""", 2)
 backstab.before_ability = before_backstab
 backstab.use_ability = use_backstab
 
@@ -253,14 +273,18 @@ def use_roll(user):
 
 
 roll = Ability("Roll", f"""\
-The user does a quick tuck-and-roll, disorienting the enemy and increasing
-the user's evasion to 256 for one turn. Also increases their speed by
-{ascii_art.colorize('[25 + Perception]', 'cyan')}. Stacks with multiple uses.""", 3)
+The user does a quick tuck-and-roll, disorienting the enemy and dodging all
+attacks for one turn. Also increases their speed by {ascii_art.colorize('[25 + Perception]', 'cyan')}.
+Stacks with multiple uses.""", 3)
 roll.before_ability = before_roll
 roll.use_ability = use_roll
 
 
 def before_scout(user):
+    pass
+
+
+def use_scout(user):
     monster_weakness = {'fire': 'Water',
                         'water': 'Electric',
                         'electric': 'Earth',
@@ -278,11 +302,7 @@ Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {us
 Evasion: {user.target.evad} | Speed: {user.target.spd,}
 Element: {user.target.element.title()} | Elemental Weakness: {monster_weakness}""")
 
-    battle.temp_stats[user.name]['p_attack'] += (5 + user.attributes['per'])
-
-
-def use_scout(user):
-    pass
+    battle.temp_stats[user.name]['p_attk'] += (5 + user.attributes['per'])
 
 
 scout = Ability("Scout", f"""\
@@ -366,23 +386,38 @@ def use_ascend(user):
     pass
 
 ascend = Ability("Ascend", """\
-ULTIMATE ABILITY: The user ascends to a higher plane of being, raising their
+ULTIMATE ABILITY: The Hero ascends to a higher plane of being, raising their
 main attribute by 25% + [10% per turn since the battle started]. Caps at 75%.
 Can only be used once per battle, and therefore does not stack with multiple
-uses.""", 0)
+uses.""", 5)
 ascend.before_ability = before_ascend
 ascend.use_ability = use_ascend
+
+
+def before_infusion(user):
+    pass
+
+
+def use_infusion(user):
+    pass
+
+
+infusion = Ability("Infusion", """\
+ULTIMATE ABILITY: Solou chooses a party member and enchants their weapon with
+an element of her choice, while also causing it to deal an additional 10%
+damage. Can be re-casted to change the chosen element, but the damage buff does
+not stack.""", 2)
 
 class_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # Designed
     'mage': [mana_drain, polymorph, spell_shield, skill_shot],       # Designed
-    'warrior': [roll_call, parry],
+    'warrior': [roll_call, parry, great_cleave],
     'assassin': [inject_poison, backstab],
     'ranger': [scout, roll],
-    'monk': [chakra_smash, pressure_point, aura_swap, berserkers_rage],  # Designed
+    'monk': [chakra_smash, shared_experience, aura_swap, berserkers_rage],  # Designed
 
     'player': [ascend],  # Designed
-    'solou': [],
+    'solou': [infusion],  # Infusion
     'ran_af': [],
     'chyme': [],
     'parsto': [],
