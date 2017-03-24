@@ -559,7 +559,7 @@ def serialize_inv(path):
 
         for item in inventory[category]:
             if category != 'coord':
-                j_inventory[category].append(item.__dict__)
+                j_inventory[category].append(item.item_id)
 
             else:
                 j_inventory[category].append(item)
@@ -578,87 +578,13 @@ def deserialize_inv(path):
     for category in j_inventory:
         norm_inv[category] = []
 
-        for item in j_inventory[category]:
-            if category == 'consumables':
-                if 'Potion of ' in item['name']:
-                    x = ItemClass.StatusPotion('', '', '', '', '')
-
-                else:
-                    x = ItemClass.Consumable('', '', '', '')
-
-            elif category == 'weapons':
-                x = ItemClass.Weapon('', '', '', '', '', '', '', '')
-
-            elif category == 'armor':
-                x = ItemClass.Armor('', '', '', '', '', '', '', '', '')
-
-            elif category == 'access':
-                if item['acc_type'] == 'elemental':
-                    x = ItemClass.ElementAccessory('', '', '', '', '')
-
-                else:
-                    continue
-
-            elif category == 'coord':
-                norm_inv[category].append(item)
+        for item_id in j_inventory[category]:
+            if category == 'coord':
+                norm_inv[category].append(item_id)
                 continue
 
-            elif category in ['misc', 'tools', 'q_items']:
-                if item['name'] == 'Magical Compass':
-                    item = items.magic_compass
-                    norm_inv[category].append(item)
-                    continue
-
-                elif item['name'] == 'Divining Rod':
-                    item = items.divining_rod
-                    norm_inv[category].append(item)
-                    continue
-
-                elif item['name'] == 'Shovel':
-                    item = items.shovel
-                    norm_inv[category].append(item)
-                    continue
-
-                elif item['name'] == 'Map of Fast Travel':
-                    item = items.map_of_fast_travel
-                    norm_inv[category].append(item)
-                    continue
-
-                elif 'Lockpick' in item['name']:
-                    if item['power'] == 30:
-                        item = items.wood_lckpck
-
-                    elif item['power'] == 45:
-                        item = items.copper_lckpck
-
-                    elif item['power'] == 60:
-                        item = items.iron_lckpck
-
-                    elif item['power'] == 75:
-                        item = items.steel_lckpck
-
-                    elif item['power'] == 90:
-                        item = items.mythril_lckpck
-
-                    norm_inv[category].append(item)
-                    continue
-
-                else:
-                    x = items.Misc('', '', '', '')
-
             else:
-                continue
-
-            if not isinstance(x, ItemClass.Armor) and not isinstance(x, ItemClass.Weapon):
-
-                item_art = x.ascart
-                x.__dict__ = item
-                x.ascart = item_art
-
-            else:
-                x.__dict__ = item
-
-            norm_inv[category].append(x)
+                norm_inv[category].append(_c(items.find_item_with_id(item_id)))
 
     inventory = norm_inv
 
@@ -670,7 +596,7 @@ def serialize_equip(path):
         j_equipped[user] = {}
         for category in equipped[user]:
             if equipped[user][category] != '(None)':
-                j_equipped[user][category] = equipped[user][category].__dict__
+                j_equipped[user][category] = equipped[user][category].item_id
 
             else:
                 j_equipped[user][category] = '(None)'
@@ -688,22 +614,13 @@ def deserialize_equip(path):
 
     for user in j_equipped:
         norm_equip[user] = {}
+
         for category in j_equipped[user]:
             if j_equipped[user][category] == '(None)':
                 norm_equip[user][category] = '(None)'
                 continue
 
-            elif category == 'weapon':
-                x = ItemClass.Weapon('', '', '', '', '', '', '', '')
-
-            elif category == 'access':
-                if j_equipped[category]['acc_type'] == 'elemental':
-                    x = ItemClass.ElementAccessory('', '', '', '', '')
-
             else:
-                x = ItemClass.Armor('', '', '', '', '', '', '', '', '')
-
-            x.__dict__ = j_equipped[user][category]
-            norm_equip[user][category] = x
+                norm_equip[user][category] = _c(items.find_item_with_id(j_equipped[user][category]))
 
     equipped = norm_equip
