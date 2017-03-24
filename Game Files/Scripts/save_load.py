@@ -191,8 +191,9 @@ def load_game():  # Check for save files and load the game if they're found
 
     # Check each part of the save file
     print('Searching for valid save files...')
+    main.smart_sleep(0.1)
+
     if not os.path.isdir('Content/Save Files'):
-        main.smart_sleep(0.1)
 
         print('No save files found. Starting new game...')
         main.smart_sleep(0.1)

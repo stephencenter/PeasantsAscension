@@ -32,14 +32,13 @@ else:
 class Item:
     # The basic item class. Items are stored in the "inventory" dictionary. All
     # item-subclasses inherit from this class.
-    def __init__(self, name, desc, buy, sell, cat='', imp=False, ascart='Misc'):
+    def __init__(self, name, desc, buy, sell, item_id, imp=False):
         self.name = name
         self.desc = desc
         self.buy = buy
-        self.sell = sell  # How much money you will get from selling it
-        self.cat = cat  # Ensures that items go into the correct inventory slot
+        self.sell = sell
         self.imp = imp
-        self.ascart = ascart
+        self.item_id = item_id
 
     def __str__(self):
         return self.name
@@ -47,10 +46,12 @@ class Item:
 
 class Consumable(Item):
     # Items that restore your HP, MP, or both
-    def __init__(self, name, desc, buy, sell, cat='consumables', imp=False, heal=0, mana=0, ascart='Potion'):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, cat='consumables', imp=False, heal=0, mana=0, ascart='Potion'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.heal = heal
         self.mana = mana
+        self.ascart = ascart
+        self.cat = cat
 
     def use_item(self, user, is_battle=False):
         print('-'*save_load.divider_size)
@@ -75,9 +76,11 @@ class Consumable(Item):
 
 
 class StatusPotion(Item):
-    def __init__(self, name, desc, buy, sell, status, cat='consumables', imp=False, ascart='Potion'):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, status, item_id, cat='consumables', imp=False, ascart='Potion'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.status = status
+        self.ascart = ascart
+        self.cat = cat
 
     def use_item(self, user, is_battle=False):
         print('-'*save_load.divider_size)
@@ -106,12 +109,15 @@ class StatusPotion(Item):
 
 class Weapon(Item):
     # Items that increase your damage by a percentage.
-    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart, element='none', cat='weapons', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart,
+                 item_id, element='none', cat='weapons', imp=False):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.ascart = ascart
         self.power = power
         self.type_ = type_
         self.class_ = class_
         self.element = element
+        self.cat = cat
 
         if self.class_ != 'none':
             if isinstance(self.class_, str):
@@ -158,11 +164,13 @@ class Weapon(Item):
 
 class Armor(Item):
     # Items that give the player a percent increase in defense when hit.
-    def __init__(self, name, desc, buy, sell, defense, part, class_, ascart, cat='armor', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, defense, part, class_, ascart, item_id, cat='armor', imp=False):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.defense = defense
         self.part = part
         self.class_ = class_
+        self.ascart = ascart
+        self.cat = cat
 
         if self.class_ != 'none':
             if isinstance(self.class_, str):
@@ -209,15 +217,17 @@ class Armor(Item):
 
 # -- ACCESSORIES -- #
 class Accessory(Item):
-    def __init__(self, name, desc, buy, sell, ascart, cat='access', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, ascart, cat='access', imp=False):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.ascart = ascart
+        self.cat = cat
 
 
 class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
-    def __init__(self, name, desc, buy, sell, element, ascart='Amulet', acc_type='elemental',
+    def __init__(self, name, desc, buy, sell, element, item_id, ascart='Amulet', acc_type='elemental',
                  cat='access', imp=False):
-        Accessory.__init__(self, name, desc, buy, sell, ascart, cat, imp)
+        Accessory.__init__(self, name, desc, buy, sell, item_id, ascart, cat, imp)
         self.element = element
         self.acc_type = acc_type
 
@@ -242,41 +252,46 @@ class ElementAccessory(Accessory):
 
 # -- TOOLS -- #
 class MagicCompass(Item):
-    def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Compass'):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Compass'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.ascart = ascart
 
     def use_item(self):
         pass
 
 
 class DiviningRod(Item):
-    def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Div Rod'):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Div Rod'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.cat = cat
 
     def use_item(self):
         pass
 
 
 class Shovel(Item):
-    def __init__(self, name, desc, buy, sell, cat='tools', imp=True, ascart='Shovel'):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.cat = cat
 
     def use_item(self):
         pass
 
 
 class TownTeleporter(Item):
-    def __init__(self, name, desc, buy, sell, cat='tools', imp=False, ascart='Map'):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Map'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.cat = cat
 
     def use_item(self):
         pass
 
 
 class LockpickKit(Item):
-    def __init__(self, name, desc, buy, sell, power, cat='tools', imp=False, ascart='Lockpick'):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, power, item_id, cat='tools', imp=False, ascart='Lockpick'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.power = power
+        self.cat = cat
 
     @staticmethod
     def use_item():
@@ -288,9 +303,10 @@ class LockpickKit(Item):
 
 # -- OTHERS -- #
 class Valuable(Item):
-    def __init__(self, name, desc, buy, sell, ascart='Gem', acquired=False, cat='misc', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, ascart='Gem', acquired=False, cat='misc', imp=False):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.acquired = acquired
+        self.cat = cat
 
     # noinspection PyMethodMayBeStatic
     def use_item(self):
@@ -300,8 +316,9 @@ class Valuable(Item):
 
 
 class Misc(Item):
-    def __init__(self, name, desc, buy, sell, ascart='Misc', cat='misc', imp=False):
-        Item.__init__(self, name, desc, buy, sell, cat, imp, ascart)
+    def __init__(self, name, desc, buy, sell, item_id, ascart='Misc', cat='misc', imp=False):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.cat = cat
 
     def use_item(self):
         print('-'*save_load.divider_size)

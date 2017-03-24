@@ -14,67 +14,68 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import copy
 
 from ItemClass import Consumable, MagicCompass, DiviningRod, Weapon, Armor, StatusPotion, \
-    Misc, Valuable, Shovel, ElementAccessory, TownTeleporter, LockpickKit
+    Misc, Valuable, Shovel, ElementAccessory, TownTeleporter, LockpickKit, Item
 
 # Potions -- Health
 s_potion = Consumable('Weak Potion',
                       'A small potion that restores 15 HP when consumed.',
-                      15, 5, heal=15)
+                      15, 5, "s_potion", heal=15)
 m_potion = Consumable('Basic Potion',
                       'A regular potion that restores 45 HP when consumed.',
-                      30, 10, heal=45)
+                      30, 10, "m_potion", heal=45)
 l_potion = Consumable('Strong Potion',
                       'A powerful potion that restores 100 HP when consumed.',
-                      60, 20, heal=100)
+                      60, 20, "l_potion", heal=100)
 x_potion = Consumable('Super Potion',
                       'A super powerful potion that restores 200 HP when consumed.',
-                      120, 40, heal=200)
+                      120, 40, "x_potion", heal=200)
 
 # Potions -- Mana
 s_elixir = Consumable('Basic Elixir',
                       'A generic elixir that restores 15 MP when consumed.',
-                      10, 3, mana=10, ascart='Elixir')
+                      10, 3, "s_elixir", mana=10, ascart='Elixir')
 m_elixir = Consumable('Enhanced Elixir',
                       'A more potent elixir that restores 45 MP when consumed.',
-                      25, 8, mana=35, ascart='Elixir')
+                      25, 8, "m_elixir", mana=35, ascart='Elixir')
 l_elixir = Consumable('Grand Elixir',
                       'A powerful elixir that restores 100 MP when consumed.',
-                      50, 17, mana=75, ascart='Elixir')
+                      50, 17, "l_elixir", mana=75, ascart='Elixir')
 x_elixir = Consumable('Extreme Elixir',
                       'A super powerful elixir that restores 175 MP when consumed.',
-                      100, 35, mana=175, ascart='Elixir')
+                      100, 35, "x_elixir", mana=175, ascart='Elixir')
 
 # Potions -- Both
 s_rejuv = Consumable('Minor Rejuvenation Potion',
                      'A basic mixture that restores 15 HP and 15 MP when consumed.',
-                     35, 12, heal=15, mana=15, ascart='Rejuv')
+                     35, 12, "s_rejuv", heal=15, mana=15, ascart='Rejuv')
 
 m_rejuv = Consumable('Refined Rejuvenation Potion',
                      'A higher quality mixture that restores 45 HP and 45 MP when consumed.',
-                     65, 22, heal=45, mana=45, ascart='Rejuv')
+                     65, 22, "m_rejuv", heal=45, mana=45, ascart='Rejuv')
 
 l_rejuv = Consumable('Mighty Rejuvenation Potion',
                      'A super powerful mixture that restores 100 HP and 100 MP when consumed.',
-                     225, 80, heal=100, mana=100, ascart='Rejuv')
+                     225, 80, "l_rejuv", heal=100, mana=100, ascart='Rejuv')
 
 # Potions - Status
 silence_potion = StatusPotion('Potion of Allowing Speech',
                               "A potion designed to enable the usage of damaged vocal chords.",
-                              50, 25, 'silenced', ascart='Status')
+                              50, 25, 'silenced', "silence_pot", ascart='Status')
 poison_potion = StatusPotion('Potion of Curing Disease',
                              'A potion designed to cure even the most deadly of illnesses.',
-                             50, 25, 'poisoned', ascart='Status')
+                             50, 25, 'poisoned', "poison_pot", ascart='Status')
 weakness_potion = StatusPotion('Potion of Regaining Strength',
                                'A potion designed to help regain lost muscle-mass and stamina.',
-                               50, 25, 'weakened', ascart='Status')
+                               50, 25, 'weakened', "weakness_pot", ascart='Status')
 blindness_potion = StatusPotion('Potion of Enabling Sight',
                                 'A potion designed to help the blind regain their eyesight.',
-                                50, 25, 'blinded', ascart='Status')
+                                50, 25, 'blinded', "blindness_pot", ascart='Status')
 paralyzation_potion = StatusPotion('Potion of Inducing Motion',
                                    'A potion designed to cure minor paralysis in most of the body.',
-                                   50, 25, 'paralyzed', ascart='Status')
+                                   50, 25, 'paralyzed', "paralyze_pot", ascart='Status')
 
 
 # Fists exist to prevent bugs caused by not having any weapon equipped. Also the starting
@@ -710,6 +711,9 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                        mythril_lckpck, mythril_lckpck]]}
 
 
+all_items = []
+
+
 def serialize_gems(path):
     with open(path, mode='w') as j:
         json.dump([gem.name for gem in valuable_list if gem.acquired], j, indent=4, separators=(', ', ': '))
@@ -725,3 +729,8 @@ def deserialize_gems(path):
         for gem in valuable_list:
             if gem.name == name:
                 gem.acquired = True
+
+
+for x in copy.copy(globals()):
+    if isinstance(globals()[x], Item) and globals()[x] not in all_items:
+        print(f"{globals()[x].item_id} not in all_items!")
