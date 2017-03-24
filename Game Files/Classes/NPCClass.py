@@ -100,7 +100,6 @@ class Conversation:
 
         return sentences
 
-
     def after_talking(self):
         pass
 
