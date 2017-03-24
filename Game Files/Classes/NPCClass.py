@@ -40,42 +40,28 @@ else:
 
 
 class NPC:
-    def __init__(self, name, conversations, occupation):
+    def __init__(self, name, conversations, occupation, active=True):
         self.name = name
         self.conversations = conversations
         self.occupation = occupation
+        self.active = active
 
     def __str__(self):
         return self.name
 
     def speak(self):
-
         # Print the NPC's dialogue to the player
         dialogue = []
         for w in self.conversations:
             if w.active:
-                try:
-                    if not w.started:  # Quests
-                        dialogue.append(w.sentences)
-
-                    elif w.started and w.finished and w.active:
-                        dialogue = [w.end_dialogue]
-                        break
-
-                except AttributeError:  # Non-quests
-                    dialogue.append(w.sentences)
+                dialogue.append(w.chop())
 
         for y in dialogue[:]:
-
             # Create some padding so that everything lines up properly and looks nice
             padding = len(max(y, key=len))
 
             for z in y:
-                if z != '-'*save_load.divider_size:
-                    input(''.join([self.name.title(), ': ', z, ' '*(padding - len(z)), ' | [ENTER] ']))
-
-                else:
-                    print(z)
+                input(z)
 
             dialogue.remove(y)
 
@@ -96,33 +82,41 @@ class NPC:
 
 
 class Conversation:
-    def __init__(self, sentences, conv_id, active=False):
-        self.sentences = sentences
+    def __init__(self, dialogue, conv_id, active=False):
+        self.dialogue = dialogue
         self.active = active
         self.conv_id = conv_id
+
+    def chop(self):
+        sentences = []
+        current_sentence = ''
+
+        for word in self.dialogue.split():
+            if len(current_sentence + word) > 79:
+                sentences.append(current_sentence)
+                current_sentence = ''
+
+            current_sentence += f' {word}'
+
+        return sentences
+
 
     def after_talking(self):
         pass
 
 
 class Quest(Conversation):
-    def __init__(self, sentences, name, desc, q_giver, reward, end_dialogue, conv_id, started=False,
-                 finished=False, active=False):
-        Conversation.__init__(self, sentences, active)
+    def __init__(self, name, dialogue, q_giver, reward, conv_id, started=False, finished=False, active=False):
+        Conversation.__init__(self, dialogue, active)
         self.name = name  # The name of the quest
-        self.desc = desc  # A brief summary of the goal of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
         self.reward = reward  # A list [experience, gold] of your reward for the quest
-        self.conv_id = conv_id
         self.started = started  # is True if the quest has been started, false otherwise
         self.finished = finished  # is True if the quest is complete, false otherwise
-        self.end_dialogue = end_dialogue  # What is printed when the quest is over
+        self.conv_id = conv_id
 
     def give_quest(self):
         print('-'*save_load.divider_size)
-        print(''.join([self.name, ': \n  ', '\n  '.join([x for x in self.desc])]))
-        print('-'*save_load.divider_size)
-
         print(f'{self.q_giver} is offering you the quest "{self.name}".')
 
         while True:

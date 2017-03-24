@@ -27,9 +27,6 @@ else:
 pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
-# Save File information
-save_dir = 'Content/Save Files'
-adventure_name = ''
 
 # General Save Files
 sav_acquired_gems = 'Content/Save Files//{ADVENTURE_NAME}/acquired_gems.json'    # Acquired Gems
@@ -50,6 +47,8 @@ sav_chyme = 'Content/Save Files/{ADVENTURE_NAME}/chyme_stats.json'      # Chyme'
 sav_ran_af = 'Content/Save Files/{ADVENTURE_NAME}/ran_af_stats.json'    # Ran'af's Stats
 sav_parsto = 'Content/Save Files/{ADVENTURE_NAME}/parsto_stats.json'    # Parsto's Stats
 sav_adorine = 'Content/Save Files/{ADVENTURE_NAME}/adorine_stats.json'  # Adorine's Stats
+
+adventure_name = ''
 
 # Game Settings. Can be changed in the settings.cfg file.
 music_vol = 1.0  # The volume of the game's Music, on a scale from 0 (muted) to 1.0 (loudest).
@@ -90,7 +89,7 @@ def set_adventure_name():
 
         # Make sure that the folder doesn't already exist, because
         # certain OSes don't allow duplicate folder names.
-        elif os.path.isdir('/'.join([save_dir, adventure_name])) and adventure_name:
+        elif os.path.isdir('/'.join(['Content/Save Files', adventure_name])) and adventure_name:
             print("\nI've already read about adventures with that name; be original!\n")
             adventure_name = ''
 
@@ -171,7 +170,7 @@ def save_game(verbose=True):
 
             # Check if the save directory already exists, and create it if it doesn't
             try:
-                os.makedirs('/'.join([save_dir, adventure_name]))
+                os.makedirs('/'.join(['Content/Save Files', adventure_name]))
 
             except FileExistsError:
                 pass
@@ -192,7 +191,7 @@ def load_game():  # Check for save files and load the game if they're found
 
     # Check each part of the save file
     print('Searching for valid save files...')
-    if not os.path.isdir(save_dir):
+    if not os.path.isdir('Content/Save Files'):
         main.smart_sleep(0.1)
 
         print('No save files found. Starting new game...')
@@ -201,8 +200,6 @@ def load_game():  # Check for save files and load the game if they're found
         print('-'*divider_size)
         units.create_player()
         return
-
-    dirs = [d for d in os.listdir(save_dir) if os.path.isdir(os.path.join(save_dir, d))]
 
     save_files = {}
     menu_info = {}
@@ -213,19 +210,18 @@ def load_game():  # Check for save files and load the game if they're found
         sav_chests
     ]
 
-    for directory in dirs:
+    for folder in [d for d in os.listdir('Content/Save Files') if os.path.isdir(os.path.join('Content/Save Files', d))]:
         # If all save-file components exist...
-        if all(map(os.path.isfile, [x.format(ADVENTURE_NAME=directory) for x in save_file_list])):
+        if all(map(os.path.isfile, [x.format(ADVENTURE_NAME=folder) for x in save_file_list])):
             # ...then set the dictionary key equal to the newly-formatted save file names
-            save_files[directory] = [x.format(ADVENTURE_NAME=directory) for x in save_file_list]
+            save_files[folder] = [x.format(ADVENTURE_NAME=folder) for x in save_file_list]
 
             try:
-                with open('/'.join([save_dir, directory, "menu_info.txt"]),
-                          encoding='utf-8') as f:
-                    menu_info[directory] = f.read()
+                with open('/'.join(['Content/Save Files', folder, "menu_info.txt"]), encoding='utf-8') as f:
+                    menu_info[folder] = f.read()
 
             except FileNotFoundError:
-                menu_info[directory] = "Unable to load preview info"
+                menu_info[folder] = "Unable to load preview info"
 
     main.smart_sleep(0.1)
 
@@ -305,7 +301,7 @@ def serialize_all(verbose=True):
         towns.serialize_chests(sav_chests)
         units.serialize_player(sav_play, sav_solou, sav_xoann, sav_adorine, sav_chyme, sav_ran_af, sav_parsto)
 
-        with open('/'.join([save_dir, adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:
+        with open('/'.join(['Content/Save Files', adventure_name, 'menu_info.txt']), mode='w', encoding='utf-8') as f:
             f.write(f"NAME: {units.player.name} | LEVEL: {units.player.lvl} | CLASS: {units.player.class_.title()}")
 
         print('Save successful.') if verbose else ''

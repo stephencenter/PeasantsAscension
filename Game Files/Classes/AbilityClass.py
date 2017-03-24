@@ -72,9 +72,9 @@ def use_great_cleave(user):
 
 
 great_cleave = Ability("Great Cleave", f"""\
-The users deals a 1.5x critical strike to an enemy unit. If this attack
+The users deals a 1.25x critical strike to an enemy unit. If this attack
 results in that unit's death, the user gets to target an additional unit
-for a second attack that deals [200 + Strength]% damage.""", 2)
+for a second attack that deals {ascii_art.colorize('[150 + Strength]% damage', 'red')}.""", 2)
 great_cleave.before_ability = before_great_cleave
 great_cleave.use_ability = use_great_cleave
 
@@ -158,7 +158,7 @@ berserkers_rage = Ability("Berserker's Rage", f"""\
 The user realigns their chakras, converting their own pain into an offensive
 weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
 for every 1% of HP the user is missing. If the user's current HP is below
-[5 + 0.5*Constitution]%, this ability will lifesteal for 25% of the damage
+{ascii_art.colorize('[5 + 0.5*Constitution]', 'magenta')}%, this ability will lifesteal for 25% of the damage
 dealt.""", 5)
 berserkers_rage.before_ability = before_berserkers_rage
 berserkers_rage.use_ability = use_berserkers_rage
@@ -322,8 +322,8 @@ def use_tip_the_scales(user):
 
 
 tip_the_scales = Ability("Tip the Scales", f"""\
-The user and their allies are healed for {ascii_art.colorize('[15 + Wisdom]', 'yellow')} HP each, while dealing
-the same in magical damage to the enemy.""", 5)
+The user and their allies are healed for {ascii_art.colorize('[5% of Maximum HP + Wisdom]', 'yellow')} HP each,
+while dealing the same in magical damage to the enemy.""", 5)
 tip_the_scales.before_ability = before_tip_the_scales
 tip_the_scales.use_ability = use_tip_the_scales
 
@@ -338,8 +338,10 @@ def use_unholy_binds(user):
 
 
 unholy_binds = Ability("Unholy Binds", f"""\
-Sets the enemy's element to Darkness, causing Light spells to deal more
-damage to it. Also restores {ascii_art.colorize('[5 + Wisdom]', 'yellow')} mana.""", 5)
+Sets the enemy's defensive element to Darkness, causing Light spells to deal
+more damage to it. If the target already has Darkness as their element, then
+Unholy Binds has a {ascii_art.colorize('[10 + Wisdom]', 'yellow')}% chance of instantly killing the target,
+with a maximum of 50%. The instant-kill effect does not work on Bosses.""", 5)
 unholy_binds.before_ability = before_unholy_binds
 unholy_binds.use_ability = use_unholy_binds
 
@@ -353,9 +355,11 @@ def use_judgement(user):
 
 
 judgement = Ability("Judgement", f"""\
-Applies a DOOM to the target, guaranteeing their death in 7 turns. If the target
-dies before the 7 turns is up, the one who dealt the killing blow restores
-{ascii_art.colorize('[10 + Wisdom]', 'yellow')} HP.""", 5)
+Applies a DOOM to the target, guaranteeing their death in 7 turns. If the
+chosen target was affected by Unholy Binds when this spell was cast, then
+the 7 turns will be lowered by {ascii_art.colorize('[15 + Wisdom]', 'yellow')}%, with a minimum of 2 turns.
+This ability has no effect when used on Bosses. Re-casting this spell has
+no effect, unless recasting it would cause the timer to be lower.""", 5)
 judgement.before_ability = before_judgement
 judgement.use_ability = use_judgement
 
@@ -405,8 +409,9 @@ def use_infusion(user):
 infusion = Ability("Infusion", """\
 ULTIMATE ABILITY: Solou chooses a party member and enchants their weapon with
 an element of her choice, while also causing it to deal an additional 10%
-damage. Can be re-casted to change the chosen element, but the damage buff does
-not stack.""", 2)
+damage. Optionally, Solou can instead choose "random", causing a random element
+to be selected and raising the damage buff to 20%. Can be re-casted to change
+the chosen element, but the damage buff does not stack.""", 2)
 
 class_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # Designed
