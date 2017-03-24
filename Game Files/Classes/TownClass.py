@@ -277,7 +277,7 @@ class Town:
 
                     sys.stdout.flush()
 
-                    text_scroll.text_scroll('...', spacing=1)
+                    text_scroll.text_scroll('...', spacing=0.75)
                     print()
 
                     main.party_info['gp'] -= self.inn_cost

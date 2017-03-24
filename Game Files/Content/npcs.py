@@ -18,6 +18,7 @@ import json
 import inv_system
 import units
 import save_load
+import copy
 from NPCClass import NPC, Conversation, Quest
 
 # -- Name: Solou -- Town: Nearton
@@ -113,7 +114,7 @@ are questing to save his daughter? Well, I happen to know of a person
 whose information would prove invaluable to you. Her name is Azura, and
 she is the head of the Sorcerer's guild. She has been studying tomes and
 has supposedly come up with a possible solution. She lives in a town
-called Parceon, located at 24\u00b0N, 28\u00b0E.""", "Joseph", [75, 75], [], "joseph_q1")
+called Parceon, located at 24\u00b0N, 28\u00b0E.""", "Joseph", [75, 75], "joseph_q1")
 
 
 def joseph_q1_us():
@@ -193,7 +194,8 @@ I wish someone would do something about this terrible ghost... Hey! You're a
 strong adventurer, perhaps you could defeat this phantom? It's at position
 8\u00b0N, -12\u00b0W.""", 'Stewson', [50, 75], "stewson_q1", active=True)
 
-stewson_convo_2 = Conversation(["Please save us from this monstrous wraith!"], "stewson_c2")
+stewson_convo_2 = Conversation("""\
+Please save us from this monstrous wraith!""", "stewson_c2")
 
 stewson_convo_3 = Conversation("""\
 You... you actually defeated it?! Thank you ever so much! Finally my men and
@@ -388,7 +390,8 @@ around here, so tell us if you see any. What I don't understand is that the
 silly Triptonians blame us for their poor eyesight. It's all their fault, and
 they know it!""", "krystin_c1", active=True)
 krystin_convo_2 = Conversation("AHHH! Help! There's a m-m-monster out there! Someone go kill it! AHHH!", "krystin_c2")
-krystin_convo_4 = Conversation(["Greetings, hero! Welcome to Fallville."], "krystin_c4")
+krystin_convo_4 = Conversation("""\
+Greetings, hero! Welcome to Fallville.""", "krystin_c4")
 
 
 def krystin_c3_at():
@@ -642,7 +645,8 @@ matthew_convo_4 = Conversation("""\
 You have? Wonderful! *He takes the iSound from your hand and pulls out 1250 GP*""", "matt_c4")
 matthew_convo_4.after_talking = matthew_c4_at
 
-matthew_convo_5 = Conversation(["...", "*He looks quite depressed.*"], "matt_c5")
+matthew_convo_5 = Conversation("""\
+*He looks quite depressed.*""", "matt_c5")
 
 
 def matthew_q1_us():
@@ -808,108 +812,111 @@ their intended recipient well.""", "lazaro_c3", active=True)
 lazaro = NPC('Lazaro', [lazaro_convo_1], "Oracle")
 
 # -- Name: Typhen -- Town: Overshire
-typhen_convo_1 = Conversation(
-    ["I've heard that when you use healing spells, you restore additional HP based",
-     "on your wisdom. And paladins supposedly get an even larger restoration bonus",
-     "when they heal!"], "typhen_c1", active=True)
+typhen_convo_1 = Conversation("""\
+I've heard that when you use healing spells, you restore additional HP based
+on your wisdom. And paladins supposedly get an even larger restoration bonus
+when they heal!""", "typhen_c1", active=True)
 
 typhen = NPC('Typhen', [typhen_convo_1], "Novice Cleric")
 
 # -- Name: Jeffery -- Town: Overshire
-jeffery_convo_1 = Conversation(
-    ["Have you heard about what happened to Princess Celeste? The news of her",
-     "kidnapping is spreading across the kingdom like wildfire! Those blasted",
-     "Thexians will pay for this!"], "jeffery_c1", active=True)
+jeffery_convo_1 = Conversation("""\
+Have you heard about what happened to Princess Celeste? The news of her
+kidnapping is spreading across the kingdom like wildfire! Those blasted
+Thexians will pay for this!""", "jeffery_c1", active=True)
 
 jeffery = NPC('Jeffery', [jeffery_convo_1], "Gossipping Serf")
 
 # -- Name: Harthos -- Town: Overshire
-harthos_convo_1 = Conversation(
-    ["Welcome to Overshire, stranger! Our Kingdom's capital is pretty big, so try",
-     "not to get lost, haha!"], "harthos_c1", active=True)
+harthos_convo_1 = Conversation("""\
+Welcome to Overshire, stranger! Our Kingdom's capital is pretty big, so try
+not to get lost, haha!""", "harthos_c1", active=True)
 
 harthos = NPC("Harthos", [harthos_convo_1], "Lumberjack")
 
 # -- Name: Ethos -- Town: Charsulville
-ethos_convo_1 = Conversation(
-    ["Any smart adventurer would keep track of town coordinates and powerful monsters",
-     "in their inventory. If you get lost, check there."], "ethos_c1", active=True)
+ethos_convo_1 = Conversation("""\
+Any smart adventurer would keep track of town coordinates and powerful monsters
+in their inventory. If you get lost, check there.""", "ethos_c1", active=True)
 
 ethos = NPC('Ethos', [ethos_convo_1], "Courier")
 
 # -- Name: F. Jones -- Town: New Ekanmar
-f_jones_convo_1 = Conversation(
-    ["Hello, adventurer! My name is Fly, ruler of the Kingdom of Flyscoria. I'm",
-     "quite busy right now, please come back later if you wish to speak to me."], "f_jones_c1", active=True)
+f_jones_convo_1 = Conversation("""\
+Hello, adventurer! My name is Fly, ruler of the Kingdom of Flyscoria. I'm
+quite busy right now, please come back later if you wish to speak to me.""", "f_jones_c1", active=True)
 
 f_jones = NPC('F. Jones', [f_jones_convo_1], "King of Flyscoria")
 
 # -- Name: Stravi -- Town: New Ekanmar
-stravi_convo_1 = Conversation(
-    ["Greetings, young traveller. I am Stravi, Queen of Flyscoria. My husband",
-     "and I are on important business relating to the recent kidnapping of King",
-     "Harconius II's daughter, Celeste. Please return in a few weeks if you wish",
-     "to speak to Fly and me. Oh, and whatever you do, do not under ANY",
-     "circumstances mention the word 'chandelier' to my husband. It makes him very",
-     "upset for some reason."], "stravi_c1", active=True)
+stravi_convo_1 = Conversation("""\
+Greetings, young traveller. I am Stravi, Queen of Flyscoria. My husband
+and I are on important business relating to the recent kidnapping of King
+Harconius II's daughter, Celeste. Please return in a few weeks if you wish
+to speak to Fly and me. Oh, and whatever you do, do not under ANY
+circumstances mention the word 'chandelier' to my husband. It makes him very
+upset for some reason.""", "stravi_c1", active=True)
 
 stravi = NPC('Stravi', [stravi_convo_1], "Queen of Flyscoria")
 
 # -- Name: Caesar -- Town: New Ekanmar
-caesar_convo_1 = Conversation(["*Caesar, Fly's pet strawberry dragon, runs away and hides behind",
-                               'his owner before you get a chance to converse with him.*'], "caesar_c1", active=True)
+caesar_convo_1 = Conversation("""\
+*Caesar, Fly's pet strawberry dragon, runs away and hides behind
+his owner before you get a chance to converse with him.*""", "caesar_c1", active=True)
 
 caesar = NPC('Caesar', [caesar_convo_1], "Fly's Pet")
 
 # -- Name: Sakura -- Town: Principalia
-sakura_convo_1 = Conversation(['HALT! State your business! Ah, you want to see the King, do you?',
-                               'Well, the King is currently in Overshire. Sakura cannot imagine',
-                               'that he is accepting visitors right now, though. Unless you have',
-                               'something really important to tell him, such as how to save his',
-                               "daughter, Sakura doesn't see you talking to him in your future.",
-                               "Now get out of here, Sakura is busy!"], "sakura_c1", active=True)
+sakura_convo_1 = Conversation("""\
+HALT! State your business! Ah, you want to see the King, do you?
+Well, the King is currently in Overshire. Sakura cannot imagine
+that he is accepting visitors right now, though. Unless you have
+something really important to tell him, such as how to save his
+daughter, Sakura doesn't see you talking to him in your future.
+Now get out of here, Sakura is busy!""", "sakura_c1", active=True)
 
 sakura = NPC('Sakura', [sakura_convo_1], "Head of the Royal Guard")
 
 # -- Name: Strathius -- Town: Ravenstone
-strathius_convo_1 = Conversation([
-    "Greetings, man! I'm like, Strathius, and I'm a druid. I'm one with like,",
-    "nature. I'm gonna give you some helpful advice, man. Monsters can give you",
-    "these like, things, that are called \"Status Ailments\" which like, totally",
-    "harsh your style brah. Getting muted totally makes your stuff get like totally",
-    "lost, so you can't use those radical items you have in your backpack.",
-    "Paralyzation makes you totally slow for a while, so you have your",
-    "turn later and it's harder to away dog. Weakness makes you like",
-    "a total softy, and you won't deal much physical damage, man. Poison",
-    "is mega-harsh dude. It makes you take a little bit of damage each,",
-    "like, turn. Definitely not cool. Blindness is also totally whack",
-    "man - it makes you aim like a total nut and do less pierce damage.",
-    "Silence is bad news for mages 'cuz it means you can't use magic for a bit.",
-    "Always keep a stash of items to cure these sicknesses man."], "strathius_c1", active=True)
+strathius_convo_1 = Conversation("""\
+Greetings, man! I'm like, Strathius, and I'm a druid. I'm one with like,
+nature. I'm gonna give you some helpful advice, man. Monsters can give you
+these like, things, that are called \"Status Ailments\" which like, totally
+harsh your style brah. Getting muted totally makes your stuff get like totally
+lost, so you can't use those radical items you have in your backpack.
+Paralyzation makes you totally slow for a while, so you have your
+turn later and it's harder to away dog. Weakness makes you like
+a total softy, and you won't deal much physical damage, man. Poison
+is mega-harsh dude. It makes you take a little bit of damage each,
+like, turn. Definitely not cool. Blindness is also totally whack
+man - it makes you aim like a total nut and do less pierce damage.
+Silence is bad news for mages 'cuz it means you can't use magic for a bit.
+Always keep a stash of items to cure these sicknesses man.""", "strathius_c1", active=True)
 
 strathius = NPC("Strathius", [strathius_convo_1], "Druid")
 
 # -- Name: Sugulat -- Town: Ambercreek
-sugulat_convo_1 = Conversation(
-    ["Greetings! My name is Sugulat, Emperor of Chin'tor and legendary digger of",
-     "holes. Y'know, you look like a nice guy. I'm going to tell you a little",
-     "secret: If you buy a shovel from the general store, you can dig up valuable",
-     "gems in certain places! They can be tricky to find, though, so that's why I",
-     "invented the Divining Rod! Simply use it, and it will tell if you are near",
-     "any gems. Very handy! You can buy it at the general store."], "sugalat_c1", active=True)
+sugulat_convo_1 = Conversation("""\
+Greetings! My name is Sugulat, Emperor of Chin'tor and legendary digger of
+holes. Y'know, you look like a nice guy. I'm going to tell you a little
+secret: If you buy a shovel from the general store, you can dig up valuable
+gems in certain places! They can be tricky to find, though, so that's why I
+invented the Divining Rod! Simply use it, and it will tell if you are near
+any gems. Very handy! You can buy it at the general store.""", "sugalat_c1", active=True)
 
 sugulat = NPC('Sugulat', [sugulat_convo_1], "Emperor of Chin'tor")
 
 # -- Name: Serena -- Town: Whistumn
-serena_convo_1 = Conversation(
-    ["Oh, woe is me! My daughter has fallen ill from a terrible disease! They call",
-     "it \"Hatchnuk's Blight\", and it is very deadly. Oh, what am I to do? ",
-     "*sobs uncontrollably*"], "serena_c1", active=True)
+serena_convo_1 = Conversation("""\
+Oh, woe is me! My daughter has fallen ill from a terrible disease! They call
+it "Hatchnuk's Blight", and it is very deadly. Oh, what am I to do?
+*sobs uncontrollably*""", "serena_c1", active=True)
 
-serena_convo_2 = Conversation(['You are a good man, trying to help our daughter! Good luck on your quest!'],
-                              "serena_c2")
+serena_convo_2 = Conversation("""\
+You are a good man, trying to help our daughter! Good luck on your quest!""","serena_c2")
 
-serena_convo_3 = Conversation(['You are our heroes! Here, allow us to treat your wounds.'], "serena_c3")
+serena_convo_3 = Conversation("""\
+You are our heroes! Here, allow us to treat your wounds.""", "serena_c3")
 
 
 def serena_c3_at():
@@ -952,43 +959,43 @@ serena_convo_3.after_talking = serena_c3_at
 serena = NPC('Serena', [serena_convo_1, serena_convo_2, serena_convo_3], "Scientist")
 
 # -- Name: Bamdeliit -- Town: Cesura
-morrison_convo_1 = Conversation(
-    ["Hello, sir! I'm Morrison, the head engineer of Cesura! I'm a native Elysian,",
-     "and have only been here for around a year, so I'm pretty new to this place!",
-     "Most of my time is spent making sure that these trains run properly. By the",
-     "way, do you know what \"witch\" means? Hythic isn't my first language, and the",
-     "townsfolk keep calling me that when I turn on the trains. Witch is a good",
-     "thing, right?"], "morrison_c1", active=True)
+morrison_convo_1 = Conversation("""\
+Hello, sir! I'm Morrison, the head engineer of Cesura! I'm a native Elysian,
+and have only been here for around a year, so I'm pretty new to this place!
+Most of my time is spent making sure that these trains run properly. By the
+way, do you know what \"witch\" means? Hythic isn't my first language, and the
+townsfolk keep calling me that when I turn on the trains. Witch is a good
+thing, right?""", "morrison_c1", active=True)
 
 morrison = NPC('Morrison', [morrison_convo_1], "Engineer")
 
 # -- Name: Ariver -- Town: Sanguion
-ariver_convo_1 = Conversation(
-    ["*Ariver mistakes you for a vampire hunter and runs quickly into his house,",
-     "locking the doors, shutting the windows, and closing the blinds. As you begin",
-     "walking away, scratching your head in confusion, you see him look out the",
-     "window and walk back outside, having determined you are not a threat at the",
-     "moment.*"], "ariver_c1", active=True)
+ariver_convo_1 = Conversation("""\
+*Ariver mistakes you for a vampire hunter and runs quickly into his house,
+locking the doors, shutting the windows, and closing the blinds. As you begin
+walking away, scratching your head in confusion, you see him look out the
+window and walk back outside, having determined you are not a threat at the
+moment.*""", "ariver_c1", active=True)
 
 ariver = NPC('Ariver', [ariver_convo_1], "Vampire")
 
 # -- Name: Fitzgerald -- Town: Valenfall
-fitz_convo_1 = Conversation(
-    ["*hic* Pay no attention to the behind behind the curtain! *The man appears to",
-     "be quite drunk. You also notice a distinct lack of any curtain nearby.*",
-     "*hic* Drop that, you thief! Give me back my penny-loafers! *You slowly walk",
-     "away from the raving drunk.*"], "fitz_c1", active=True)
+fitz_convo_1 = Conversation("""\
+*hic* Pay no attention to the behind behind the curtain! *The man appears to
+be quite drunk. You also notice a distinct lack of any curtain nearby.*
+*hic* Drop that, you thief! Give me back my penny-loafers! *You slowly walk
+away from the raving drunk.*""", "fitz_c1", active=True)
 
 fitzgerald = NPC("Fitzgerald the Drunk", [fitz_convo_1], "Raving Alcoholic")
 
 all_dialogue = [
-    solou_convo_1, solou_convo_2, solou_quest_1,
+    solou_convo_1, solou_convo_2, solou_convo_3, solou_quest_1,
 
-    rivesh_convo_1, rivesh_convo_2, rivesh_convo_3, rivesh_convo_4, rivesh_quest_1,
+    rivesh_convo_1, rivesh_convo_2, rivesh_convo_3, rivesh_convo_4, rivesh_convo_5, rivesh_quest_1,
 
-    alfred_convo_1, alfred_convo_2, alfred_convo_3, alfred_quest_1,
+    alfred_convo_1, alfred_convo_2, alfred_convo_3, alfred_convo_4, alfred_quest_1,
 
-    stewson_convo_1, stewson_convo_2, stewson_convo_3, stewson_quest_1,
+    stewson_convo_1, stewson_convo_2, stewson_convo_3, stewson_convo_4, stewson_quest_1,
 
     kyle_convo_1, kyle_convo_2, kyle_convo_3, kyle_convo_4,
 
@@ -1002,7 +1009,7 @@ all_dialogue = [
 
     azura_convo_1, azura_convo_2, azura_convo_3,
 
-    polmor_convo_1, polmor_convo_2, polmor_quest_1,
+    polmor_convo_1, polmor_convo_2, polmor_convo_3, polmor_quest_1,
     serena_convo_1, serena_convo_2, serena_convo_3,
 
     matthew_convo_1, matthew_quest_1, matthew_convo_2,
@@ -1010,13 +1017,14 @@ all_dialogue = [
 
     pime_convo_1, pime_quest_1, pime_convo_2, pime_convo_3, pime_convo_4,
 
+    lazaro_convo_1, lazaro_convo_2, lazaro_convo_3,
+
     philliard_convo_1,
     f_jones_convo_1,
     stravi_convo_1,
     sakura_convo_1,
     sugulat_convo_1,
     raidon_convo_1,
-    lazaro_convo_1,
     caesar_convo_1,
     wesley_convo_1,
     seriph_convo_1,
@@ -1062,3 +1070,8 @@ def deserialize_dialogue(path):
                     c.active, c.started, c.finished = j_log[key][0], j_log[key][1], j_log[key][2]
                 else:
                     c.active = j_log[key][0]
+
+
+for item in copy.copy(globals()):
+    if isinstance(globals()[item], Conversation) and globals()[item] not in all_dialogue:
+        print(f"{item} not in all_dialogue!")
