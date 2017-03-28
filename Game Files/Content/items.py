@@ -628,7 +628,7 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                          paralyzation_potion, paralyzation_potion, paralyzation_potion],  # Para. Potion
 
                         [weakness_potion, weakness_potion, weakness_potion,
-             weakness_potion, weakness_potion, weakness_potion]],  # Weakness Potion
+                         weakness_potion, weakness_potion, weakness_potion]],  # Weakness Potion
 
             'Weapons': [[bnz_swd, en_bnz_swd, stl_spr,
                          en_stl_spr, durs_axe, en_durs_axe],  # Warrior Weapons
@@ -649,31 +649,31 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                          en_bladed_gloves, lead_bg, en_lead_bg]],  # Monk Weapons
 
             'Armor': [[bnz_hlm, en_bnz_hlm, stl_hlm,
-                       en_stl_hlm, ori_hlm, ori_hlm],  # Warrior Armor -- Head
+                       en_stl_hlm, ori_hlm, ori_hlm],  # Warrior + Paladin Armor -- Head
 
                       [bnz_cst, en_bnz_cst, stl_cst,
-                       en_stl_cst, ori_cst, ori_cst],  # Warrior Armor -- Body
+                       en_stl_cst, ori_cst, ori_cst],  # Warrior + Paladin Armor -- Body
 
                       [bnz_leg, en_bnz_leg, stl_leg,
-                       en_stl_leg, ori_leg, ori_leg],  # Warrior Armor -- Legs
+                       en_stl_leg, ori_leg, ori_leg],  # Warrior + Paladin Armor -- Legs
 
                       [wiz_hat, en_wiz_hat, myst_hat,
-                       en_myst_hat, elem_hat, elem_hat],  # Mage Armor -- Head
+                       en_myst_hat, elem_hat, elem_hat],  # Mage + Monk Armor -- Head
 
                       [wiz_rob, en_wiz_rob, myst_rob,
-                       en_myst_rob, elem_rob, elem_rob],  # Mage Armor -- Body
+                       en_myst_rob, elem_rob, elem_rob],  # Mage + Monk Armor -- Body
 
                       [wiz_gar, en_wiz_gar, myst_gar,
-                       en_myst_gar, elem_gar, elem_gar],  # Mage Armor -- Legs
+                       en_myst_gar, elem_gar, elem_gar],  # Mage + Monk Armor -- Legs
 
                       [lth_cap, en_lth_cap, std_cwl,
-                       en_std_cwl, drg_cwl, drg_cwl],  # Assassin + Ranged Armor -- Head
+                       en_std_cwl, drg_cwl, drg_cwl],  # Assassin + Ranger Armor -- Head
 
                       [lth_bdy, en_lth_bdy, std_bdy,
-                       en_std_bdy, drg_bdy, drg_bdy],  # Assassin + Ranged Armor -- Body
+                       en_std_bdy, drg_bdy, drg_bdy],  # Assassin + Ranger Armor -- Body
 
                       [lth_leg, en_lth_leg, std_leg,
-                       en_std_leg, drg_leg]],  # Assassin + Ranged Armor -- Legs
+                       en_std_leg, drg_leg]],  # Assassin + Ranger Armor -- Legs
 
             'Accessories': [[water_amulet, water_amulet, water_amulet,
                              water_amulet, water_amulet, water_amulet],
@@ -715,7 +715,7 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                        mythril_lckpck, mythril_lckpck]]}
 
 
-all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale , ink_sack, bone_bag, monster_skull , living_bark,
+all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bone_bag, monster_skull, living_bark,
              ripped_cloth, beetle_shell, wing_piece, monster_fang, animal_fur, golem_rock, burnt_ash, antennae,
              ectoplasm, chain_link, unicorn_horn, demonic_essence, angelic_essence, eye_balls, mysterious_runes,
              rodent_tail, serpent_tongue, feathers, broken_crystal, slime_vial, blood_vial, water_vial,
@@ -764,11 +764,11 @@ def find_item_with_id(item_id):
     return False
 
 
-for x in copy.copy(globals()):
-    if isinstance(globals()[x], Item) and globals()[x] not in all_items:
-        print(f"{globals()[x].item_id} not in all_items!")
+for item1 in copy.copy(globals()):
+    if isinstance(globals()[item1], Item) and globals()[item1] not in all_items:
+        print(f"{globals()[item1].item_id} not in all_items!")
 
-for x in all_items:
-    if find_item_with_id(x.item_id) != x:
-        print(f"{x.item_id} doesn't have a unique item ID!")
+for item2 in all_items:
+    if find_item_with_id(item2.item_id) != item2:
+        print(f"{item2.item_id} doesn't have a unique item ID!")
 

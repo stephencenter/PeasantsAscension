@@ -24,13 +24,19 @@ from NPCClass import NPC, Conversation, Quest
 # -- Name: Solou -- Town: Nearton
 
 
-def solou_c1_at():
-    # Stands for "Solou Phrase I -- After Talking
-    units.solou.enabled = True
-    solou_convo_1.active = False
-    solou_convo_2.active = True
+def solou_c3_at():
+    global npc_solou
+    global solou_convo_1
+    global solou_convo_2
+    global solou_convo_3
 
-    input('-'*save_load.divider_size)
+    units.solou.enabled = True
+    npc_solou.active = False
+    solou_convo_1.active = False
+    solou_convo_2.active = False
+    solou_convo_3.active = False
+
+    print('-'*save_load.divider_size)
     print("Solou the Mage has been added to your party!")
     input('\nPress enter/return ')
 
@@ -39,8 +45,6 @@ H-hello! My name is Solou, wizard in training! Well, the truth is that I'm actua
 one dream is to become a master sorceress! Uh, well anyway I'm here delivering a letter to a person named... oh wait a
 minute, what did you say your name was? Huzzah, this letter is for you then! As it is sensitive information, I am
 required by law to give it to you and then dispose of it with fire!""", "solou_c1", active=True)
-solou_convo_1.after_talking = solou_c1_at
-
 solou_convo_2 = Conversation("""*Ahem*:
    "As captain of the 7th Platoon of the Harconian Army, you are hereby entrusted with the following information and a
     mission. Princess Celeste, daughter of His Majesty King Harconius II, has been kidnapped by the Thexus, a group of
@@ -59,6 +63,7 @@ do I do... Hey, I've got an idea - how about I go adventuring with you? Like I
 said earlier, I've always dreamed of being a master sorceress, and joining a
 mighty adventurer like yourself on your quest might help me achieve my dreams!
 I'm sure that my wizardry would be of great use to you, too!""", "solou_c3", active=True)
+solou_convo_3.after_talking = solou_c3_at
 
 
 def solou_q1_us():
@@ -78,8 +83,6 @@ crier relay the message to the citizens. The first town we must visit
 is Overshire, located northwest of here. I believe it's exact coordinates
 are 13\u00b0N, -11\u00b0W. It's a massive place, there's no way we can
 miss it.""", "Solou", [25, 25], "solou_q1", active=True)
-
-
 solou_quest_1.upon_starting = solou_q1_us
 
 npc_solou = NPC("Solou", [solou_convo_1, solou_convo_2, solou_convo_3, solou_quest_1], "Page")
@@ -913,7 +916,7 @@ it "Hatchnuk's Blight", and it is very deadly. Oh, what am I to do?
 *sobs uncontrollably*""", "serena_c1", active=True)
 
 serena_convo_2 = Conversation("""\
-You are a good man, trying to help our daughter! Good luck on your quest!""","serena_c2")
+You are a good man, trying to help our daughter! Good luck on your quest!""", "serena_c2")
 
 serena_convo_3 = Conversation("""\
 You are our heroes! Here, allow us to treat your wounds.""", "serena_c3")
@@ -1072,6 +1075,6 @@ def deserialize_dialogue(path):
                     c.active = j_log[key][0]
 
 
-for item in copy.copy(globals()):
-    if isinstance(globals()[item], Conversation) and globals()[item] not in all_dialogue:
-        print(f"{item} not in all_dialogue!")
+for item1 in copy.copy(globals()):
+    if isinstance(globals()[item1], Conversation) and globals()[item1] not in all_dialogue:
+        print(f"{item1} not in all_dialogue!")

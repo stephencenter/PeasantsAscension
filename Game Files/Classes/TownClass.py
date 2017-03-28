@@ -87,7 +87,7 @@ class Town:
                 elif choice == '3':
                     print('-'*save_load.divider_size)
 
-                    if self.people:
+                    if [x for x in self.people if x.active]:
                         self.speak_to_npcs()
 
                     else:
@@ -498,14 +498,14 @@ class Town:
         while True:
             print('NPCs: ')
 
-            for x, npc in enumerate(self.people):
+            for x, npc in enumerate([x for x in self.people if x.active]):
                 print(f"      [{x + 1}] {npc}")
 
             while True:
                 npc = input('Input [#] (or type "exit"): ').lower()
 
                 try:
-                    npc = self.people[int(npc) - 1]
+                    npc = [x for x in self.people if x.active][int(npc) - 1]
 
                 except (IndexError, ValueError):
                     if npc in ['e', 'x', 'exit', 'b', 'back']:
@@ -535,7 +535,7 @@ class Town:
             print("Unlocked Houses:")
 
             for x, y in enumerate([house for house in self.houses]):
-                print('     ', '      '.join([f"[{x + 1}] {y.owner}'s House"]))
+                print(f"      [{x + 1}] {y.owner}'s House")
 
             while True:
                 chosen_house = input('Input [#] (or type "exit"): ').lower()

@@ -90,7 +90,7 @@ class PlayableCharacter(Unit):
 
         self.target = Monster('', '', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
         self.c_ability = AbilityClass.Ability('', '', '')  # The ability that the PCU is currently casting
-        self.c_spell = magic.Spell('', '', '', '')  # The spell that the PCU is currently casting
+        self.c_spell = magic.Spell('', '', '', '', '', '')  # The spell that the PCU is currently casting
 
         self.attributes = {'int': 1,  # Intelligence, for Mages
                            'wis': 1,  # Wisdom, for Paladins

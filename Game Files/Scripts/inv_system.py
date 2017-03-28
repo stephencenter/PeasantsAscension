@@ -228,7 +228,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
 
                 for x, y in enumerate([it for it in inventory[cat] if not it.imp]):
                     full_padding = '-'*(padding - len(y.name) + (extra_pad - len(str(x + 1))))
-                    print('     ', '      '.join([f"[{x + 1}] {y} {full_padding}--> {y.sell} GP"]))
+                    print(f"      [{x + 1}] {y} {full_padding}--> {y.sell} GP")
 
         else:
             return
@@ -508,7 +508,7 @@ def view_quests():
                     print(f"QUEST NAME: {quest.name}")
                     print(f"GIVEN BY: {quest.q_giver}")
 
-                    for x in quest.desc:
+                    for x in quest.chop():
                         print(x)
 
                     input("\nPress enter/return ")

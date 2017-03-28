@@ -13,6 +13,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
+import copy
 import json
 import math
 import random
@@ -22,9 +23,9 @@ import pygame
 
 import ascii_art
 import battle
+import save_load
 import sounds
 import units
-import save_load
 
 if __name__ == "__main__":
     sys.exit()
@@ -41,12 +42,13 @@ out_of_mana = "-------------------------\n{0} doesn't have enough mana to cast {
 
 
 class Spell:
-    def __init__(self, name, desc, mana, req_lvl, a_c=('mage',)):
+    def __init__(self, name, desc, mana, req_lvl, class_, spell_id):
         self.name = name
         self.desc = desc
         self.mana = mana
         self.req_lvl = req_lvl
-        self.a_c = a_c  # These are the classes that are able to obtain this spell
+        self.class_ = class_  # These are the classes that are able to obtain this spell
+        self.spell_id = spell_id
 
     def __str__(self):
         return self.name
@@ -54,8 +56,7 @@ class Spell:
     def use_mana(self, user):
         user.mp -= self.mana
 
-        if user.mp < 0:
-            user.mp = 0
+        units.fix_stats()
 
     def use_magic(self, user, is_battle):
         pass
@@ -63,8 +64,8 @@ class Spell:
 
 class Healing(Spell):
     # Healing spells are spells that restore your HP during battle
-    def __init__(self, name, desc, mana, req_lvl, health, thresh, a_c=('mage', 'paladin')):
-        Spell.__init__(self, name, desc, mana, req_lvl, a_c)
+    def __init__(self, name, desc, mana, req_lvl, health, thresh, class_, spell_id):
+        Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
         self.health = health
         self.thresh = thresh
 
@@ -75,11 +76,11 @@ class Healing(Spell):
         Spell.use_mana(self, user)
         target = user.target
 
-        # Healing spells will always restore a minimum of user.hp*thresh.
+        # Healing spells will always restore a minimum of target.hp*thresh.
         # e.g. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
         # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
-        # In addition to this, the user restores an additional 2*Wisdom, unless they are a
-        # Paladin in which case it it 4*Wisdom.
+        # In addition to this, the target restores an additional 2*User-wisdom, unless they are a
+        # Paladin in which case it it 4*User-wisdom.
         if self.health < target.hp*self.thresh:
             if user.class_ == 'paladin':
                 total_heal = target.hp*self.thresh + 4*user.attributes['wis']
@@ -95,11 +96,8 @@ class Healing(Spell):
                 total_heal = self.health + 2*user.attributes['wis']
 
         target.hp += total_heal
-
-        if target.hp > target.max_hp:
-            target.hp -= (target.hp - target.max_hp)
-
         target.hp = math.ceil(target.hp)
+        units.fix_stats()
 
         sounds.magic_healing.play()
 
@@ -118,8 +116,8 @@ class Damaging(Spell):
     # Damaging spells are spells that deal damage to the enemy during battle.
     # Just like normal attacks, they have a chance to miss based on
     # the enemy's evade stat.
-    def __init__(self, name, desc, mana, req_lvl, damage, element, a_c=('mage',)):
-        Spell.__init__(self, name, desc, mana, req_lvl, a_c)
+    def __init__(self, name, desc, mana, req_lvl, damage, element, class_, spell_id):
+        Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
         self.damage = damage
         self.element = element
 
@@ -152,8 +150,8 @@ class Buff(Spell):
     # Buffs are spells that temporarily raise the player's stats
     # during battle. They last until the battle is over, at which
     # point the player's stats will return to normal.
-    def __init__(self, name, desc, mana, req_lvl, increase, stat, a_c=('mage', 'monk')):
-        Spell.__init__(self, name, desc, mana, req_lvl, a_c)
+    def __init__(self, name, desc, mana, req_lvl, increase, stat, class_, spell_id):
+        Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
         self.increase = increase
         self.stat = stat
 
@@ -328,7 +326,7 @@ def new_spells(character):
 
             else:
                 # Almost all spells can be learned by mages, but only a few can be learned by other classes
-                if character.class_ not in spell.a_c:
+                if (character.class_ not in spell.class_) and spell.class_:
                     continue
 
                 sounds.item_pickup.play()
@@ -336,198 +334,200 @@ def new_spells(character):
 
                 input(f'{character.name} has learned "{spell}", a new {cat} spell! | Press enter/return ')
 
+
 # -- Damaging Spells -- #
 # Neutral
 magic_shot = Damaging('Magical Shot', "Hurl a small ball of magical energy at your enemies! (25% Spell Power)",
-                      3, 1, 0.25, "none")
+                      3, 1, 0.25, "none", [], "no_elem_1")
 
 magic_burst = Damaging('Magical Burst', "Shatter your enemy with a wave of magical energy! (50% Spell Power)",
-                       9, 11, 0.5, "none")
+                       9, 11, 0.5, "none", [], "no_elem_2")
 
 magic_blast = Damaging('Magical Blast', "Annihilate your enemies with a blast of magical energy! (100% Spell Power)",
-                       18, 23, 1, "none", a_c=['mage'])
+                       18, 23, 1, "none", ['mage'], "no_elem_3")
 
 # Fire
 flame_bolt = Damaging('Flame Bolt', "Summon a small fireball to destroy your foes! (25% Spell Power)",
-                      3, 2, 0.25, "fire")
+                      3, 2, 0.25, "fire", [], "fire_elem_1")
 
 f_blaze = Damaging('Fierce Blaze', "Summon a powerful flame to destroy your foes! (50% Spell Power)",
-                   10, 12, 0.5, "fire")
+                   10, 12, 0.5, "fire", [], "fire_elem_2")
 
 g_infer = Damaging('Grand Inferno', "Unleash a monstrous blaze destroy your foes! (100% Spell Power)",
-                   20, 24, 1, "fire", a_c=['mage'])
+                   20, 24, 1, "fire", ['mage'], "fire_elem_3")
 
 # Grass
 lef_blad = Damaging('Leaf Blade', "Summon razor-sharp blades of grass to destroy your foes! (25% Spell Power)",
-                    3, 2, 0.25, "grass")
+                    3, 2, 0.25, "grass", [], "grass_elem_1")
 
 gra_gren = Damaging('Grass Grenade', "Summon a small explosion to destroy your foes! (50% Spell Power)",
-                    10, 12, 0.5, "grass")
+                    10, 12, 0.5, "grass", [], "grass_elem_2")
 
 vin_strm = Damaging('Vine Storm', "Unleash a frenzy of powerful vines to destroy your foes! (100% Spell Power)",
-                    20, 24, 1, "grass", a_c=['mage'])
+                    20, 24, 1, "grass", ['mage'], "grass_elem_3")
 
 # Electricity
 spark = Damaging('Spark', "Summon a small spark to destroy your foes! (25% Spell Power)",
-                 3, 3, 0.25, "electric")
+                 3, 3, 0.25, "electric", [], "elec_elem_1")
 
 pwr_jolt = Damaging('Powerful Jolt', "Summon a powerful jolt of energy to destroy your foes! (50% Spell Power)",
-                    10, 13, 0.5, "electric")
+                    10, 13, 0.5, "electric", [], "elec_elem_2")
 
 sp_storm = Damaging('Superior Storm', "Unleash a devastating lightning storm to destroy your foes! (100% Spell Power)",
-                    20, 25, 1, "electric", a_c=['mage'])
+                    20, 25, 1, "electric", ['mage'], "elec_elem_3")
 
 # Water
 drizzle = Damaging('Drizzle', "Summon a small to destroy your foes! (25% Spell Power)",
-                   3, 3, 0.25, "water")
+                   3, 3, 0.25, "water", [], "water_elem_1")
 
 wtr_blast = Damaging('Water Blast', "Summon a large burst of water to destroy your foes! (50% Spell Power)",
-                     10, 13, 0.5, "water")
+                     10, 13, 0.5, "water", [], "water_elem_2")
 
 tsunami = Damaging('Tsunami', "Unleash a terrifying barrage of waves upon your foes! (100% Spell Power)",
-                   20, 25, 1, "water", a_c=['mage'])
+                   20, 25, 1, "water", ['mage'], "water_elem_3")
 
 # Earth
 mud_toss = Damaging('Mud Toss', "Summon a small ball of mud to throw at your foes! (25% Spell Power)",
-                    3, 4, 0.25, "earth")
+                    3, 4, 0.25, "earth", [], "earth_elem_1")
 
 rock_slam = Damaging('Rock Slam', "Crush your enemies under a layer of solid rock! (50% Spell Power)",
-                     10, 13, 0.5, "earth")
+                     10, 13, 0.5, "earth", [], "earth_elem_2")
 
 earthquake = Damaging("Earthquake", "Wreck havoc on your enemies with a powerful earthquake! (100% Spell Power)",
-                      20, 25, 1, "earth", a_c=['mage'])
+                      20, 25, 1, "earth", ['mage'], "earth_elem_3")
 
 # Ice
 icicle_dagger = Damaging('Icicle Dagger', "Hurl a volley of supercooled icicles at your enemies! (25% Spell Power)",
-                         3, 4, 0.25, "ice")
+                         3, 4, 0.25, "ice", [], "ice_elem_1")
 
 hail_storm = Damaging('Hailstorm', "Rain ice upon your enemies with unrelenting force! (50% Spell Power)",
-                      11, 14, 0.5, 'ice')
+                      11, 14, 0.5, 'ice', [], "ice_elem_2")
 
 blizzard = Damaging('Blizzard', "Devastate your enemies with a terrifying flurry of ice and wind! (100% Spell Power)",
-                    23, 26, 1, 'ice', a_c=['mage'])
+                    23, 26, 1, 'ice', ['mage'], "ice_elem_3")
 
 # Wind
 m_gust = Damaging('Minor Gust', "Batter your enemies with powerful gusts and winds! (25% Spell Power)",
-                  3, 4, 0.25, "wind")
+                  3, 4, 0.25, "wind", [], "wind_elem_1")
 
 microburst = Damaging('Microburst',
                       "Decimate your foes with a powerful blast of wind! (50% Spell Power)",
-                      11, 14, 0.5, "wind")
+                      11, 14, 0.5, "wind", [], "wind_elem_2")
 cyclone = Damaging('Cyclone',
                    "Demolish all that stand in your path with a terrifying tornado! (100% Spell Power)",
-                   23, 26, 1, "wind", a_c=['mage'])
+                   23, 26, 1, "wind", ['mage'], "wind_elem_3")
 
 # Light
 purify = Damaging('Purify', "Call upon His Divinity to cast out evil creatures! (25% Spell Power)!",
-                  3, 5, 0.25, "light")
+                  3, 5, 0.25, "light", [], "light_elem_1")
 smite = Damaging('Holy Smite', "Strike down unholy beings using His Divinity's power! (50% Spell Power)",
-                 11, 15, 0.5, "light")
+                 11, 15, 0.5, "light", [], "light_elem_2")
 moonbeam = Damaging('Moonbeam', "Utterly destroy evil creatures with holy rays from the moon! (100% Spell Power)",
-                    23, 27, 1, "light", a_c=('paladin', 'mage'))
+                    23, 27, 1, "light", ('paladin', 'mage'), "light_elem_3")
 
 
 # Dark
 curse = Damaging('Evil Curse', "Call upon His Wickedness to harm holy creatures! (25% Spell Power)",
-                 3, 5, 0.25, "dark")
+                 3, 5, 0.25, "dark", [], "dark_elem_1")
 desecration = Damaging('Desecration', "Defile holy spirits with an evil aura! (50% Spell Power)",
-                       11, 15, 0.5, "dark")
+                       11, 15, 0.5, "dark", [], "dark_elem_2")
 unholy_rend = Damaging('Unholy Rend', "Annihilate holy creatures with a sundering blow! (100% Spell Power)",
-                       23, 27, 1, "dark", a_c=['mage'])
+                       23, 27, 1, "dark", ['mage'], "dark_elem_3")
 
 # -- Healing -- #
 # Every character starts with this spell
 pit_heal = Healing('Novice Healing', """\
 Restore a small amount of an ally's HP using holy magic. Heals 10 HP or 5% of
-the target's max HP, whichever is greater (5% Healing Power)""", 2, 1, 10, 0.05)
+the target's max HP, whichever is greater (5% Healing Power)""",
+                   2, 1, 10, 0.05, [], "healing_1")
 
 # The Paladin also starts with this spell
 min_heal = Healing('Adept Healing', """\
 Restore a moderate amount of an ally's HP using holy magic. Heals 25 HP or 20%
 of the target's max HP, whichever is greater (20% Healing Power)""",
-                   5, 3, 25, 0.2, a_c=('assassin', 'monk', 'paladin', 'mage', 'warrior', 'ranger'))
+                   5, 3, 25, 0.2, [], "healing_2")
 
 # This tier and up can only be learned by Paladins and Mages
 adv_heal = Healing('Advanced Healing', """\
 Restore a large amount of an ally's HP using holy magic. Heals 70 HP or 50%
 of the target's max HP, whichever is greater (50% Healing Power)""",
-                   10, 15, 70, 0.5, a_c=('paladin', 'mage'))
+                   10, 15, 70, 0.5, ('paladin', 'mage'), "healing_3")
 
 div_heal = Healing('Divine Healing', """\
 Restore a very large amount of an ally's HP using holy magic. Heals 125 HP or
 75% of the target's max HP, whichever is greater (75% Healing Power)""",
-                   25, 28, 125, 0.75, a_c=('paladin', 'mage'))
+                   25, 28, 125, 0.75, ('paladin', 'mage'), "healing_4")
 
 # -- Buffs -- #
 
 # Movement Buffs
 m_quick = Buff('Minor Quickness', """\
 Raise an ally's speed by 15%. Stacks with multiple uses. Lasts until the end
-of battle.""", 3, 1, 0.15, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
+of battle.""", 3, 1, 0.15, "spd", [], "speed_1")
 
 m_evade = Buff('Minor Evade', """\
 Raise an ally's evasion by 15%. Stacks with multiple uses. Lasts until the end
 of battle. Note: Evasion has a cap of 256 (50% chance to dodge).""",
-               3, 1, 0.15, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
+               3, 1, 0.15, "evad", [], "evad_1")
 
 a_quick = Buff('Adept Quickness', """\
-Raise an ally's speed by 15%. Stacks with multiple uses. Lasts until the end
-of battle.""", 6, 10, 0.3, "spd", a_c=('mage', 'monk', 'ranger', 'assassin'))
+Raise an ally's speed by 30%. Stacks with multiple uses. Lasts until the end
+of battle.""", 6, 10, 0.3, "spd", ('mage', 'monk'), "speed_2")
 
 a_evade = Buff('Adept Evade', """\
 Raise an ally's evasion by 30%. Stacks with multiple uses. Lasts until the end
-of battle. Note: Evasion has a cap of 256.""",
-               6, 10, 0.3, "evad", a_c=('mage', 'monk', 'ranger', 'assassin'))
+of battle. Note: Evasion has a cap of 256 (50% chance to dodge).""",
+               6, 10, 0.3, "evad", ('mage', 'monk'), "evad_2")
 
 # Defense Buffs
 m_defend = Buff('Minor Defend', """\
 Raise an ally's Physical Defense by 15%. Stacks with multiple uses. Lasts until the end
-of battle.""", 3, 3, 0.15, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+of battle.""", 3, 3, 0.15, "dfns", [], "defend_1")
 
 m_shield = Buff('Minor Shield', """\
 Raise an ally's Magical Defense by 15%. Stacks with multiple uses. Lasts until the end
-of battle.""", 3, 5, 0.15, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+of battle.""", 3, 5, 0.15, "m_dfns", [], "shield_1")
 
 m_block = Buff('Minor Block', """\
 Raise an ally's Pierce Defense by 15%. Stacks with multiple uses. Lasts until
-the end of battle.""", 3, 7, 0.15, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+the end of battle.""", 3, 7, 0.15, "p_dfns", [], "block_1")
 
 a_defend = Buff('Adept Defend', """\
 Raise an ally's Physical Defense by 30%. Stacks with multiple uses. Lasts until the end
-of battle.""", 6, 14, 0.3, "dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+of battle.""", 6, 14, 0.3, "dfns", ('mage', 'monk'), "defend_2")
 
 a_shield = Buff('Adept Shield', """\
 Raise an ally's Magical Defense by 30%. Stacks with multiple uses. Lasts until the end
-of battle.""", 6, 16, 0.3, "m_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+of battle.""", 6, 16, 0.3, "m_dfns", ('mage', 'monk'), "shield_2")
 
 a_block = Buff('Adept Block', """\
 Raise an ally's Pierce Defense by 30%. Stacks with multiple uses. Lasts until the end
-of battle.""", 6, 18, 0.3, "p_dfns", a_c=('mage', 'monk', 'warrior', 'paladin'))
+of battle.""", 6, 18, 0.3, "p_dfns", ('mage', 'monk'), "block_2")
 
 # Attack Buffs
 m_stren = Buff('Minor Strengthen', """\
 Raise an ally's Physical Attack by 15%. Stacks with multiple uses. Lasts until the end
-of battle.""", 3, 2, 0.15, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
+of battle.""", 3, 2, 0.15, "attk", [], "strength_1")
 
 m_power = Buff('Minor Empower', """\
 Raise an ally's Magical Attack by 15%. Stacks with multiple uses. Lasts until the end
-of battle.""", 3, 4, 0.15, "m_attk", a_c=('mage', 'paladin', 'monk'))
+of battle.""", 3, 4, 0.15, "m_attk", [], "power_1")
 
 m_aim = Buff('Minor Aim', """\
 Raise an ally's Pierce Attack by 15%. Stacks with multiple uses. Lasts until the end
-of battle.""", 3, 6, 0.15, "p_attk", a_c=('ranger', 'mage', 'monk'))
+of battle.""", 3, 6, 0.15, "p_attk", [], "aim_1")
 
 a_stren = Buff('Adept Strengthen', """\
 Raise an ally's Physical Attack by 30%. Stacks with multiple uses. Lasts until the end
-of battle.""", 6, 13, 0.3, "attk", a_c=('mage', 'paladin', 'warrior', 'assassin', 'monk'))
+of battle.""", 6, 13, 0.3, "attk", ('mage', 'monk'), "strength_2")
 
 a_power = Buff('Adept Empower', """\
 Raise an ally's Magical Attack by 30%. Stacks with multiple uses. Lasts until the end
-of battle.""", 6, 15, 0.3, "m_attk", a_c=('mage', 'paladin', 'monk'))
+of battle.""", 6, 15, 0.3, "m_attk", ('mage', 'monk'), "power_2")
 
 a_aim = Buff('Adept Aim', """\
 Raise an ally's Pierce Attack by 30%. Stacks with multiple uses. Lasts until the end
-of battle.""", 6, 17, 0.3, "p_attk", a_c=('mage', 'ranger', 'monk'))
+of battle.""", 6, 17, 0.3, "p_attk", ('mage', 'monk'), "aim_2")
 
 all_spells = [
     pit_heal, min_heal, adv_heal, div_heal,  # Healing Spells
@@ -608,8 +608,7 @@ def serialize_sb(path):
             j_spellbook[user][cat] = []
 
             for spell in spellbook[user][cat]:
-                spell_dict = {key: spell.__dict__[key] for key in spell.__dict__ if key != 'use_magic'}
-                j_spellbook[user][cat].append(spell_dict)
+                j_spellbook[user][cat].append(spell.spell_id)
 
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_spellbook, f, indent=4, separators=(', ', ': '))
@@ -628,21 +627,24 @@ def deserialize_sb(path):
         for category in j_spellbook[user]:
             norm_sb[user][category] = []
 
-            for spell in j_spellbook[user][category]:
-
-                if category == 'Damaging':
-                    x = Damaging('', '', '', '', '', '')
-
-                elif category == 'Healing':
-                    x = Healing('', '', '', '', '', '')
-
-                elif category == 'Buffs':
-                    x = Buff('', '', '', '', '', '')
-
-                elif category == 'Previous Spell':
-                    continue
-
-                x.__dict__ = spell
-                norm_sb[user][category].append(x)
+            for spell_id in j_spellbook[user][category]:
+                norm_sb[user][category].append(find_spell_with_id(spell_id))
 
     spellbook = norm_sb
+
+
+def find_spell_with_id(spell_id):
+    for x in all_spells:
+        if x.spell_id == spell_id:
+            return x
+
+    return False
+
+
+for item1 in copy.copy(globals()):
+    if isinstance(globals()[item1], Spell) and globals()[item1] not in all_spells:
+        print(f"{globals()[item1].spell_id} not in all_spells!")
+
+for item2 in all_spells:
+    if find_spell_with_id(item2.spell_id) != item2:
+        print(f"{item2.spell_id} doesn't have a unique spell_id!")

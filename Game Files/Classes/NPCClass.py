@@ -51,34 +51,20 @@ class NPC:
 
     def speak(self):
         # Print the NPC's dialogue to the player
-        dialogue = []
-        for w in self.conversations:
-            if w.active:
-                dialogue.append(w.chop())
+        print(f"{self.name}, the {self.occupation}:")
+        for convo in [x for x in self.conversations if x.active]:
+            for sentence in convo.chop():
+                input(f" {sentence}")
 
-        for y in dialogue[:]:
-            # Create some padding so that everything lines up properly and looks nice
-            padding = len(max(y, key=len))
+            if isinstance(convo, Quest) and not convo.started:
+                convo.give_quest()
 
-            for z in y:
-                input(z)
+            elif isinstance(convo, Quest) and convo.finished:
+                convo.completion()
 
-            dialogue.remove(y)
+            convo.after_talking()
 
-            if dialogue:
-                print('-'*save_load.divider_size)
-
-            for obj in self.conversations:
-                if (isinstance(obj, Quest) and obj.end_dialogue == y) or obj.sentences == y:
-                    y = obj
-
-            if isinstance(y, Quest) and not y.started:
-                y.give_quest()
-
-            elif isinstance(y, Quest) and y.finished:
-                y.completion()
-
-            y.after_talking()
+            print()
 
 
 class Conversation:
@@ -92,11 +78,13 @@ class Conversation:
         current_sentence = ''
 
         for word in self.dialogue.split():
-            if len(current_sentence + word) > 79:
+            if len(current_sentence + word) > 77:
                 sentences.append(current_sentence)
                 current_sentence = ''
 
             current_sentence += f' {word}'
+
+        sentences.append(current_sentence) if current_sentence else ''
 
         return sentences
 
