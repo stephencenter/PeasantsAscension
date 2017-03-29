@@ -39,7 +39,7 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, houses, inn_cost=0, gs_level=1, watermelon=False):
+    def __init__(self, name, desc, people, houses, inn_cost, gs_level, town_id, watermelon=False):
         self.name = name  # The town's name (i.e. New York City)
         self.desc = desc  # A brief description of the town
 
@@ -50,6 +50,7 @@ class Town:
         self.houses = houses  # A list that contains random buildings you can enter
 
         self.watermelon = watermelon  # Only used for one specific quest
+        self.town_id = town_id
 
     def town_choice(self):
         print('-'*save_load.divider_size)
@@ -71,11 +72,16 @@ class Town:
 
                 if choice == '1':
                     print('-'*save_load.divider_size)
-                    input(''.join([self.desc, '\n\nPress Enter/Return ']))
+
+                    for x in main.chop_by_79(self.desc):
+                        print(x)
+
+                    input('\nPress Enter/Return ')
                     print('-'*save_load.divider_size)
 
                 elif choice == '2':
                     print('-'*save_load.divider_size)
+
                     if self.gs_level != -1 or self.inn_cost != -1 or self.watermelon:
                         self.inside_town()
 
@@ -521,8 +527,6 @@ class Town:
 
                 npc.speak()
 
-                print('-'*save_load.divider_size)
-
                 pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(save_load.music_vol)
@@ -563,24 +567,16 @@ class Tavern:
         self.name = name
         self.inn_cost = inn_cost
 
-    def new_location(self, add=True):  # Translate the location of newly-found towns into a string
+    def get_coords(self, add=True):  # Translate the location of newly-found towns into a string
         mpi = main.party_info
 
         coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
         coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
         coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
 
-        new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
+        coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
 
-        if add and new_coords not in inv_system.inventory['coord']:
-            inv_system.inventory['coord'].append(new_coords)
-            main.party_info['visited_towns'].append(self.name)
-
-            print(f"{self.name}'s location has been added to the coordinates section of your inventory.")
-            input("\nPress enter/return ")
-
-        else:
-            return new_coords
+        return coords
 
     def town_choice(self):
         print('-'*save_load.divider_size)

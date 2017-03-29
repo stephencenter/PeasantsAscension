@@ -157,7 +157,11 @@ def pick_category():
 
                     elif cat == 'coord':
                         print('-'*save_load.divider_size)
-                        print('Coordinates:\n', '\n'.join(inventory[cat]))
+                        print('Coordinates: ')
+
+                        for item in inventory[cat]:
+                            print(item)
+
                         input("\nPress enter/return ")
                         print('-'*save_load.divider_size)
 
@@ -508,7 +512,7 @@ def view_quests():
                     print(f"QUEST NAME: {quest.name}")
                     print(f"GIVEN BY: {quest.q_giver}")
 
-                    for x in quest.chop():
+                    for x in main.chop_by_79(quest.dialogue):
                         print(x)
 
                     input("\nPress enter/return ")

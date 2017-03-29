@@ -53,7 +53,7 @@ class NPC:
         # Print the NPC's dialogue to the player
         print(f"{self.name}, the {self.occupation}:")
         for convo in [x for x in self.conversations if x.active]:
-            for sentence in convo.chop():
+            for sentence in main.chop_by_79(convo.dialogue):
                 input(f" {sentence}")
 
             if isinstance(convo, Quest) and not convo.started:
@@ -63,8 +63,7 @@ class NPC:
                 convo.completion()
 
             convo.after_talking()
-
-            print()
+            print('-'*save_load.divider_size)
 
 
 class Conversation:
@@ -72,21 +71,6 @@ class Conversation:
         self.dialogue = dialogue
         self.active = active
         self.conv_id = conv_id
-
-    def chop(self):
-        sentences = []
-        current_sentence = ''
-
-        for word in self.dialogue.split():
-            if len(current_sentence + word) > 77:
-                sentences.append(current_sentence)
-                current_sentence = ''
-
-            current_sentence += f' {word}'
-
-        sentences.append(current_sentence) if current_sentence else ''
-
-        return sentences
 
     def after_talking(self):
         pass

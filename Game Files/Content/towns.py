@@ -47,38 +47,40 @@ Nearton: A small village in the central region of the Forest. It is in this
 very town where numerous brave adventurers have begun their journey. Nearton
 is just your standard run-of-the-mill village: it has a general store, an inn,
 and a few small houses. An old man  is standing near one of the houses, and
-appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, npcs.saar, npcs.npc_solou],
-                                                 [nearton_h1, nearton_h2])
+appears to be very troubled about something.""",
+                    [npcs.philliard, npcs.alfred, npcs.saar, npcs.npc_solou], [nearton_h1, nearton_h2], 0, 1, "nearton")
 
-southford_h1_c1 = Chest([35], 2, "")
+southford_h1_c1 = Chest([35], 2, "S-H1-C1")
+southford_h1 = House("Lazaro", [southford_h1_c1])
 
 town_southford = Town('Southford', """\
 Southford: A fair-size town in the South-East of the Inner Central Forest.
 The inhabitants of this town are known for being quite wise, and may
-provide you with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], [], inn_cost=2)
+provide you with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], [southford_h1], 2, 1, "southford")
 
 town_overshire = Town('Overshire', """\
 Overshire: A city in the northwestern region of the Forest. Overshire is the
 capital of Harconia, and as such is very densely populated. The city is
 separated into three sectors: the upper-class inner portion consisting of
-castle surrounded by reinforced stone walls, a lower-class outer portion
+a castle surrounded by reinforced stone walls, a lower-class outer portion
 comprised of smalls buildings and huts, and a middle-class section situated in
 between. As an outsider, you are forbidden to enter the upper two, but are
-welcome to do as you wish in the lower.""", [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
-                      [], inn_cost=5, gs_level=2)
+welcome to do as you wish in the lower.""",
+                      [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos], [],
+                      5, 2, "overshire")
 
 town_charsulville = Town('Charsulville', """\
 Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
 inn service and higher-quality products it sells more than makes up for this.
-There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.typhen], [], inn_cost=2, gs_level=2)
+There is a ragged beggar standing in the middle of the road.""", [npcs.ethos, npcs.typhen], [], 2, 2, "charsulville")
 
 town_fort_sigil = Town('Fort Sigil', """\
 Fort Sigil: A small village in the northern region
 of the Forest. The citizens of this town have worked tremendously hard to
 convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
-visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh], [], gs_level=3)
+visitors. Perhaps there's a reason...""",[npcs.seriph, npcs.rivesh], [], 1, 3, "fort_sigil")
 
 town_tripton = Town('Tripton', """\
 Tripton: When the town of Tripton was being built, the people working on the
@@ -87,7 +89,7 @@ located mere meters away from the new town's borders. Merchants in Tripton
 became very successful, as their superior bartering tactics allowed them to
 easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
-village leaders.""", [npcs.kyle], [], inn_cost=3, gs_level=3)
+village leaders.""", [npcs.kyle], [], 3, 3, "tripton")
 
 town_fallville = Town('Fallville', """\
 Fallville: When the town of Tripton was being built, the people working on the
@@ -96,24 +98,25 @@ located mere meters away from the new town's borders. Merchants in Tripton
 became very successful, as their superior bartering tactics allowed them to
 easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
-village leaders.""", [npcs.krystin, npcs.frederick], [], gs_level=2)
+village leaders.""", [npcs.krystin, npcs.frederick], [], 1, 2, "fallville")
 
 town_parceon = Town('Parceon', """\
 Parceon: A highly populated town renown for it's rich magical background.
 Parceon is home to the famous Sorcerers' Guild, a group of unbelievably
 skilled and wise mages who work together to establish and enforce magical law.
 The head of the guild, Azura, lives in a large tower in the southwest side of
-the town.""", [npcs.azura], [], gs_level=3)
+the town.""", [npcs.azura], [], 4, 3, "parceon")
 
 town_sardooth = Town('Sardooth', """\
 Sardooth: A ghost town. There has not been a single
 permanent inhabitant of this town for more than 75 years. It is completely
 run down, with most of the buildings having been destroyed in the Harconian
 Revolution. While this town may seem interesting and historic, there is nothing
-of value here.""", [], [])
+of value here.""", [], [], -1, -1, "sardooth")
 
 town_principalia = Town('Principalia', """\
-Principalia: Principalia is the home of
+Principalia: Principalia is an unbelievably large town, rivaling the likes of
+Overshire and Valice. More interestingly, this is also the current home of
 King Harconius II. The main attraction here is the Pytheror Building, a
 medium-large cottage that the original King Harconius I had lived in
 centuries ago. Every Monarch to date has decided to instead live in
@@ -124,7 +127,7 @@ and the cottage is surrounded by a ring of 12 archer towers, each with
 2 crossbowmen and one archer at the top. Each tower is about
 100 yards from the cottage. In addition, there are numerous guards
 standing watch all around the building. One guard happens to catch
-your attention - probably because she just screamed "HALT!" at you.""", [npcs.sakura], [])
+your attention - probably because she just screamed "HALT!" at you.""", [npcs.sakura], [], 6, 3, "principalia")
 
 town_new_ekanmar = Town('New Ekanmar', """\
 New Ekanmar: The home of the Flyscorian Embassy in
@@ -134,7 +137,7 @@ them out, but a large number of them defected to the Harconian side and stayed.
 After the war, the citizens gave up their weapons and became a peaceful town.
 The vast majority of the inhabitants of this town are, naturally, Flyscors.
 It seems that the Flyscorian Royal Family is visiting here - perhaps you can
-talk with them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], [], gs_level=3)
+talk with them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], [], 2, 3, "new_ekanmar")
 
 town_ravenstone = Town('Ravenstone', """\
 Ravenstone: Ravenstone is a natural sanctuary,
@@ -144,7 +147,7 @@ other nature-magicians. Ravenstone is also the home of the Druids'
 section of the Sorcerers' Guild. Vegetation grows on almost
 every building and statue in the town. When the population of
 the town is calculated, animals are counted as people. More than
-35% of the population are various species of animals.""", [npcs.strathius], [], gs_level=3)
+35% of the population are various species of animals.""", [npcs.strathius], [], 1, 3, "ravenstone")
 
 town_ambercreek = Town('Ambercreek', """\
 Ambercreek: Ambercreek is a large mining town
@@ -153,7 +156,7 @@ in the middle of this town surrounded by large stone walls and a few
 guard-towers. Sugulat, the King of Chin'tor, can often be found mining
 on the outskirts of town. A very troubled-looking old man is in
 the southwest portion of the town near a few smaller houses.""",
-                       [npcs.raidon, npcs.sugulat], [], gs_level=4, inn_cost=15)
+                       [npcs.raidon, npcs.sugulat], [], 8, 4, "ambercreek")
 
 town_whistumn = Town('Whistumn', """\
 Whistumn: An ancient city situated on the border
@@ -162,7 +165,7 @@ are known for their skepticism and reasoning. Many of them are scientists and ar
 skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
-on the steps of the general store.""", [npcs.polmor, npcs.serena], [], gs_level=4, inn_cost=13)
+on the steps of the general store.""", [npcs.polmor, npcs.serena], [], 9, 4, "whistumn")
 
 town_hatchnuk = Town("Hatchnuk", """\
 Hatchnuk: Hatchnuk is the only remaining town in Harconia
@@ -174,7 +177,7 @@ The economy of Hatchnuk has entirely collapsed, as the risk of spreading disease
 is far too great for people to be walking out in the open doing business together.
 As a result, there are no buildings that you are able to enter, and no people to talk
 to. The only people who are around to speak to are the guards, but their plague-doctor-esque
-apparel and stern looks make it clear that they are not in the mood for chit-chat.""", [], [])
+apparel and stern looks make it clear that they are not in the mood for chit-chat.""", [], [], -1, -1, "hatchnuk")
 
 town_cesura = Town("Cesura", """\
 Cesura: A town of great historical significance.
@@ -187,40 +190,39 @@ An interesting thing to note is that Cesura is the only town that has a train
 station. Construction of the town of Cesura was outsourced to Elysium, who is
 the most technologically advanced civilization on the planet by far, having
 developed and perfected the Steam Engine and later the Train before the year
-1300 A.D.""", [npcs.morrison], [], watermelon=True)
+1300 A.D.""", [npcs.morrison], [], 10, 4, "cesura")
 
 town_sanguion = Town("Sanguion", """\
 Sanguion: Sanguion is a safe-haven for vampires. Vampires are feared throughout
 Harconia, so this fairly unknown town is the only place they can go without
 being persecuted. The vampires in this town are peaceful, and actually refuse
 to drink the blood of intelligent lifeforms. Beware, though, as not all
-vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.ariver], [], gs_level=5, inn_cost=18)
+vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.ariver], [], 15, 4, "sanguion")
 
 town_lantonum = Town("Lamtonum", """\
 Lantonum: Lantonum is a small town that has the best forge in all of Arcadia.
 Nearly 2/3s of all citizens of this town are experienced blacksmiths, and 90%
 of all ores and minerals mined in Chin'tor or Ambercreek are brought here. It
 is one of the wealthiest cities in all of the desert region due to its Mythril,
-Magestite, and Necrite bar exports.""", [npcs.matthew], [], gs_level=4)
+Magestite, and Necrite bar exports.""", [npcs.matthew], [], 13, 4, "lantonum")
 
 town_capwild = Town("Capwild", """\
 Capwild: Capwild is a medium sized town situated in the Terrius Mt. Range.
 Capwild is a supplier of grains and herbs for the entire region, and makes
 extensive use of terrace farming to make up for the lack of arable land.
 Further investigation reveals that water mages have created self-sustaining
-irrigation systems as well, further enhancing Capwild's farming capabilities.""", [], [], gs_level=5, inn_cost=15)
+irrigation systems as well, further enhancing Capwild's farming capabilities.""", [], [], 12, 4, "capwild")
 
 town_rymn_outpost = Town("Rymn Outpost", """\
 Rymn Outpost: Rymn Outpost is one of the several small villages established
 after the Thexian Incursion. All of the residents of this town are soldiers or
 family members of soldiers, with the exception a few merchants. Rymn Outpost
-is named after Rymnes, the Divinic gods of defense.""", [], [], gs_level=5, inn_cost=17)
+is named after Rymnes, the Divinic gods of defense.""", [], [], 16, 4, "rymn_outposts")
 
 cottage1 = Town('Small Cottage', """\
 Small Cottage: As the name would suggest, his area only has a small cottage.
 An old man is tending to his flock in a small pasture behind the building.
-There doesn't appear be any other people near here.""", [npcs.alden], [], gs_level=-1, inn_cost=-1)
-
+There doesn't appear be any other people near here.""", [npcs.alden], [], -1, -1, "cottage1")
 
 a_town_valenfall = Town("Valenfall", """\
 Valenfall: Not much is known about the ancient city of Valenfall. It's
@@ -229,7 +231,7 @@ by his Divinity. The gods supposedly used Valenfall as the cornerstone,
 constructing all of the surrounding land of Aethus around it. Valenfall is
 deeply intertwined with nature, and monuments depicting the nature deities can
 be seen on every corner.
-""", [npcs.fitzgerald], [], inn_cost=2, gs_level=4)
+""", [npcs.fitzgerald], [], 2, 4, "a_valenfall")
 
 # These three lists are used to serialize chest data. It's easier than having to constantly add chests to lists
 all_towns = [town_nearton, town_southford, town_ambercreek, town_capwild, town_cesura, town_charsulville,
@@ -273,11 +275,7 @@ def search_towns(enter=True):
 
             while True:
                 if isinstance(town, Tavern):
-                    if town.new_location(add=False) not in inv_system.inventory['coord']:
-                        y_n = input("How convenient, a tavern is nearby! Should your party investigate? | Yes or No: ")
-
-                    else:
-                        y_n = input(f'{town.name} is nearby. Should your party give it a visit? | Yes or No: ')
+                    y_n = input("How convenient, a tavern is nearby! Should your party investigate? | Yes or No: ")
 
                 else:
                     if town.new_location(add=False) not in inv_system.inventory['coord']:

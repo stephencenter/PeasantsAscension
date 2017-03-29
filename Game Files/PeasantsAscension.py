@@ -550,6 +550,22 @@ def smart_sleep(duration):
         msvcrt.getwch()
 
 
+def chop_by_79(string, padding=0):
+    sentences = []
+    current_sentence = ''
+
+    for word in string.split():
+        if len(current_sentence + word) > 79 - padding:
+            sentences.append(current_sentence)
+            current_sentence = ''
+
+        current_sentence += f'{word} '
+
+    sentences.append(current_sentence) if current_sentence else ''
+
+    return sentences
+
+
 def main():
     # main() handles all the setup for the game, and includes the main game loop.
     # Everything happens in this function in one way or another.
