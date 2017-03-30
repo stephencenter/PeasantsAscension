@@ -637,7 +637,7 @@ class House:
         self.chests = chests
 
     def enter_house(self):
-        pygame.mixer.music.load('Content/Music/Somewhere I Went Wrong.ogg')
+        pygame.mixer.music.load('Content/Music/song21_02.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 

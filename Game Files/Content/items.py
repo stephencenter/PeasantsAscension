@@ -770,5 +770,5 @@ for item1 in copy.copy(globals()):
 
 for item2 in all_items:
     if find_item_with_id(item2.item_id) != item2:
-        print(f"{item2.item_id} doesn't have a unique item ID!")
+        print(f"{item2.item_id} doesn't have a unique item_id!")
 

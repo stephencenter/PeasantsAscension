@@ -331,4 +331,6 @@ def deserialize_chests(path):
         find_chest_with_id(j_chest[0]).opened = j_chest[2]
 
 
-
+for item1 in all_chests:
+    if find_chest_with_id(item1.chest_id) != item1:
+        print(f"{item1.chest_id} doesn't have a unique chest_id!")

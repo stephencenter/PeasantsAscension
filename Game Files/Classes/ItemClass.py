@@ -255,6 +255,7 @@ class MagicCompass(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Compass'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.ascart = ascart
+        self.cat = cat
 
     def use_item(self):
         pass
@@ -263,6 +264,7 @@ class MagicCompass(Item):
 class DiviningRod(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Div Rod'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.ascart = ascart
         self.cat = cat
 
     def use_item(self):
@@ -272,6 +274,7 @@ class DiviningRod(Item):
 class Shovel(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.ascart = ascart
         self.cat = cat
 
     def use_item(self):
@@ -281,6 +284,7 @@ class Shovel(Item):
 class TownTeleporter(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.ascart = ascart
         self.cat = cat
 
     def use_item(self):
@@ -291,6 +295,7 @@ class LockpickKit(Item):
     def __init__(self, name, desc, buy, sell, power, item_id, cat='tools', imp=False, ascart='Lockpick'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.power = power
+        self.ascart = ascart
         self.cat = cat
 
     @staticmethod
@@ -318,13 +323,10 @@ class Valuable(Item):
 class Misc(Item):
     def __init__(self, name, desc, buy, sell, item_id, ascart='Misc', cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, item_id, imp)
+        self.ascart = ascart
         self.cat = cat
 
     def use_item(self):
         print('-'*save_load.divider_size)
-        if 'Message' in self.name:
-            input("""The envelop is designed in a way that makes tampering easily noticeable.
-It's probably best not to try to open it and read the letter. | [ENTER] """)
-
-        else:
-            input("Your party cannot think of anything useful to do with this. | [ENTER] ")
+        print(self.desc)
+        input("\nPress enter/return ")
