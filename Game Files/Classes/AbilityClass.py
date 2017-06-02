@@ -72,11 +72,29 @@ def use_great_cleave(user):
 
 
 great_cleave = Ability("Great Cleave", f"""\
-The users deals a 1.25x critical strike to an enemy unit. If this attack
-results in that unit's death, the user gets to target an additional unit
+The user deals a 1.25x critical strike to an enemy unit. If this attack
+results in that unit's death, the user gets to target an random additional unit
 for a second attack that deals {ascii_art.colorize('[150 + Strength]% damage', 'red')}.""", 2)
 great_cleave.before_ability = before_great_cleave
 great_cleave.use_ability = use_great_cleave
+
+
+def before_berserkers_rage(user):
+    pass
+
+
+def use_berserkers_rage(user):
+    pass
+
+
+berserkers_rage = Ability("Berserker's Rage", f"""\
+The user goes into a frenzy, discarding their defensive training and focusing
+their might on destroying the enemy. Increases speed, damage dealt, and damage
+taken all by [15 + Strength]% for 3 turns. Applies to damage from ALL sources,
+including physical and magical damage. Does not stack with multiple
+uses - repeat uses only refresh the buff duration.""", 2)
+berserkers_rage.before_ability = before_berserkers_rage
+berserkers_rage.use_ability = use_berserkers_rage
 
 
 # -- MONK ABILITIES, scales with Constitution -- #
@@ -146,22 +164,22 @@ aura_swap.before_ability = before_aura_swap
 aura_swap.use_ability = use_aura_swap
 
 
-def before_berserkers_rage(user):
+def before_breaking_vows(user):
     pass
 
 
-def use_berserkers_rage(user):
+def use_breaking_vows(user):
     pass
 
 
-berserkers_rage = Ability("Berserker's Rage", f"""\
+breaking_vows = Ability("Breaking Vows", f"""\
 The user realigns their chakras, converting their own pain into an offensive
 weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
 for every 1% of HP the user is missing. If the user's current HP is below
 {ascii_art.colorize('[5 + 0.5*Constitution]', 'magenta')}%, this ability will lifesteal for 25% of the damage
 dealt.""", 5)
-berserkers_rage.before_ability = before_berserkers_rage
-berserkers_rage.use_ability = use_berserkers_rage
+breaking_vows.before_ability = before_breaking_vows
+breaking_vows.use_ability = use_breaking_vows
 
 
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
@@ -199,6 +217,24 @@ backstab.before_ability = before_backstab
 backstab.use_ability = use_backstab
 
 
+def before_knockout_gas(user):
+    pass
+
+
+def use_knockout_gas(user):
+    pass
+
+
+knockout_gas = Ability("Knockout Gas", f"""\
+The user sneaks behind the enemy and applies knockout gas to them, putting them
+to sleep. The sleep lasts for {ascii_art.colorize('[Dexterity/25]', 'green')} turns, with a minimum of 1 turn
+and a maximum of 8. The target has a 5% chance of randomly waking up each turn,
+and is guaranteed to wake up when the timer runs out. Does not stack with
+multiple uses - repeat uses only refresh the sleep duration.""", 2)
+knockout_gas.before_ability = before_knockout_gas
+knockout_gas.use_ability = use_knockout_gas
+
+
 # -- MAGE ABILITIES, scales with Intelligence -- #
 def before_skill_shot(user):
     pass
@@ -225,9 +261,10 @@ def use_polymorph(user):
 
 
 polymorph = Ability("Polymorph", f"""\
-Turns the enemy unit into a harmless frog for one turn, silencing them and
-reducing their attack stats, speed, and evasion to 0. The user's magic attack
-is also increased by {ascii_art.colorize('[5 + Intelligence]', 'blue')}. Stacks with multiple uses.""", 5)
+Turns the target enemy into a harmless frog for one turn, silencing them and
+reducing their attack stats, speed, and evasion to 0. If multiple enemies are
+alive on the field, this spell has a {ascii_art.colorize('[25 + Intelligence]', 'blue')}% chance of affecting a
+random second target, and a [5 + Intelligence]% chance of affecting a third.""", 5)
 polymorph.before_ability = before_polymorph
 polymorph.use_ability = use_polymorph
 
@@ -302,14 +339,32 @@ Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {us
 Evasion: {user.target.evad} | Speed: {user.target.spd,}
 Element: {user.target.element.title()} | Elemental Weakness: {monster_weakness}""")
 
-    battle.temp_stats[user.name]['p_attk'] += (5 + user.attributes['per'])
-
 
 scout = Ability("Scout", f"""\
-Scouts the enemy, revealing their stats and elemental weakness. Also increases
-Pierce attack by {ascii_art.colorize('[5 + Perception]', 'cyan')}%. Stacks with multiple uses.""", 1)
+Scouts the enemy, revealing their stats and elemental weakness. In addition,
+all attacks on this type of enemy - including in future battles - will have
+an additional {ascii_art.colorize('[5 + Perception]', 'cyan')}% chance to be a critical strike, with a maximum
+of 25%. Base critical strike chance is 15%. Casting this on an enemy that has
+already been scouted in the past will not increase the critical strike bonus.""", 1)
 scout.before_ability = before_scout
 scout.use_ability = use_scout
+
+
+def before_powershot(user):
+    pass
+
+
+def use_powershot(user):
+    pass
+
+
+powershot = Ability("Powershot", f"""\
+The user channels the power of the wind, firing an single absurdly powerful
+arrow. Deals [175 + Dexterity]% attack damgage to the chosen target, as well
+as all units next to them. The user is disabled for one turn after using this
+ability, unable to use abilities, magic, or attacks.""", 2)
+powershot.before_ability = before_powershot
+powershot.use_ability = use_powershot
 
 
 # -- PALADIN ABILITIES, scales with Wisdom -- #
@@ -358,8 +413,8 @@ judgement = Ability("Judgement", f"""\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the
 chosen target was affected by Unholy Binds when this spell was cast, then
 the 7 turns will be lowered by {ascii_art.colorize('[15 + Wisdom]', 'yellow')}%, with a minimum of 2 turns.
-This ability has no effect when used on Bosses. Re-casting this spell has
-no effect, unless recasting it would cause the timer to be lower.""", 5)
+When cast on bosses, the turn count is always 10 turns. Re-casting this spell
+has no effect, unless re-casting it would cause the timer to be lower.""", 5)
 judgement.before_ability = before_judgement
 judgement.use_ability = use_judgement
 
@@ -416,13 +471,13 @@ the chosen element, but the damage buff does not stack.""", 2)
 class_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # Designed
     'mage': [mana_drain, polymorph, spell_shield, skill_shot],       # Designed
-    'warrior': [roll_call, parry, great_cleave],
-    'assassin': [inject_poison, backstab],
-    'ranger': [scout, roll],
-    'monk': [chakra_smash, shared_experience, aura_swap, berserkers_rage],  # Designed
+    'warrior': [roll_call, parry, great_cleave, berserkers_rage],    # Designed
+    'assassin': [inject_poison, backstab, knockout_gas],
+    'ranger': [scout, roll, powershot],
+    'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],  # Designed
 
     'player': [ascend],  # Designed
-    'solou': [infusion],  # Infusion
+    'solou': [infusion],  # Designed
     'ran_af': [],
     'chyme': [],
     'parsto': [],

@@ -126,8 +126,6 @@ class PlayableCharacter(Unit):
             if not ''.join(self.name.split()) and ''.join(choice.split()):
                 continue
 
-            # Flygon Jones, Cynder887, and Apollo Kalar are all pseudonyms for my real-life
-            # best friend. He also happens to be one of the primary bug-testers for the game!
             if self.name.lower() in ["flygon jones", "apollo kalar", "cynder887"]:
                 print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
                 input('\nPress enter/return ')
@@ -199,7 +197,7 @@ Input [#]: """)
 
                               'paladin': """\
     -Can use abilities that scale off Wisdom
-    -Healing spell HP bonus from Wisdom is 4*Wisdom instead of 2*Wisdom
+    -Bonus healing from spells is 4*Wisdom instead of 2*Wisdom
     -Can learn all Healing spells and offensive Light spells
     -Physical Damage scales with equipped weapon
     -Deals Physical Damage with Standard Attacks

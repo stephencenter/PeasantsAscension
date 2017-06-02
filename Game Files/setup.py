@@ -7,5 +7,5 @@ sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game 
 
 setup(name="Peasants' Ascension",
       version="v1.0.0 Beta",
-      description="A fun RPG programmed in Python",
+      description="A fun, text-based RPG programmed in Python",
       executables=[Executable("PeasantsAscension.py", base="console", icon="peasant_icon.ico")])
