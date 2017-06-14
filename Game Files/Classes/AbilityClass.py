@@ -89,9 +89,9 @@ def use_berserkers_rage(user):
 
 berserkers_rage = Ability("Berserker's Rage", f"""\
 The user goes into a frenzy, discarding their defensive training and focusing
-their might on destroying the enemy. Increases speed, damage dealt, and damage
-taken all by [15 + Strength]% for 3 turns. Applies to damage from ALL sources,
-including physical and magical damage. Does not stack with multiple
+their might on destroying an target enemy. Increases speed, damage dealt, and
+damage taken all by {ascii_art.colorize('[15 + Strength]', 'red')}% for 3 turns. Applies to damage from ALL
+sources, including physical and magical damage. Does not stack with multiple
 uses - repeat uses only refresh the buff duration.""", 2)
 berserkers_rage.before_ability = before_berserkers_rage
 berserkers_rage.use_ability = use_berserkers_rage
@@ -123,7 +123,7 @@ def use_chakra_smash(user):
 
 
 chakra_smash = Ability("Chakra Smash", f"""\
-Deals a 2x critical strike to the enemy, lowering their defensive stats
+Deals a 2x critical strike to a target enemy, lowering their defensive stats
 by {ascii_art.colorize('[5 + Constitution]', 'magenta')}. The armor reduction lasts indefinitely and stacks
 with multiple uses.""", 5)
 chakra_smash.before_ability = before_chakra_smash
@@ -140,9 +140,9 @@ def use_shared_experience(user):
 
 shared_experience = Ability("Shared Experience", f"""\
 The user disregards any sense of good judgement they had, throwing themself
-wrecklessly at the enemy. Deals {ascii_art.colorize('[25 + Constitution]', 'magenta')}% of the target's current HP
-in magical damage, while also damaging the user for half the value. The
-self-damage is non-lethal, meaning that the user cannot die from it.""", 5)
+wrecklessly at a target enemy. Deals {ascii_art.colorize('[25 + Constitution]', 'magenta')}% of the target's
+current HP in magical damage, while also damaging the user for half the value.
+The self-damage is non-lethal, meaning that the user cannot die from it.""", 5)
 shared_experience.before_ability = before_shared_experience
 shared_experience.use_ability = use_shared_experience
 
@@ -176,7 +176,7 @@ breaking_vows = Ability("Breaking Vows", f"""\
 The user realigns their chakras, converting their own pain into an offensive
 weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
 for every 1% of HP the user is missing. If the user's current HP is below
-{ascii_art.colorize('[5 + 0.5*Constitution]', 'magenta')}%, this ability will lifesteal for 25% of the damage
+25%, this ability will lifesteal for {ascii_art.colorize('[10 + Constitution]', 'magenta')}% of the damage
 dealt.""", 5)
 breaking_vows.before_ability = before_breaking_vows
 breaking_vows.use_ability = use_breaking_vows
@@ -192,7 +192,7 @@ def use_inject_poison(user):
 
 
 inject_poison = Ability("Inject Poison", f"""\
-Injects a poison into the enemy target that deals {ascii_art.colorize('[2 + Dexterity]', 'green')} magical
+Injects a poison into a target enemy that deals {ascii_art.colorize('[2 + Dexterity]', 'green')} magical
 damage per turn. Stacks with multiple uses, with each stack increasing damage
 dealt per turn by 2% of the target's maximum HP.""", 5)
 inject_poison.before_ability = before_inject_poison
@@ -226,13 +226,32 @@ def use_knockout_gas(user):
 
 
 knockout_gas = Ability("Knockout Gas", f"""\
-The user sneaks behind the enemy and applies knockout gas to them, putting them
-to sleep. The sleep lasts for {ascii_art.colorize('[Dexterity/25]', 'green')} turns, with a minimum of 1 turn
-and a maximum of 8. The target has a 5% chance of randomly waking up each turn,
-and is guaranteed to wake up when the timer runs out. Does not stack with
-multiple uses - repeat uses only refresh the sleep duration.""", 2)
+The user sneaks behind a target enemy and applies knockout gas to them,
+putting them to sleep. The sleep lasts for {ascii_art.colorize('[Dexterity/25]', 'green')} turns, with
+a minimum of 1 turn and a maximum of 8. The target has a 5% chance of randomly
+waking up each turn, and is guaranteed to wake up when the timer runs out.
+Does not stack with multiple uses - repeat uses only refresh the sleep duration.""", 2)
 knockout_gas.before_ability = before_knockout_gas
 knockout_gas.use_ability = use_knockout_gas
+
+
+def before_disarming_blow(user):
+    pass
+
+
+def use_disarming_blow(user):
+    pass
+
+
+disarming_blow = Ability("Disarming Blow", f"""\
+The user knocks the weapon out of a target enemy's hands, taking it for
+themselves. Deals 10 damage, and lowers enemy physical attack by
+[5 + Dexterity]%. Has a 25% chance to add the target's weapon to the user's party
+inventory. The weapon has attack stats equal to 75% the user's currently
+equipped weapon, and has a resell value equal to the target's level. Can only
+be used once per enemy per battle. Damage reduction is halved against bosses. """, 2)
+disarming_blow.before_ability = before_disarming_blow
+disarming_blow.use_ability = use_disarming_blow
 
 
 # -- MAGE ABILITIES, scales with Intelligence -- #
@@ -261,7 +280,7 @@ def use_polymorph(user):
 
 
 polymorph = Ability("Polymorph", f"""\
-Turns the target enemy into a harmless frog for one turn, silencing them and
+Turns a target enemy into a harmless frog for one turn, silencing them and
 reducing their attack stats, speed, and evasion to 0. If multiple enemies are
 alive on the field, this spell has a {ascii_art.colorize('[25 + Intelligence]', 'blue')}% chance of affecting a
 random second target, and a [5 + Intelligence]% chance of affecting a third.""", 5)
@@ -310,7 +329,7 @@ def use_roll(user):
 
 
 roll = Ability("Roll", f"""\
-The user does a quick tuck-and-roll, disorienting the enemy and dodging all
+The user does a quick tuck-and-roll, disorienting the enemy team and dodging all
 attacks for one turn. Also increases their speed by {ascii_art.colorize('[25 + Perception]', 'cyan')}.
 Stacks with multiple uses.""", 3)
 roll.before_ability = before_roll
@@ -341,7 +360,7 @@ Element: {user.target.element.title()} | Elemental Weakness: {monster_weakness}"
 
 
 scout = Ability("Scout", f"""\
-Scouts the enemy, revealing their stats and elemental weakness. In addition,
+Scouts a target enemy, revealing their stats and elemental weakness. In addition,
 all attacks on this type of enemy - including in future battles - will have
 an additional {ascii_art.colorize('[5 + Perception]', 'cyan')}% chance to be a critical strike, with a maximum
 of 25%. Base critical strike chance is 15%. Casting this on an enemy that has
@@ -360,11 +379,27 @@ def use_powershot(user):
 
 powershot = Ability("Powershot", f"""\
 The user channels the power of the wind, firing an single absurdly powerful
-arrow. Deals [175 + Dexterity]% attack damgage to the chosen target, as well
+arrow. Deals {ascii_art.colorize('[175 + Perception]', 'cyan')}% attack damgage to the chosen target, as well
 as all units next to them. The user is disabled for one turn after using this
 ability, unable to use abilities, magic, or attacks.""", 2)
 powershot.before_ability = before_powershot
 powershot.use_ability = use_powershot
+
+
+def before_unstable_footing(user):
+    pass
+
+
+def use_unstable_footing(user):
+    pass
+
+
+unstable_footing = Ability("Unstable Footing", f"""\
+The user takes advantage of the uneven terrain and trips a target enemy.
+Deals {ascii_art.colorize('[10 + Perception]', 'cyan')} damage. If the target has not yet moved this turn,
+their turn is skipped. The target is also guaranteed to go last next turn.""", 2)
+unstable_footing.before_ability = before_unstable_footing
+unstable_footing.use_ability = use_unstable_footing
 
 
 # -- PALADIN ABILITIES, scales with Wisdom -- #
@@ -377,15 +412,15 @@ def use_tip_the_scales(user):
 
 
 tip_the_scales = Ability("Tip the Scales", f"""\
-The user and their allies are healed for {ascii_art.colorize('[5% of Maximum HP + Wisdom]', 'yellow')} HP each,
-while dealing the same in magical damage to the enemy.""", 5)
+The user tips the scales in their favor, causing them and their allies to be
+healed for {ascii_art.colorize('[5% of Maximum HP + Wisdom]', 'yellow')} HP each, while dealing the same in
+magical damage to each member of the enemy team.""", 5)
 tip_the_scales.before_ability = before_tip_the_scales
 tip_the_scales.use_ability = use_tip_the_scales
 
 
 def before_unholy_binds(user):
-    user.target.element = "dark"
-    user.mana += (5 + user.attributes['wis'])
+    pass
 
 
 def use_unholy_binds(user):
@@ -393,9 +428,9 @@ def use_unholy_binds(user):
 
 
 unholy_binds = Ability("Unholy Binds", f"""\
-Sets the enemy's defensive element to Darkness, causing Light spells to deal
-more damage to it. If the target already has Darkness as their element, then
-Unholy Binds has a {ascii_art.colorize('[10 + Wisdom]', 'yellow')}% chance of instantly killing the target,
+Sets a target enemy's defensive element to Darkness, causing Light spells to
+deal more damage to it. If the target already has Darkness as their element,
+then Unholy Binds has a {ascii_art.colorize('[10 + Wisdom]', 'yellow')}% chance of instantly killing the target,
 with a maximum of 50%. The instant-kill effect does not work on Bosses.""", 5)
 unholy_binds.before_ability = before_unholy_binds
 unholy_binds.use_ability = use_unholy_binds
@@ -467,17 +502,19 @@ an element of her choice, while also causing it to deal an additional 10%
 damage. Optionally, Solou can instead choose "random", causing a random element
 to be selected and raising the damage buff to 20%. Can be re-casted to change
 the chosen element, but the damage buff does not stack.""", 2)
+infusion.before_ability = before_infusion
+infusion.use_ability = use_infusion
 
 class_abilities = {
-    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # Designed
-    'mage': [mana_drain, polymorph, spell_shield, skill_shot],       # Designed
-    'warrior': [roll_call, parry, great_cleave, berserkers_rage],    # Designed
-    'assassin': [inject_poison, backstab, knockout_gas],
-    'ranger': [scout, roll, powershot],
-    'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],  # Designed
+    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],
+    'mage': [mana_drain, polymorph, spell_shield, skill_shot],
+    'warrior': [roll_call, parry, great_cleave, berserkers_rage],
+    'assassin': [inject_poison, backstab, knockout_gas, disarming_blow],
+    'ranger': [scout, roll, powershot, unstable_footing],
+    'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],
 
-    'player': [ascend],  # Designed
-    'solou': [infusion],  # Designed
+    'player': [ascend],
+    'solou': [infusion],
     'ran_af': [],
     'chyme': [],
     'parsto': [],
