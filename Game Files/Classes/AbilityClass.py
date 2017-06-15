@@ -28,9 +28,6 @@ class Ability:
         pass
 
 
-# 21 of 30 designed
-# 3 of 30 implemented
-
 # -- WARRIOR ABILITES, scales with Strength -- #
 def before_parry(user):
     pass

@@ -210,17 +210,19 @@ def pick_cat(user, is_battle=True):
                         user.c_spell = spell
 
                         if isinstance(spell, Healing) or isinstance(spell, Buff):
-                            user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
+                            user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
+                                               ally=True, enemy=False)
 
                             return True
 
                         else:
-                            user.choose_target(f"Who should {user.name} cast {spell.name} on?")
+                            user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?")
 
                             break
 
                     else:
-                        user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
+                        user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
+                                           ally=True, enemy=False)
                         spell.use_magic(user, is_battle)
 
                         break
@@ -292,17 +294,19 @@ def pick_spell(cat, user, is_battle):
                 user.c_spell = spell
 
                 if isinstance(spell, Healing) or isinstance(spell, Buff):
-                    user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
+                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
+                                       ally=True, enemy=False)
 
                     return True
 
                 else:
-                    user.choose_target(f"Who should {user.name} cast {spell.name} on?")
+                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?")
 
                     return True
 
             else:
-                user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
+                user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
+                                   ally=True, enemy=False)
                 spell.use_magic(user, is_battle)
 
                 break

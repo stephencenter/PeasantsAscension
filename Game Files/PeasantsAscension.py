@@ -86,6 +86,12 @@ class YouDontSurfException(Exception):
 shirt fuck you"
 
 
+def s_input(string):
+    # Custom input, plays a "blip" sound after the player presses enter
+    x = input(string)
+    sounds.input_blip.play()
+    return x
+
 def game_loop():
     pygame.mixer.music.load(party_info['reg_music'])
     pygame.mixer.music.play(-1)

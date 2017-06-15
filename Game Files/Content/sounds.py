@@ -91,6 +91,9 @@ unlock_chest = Sound('Content/Sound FX/unlock_chest.wav')
 # Debuff -- Played when the player suffers from a debuff
 debuff = Sound('Content/Sound FX/debuff.wav')
 
+# Input Blip
+input_blip = Sound('Content/Sound FX/input_blip.wav')
+
 # Eerie Sound - No current use
 eerie_sound = Sound('Content/Sound FX/eerie_sound.wav')
 
@@ -108,5 +111,5 @@ def change_volume():
               'critical_hit', 'lockpicking',
               'lockpick_break', 'unlock_chest',
               'debuff', 'eerie_sound',
-              'random_enc']:
+              'random_enc', "input_blip"]:
         globals()[x].set_volume(save_load.sound_vol)

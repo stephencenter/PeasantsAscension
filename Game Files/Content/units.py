@@ -547,12 +547,11 @@ Armor:
                 continue
 
             # Standard Attack
-            if self.move in ['1', 'q']:
-                self.move = '1'
-                self.choose_target(f"Who should {self.name} attack?")
+            if self.move == '1':
+                self.choose_target(f"Who should {ascii_art.color_name(self.name)} attack?")
 
             # Use Magic
-            elif self.move in ['2', 'w']:
+            elif self.move == '2':
                 print('-'*save_load.divider_size)
 
                 if self.status_ail == 'silenced':
@@ -568,14 +567,12 @@ Armor:
 
                     continue
 
-                self.move = '2'
-
             # Use Abilities
-            elif self.move in ['3', 'e']:
-                self.move = '3'
+            elif self.move == '3':
+                pass  # TODO!
 
             # Use Items
-            elif self.move in ['4', 'r']:
+            elif self.move == '4':
                 print('-'*save_load.divider_size)
 
                 if not inv_system.inventory['consumables']:
@@ -600,13 +597,8 @@ Armor:
 
                 input('\nPress enter/return ')
 
-                self.move = '3'
-
             # Run
-            elif self.move in ['5', 'd']:
-                self.move = '5'
-
-            else:
+            elif self.move != '5':
                 continue
 
             return
@@ -719,6 +711,7 @@ class Monster(Unit):
         self.is_poisoned = False
         self.is_defending = False
         self.class_ = None
+
         self.ability_vars = {}  # This dictionary will contain numerous variables that interact with abilties in battle
 
     def monst_level(self):
@@ -856,7 +849,7 @@ class Monster(Unit):
         elif self.name in magic_monsters:
             self.attk_msg = "draws from its magical essence to destroy"
         elif self.name in math_monsters:
-            self.attk_msg = "begins calculating the fuck out of"
+            self.attk_msg = "begins calculating the hell out of"
 
         # Prepare to add the modifier onto the name
         self.monster_name = copy.copy(self.name)
@@ -1091,7 +1084,7 @@ class Monster(Unit):
 
         # Magic heal
         elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
-            print(f'The {self.monster_name} is attempting to cast a healing spell on itself...')
+            print(f'The {self.monster_name} is casting a healing spell on itself...')
             main.smart_sleep(0.75)
             print(f'The {self.monster_name} heals itself for {max([self.hp*0.2, 20])} HP!')
 
@@ -1288,6 +1281,11 @@ class Boss(Monster):
 
 
 # Boss: Master Slime -- Position: 0'N, 1'E
+def mastslim_ud():
+    npcs.alfred_quest_1.finished = True
+    npcs.alfred_convo_2.active = False
+
+
 master_slime = Boss('Master Slime',
                     35, 5,   # 35 HP and 5 MP
                     12, 5,   # 12 Attack, 5 Defense
@@ -1296,19 +1294,11 @@ master_slime = Boss('Master Slime',
                     6, 6,    # 6 Speed, 6 Evasion
                     3,       # Level 3
                     None,    # Drops no items
-                    25, 25,  # Drops 25 XP and 25 GP
+                    25, 25,  # Gives 25 XP and 25 GP
                     "jiggles ferociously and begins to attack",
                     active=False)
 
 master_slime.battle_turn = master_slime.melee_ai
-
-
-def mastslim_ud():
-    # Stands for "Master Slime -- Upon Defeating"
-    npcs.alfred_quest_1.finished = True
-    npcs.alfred_convo_2.active = False
-
-
 master_slime.upon_defeating = mastslim_ud
 
 # Boss: Goblin Chieftain -- Position: 4'N, -2'W
@@ -1320,12 +1310,19 @@ whisp_goblin = Boss('Goblin Chieftain',
                     15, 7,   # 15 Speed, 7 Evasion
                     5,       # Level 5
                     None,    # Drops no items
-                    45, 45,  # Drops 45 XP and 45 GP
+                    45, 45,  # Gives 45 XP and 45 GP
                     "readies his great spear and begins to stab")
 
 whisp_goblin.battle_turn = whisp_goblin.melee_ai
 
+
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
+def menacphan_ud():
+    # Stands for "Menacing Phantom -- Upon Defeating"
+    npcs.stewson_quest_1.finished = True
+    npcs.stewson_convo_2.active = False
+
+
 menac_phantom = Boss('Menacing Phantom',
                      75, 50,  # 75 HP and 50 MP
                      10, 20,  # 10 Attack, 20 Defense
@@ -1334,33 +1331,15 @@ menac_phantom = Boss('Menacing Phantom',
                      20, 15,  # 20 Speed, 15 Evasion
                      8,       # Level 8
                      None,    # Drops no items
-                     75, 75,  # Drops 75 XP and 75 GP
+                     75, 75,  # Gives 75 XP and 75 GP
                      "calls upon its ethereal power and casts a hex on",
                      active=False, element='dark')
-
-
-def menacphan_ud():
-    # Stands for "Menacing Phantom -- Upon Defeating"
-    npcs.stewson_quest_1.finished = True
-    npcs.stewson_convo_2.active = False
-
 
 menac_phantom.battle_turn = menac_phantom.magic_ai
 menac_phantom.upon_defeating = menacphan_ud
 
+
 # Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
-terr_tarant = Boss('Terrible Tarantuloid',
-                   100, 25,   # 100 Health, 25 Mana
-                   45, 30,    # 45 Attack, 30 Defense
-                   25, 15,    # 25 Pierce Attack, 15 Pierce Defense
-                   15, 25,    # 15 Magic Attack, 25 Magic Defense
-                   35, 25,    # 35 Speed, 25 Evasion
-                   12,        # Level 12
-                   None,      # Drops no items
-                   150, 150,  # Drops 150 XP and 150 GP
-                   "readies its venomous fangs and bites")
-
-
 def terrtar_ud():
     npcs.krystin_convo_2.active = False
     npcs.krystin_convo_3.active = True
@@ -1370,10 +1349,27 @@ def terrtar_ud():
     npcs.alden_convo_2.active = True
 
 
+terr_tarant = Boss('Terrible Tarantuloid',
+                   100, 25,   # 100 Health, 25 Mana
+                   45, 30,    # 45 Attack, 30 Defense
+                   25, 15,    # 25 Pierce Attack, 15 Pierce Defense
+                   15, 25,    # 15 Magic Attack, 25 Magic Defense
+                   35, 25,    # 35 Speed, 25 Evasion
+                   12,        # Level 12
+                   None,      # Drops no items
+                   150, 150,  # Gives 150 XP and 150 GP
+                   "readies its venomous fangs and bites")
+
 terr_tarant.battle_turn = terr_tarant.melee_ai
 terr_tarant.upon_defeating = terrtar_ud
 
+
 # Boss: Cursed Spectre -- Position 22'N, 3'E
+def cursspect_ud():
+    npcs.rivesh_convo_3.active = False
+    npcs.rivesh_quest_1.finished = True
+
+
 cursed_spect = Boss('Cursed Spectre',
                     125, 75,             # 125 Health, 75 Mana
                     15, 30,              # 15 Attack, 30 Defense
@@ -1381,16 +1377,10 @@ cursed_spect = Boss('Cursed Spectre',
                     50, 35,              # 50 Magic Attack, 35 Magic Defense
                     25, 20,              # 25 Speed, 20 Evasion
                     15,                  # Level 15
-                    None,  # Drops a spectre wand
-                    250, 250,            # Drops 250 XP and 250 GP
+                    None,                # Drops no items
+                    250, 250,            # Gives 250 XP and 250 GP
                     "calls upon its ethereal power and casts a hex on",
                     element='dark', active=False)
-
-
-def cursspect_ud():
-    npcs.rivesh_convo_3.active = False
-    npcs.rivesh_quest_1.finished = True
-
 
 cursed_spect.battle_turn = cursed_spect.magic_ai
 cursed_spect.upon_defeating = cursspect_ud
@@ -1403,9 +1393,9 @@ giant_ent = Boss('Giant Ent',
                  20, 15,          # 20 Magic Attack, 15 Magic Defense
                  15, 5,           # 15 Speed, 5 Evasion
                  15,              # Level 15
-                 None,  # Drops an enchanted yew wand
-                 250, 250,        # Drops 250 XP and 250 GP
-                 "calls upon the essence of the forest and attacks",
+                 None,            # Drops no items
+                 250, 250,        # Gives 250 XP and 250 GP
+                 "slowly lumbers over and whacks",
                  element='grass', active=True)
 
 giant_ent.battle_turn = giant_ent.melee_ai
