@@ -67,7 +67,7 @@ class Consumable(Item):
         print(f'{user.name} consumes the {self.name}.')
 
         if not is_battle:
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
         for x, y in enumerate(inv_system.inventory[self.cat]):
             if y.name == self.name:
@@ -100,11 +100,11 @@ class StatusPotion(Item):
             print(f'{user.name} drinks the {self.name} and feels much better.')
 
             if not is_battle:
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
         else:
             print(f"Drinking this {self.name} probably wouldn't do anything.")
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
 
 class Weapon(Item):
@@ -147,7 +147,7 @@ class Weapon(Item):
 
             print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self.name}.')
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
         else:
             print('-'*save_load.divider_size)
@@ -155,11 +155,11 @@ class Weapon(Item):
             if isinstance(self.class_, list):
                 print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
 
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
             else:
                 print(f"{user.name} must be a {self.class_.title()} to equip this.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
 
 class Armor(Item):
@@ -201,18 +201,18 @@ class Armor(Item):
 
             print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self.name}.')
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
         else:
             print('-'*save_load.divider_size)
 
             if isinstance(self.class_, list):
                 print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
             else:
                 print(f"{user.name} must be a {self.class_.title()} to equip this.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
 
 # -- ACCESSORIES -- #
@@ -247,7 +247,7 @@ class ElementAccessory(Accessory):
 
         print('-'*save_load.divider_size)
         print(f'{user.name} equips the {self.name}. Their element is now set to {self.element}.')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
 
 # -- TOOLS -- #
@@ -303,7 +303,7 @@ class LockpickKit(Item):
         print('-'*save_load.divider_size)
         print("Your party could certainly make a quick buck lockpicking chests with this thing.")
         print("But that's illegal - you wouldn't break the law, would you?")
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
 
 # -- OTHERS -- #
@@ -317,7 +317,7 @@ class Valuable(Item):
     def use_item(self):
         print('-'*save_load.divider_size)
         print(f'Your party admires the {self.name}. It looks very valuable.')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
 
 class Misc(Item):
@@ -329,4 +329,4 @@ class Misc(Item):
     def use_item(self):
         print('-'*save_load.divider_size)
         print(self.desc)
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")

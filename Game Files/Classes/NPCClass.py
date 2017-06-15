@@ -54,7 +54,7 @@ class NPC:
         print(f"{self.name}, the {self.occupation}:")
         for convo in [x for x in self.conversations if x.active]:
             for sentence in main.chop_by_79(convo.dialogue):
-                input(f" {sentence}")
+                main.s_input(f" {sentence}")
 
             if isinstance(convo, Quest) and not convo.started:
                 convo.give_quest()
@@ -91,7 +91,7 @@ class Quest(Conversation):
         print(f'{self.q_giver} is offering you the quest "{self.name}".')
 
         while True:
-            accept = input('Do you accept this quest? | Yes or No: ').lower()
+            accept = main.s_input('Do you accept this quest? | Y/N: ').lower()
 
             if accept.startswith('y'):
                 print('-'*save_load.divider_size)
@@ -112,7 +112,7 @@ class Quest(Conversation):
 
         print("Quest Complete!")
         print(f"You've received {self.reward[0]} XP and {self.reward[1]} GP for completing this quest.")
-        input('\nPress enter/return')
+        main.s_input('\nPress enter/return')
 
         main.party_info['gp'] += self.reward[1]
         units.player.exp += self.reward[0]

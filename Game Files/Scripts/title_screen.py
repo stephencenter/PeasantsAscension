@@ -1,6 +1,7 @@
 import logging
 import sys
 import time
+import os
 
 import pygame
 import save_load
@@ -40,21 +41,31 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
 
     while True:
         # Give the user a choice of keys to press to do specific actions
-        choice = input('[P]lay Game | [C]redits | [B]ackstory | [L]ore | [E]xit | Input Letter: ').lower()
+        choice = main.s_input('[P]lay Game | [S]ettings | [C]redits | [L]ore | [E]xit | Input Letter: ').lower()
 
         if choice.startswith('p'):
             return
+
+        if choice.startswith("s"):
+            os.system("notepad.exe ../settings.cfg")
 
         if choice.startswith('c'):
             show_credits()
             print(title_logo)
 
-        if choice.startswith('b'):
-            show_backstory()
-            print(title_logo)
-
         if choice.startswith('l'):
-            show_lore()
+            while True:
+                c_2 = main.s_input('View [H]istory or [S]tory? | Input letter (or type "back"): ').lower()
+
+                if c_2.startswith("h"):
+                    show_history()
+
+                elif c_2.startswith("s"):
+                    show_story()
+
+                elif c_2 in ['e', 'x', 'exit', 'b', 'back']:
+                    break
+
             print(title_logo)
 
         if choice.startswith('e'):
@@ -95,20 +106,20 @@ def show_credits():
         # Display this is the Credits.txt file couldn't be found
         logging.exception(f'Error finding credits.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         print('The "credits.txt" file could not be found.')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
     except OSError:
         # If there is a problem opening the Credits.txt file, but it does exist,
         # display this message and log the error
         logging.exception(f'Error loading credits.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         print('There was a problem opening "credits.txt".')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
 
-def show_backstory():
+def show_story():
     # Display the storyline of the game
     print('-'*save_load.divider_size)
-    input('Press enter/return after each line to advance the text ')
+    main.s_input('Press enter/return after each line to advance the text ')
     print('-'*save_load.divider_size)
 
     try:
@@ -121,7 +132,7 @@ def show_backstory():
         with open('Content/peasant_plot.txt', encoding='utf-8') as f:
             for line in f:
                 if ''.join(char for char in line.split(" ") if char.isalnum()):
-                    input(''.join(line.split("\n")))
+                    main.s_input(''.join(line.split("\n")))
 
                 else:
                     print(''.join(line.split("\n")))
@@ -134,22 +145,22 @@ def show_backstory():
         # Display this is the peasant_plot.txt file couldn't be found
         logging.exception(f'Error finding peasant_plot.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         print('The "peasant_plot.txt" file could not be found.')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
     except OSError:
         # If there is a problem opening the peasant_plot.txt file, but it does exist,
         # display this message and log the error
         logging.exception(f'Error loading peasant_plot.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         print('There was an problem opening "peasant_plot.txt".')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
     print('-'*save_load.divider_size)
 
 
-def show_lore():
+def show_history():
     # Display side-story lore and the history of Pythonia
     print('-'*save_load.divider_size)
-    input('Press enter/return after each line to advance the text ')
+    main.s_input('Press enter/return after each line to advance the text ')
     print('-'*save_load.divider_size)
 
     try:
@@ -162,7 +173,7 @@ def show_lore():
         with open('Content/peasant_lore.txt', encoding='utf-8') as f:
             for line in f:
                 if ''.join(char for char in line.split(" ") if char.isalnum()):
-                    input(''.join(line.split("\n")))
+                    main.s_input(''.join(line.split("\n")))
                 else:
                     print(''.join(line.split("\n")))
 

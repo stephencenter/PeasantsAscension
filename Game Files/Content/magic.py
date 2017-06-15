@@ -108,7 +108,7 @@ class Healing(Spell):
         else:
             print('-'*save_load.divider_size)
             print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
             print('-'*save_load.divider_size)
 
 
@@ -189,7 +189,7 @@ def pick_cat(user, is_battle=True):
       [4] Use Most Recent Spell""")
         spam = True
         while spam:
-            cat = input('Input [#] (or type "exit"): ')
+            cat = main.s_input('Input [#] (or type "exit"): ')
 
             if cat == '1':
                 cat = 'Damaging'
@@ -230,7 +230,7 @@ def pick_cat(user, is_battle=True):
                 else:
                     print('-'*save_load.divider_size)
                     print(f'{user.name} has no previously used spells!')
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
 
                     break
@@ -270,7 +270,7 @@ def pick_spell(cat, user, is_battle):
             print(f"      [{x + 1}] {y} --{'-'*(padding - len(y.name))}> {y.mana} MP")
 
         while True:
-            spell = input('Input [#] (or type "back"): ').lower()
+            spell = main.s_input('Input [#] (or type "back"): ').lower()
 
             try:
                 spell = spellbook[inv_name][cat][int(spell) - 1]
@@ -336,7 +336,7 @@ def new_spells(character):
                 sounds.item_pickup.play()
                 spellbook[character.name if character != units.player else 'player'][cat].append(spell)
 
-                input(f'{character.name} has learned "{spell}", a new {cat} spell! | Press enter/return ')
+                main.s_input(f'{character.name} has learned "{spell}", a new {cat} spell! | Press enter/return ')
 
 
 # -- Damaging Spells -- #

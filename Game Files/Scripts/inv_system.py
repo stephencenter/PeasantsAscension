@@ -109,7 +109,7 @@ def pick_category():
        |---->[C] Coordinates
        |---->[Q] Quests""")
         while True:
-            cat = input('Input [#] or [L]etter (or type "exit"): ').lower()
+            cat = main.s_input('Input [#] or [L]etter (or type "exit"): ').lower()
 
             if cat in ['e', 'x', 'exit', 'b', 'back']:
                 return
@@ -162,7 +162,7 @@ def pick_category():
                         for item in inventory[cat]:
                             print(item)
 
-                        input("\nPress enter/return ")
+                        main.s_input("\nPress enter/return ")
                         print('-'*save_load.divider_size)
 
                     else:
@@ -173,7 +173,7 @@ def pick_category():
                         else:
                             print('-'*save_load.divider_size)
                             print(f'The {vis_cat} category is empty.')
-                            input("\nPress enter/return ")
+                            main.s_input("\nPress enter/return ")
                             print('-'*save_load.divider_size)
 
                     break
@@ -181,7 +181,7 @@ def pick_category():
                 else:
                     print('-'*save_load.divider_size)
                     print(f'The {vis_cat} category is empty.')
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
                     break
 
@@ -196,7 +196,7 @@ def pick_category():
             else:
                 print('-'*save_load.divider_size)
                 print("Your party has no active or completed quests.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
                 print('-'*save_load.divider_size)
                 break
 
@@ -238,7 +238,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             return
 
         while True:
-            item = input('Input [#] (or type "back"): ').lower()
+            item = main.s_input('Input [#] (or type "back"): ').lower()
 
             try:
                 if gs:
@@ -270,7 +270,7 @@ def pick_action(cat, item):
             use_equip = 'Use'
 
         print('-'*save_load.divider_size)
-        action = input(f"""What should your party do with the {item}?
+        action = main.s_input(f"""What should your party do with the {item}?
       [1] {use_equip}
       [2] Read Description
       [3] Drop
@@ -303,22 +303,22 @@ Input [#] (or type "back"): """)
                 print(ascii_art.item_sprites[item.ascart])
 
             print(f'"{item.desc}"')
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
         elif action == '3':
             print('-'*save_load.divider_size)
 
             if item.imp:
                 print('Essential Items cannot be thrown away.')
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
             else:
                 while True:
-                    y_n = input(f'Are you sure your party should get rid of the {item}? | Yes or No: ').lower()
+                    y_n = main.s_input(f'Are you sure your party should get rid of the {item}? | Y/N: ').lower()
 
                     if y_n.startswith('y'):
                         print(f'Your party tosses the {item} aside and continues on their journey.')
-                        input("\nPress enter/return ")
+                        main.s_input("\nPress enter/return ")
 
                         inventory[cat].remove(item)
 
@@ -327,7 +327,7 @@ Input [#] (or type "back"): """)
                     elif y_n.startswith('n'):
                         print('-'*save_load.divider_size)
                         print(f'Your party decide to keep the {item} with them.')
-                        input("\nPress enter/return ")
+                        main.s_input("\nPress enter/return ")
 
                         break
 
@@ -353,7 +353,7 @@ def manage_equipped_2(target):
       [5] Accessory -> {p_equip['access']}""")
 
         while True:
-            selected = input('Input [#] (or type "back"): ').lower()
+            selected = main.s_input('Input [#] (or type "back"): ').lower()
 
             if selected in ['e', 'x', 'exit', 'b', 'back']:
                 print('-'*save_load.divider_size)
@@ -380,7 +380,7 @@ def manage_equipped_2(target):
             if selected == '(None)':
                 print('-'*save_load.divider_size)
                 print(f"{target.name} doesn't have anything equipped in that slot.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
                 break
 
@@ -412,20 +412,20 @@ def manage_equipped_3(key, selected, p_equip, target):
       [2] Read Description""")
 
         while True:
-            action = input('Input [#] (or type "back"): ').lower()
+            action = main.s_input('Input [#] (or type "back"): ').lower()
 
             if action == '1':
                 if selected.name == 'Fists':
                     print('-'*save_load.divider_size)
                     print("Removing those would be difficult without causing damage.")
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
 
                     break
 
                 print('-'*save_load.divider_size)
                 print(f'{target.name} unequips the {selected.name}.')
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
                 if isinstance(selected, ItemClass.Weapon):
                     inventory[selected.cat].append(p_equip[key])
@@ -442,7 +442,7 @@ def manage_equipped_3(key, selected, p_equip, target):
                         target.element = 'none'
 
                         print(f'{target.name} is no longer imbued with the {selected.element} element.')
-                        input("\nPress enter/return ")
+                        main.s_input("\nPress enter/return ")
 
                     inventory[selected.cat].append(p_equip[key])
                     p_equip[key] = '(None)'
@@ -456,7 +456,7 @@ def manage_equipped_3(key, selected, p_equip, target):
                     print(ascii_art.item_sprites[selected.ascart])
 
                 print(selected.desc)
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
                 print('-'*save_load.divider_size)
 
                 break
@@ -469,7 +469,7 @@ def view_quests():
     print('-'*save_load.divider_size)
     while True:
         fizz = True
-        choice = input('View [f]inished or [a]ctive quests? | Input [Letter] (or type "back"): ').lower()
+        choice = main.s_input('View [f]inished or [a]ctive quests? | Input [Letter] (or type "back"): ').lower()
 
         print('-'*save_load.divider_size)
         if choice.startswith('f'):  # Finished Quests
@@ -496,7 +496,7 @@ def view_quests():
                     print(f'      [{num + 1}] {x.name}')
 
                 while True:
-                    quest = input('Input [#] (or type "back"): ').lower()
+                    quest = main.s_input('Input [#] (or type "back"): ').lower()
 
                     try:
                         quest = dialogue[int(quest) - 1]
@@ -515,7 +515,7 @@ def view_quests():
                     for x in main.chop_by_79(quest.dialogue):
                         print(x)
 
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
 
                     break
@@ -524,7 +524,7 @@ def view_quests():
 
         else:
             print(f'Your party has no {"active" if choice.startswith("a") else "finished"} quests!')
-            input('\nPress enter/return ')
+            main.s_input('\nPress enter/return ')
             print('-'*save_load.divider_size)
 
 
@@ -537,7 +537,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
     print(item.desc)
     print('-'*save_load.divider_size)
     while True:
-        y_n = input(f'Should your party sell the {item.name} for {item.sell} GP? | Yes or No: ').lower()
+        y_n = main.s_input(f'Should your party sell the {item.name} for {item.sell} GP? | Y/N: ').lower()
 
         if y_n.startswith('y'):
             for num, it in enumerate(inventory[cat]):
@@ -547,7 +547,7 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
                     main.party_info['gp'] += item.sell
 
                     print(f'Your party hands the shopkeeper their {item.name} and receives {item.sell} GP.')
-                    input('\nPress enter/return ')
+                    main.s_input('\nPress enter/return ')
 
                     return
 

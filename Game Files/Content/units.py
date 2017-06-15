@@ -71,7 +71,7 @@ class Unit:
 
 
 class PlayableCharacter(Unit):
-    # A class for characters whose input can be directly controlled by the player
+    # A class for characters whose main.s_input can be directly controlled by the player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
         Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
@@ -105,7 +105,7 @@ class PlayableCharacter(Unit):
     def choose_name(self):
         while True:
             # Ask the player for their name, and remove any pipe characters from it
-            choice = input('What is your name, young adventurer? | Input Name: ')
+            choice = main.s_input('What is your name, young adventurer? | Input Name: ')
 
             if not ''.join(choice.split()):
                 continue
@@ -128,13 +128,13 @@ class PlayableCharacter(Unit):
 
             if self.name.lower() in ["flygon jones", "apollo kalar", "cynder887"]:
                 print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
-                input('\nPress enter/return ')
+                main.s_input('\nPress enter/return ')
                 print('-'*save_load.divider_size)
 
                 return
 
             while True:
-                y_n = input(f'So, your name is {self.name}? | Yes or No: ').lower()
+                y_n = main.s_input(f'So, your name is {self.name}? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
                     print('-'*save_load.divider_size)
@@ -148,7 +148,7 @@ class PlayableCharacter(Unit):
 
     def choose_class(self):
         while True:
-            class_ = input(f"""{self.name}, which class would you like to train as?
+            class_ = main.s_input(f"""{self.name}, which class would you like to train as?
       [1] Mage: Master of the arcane arts capable of using all spells, but has low defense.
       [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes.
       [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage.
@@ -232,7 +232,7 @@ Input [#]: """)
             print('-'*save_load.divider_size)
 
             while True:
-                y_n = input(f'You wish to be of the {class_.title()} class? | Yes or No: ').lower()
+                y_n = main.s_input(f'You wish to be of the {class_.title()} class? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
                     print('-'*save_load.divider_size)
@@ -260,8 +260,10 @@ Input [#]: """)
             rem_points = 0  # Remaining Skill Points
             extra_points = 0  # The number of extra skill points the player will receive
 
+            if self.exp >= self.req_xp:
+                print("-"*save_load.divider_size)
+
             while self.exp >= self.req_xp:
-                sounds.item_pickup.play()
                 self.lvl += 1
                 print(f"{self.name} has advanced to level {self.lvl}!")
 
@@ -359,7 +361,7 @@ Input [#]: """)
         while rem_points > 0:
             print(f"{self.name} has {rem_points} skill point{'s' if rem_points > 1 else ''} left to spend.")
 
-            skill = input("""Choose a skill to increase:
+            skill = main.s_input("""Choose a skill to increase:
       [I]ntelligence - The attribute of Mages. Increases magic stats and MP.
       [W]isdom - The attribute of Paladins. Improves healing spells and increases MP.
       [S]trength -  The attribute of Warriors. Increases physical attack and defense.
@@ -408,7 +410,7 @@ Input [L]etter: """)
                     print("Instead, upgrading Fortune will provide 2x the extra experience and gold from enemies.")
 
                 while True:
-                    y_n = input(f"Increase {self.name}'s {vis_skill}? | Yes or No: ")
+                    y_n = main.s_input(f"Increase {self.name}'s {vis_skill}? | Y/N: ")
                     y_n = y_n.lower()
 
                     if not (y_n.startswith('y') or y_n.startswith('n')):
@@ -458,7 +460,7 @@ Armor:
   Body: {inv_system.equipped[inv_name]['body']}
   Legs: {inv_system.equipped[inv_name]['legs']}""")
 
-        input('\nPress enter/return ')
+        main.s_input('\nPress enter/return ')
 
     def battle_turn(self):
         inv_name = self.name if self != player else 'player'
@@ -538,7 +540,7 @@ Armor:
         print(battle_options.format(self.name))
 
         while True:
-            self.move = input("Input [#]: ")
+            self.move = main.s_input("Input [#]: ")
 
             try:
                 self.move = re.sub("[^0-9][^QWEDR]", '', self.move)[0].lower()
@@ -557,7 +559,7 @@ Armor:
                 if self.status_ail == 'silenced':
                     sounds.debuff.play()
                     print(f"{self.name} is silenced and cannot use spells!")
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print(battle_options.format(self.name))
 
                     continue
@@ -569,7 +571,7 @@ Armor:
 
             # Use Abilities
             elif self.move == '3':
-                pass  # TODO!
+                pass  # TODO!!
 
             # Use Items
             elif self.move == '4':
@@ -595,7 +597,7 @@ Armor:
 
                     continue
 
-                input('\nPress enter/return ')
+                main.s_input('\nPress enter/return ')
 
             # Run
             elif self.move != '5':
@@ -641,7 +643,7 @@ Armor:
             print(f"      [{x + 1}] {y.name}")
 
         while True:
-            chosen = input("Input [#]: ").lower()
+            chosen = main.s_input("Input [#]: ").lower()
 
             try:
                 self.target = this_list[int(chosen) - 1]
@@ -1270,7 +1272,7 @@ class Boss(Monster):
             inv_system.inventory['coord'].append(new_coords)
             print('-'*save_load.divider_size)
             print(f"You quickly mark down the location of {self.name}'s lair.")
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
         else:
 
@@ -1411,8 +1413,6 @@ def check_bosses():
         if boss.name not in defeated_bosses and boss.active:
             print('-'*save_load.divider_size)
 
-            sounds.item_pickup.play()
-
             if boss.new_location(add=False) not in inv_system.inventory['coord']:
                 print('You feel the presence of an unknown entity...')
 
@@ -1421,10 +1421,10 @@ def check_bosses():
 
             while True:
                 if boss.new_location(add=False) not in inv_system.inventory['coord']:
-                    y_n = input('Do you wish to investigate? | Yes or No: ')
+                    y_n = main.s_input('Do you wish to investigate? | Y/N: ')
 
                 else:
-                    y_n = input(f'Do you wish to confront the {boss.name}? | Yes or No: ')
+                    y_n = main.s_input(f'Do you wish to confront the {boss.name}? | Y/N: ')
 
                 y_n = y_n.lower()
 

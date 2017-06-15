@@ -524,4 +524,4 @@ class_abilities = {
 # for x in class_abilities.values():
 #     for y in x:
 #         print(y.desc)
-#         input()
+#         main.s_input()

@@ -247,7 +247,7 @@ def battle_system(is_boss=False, ambush=False):
 
                 if any(x.hp > 0 for x in enabled_pcus):
                     if any(x.hp > 0 for x in m_list) and char.status_ail != 'dead':
-                        input('\nPress enter/return ')
+                        main.s_input('\nPress enter/return ')
 
                     elif all(x.hp <= 0 for x in m_list):
                         break
@@ -264,7 +264,7 @@ def battle_system(is_boss=False, ambush=False):
 
                     print("-"*25)
                     print(f'{char_2.name} has fallen to the monsters!')
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
 
                 if isinstance(char_2, units.Monster) and char_2.hp <= 0 and char_2.status_ail != 'dead':
                     char_2.hp = 0
@@ -273,7 +273,7 @@ def battle_system(is_boss=False, ambush=False):
 
                     print("-"*25)
                     print(f'The {char_2.name} was defeated by your party!')
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
 
     after_battle(is_boss)
 
@@ -306,7 +306,7 @@ def run_away(runner):
     if random.randint(0, 100) <= chance:
         sounds.buff_spell.play()
         print(f'Your party manages to escape from the {units.monster.name}!')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
         return True
 
     else:
@@ -340,7 +340,7 @@ def after_battle(is_boss):
                     y_n = 'y'
 
                 else:
-                    y_n = input('Do you wish to continue playing? | Yes or No: ').lower()
+                    y_n = main.s_input('Do you wish to continue playing? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
                     # If you die, you return to the last town visited or 0'N, 0'E
@@ -369,7 +369,7 @@ def after_battle(is_boss):
 
                 elif y_n.startswith('n'):
                     while True:
-                        y_n = input('Are you sure you want to quit and lose all unsaved progress? | Yes or No: ')
+                        y_n = main.s_input('Are you sure you want to quit and lose all unsaved progress? | Y/N: ')
                         y_n = y_n
 
                         if y_n.startswith('y'):
@@ -414,12 +414,12 @@ def after_battle(is_boss):
                 inv_system.inventory[cat].append(_c(units.monster.items))
 
                 sounds.item_pickup.play()
-                input(f'The {units.monster.monster_name} dropped a {units.monster.items}! | Press enter/return')
+                main.s_input(f'The {units.monster.monster_name} dropped a {units.monster.items}! | Press enter/return')
 
             # Give the Player their GP
             main.party_info['gp'] += gold
             sounds.item_pickup.play()
-            input(f'Your party has gained {gold} GP | Press enter/return ')
+            main.s_input(f'Your party has gained {gold} GP | Press enter/return ')
 
             for character in enabled_pcus:
 
@@ -437,7 +437,7 @@ def after_battle(is_boss):
 
                 sounds.item_pickup.play()
 
-                input(f'{character.name} gained {experience} XP | Press enter/return ')
+                main.s_input(f'{character.name} gained {experience} XP | Press enter/return ')
 
                 # Check to see if the player gained any levels
                 character.level_up()
@@ -466,7 +466,7 @@ def battle_inventory(user):
             print(f'[{x + 1}] {y}')
 
         while True:
-            item = input('Input [#] (or type "exit"): ').lower()
+            item = main.s_input('Input [#] (or type "exit"): ').lower()
 
             try:
                 item = inv_system.inventory['consumables'][int(item) - 1]

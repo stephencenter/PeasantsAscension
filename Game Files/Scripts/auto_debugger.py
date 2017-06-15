@@ -1,5 +1,5 @@
 """
-THIS MODULE IS DESIGNED TO REPLACE THE DEFAULT input() FUNCTION WITH AN AUTOMATIC INPUTTER,
+THIS MODULE IS DESIGNED TO REPLACE THE DEFAULT main.s_input() FUNCTION WITH AN AUTOMATIC INPUTTER,
 ALLOWING THE GAME TO BASICALLY CHECK ITSELF FOR BUGS.
 """
 import copy
@@ -21,4 +21,4 @@ def debugger():
         return debug_input
 
     else:
-        return copy.copy(input)
+        return copy.copy(main.s_input)

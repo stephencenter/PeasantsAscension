@@ -68,7 +68,7 @@ class Town:
       [5] --> View Inventory""")
 
             while True:
-                choice = input('Input [#] (or type "exit"): ')
+                choice = main.s_input('Input [#] (or type "exit"): ')
 
                 if choice == '1':
                     print('-'*save_load.divider_size)
@@ -76,7 +76,7 @@ class Town:
                     for x in main.chop_by_79(self.desc):
                         print(x)
 
-                    input('\nPress Enter/Return ')
+                    main.s_input('\nPress Enter/Return ')
                     print('-'*save_load.divider_size)
 
                 elif choice == '2':
@@ -138,7 +138,7 @@ class Town:
             main.party_info['visited_towns'].append(self.name)
 
             print(f"{self.name}'s location has been added to the coordinates section of your inventory.")
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
         else:
             return new_coords
@@ -157,7 +157,7 @@ class Town:
                 buildings = town_words
 
             while True:
-                selected = input('Where do you want to go? | Input [L]etter (or type "exit"): ').lower()
+                selected = main.s_input('Where do you want to go? | Input [L]etter (or type "exit"): ').lower()
 
                 if any(map(selected.startswith, buildings)):
                     pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
@@ -198,11 +198,11 @@ class Town:
             'I just sell the stuff. So, what will it be?'
         ]:
 
-            input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
+            main.s_input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
 
         print('-'*save_load.divider_size)
         print('You understood absolutely none of what he said, but you get the feeling')
-        input('that he wants you to buy something. | Press enter/return ')
+        main.s_input('that he wants you to buy something. | Press enter/return ')
         print('-'*save_load.divider_size)
 
         while True:
@@ -217,7 +217,7 @@ class Town:
 
             spam = True
             while spam:
-                choice = input('Input [#] (or type "exit") ').lower()
+                choice = main.s_input('Input [#] (or type "exit") ').lower()
 
                 try:
                     choice = int(choice)
@@ -228,7 +228,7 @@ class Town:
 
                 if choice in [1, 2, 3, 4, 5, 6]:
                     print('-'*save_load.divider_size)
-                    input('Salesman: Yeah right, as if you actually have that much money | [ENTER] ')
+                    main.s_input('Salesman: Yeah right, as if you actually have that much money | [ENTER] ')
                     print('-'*save_load.divider_size)
 
                     break
@@ -237,14 +237,14 @@ class Town:
                     print('-'*save_load.divider_size)
 
                     while True:
-                        y_n = input("Do you want to buy an iSound for 250 GP? | Yes or No: ").lower()
+                        y_n = main.s_input("Do you want to buy an iSound for 250 GP? | Y/N: ").lower()
 
                         if y_n.startswith("y") and main.party_info['gp'] >= 250:
                             print('-'*save_load.divider_size)
-                            input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
-                            input('It has been added to the Quest Items page of your inventory | [ENTER] ')
+                            main.s_input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
+                            main.s_input('It has been added to the Quest Items page of your inventory | [ENTER] ')
                             print('-'*save_load.divider_size)
-                            input('Salesman: Thank you, come back again!" | [ENTER] ')
+                            main.s_input('Salesman: Thank you, come back again!" | [ENTER] ')
                             print('-'*save_load.divider_size)
 
                             main.party_info['gp'] -= 250
@@ -255,7 +255,7 @@ class Town:
 
                         elif y_n.startswith("y") and main.party_info['gp'] < 250:
                             print('-'*save_load.divider_size)
-                            input('Salesman: "Hey, you don\'t have enough money for that!" | [ENTER]')
+                            main.s_input('Salesman: "Hey, you don\'t have enough money for that!" | [ENTER]')
                             print('-'*save_load.divider_size)
 
                             break
@@ -272,7 +272,7 @@ class Town:
         cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
 
         while True:
-            choice = input(f'"Would you like to stay at our inn? {cost_string}" | Yes or No: ').lower()
+            choice = main.s_input(f'"Would you like to stay at our inn? {cost_string}" | Y/N: ').lower()
 
             if choice.startswith('y'):
                 print()
@@ -304,14 +304,14 @@ class Town:
 
                     print("Your party's HP and MP have been fully restored.")
                     print('Your party has been relieved of all status ailments.')
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
 
                     save_load.save_game()
 
                 else:
                     print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
 
                 return
@@ -344,7 +344,7 @@ class Town:
 
         while True:
             eggs = False
-            b_s = input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ').lower()
+            b_s = main.s_input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ').lower()
 
             if b_s.startswith('b'):
                 print('-'*save_load.divider_size)
@@ -356,7 +356,7 @@ class Town:
       [5] Tools
       [6] All""")
                 while True:
-                    chosen_cat = input('Input [#] (or type "back"): ')
+                    chosen_cat = main.s_input('Input [#] (or type "back"): ')
 
                     if chosen_cat == '1':
                         item_cat = 'Armor'
@@ -400,7 +400,7 @@ class Town:
                         print(f"      [{num + 1}] {item} {(padding - len(item.name))*'-'}--> {item.buy} GP")
 
                     while True:
-                        purchase = input('Input [#] (or type "back"): ').lower()
+                        purchase = main.s_input('Input [#] (or type "back"): ').lower()
 
                         try:
                             i = stock[item_cat][int(purchase) - 1]
@@ -421,7 +421,7 @@ class Town:
 
                         while True:
                             spam = 'these' if str(i).endswith('s') else 'this'
-                            confirm = input(f"\"Ya want {spam} {i}? It'll cost ya {i.buy} GP.\" | Yes or No: ").lower()
+                            confirm = main.s_input(f"\"Ya want {spam} {i}? It'll cost ya {i.buy} GP.\" | Y/N: ").lower()
 
                             if confirm.startswith('y'):
                                 if main.party_info['gp'] >= i.buy:
@@ -430,12 +430,12 @@ class Town:
 
                                     print('-'*save_load.divider_size)
                                     print(f'You purchase the {i} for {i.buy} GP.')
-                                    input("\nPress enter/return ")
+                                    main.s_input("\nPress enter/return ")
                                     print('-'*save_load.divider_size)
 
                                 else:
                                     print(f'"Hey, you don\'t even have enough GP for this {i}!"')
-                                    input("\nPress enter/return ")
+                                    main.s_input("\nPress enter/return ")
 
                                 break
 
@@ -457,7 +457,7 @@ class Town:
       [4] Accessories
       [5] Miscellaneous""")
                     while True:
-                        cat = input('Input [#] (or type "back"): ').lower()
+                        cat = main.s_input('Input [#] (or type "back"): ').lower()
 
                         if cat in ['e', 'x', 'exit', 'b', 'back']:
                             print('-'*save_load.divider_size)
@@ -492,7 +492,7 @@ class Town:
                             else:
                                 print('-'*save_load.divider_size)
                                 print(f"You don't have any items in the {vis_cat} category.")
-                                input("\nPress enter/return")
+                                main.s_input("\nPress enter/return")
                                 print('-'*save_load.divider_size)
 
                                 break
@@ -508,7 +508,7 @@ class Town:
                 print(f"      [{x + 1}] {npc}")
 
             while True:
-                npc = input('Input [#] (or type "exit"): ').lower()
+                npc = main.s_input('Input [#] (or type "exit"): ').lower()
 
                 try:
                     npc = [x for x in self.people if x.active][int(npc) - 1]
@@ -542,7 +542,7 @@ class Town:
                 print(f"      [{x + 1}] {y.owner}'s House")
 
             while True:
-                chosen_house = input('Input [#] (or type "exit"): ').lower()
+                chosen_house = main.s_input('Input [#] (or type "exit"): ').lower()
 
                 try:
                     chosen_house = self.houses[int(chosen_house) - 1]
@@ -585,7 +585,7 @@ class Tavern:
         cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
 
         while True:
-            choice = input(f'"Would you like to stay at our inn? {cost_string}" | Yes or No: ').lower()
+            choice = main.s_input(f'"Would you like to stay at our inn? {cost_string}" | Y/N: ').lower()
 
             if choice.startswith('y'):
                 print()
@@ -657,7 +657,7 @@ class House:
                 print("nothing of interest. ")
                 print(f"Your party discreetly exits {self.owner}'s house before anyone even")
                 print("notices you've entered.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
                 return
 
@@ -669,12 +669,12 @@ class House:
                     print("Unfortunately, you do not own any lockpick kits and thus cannot attempt")
                     print(f"to open the chest. Your party discreetly exits {self.owner}'s house")
                     print("before anyone even notices you've entered.")
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
 
                     return
 
                 while True:
-                    y_n = input("Attempt to unlock the chest? | Yes or No: ").lower()
+                    y_n = main.s_input("Attempt to unlock the chest? | Y/N: ").lower()
 
                     if y_n.startswith("y"):
                         target_chest = available_chests[0]
@@ -685,14 +685,14 @@ class House:
 
             else:
                 print(f"{len(available_chests)} locked chests.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
                 print('-'*save_load.divider_size)
 
                 if not lockpicks:
                     print("Unfortunately, you do not own any lockpick kits and thus cannot attempt")
                     print(f"to open the chest. Your party discreetly exits {self.owner}'s house")
                     print("before anyone even notices you've entered.")
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
 
                     return
 
@@ -702,7 +702,7 @@ class House:
                     print(f'      [{str(num + 1)}] Locked Chest #{str(num + 1)} --> Difficulty {chest.difficulty}')
 
                 while True:
-                    target_chest = input('Input [#] (or type "exit") ')
+                    target_chest = main.s_input('Input [#] (or type "exit") ')
 
                     try:
                         target_chest = available_chests[int(target_chest) - 1]
@@ -746,34 +746,34 @@ class Chest:
                     print('-'*save_load.divider_size)
                     print("Your party's lockpicking attempts were not in vain, as the lock")
                     print("gives way and the chest opens!")
-                    input("\nPress enter/return ")
+                    main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
 
                     for n, item in enumerate(self.contents):
                         if isinstance(item, int):
                             main.party_info['gp'] += item
                             sounds.item_pickup.play()
-                            input(f"Your party obtained {item} gold from the chest! | Press enter/return")
+                            main.s_input(f"Your party obtained {item} gold from the chest! | Press enter/return")
 
                         else:
                             inv_system.inventory[item.cat].append(item)
                             sounds.item_pickup.play()
                             an_a = 'an' if any(map(item.name.startswith, battle.vowels)) else 'a'
-                            input(f"""Your party obtained {an_a} {item.name} from the chest! | Press enter/return""")
+                            main.s_input(f"Your party obtained {an_a} {item.name} from the chest! | Press enter/return")
 
                     self.opened = True
                     return
 
             sounds.lockpick_break.play()
             print("Your party's lockpicking attempt fails.")
-            input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
             self.tries -= 1
 
             if self.tries > 0:
                 print('-'*save_load.divider_size)
                 while True:
-                    y_n = input("Attempt to open the chest again? | Yes or No: ").lower()
+                    y_n = main.s_input("Attempt to open the chest again? | Y/N: ").lower()
 
                     if y_n.startswith('y'):
                         print('-'*save_load.divider_size)
@@ -787,7 +787,7 @@ class Chest:
                 print('-'*save_load.divider_size)
                 print("Your party has run out of attempts, and the chest's lock breaks.")
                 print("The chest is still locked, and the chest cannot be picked again.")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
                 self.destroyed = True
 

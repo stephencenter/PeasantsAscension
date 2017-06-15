@@ -14,12 +14,19 @@
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
+import sys
 
 import inv_system
 import units
 import save_load
 import copy
 from NPCClass import NPC, Conversation, Quest
+
+if __name__ == "__main__":
+    sys.exit()
+
+else:
+    main = sys.modules["__main__"]
 
 # -- Name: Solou -- Town: Nearton
 
@@ -38,7 +45,7 @@ def solou_c3_at():
 
     print('-'*save_load.divider_size)
     print("Solou the Mage has been added to your party!")
-    input('\nPress enter/return ')
+    main.s_input('\nPress enter/return ')
 
 solou_convo_1 = Conversation("""
 H-hello! My name is Solou, wizard in training! Well, the truth is that I'm actually a page for King Harconius II, but my
@@ -161,7 +168,7 @@ def azura_c1_at():
     global azura_convo_3
 
     print('You write down the coordinates of Ambercreek.')
-    input("\nPress enter/return ")
+    main.s_input("\nPress enter/return ")
     azura_convo_2.active = False
     azura_convo_3.active = True
 
@@ -226,7 +233,7 @@ def stewson_q1_uc():
     rivesh_quest_1.active = True
     print('-'*save_load.divider_size)
     print('You now have experience defeating ghosts!')
-    input("\nPress enter/return ")
+    main.s_input("\nPress enter/return ")
 
 
 stewson_quest_1.upon_starting = stewson_q1_us
@@ -954,7 +961,7 @@ def serena_c3_at():
     print('-'*save_load.divider_size)
     print('Polmor and Serena get to work on healing your party.')
     print('Your party has been restored to full HP and healed of its status ailments.')
-    input("\nPress enter/return ")
+    main.s_input("\nPress enter/return ")
 
 
 serena_convo_3.after_talking = serena_c3_at

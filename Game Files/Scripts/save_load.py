@@ -54,6 +54,7 @@ adventure_name = ''
 music_vol = 1.0  # The volume of the game's Music, on a scale from 0 (muted) to 1.0 (loudest).
 sound_vol = 1.0  # The volume of the game's SFX, on a scale from 0 (muted) to 1.0 (loudest).
 divider_size = 25  # The number of dashes used for dividers between different UI elements
+do_blip = True  # Determines whether or not a "blip" sound is made whenever you press enter
 
 
 def set_adventure_name():
@@ -64,7 +65,7 @@ def set_adventure_name():
     while True:
         # Certain OSes don't allow certain characters, so this removes those characters
         # and replaces them with whitespace. The player is then asked if this is okay.
-        choice = input("Finally, what do you want to name this adventure? | Input name: ")
+        choice = main.s_input("Finally, what do you want to name this adventure? | Input name: ")
 
         # Files/Folders cannot be have only whitespace as their filename.
         if not ''.join(choice.split()):
@@ -98,7 +99,7 @@ def set_adventure_name():
         # Check if the modified adventure name is identical to the original one the player proposed
         elif adventure_name != choice:
             while True:
-                y_n = input(f'\nI had to change some of that. Is "{adventure_name}" okay? | Yes or No: ').lower()
+                y_n = main.s_input(f'\nI had to change some of that. Is "{adventure_name}" okay? | Y/N: ').lower()
 
                 if y_n.startswith("y"):
                     format_save_names()
@@ -117,7 +118,7 @@ def set_adventure_name():
 
         else:
             while True:
-                y_n = input(f'You wish for your adventure to be known as "{choice}"? | Yes or No: ')
+                y_n = main.s_input(f'You wish for your adventure to be known as "{choice}"? | Y/N: ')
 
                 if y_n.startswith("y"):
                     format_save_names()
@@ -147,12 +148,12 @@ def change_settings():
 
     if os.path.isfile("../settings.cfg"):
         config.read("../settings.cfg")
+        config = config['settings']
 
-        for x in config['volume_levels']:
-            globals()[x] = float(config['volume_levels'][x])/100
-
-        for x in config['divider_size']:
-            globals()[x] = int(config['divider_size'][x])
+        globals()['music_vol'] = float(config['music_vol'])/100
+        globals()['sound_vol'] = float(config['sound_vol'])/100
+        globals()['divider_size'] = int(config['divider_size'])
+        globals()['do_blip'] = int(config['do_blip'])
 
         sounds.change_volume()
 
@@ -162,7 +163,7 @@ def save_game(verbose=True):
     # If verbose == True, then this function will print everything and use smart_sleep() functions
     # When set to False, this function can be used to auto-save the game
     while True:
-        y_n = input('Do you wish to save your progress? | Yes or No: ').lower() if verbose else 'y'
+        y_n = main.s_input('Do you wish to save your progress? | Y/N: ').lower() if verbose else 'y'
 
         if y_n.startswith('y'):
             print('Saving...') if verbose else ''
@@ -248,7 +249,7 @@ def load_game():  # Check for save files and load the game if they're found
         print(f"      [{num + 1}] {fol}{' '*(padding - len(fol))} | {menu_info[fol]}")
 
     while True:
-        chosen = input('Input [#] (or type "create new"): ').lower()
+        chosen = main.s_input('Input [#] (or type "create new"): ').lower()
 
         try:
             # Account for the fact that list indices start at 0
@@ -312,7 +313,7 @@ def serialize_all(verbose=True):
     except (OSError, ValueError):
         logging.exception(f'Error saving game on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         print('There was an error in saving. Error message can be found in error_log.out') if verbose else ''
-        input("\nPress enter/return ") if verbose else ''
+        main.s_input("\nPress enter/return ") if verbose else ''
 
 
 def deserialize_all():
@@ -344,7 +345,7 @@ def deserialize_all():
         logging.exception(f'Error loading game on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
         print('There was an error loading your game. Please reload game.')
         print('Error message can be found in the error_log.out file.')
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
         # A file failing to load screws up some internal values, so the entire game needs to be reloaded
         raise

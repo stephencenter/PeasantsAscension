@@ -24,7 +24,6 @@ import inv_system
 import items
 import npcs
 import save_load
-import sounds
 import tiles
 from TownClass import Town, Tavern, Chest, House
 
@@ -265,24 +264,22 @@ def search_towns(enter=True):
         main.party_info['current_tile'] = tiles.in_for_c
         main.party_info['x'], main.party_info['y'], main.party_info['z'] = 0, 0, 0
         print("There was an error gathering tile data - your party has been relocated to 0'N, 0'E.")
-        input("\nPress enter/return ")
+        main.s_input("\nPress enter/return ")
 
     for town in main.party_info['current_tile'].town_list:
         if enter:
             print('-'*save_load.divider_size)
 
-            sounds.item_pickup.play()
-
             while True:
                 if isinstance(town, Tavern):
-                    y_n = input("How convenient, a tavern is nearby! Should your party investigate? | Yes or No: ")
+                    y_n = main.s_input("How convenient, a tavern is nearby! Should your party investigate? | Y/N: ")
 
                 else:
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
-                        y_n = input('There is a town nearby. Should your party investigate? | Yes or No: ')
+                        y_n = main.s_input('There is a town nearby. Should your party investigate? | Y/N: ')
 
                     else:
-                        y_n = input(f'{town.name} is nearby. Should your party give it a visit? | Yes or No: ')
+                        y_n = main.s_input(f'{town.name} is nearby. Should your party give it a visit? | Y/N: ')
 
                 y_n = y_n.lower()
 

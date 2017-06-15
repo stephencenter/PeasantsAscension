@@ -29,7 +29,7 @@ def text_scroll(string, spacing=0.025):
     only be printed one at a time with "spacing" seconds in between.
     If using text_scroll(), then it prints all characters. If
     using input_ts(), then it will print all but the last
-    character, which will then be run through the input
+    character, which will then be run through the main.s_input
     function instead.
 
     For "spacing", any positive number (including zero) is valid. Anything
@@ -58,14 +58,14 @@ def text_scroll(string, spacing=0.025):
 
 def input_ts(string, spacing=0.025):
         # Input mode prints all but the last character. The last character
-        # is instead passed as the argument for the "input()" function,
+        # is instead passed as the argument for the "main.s_input()" function,
         # the result of which is returned.
 
         if not string.endswith(' '):
-            # If there isn't a space, then user input will be
+            # If there isn't a space, then user main.s_input will be
             # mashed together with the printed characters.
 
             string = ''.join([string, ' '])
 
         text_scroll(string[:-1], spacing)  # Select all but the last character
-        return input(string[-1])
+        return main.s_input(string[-1])

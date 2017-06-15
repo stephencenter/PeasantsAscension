@@ -87,10 +87,24 @@ shirt fuck you"
 
 
 def s_input(string):
-    # Custom input, plays a "blip" sound after the player presses enter
+    # Custom s_input, plays a "blip" sound after the player presses enter.
+    # Also can be used to automatically play the game and find crashes.
+    do_debug = False  # Set to true when auto-testing
+
+    if do_debug:
+        print(string, end='')
+        char = random.choice('0123456789ynxpsewrt')
+        print(char)
+
+        return char
+
     x = input(string)
-    sounds.input_blip.play()
+
+    if save_load.do_blip:
+        sounds.item_pickup.play()
+
     return x
+
 
 def game_loop():
     pygame.mixer.music.load(party_info['reg_music'])
@@ -105,7 +119,7 @@ def game_loop():
         coord_change, available_dirs = game_ui()
 
         while True:
-            command = input('Input Command (type "help" to view command list): ').lower()
+            command = s_input('Input Command (type "help" to view command list): ').lower()
 
             if command == "debug-menu":
                 debug_command()
@@ -256,7 +270,7 @@ def move_command(coord_change, available_dirs, command):
     party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in
                                   [a[1] for a in available_dirs if a[0] == command]][0]
 
-    # Translate the player's commandal input into a coordinate change
+    # Translate the player's commandal s_input into a coordinate change
     for drc in [a[0] for a in available_dirs]:
         if drc == command == 'e':
             coord_change = ['x', 1]
@@ -313,7 +327,7 @@ def help_command():
  [H]elp - Reopen this list of commands
 Type the letter in brackets while on the overworld to use the command""")
 
-    input("\nPress enter/return ")
+    s_input("\nPress enter/return ")
 
 
 def stats_command():
@@ -338,7 +352,7 @@ def stats_command():
             print(f"      [{int(num) + 1}] {character.name}")
 
         while True:
-            target = input('Input [#] (or type "exit"): ').lower()
+            target = s_input('Input [#] (or type "exit"): ').lower()
 
             try:
                 target = target_options[int(target) - 1]
@@ -373,13 +387,13 @@ def magic_command():
     else:
         print('-'*save_load.divider_size)
         print(f'{units.player.target.name} has no overworld spells in their spellbook.')
-        input("\nPress enter/return ")
+        s_input("\nPress enter/return ")
 
 
 def look_command():
     print('-'*save_load.divider_size)
     print(party_info['current_tile'].desc)
-    input("\nPress enter/return ")
+    s_input("\nPress enter/return ")
     print('-'*save_load.divider_size)
 
 
@@ -397,7 +411,7 @@ def rest_command():
             units.adorine.hp == units.adorine.max_hp and units.adorine.mp == units.adorine.max_mp]):
 
         print('Your party feels fine and decides not to rest.')
-        input("\nPress enter/return ")
+        s_input("\nPress enter/return ")
         print('-'*save_load.divider_size)
 
         return
@@ -459,7 +473,7 @@ def tools_command():
 
     if not available_tools:
         print('Your party has no available tools to use.')
-        input('\nPress enter/return ')
+        s_input('\nPress enter/return ')
         print('-'*save_load.divider_size)
 
         return
@@ -471,7 +485,7 @@ def tools_command():
             print(f"      [{x + 1}] {y}")
 
         while True:
-            tool = input('Input [#] (or type "exit"): ').lower()
+            tool = s_input('Input [#] (or type "exit"): ').lower()
 
             try:
                 tool = available_tools[int(tool) - 1]
@@ -498,7 +512,7 @@ def debug_command():
     print('-'*save_load.divider_size)
     print('-DEBUG MENU-')
     while True:
-        command = input('Input command (or type "exit"): ')
+        command = s_input('Input command (or type "exit"): ')
 
         if command in ['e', 'x', 'exit', 'b', 'back']:
             print('-'*save_load.divider_size)
@@ -580,7 +594,7 @@ def main():
     save_load.change_settings()  # ...set the volume and save file settings...
     title_screen.show_title()  # ...display the titlescreen...
     save_load.load_game()  # ...check for save files...
-    game_loop()  # ...and then start the game.
+    game_loop()  # ...and then start the game!
 
 
 if __name__ == "__main__":  # If this file is being run and not imported, run main()
@@ -592,7 +606,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
         # If an exception is raised and not caught, log the error message.
         logging.exception(f'Got exception of main handler on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
 
-        # raise # Uncomment this if you're using the auto-input debugger
+        # raise # Uncomment this if you're using the auto-s_input debugger
 
         print(traceback.format_exc())
         print("""\
@@ -600,7 +614,7 @@ Peasants' Ascension encountered an error and crashed! Send the error message
 shown above to TheFrozenMawile (ninjafurret@gmail.com) to make sure the bug
 gets fixed. The error message, along with any errors messages encountered,
 can also be found in the error_log.out file.""")
-        input("\nPress enter/return")
+        s_input("\nPress enter/return")
 
         pygame.quit()
         sys.exit()
