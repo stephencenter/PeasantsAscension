@@ -55,8 +55,8 @@ class Consumable(Item):
 
     def use_item(self, user, is_battle=False):
         print('-'*save_load.divider_size)
-
         if is_battle:
+            print(f"-{user.name}'s Turn-")
             print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
 
         user.hp += self.heal

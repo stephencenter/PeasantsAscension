@@ -388,59 +388,31 @@ def after_battle(is_boss):
             pygame.mixer.music.set_volume(save_load.music_vol)
 
             if not is_boss:
-                # Only do the following if the player defeated a normal enemy, and not a boss
                 print(f'The {units.monster.name} falls to the ground, dead as a stone.')
 
-                # Enemies drop gold/exp based on the player/monster's levels
-                gold = math.ceil(2.5*units.monster.lvl - units.player.lvl + random.randint(-1, 1))
-
-                if gold <= 0:
-                    gold = 1
-
             else:
-                # Only do the following if the player defeated a boss
-                units.defeated_bosses.append(units.monster.name)
                 print(f'The almighty {units.monster.name} has been slain!')
-
-                # Bosses drop a set amount of gold
-                gold = units.monster.gold
-
-                # Check to see if the boss does anything special at death
+                units.defeated_bosses.append(units.monster.name)
                 units.monster.upon_defeating()
 
-            # If the monster has items, give them to the player
-            if units.monster.items:
-                cat = units.monster.items.cat
-                inv_system.inventory[cat].append(_c(units.monster.items))
+            # Formulas for item, gold, and experience drops
+            gold_drops = math.ceil(sum([max(1, x.gold, 2.5*x.lvl) for x in m_list]))
+            expr_drops = math.ceil(sum([max(1, y.experience, 1.5**y.lvl)/2 for y in m_list]))
+            item_drops = [(z.name, z.items) for z in m_list if z.items]
 
-                sounds.item_pickup.play()
-                main.s_input(f'The {units.monster.monster_name} dropped a {units.monster.items}! | Press enter/return')
+            main.party_info['gp'] += gold_drops
+            main.s_input(f'Your party has gained {gold_drops} GP | Press enter/return ')
 
-            # Give the Player their GP
-            main.party_info['gp'] += gold
-            sounds.item_pickup.play()
-            main.s_input(f'Your party has gained {gold} GP | Press enter/return ')
-
+            # Each party member gets their own XP, which is influenced by their Fortune stat
             for character in enabled_pcus:
-
-                # Give the Player their XP
-                if is_boss:
-                    experience = units.monster.experience
-
-                else:
-                    experience = math.ceil((units.monster.lvl**1.5 + character.ext_exp)/2) + 1
-
-                if experience <= 0:
-                    experience = 1
-
-                character.exp += experience
-
-                sounds.item_pickup.play()
-
-                main.s_input(f'{character.name} gained {experience} XP | Press enter/return ')
-
-                # Check to see if the player gained any levels
+                character.exp += expr_drops + character.ext_exp
+                main.s_input(f'{character.name} gained {expr_drops} XP | Press enter/return ')
                 character.level_up()
+
+            # Each monster can drop their own item
+            for drop in item_drops:
+                print(f"The {drop[0]} dropped a {drop[1]}! | Press enter/return")
+                inv_system.inventory[drop[1].cat].append(drop[1])
 
             pygame.mixer.music.load(main.party_info['reg_music'])
             pygame.mixer.music.play(-1)
@@ -463,7 +435,7 @@ def battle_inventory(user):
         print('Battle Inventory: ')
 
         for x, y in enumerate(inv_system.inventory['consumables']):
-            print(f'[{x + 1}] {y}')
+            print(f'      [{x + 1}] {y}')
 
         while True:
             item = main.s_input('Input [#] (or type "exit"): ').lower()
@@ -473,11 +445,10 @@ def battle_inventory(user):
 
             except (IndexError, ValueError):
                 if item in ['e', 'x', 'exit', 'b', 'back']:
+                    print("-"*save_load.divider_size)
                     return False
 
                 continue
-
-            print('\n-Player Turn-')
 
             if isinstance(item, items.StatusPotion):
                 if item.status != user.status_ail:

@@ -87,7 +87,7 @@ shirt fuck you"
 
 
 def s_input(string):
-    # Custom s_input, plays a "blip" sound after the player presses enter.
+    # Custom input, plays a "blip" sound after the player presses enter.
     # Also can be used to automatically play the game and find crashes.
     do_debug = False  # Set to true when auto-testing
 

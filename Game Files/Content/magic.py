@@ -185,8 +185,11 @@ def pick_cat(user, is_battle=True):
         print(f"""{user.name}'s spellbook:
       [1] Damaging Spells
       [2] Buff Spells
-      [3] Healing Spells
-      [4] Use Most Recent Spell""")
+      [3] Healing Spells""")
+
+        if spellbook[inv_name]['Previous Spell']:
+            print(f"      [4] Re-cast {spellbook[inv_name]['Previous Spell'][0].name}")
+
         spam = True
         while spam:
             cat = main.s_input('Input [#] (or type "exit"): ')
@@ -200,40 +203,18 @@ def pick_cat(user, is_battle=True):
             elif cat == '3':
                 cat = 'Healing'
 
-            elif cat == '4':
-                spell = spellbook[inv_name]['Previous Spell']
+            elif cat == '4' and spellbook[inv_name]['Previous Spell']:
+                spell = spellbook[inv_name]['Previous Spell'][0]
+                user.c_spell = spell
 
-                if spell:
-                    spell = spell[0]
-
-                    if is_battle:
-                        user.c_spell = spell
-
-                        if isinstance(spell, Healing) or isinstance(spell, Buff):
-                            user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
-                                               ally=True, enemy=False)
-
-                            return True
-
-                        else:
-                            user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?")
-
-                            break
-
-                    else:
-                        user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
-                                           ally=True, enemy=False)
-                        spell.use_magic(user, is_battle)
-
-                        break
+                if isinstance(spell, Healing) or isinstance(spell, Buff) or not is_battle:
+                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
+                                       ally=True, enemy=False)
 
                 else:
-                    print('-'*save_load.divider_size)
-                    print(f'{user.name} has no previously used spells!')
-                    main.s_input("\nPress enter/return ")
-                    print('-'*save_load.divider_size)
+                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?")
 
-                    break
+                return True
 
             else:
                 if cat.lower() in ['e', 'x', 'exit', 'b', 'back']:

@@ -482,7 +482,6 @@ Armor:
 
         # There's a 1 in 4 chance for the players status effect to wear off each turn.
         if self.status_ail != 'none' and random.randint(0, 3) == 0:
-
             sounds.buff_spell.play()
             print(f"{self.name}'s afflictions have worn off! They are no longer {self.status_ail}.")
             self.status_ail = 'none'
@@ -523,7 +522,7 @@ Armor:
             self.c_spell.use_magic(self, True)
 
         elif self.move == '3':
-            # Does nothing, still a WIP
+            # TODO!!
             return
 
         # Run away!
@@ -709,10 +708,13 @@ class Monster(Unit):
         Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
         self.monster_name = ''  # The name of the monsters species (so a Fast Goblin's monster_name would be Goblin)
         self.status = ''        # The status effect that will be applied to the player if RNGsus wills it
-        self.items = ''         # The item that the monster will drop if RNGsus wills it
         self.is_poisoned = False
         self.is_defending = False
         self.class_ = None
+
+        self.gold = 0
+        self.experience = 0
+        self.items = 0
 
         self.ability_vars = {}  # This dictionary will contain numerous variables that interact with abilties in battle
 
