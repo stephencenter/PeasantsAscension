@@ -240,7 +240,7 @@ def pick_spell(cat, user, is_battle):
     print('-'*save_load.divider_size)
     while True:
         padding = len(max([spell.name for spell in spellbook[inv_name][cat]], key=len))
-        print(f"{cat} Spells ({user.name} has {user.mp}/{user.max_mp} MP remaining):")
+        print(f"{user.name}'s {cat} Spells | {user.mp}/{user.max_mp} MP remaining")
 
         for x, y in enumerate(spellbook[inv_name][cat]):
             print(f"      [{x + 1}] {y} --{'-'*(padding - len(y.name))}> {y.mana} MP")

@@ -5,6 +5,9 @@ import ascii_art
 import battle
 import units
 import sounds
+import random
+import ItemClass
+import inv_system
 
 if __name__ == "__main__":
     sys.exit()
@@ -183,7 +186,6 @@ breaking_vows.use_ability = use_breaking_vows
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
 def before_inject_poison(user):
     user.choose_target(f"Who should {user.name} inject poison into?", ally=False, enemy=True)
-    pass
 
 
 def use_inject_poison(user):
@@ -246,20 +248,43 @@ knockout_gas.use_ability = use_knockout_gas
 
 
 def before_disarming_blow(user):
-    pass
+    user.choose_target(f"Who should {user.name} disarm?", ally=False, enemy=True)
 
 
 def use_disarming_blow(user):
-    pass
+    print(f"{user.name} is preparing to disarm the {user.target.monster_name}")
+    sounds.aim_weapon.play()
+    main.smart_sleep(0.75)
+
+    if user.target.ability_vars['disarmed']:
+        sounds.debuff.play()
+        print(f"But the {user.target.monster_name} is already disarmed!")
+        return
+
+    print(f"The {user.target.monster_name} drops their weapon, lowering their attack!")
+    sounds.buff_spell.play()
+
+    user.target.ability_vars['disarmed'] = True
+
+    base_ar = (5 + user.attributes['dex'])/2 if isinstance(user.target, units.Boss) else 5 + user.attributes['dex']
+    actual_ar = max(0, 100 - base_ar)/100
+    user.target.attk *= actual_ar
+
+    user.target.hp -= 10
+
+    if random.randint(0, 3) == 3:
+        main.smart_sleep(0.75)
+        sounds.unlock_chest.play()
+        print(f"{user.name} stealthily retrieves the weapon and pawns it off for {max(user.target.lvl, 5)} GP!")
+        main.party_info['gp'] += max(user.target.lvl, 5)
 
 
 disarming_blow = Ability("Disarming Blow", f"""\
 The user knocks the weapon out of a target enemy's hands, taking it for
-themselves. Deals 10 damage, and lowers enemy physical attack by
-[5 + Dexterity]%. Has a 25% chance to add the target's weapon to the user's party
-inventory. The weapon has attack stats equal to 75% the user's currently
-equipped weapon, and has a resell value equal to the target's level. Can only
-be used once per enemy per battle. Damage reduction is halved against bosses. """, 2)
+themselves. Deals 10 damage, and lowers the target's physical attack by
+[5 + Dexterity]%. The user has a 25% chance to steal the weapon, immediately
+trading it in for an amount of GP equal to the target's level, with a minimum
+of 5 GP.""", 2)
 disarming_blow.before_ability = before_disarming_blow
 disarming_blow.use_ability = use_disarming_blow
 
@@ -371,9 +396,9 @@ Element: {user.target.element.title()} | Elemental Weakness: {monster_weakness}"
 
 scout = Ability("Scout", f"""\
 Scouts a target enemy, revealing their stats and elemental weakness. In addition,
-all attacks on this type of enemy - including in future battles - will have
+all Standard Attacks on this type of enemy - including in future battles - will have
 an additional {ascii_art.colorize('[5 + Perception]', 'cyan')}% chance to be a critical strike, with a maximum
-of 25%. Base critical strike chance is 15%. Casting this on an enemy that has
+of +25%. Base critical strike chance is 15%. Casting this on an enemy that has
 already been scouted in the past will not increase the critical strike bonus.""", 1)
 scout.before_ability = before_scout
 scout.use_ability = use_scout
@@ -524,12 +549,12 @@ a_abilities = {
     'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],
 
     'player': [ascend],
-    'solou': [infusion],
-    'ran_af': [],
-    'chyme': [],
-    'parsto': [],
-    'xoann': [],
-    'adorine': []
+    'Solou': [infusion],
+    'Ran_af': [],
+    'Chyme': [],
+    'Parsto': [],
+    'Xoann': [],
+    'Adorine': []
 
 }
 

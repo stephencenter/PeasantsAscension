@@ -73,7 +73,7 @@ pygame.mixer.init()
 party_info = {'reg': 'Central Forest', 'reg_music': 'Content/Music/Through the Forest.ogg',
               'prev_town': tiles.in_for_c, 'p_town_xyz': ['', '', ''], 'is_aethus': False, 'gp': 20,
               'visited_towns': [], 'current_tile': tiles.in_for_c, 'x': 0, 'y': 0, 'z': 0,
-              'steps_without_battle': 0, 'do_monster_spawns': True}
+              'steps_without_battle': 0, 'do_monster_spawns': True, 'scout_list': []}
 
 
 class YouDontSurfException(Exception):

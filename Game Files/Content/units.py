@@ -470,7 +470,7 @@ Armor:
 
         # Check to see if the PCU is poisoned
         if self.status_ail == 'poisoned' and monster.hp > 0:
-            main.smart_sleep(0.5)
+            main.smart_sleep(0.75)
             sounds.poison_damage.play()
             poison_damage = math.floor(self.hp/5)
             self.hp -= poison_damage
@@ -485,7 +485,7 @@ Armor:
             sounds.buff_spell.play()
             print(f"{self.name}'s afflictions have worn off! They are no longer {self.status_ail}.")
             self.status_ail = 'none'
-            main.smart_sleep(0.5)
+            main.smart_sleep(0.75)
 
         # Basic Attack
         if self.move == '1':
@@ -575,15 +575,18 @@ Armor:
                 do_loop = True
                 while do_loop:
                     print('-'*save_load.divider_size)
-                    print(f"{self.class_.title()} Abilities ({self.name} has {self.ap}/{self.max_ap} AP remaining)")
+                    print(f"{self.name}'s Abilities | {self.ap}/{self.max_ap} AP remaining")
 
-                    for num, ability in enumerate(abilities.a_abilities[self.class_]):
+                    all_abilities = abilities.a_abilities[self.class_] + \
+                        abilities.a_abilities['player' if self == player else self.name]
+
+                    for num, ability in enumerate(all_abilities):
                         print(f"      [{num + 1}] {ability.name} --> {ability.ap_cost} AP")
 
                     while True:
                         try:
                             chosen = main.s_input('Input [#] (or type "back"): ').lower()
-                            self.c_ability = abilities.a_abilities[self.class_][int(chosen) - 1]
+                            self.c_ability = all_abilities[int(chosen) - 1]
 
                             if self.ap < self.c_ability.ap_cost:
                                 print('-'*save_load.divider_size)
@@ -746,8 +749,8 @@ class Monster(Unit):
 
         self.ability_vars = {
             'poison_pow': 0,
-            'poison_dex': 0
-            }  # This dictionary will contain numerous variables that interact with abilties in battle
+            'poison_dex': 0,
+            'disarmed': False}  # This dictionary will contain numerous variables that interact with abilties in battle
 
     def monst_level(self):
         self.lvl = main.party_info['current_tile'].m_level
