@@ -394,7 +394,7 @@ class Town:
 
                 while fizz:
                     padding = len(max([item.name for item in stock[item_cat]], key=len))
-                    print(f"{item_cat} [Your party has {main.party_info['gp']} GP]: ")
+                    print(f"{item_cat} (Your party has {main.party_info['gp']} GP): ")
 
                     for num, item in enumerate(stock[item_cat]):
                         print(f"      [{num + 1}] {item} {(padding - len(item.name))*'-'}--> {item.buy} GP")
@@ -434,8 +434,7 @@ class Town:
                                     print('-'*save_load.divider_size)
 
                                 else:
-                                    print(f'"Hey, you don\'t even have enough GP for this {i}!"')
-                                    main.s_input("\nPress enter/return ")
+                                    main.s_input(f'"Sorry, you don\'t have enough GP for that!" | Press enter/return ')
 
                                 break
 

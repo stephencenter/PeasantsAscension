@@ -32,7 +32,6 @@ pygame.mixer.init()
 
 temp_stats = ''
 vowels = 'AEIOU'
-turn_counter = 0
 m_list = []
 enabled_pcus = []
 
@@ -143,6 +142,7 @@ def battle_system(is_boss=False, ambush=False):
                                 units.ran_af,
                                 units.adorine,
                                 units.parsto] if x.enabled]
+    turn_counter = 0
 
     # Add monsters to the battle.
     m_list = list()
@@ -213,6 +213,8 @@ def battle_system(is_boss=False, ambush=False):
 
     # While all active party members are alive, continue the battle
     while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
+        turn_counter += 1
+
         # A list of the battle participants sorted by speed. Updates once per turn
         speed_list = sorted(m_list + enabled_pcus, key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd,
                             reverse=True)
@@ -242,7 +244,8 @@ def battle_system(is_boss=False, ambush=False):
 
                 print('-'*save_load.divider_size)
 
-                if char.battle_turn() == 'Ran':
+                if ((isinstance(char, units.PlayableCharacter) and char.battle_turn() == 'Ran') or
+                        (isinstance(char, units.Monster) and char.base_turn() == 'Ran')):
                     return
 
                 if any(x.hp > 0 for x in enabled_pcus):
@@ -263,7 +266,7 @@ def battle_system(is_boss=False, ambush=False):
                     sounds.ally_death.play()
 
                     print("-"*25)
-                    print(f'{char_2.name} has fallen to the monsters!')
+                    print(ascii_art.colorize(f"{char_2.name} has fallen to the monsters!", 'red'))
                     main.s_input("\nPress enter/return ")
 
                 if isinstance(char_2, units.Monster) and char_2.hp <= 0 and char_2.status_ail != 'dead':
@@ -272,7 +275,7 @@ def battle_system(is_boss=False, ambush=False):
                     sounds.buff_spell.play()
 
                     print("-"*25)
-                    print(f'The {char_2.name} was defeated by your party!')
+                    print(ascii_art.colorize(f"The {char_2.name} was defeated by your party!", 'green'))
                     main.s_input("\nPress enter/return ")
 
     after_battle(is_boss)
@@ -430,7 +433,6 @@ def after_battle(is_boss):
 
 def battle_inventory(user):
     # The player can use items from the Consumables category of their inventory during battles.
-
     while True:
         print('Battle Inventory: ')
 

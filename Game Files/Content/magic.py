@@ -36,10 +36,6 @@ else:
 pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
-# This is the message that is printed if you attempt to use magic
-# without the required amount of mana.
-out_of_mana = "-------------------------\n{0} doesn't have enough mana to cast {1}."
-
 
 class Spell:
     def __init__(self, name, desc, mana, req_lvl, class_, spell_id):
@@ -208,11 +204,10 @@ def pick_cat(user, is_battle=True):
                 user.c_spell = spell
 
                 if isinstance(spell, Healing) or isinstance(spell, Buff) or not is_battle:
-                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
-                                       ally=True, enemy=False)
+                    user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
 
                 else:
-                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?")
+                    user.choose_target(f"Who should {user.name} cast {spell.name} on?")
 
                 return True
 
@@ -245,7 +240,7 @@ def pick_spell(cat, user, is_battle):
     print('-'*save_load.divider_size)
     while True:
         padding = len(max([spell.name for spell in spellbook[inv_name][cat]], key=len))
-        print(f"{cat} Spells [{user.name} has {user.mp} mana remaining]:")
+        print(f"{cat} Spells ({user.name} has {user.mp}/{user.max_mp} MP remaining):")
 
         for x, y in enumerate(spellbook[inv_name][cat]):
             print(f"      [{x + 1}] {y} --{'-'*(padding - len(y.name))}> {y.mana} MP")
@@ -265,7 +260,9 @@ def pick_spell(cat, user, is_battle):
                 continue
 
             if spell.mana > user.mp:
-                print(out_of_mana.format(user.name, spell.name))
+                print("-"*save_load.divider_size)
+                print(f"{user.name} doesn't have enough MP to cast {spell.name}!")
+                input("\nPress enter/return ")
 
                 break
 
@@ -275,18 +272,18 @@ def pick_spell(cat, user, is_battle):
                 user.c_spell = spell
 
                 if isinstance(spell, Healing) or isinstance(spell, Buff):
-                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
+                    user.choose_target(f"Who should {user.name} cast {spell.name} on?",
                                        ally=True, enemy=False)
 
                     return True
 
                 else:
-                    user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?")
+                    user.choose_target(f"Who should {user.name} cast {spell.name} on?")
 
                     return True
 
             else:
-                user.choose_target(f"Who should {ascii_art.color_name(user.name)} cast {spell.name} on?",
+                user.choose_target(f"Who should {user.name} cast {spell.name} on?",
                                    ally=True, enemy=False)
                 spell.use_magic(user, is_battle)
 

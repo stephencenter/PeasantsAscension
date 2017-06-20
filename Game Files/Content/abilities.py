@@ -4,6 +4,7 @@ import sys
 import ascii_art
 import battle
 import units
+import sounds
 
 if __name__ == "__main__":
     sys.exit()
@@ -181,10 +182,22 @@ breaking_vows.use_ability = use_breaking_vows
 
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
 def before_inject_poison(user):
+    user.choose_target(f"Who should {user.name} inject poison into?", ally=False, enemy=True)
     pass
 
 
 def use_inject_poison(user):
+    user.target.status_ail = 'poisoned'
+    user.target.ability_vars['poison_pow'] += 0.02
+    user.target.ability_vars['poison_dex'] = 2 + user.attributes['dex']
+
+    poison_power = math.ceil(100*user.target.ability_vars['poison_pow'] + user.target.ability_vars['poison_dex'])
+
+    print(f"{user.name} is preparing a poison with power {poison_power}...")
+    sounds.aim_weapon.play()
+    main.smart_sleep(0.75)
+    print(f"{user.name} injects the poison into the {user.target.monster_name}!")
+    sounds.buff_spell.play()
     pass
 
 
@@ -310,8 +323,8 @@ def use_mana_drain(user):
 
 
 mana_drain = Ability("Mana Drain", f"""\
-Depletes the target's current mana by {ascii_art.colorize('[5 + Intelligence]', 'blue')}% of their maximum
-mana pool, while restoring the same amount to the user.""", 5)
+Depletes the target's current MP by {ascii_art.colorize('[5 + Intelligence]', 'blue')}% of their maximum
+MP, while restoring the same amount to the user.""", 5)
 mana_drain.before_ability = before_mana_drain
 mana_drain.use_ability = use_mana_drain
 
@@ -502,7 +515,7 @@ the chosen element, but the damage buff does not stack.""", 2)
 infusion.before_ability = before_infusion
 infusion.use_ability = use_infusion
 
-class_abilities = {
+a_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],
     'mage': [mana_drain, polymorph, spell_shield, skill_shot],
     'warrior': [roll_call, parry, great_cleave, berserkers_rage],

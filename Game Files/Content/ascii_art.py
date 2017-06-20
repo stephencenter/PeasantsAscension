@@ -15,7 +15,6 @@
 # ----------------------------------------------------------------------------#
 # This file is where ALL of the Enemy and Player ASCII
 # art in the game is located.
-import units
 from colorama import Fore
 
 
@@ -39,32 +38,6 @@ def colorize(string, color):
         return string
     else:
         raise Exception('Invalid argument for "color" - must be red, green, yellow, magenta, blue, or cyan.')
-
-
-def color_name(string):
-    if string == units.adorine.name:
-        return Fore.RED + string + Fore.RESET
-
-    if string == units.solou.name:
-        return Fore.BLUE + string + Fore.RESET
-
-    if string == units.chyme.name:
-        return Fore.YELLOW + string + Fore.RESET
-
-    if string == units.parsto.name:
-        return Fore.CYAN + string + Fore.RESET
-
-    if string == units.ran_af.name:
-        return Fore.MAGENTA + string + Fore.RESET
-
-    if string == units.xoann.name:
-        return Fore.GREEN + string + Fore.RESET
-
-    if string == units.player.name:
-        return string
-
-    else:
-        raise Exception(f'There is no PCU with name "{string}"')
 
 
 player_art = {

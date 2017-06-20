@@ -22,7 +22,7 @@ import sys
 
 import pygame
 
-import AbilityClass
+import abilities
 import ascii_art
 import battle
 import inv_system
@@ -42,11 +42,11 @@ pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 battle_options = """Pick {0}'s Move:
-      [1]: Standard Attack
-      [2]: Use Magic
-      [3]: Use Abilities
-      [4]: Use Items
-      [5]: Run"""
+      [1] Standard Attack
+      [2] Use Magic
+      [3] Use Abilities
+      [4] Use Items
+      [5] Run"""
 
 
 class Unit:
@@ -89,7 +89,7 @@ class PlayableCharacter(Unit):
         self.max_ap = 10          # The number of maximum Action Points the user can have at one time
 
         self.target = Monster('', '', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
-        self.c_ability = AbilityClass.Ability('', '', '')  # The ability that the PCU is currently casting
+        self.c_ability = abilities.Ability('', '', '')  # The ability that the PCU is currently casting
         self.c_spell = magic.Spell('', '', '', '', '', '')  # The spell that the PCU is currently casting
 
         self.attributes = {'int': 1,  # Intelligence, for Mages
@@ -522,8 +522,8 @@ Armor:
             self.c_spell.use_magic(self, True)
 
         elif self.move == '3':
-            # TODO!!
-            return
+            print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
+            self.c_ability.use_ability(self)
 
         # Run away!
         elif self.move == '5' and battle.run_away(self):
@@ -542,14 +542,15 @@ Armor:
             self.move = main.s_input("Input [#]: ")
 
             try:
-                self.move = re.sub("[^0-9][^QWEDR]", '', self.move)[0].lower()
+                self.move = re.sub("[^0-9]", '', self.move)[0]
 
             except IndexError:
                 continue
 
             # Standard Attack
             if self.move == '1':
-                self.choose_target(f"Who should {ascii_art.color_name(self.name)} attack?")
+                self.choose_target(f"Who should {self.name} attack?")
+                return
 
             # Use Magic
             elif self.move == '2':
@@ -557,8 +558,7 @@ Armor:
 
                 if self.status_ail == 'silenced':
                     sounds.debuff.play()
-                    print(f"{self.name} is silenced and cannot use spells!")
-                    main.s_input("\nPress enter/return ")
+                    main.s_input(f"{self.name} is silenced! | Press enter/return ")
                     print(battle_options.format(self.name))
 
                     continue
@@ -568,25 +568,54 @@ Armor:
 
                     continue
 
+                return
+
             # Use Abilities
             elif self.move == '3':
-                pass  # TODO!!
+                do_loop = True
+                while do_loop:
+                    print('-'*save_load.divider_size)
+                    print(f"{self.class_.title()} Abilities ({self.name} has {self.ap}/{self.max_ap} AP remaining)")
+
+                    for num, ability in enumerate(abilities.a_abilities[self.class_]):
+                        print(f"      [{num + 1}] {ability.name} --> {ability.ap_cost} AP")
+
+                    while True:
+                        try:
+                            chosen = main.s_input('Input [#] (or type "back"): ').lower()
+                            self.c_ability = abilities.a_abilities[self.class_][int(chosen) - 1]
+
+                            if self.ap < self.c_ability.ap_cost:
+                                print('-'*save_load.divider_size)
+                                print(f"{self.name} doesn't have enough AP to cast {self.c_ability.name}!")
+                                input("\nPress enter/return ")
+
+                                break
+
+                        except (IndexError, ValueError):
+                            if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                                print('-'*save_load.divider_size)
+                                print(battle_options.format(self.name))
+                                do_loop = False
+                                break
+
+                        self.ap -= self.c_ability.ap_cost
+                        self.c_ability.before_ability(self)
+                        return
 
             # Use Items
             elif self.move == '4':
                 print('-'*save_load.divider_size)
 
                 if not inv_system.inventory['consumables']:
-                    print('Your party has no battle-allowed items - the consumable category is empty!')
-                    print("\nPress enter/return ")
+                    main.s_input('Your party has no battle items! | Press enter/return ')
                     print(battle_options.format(self.name))
 
                     continue
 
                 if self.status_ail == "muted":
                     sounds.debuff.play()
-                    print(f"{self.name} is muted and cannot access their inventory!")
-                    print("\nPress enter/return ")
+                    main.s_input(f"{self.name} is muted! | Press enter/return ")
                     print(battle_options.format(self.name))
 
                     continue
@@ -597,12 +626,11 @@ Armor:
                     continue
 
                 main.s_input('\nPress enter/return ')
+                return
 
             # Run
-            elif self.move != '5':
-                continue
-
-            return
+            elif self.move == '5':
+                return
 
     def choose_target(self, action_desc, ally=False, enemy=True):
         pcu_list = [x for x in [player,
@@ -716,7 +744,10 @@ class Monster(Unit):
         self.experience = 0
         self.items = 0
 
-        self.ability_vars = {}  # This dictionary will contain numerous variables that interact with abilties in battle
+        self.ability_vars = {
+            'poison_pow': 0,
+            'poison_dex': 0
+            }  # This dictionary will contain numerous variables that interact with abilties in battle
 
     def monst_level(self):
         self.lvl = main.party_info['current_tile'].m_level
@@ -745,38 +776,20 @@ class Monster(Unit):
                                             'paralyzed',
                                             'muted'] if x != target.status_ail])
 
-        print(f'The {self.monster_name} is attempting to make {target.name} {status}...')
+        print(f'The {self.monster_name} is attempting to make {self.m_target.name} {status}...')
         main.smart_sleep(0.75)
 
         # There's a 50% chance that the status spell will work
         if random.randint(0, 1) == 1:
             sounds.buff_spell.play()
-            print(f'{target.name} is now {status}!')
+            print(f'{self.m_target.name} is now {status}!')
             target.status_ail = status
 
         else:
             sounds.debuff.play()
-            print(f'The {self.monster_name} failed to make {target.name} {status}!')
+            print(f'The {self.monster_name} failed to make {self.m_target.name} {status}!')
 
         self.mp -= self.max_mp*0.1
-
-    def check_poison(self):
-        # Check whether the monster is poisoned or not.
-        if self.is_poisoned:
-            if random.randint(0, 9) == 0:  # 10% chance to recover per turn
-                self.is_poisoned = False
-                sounds.buff_spell.play()
-                print(f'The {self.monster_name} recovered from the poison!')
-
-                main.smart_sleep(0.5)
-
-            else:
-                poison_damage = math.floor(self.hp/6)
-                self.hp -= poison_damage
-                sounds.poison_damage.play()
-                print(f'The {self.monster_name} took poison damage! (-{poison_damage} HP)')
-
-                main.smart_sleep(0.5)
 
     def monst_name(self):
         m_type = {'Central Forest': ['Goblin Archer', 'Spriggan', 'Imp', 'Bat',
@@ -1066,25 +1079,37 @@ class Monster(Unit):
 
         self.class_ = 'ranger'
 
-    def magic_ai(self):
-        battle.turn_counter += 1
-
-        target = random.choice([x for x in [
-            player,
-            solou,
-            xoann,
-            chyme,
-            ran_af,
-            parsto,
-            adorine
-        ] if x.enabled and x.status_ail != 'dead'])
+    def base_turn(self):
+        self.get_target()
 
         print(f"-{self.monster_name}'s Turn-")
         print(ascii_art.monster_art[self.monster_name] % f"The {self.monster_name} is making a move!\n")
+        self.do_abilities()
+        self.battle_turn()
 
+    def do_abilities(self):
+        if self.status_ail == 'poisoned':
+            damage = math.ceil(self.ability_vars['poison_pow']*self.max_hp + self.ability_vars['poison_dex'])
+            self.hp -= damage
+            print(f"The {self.monster_name} took {damage} damage from poison!")
+            sounds.poison_damage.play()
+            main.smart_sleep(0.75)
+
+    def get_target(self):
+        self.m_target = random.choice([x for x in [
+                                     player,
+                                     solou,
+                                     xoann,
+                                     chyme,
+                                     ran_af,
+                                     parsto,
+                                     adorine
+                                     ] if x.enabled and x.status_ail != 'dead'])
+
+    def magic_ai(self):
         # 16.67% chance for the enemy to give a status ailment
-        if target.status_ail == "none" and random.randint(0, 5) == 0 and self.mp >= self.max_mp*0.1:
-            self.give_status(target)
+        if self.m_target.status_ail == "none" and random.randint(0, 5) == 0 and self.mp >= self.max_mp*0.1:
+            self.give_status(self.m_target)
 
         # Magic heal
         elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
@@ -1106,95 +1131,60 @@ class Monster(Unit):
 
             sounds.magic_attack.play()
 
-            print(f'The {self.monster_name} is preparing to cast a damaging spell on {target.name}!')
+            print(f'The {self.monster_name} is preparing to cast a spell on {self.m_target.name}!')
             main.smart_sleep(0.75)
 
-            dam_dealt = deal_damage(self, target, "magical")
-            if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
+            dam_dealt = deal_damage(self, self.m_target, "magical")
+            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.monster_name}'s spell succeeds and deals {dam_dealt} damage to {target.name}!")
+                print(f"The {self.monster_name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
 
-                target.hp -= dam_dealt
+                self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.monster_name}'s spell narrowly misses {target.name}!")
+                print(f"The {self.monster_name}'s spell narrowly misses {self.m_target.name}!")
 
             self.mp -= self.max_mp*0.15
 
         # Non-magic Attack
         else:
             sounds.aim_weapon.play()
-            print(f'The {self.monster_name} {self.attk_msg} {target.name}')
+            print(f'The {self.monster_name} {self.attk_msg} {self.m_target.name}')
 
             main.smart_sleep(0.75)
 
-            dam_dealt = deal_damage(self, target, "piercing")
-            if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
+            dam_dealt = deal_damage(self, self.m_target, "piercing")
+            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
+                print(f"The {self.monster_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
-                target.hp -= dam_dealt
+                self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.monster_name}'s attack narrowly misses {target.name}!")
-
-            self.check_poison()
-            self.mp = math.ceil(self.mp)
+                print(f"The {self.monster_name}'s attack narrowly misses {self.m_target.name}!")
 
     def ranged_ai(self):
-        battle.turn_counter += 1
-
-        target = random.choice([x for x in [
-            player,
-            solou,
-            xoann,
-            chyme,
-            ran_af,
-            parsto,
-            adorine
-        ] if x.enabled and x.status_ail != 'dead'])
-
-        print(f"-{self.monster_name}'s Turn-")
-        print(ascii_art.monster_art[self.monster_name] % f"The {self.monster_name} is making a move!\n")
-
         # At the moment, Ranged monsters are only capable of attacking
-        print(f'The {self.monster_name} {self.attk_msg} {target.name}!')
+        print(f'The {self.monster_name} {self.attk_msg} {self.m_target.name}!')
         sounds.aim_weapon.play()
 
         main.smart_sleep(0.75)
 
-        if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
-            dam_dealt = deal_damage(self, target, 'piercing')
+        if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
+            dam_dealt = deal_damage(self, self.m_target, 'piercing')
 
-            print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
+            print(f"The {self.monster_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
-            target.hp -= dam_dealt
+            self.m_target.hp -= dam_dealt
             sounds.enemy_hit.play()
 
         else:
             sounds.attack_miss.play()
-            print(f"The {self.monster_name}'s attack narrowly misses {target.name}!")
-
-            self.check_poison()
+            print(f"The {self.monster_name}'s attack narrowly misses {self.m_target.name}!")
 
     def melee_ai(self):
-        battle.turn_counter += 1
-
-        target = random.choice([x for x in [
-            player,
-            solou,
-            xoann,
-            chyme,
-            ran_af,
-            parsto,
-            adorine
-        ] if x.enabled and x.status_ail != 'dead'])
-
-        print(f"-{self.monster_name}'s Turn-")
-        print(ascii_art.monster_art[self.monster_name] % f"The {self.monster_name} is making a move!\n")
-
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
         if random.randint(0, 5) == 0 and not self.is_defending:
             self.is_defending = True
@@ -1224,21 +1214,20 @@ class Monster(Unit):
         # If the monster doesn't defend, then it will attack!
         if not self.is_defending:
             sounds.sword_slash.play()
-            print(f'The {self.monster_name} {self.attk_msg} {target.name}!')
+            print(f'The {self.monster_name} {self.attk_msg} {self.m_target.name}!')
             main.smart_sleep(0.75)
 
-            dam_dealt = deal_damage(self, target, "physical")
-            if random.randint(1, 512) in range(battle.temp_stats[target.name]['evad'], 512):
+            dam_dealt = deal_damage(self, self.m_target, "physical")
+            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.monster_name}'s attack lands, dealing {dam_dealt} damage to {target.name}!")
+                print(f"The {self.monster_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
-                target.hp -= dam_dealt
+                self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.monster_name}'s attack narrowly misses {target.name}!")
+                print(f"The {self.monster_name}'s attack narrowly misses {self.m_target.name}!")
 
-            self.check_poison()
 
 
 class Boss(Monster):
