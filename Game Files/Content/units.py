@@ -63,9 +63,8 @@ class Unit:
         self.spd = spd            # Speed
         self.evad = evad          # Evasion
         self.lvl = 1              # Level
-        self.element = 'none'     # Player's Element
-        self.status_ail = 'none'  # Current Status Ailment
 
+        self.status_ail = 'none'  # Current Status Ailment
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
 
@@ -75,18 +74,19 @@ class PlayableCharacter(Unit):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
         Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
-        self.class_ = class_      # PCU's Class
-        self.element = 'none'     # PCU's Element
-        self.status_ail = 'none'  # Current Status Ailment
-        self.enabled = enabled    # Whether the PCU has been recruited or not
-        self.exp = 0              # Experience
-        self.extra_sp = 0         # Extra Skill Points
-        self.ext_gol = 0          # Extra Gold Pieces
-        self.ext_exp = 0          # Extra Experience
-        self.req_xp = 3           # Required XP to level up
-        self.move = ''            # What move the character chose during battle
-        self.ap = 10              # The number of "Action Points" that the user has remaining
-        self.max_ap = 10          # The number of maximum Action Points the user can have at one time
+        self.class_ = class_       # PCU's Class
+        self.off_element = 'none'  # PCU's Element
+        self.def_element = 'none'  # PCU's Element
+        self.status_ail = 'none'   # Current Status Ailment
+        self.enabled = enabled     # Whether the PCU has been recruited or not
+        self.exp = 0               # Experience
+        self.extra_sp = 0          # Extra Skill Points
+        self.ext_gol = 0           # Extra Gold Pieces
+        self.ext_exp = 0           # Extra Experience
+        self.req_xp = 3            # Required XP to level up
+        self.move = ''             # What move the character chose during battle
+        self.ap = 10               # The number of "Action Points" that the user has remaining
+        self.max_ap = 10           # The number of maximum Action Points the user can have at one time
 
         self.target = Monster('', '', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
         self.c_ability = abilities.Ability('', '', '')  # The ability that the PCU is currently casting
@@ -443,14 +443,15 @@ Input [L]etter: """)
         fix_stats()
 
         print(f"""-{self.name}'s Stats-
-Level: {self.lvl} | Class: {self.class_.title()} | Element: {self.element.title()}
-HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Status Ailment: {self.status_ail.upper()}
+Level: {self.lvl} | Class: {self.class_.title()}
+HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Status Ailment: {self.status_ail.title()}
 Attack: {self.attk} | M. Attack: {self.m_attk} | P. Attack {self.p_attk}
 Defense: {self.dfns} | M. Defense: {self.m_dfns} | P. Defense {self.p_dfns}
 Speed: {self.spd} | Evasion: {self.evad}
+Def. Element: {self.def_element.title()} | Off. Element: {self.off_element.title()}
 INT: {self.attributes['int']} | WIS: {self.attributes['wis']} | STR: {self.attributes['str']} | CON: \
 {self.attributes['con']} | DEX: {self.attributes['dex']} | PER: {self.attributes['per']} | FOR: {self.attributes['for']}
-Experience Pts: {self.exp}/{self.req_xp} | Gold Pieces: {main.party_info['gp']}
+XP: {self.exp}/{self.req_xp} | GP: {main.party_info['gp']}
 
 -Equipped Items-
 Weapon: {inv_system.equipped[inv_name]['weapon']}
@@ -467,6 +468,11 @@ Armor:
         player_weapon = inv_system.equipped[inv_name]['weapon']
 
         print(f"-{self.name}'s Turn-")
+
+        # PCUs regain 1 Action Point per turn. This regeneration is paused on turns where
+        # the player uses an ability.
+        if self.move != '3':
+            self.ap += 1
 
         # Check to see if the PCU is poisoned
         if self.status_ail == 'poisoned' and monster.hp > 0:
@@ -733,15 +739,19 @@ Armor:
 
 
 class Monster(Unit):
-    # All monsters use this class. Bosses use a sub-class called
-    # "Boss" (located in bosses.py) which inherits from this.
+    # All monsters use this class. Bosses use a sub-class called "Boss" which inherits from this.
+
     def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
-        self.monster_name = ''  # The name of the monsters species (so a Fast Goblin's monster_name would be Goblin)
+        Unit.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.m_name = ''  # The name of the monsters species (so a Fast Goblin's monster_name would be Goblin)
         self.status = ''        # The status effect that will be applied to the player if RNGsus wills it
         self.is_poisoned = False
         self.is_defending = False
         self.class_ = None
+
+        self.off_element = 'none'
+        self.def_element = 'none'
 
         self.gold = 0
         self.experience = 0
@@ -779,7 +789,7 @@ class Monster(Unit):
                                             'paralyzed',
                                             'muted'] if x != target.status_ail])
 
-        print(f'The {self.monster_name} is attempting to make {self.m_target.name} {status}...')
+        print(f'The {self.m_name} is attempting to make {self.m_target.name} {status}...')
         main.smart_sleep(0.75)
 
         # There's a 50% chance that the status spell will work
@@ -790,7 +800,7 @@ class Monster(Unit):
 
         else:
             sounds.debuff.play()
-            print(f'The {self.monster_name} failed to make {self.m_target.name} {status}!')
+            print(f'The {self.m_name} failed to make {self.m_target.name} {status}!')
 
         self.mp -= self.max_mp*0.1
 
@@ -872,7 +882,7 @@ class Monster(Unit):
             self.attk_msg = "begins calculating the hell out of"
 
         # Prepare to add the modifier onto the name
-        self.monster_name = copy.copy(self.name)
+        self.m_name = copy.copy(self.name)
 
         modifiers = ['Slow', 'Fast', 'Powerful', 'Ineffective', 'Nimble', 'Clumsy', 'Armored', 'Broken', 'Mystic',
                      'Foolish', 'Strong', 'Weak', 'Observant', 'Obtuse']
@@ -947,48 +957,57 @@ class Monster(Unit):
 
             exec(f"{stat} = math.ceil({stat})")  # Enemy stats must be integers
 
-        if self.monster_name == "Calculator":
-            self.element = 'grass'
+        if self.m_name == "Calculator":
+            self.def_element = 'grass'
+            self.off_element = 'grass'
             self.status = 'fucked'
             self.status_msg = "was imbued with bullshit, causing severe fuckage!"
 
         elif main.party_info['reg'] == 'Glacian Plains':
-            self.element = 'ice'
+            self.def_element = 'ice'
+            self.off_element = 'ice'
             self.status = 'frostbitten'
             self.status_msg = "was imbued with frost, causing painful frostbite!"
 
         elif main.party_info['reg'] == 'Arcadian Desert':
-            self.element = 'fire'
+            self.def_element = 'fire'
+            self.off_element = 'fire'
             self.status = 'blinded'
             self.status_msg = "brought upon a sandstorm, causing temporary blindness!"
 
         elif main.party_info['reg'] == 'Terrius Mt. Range':
-            self.element = 'earth'
+            self.def_element = 'earth'
+            self.off_element = 'earth'
             self.status = 'paralyzed'
             self.status_msg = "hit a nerve ending, causing temporary paralysis!"
 
         elif main.party_info['reg'] == 'Harconian Coastline':
-            self.element = 'water'
+            self.def_element = 'water'
+            self.off_element = 'water'
             self.status = 'muted'
             self.status_msg = "caused organizational issues, leading to impaired item usage!"
 
         elif main.party_info['reg'] == 'Central Forest':
-            self.element = 'electric'
+            self.def_element = 'electric'
+            self.off_element = 'electric'
             self.status = 'weakened'
             self.status_msg = "drained its target's energy, causing temporary weakness!"
 
         elif main.party_info['reg'] == 'Bogthorn Marsh':
-            self.element = 'grass'
+            self.def_element = 'grass'
+            self.off_element = 'grass'
             self.status = 'poisoned'
             self.status_msg = "was imbued with deadly toxins that will slowly drain health!"
 
         elif main.party_info['reg'] == 'Overshire Graveyard':
-            self.element = 'death'
+            self.def_element = 'death'
+            self.off_element = 'death'
             self.status = 'poisoned'
             self.status_msg = "poisoned their target using noxious fumes!"
 
         elif main.party_info['reg'] == 'Aethus':
-            self.element = 'wind'
+            self.def_element = 'wind'
+            self.off_element = 'wind'
             self.status = 'blinded'
             self.status_msg = "brought upon the winds, dampening their target's vision!"
 
@@ -996,7 +1015,7 @@ class Monster(Unit):
 
         # Give the monster a set of items to drop if RNGsus wills it
         if random.randint(0, 4) == 0:  # 20% chance
-            self.items = random.choice(items.monster_drop_list[self.monster_name])
+            self.items = random.choice(items.monster_drop_list[self.m_name])
 
     def melee_stats(self):
         # Set stats for melee-class monsters
@@ -1085,8 +1104,8 @@ class Monster(Unit):
     def base_turn(self):
         self.get_target()
 
-        print(f"-{self.monster_name}'s Turn-")
-        print(ascii_art.monster_art[self.monster_name] % f"The {self.monster_name} is making a move!\n")
+        print(f"-{self.m_name}'s Turn-")
+        print(ascii_art.monster_art[self.m_name] % f"The {self.m_name} is making a move!\n")
         self.do_abilities()
         self.battle_turn()
 
@@ -1094,7 +1113,7 @@ class Monster(Unit):
         if self.status_ail == 'poisoned':
             damage = math.ceil(self.ability_vars['poison_pow']*self.max_hp + self.ability_vars['poison_dex'])
             self.hp -= damage
-            print(f"The {self.monster_name} took {damage} damage from poison!")
+            print(f"The {self.m_name} took {damage} damage from poison!")
             sounds.poison_damage.play()
             main.smart_sleep(0.75)
 
@@ -1116,9 +1135,9 @@ class Monster(Unit):
 
         # Magic heal
         elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
-            print(f'The {self.monster_name} is casting a healing spell on itself...')
+            print(f'The {self.m_name} is casting a healing spell on itself...')
             main.smart_sleep(0.75)
-            print(f'The {self.monster_name} heals itself for {max([self.hp*0.2, 20])} HP!')
+            print(f'The {self.m_name} heals itself for {max([self.hp*0.2, 20])} HP!')
 
             sounds.magic_healing.play()
 
@@ -1134,43 +1153,43 @@ class Monster(Unit):
 
             sounds.magic_attack.play()
 
-            print(f'The {self.monster_name} is preparing to cast a spell on {self.m_target.name}!')
+            print(f'The {self.m_name} is preparing to cast a spell on {self.m_target.name}!')
             main.smart_sleep(0.75)
 
             dam_dealt = deal_damage(self, self.m_target, "magical")
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.monster_name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
+                print(f"The {self.m_name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
 
                 self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.monster_name}'s spell narrowly misses {self.m_target.name}!")
+                print(f"The {self.m_name}'s spell narrowly misses {self.m_target.name}!")
 
             self.mp -= self.max_mp*0.15
 
         # Non-magic Attack
         else:
             sounds.aim_weapon.play()
-            print(f'The {self.monster_name} {self.attk_msg} {self.m_target.name}')
+            print(f'The {self.m_name} {self.attk_msg} {self.m_target.name}')
 
             main.smart_sleep(0.75)
 
             dam_dealt = deal_damage(self, self.m_target, "piercing")
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.monster_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+                print(f"The {self.m_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
                 self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.monster_name}'s attack narrowly misses {self.m_target.name}!")
+                print(f"The {self.m_name}'s attack narrowly misses {self.m_target.name}!")
 
     def ranged_ai(self):
         # At the moment, Ranged monsters are only capable of attacking
-        print(f'The {self.monster_name} {self.attk_msg} {self.m_target.name}!')
+        print(f'The {self.m_name} {self.attk_msg} {self.m_target.name}!')
         sounds.aim_weapon.play()
 
         main.smart_sleep(0.75)
@@ -1178,14 +1197,14 @@ class Monster(Unit):
         if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
             dam_dealt = deal_damage(self, self.m_target, 'piercing')
 
-            print(f"The {self.monster_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+            print(f"The {self.m_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
             self.m_target.hp -= dam_dealt
             sounds.enemy_hit.play()
 
         else:
             sounds.attack_miss.play()
-            print(f"The {self.monster_name}'s attack narrowly misses {self.m_target.name}!")
+            print(f"The {self.m_name}'s attack narrowly misses {self.m_target.name}!")
 
     def melee_ai(self):
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
@@ -1201,7 +1220,7 @@ class Monster(Unit):
             self.p_dfns = math.ceil(self.p_dfns)
             self.m_dfns = math.ceil(self.m_dfns)
 
-            print(f"The {self.monster_name} defends itself from attacks for one turn!")
+            print(f"The {self.m_name} defends itself from attacks for one turn!")
 
         # Set defense back to normal if the monster defended last turn
         elif self.is_defending:
@@ -1217,35 +1236,35 @@ class Monster(Unit):
         # If the monster doesn't defend, then it will attack!
         if not self.is_defending:
             sounds.sword_slash.play()
-            print(f'The {self.monster_name} {self.attk_msg} {self.m_target.name}!')
+            print(f'The {self.m_name} {self.attk_msg} {self.m_target.name}!')
             main.smart_sleep(0.75)
 
             dam_dealt = deal_damage(self, self.m_target, "physical")
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.monster_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+                print(f"The {self.m_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
                 self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.monster_name}'s attack narrowly misses {self.m_target.name}!")
-
+                print(f"The {self.m_name}'s attack narrowly misses {self.m_target.name}!")
 
 
 class Boss(Monster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad, lvl, b_items, gold,
-                 experience, attk_msg, active=True, element='none'):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, lvl, b_items, gold,
+                 experience, attk_msg, active=True, off_element='none', def_element='none'):
+        Monster.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
-        Monster.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+        self.off_element = off_element
+        self.def_element = def_element
         self.items = b_items
         self.active = active
         self.lvl = lvl
-        self.element = element
         self.experience = experience
         self.gold = gold
         self.attk_msg = attk_msg
-        self.monster_name = copy.copy(self.name)
+        self.m_name = copy.copy(self.name)
 
     def max_stats(self):
         self.hp = copy.copy(self.max_hp)
@@ -1329,7 +1348,7 @@ menac_phantom = Boss('Menacing Phantom',
                      None,    # Drops no items
                      75, 75,  # Gives 75 XP and 75 GP
                      "calls upon its ethereal power and casts a hex on",
-                     active=False, element='dark')
+                     off_element='dark', def_element='dark', active=False)
 
 menac_phantom.battle_turn = menac_phantom.magic_ai
 menac_phantom.upon_defeating = menacphan_ud
@@ -1376,7 +1395,7 @@ cursed_spect = Boss('Cursed Spectre',
                     None,                # Drops no items
                     250, 250,            # Gives 250 XP and 250 GP
                     "calls upon its ethereal power and casts a hex on",
-                    element='dark', active=False)
+                    off_element='dark', def_element='dark', active=False)
 
 cursed_spect.battle_turn = cursed_spect.magic_ai
 cursed_spect.upon_defeating = cursspect_ud
@@ -1392,7 +1411,7 @@ giant_ent = Boss('Giant Ent',
                  None,            # Drops no items
                  250, 250,        # Gives 250 XP and 250 GP
                  "slowly lumbers over and whacks",
-                 element='grass', active=True)
+                 off_element='grass', def_element='grass', active=True)
 
 giant_ent.battle_turn = giant_ent.melee_ai
 
@@ -1532,8 +1551,8 @@ def eval_element(attacker, target, damage):
     # All other interactions are neutral
 
     # Set everything to be lowercase, just incase
-    a_elem = attacker.element.lower()
-    t_elem = target.element.lower()
+    a_elem = attacker.off_element.lower()
+    t_elem = target.def_element.lower()
 
     # element_matchup[key][0] is the element that key is weak to
     # element_matchup[key][1] is the element that key is resistant to
@@ -1655,7 +1674,6 @@ def create_player():
 
     player.hp = copy.copy(player.max_hp)
     player.mp = copy.copy(player.max_mp)
-    print('-'*save_load.divider_size)
 
     save_load.save_game(verbose=False)
 
@@ -1668,8 +1686,11 @@ def spawn_monster():
 
 
 def fix_stats():
-    # Makes sure that that no-one ever has 1) stats that are above their maximum, 2) stats that are negative,
-    # and 3) stats that are not integers.
+    # Makes sure that that no-one ever has stats that would cause the game to malfunction.
+    # e.g. no negative HP/MP/AP, no non-integer HP/MP/AP, etc.
+    # This function also acts as a hard-cap for evasion, which is limited to a max of 256
+    # (50% dodge chance). This is to prevent people from min-maxing their evasion to cheese
+    # their way through the game, and also prevents monsters from being invincible.
 
     global player
     global solou
@@ -1680,93 +1701,58 @@ def fix_stats():
     global adorine
     global monster
 
-    if player.hp < 0:
-        player.hp = 0
-    if solou.hp < 0:
-        solou.hp = 0
-    if xoann.hp < 0:
-        xoann.hp = 0
-    if chyme.hp < 0:
-        chyme.hp = 0
-    if parsto.hp < 0:
-        parsto.hp = 0
-    if ran_af.hp < 0:
-        ran_af.hp = 0
-    if adorine.hp < 0:
-        adorine.hp = 0
+    player.hp, player.mp, player.ap = max(0, player.hp), max(0, player.mp), max(0, player.ap)
+    solou.hp, solou.mp, solou.ap = max(0, solou.hp), max(0, solou.mp), max(0, solou.ap)
+    xoann.hp, xoann.mp, xoann.ap = max(0, xoann.hp), max(0, xoann.mp), max(0, xoann.ap)
+    chyme.hp, chyme.mp, chyme.ap = max(0, chyme.hp), max(0, chyme.mp), max(0, chyme.ap)
+    parsto.hp, parsto.mp, parsto.ap = max(0, parsto.hp), max(0, parsto.mp), max(0, parsto.ap)
+    ran_af.hp, ran_af.mp, ran_af.ap = max(0, ran_af.hp), max(0, ran_af.mp), max(0, ran_af.ap)
+    adorine.hp, adorine.mp, adorine.ap = max(0, adorine.hp), max(0, adorine.mp), max(0, adorine.ap)
 
-    if player.mp < 0:
-        player.mp = 0
-    if solou.mp < 0:
-        solou.mp = 0
-    if xoann.mp < 0:
-        xoann.mp = 0
-    if chyme.mp < 0:
-        chyme.mp = 0
-    if parsto.mp < 0:
-        parsto.mp = 0
-    if ran_af.mp < 0:
-        ran_af.mp = 0
-    if adorine.mp < 0:
-        adorine.mp = 0
+    player.hp, player.mp, player.ap = \
+        min(player.max_hp, player.hp), \
+        min(player.max_mp, player.mp), \
+        min(player.max_ap, player.ap)
+    solou.hp, solou.mp, solou.ap = \
+        min(solou.max_hp, solou.hp), \
+        min(solou.max_mp, solou.mp), \
+        min(solou.max_ap, solou.ap)
+    xoann.hp, xoann.mp, xoann.ap = \
+        min(xoann.max_hp, xoann.hp), \
+        min(xoann.max_mp, xoann.mp), \
+        min(xoann.max_ap, xoann.ap)
+    chyme.hp, chyme.mp, chyme.ap = \
+        min(chyme.max_hp, chyme.hp), \
+        min(chyme.max_mp, chyme.mp), \
+        min(chyme.max_ap, chyme.ap)
+    parsto.hp, parsto.mp, parsto.ap = \
+        min(parsto.max_hp, parsto.hp), \
+        min(parsto.max_mp, parsto.mp), \
+        min(parsto.max_ap, parsto.ap)
+    ran_af.hp, ran_af.mp, ran_af.ap = \
+        min(ran_af.max_hp, ran_af.hp), \
+        min(ran_af.max_mp, ran_af.mp), \
+        min(ran_af.max_ap, ran_af.ap)
+    adorine.hp, adorine.mp, adorine.ap = \
+        min(adorine.max_hp, adorine.hp), \
+        min(adorine.max_mp, adorine.mp), \
+        min(adorine.max_ap, adorine.ap)
 
-    if player.hp > player.max_hp:
-        player.hp -= (player.hp - player.max_hp)
-    if solou.hp > solou.max_hp:
-        solou.hp -= (solou.hp - solou.max_hp)
-    if xoann.hp > xoann.max_hp:
-        xoann.hp -= (xoann.hp - xoann.max_hp)
-    if chyme.hp > chyme.max_hp:
-        chyme.hp -= (chyme.hp - chyme.max_hp)
-    if parsto.hp > parsto.max_hp:
-        parsto.hp -= (parsto.hp - parsto.max_hp)
-    if ran_af.hp > ran_af.max_hp:
-        ran_af.hp -= (ran_af.hp - ran_af.max_hp)
-    if adorine.hp > adorine.max_hp:
-        adorine.hp -= (adorine.hp - adorine.max_hp)
+    player.hp, player.mp, player.ap = math.ceil(player.hp), math.ceil(player.mp), math.ceil(player.ap)
+    solou.hp, solou.mp, solou.ap = math.ceil(solou.hp), math.ceil(solou.mp), math.ceil(solou.ap)
+    parsto.hp, parsto.mp, parsto.ap = math.ceil(parsto.hp), math.ceil(parsto.mp), math.ceil(parsto.ap)
+    xoann.hp, xoann.mp, xoann.ap = math.ceil(xoann.hp), math.ceil(xoann.mp), math.ceil(xoann.ap)
+    chyme.hp, chyme.mp, chyme.ap = math.ceil(chyme.hp), math.ceil(chyme.mp), math.ceil(chyme.ap)
+    ran_af.hp, ran_af.mp, ran_af.ap = math.ceil(ran_af.hp), math.ceil(ran_af.mp), math.ceil(ran_af.ap)
+    adorine.hp, adorine.mp, adorine.ap = math.ceil(adorine.hp), math.ceil(adorine.mp), math.ceil(adorine.ap)
 
-    if player.mp > player.max_mp:
-        player.mp -= (player.mp - player.max_mp)
-    if solou.mp > solou.max_mp:
-        solou.mp -= (solou.mp - solou.max_mp)
-    if xoann.mp > xoann.max_mp:
-        xoann.mp -= (xoann.mp - xoann.max_mp)
-    if chyme.mp > chyme.max_mp:
-        chyme.mp -= (chyme.mp - chyme.max_mp)
-    if parsto.mp > parsto.max_mp:
-        parsto.mp -= (parsto.mp - parsto.max_mp)
-    if ran_af.mp > ran_af.max_mp:
-        ran_af.mp -= (ran_af.mp - ran_af.max_mp)
-    if adorine.mp > adorine.max_mp:
-        adorine.mp -= (adorine.mp - adorine.max_mp)
-
-    player.hp = math.ceil(player.hp)
-    player.mp = math.ceil(player.mp)
-    parsto.hp = math.ceil(parsto.hp)
-    parsto.mp = math.ceil(parsto.mp)
-    adorine.hp = math.ceil(adorine.hp)
-    adorine.mp = math.ceil(adorine.mp)
-    ran_af.hp = math.ceil(ran_af.hp)
-    ran_af.mp = math.ceil(ran_af.mp)
-    xoann.hp = math.ceil(xoann.hp)
-    xoann.mp = math.ceil(xoann.mp)
-    solou.hp = math.ceil(solou.hp)
-    solou.mp = math.ceil(solou.mp)
-    chyme.hp = math.ceil(chyme.hp)
-    chyme.mp = math.ceil(chyme.mp)
-
-    if adorine.evad > 256:
-        adorine.evad = 256
-    if ran_af.evad > 256:
-        ran_af.evad = 256
-    if solou.evad > 256:
-        solou.evad = 256
-    if xoann.evad > 256:
-        xoann.evad = 256
-    if chyme.evad > 256:
-        chyme.evad = 256
-    if parsto.evad > 256:
-        parsto.evad = 256
+    player.evad = min(256, player.evad)
+    solou.evad = min(256, solou.evad)
+    xoann.evad = min(256, xoann.evad)
+    chyme.evad = min(256, chyme.evad)
+    parsto.evad = min(256, parsto.evad)
+    ran_af.evad = min(256, ran_af.evad)
+    adorine.evad = min(256, adorine.evad)
 
     if player.hp > 0 and player.status_ail == 'dead':
         player.status_ail = 'none'
@@ -1784,53 +1770,21 @@ def fix_stats():
         adorine.status_ail = 'none'
 
     try:
-        monster.hp = math.ceil(monster.hp)
-        monster.mp = math.ceil(monster.mp)
+        monster.hp, monster.mp = max(0, monster.hp), max(0, monster.mp)
+        monster_2.hp, monster_2.mp = max(0, monster_2.hp), max(0, monster_2.mp)
+        monster_3.hp, monster_3.mp = max(0, monster_3.hp), max(0, monster_3.mp)
 
-        if monster.hp < 0:
-            monster.hp = 0
-        if monster.mp < 0:
-            monster.mp = 0
+        monster.hp, monster.mp = min(monster.max_hp, monster.hp), min(monster.max_mp, monster.mp)
+        monster_2.hp, monster_2.mp = min(monster_2.max_hp, monster_2.hp), min(monster_2.max_mp, monster_2.mp)
+        monster_3.hp, monster_3.mp = min(monster_3.max_hp, monster_3.hp), min(monster_3.max_mp, monster_3.mp)
 
-        if monster.hp > monster.max_hp:
-            monster.hp -= (monster.hp - monster.max_hp)
-        if monster.mp > monster.max_mp:
-            monster.mp -= (monster.mp - monster.max_mp)
+        monster.hp, monster.mp = math.ceil(monster.hp), math.ceil(monster.mp)
+        monster_2.hp, monster_2.mp = math.ceil(monster_2.hp), math.ceil(monster_2.mp)
+        monster_3.hp, monster_3.mp = math.ceil(monster_3.hp), math.ceil(monster_3.mp)
 
-        if monster.evad > 256:
-            monster.evad = 256
-
-        monster_2.hp = math.ceil(monster_2.hp)
-        monster_2.mp = math.ceil(monster_2.mp)
-
-        if monster_2.hp < 0:
-            monster_2.hp = 0
-        if monster_2.mp < 0:
-            monster_2.mp = 0
-
-        if monster_2.hp > monster_2.max_hp:
-            monster_2.hp -= (monster_2.hp - monster_2.max_hp)
-        if monster_2.mp > monster_2.max_mp:
-            monster_2.mp -= (monster_2.mp - monster_2.max_mp)
-
-        if monster_2.evad > 256:
-            monster_2.evad = 256
-
-        monster_3.hp = math.ceil(monster_3.hp)
-        monster_3.mp = math.ceil(monster_3.mp)
-
-        if monster_3.hp < 0:
-            monster_3.hp = 0
-        if monster_3.mp < 0:
-            monster_3.mp = 0
-
-        if monster_3.hp > monster_3.max_hp:
-            monster_3.hp -= (monster_3.hp - monster_3.max_hp)
-        if monster_3.mp > monster_3.max_mp:
-            monster_3.mp -= (monster_3.mp - monster_3.max_mp)
-
-        if monster_3.evad > 256:
-            monster_3.evad = 256
+        monster.evad = min(256, monster.evad)
+        monster_2.evad = min(256, monster_2.evad)
+        monster_3.evad = min(256, monster_3.evad)
 
     except (AttributeError, TypeError):
         if not any([isinstance(monster, str), isinstance(monster_2, str), isinstance(monster_3, str)]):

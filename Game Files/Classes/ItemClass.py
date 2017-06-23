@@ -110,13 +110,13 @@ class StatusPotion(Item):
 class Weapon(Item):
     # Items that increase your damage by a percentage.
     def __init__(self, name, desc, buy, sell, power, type_, class_, ascart,
-                 item_id, element='none', cat='weapons', imp=False):
+                 item_id, off_element='none', cat='weapons', imp=False):
         Item.__init__(self, name, desc, buy, sell, item_id, imp)
         self.ascart = ascart
         self.power = power
         self.type_ = type_
         self.class_ = class_
-        self.element = element
+        self.off_element = off_element
         self.cat = cat
 
         if self.class_ != 'none':
@@ -225,10 +225,10 @@ class Accessory(Item):
 
 class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
-    def __init__(self, name, desc, buy, sell, element, item_id, ascart='Amulet', acc_type='elemental',
+    def __init__(self, name, desc, buy, sell, def_element, item_id, ascart='Amulet', acc_type='elemental',
                  cat='access', imp=False):
         Accessory.__init__(self, name, desc, buy, sell, item_id, ascart, cat, imp)
-        self.element = element
+        self.def_element = def_element
         self.acc_type = acc_type
 
     def __str__(self):
@@ -243,10 +243,10 @@ class ElementAccessory(Accessory):
 
         inv_system.inventory['access'].remove(self)
         inv_system.equipped[user.name if user != units.player else 'player']['access'] = spam
-        user.element = self.element
+        user.def_element = self.def_element
 
         print('-'*save_load.divider_size)
-        print(f'{user.name} equips the {self.name}. Their element is now set to {self.element}.')
+        print(f'{user.name} equips the {self.name}. Their element is now set to {self.def_element}.')
         main.s_input("\nPress enter/return ")
 
 

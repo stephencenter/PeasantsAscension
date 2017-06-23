@@ -201,6 +201,7 @@ def load_game():  # Check for save files and load the game if they're found
 
         print('-'*divider_size)
         units.create_player()
+
         return
 
     save_files = {}

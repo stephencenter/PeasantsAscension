@@ -158,7 +158,7 @@ def battle_system(is_boss=False, ambush=False):
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
-        print(ascii_art.monster_art[units.monster.monster_name] % '')
+        print(ascii_art.monster_art[units.monster.m_name] % '')
 
         if len(m_list) == 3:
             print(f'The legendary {units.monster.name} and 2 other monsters have awoken!')
@@ -172,7 +172,7 @@ def battle_system(is_boss=False, ambush=False):
         main.smart_sleep(0.35)
 
     else:
-        print(ascii_art.monster_art[units.monster.monster_name] % '')
+        print(ascii_art.monster_art[units.monster.m_name] % '')
 
         if any(map(units.monster.name.startswith, vowels)):  # Remember to use proper grammar!
             an_a = 'An'

@@ -439,9 +439,9 @@ def manage_equipped_3(key, selected, p_equip, target):
 
                 elif isinstance(selected, ItemClass.Accessory):
                     if isinstance(selected, ItemClass.ElementAccessory):
-                        target.element = 'none'
+                        target.def_element = 'none'
 
-                        print(f'{target.name} is no longer imbued with the {selected.element} element.')
+                        print(f'{target.name} is no longer imbued with the {selected.def_element} element.')
                         main.s_input("\nPress enter/return ")
 
                     inventory[selected.cat].append(p_equip[key])

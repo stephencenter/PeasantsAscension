@@ -6,8 +6,6 @@ import battle
 import units
 import sounds
 import random
-import ItemClass
-import inv_system
 
 if __name__ == "__main__":
     sys.exit()
@@ -198,7 +196,7 @@ def use_inject_poison(user):
     print(f"{user.name} is preparing a poison with power {poison_power}...")
     sounds.aim_weapon.play()
     main.smart_sleep(0.75)
-    print(f"{user.name} injects the poison into the {user.target.monster_name}!")
+    print(f"{user.name} injects the poison into the {user.target.m_name}!")
     sounds.buff_spell.play()
     pass
 
@@ -252,16 +250,16 @@ def before_disarming_blow(user):
 
 
 def use_disarming_blow(user):
-    print(f"{user.name} is preparing to disarm the {user.target.monster_name}")
+    print(f"{user.name} is preparing to disarm the {user.target.m_name}")
     sounds.aim_weapon.play()
     main.smart_sleep(0.75)
 
     if user.target.ability_vars['disarmed']:
         sounds.debuff.play()
-        print(f"But the {user.target.monster_name} is already disarmed!")
+        print(f"But the {user.target.m_name} is already disarmed!")
         return
 
-    print(f"The {user.target.monster_name} drops their weapon, lowering their attack!")
+    print(f"The {user.target.m_name} drops their weapon, lowering their attack!")
     sounds.buff_spell.play()
 
     user.target.ability_vars['disarmed'] = True
@@ -376,22 +374,22 @@ def before_scout(user):
 
 
 def use_scout(user):
-    monster_weakness = {'fire': 'Water',
-                        'water': 'Electric',
-                        'electric': 'Earth',
-                        'earth': 'Wind',
-                        'wind': 'Grass',
-                        'grass': 'Ice',
-                        'ice': 'Fire',
-                        'none': 'None',
-                        'light': 'Dark',
-                        'dark': 'Light'}[user.target.element]
+    m_w = {'fire': 'Water',
+           'water': 'Electric',
+           'electric': 'Earth',
+           'earth': 'Wind',
+           'wind': 'Grass',
+           'grass': 'Ice',
+           'ice': 'Fire',
+           'none': 'None',
+           'light': 'Dark',
+           'dark': 'Light'}[user.target.def_element]
 
     print(f"""{user.target.name.upper()}'s STATS:
 Attack: {user.target.attk} | M. Attack: {user.target.m_attk} | P. Attack: {user.target.p_attk}
 Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {user.target.p_dfns}
 Evasion: {user.target.evad} | Speed: {user.target.spd,}
-Element: {user.target.element.title()} | Elemental Weakness: {monster_weakness}""")
+Def. Element: {user.target.def_element.title()} | Off. Element: {user.target.off_element.title()} | Weakness: {m_w}""")
 
 
 scout = Ability("Scout", f"""\
@@ -449,24 +447,50 @@ def use_tip_the_scales(user):
 tip_the_scales = Ability("Tip the Scales", f"""\
 The user tips the scales in their favor, causing them and their allies to be
 healed for {ascii_art.colorize('[5% of Maximum HP + Wisdom]', 'yellow')} HP each, while dealing the same in
-magical damage to each member of the enemy team.""", 5)
+magical damage to each member of the enemy team.""", 3)
 tip_the_scales.before_ability = before_tip_the_scales
 tip_the_scales.use_ability = use_tip_the_scales
 
 
 def before_unholy_binds(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Unholy Binds on?", ally=True, enemy=True)
 
 
 def use_unholy_binds(user):
-    pass
+    if isinstance(user.target, units.PlayableCharacter):
+        print(f"{user.target.name} is preparing to cast Unholy Binds on {user.target.name}!")
 
+    else:
+        print(f"{user.target.name} is preparing to cast Unholy Binds on the {user.target.m_name}!")
+
+    main.smart_sleep(0.75)
+
+    chance = min(10 + user.attributes['wis'], 50)/10
+
+    if all([user.target.def_element == 'dark',
+            random.randint(1, 10) < chance,
+            not isinstance(user.target, units.Boss),
+            not isinstance(user.target, units.PlayableCharacter)]):
+        user.target.status_ail = 'dead'
+        user.target.hp = 0
+        print(f"The {user.target.m_name} succumed to the darkness!")
+
+        return
+
+    user.target.def_element = 'dark'
+
+    if isinstance(user.target, units.PlayableCharacter):
+        print(f"{user.target.name} had their defensive element set to Darkness!")
+
+    else:
+        print(f"The {user.target.m_name} had their defensive element set to Darkness!")
 
 unholy_binds = Ability("Unholy Binds", f"""\
-Sets a target enemy's defensive element to Darkness, causing Light spells to
-deal more damage to it. If the target already has Darkness as their element,
-then Unholy Binds has a {ascii_art.colorize('[10 + Wisdom]', 'yellow')}% chance of instantly killing the target,
-with a maximum of 50%. The instant-kill effect does not work on Bosses.""", 5)
+Sets a target's defensive element to Darkness, causing Light and Dark spells
+to do more/less damage, respectively. If the target is an enemy, and already
+has Darkness as their element, then Unholy Binds has a {ascii_art.colorize('[10 + Wisdom]', 'yellow')}% chance
+of instantly killing the target, with a maximum of 50%. The instant-kill
+effect does not work on Bosses.""", 2)
 unholy_binds.before_ability = before_unholy_binds
 unholy_binds.use_ability = use_unholy_binds
 
@@ -481,10 +505,10 @@ def use_judgement(user):
 
 judgement = Ability("Judgement", f"""\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the
-chosen target was affected by Unholy Binds when this spell was cast, then
-the 7 turns will be lowered by {ascii_art.colorize('[15 + Wisdom]', 'yellow')}%, with a minimum of 2 turns.
-When cast on bosses, the turn count is always 10 turns. Re-casting this spell
-has no effect, unless re-casting it would cause the timer to be lower.""", 5)
+target's defensive element is Darkness, then the 7 turns will be lowered by
+{ascii_art.colorize('[15 + Wisdom]', 'yellow')}%, with a minimum of 2 turns. When cast on bosses, the turn
+count is always 10 turns. Re-casting this spell has no effect, unless
+re-casting it would cause the timer to be lower.""", 4)
 judgement.before_ability = before_judgement
 judgement.use_ability = use_judgement
 
@@ -499,9 +523,9 @@ def use_canonize(user):
 
 canonize = Ability("Canonize", f"""\
 Declares the target ally a holy figure, converting their defensive element to
-Light and causing all enemy light and dark magic casted on them to heal for
-{ascii_art.colorize('[25 + Wisdom]', 'yellow')}% HP instead of damaging. Lasts 2 turns. Does not stack with
- multiple uses - repeat uses only refresh the buff duration.""", 5)
+Light and causing all healing spells casted on them to heal for an additional
+{ascii_art.colorize('[25 + Wisdom]', 'yellow')}% HP. Lasts 2 turns. Does not stack with multiple uses - repeat
+uses only refresh the buff duration.""", 3)
 canonize.before_ability = before_canonize
 canonize.use_ability = use_canonize
 

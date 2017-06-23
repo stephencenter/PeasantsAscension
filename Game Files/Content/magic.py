@@ -112,10 +112,10 @@ class Damaging(Spell):
     # Damaging spells are spells that deal damage to the enemy during battle.
     # Just like normal attacks, they have a chance to miss based on
     # the enemy's evade stat.
-    def __init__(self, name, desc, mana, req_lvl, damage, element, class_, spell_id):
+    def __init__(self, name, desc, mana, req_lvl, damage, off_element, class_, spell_id):
         Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
         self.damage = damage
-        self.element = element
+        self.off_element = off_element
 
     def __str__(self):
         return self.name
@@ -135,11 +135,11 @@ class Damaging(Spell):
         if random.randint(1, 512) in range(target.evad, 512):
             sounds.enemy_hit.play()
             target.hp -= dam_dealt
-            print(f'Using the power of {self.name}, {user.name} deals {dam_dealt} damage to the {target.monster_name}!')
+            print(f'Using the power of {self.name}, {user.name} deals {dam_dealt} damage to the {target.m_name}!')
 
         else:
             sounds.attack_miss.play()
-            print(f"The {target.monster_name} narrowly dodges {user.name}'s spell!")
+            print(f"The {target.m_name} narrowly dodges {user.name}'s spell!")
 
 
 class Buff(Spell):
