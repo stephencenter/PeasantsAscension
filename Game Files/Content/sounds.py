@@ -76,6 +76,9 @@ buff_spell = Sound('Content/Sound FX/buff_spell.wav')
 # Ally Death -- Played when a member of your party dies
 ally_death = Sound('Content/Sound FX/ally_death.wav')
 
+# Enemy Death -- Played when a member of the enemy team dies
+enemy_death = Sound('Content/Sound FX/enemy_death.wav')
+
 # Critical Hit -- Played when someone lands a critical hit
 critical_hit = Sound('Content/Sound FX/critical_hit.wav')
 
@@ -108,5 +111,5 @@ def change_volume():
               'critical_hit', 'lockpicking',
               'lockpick_break', 'unlock_chest',
               'debuff', 'eerie_sound',
-              'random_enc']:
+              'random_enc', 'enemy_death']:
         globals()[x].set_volume(save_load.sound_vol)

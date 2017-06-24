@@ -534,7 +534,7 @@ class Town:
 
     def town_houses(self):
         while True:
-            print("-"*25)
+            print('-'*save_load.divider_size)
             print("Unlocked Houses:")
 
             for x, y in enumerate([house for house in self.houses]):

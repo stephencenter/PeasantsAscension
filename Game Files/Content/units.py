@@ -261,7 +261,7 @@ Input [#]: """)
             extra_points = 0  # The number of extra skill points the player will receive
 
             if self.exp >= self.req_xp:
-                print("-"*save_load.divider_size)
+                print('-'*save_load.divider_size)
 
             while self.exp >= self.req_xp:
                 self.lvl += 1
@@ -499,11 +499,11 @@ Armor:
 
             if inv_system.equipped[inv_name]['weapon'].type_ == 'melee':
                 sounds.sword_slash.play()
-                print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon}...')
+                print(f'{self.name} fiercely attacks the {self.target.m_name} using their {player_weapon}...')
 
             else:
                 sounds.aim_weapon.play()
-                print(f'{self.name} aims carefully at the {self.target.name} using their {player_weapon}...')
+                print(f'{self.name} aims carefully at the {self.target.m_name} using their {player_weapon}...')
 
             main.smart_sleep(0.75)
 
@@ -515,13 +515,13 @@ Armor:
 
             # Check for attack accuracy
             if random.randint(1, 512) in range(self.target.evad, 512):
-                print(f"{self.name}'s attack connects with the {self.target.name}, dealing {dam_dealt} damage!")
+                print(f"{self.name}'s attack connects with the {self.target.m_name}, dealing {dam_dealt} damage!")
 
                 sounds.enemy_hit.play()
                 self.target.hp -= dam_dealt
 
             else:
-                print(f"The {self.target.name} narrowly avoids {self.name}'s attack!")
+                print(f"The {self.target.m_name} narrowly avoids {self.name}'s attack!")
                 sounds.attack_miss.play()
 
         if self.move == '2':

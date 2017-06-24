@@ -196,8 +196,9 @@ def use_inject_poison(user):
     print(f"{user.name} is preparing a poison with power {poison_power}...")
     sounds.aim_weapon.play()
     main.smart_sleep(0.75)
+
     print(f"{user.name} injects the poison into the {user.target.m_name}!")
-    sounds.buff_spell.play()
+    sounds.poison_damage.play()
     pass
 
 
@@ -338,16 +339,30 @@ spell_shield.use_ability = use_spell_shield
 
 
 def before_mana_drain(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Mana Drain on?")
 
 
 def use_mana_drain(user):
-    pass
+    print(f"{user.name} is preparing to cast Mana Drain on the {user.target.m_name}...")
+    sounds.aim_weapon.play()
+    main.smart_sleep(0.75)
+
+    drain = max(((5 + user.attributes['int'])/100)*user.target.max_mp, 5)
+
+    user.mp += drain
+    user.target.mp -= drain
+
+    units.fix_stats()
+
+    sounds.buff_spell.play()
+    print(f"The {user.target.m_name} lost {drain} MP!")
+    print(f"{user.name} gained {drain} MP!")
 
 
 mana_drain = Ability("Mana Drain", f"""\
 Depletes the target's current MP by {ascii_art.colorize('[5 + Intelligence]', 'blue')}% of their maximum
-MP, while restoring the same amount to the user.""", 5)
+MP, while restoring the same amount to the user. Always drains/restores a
+minimum of 5 MP.""", 5)
 mana_drain.before_ability = before_mana_drain
 mana_drain.use_ability = use_mana_drain
 
@@ -463,6 +478,7 @@ def use_unholy_binds(user):
     else:
         print(f"{user.target.name} is preparing to cast Unholy Binds on the {user.target.m_name}!")
 
+    sounds.aim_weapon.play()
     main.smart_sleep(0.75)
 
     chance = min(10 + user.attributes['wis'], 50)/10
@@ -473,12 +489,16 @@ def use_unholy_binds(user):
             not isinstance(user.target, units.PlayableCharacter)]):
         user.target.status_ail = 'dead'
         user.target.hp = 0
+
+        sounds.enemy_death.play()
+
         print(f"The {user.target.m_name} succumed to the darkness!")
 
         return
 
     user.target.def_element = 'dark'
 
+    sounds.poison_damage.play()
     if isinstance(user.target, units.PlayableCharacter):
         print(f"{user.target.name} had their defensive element set to Darkness!")
 

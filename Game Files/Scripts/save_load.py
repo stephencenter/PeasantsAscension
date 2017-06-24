@@ -118,7 +118,7 @@ def set_adventure_name():
 
         else:
             while True:
-                y_n = main.s_input(f'You wish for your adventure to be known as "{choice}"? | Y/N: ')
+                y_n = main.s_input(f'You wish for your adventure to be known as "{choice}"? | Y/N: ').lower()
 
                 if y_n.startswith("y"):
                     format_save_names()

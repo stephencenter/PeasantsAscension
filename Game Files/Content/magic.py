@@ -260,7 +260,7 @@ def pick_spell(cat, user, is_battle):
                 continue
 
             if spell.mana > user.mp:
-                print("-"*save_load.divider_size)
+                print('-'*save_load.divider_size)
                 print(f"{user.name} doesn't have enough MP to cast {spell.name}!")
                 input("\nPress enter/return ")
 

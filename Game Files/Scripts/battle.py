@@ -265,16 +265,16 @@ def battle_system(is_boss=False, ambush=False):
                     char_2.status_ail = 'dead'
                     sounds.ally_death.play()
 
-                    print("-"*25)
+                    print('-'*save_load.divider_size)
                     print(ascii_art.colorize(f"{char_2.name} has fallen to the monsters!", 'red'))
                     main.s_input("\nPress enter/return ")
 
                 if isinstance(char_2, units.Monster) and char_2.hp <= 0 and char_2.status_ail != 'dead':
                     char_2.hp = 0
                     char_2.status_ail = 'dead'
-                    sounds.buff_spell.play()
+                    sounds.enemy_death.play()
 
-                    print("-"*25)
+                    print('-'*save_load.divider_size)
                     print(ascii_art.colorize(f"The {char_2.name} was defeated by your party!", 'green'))
                     main.s_input("\nPress enter/return ")
 
@@ -447,7 +447,7 @@ def battle_inventory(user):
 
             except (IndexError, ValueError):
                 if item in ['e', 'x', 'exit', 'b', 'back']:
-                    print("-"*save_load.divider_size)
+                    print('-'*save_load.divider_size)
                     return False
 
                 continue
