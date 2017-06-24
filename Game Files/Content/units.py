@@ -405,8 +405,9 @@ Input [L]etter: """).lower()
                     else:
                         continue
 
-                    print('-'*save_load.divider_size)
-                    print(f"{self.name}'s {vis_skill} has increased!")
+                    if act_skill != 'for':
+                        print('-'*save_load.divider_size)
+                        print(f"{self.name}'s {vis_skill} has increased!")
 
                     # Decrement remaining points
                     rem_points -= 1
@@ -736,7 +737,7 @@ class Monster(Unit):
         Unit.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
         self.m_name = ''  # The name of the monsters species (so a Fast Goblin's monster_name would be Goblin)
-        self.status = ''        # The status effect that will be applied to the player if RNGsus wills it
+        self.status = ''  # The status effect that will be applied to the player if RNGsus wills it
         self.is_poisoned = False
         self.is_defending = False
         self.class_ = None
@@ -781,6 +782,7 @@ class Monster(Unit):
                                             'muted'] if x != target.status_ail])
 
         print(f'The {self.m_name} is attempting to make {self.m_target.name} {status}...')
+        sounds.aim_weapon.play()
         main.smart_sleep(0.75)
 
         # There's a 50% chance that the status spell will work
@@ -943,10 +945,7 @@ class Monster(Unit):
         for stat in ['self.attk', 'self.dfns', 'self.p_attk', 'self.p_dfns', 'self.m_attk', 'self.m_dfns',
                      'self.spd', 'self.evad', 'self.mp', 'self.max_mp', 'self.hp', 'self.max_hp']:
 
-            if eval(stat) < 1:  # Enemy stats cannot be lower than one
-                exec(f"{stat} = 1")
-
-            exec(f"{stat} = math.ceil({stat})")  # Enemy stats must be integers
+            exec(f"{stat} = max(1, math.ceil({stat}))")  # Enemy stats must be integers
 
         if self.m_name == "Calculator":
             self.def_element = 'grass'
@@ -1128,16 +1127,13 @@ class Monster(Unit):
         elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
             print(f'The {self.m_name} is casting a healing spell on itself...')
             main.smart_sleep(0.75)
-            print(f'The {self.m_name} heals itself for {max([self.hp*0.2, 20])} HP!')
 
-            sounds.magic_healing.play()
-
-            self.hp += max([self.hp*0.2, 20])
-
-            if self.hp > self.max_hp:
-                self.hp -= (self.hp - self.max_hp)
-
+            healing_power = math.ceil(max([self.hp*0.2, 5]))
+            self.hp += min([self.hp*0.2, 5])
             self.mp -= self.max_mp*0.2
+
+            print(f'The {self.m_name} heals itself for {healing_power} HP!')
+            sounds.magic_healing.play()
 
         # Magic Attack
         elif self.mp >= self.max_mp*0.15:
@@ -1148,6 +1144,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             dam_dealt = deal_damage(self, self.m_target, "magical")
+
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
                 print(f"The {self.m_name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
@@ -1168,6 +1165,7 @@ class Monster(Unit):
             main.smart_sleep(0.75)
 
             dam_dealt = deal_damage(self, self.m_target, "piercing")
+
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
                 print(f"The {self.m_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
@@ -1201,28 +1199,23 @@ class Monster(Unit):
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
         if random.randint(0, 5) == 0 and not self.is_defending:
             self.is_defending = True
-            sounds.buff_spell.play()
+            print(f"The {self.m_name} is preparing itself for enemy attacks...")
+            main.smart_sleep(0.75)
 
             self.dfns *= 2
             self.m_dfns *= 2
             self.p_dfns *= 2
 
-            self.dfns = math.ceil(self.dfns)
-            self.p_dfns = math.ceil(self.p_dfns)
-            self.m_dfns = math.ceil(self.m_dfns)
-
-            print(f"The {self.m_name} defends itself from attacks for one turn!")
+            print(f"The {self.m_name}'s defense stats increased by 2x for one turn!")
+            sounds.buff_spell.play()
 
         # Set defense back to normal if the monster defended last turn
         elif self.is_defending:
+            print(f"The {self.m_name} stops defending, returning its defense stats to normal.")
             self.is_defending = False
-
             self.dfns /= 2
             self.m_dfns /= 2
             self.p_dfns /= 2
-            self.dfns = math.floor(self.dfns)
-            self.m_dfns = math.floor(self.m_dfns)
-            self.p_dfns = math.floor(self.p_dfns)
 
         # If the monster doesn't defend, then it will attack!
         if not self.is_defending:
@@ -1522,13 +1515,7 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
 
             main.smart_sleep(0.5)
 
-        dam_dealt = eval_element(attacker, target, dam_dealt)
-
-        if dam_dealt < 1:
-            dam_dealt = 1
-
-        if dam_dealt > 999:
-            dam_dealt = 999
+        dam_dealt = min(max(1, eval_element(attacker, target, dam_dealt)), 999)
 
         return math.ceil(dam_dealt)
 

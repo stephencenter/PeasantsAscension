@@ -131,7 +131,7 @@ class Damaging(Spell):
         main.smart_sleep(0.75)
         dam_dealt = units.deal_damage(user, target, "magical", spell_power=self.damage)
 
-        # If the monster's evasion (with a max of 256) is higher than the user's accuracy roll, the spell will land
+        # If the monster's evasion is higher than the user's accuracy roll, the spell will land
         if random.randint(1, 512) in range(target.evad, 512):
             sounds.enemy_hit.play()
             target.hp -= dam_dealt

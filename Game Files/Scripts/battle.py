@@ -409,12 +409,13 @@ def after_battle(is_boss):
             for character in enabled_pcus:
                 character.exp += expr_drops
                 main.s_input(f'{character.name} gained {expr_drops} XP | Press enter/return ')
-                character.level_up()
 
             # Each monster can drop their own item
             for drop in item_drops:
                 print(f"The {drop[0]} dropped a {drop[1]}! | Press enter/return")
                 inv_system.inventory[drop[1].cat].append(drop[1])
+
+            character.level_up()
 
             pygame.mixer.music.load(main.party_info['reg_music'])
             pygame.mixer.music.play(-1)
