@@ -379,7 +379,7 @@ def use_roll(user):
 roll = Ability("Roll", f"""\
 The user does a quick tuck-and-roll, disorienting the enemy team and dodging all
 attacks for one turn. Also increases their speed by {ascii_art.colorize('[25 + Perception]', 'cyan')}.
-Stacks with multiple uses.""", 3)
+The speed bonus stacks with multiple uses.""", 3)
 roll.before_ability = before_roll
 roll.use_ability = use_roll
 

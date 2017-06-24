@@ -80,9 +80,6 @@ class PlayableCharacter(Unit):
         self.status_ail = 'none'   # Current Status Ailment
         self.enabled = enabled     # Whether the PCU has been recruited or not
         self.exp = 0               # Experience
-        self.extra_sp = 0          # Extra Skill Points
-        self.ext_gol = 0           # Extra Gold Pieces
-        self.ext_exp = 0           # Extra Experience
         self.req_xp = 3            # Required XP to level up
         self.move = ''             # What move the character chose during battle
         self.ap = 10               # The number of "Action Points" that the user has remaining
@@ -246,8 +243,6 @@ Input [#]: """)
 
     def level_up(self):
         if self.exp >= self.req_xp:
-            print()
-
             pygame.mixer.music.load('Content/Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
@@ -258,7 +253,6 @@ Input [#]: """)
             self.status_ail = 'none'
 
             rem_points = 0  # Remaining Skill Points
-            extra_points = 0  # The number of extra skill points the player will receive
 
             if self.exp >= self.req_xp:
                 print('-'*save_load.divider_size)
@@ -268,7 +262,6 @@ Input [#]: """)
                 print(f"{self.name} has advanced to level {self.lvl}!")
 
                 rem_points += 5
-                extra_points += self.extra_sp
                 magic.new_spells(self)
 
                 if self.class_ == 'warrior':
@@ -343,7 +336,7 @@ Input [#]: """)
                 fix_stats()
 
             print('-'*save_load.divider_size)
-            self.skill_points(rem_points, extra_points)
+            self.skill_points(rem_points)
 
             self.max_hp = copy.copy(self.hp)
             self.max_mp = copy.copy(self.mp)
@@ -353,11 +346,7 @@ Input [#]: """)
 
             return
 
-    def skill_points(self, rem_points, extra_points):
-        if extra_points:
-            print(f"{self.name}'s great fortune has granted them {extra_points} additional skill points!")
-            rem_points += extra_points
-
+    def skill_points(self, rem_points):
         while rem_points > 0:
             print(f"{self.name} has {rem_points} skill point{'s' if rem_points > 1 else ''} left to spend.")
 
@@ -368,10 +357,8 @@ Input [#]: """)
       [C]onstitution - The attribute of Monks. Increases defensive stats and HP.
       [D]exterity - The attribute of Assassins. Increases evasion, speed and physical attack.
       [P]erception - The attribute of Rangers. Increases pierce stats and evasion.
-      [F]ortune - No class affiliation. Increases GP, XP, and Skill Point gain.
-Input [L]etter: """)
-
-            skill = skill.lower()
+      [F]ortune - No direct class affiliation. Increases 2 random attributes by 1 each.
+Input [L]etter: """).lower()
 
             if any(map(skill.startswith, ['i', 'w', 's', 'c', 'd', 'p', 'f'])):
                 if skill.startswith('i'):
@@ -405,22 +392,14 @@ Input [L]etter: """)
                 print('-'*save_load.divider_size)
                 print(f'Current {vis_skill}: {self.attributes[act_skill]}')
 
-                if self.extra_sp == 10 and act_skill == 'for':
-                    print(f"{self.name}'s additional skill points from Fortune has already reached the maximum of 10.")
-                    print("Instead, upgrading Fortune will provide 2x the extra experience and gold from enemies.")
-
                 while True:
-                    y_n = main.s_input(f"Increase {self.name}'s {vis_skill}? | Y/N: ")
-                    y_n = y_n.lower()
-
-                    if not (y_n.startswith('y') or y_n.startswith('n')):
-                        continue
+                    y_n = main.s_input(f"Increase {self.name}'s {vis_skill}? | Y/N: ").lower()
 
                     if y_n.startswith('n'):
                         print('-'*save_load.divider_size)
                         break
 
-                    if any(map(skill.startswith, ['d', 'c', 'i', 'w', 'p', 'f', 's'])):
+                    elif y_n.startswith('y') and any(map(skill.startswith, ['d', 'c', 'i', 'w', 'p', 'f', 's'])):
                         self.increase_attribute(skill)
 
                     else:
@@ -597,7 +576,7 @@ Armor:
                             if self.ap < self.c_ability.ap_cost:
                                 print('-'*save_load.divider_size)
                                 print(f"{self.name} doesn't have enough AP to cast {self.c_ability.name}!")
-                                input("\nPress enter/return ")
+                                main.s_input("\nPress enter/return ")
 
                                 break
 
@@ -726,16 +705,28 @@ Armor:
             self.attributes['per'] += 1
 
         elif attribute.startswith('f'):
-            if self.extra_sp == 10:
-                self.ext_gol += 2
-                self.ext_exp += 2
-
-            else:
-                self.extra_sp += 1
-                self.ext_gol += 1
-                self.ext_exp += 1
-
             self.attributes['for'] += 1
+            rand_attr1 = random.choice([('int', 'Intelligence'),
+                                        ('wis', 'Wisdom'),
+                                        ('str', 'Strength'),
+                                        ('con', 'Constitution'),
+                                        ('dex', 'Dexterity'),
+                                        ('per', 'Perception')])
+
+            rand_attr2 = random.choice([('int', 'Intelligence'),
+                                        ('wis', 'Wisdom'),
+                                        ('str', 'Strength'),
+                                        ('con', 'Constitution'),
+                                        ('dex', 'Dexterity'),
+                                        ('per', 'Perception')])
+
+            self.increase_attribute(rand_attr1[0])
+            self.increase_attribute(rand_attr2[0])
+
+            print('-'*save_load.divider_size)
+            print(f"{self.name} gained one point in {rand_attr1[1]} from Fortune!")
+            print(f"{self.name} gained one point in {rand_attr2[1]} from Fortune!")
+            main.s_input("\nPress enter/return ")
 
 
 class Monster(Unit):
@@ -1434,12 +1425,10 @@ def check_bosses():
 
             while True:
                 if boss.new_location(add=False) not in inv_system.inventory['coord']:
-                    y_n = main.s_input('Do you wish to investigate? | Y/N: ')
+                    y_n = main.s_input('Do you wish to investigate? | Y/N: ').lower()
 
                 else:
-                    y_n = main.s_input(f'Do you wish to confront the {boss.name}? | Y/N: ')
-
-                y_n = y_n.lower()
+                    y_n = main.s_input(f'Do you wish to confront the {boss.name}? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
                     monster = boss

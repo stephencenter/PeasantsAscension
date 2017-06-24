@@ -372,8 +372,7 @@ def after_battle(is_boss):
 
                 elif y_n.startswith('n'):
                     while True:
-                        y_n = main.s_input('Are you sure you want to quit and lose all unsaved progress? | Y/N: ')
-                        y_n = y_n
+                        y_n = main.s_input('Are you sure you want to quit and lose unsaved progress? |  Y/N: ').lower()
 
                         if y_n.startswith('y'):
                             pygame.quit()
@@ -406,9 +405,9 @@ def after_battle(is_boss):
             main.party_info['gp'] += gold_drops
             main.s_input(f'Your party has gained {gold_drops} GP | Press enter/return ')
 
-            # Each party member gets their own XP, which is influenced by their Fortune stat
+            # Each party member gets their own XP
             for character in enabled_pcus:
-                character.exp += expr_drops + character.ext_exp
+                character.exp += expr_drops
                 main.s_input(f'{character.name} gained {expr_drops} XP | Press enter/return ')
                 character.level_up()
 

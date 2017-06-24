@@ -188,7 +188,7 @@ def pick_cat(user, is_battle=True):
 
         spam = True
         while spam:
-            cat = main.s_input('Input [#] (or type "exit"): ')
+            cat = main.s_input('Input [#] (or type "exit"): ').lower()
 
             if cat == '1':
                 cat = 'Damaging'
@@ -212,7 +212,7 @@ def pick_cat(user, is_battle=True):
                 return True
 
             else:
-                if cat.lower() in ['e', 'x', 'exit', 'b', 'back']:
+                if cat in ['e', 'x', 'exit', 'b', 'back']:
                     print('-'*save_load.divider_size)
                     return False
 
@@ -262,7 +262,7 @@ def pick_spell(cat, user, is_battle):
             if spell.mana > user.mp:
                 print('-'*save_load.divider_size)
                 print(f"{user.name} doesn't have enough MP to cast {spell.name}!")
-                input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ")
 
                 break
 
@@ -272,8 +272,7 @@ def pick_spell(cat, user, is_battle):
                 user.c_spell = spell
 
                 if isinstance(spell, Healing) or isinstance(spell, Buff):
-                    user.choose_target(f"Who should {user.name} cast {spell.name} on?",
-                                       ally=True, enemy=False)
+                    user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
 
                     return True
 
@@ -283,8 +282,7 @@ def pick_spell(cat, user, is_battle):
                     return True
 
             else:
-                user.choose_target(f"Who should {user.name} cast {spell.name} on?",
-                                   ally=True, enemy=False)
+                user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
                 spell.use_magic(user, is_battle)
 
                 break

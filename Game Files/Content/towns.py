@@ -272,16 +272,14 @@ def search_towns(enter=True):
 
             while True:
                 if isinstance(town, Tavern):
-                    y_n = main.s_input("How convenient, a tavern is nearby! Should your party investigate? | Y/N: ")
+                    y_n = main.s_input("A tavern is nearby! Visit the tavern? | Y/N: ").lower()
 
                 else:
                     if town.new_location(add=False) not in inv_system.inventory['coord']:
-                        y_n = main.s_input('There is a town nearby. Should your party investigate? | Y/N: ')
+                        y_n = main.s_input('There is a town nearby. Should your party investigate? | Y/N: ').lower()
 
                     else:
-                        y_n = main.s_input(f'{town.name} is nearby. Should your party give it a visit? | Y/N: ')
-
-                y_n = y_n.lower()
+                        y_n = main.s_input(f'{town.name} is nearby. Give it a visit? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
                     pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
