@@ -623,14 +623,14 @@ Armor:
             elif self.move == '5':
                 return
 
-    def choose_target(self, action_desc, ally=False, enemy=True):
+    def choose_target(self, action_desc, ally=False, enemy=True, allow_dead=False):
         pcu_list = [x for x in [player,
                                 solou,
                                 xoann,
                                 chyme,
                                 ran_af,
                                 adorine,
-                                parsto] if x.enabled]
+                                parsto] if x.enabled and (True if x.status_ail != 'dead' or allow_dead else False)]
 
         if enemy and not ally:
             if len([x for x in battle.m_list if x.status_ail != 'dead']) == 1:

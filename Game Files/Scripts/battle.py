@@ -374,14 +374,14 @@ def after_battle(is_boss):
                     while True:
                         y_n = main.s_input('Are you sure you want to quit and lose unsaved progress? |  Y/N: ').lower()
 
-                        if y_n.startswith('y'):
-                            pygame.quit()
-                            sys.exit()
-
-                        elif y_n.startswith('n'):
+                        if y_n.startswith('n') or main.do_debug:
                             auto_yes = True
 
                             break
+
+                        elif y_n.startswith('y'):
+                            pygame.quit()
+                            sys.exit()
 
         # If the player wins...
         elif all([m.status_ail == 'dead' for m in m_list]) and any([x.status_ail != 'dead' for x in enabled_pcus]):
@@ -415,7 +415,8 @@ def after_battle(is_boss):
                 print(f"The {drop[0]} dropped a {drop[1]}! | Press enter/return")
                 inv_system.inventory[drop[1].cat].append(drop[1])
 
-            character.level_up()
+            for character in enabled_pcus:
+                character.level_up()
 
             pygame.mixer.music.load(main.party_info['reg_music'])
             pygame.mixer.music.play(-1)

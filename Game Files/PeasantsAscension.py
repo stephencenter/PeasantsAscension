@@ -75,6 +75,8 @@ party_info = {'reg': 'Central Forest', 'reg_music': 'Content/Music/Through the F
               'visited_towns': [], 'current_tile': tiles.in_for_c, 'x': 0, 'y': 0, 'z': 0,
               'steps_without_battle': 0, 'do_monster_spawns': True, 'scout_list': []}
 
+do_debug = False  # Set to true when auto-testing
+
 
 class YouDontSurfException(Exception):
     # Joke exception, used just for testing the error logger
@@ -89,8 +91,6 @@ shirt fuck you"
 def s_input(string):
     # Custom input, plays a "blip" sound after the player presses enter.
     # Also can be used to automatically play the game and find crashes.
-    do_debug = False  # Set to true when auto-testing
-
     if do_debug:
         print(string, end='')
         char = random.choice('0123456789ynxpsewrt')
@@ -104,6 +104,35 @@ def s_input(string):
         sounds.item_pickup.play()
 
     return x
+
+
+def smart_sleep(duration):
+    # "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
+
+    if do_debug:
+        return
+
+    time.sleep(duration)
+
+    # I have no idea how this works but I found it on Stack Overflow and it makes the text sync properly
+    while msvcrt.kbhit():
+        msvcrt.getwch()
+
+
+def chop_by_79(string, padding=0):
+    sentences = []
+    current_sentence = ''
+
+    for word in string.split():
+        if len(current_sentence + word) > 79 - padding:
+            sentences.append(current_sentence)
+            current_sentence = ''
+
+        current_sentence += f'{word} '
+
+    sentences.append(current_sentence) if current_sentence else ''
+
+    return sentences
 
 
 def game_loop():
@@ -556,34 +585,6 @@ def set_prompt_properties():
 
     # Set the console title
     ctypes.windll.kernel32.SetConsoleTitleA(f"Peasants' Ascension {title_screen.game_version}".encode())
-
-
-def smart_sleep(duration):
-    # "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
-
-    # return # Uncomment this when doing automated bug-testing
-
-    time.sleep(duration)
-
-    # I have no idea how this works but I found it on Stack Overflow and it makes the text sync properly
-    while msvcrt.kbhit():
-        msvcrt.getwch()
-
-
-def chop_by_79(string, padding=0):
-    sentences = []
-    current_sentence = ''
-
-    for word in string.split():
-        if len(current_sentence + word) > 79 - padding:
-            sentences.append(current_sentence)
-            current_sentence = ''
-
-        current_sentence += f'{word} '
-
-    sentences.append(current_sentence) if current_sentence else ''
-
-    return sentences
 
 
 def main():
