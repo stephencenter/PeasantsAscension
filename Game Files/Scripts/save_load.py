@@ -116,7 +116,7 @@ def set_adventure_name():
                     break
 
         elif len(choice) > 35 and len(adventure_name) > 35:
-            print("\That adventure name is far too long, it would never catch on!")
+            print("That adventure name is far too long, it would never catch on!")
             continue
 
         else:

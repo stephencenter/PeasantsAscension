@@ -588,6 +588,8 @@ Armor:
                                 do_loop = False
                                 break
 
+                            continue
+
                         self.ap -= self.c_ability.ap_cost
                         self.c_ability.before_ability(self)
                         return
