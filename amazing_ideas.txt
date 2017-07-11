@@ -73,6 +73,34 @@ PEASANT-RPG GOALS
 		restoring HP/MP, or increasing stats in-battle. But others have cooler effects, such as allowing you to rename your character,
 		and enabling you to re-pick your class. 
 
+[ ] Completely rework the world
+	[ ] The whole "nation divided into regions, each comprised of a single biome" thing is really stupid. 
+		Instead, the world should be more natural, with caves and mountain ranges spread all across instead
+		of only in a single region.
+	[ ] Make the game world WAY smaller. There's simply not enough content that you can squeeze into a massive 60,000-tile game using
+		only text.
+	[ ] Redo the backstory. Personally, I think that the world would be better suited as an large nation-continent/island surrounded by
+		ocean on a planet called Arcadia, instead of a single nation in a continent on earth. It's really weird for a country to have
+		deserts, tundra, mountains, forests, etc... while simultaneously being just south of the equator and surrounded by other countries
+		with much more normal geography. 
+		[ ] The regions should be renamed (again...) to be more province-like
+		[ ] Thex is now a Harconian province
+		[ ] Retcon the whole "democratically elected leader" thing. It sounds good and is a good way to make your country likable but I feel
+			it's harder to work with in a fantasy setting without a concept of heirs and inheritence.
+	[ ] Redo the plot:
+		[ ] BIG TWIST: The princess isn't alive anymore. In fact, she's never been alive - King Harconia II has no heir. Princess Celeste
+			and her supposed death is simply a coverup to justify starting a civil war with Thex. King Harconia II is extremely paranoid - his wife
+			is pregnant with his daughter (to be named Celeste) and the King fears that Thex is plotting to assassinate him and his wife in
+			an attempt to ursurp the throne.
+		[ ] When you discover this fact and confront the King about it, he denies it. When he sees you aren't falling for his lies, he orders his
+			Royal Guard to kill you. These guards, of course, were unaware of the King's trechery and viewed your party as heroes, and refuse to 
+			attack you. The King realizes he has to take matters into his own hands, casting lightning magic to kill his guards, and then finally
+			turning to you. The King turns to your party and the final boss battle begins.
+	[ ] Cool area ideas:
+		[ ] "Illusory Forest" - An expy of Zelda's Lost Woods, but with the SWENSEN mechanic from RuneScape
+		[ ] "The Overshire Graveyard" - A port of the graveyard from the coordinate-based Pythonius, this one could have some really cool features in it thanks to the new system
+
+	
 [ ] Color "important" text using Colorama
 	[x] Attribute scaling in ability descriptions
 		[x] STR, red
