@@ -22,13 +22,13 @@ import sys
 
 import pygame
 
+import dialogue
 import abilities
 import ascii_art
 import battle
 import inv_system
 import items
 import magic
-import npcs
 import save_load
 import sounds
 
@@ -1283,8 +1283,8 @@ class Boss(Monster):
 
 # Boss: Master Slime -- Position: 0'N, 1'E
 def mastslim_ud():
-    npcs.alfred_quest_1.finished = True
-    npcs.alfred_convo_2.active = False
+    dialogue.alfred_quest_1.finished = True
+    dialogue.alfred_convo_2.active = False
 
 
 master_slime = Boss('Master Slime',
@@ -1320,8 +1320,8 @@ whisp_goblin.battle_turn = whisp_goblin.melee_ai
 # Boss: Menacing Phantom -- Position: 8'N, -12'W
 def menacphan_ud():
     # Stands for "Menacing Phantom -- Upon Defeating"
-    npcs.stewson_quest_1.finished = True
-    npcs.stewson_convo_2.active = False
+    dialogue.stewson_quest_1.finished = True
+    dialogue.stewson_convo_2.active = False
 
 
 menac_phantom = Boss('Menacing Phantom',
@@ -1342,12 +1342,12 @@ menac_phantom.upon_defeating = menacphan_ud
 
 # Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
 def terrtar_ud():
-    npcs.krystin_convo_2.active = False
-    npcs.krystin_convo_3.active = True
-    npcs.kyle_convo_2.active = False
-    npcs.kyle_convo_3.active = True
-    npcs.alden_convo_1.active = False
-    npcs.alden_convo_2.active = True
+    dialogue.krystin_convo_2.active = False
+    dialogue.krystin_convo_3.active = True
+    dialogue.kyle_convo_2.active = False
+    dialogue.kyle_convo_3.active = True
+    dialogue.alden_convo_1.active = False
+    dialogue.alden_convo_2.active = True
 
 
 terr_tarant = Boss('Terrible Tarantuloid',
@@ -1367,8 +1367,8 @@ terr_tarant.upon_defeating = terrtar_ud
 
 # Boss: Cursed Spectre -- Position 22'N, 3'E
 def cursspect_ud():
-    npcs.rivesh_convo_3.active = False
-    npcs.rivesh_quest_1.finished = True
+    dialogue.rivesh_convo_3.active = False
+    dialogue.rivesh_quest_1.finished = True
 
 
 cursed_spect = Boss('Cursed Spectre',

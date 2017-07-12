@@ -17,7 +17,7 @@ import json
 import sys
 from copy import copy as _c
 
-import npcs
+import dialogue
 import ascii_art
 import units
 import items
@@ -189,7 +189,7 @@ def pick_category():
                 pick_item(cat, vis_cat)
                 break
 
-            if cat == 'quests' and [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.started]:
+            if cat == 'quests' and [x for x in dialogue.all_dialogue if isinstance(x, dialogue.Quest) and x.started]:
                 pick_item(cat, vis_cat)
                 break
 
@@ -473,10 +473,10 @@ def view_quests():
 
         print('-'*save_load.divider_size)
         if choice.startswith('f'):  # Finished Quests
-            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and x.finished]
+            dia_ = [x for x in dialogue.all_dialogue if isinstance(x, dialogue.Quest) and x.finished]
 
         elif choice.startswith('a'):
-            dialogue = [x for x in npcs.all_dialogue if isinstance(x, npcs.Quest) and not x.finished and x.started]
+            dia_ = [x for x in dialogue.all_dialogue if isinstance(x, dialogue.Quest) and not x.finished and x.started]
 
         elif choice in ['e', 'x', 'exit', 'b', 'back']:
             return
@@ -499,7 +499,7 @@ def view_quests():
                     quest = main.s_input('Input [#] (or type "back"): ').lower()
 
                     try:
-                        quest = dialogue[int(quest) - 1]
+                        quest = dia_[int(quest) - 1]
 
                     except (IndexError, ValueError):
                         if quest in ['e', 'x', 'exit', 'b', 'back']:

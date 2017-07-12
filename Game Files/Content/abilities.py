@@ -2,7 +2,6 @@ import math
 import sys
 
 import ascii_art
-import battle
 import units
 import sounds
 import random

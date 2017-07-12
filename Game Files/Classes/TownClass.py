@@ -93,7 +93,7 @@ class Town:
                 elif choice == '3':
                     print('-'*save_load.divider_size)
 
-                    if [x for x in self.people if x.active]:
+                    if [x for x in self.people if any([y.active for y in x.conversations])]:
                         self.speak_to_npcs()
 
                     else:
@@ -503,14 +503,16 @@ class Town:
         while True:
             print('NPCs: ')
 
-            for x, npc in enumerate([x for x in self.people if x.active]):
+            npc_list = [x for x in self.people if any([y.active for y in x.conversations])]
+
+            for x, npc in enumerate(npc_list):
                 print(f"      [{x + 1}] {npc}")
 
             while True:
                 npc = main.s_input('Input [#] (or type "exit"): ').lower()
 
                 try:
-                    npc = [x for x in self.people if x.active][int(npc) - 1]
+                    npc = npc_list[int(npc) - 1]
 
                 except (IndexError, ValueError):
                     if npc in ['e', 'x', 'exit', 'b', 'back']:

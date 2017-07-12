@@ -41,6 +41,7 @@ nearton_h1 = House("Philliard", [nearton_h1_c1, nearton_h1_c2])
 nearton_h2_c1 = Chest([5, items.bone_bag, items.fairy_dust, items.feathers], 1, "N-H2-C1")
 nearton_h2 = House("Alfred", [nearton_h2_c1])
 
+# RENAME
 town_nearton = Town('Nearton', """\
 Nearton: A small village in the central region of the Forest. It is in this
 very town where numerous brave adventurers have begun their journey. Nearton
@@ -52,6 +53,7 @@ appears to be very troubled about something.""",
 southford_h1_c1 = Chest([35], 2, "S-H1-C1")
 southford_h1 = House("Lazaro", [southford_h1_c1])
 
+# RENAME
 town_southford = Town('Southford', """\
 Southford: A fair-size town in the South-East of the Inner Central Forest.
 The inhabitants of this town are known for being quite wise, and may
@@ -68,6 +70,7 @@ welcome to do as you wish in the lower.""",
                       [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos], [],
                       5, 2, "overshire")
 
+# RENAME
 town_charsulville = Town('Charsulville', """\
 Charsulville: A plain village in the south east
 region of the Forest. It is home to nothing special, although it's cheap
@@ -81,6 +84,7 @@ convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
 visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh], [], 1, 3, "fort_sigil")
 
+# RENAME
 town_tripton = Town('Tripton', """\
 Tripton: When the town of Tripton was being built, the people working on the
 project failed to notice that another town, Fallville, just so happened to be
@@ -90,6 +94,7 @@ easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
 village leaders.""", [npcs.kyle], [], 3, 3, "tripton")
 
+# RENAME
 town_fallville = Town('Fallville', """\
 Fallville: When the town of Tripton was being built, the people working on the
 project failed to notice that another town, Fallville, just so happened to be
@@ -128,15 +133,16 @@ and the cottage is surrounded by a ring of 12 archer towers, each with
 standing watch all around the building. One guard happens to catch
 your attention - probably because she just screamed "HALT!" at you.""", [npcs.sakura], [], 6, 3, "principalia")
 
+# REWORK
 town_new_ekanmar = Town('New Ekanmar', """\
-New Ekanmar: The home of the Flyscorian Embassy in
-Harconia. Prior to the Harconian Revolution, this town was the location of
-a large portion of Flyscoria's troops in Harconia. The Harconians drove much of
-them out, but a large number of them defected to the Harconian side and stayed.
-After the war, the citizens gave up their weapons and became a peaceful town.
-The vast majority of the inhabitants of this town are, naturally, Flyscors.
-It seems that the Flyscorian Royal Family is visiting here - perhaps you can
-talk with them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], [], 2, 3, "new_ekanmar")
+New Ekanmar: The capital of Celemia, one of the Harconian provinces. Prior
+to the Harconian Revolution, this town was the location of a large portion of
+Flyscoria's troops in Harconia. The Harconians drove much of them out, but
+a large number of them defected to the Harconian side and stayed. After the
+war, the citizens gave up their weapons and became a peaceful town. The vast
+majority of the inhabitants of this town are, naturally, Flyscors. It seems
+that the Flyscorian Royal Family is visiting here - perhaps you can talk with
+ them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], [], 2, 3, "new_ekanmar")
 
 town_ravenstone = Town('Ravenstone', """\
 Ravenstone: Ravenstone is a natural sanctuary,

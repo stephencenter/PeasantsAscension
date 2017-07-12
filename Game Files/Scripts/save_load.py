@@ -9,10 +9,10 @@ import shutil
 
 import pygame
 
+import dialogue
 import inv_system
 import items
 import magic
-import npcs
 import sounds
 import tiles
 import towns
@@ -339,7 +339,7 @@ def serialize_all(verbose=True):
         items.serialize_gems('/'.join([base_dir, temp_dir, sav_acquired_gems]))
         inv_system.serialize_equip('/'.join([base_dir, temp_dir, sav_equip_items]))
         inv_system.serialize_inv('/'.join([base_dir, temp_dir, sav_inventory]))
-        npcs.serialize_dialogue('/'.join([base_dir, temp_dir, sav_quests_dia]))
+        dialogue.serialize_dialogue('/'.join([base_dir, temp_dir, sav_quests_dia]))
         magic.serialize_sb('/'.join([base_dir, temp_dir, sav_spellbook]))
         units.serialize_bosses('/'.join([base_dir, temp_dir, sav_misc_boss_info]))
         towns.serialize_chests('/'.join([base_dir, temp_dir, sav_chests]))
@@ -378,7 +378,7 @@ def deserialize_all():
         inv_system.deserialize_equip('/'.join([base_dir, sav_equip_items]))
         inv_system.deserialize_inv('/'.join([base_dir, sav_inventory]))
         units.deserialize_bosses('/'.join([base_dir, sav_misc_boss_info]))
-        npcs.deserialize_dialogue('/'.join([base_dir, sav_quests_dia]))
+        dialogue.deserialize_dialogue('/'.join([base_dir, sav_quests_dia]))
         magic.deserialize_sb('/'.join([base_dir, sav_spellbook]))
         towns.deserialize_chests('/'.join([base_dir, sav_chests]))
 
