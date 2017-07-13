@@ -1,20 +1,18 @@
-#   This file is part of Peasants' Ascension.
+# This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#    Peasants' Ascension is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
-#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
-# ----------------------------------------------------------------------------#
-# This file is where ALL of the Enemy and Player ASCII
-# art in the game is located.
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
+
 from colorama import Fore
 
 
@@ -773,7 +771,7 @@ item_sprites = {
 
 
 locations = {
-    'Terrius Mt. Range': """\
+    'mountain': """\
                                    _
                          .-.      / \        _
              ^^         /   \    /^./\__   _/ \\
@@ -787,7 +785,7 @@ locations = {
   @/        `.  / /      `-.   /  .-'   / .   .'   \    \  \  .-  \%
 ---------------------------------------------------------------------""",
 
-    'Arcadian Desert': """\
+    'desert': """\
           \  :  /
            ' _ '
        -= ( (_) ) =-
@@ -805,7 +803,7 @@ locations = {
            ~~     ^~^                ~~
 ---------------------------------------------------------------------""",
 
-    "Harconian Coastline": """\
+    "shore": """\
                                                  |
                                                \ _ /
                                             - = (_) = -
@@ -815,7 +813,7 @@ locations = {
     |   |  |  /###/#\    |     |  |                      /| \\
     |   |  |  |' '|:|    |`=.='|  |                     /_|__\\
 ----------------------------------------------------~~~~~~~~~~~~~~~~~""",
-    "Glacian Plains": """\
+    "tundra": """\
                       *  .  *
                     . _\/ \/_ .
                      \  \ /  /             .      .
@@ -828,7 +826,7 @@ locations = {
       ./    \.                            '      '
       ''    ''
 ---------------------------------------------------------------------""",
-    "Central Forest": """\
+    "forest": """\
             ,@@@@@@@,                         ,@@@@@@@,
     ,,,.   ,@@@@@@/@@,  .oo8888o.     ,,,.   ,@@@@@@/@@,  .oo8888o.
  ,&%%&%&&%,@@@@@/@@@@@@,8888\88/8o  ,&%%&%&&%,@@@@@/@@@@@@,8888\88/8o
@@ -839,7 +837,7 @@ locations = {
     |o|        | |         | |          |o|        | |         | |
     |.|        | |         | |          |.|        | |         | |
 ---------------------------------------------------------------------""",
-    "Bogthorn Marsh": """\
+    "swamp": """\
                     |                             |
                  \|\|/|/                       \|\|/|/
                 \|\\\\|//|/                     \|\\\\|//|/
@@ -850,7 +848,7 @@ locations = {
     (_)             |             (_)             |           (_)
  \|/(_)\|/ _\|/__|_\|/____\|/  \|/(_)\|/ _\|/_|__\|/____\|/\|/(_)\|/
 ---------------------------------------------------------------------""",
-    "Overshire Graveyard": """\
+    "graveyard": """\
         _.---,._,'
    /' _.--.<
      /'     `'
@@ -866,7 +864,7 @@ locations = {
     |                 |           |         |           |
      \              \\\\|           |//     \\\\|           |//
 ---------------------------------------------------------------------""",
-    "Aethus": """\
+    "aethus": """\
                      _  _
                    ( `   )_
                   (    )    `)

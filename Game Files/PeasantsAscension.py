@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 # Peasants' Ascension v1.0.0 Beta
 # --------------------------------------------------------------------------- #
-#   This file is part of Peasants' Ascension.
+# This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#    Peasants' Ascension is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
-#    along with Peasants' Ascension. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 # --------------------------------------------------------------------------- #
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
@@ -35,6 +35,11 @@
 #     email the error code to me. If you could provide a description of what
 #     you did to cause the bug, that'd be great. Contact information is near
 #     the top of the module.
+#
+#  4. I made an attempt to comment most of my code, and hopefully the rest is
+#     pretty self-explanatory. But if you have any questions about how something
+#     works or why something is the way it is, feel free to ask me! I love
+#     answering questions!
 # --------------------------------------------------------------------------- #
 
 import ctypes
@@ -47,6 +52,8 @@ import random
 
 import pygame
 
+# Some of the files are in different folders for some reason.
+# Adding those folders to the path allows us to use the import statement to access them.
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Content")
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Scripts")
 sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Classes")
@@ -70,22 +77,18 @@ pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 # A dictionary containing generic information about the player's party
-party_info = {'reg': 'Central Forest', 'reg_music': 'Content/Music/Through the Forest.ogg',
+party_info = {'biome': 'forest', 'music': 'Content/Music/Through the Forest.ogg', 'prov': "Province of Overshire",
               'prev_town': tiles.in_for_c, 'p_town_xyz': [0, 0, 0], 'is_aethus': False, 'gp': 20,
               'visited_towns': [], 'current_tile': tiles.in_for_c, 'x': 0, 'y': 0, 'z': 0,
               'steps_without_battle': 0, 'do_monster_spawns': True, 'scout_list': []}
 
-do_debug = False  # Set to true when auto-testing
+# Set to true when auto-testing
+do_debug = False
 
-
-class YouDontSurfException(Exception):
-    # Joke exception, used just for testing the error logger
-    @staticmethod
-    def bullshit_shirt():
-        # Used `raise YouDontSurfException(YouDontSurfException.bullshit_shirt())`
-        # This is so I don't have to type out the whole meme when I want to use this
-        return "that's a stupid fucking shirt you don't surf you've never surfed lying little shit with your bullshit \
-shirt fuck you"
+# A list of usernames that my friend has used in the past. Adds a few easter eggs.
+friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
+                "flygon jones", "flygonjones", "flygon_jones",
+                "cynder887", "gabe", "gabriel"]
 
 
 def s_input(string):
@@ -110,7 +113,7 @@ def smart_sleep(duration):
     # "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
 
     if do_debug:
-        return
+        duration = 0.1
 
     time.sleep(duration)
 
@@ -119,12 +122,15 @@ def smart_sleep(duration):
         msvcrt.getwch()
 
 
-def chop_by_79(string, padding=0):
+def chop_by_79(string, padding=0, num=79):
+    # Takes a string and coverts it into a list, cutting off at every 79th character.
+    # Also does some magic to make sure that sentences don't get cut off mid w
+    # ord
     sentences = []
     current_sentence = ''
 
     for word in string.split():
-        if len(current_sentence + word) > 79 - padding:
+        if len(current_sentence + word) > num - padding:
             sentences.append(current_sentence)
             current_sentence = ''
 
@@ -136,7 +142,7 @@ def chop_by_79(string, padding=0):
 
 
 def game_loop():
-    pygame.mixer.music.load(party_info['reg_music'])
+    pygame.mixer.music.load(party_info['music'])
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -186,51 +192,64 @@ def game_loop():
 
 
 def check_region():
-    # Check the coordinates of the player and change the region to match.
-    new_region = party_info['current_tile'].region
+    # Check the coordinates of the player and change the music to match
+    # Also alerts the player when they change biomes/provinces
+    new_province = party_info['current_tile'].province
+    new_biome = party_info['current_tile'].biome
 
-    if new_region == 'The Aethus':
-        reg_music = 'Content/Music/Island of Peace.ogg'
+    if new_biome == 'sky':
+        music = 'Content/Music/Island of Peace.ogg'
 
-    elif new_region == 'Overshire Graveyard':
-        reg_music = 'Content/Music/Frontier.ogg'
+    elif new_biome == 'graveyard':
+        music = 'Content/Music/Frontier.ogg'
 
-    elif new_region == 'Central Forest':
-        reg_music = 'Content/Music/Through the Forest.ogg'
+    elif new_biome == 'forest':
+        music = 'Content/Music/Through the Forest.ogg'
 
-    elif new_region == 'Terrius Mt. Range':
-        reg_music = 'Content/Music/Mountain.ogg'
+    elif new_biome == 'mountain':
+        music = 'Content/Music/Mountain.ogg'
 
-    elif new_region == 'Glacian Plains':
-        reg_music = 'Content/Music/Arpanauts.ogg'
+    elif new_biome == 'tundra':
+        music = 'Content/Music/Arpanauts.ogg'
 
-    elif new_region == 'Arcadian Desert':
-        reg_music = 'Content/Music/Come and Find Me.ogg'
+    elif new_biome == 'desert':
+        music = 'Content/Music/Come and Find Me.ogg'
 
-    elif new_region == 'Bogthorn Marsh':
-        reg_music = 'Content/Music/Digital Native.ogg'
+    elif new_biome == 'swamp':
+        music = 'Content/Music/Digital Native.ogg'
 
-    elif new_region == 'Harconian Coastline':
-        reg_music = 'Content/Music/We\'re all under the stars.ogg'
+    elif new_biome == 'shore':
+        music = 'Content/Music/We\'re all under the stars.ogg'
+
+    elif new_biome == 'cave':
+        music = 'Content/Music/song21_02.ogg'
 
     else:
-        reg_music = 'Content/Music/Through the Forest.ogg'
+        logging.debug(f'No music for biome "{new_biome}" on {time.strftime("%m/%d/%Y at %H:%M:%S")}')
+        music = 'Content/Music/Through the Forest.ogg'
 
-    if party_info['reg'] != new_region:
-        print('-'*save_load.divider_size)
-        print(ascii_art.locations[new_region])
-        print(f"You have left the {party_info['reg']} and are now entering the {new_region}.")
+    if party_info['prov'] != new_province or party_info['biome'] != new_biome:
 
-        party_info['reg'] = new_region
-        party_info['reg_music'] = reg_music
+        if party_info['biome'] != new_biome:
+            print(ascii_art.locations['new_biome'])
+            print(f"Looks like your party's entering a {new_biome.title()}.")
 
-        # Change the music & play it
-        pygame.mixer.music.load(reg_music)
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+            party_info['biome'] = new_biome
+            party_info['music'] = music
 
-        if not towns.search_towns(enter=False):
+            # Play that funky music
+            pygame.mixer.music.load(music)
+            pygame.mixer.music.play(-1)
+            pygame.mixer.music.set_volume(save_load.music_vol)
+
+            if not towns.search_towns(enter=False):
+                print('-'*save_load.divider_size)
+
+        if party_info['prov'] != new_province:
             print('-'*save_load.divider_size)
+            print(f"You have left the {party_info['prov']} and are now entering the {new_province}.")
+
+        s_input("\nPress enter/return ")
 
         return True
 
@@ -254,8 +273,9 @@ def game_ui():
 
     coordinates = ''.join([coord_y, coord_x, coord_z])
 
-    print(f"Coordinates: {coordinates} | Region: [{tile.region}] | Subregion [{tile.name}]")
+    print(f"Coordinates: {coordinates} | Province: [{tile.province}] | Region [{tile.name}]")
 
+    # Tells the player which directions are available to go in
     for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
         if drc == tile.to_e:
             print("    To the [E]ast", end='')
@@ -344,6 +364,7 @@ def move_command(coord_change, available_dirs, command):
 
 
 def help_command():
+    # Peasant's Ascension
     print('-'*save_load.divider_size)
     print("""Command List:
  [NSEW] - Moves your party if the selected direction is unobstructed

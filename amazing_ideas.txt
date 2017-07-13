@@ -69,7 +69,8 @@ PEASANT-RPG GOALS
 		[ ] 12 Provinces:
 			[ ] Celemia
 			[ ] Simphet
-			
+			[ ] Thex
+			 
 	[ ] Redo the plot:
 		[ ] Beginning your adventure:
 			"""[Name] wakes up under a tree, a tree they fall to sleep under every night.
@@ -98,7 +99,7 @@ PEASANT-RPG GOALS
 		[ ] BIG TWIST: The princess isn't alive anymore. In fact, she's never been alive - King Harconius II has no heir. Princess Celeste
 			and her supposed death is simply a coverup to justify starting a civil war with Thex. King Harconius II is extremely paranoid - his wife
 			is pregnant with his daughter (to be named Celeste) and the King fears that Thex is plotting to assassinate him and his wife in
-			an attempt to ursurp the throne.
+			an attempt to ursurp the throne. In addition, the King was the one that put up the barrier around Thex, again, because he was paranoid.
 		[ ] When you discover this fact and confront the King about it, he denies it. When he sees you aren't falling for his lies, he orders his
 			Royal Guard to kill you. These guards, of course, were unaware of the King's trechery and viewed your party as heroes, and refuse to 
 			attack you. The King realizes he has to take matters into his own hands, casting lightning magic to kill his guards, and then finally
@@ -123,7 +124,7 @@ PEASANT-RPG GOALS
 		[ ] Ranger, Quiver
 		[ ] Warrior, Shield
 		[ ] Paladin, Cross Necklace
-		[ ] Monk, ???
+		[ ] Monk, Meditation Candles
 		[ ] Assassin, Poisons (nightshade, etc)
 		[ ] Mage, Runestones
 		

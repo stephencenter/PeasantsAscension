@@ -1,17 +1,17 @@
-#   This file is part of Peasants' Ascension.
+# This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#    Peasants' Ascension is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
-#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
 import json
@@ -135,11 +135,11 @@ class Damaging(Spell):
         if random.randint(1, 512) in range(target.evad, 512):
             sounds.enemy_hit.play()
             target.hp -= dam_dealt
-            print(f'Using the power of {self.name}, {user.name} deals {dam_dealt} damage to the {target.m_name}!')
+            print(f'Using the power of {self.name}, {user.name} deals {dam_dealt} damage to the {target.name}!')
 
         else:
             sounds.attack_miss.play()
-            print(f"The {target.m_name} narrowly dodges {user.name}'s spell!")
+            print(f"The {target.name} narrowly dodges {user.name}'s spell!")
 
 
 class Buff(Spell):

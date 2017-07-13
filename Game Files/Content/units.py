@@ -1,17 +1,17 @@
-#   This file is part of Peasants' Ascension.
+# This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#    Peasants' Ascension is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
-#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
 import json
@@ -123,7 +123,7 @@ class PlayableCharacter(Unit):
             if not ''.join(self.name.split()) and ''.join(choice.split()):
                 continue
 
-            if self.name.lower() in ["flygon jones", "apollo kalar", "cynder887"]:
+            if self.name.lower() in main.friend_names:
                 print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
                 main.s_input('\nPress enter/return ')
                 print('-'*save_load.divider_size)
@@ -479,11 +479,11 @@ Armor:
 
             if inv_system.equipped[inv_name]['weapon'].type_ == 'melee':
                 sounds.sword_slash.play()
-                print(f'{self.name} fiercely attacks the {self.target.m_name} using their {player_weapon}...')
+                print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon}...')
 
             else:
                 sounds.aim_weapon.play()
-                print(f'{self.name} aims carefully at the {self.target.m_name} using their {player_weapon}...')
+                print(f'{self.name} aims carefully at the {self.target.name} using their {player_weapon}...')
 
             main.smart_sleep(0.75)
 
@@ -495,13 +495,13 @@ Armor:
 
             # Check for attack accuracy
             if random.randint(1, 512) in range(self.target.evad, 512):
-                print(f"{self.name}'s attack connects with the {self.target.m_name}, dealing {dam_dealt} damage!")
+                print(f"{self.name}'s attack connects with the {self.target.name}, dealing {dam_dealt} damage!")
 
                 sounds.enemy_hit.play()
                 self.target.hp -= dam_dealt
 
             else:
-                print(f"The {self.target.m_name} narrowly avoids {self.name}'s attack!")
+                print(f"The {self.target.name} narrowly avoids {self.name}'s attack!")
                 sounds.attack_miss.play()
 
         if self.move == '2':
@@ -513,7 +513,7 @@ Armor:
 
         # Run away!
         elif self.move == '5' and battle.run_away(self):
-            pygame.mixer.music.load(main.party_info['reg_music'])
+            pygame.mixer.music.load(main.party_info['music'])
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -737,8 +737,6 @@ class Monster(Unit):
 
     def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         Unit.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
-
-        self.m_name = ''  # The name of the monsters species (so a Fast Goblin's monster_name would be Goblin)
         self.status = ''  # The status effect that will be applied to the player if RNGsus wills it
         self.is_poisoned = False
         self.is_defending = False
@@ -756,24 +754,6 @@ class Monster(Unit):
             'poison_dex': 0,
             'disarmed': False}  # This dictionary will contain numerous variables that interact with abilties in battle
 
-    def monst_level(self):
-        self.lvl = main.party_info['current_tile'].m_level
-
-        for x in range(1, self.lvl):
-            self.hp += 5
-            self.mp += 4
-            self.attk += 4
-            self.dfns += 3
-            self.p_attk += 4
-            self.p_dfns += 3
-            self.m_attk += 4
-            self.m_dfns += 3
-            self.spd += 3
-            self.evad += 2
-
-        self.max_hp = self.hp
-        self.max_mp = self.mp
-
     def give_status(self, target):
         # Attempt to give the target a status ailment
         status = random.choice([x for x in ['poisoned',
@@ -783,7 +763,7 @@ class Monster(Unit):
                                             'paralyzed',
                                             'muted'] if x != target.status_ail])
 
-        print(f'The {self.m_name} is attempting to make {self.m_target.name} {status}...')
+        print(f'The {self.name} is attempting to make {self.m_target.name} {status}...')
         sounds.aim_weapon.play()
         main.smart_sleep(0.75)
 
@@ -795,30 +775,32 @@ class Monster(Unit):
 
         else:
             sounds.debuff.play()
-            print(f'The {self.m_name} failed to make {self.m_target.name} {status}!')
+            print(f'The {self.name} failed to make {self.m_target.name} {status}!')
 
         self.mp -= self.max_mp*0.1
 
-    def monst_name(self):
-        m_type = {'Central Forest': ['Goblin Archer', 'Spriggan', 'Imp', 'Bat',
-                                     'Beetle' if player.name != "Flygon Jones" else "Calculator"],
+    def monster_generation(self):
+        m_type = {'forest': ['Goblin Archer', 'Spriggan', 'Imp', 'Bat', 'Beetle'],
 
-                  'Harconian Coastline': ['Shell Mimic', 'Giant Crab', 'Naiad', 'Sea Serpent', 'Squid'],
+                  'shore': ['Shell Mimic', 'Giant Crab', 'Naiad', 'Sea Serpent', 'Squid'],
 
-                  'Glacian Plains': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge', 'Arctic Wolf', 'Frost Bat'],
+                  'tundra': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge', 'Arctic Wolf', 'Frost Bat'],
 
-                  'Bogthorn Marsh': ['Bog Slime', 'Moss Ogre', "Will-o'-the-wisp", 'Vine Lizard', 'Sludge Rat'],
+                  'swamp': ['Bog Slime', 'Moss Ogre', "Will-o'-the-wisp", 'Vine Lizard', 'Sludge Rat'],
 
-                  'Arcadian Desert': ['Mummy', 'Sand Golem', 'Anubis', 'Fire Ant', 'Naga'],
+                  'desert': ['Mummy', 'Sand Golem', 'Anubis', 'Fire Ant', 'Naga'],
 
-                  'Terrius Mt. Range': ['Troll', 'Rock Giant', 'Oread', 'Tengu', 'Giant Worm'],
+                  'mountain': ['Troll', 'Rock Giant', 'Oread', 'Tengu', 'Giant Worm'],
 
-                  'Overshire Graveyard': ['Zombie', 'Undead Archer', 'Necromancer', 'Skeleton', 'Ghoul'],
+                  'graveyard': ['Zombie', 'Undead Archer', 'Necromancer', 'Skeleton', 'Ghoul'],
 
-                  'Aethus': ['Alicorn', 'Griffin', 'Wraith', 'Harpy', 'Flying Serpent']
+                  'sky': ['Alicorn', 'Griffin', 'Wraith', 'Harpy', 'Flying Serpent']
                   }
 
-        self.name = m_type[main.party_info['reg']][random.randint(0, 4)]
+        if player.name.lower() in main.friend_names:
+            m_type['forest'].append("Calculator")
+
+        self.name = random.choice(m_type[main.party_info['biome']])
 
         # A list of monster-types and what AI they are to have
         magic_enemies = ['Naiad', "Will-o'the-wisp", 'Anubis', 'Oread', 'Necromancer', 'Wraith',
@@ -876,32 +858,114 @@ class Monster(Unit):
         elif self.name in math_monsters:
             self.attk_msg = "begins calculating the hell out of"
 
-        # Prepare to add the modifier onto the name
+        if self.name == "Calculator":
+            self.def_element = 'grass'
+            self.off_element = 'grass'
+            self.status = 'japed'
+            self.status_msg = "was thouroughly japed by the great Calculator!"
+
+        elif main.party_info['biome'] == 'tundra':
+            self.def_element = 'ice'
+            self.off_element = 'ice'
+            self.status = 'frostbitten'
+            self.status_msg = "was imbued with frost, causing painful frostbite!"
+
+        elif main.party_info['biome'] == 'desert':
+            self.def_element = 'fire'
+            self.off_element = 'fire'
+            self.status = 'blinded'
+            self.status_msg = "brought upon a sandstorm, causing temporary blindness!"
+
+        elif main.party_info['biome'] == 'mountain':
+            self.def_element = 'earth'
+            self.off_element = 'earth'
+            self.status = 'paralyzed'
+            self.status_msg = "hit a nerve ending, causing temporary paralysis!"
+
+        elif main.party_info['biome'] == 'shore':
+            self.def_element = 'water'
+            self.off_element = 'water'
+            self.status = 'muted'
+            self.status_msg = "caused organizational issues, leading to impaired item usage!"
+
+        elif main.party_info['biome'] == 'forest':
+            self.def_element = 'electric'
+            self.off_element = 'electric'
+            self.status = 'weakened'
+            self.status_msg = "drained its target's energy, causing temporary weakness!"
+
+        elif main.party_info['biome'] == 'swamp':
+            self.def_element = 'grass'
+            self.off_element = 'grass'
+            self.status = 'poisoned'
+            self.status_msg = "was imbued with deadly toxins that will slowly drain health!"
+
+        elif main.party_info['biome'] == 'graveyard':
+            self.def_element = 'death'
+            self.off_element = 'death'
+            self.status = 'poisoned'
+            self.status_msg = "poisoned their target using noxious fumes!"
+
+        elif main.party_info['biome'] == 'sky':
+            self.def_element = 'wind'
+            self.off_element = 'wind'
+            self.status = 'blinded'
+            self.status_msg = "brought upon the winds, dampening their target's vision!"
+
+        # Give the monster a set of items to drop if RNGsus wills it
+        if random.randint(0, 4) == 0:  # 20% chance
+            self.items = random.choice(items.monster_drop_list[self.name])
+
+    def monster_level(self):
+        self.lvl = main.party_info['current_tile'].m_level
+
+        for x in range(1, self.lvl):
+            self.hp += 5
+            self.mp += 4
+            self.attk += 4
+            self.dfns += 3
+            self.p_attk += 4
+            self.p_dfns += 3
+            self.m_attk += 4
+            self.m_dfns += 3
+            self.spd += 3
+            self.evad += 2
+
+        self.max_hp = self.hp
+        self.max_mp = self.mp
+
+    def monster_modifiers(self):
+        # Monsters with >40 level are called "Greater"
+        # Monsters with <10 level are called "Lesser"
+        # Goblins also randomly have a chance to be "Whipsering", which is an inside joke with a friend of mine
         self.m_name = copy.copy(self.name)
 
-        modifiers = ['Slow', 'Fast', 'Powerful', 'Ineffective', 'Nimble', 'Clumsy', 'Armored', 'Broken', 'Mystic',
-                     'Foolish', 'Strong', 'Weak', 'Observant', 'Obtuse']
-
-        modifier = random.choice(modifiers)
-
         if self.name == "Goblin" and random.randint(0, 50) == 42:
-            self.modifier = "Whispering"
-            self.attk *= 1.2
-            self.dfns *= 1.2
-            self.m_attk *= 1.2
-            self.m_dfns *= 1.2
-            self.p_attk *= 1.2
-            self.p_dfns *= 1.2
-            self.evad *= 1.2
-            self.spd *= 1.2
+            self.name = ''.join(["Whispering ", self.name])
 
-        elif modifier == 'Slow':  # Very-low speed, below-average speed
+        elif self.lvl < 10:
+            self.name = ''.join(["Lesser ", self.name])
+
+        elif self.lvl > 40:
+            self.name = ''.join(["Greater ", self.name])
+
+        # Monsters are given one of 14 different "modifiers", which increase/decrease some of their stats
+        # This is to help spice up the game and make it less predictable
+        modifier = random.choice(['Slow', 'Fast',
+                                  'Nimble', 'Clumsy',
+                                  'Powerful', 'Ineffective',
+                                  'Armored', 'Broken',
+                                  'Mystic', 'Foolish',
+                                  'Strong', 'Weak',
+                                  'Observant', 'Obtuse'])
+
+        if modifier == "Slow":  # Very-low speed, below-average speed
             self.spd /= 1.3
             self.evad /= 1.1
-        elif modifier == 'Fast':  # Very-high speed, above-average speed
+        elif modifier == "Fast":  # Very-high speed, above-average speed
             self.spd *= 1.3
             self.evad *= 1.1
-        elif modifier == 'Nimble':  # Very-high evasion, above-average speed
+        elif modifier == "Nimble":  # Very-high evasion, above-average speed
             self.evad *= 1.3
             self.spd *= 1.1
         elif modifier == 'Clumsy':  # Very-low evasion, below-average speed
@@ -948,66 +1012,6 @@ class Monster(Unit):
                      'self.spd', 'self.evad', 'self.mp', 'self.max_mp', 'self.hp', 'self.max_hp']:
 
             exec(f"{stat} = max(1, math.ceil({stat}))")  # Enemy stats must be integers
-
-        if self.m_name == "Calculator":
-            self.def_element = 'grass'
-            self.off_element = 'grass'
-            self.status = 'fucked'
-            self.status_msg = "was imbued with bullshit, causing severe fuckage!"
-
-        elif main.party_info['reg'] == 'Glacian Plains':
-            self.def_element = 'ice'
-            self.off_element = 'ice'
-            self.status = 'frostbitten'
-            self.status_msg = "was imbued with frost, causing painful frostbite!"
-
-        elif main.party_info['reg'] == 'Arcadian Desert':
-            self.def_element = 'fire'
-            self.off_element = 'fire'
-            self.status = 'blinded'
-            self.status_msg = "brought upon a sandstorm, causing temporary blindness!"
-
-        elif main.party_info['reg'] == 'Terrius Mt. Range':
-            self.def_element = 'earth'
-            self.off_element = 'earth'
-            self.status = 'paralyzed'
-            self.status_msg = "hit a nerve ending, causing temporary paralysis!"
-
-        elif main.party_info['reg'] == 'Harconian Coastline':
-            self.def_element = 'water'
-            self.off_element = 'water'
-            self.status = 'muted'
-            self.status_msg = "caused organizational issues, leading to impaired item usage!"
-
-        elif main.party_info['reg'] == 'Central Forest':
-            self.def_element = 'electric'
-            self.off_element = 'electric'
-            self.status = 'weakened'
-            self.status_msg = "drained its target's energy, causing temporary weakness!"
-
-        elif main.party_info['reg'] == 'Bogthorn Marsh':
-            self.def_element = 'grass'
-            self.off_element = 'grass'
-            self.status = 'poisoned'
-            self.status_msg = "was imbued with deadly toxins that will slowly drain health!"
-
-        elif main.party_info['reg'] == 'Overshire Graveyard':
-            self.def_element = 'death'
-            self.off_element = 'death'
-            self.status = 'poisoned'
-            self.status_msg = "poisoned their target using noxious fumes!"
-
-        elif main.party_info['reg'] == 'Aethus':
-            self.def_element = 'wind'
-            self.off_element = 'wind'
-            self.status = 'blinded'
-            self.status_msg = "brought upon the winds, dampening their target's vision!"
-
-        self.name = ' '.join([modifier, self.name]) if modifier else self.name
-
-        # Give the monster a set of items to drop if RNGsus wills it
-        if random.randint(0, 4) == 0:  # 20% chance
-            self.items = random.choice(items.monster_drop_list[self.m_name])
 
     def melee_stats(self):
         # Set stats for melee-class monsters
@@ -1096,8 +1100,8 @@ class Monster(Unit):
     def base_turn(self):
         self.get_target()
 
-        print(f"-{self.m_name}'s Turn-")
-        print(ascii_art.monster_art[self.m_name] % f"The {self.m_name} is making a move!\n")
+        print(f"-{self.name}'s Turn-")
+        print(ascii_art.monster_art[self.m_name] % f"The {self.name} is making a move!\n")
         self.do_abilities()
         self.battle_turn()
 
@@ -1105,7 +1109,7 @@ class Monster(Unit):
         if self.status_ail == 'poisoned':
             damage = math.ceil(self.ability_vars['poison_pow']*self.max_hp + self.ability_vars['poison_dex'])
             self.hp -= damage
-            print(f"The {self.m_name} took {damage} damage from poison!")
+            print(f"The {self.name} took {damage} damage from poison!")
             sounds.poison_damage.play()
             main.smart_sleep(0.75)
 
@@ -1127,14 +1131,14 @@ class Monster(Unit):
 
         # Magic heal
         elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
-            print(f'The {self.m_name} is casting a healing spell on itself...')
+            print(f'The {self.name} is casting a healing spell on itself...')
             main.smart_sleep(0.75)
 
             healing_power = math.ceil(max([self.hp*0.2, 5]))
             self.hp += min([self.hp*0.2, 5])
             self.mp -= self.max_mp*0.2
 
-            print(f'The {self.m_name} heals itself for {healing_power} HP!')
+            print(f'The {self.name} heals itself for {healing_power} HP!')
             sounds.magic_healing.play()
 
         # Magic Attack
@@ -1142,27 +1146,27 @@ class Monster(Unit):
 
             sounds.magic_attack.play()
 
-            print(f'The {self.m_name} is preparing to cast a spell on {self.m_target.name}!')
+            print(f'The {self.name} is preparing to cast a spell on {self.m_target.name}!')
             main.smart_sleep(0.75)
 
             dam_dealt = deal_damage(self, self.m_target, "magical")
 
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.m_name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
+                print(f"The {self.name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
 
                 self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.m_name}'s spell narrowly misses {self.m_target.name}!")
+                print(f"The {self.name}'s spell narrowly misses {self.m_target.name}!")
 
             self.mp -= self.max_mp*0.15
 
         # Non-magic Attack
         else:
             sounds.aim_weapon.play()
-            print(f'The {self.m_name} {self.attk_msg} {self.m_target.name}')
+            print(f'The {self.name} {self.attk_msg} {self.m_target.name}')
 
             main.smart_sleep(0.75)
 
@@ -1170,17 +1174,17 @@ class Monster(Unit):
 
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.m_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+                print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
                 self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.m_name}'s attack narrowly misses {self.m_target.name}!")
+                print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
     def ranged_ai(self):
         # At the moment, Ranged monsters are only capable of attacking
-        print(f'The {self.m_name} {self.attk_msg} {self.m_target.name}!')
+        print(f'The {self.name} {self.attk_msg} {self.m_target.name}!')
         sounds.aim_weapon.play()
 
         main.smart_sleep(0.75)
@@ -1188,32 +1192,32 @@ class Monster(Unit):
         if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
             dam_dealt = deal_damage(self, self.m_target, 'piercing')
 
-            print(f"The {self.m_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+            print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
             self.m_target.hp -= dam_dealt
             sounds.enemy_hit.play()
 
         else:
             sounds.attack_miss.play()
-            print(f"The {self.m_name}'s attack narrowly misses {self.m_target.name}!")
+            print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
     def melee_ai(self):
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
         if random.randint(0, 5) == 0 and not self.is_defending:
             self.is_defending = True
-            print(f"The {self.m_name} is preparing itself for enemy attacks...")
+            print(f"The {self.name} is preparing itself for enemy attacks...")
             main.smart_sleep(0.75)
 
             self.dfns *= 2
             self.m_dfns *= 2
             self.p_dfns *= 2
 
-            print(f"The {self.m_name}'s defense stats increased by 2x for one turn!")
+            print(f"The {self.name}'s defense stats increased by 2x for one turn!")
             sounds.buff_spell.play()
 
         # Set defense back to normal if the monster defended last turn
         elif self.is_defending:
-            print(f"The {self.m_name} stops defending, returning its defense stats to normal.")
+            print(f"The {self.name} stops defending, returning its defense stats to normal.")
             self.is_defending = False
             self.dfns /= 2
             self.m_dfns /= 2
@@ -1222,19 +1226,19 @@ class Monster(Unit):
         # If the monster doesn't defend, then it will attack!
         if not self.is_defending:
             sounds.sword_slash.play()
-            print(f'The {self.m_name} {self.attk_msg} {self.m_target.name}!')
+            print(f'The {self.name} {self.attk_msg} {self.m_target.name}!')
             main.smart_sleep(0.75)
 
             dam_dealt = deal_damage(self, self.m_target, "physical")
             if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
                 sounds.enemy_hit.play()
-                print(f"The {self.m_name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+                print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
 
                 self.m_target.hp -= dam_dealt
 
             else:
                 sounds.attack_miss.play()
-                print(f"The {self.m_name}'s attack narrowly misses {self.m_target.name}!")
+                print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
 
 class Boss(Monster):
@@ -1659,8 +1663,9 @@ def create_player():
 def spawn_monster():
     for unit_object in ['monster', 'monster_2', 'monster_3']:
         globals()[unit_object] = Monster('', 10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
-        globals()[unit_object].monst_name()
-        globals()[unit_object].monst_level()
+        globals()[unit_object].monster_generation()
+        globals()[unit_object].monster_level()
+        globals()[unit_object].monster_modifiers()
 
 
 def fix_stats():

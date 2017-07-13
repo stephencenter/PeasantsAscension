@@ -1,17 +1,17 @@
-#   This file is part of Peasants' Ascension.
+# This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#    Peasants' Ascension is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
-#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
 import random
@@ -113,7 +113,7 @@ class Town:
                     print('-'*save_load.divider_size)
 
                 elif choice.lower() in ['e', 'x', 'exit', 'b', 'back']:
-                    pygame.mixer.music.load(main.party_info['reg_music'])
+                    pygame.mixer.music.load(main.party_info['music'])
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(save_load.music_vol)
                     print('-'*save_load.divider_size)
@@ -616,7 +616,7 @@ class Tavern:
                 else:
                     print('"You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
 
-                pygame.mixer.music.load(main.party_info['reg_music'])
+                pygame.mixer.music.load(main.party_info['music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(save_load.music_vol)
                 print('-'*save_load.divider_size)
@@ -624,7 +624,7 @@ class Tavern:
                 return
 
             elif choice.startswith('n'):
-                pygame.mixer.music.load(main.party_info['reg_music'])
+                pygame.mixer.music.load(main.party_info['music'])
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(save_load.music_vol)
                 print('-'*save_load.divider_size)

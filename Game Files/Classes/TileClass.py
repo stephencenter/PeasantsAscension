@@ -1,28 +1,29 @@
-#   This file is part of Peasants' Ascension.
+# This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#    Peasants' Ascension is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
-#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
-# ------------------------------------------------------------------------ #
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 
 class Tile:
-    def __init__(self, name, tile_id, region, desc, m_level, to_n=None, to_s=None, to_e=None, to_w=None, to_up=None,
-                 to_dn=None, town_list=(), boss_list=(), gem_list=(), allow_recursion=False, allow_oneway=False,
-                 allow_noneuclidean=False):
+    def __init__(self, name, tile_id, province, desc, biome,  m_level,
+                 to_n=None, to_s=None, to_e=None, to_w=None, to_up=None, to_dn=None,
+                 town_list=(), boss_list=(), gem_list=(),
+                 allow_recursion=False, allow_oneway=False, allow_noneuclidean=False):
         self.name = name
         self.tile_id = tile_id
-        self.region = region
+        self.province = province
         self.desc = desc
+        self.biome = biome
         self.m_level = m_level
         self.to_n = to_n
         self.to_s = to_s

@@ -1,3 +1,18 @@
+# This file is part of Peasants' Ascension.
+#
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
+
 import math
 import sys
 
@@ -196,7 +211,7 @@ def use_inject_poison(user):
     sounds.aim_weapon.play()
     main.smart_sleep(0.75)
 
-    print(f"{user.name} injects the poison into the {user.target.m_name}!")
+    print(f"{user.name} injects the poison into the {user.target.name}!")
     sounds.poison_damage.play()
     pass
 
@@ -250,16 +265,16 @@ def before_disarming_blow(user):
 
 
 def use_disarming_blow(user):
-    print(f"{user.name} is preparing to disarm the {user.target.m_name}")
+    print(f"{user.name} is preparing to disarm the {user.target.name}")
     sounds.aim_weapon.play()
     main.smart_sleep(0.75)
 
     if user.target.ability_vars['disarmed']:
         sounds.debuff.play()
-        print(f"But the {user.target.m_name} is already disarmed!")
+        print(f"But the {user.target.name} is already disarmed!")
         return
 
-    print(f"The {user.target.m_name} drops their weapon, lowering their attack!")
+    print(f"The {user.target.name} drops their weapon, lowering their attack!")
     sounds.buff_spell.play()
 
     user.target.ability_vars['disarmed'] = True
@@ -342,7 +357,7 @@ def before_mana_drain(user):
 
 
 def use_mana_drain(user):
-    print(f"{user.name} is preparing to cast Mana Drain on the {user.target.m_name}...")
+    print(f"{user.name} is preparing to cast Mana Drain on the {user.target.name}...")
     sounds.aim_weapon.play()
     main.smart_sleep(0.75)
 
@@ -354,7 +369,7 @@ def use_mana_drain(user):
     units.fix_stats()
 
     sounds.buff_spell.play()
-    print(f"The {user.target.m_name} lost {drain} MP!")
+    print(f"The {user.target.name} lost {drain} MP!")
     print(f"{user.name} gained {drain} MP!")
 
 
@@ -475,7 +490,7 @@ def use_unholy_binds(user):
         print(f"{user.target.name} is preparing to cast Unholy Binds on {user.target.name}!")
 
     else:
-        print(f"{user.target.name} is preparing to cast Unholy Binds on the {user.target.m_name}!")
+        print(f"{user.target.name} is preparing to cast Unholy Binds on the {user.target.name}!")
 
     sounds.aim_weapon.play()
     main.smart_sleep(0.75)
@@ -491,7 +506,7 @@ def use_unholy_binds(user):
 
         sounds.enemy_death.play()
 
-        print(f"The {user.target.m_name} succumed to the darkness!")
+        print(f"The {user.target.name} succumed to the darkness!")
 
         return
 
@@ -502,7 +517,7 @@ def use_unholy_binds(user):
         print(f"{user.target.name} had their defensive element set to Darkness!")
 
     else:
-        print(f"The {user.target.m_name} had their defensive element set to Darkness!")
+        print(f"The {user.target.name} had their defensive element set to Darkness!")
 
 unholy_binds = Ability("Unholy Binds", f"""\
 Sets a target's defensive element to Darkness, causing Light and Dark spells

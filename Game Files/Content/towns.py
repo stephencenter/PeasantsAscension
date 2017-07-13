@@ -1,17 +1,17 @@
-#   This file is part of Peasants' Ascension.
+# This file is part of Peasants' Ascension.
 #
-#    Peasants' Ascension is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
+# Peasants' Ascension is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-#    Peasants' Ascension is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Peasants' Ascension is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-#    You should have received a copy of the GNU General Public License
-#    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import json
 import logging
@@ -59,16 +59,15 @@ Southford: A fair-size town in the South-East of the Inner Central Forest.
 The inhabitants of this town are known for being quite wise, and may
 provide you with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], [southford_h1], 2, 1, "southford")
 
-town_overshire = Town('Overshire', """\
-Overshire: A city in the northwestern region of the Forest. Overshire is the
+town_overshire_city = Town('Overshire City', """\
+Overshire City: A city in the northwestern region of the Forest. Overshire is the
 capital of Harconia, and as such is very densely populated. The city is
 separated into three sectors: the upper-class inner portion consisting of
 a castle surrounded by reinforced stone walls, a lower-class outer portion
 comprised of smalls buildings and huts, and a middle-class section situated in
 between. As an outsider, you are forbidden to enter the upper two, but are
-welcome to do as you wish in the lower.""",
-                      [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos], [],
-                      5, 2, "overshire")
+welcome to do as you wish in the lower.""", [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
+                                            [], 5, 2, "overshire_city")
 
 # RENAME
 town_charsulville = Town('Charsulville', """\
@@ -142,7 +141,7 @@ a large number of them defected to the Harconian side and stayed. After the
 war, the citizens gave up their weapons and became a peaceful town. The vast
 majority of the inhabitants of this town are, naturally, Flyscors. It seems
 that the Flyscorian Royal Family is visiting here - perhaps you can talk with
- them for a bit.""", [npcs.f_jones, npcs.stravi, npcs.caesar], [], 2, 3, "new_ekanmar")
+ them for a bit.""", [npcs.flysio, npcs.stravi, npcs.caesar], [], 2, 3, "new_ekanmar")
 
 town_ravenstone = Town('Ravenstone', """\
 Ravenstone: Ravenstone is a natural sanctuary,
@@ -241,7 +240,7 @@ be seen on every corner.
 # These three lists are used to serialize chest data. It's easier than having to constantly add chests to lists
 all_towns = [town_nearton, town_southford, town_ambercreek, town_capwild, town_cesura, town_charsulville,
              town_fallville, town_hatchnuk, town_rymn_outpost, town_lantonum, town_fort_sigil, town_sanguion,
-             town_ravenstone, town_principalia, town_whistumn, town_new_ekanmar, town_overshire, town_sardooth]
+             town_ravenstone, town_principalia, town_whistumn, town_new_ekanmar, town_overshire_city, town_sardooth]
 all_houses = [house for sublist in [town.houses for town in all_towns] for house in sublist]
 all_chests = [chest for sublist in [house.chests for house in all_houses] for chest in sublist]
 
