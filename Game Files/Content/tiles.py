@@ -37,7 +37,7 @@ unfortunately, several kinds of monsters. There are trees in all directions as
 far as the eye can see, each towering over a hundred feet tall. The ground is
 scattered with the occasional rock and a plentiful supply of leaves twigs. In
 other words, it's your standard forest. The Inner Central Forest makes up only a
-small fraction of the 150 million acre Central Forest, and is surrounded by a
+small fraction of the 100 million acre Central Forest, and is surrounded by a
 12-foot wide moat."""
 
 in_for_n = Tile("Inner Central Forest", "I-CF-N", "Province of Overshire", icf_desc, "forest", 1,

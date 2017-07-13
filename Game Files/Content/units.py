@@ -101,47 +101,53 @@ class PlayableCharacter(Unit):
 
     def choose_name(self):
         while True:
-            # Ask the player for their name, and remove any pipe characters from it
-            choice = main.s_input('What is your name, young adventurer? | Input Name: ')
+            # Ask the player for their name, and remove any non alphanumeric/dash characters from it
+            # Also remove beginning/ending whitespace, and repeated spaces
+            choice1 = main.s_input('What is your name, young adventurer? | Input Name: ')
+            choice2 =  ' '.join(re.sub('[^\w\-_ ]', '', choice1).split())
 
-            if not ''.join(choice.split()):
-                continue
-
-            temp_name = re.sub('[^\w\-_ ]', '', choice)
-
-            for x, y in enumerate(temp_name):
-                try:
-                    if not (y == ' ' and temp_name[x + 1] == ' '):
-                        self.name = ''.join([self.name, y])
-
-                except IndexError:
-                    pass
-
-            if self.name[0] == ' ':
-                self.name = self.name[1:]
-
-            if not ''.join(self.name.split()) and ''.join(choice.split()):
-                continue
-
-            if self.name.lower() in main.friend_names:
-                print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
+            # If your original choice contained characters, but the filtered version didn't,
+            # this message will pop up.
+            if choice1 and not choice2:
+                print("I'm sorry, I didn't quite catch that.")
                 main.s_input('\nPress enter/return ')
                 print('-'*save_load.divider_size)
+                continue
 
-                return
+            # You can't name yourself nothing. Sorry but that's the rules.
+            if not (choice1 or choice2):
+                continue
+
+            self.name = choice2
 
             while True:
-                y_n = main.s_input(f'So, your name is {self.name}? | Y/N: ').lower()
+                if self.name.lower() == 'y':
+                    print("""Your name's "y", eh? Must be in a hurry.""")
+                    main.s_input('\nPress enter/return ')
+                    print('-' * save_load.divider_size)
 
-                if y_n.startswith('y'):
+                elif self.name.lower() in main.friend_names:
+                    print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
+                    main.s_input('\nPress enter/return ')
+                    print('-' * save_load.divider_size)
+
+                elif self.name.lower() == "frisk":
+                    print("Frisk? Sorry, no hard mode for you in this game.")
+                    main.s_input('\nPress enter/return ')
+                    print('-' * save_load.divider_size)
+
+                else:
+                    y_n = main.s_input(f'So, your name is "{self.name}?" | Y/N: ').lower()
                     print('-'*save_load.divider_size)
-                    return
 
-                elif y_n.startswith('n'):
-                    self.name = ''
-                    print()
+                    if y_n.startswith('n'):
+                        self.name = ''
+                        break
 
-                    break
+                    elif not y_n.startswith('y'):
+                        continue
+
+                return
 
     def choose_class(self):
         while True:

@@ -67,10 +67,16 @@ PEASANT-RPG GOALS
 		[ ] Retcon the whole "democratically elected leader" thing. It sounds good and is a good way to make your country likable but I feel
 			it's harder to work with in a fantasy setting without a concept of heirs and inheritence.
 		[ ] 12 Provinces:
+			[ ] Overshire
 			[ ] Celemia
 			[ ] Simphet
 			[ ] Thex
-			 
+			[ ] Camberlite
+			[ ] Kohrin
+			[ ] Sadora
+			[ ] Peladora
+			[ ] Flute
+			
 	[ ] Redo the plot:
 		[ ] Beginning your adventure:
 			"""[Name] wakes up under a tree, a tree they fall to sleep under every night.
