@@ -104,7 +104,7 @@ class PlayableCharacter(Unit):
             # Ask the player for their name, and remove any non alphanumeric/dash characters from it
             # Also remove beginning/ending whitespace, and repeated spaces
             choice1 = main.s_input('What is your name, young adventurer? | Input Name: ')
-            choice2 =  ' '.join(re.sub('[^\w\-_ ]', '', choice1).split())
+            choice2 = ' '.join(re.sub('[^\w\-_ ]', '', choice1).split())
 
             # If your original choice contained characters, but the filtered version didn't,
             # this message will pop up.
@@ -534,7 +534,7 @@ Armor:
             self.move = main.s_input("Input [#]: ")
 
             try:
-                self.move = re.sub("[^0-9]", '', self.move)[0]
+                self.move = ''.join([char for char in self.move if char.isnumeric])[0]
 
             except IndexError:
                 continue

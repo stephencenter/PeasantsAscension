@@ -4,12 +4,10 @@ Pacific Ocean. This continent was a safe-haven for non-human intelligent life, a
 was the only place in the world that contained nations that didn't persecute them.
 
 Races found in Harconia:
-  Elves (68%)
+  Elves (71%)
   Dwarves (18%)
-  Gnomes (6%)
-  Flyscors (5%)
-  Avali (2%)
-  Humans (1%)
+  Gnomes (7%)
+  Humans (4%)
 
 Regions of Harconia:
   The regions of Harconia are named after the geography of the areas. While the

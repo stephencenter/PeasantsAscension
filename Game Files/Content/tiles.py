@@ -55,7 +55,7 @@ in_for_e = Tile("Inner Central Forest", "I-CF-E", "Province of Overshire", icf_d
                 to_w="I-CF-C",
                 to_s="I-CF-SE",
                 to_e="I-CF-EE")
-in_for_w = Tile("Inner Central Forest", "I-CF-W", "Central Forest", icf_desc, "forest", 1,
+in_for_w = Tile("Inner Central Forest", "I-CF-W", "Province of Overshire", icf_desc, "forest", 1,
                 to_s="I-CF-SW",
                 to_e="I-CF-C",
                 to_n="I-CF-NW",
@@ -287,6 +287,33 @@ cenf_tiles_q_b = [cenf_tile_1b, cenf_tile_2b, cenf_tile_3b, cenf_tile_4b, cenf_t
 
 all_tiles = icf_tiles + cenf_tiles_q_a + cenf_tiles_q_b  # + other tiles lists as more tiles come into existence
 
+# valid_provinces and valid_biomes are lists of strings that are allowed to be used as biome/proivince names
+# This is to prevent errors such as typos and whatnot, as there's no reason to use any other biome/proivince names
+valid_provinces = ["Province of Overshire",
+                   "Province of Thex",
+                   "Province of Celemia",
+                   "Province of Pelamora",
+                   "Province of Simphet",
+                   "Province of Camberlite",
+                   "Province of Kohrin",
+                   "Province of Deltora",  # Deltora quest was one of my favorite book series growing up <3
+                   "Province of Flute",
+                   "Province of Chimney",
+                   "Province of Ranghor",
+                   "Province of Downpour"]
+
+valid_biomes = ["sky",
+                "graveyard",
+                "cave",
+                "underworld",
+                "dungeon",
+                "desert",
+                "forest",
+                "shore",
+                "swamp",
+                "mountain",
+                "tundra"]
+
 
 def find_tile_with_id(tile_id):
     # A very simple function that scans through a list of all existing Tile objects and returns the first
@@ -346,3 +373,10 @@ for item6 in all_tiles:
 
     if is_error:
         print(f"{item6.tile_id} has non-euclidean passages - is this intended?")
+
+for item7 in all_tiles:
+    if item7.province not in valid_provinces:
+        print(f"{item7.tile_id} has an invalid province name!")
+
+    if item7.biome not in valid_biomes:
+        print(f"{item7.tile_id} has an invalid biome name!")

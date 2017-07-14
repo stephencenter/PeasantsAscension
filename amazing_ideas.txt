@@ -73,9 +73,12 @@ PEASANT-RPG GOALS
 			[ ] Thex
 			[ ] Camberlite
 			[ ] Kohrin
-			[ ] Sadora
-			[ ] Peladora
+			[ ] Pelamora
 			[ ] Flute
+			[ ] Deltora
+			[ ] Downpour
+			[ ] Chimney
+			[ ] Ranghor
 			
 	[ ] Redo the plot:
 		[ ] Beginning your adventure:

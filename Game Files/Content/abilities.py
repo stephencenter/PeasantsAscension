@@ -417,7 +417,7 @@ def use_scout(user):
     print(f"""{user.target.name.upper()}'s STATS:
 Attack: {user.target.attk} | M. Attack: {user.target.m_attk} | P. Attack: {user.target.p_attk}
 Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {user.target.p_dfns}
-Evasion: {user.target.evad} | Speed: {user.target.spd,}
+Evasion: {user.target.evad} | Speed: {user.target.spd}
 Def. Element: {user.target.def_element.title()} | Off. Element: {user.target.off_element.title()} | Weakness: {m_w}""")
 
 

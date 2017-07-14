@@ -41,19 +41,17 @@ nearton_h1 = House("Philliard", [nearton_h1_c1, nearton_h1_c2])
 nearton_h2_c1 = Chest([5, items.bone_bag, items.fairy_dust, items.feathers], 1, "N-H2-C1")
 nearton_h2 = House("Alfred", [nearton_h2_c1])
 
-# RENAME
 town_nearton = Town('Nearton', """\
 Nearton: A small village in the central region of the Forest. It is in this
 very town where numerous brave adventurers have begun their journey. Nearton
 is just your standard run-of-the-mill village: it has a general store, an inn,
 and a few small houses. An old man  is standing near one of the houses, and
-appears to be very troubled about something.""",
-                    [npcs.philliard, npcs.alfred, npcs.saar, npcs.npc_solou], [nearton_h1, nearton_h2], 0, 1, "nearton")
+appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, npcs.saar, npcs.npc_solou],
+                                                 [nearton_h1, nearton_h2], 0, 1, "nearton")
 
 southford_h1_c1 = Chest([35], 2, "S-H1-C1")
 southford_h1 = House("Lazaro", [southford_h1_c1])
 
-# RENAME
 town_southford = Town('Southford', """\
 Southford: A fair-size town in the South-East of the Inner Central Forest.
 The inhabitants of this town are known for being quite wise, and may
@@ -83,7 +81,6 @@ convert the rarely-used fort into a hospitable village, and have done
 fairly well. Despite it's rich backstory, Fort Sigil doesn't get many
 visitors. Perhaps there's a reason...""", [npcs.seriph, npcs.rivesh], [], 1, 3, "fort_sigil")
 
-# RENAME
 town_tripton = Town('Tripton', """\
 Tripton: When the town of Tripton was being built, the people working on the
 project failed to notice that another town, Fallville, just so happened to be
@@ -93,7 +90,6 @@ easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
 village leaders.""", [npcs.kyle], [], 3, 3, "tripton")
 
-# RENAME
 town_fallville = Town('Fallville', """\
 Fallville: When the town of Tripton was being built, the people working on the
 project failed to notice that another town, Fallville, just so happened to be

@@ -151,7 +151,7 @@ def game_loop():
             print('-'*save_load.divider_size)
 
         # These lists will tell the game how to manipulate the players position in the next part of the function
-        coord_change, available_dirs = game_ui()
+        available_dirs = game_ui()
 
         while True:
             command = s_input('Input Command (type "help" to view command list): ').lower()
@@ -160,7 +160,7 @@ def game_loop():
                 debug_command()
 
             elif any(map(command.startswith, [x[0] for x in available_dirs])):
-                move_command(coord_change, available_dirs, command[0])
+                move_command(available_dirs, command[0])
 
                 break
 
@@ -219,10 +219,18 @@ def check_region():
         music = 'Content/Music/Digital Native.ogg'
 
     elif new_biome == 'shore':
-        music = 'Content/Music/We\'re all under the stars.ogg'
+        music = "Content/Music/We're all under the stars.ogg"
 
     elif new_biome == 'cave':
         music = 'Content/Music/song21_02.ogg'
+
+    elif new_biome == 'underworld':
+        # TODO!! get music!
+        pass
+
+    elif new_biome == 'dungeon':
+        # TODO!! get music!
+        pass
 
     else:
         logging.debug(f'No music for biome "{new_biome}" on {time.strftime("%m/%d/%Y at %H:%M:%S")}')
@@ -280,40 +288,34 @@ def game_ui():
         if drc == tile.to_e:
             print("    To the [E]ast", end='')
             available_dirs.append(['e', drc])
-            coord_change = ['x', 1]
 
         if drc == tile.to_w:
             print("    To the [W]est", end='')
             available_dirs.append(['w', drc])
-            coord_change = ['x', -1]
 
         if drc == tile.to_n:
             print("    To the [N]orth", end='')
             available_dirs.append(['n', drc])
-            coord_change = ['y', 1]
 
         if drc == tile.to_s:
             print("    To the [S]outh", end='')
             available_dirs.append(['s', drc])
-            coord_change = ['y', -1]
 
         if drc == tile.to_up:
             print("    [U]pwards, above your party,", end='')
             available_dirs.append(['u', drc])
-            coord_change = ['z', 1]
 
         if drc == tile.to_dn:
             print("    [D]ownwards, below your party,", end='')
             available_dirs.append(['d', drc])
-            coord_change = ['z', -1]
 
         adj_tile = tiles.find_tile_with_id(drc)
         print(f" lies the {adj_tile.name}")
 
-    return coord_change, available_dirs
+    return available_dirs
 
 
-def move_command(coord_change, available_dirs, command):
+def move_command(available_dirs, command):
     sounds.foot_steps.play()
 
     party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in

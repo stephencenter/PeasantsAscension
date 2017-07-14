@@ -39,8 +39,8 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, houses, inn_cost, gs_level, town_id, watermelon=False):
-        self.name = name  # The town's name (i.e. New York City)
+    def __init__(self, name, desc, people, houses, inn_cost, gs_level, town_id, has_watermelon=False):
+        self.name = name  # The town's name (e.g. New York City)
         self.desc = desc  # A brief description of the town
 
         self.inn_cost = inn_cost  # How much money it costs to sleep at the inn
@@ -49,7 +49,7 @@ class Town:
         self.people = people  # A list that contains the NPCs you can talk to
         self.houses = houses  # A list that contains random buildings you can enter
 
-        self.watermelon = watermelon  # Only used for one specific quest
+        self.has_watermelon = has_watermelon  # Only used for one specific quest
         self.town_id = town_id
 
     def town_choice(self):
@@ -82,7 +82,7 @@ class Town:
                 elif choice == '2':
                     print('-'*save_load.divider_size)
 
-                    if self.gs_level != -1 or self.inn_cost != -1 or self.watermelon:
+                    if self.gs_level != -1 or self.inn_cost != -1 or self.has_watermelon:
                         self.inside_town()
 
                     else:
@@ -148,7 +148,7 @@ class Town:
         watermelon_words = ['w', 'u']
 
         while True:
-            if self.watermelon:
+            if self.has_watermelon:
                 print('There is a [W]atermelon store and some [U]nlocked houses in this town.')
                 buildings = watermelon_words
 
@@ -174,7 +174,7 @@ class Town:
                         self.town_inn()
 
                     if selected.startswith('w'):
-                        self.watermelon()
+                        self.watermelon_store()
 
                     print('-'*save_load.divider_size)
 
@@ -186,85 +186,6 @@ class Town:
 
                 elif selected in ['e', 'x', 'exit', 'b', 'back']:
                     return
-
-    @staticmethod
-    def watermelon():
-        print('-'*save_load.divider_size)
-        for sentence in [
-            'Greetings, sir! Welcome to the Watermelon Inc. Store! We sell the latest',
-            'Watermelon brand products, including the iSheet, the uPhone, and our most',
-            'popular: the iSound! The latest one is our thinnest yet, at slightly less',
-            'than a micrometer thick! What purpose does that serve, you ask? No clue,',
-            'I just sell the stuff. So, what will it be?'
-        ]:
-
-            main.s_input(''.join(["Salesman: ", sentence, " | [ENTER] "]))
-
-        print('-'*save_load.divider_size)
-        print('You understood absolutely none of what he said, but you get the feeling')
-        main.s_input('that he wants you to buy something. | Press enter/return ')
-        print('-'*save_load.divider_size)
-
-        while True:
-            print(f"""Shopkeeper Inventory | You have {main.party_info['gp']} GP
-      [1] iSheet ---------> 1000000 GP
-      [2] uPhone ---------> 1000000 GP
-      [3] wePad ----------> 1000000 GP
-      [4] iListen --------> 1000000 GP
-      [5] Watermelon TV --> 1000000 GP
-      [6] iSheet Mini ----> 1000000 GP
-      [7] iSound ---------> 250 GP""")
-
-            spam = True
-            while spam:
-                choice = main.s_input('Input [#] (or type "exit") ').lower()
-
-                try:
-                    choice = int(choice)
-
-                except ValueError:
-                    if choice in ['e', 'x', 'exit', 'b', 'back']:
-                        return
-
-                if choice in [1, 2, 3, 4, 5, 6]:
-                    print('-'*save_load.divider_size)
-                    main.s_input('Salesman: Yeah right, as if you actually have that much money | [ENTER] ')
-                    print('-'*save_load.divider_size)
-
-                    break
-
-                elif choice == 7:
-                    print('-'*save_load.divider_size)
-
-                    while True:
-                        y_n = main.s_input("Do you want to buy an iSound for 250 GP? | Y/N: ").lower()
-
-                        if y_n.startswith("y") and main.party_info['gp'] >= 250:
-                            print('-'*save_load.divider_size)
-                            main.s_input('*You exchange the 250 GP for the iSound thing* | [ENTER] ')
-                            main.s_input('It has been added to the Quest Items page of your inventory | [ENTER] ')
-                            print('-'*save_load.divider_size)
-                            main.s_input('Salesman: Thank you, come back again!" | [ENTER] ')
-                            print('-'*save_load.divider_size)
-
-                            main.party_info['gp'] -= 250
-                            inv_system.inventory['q_items'].append(copy.copy(items.iSound))
-                            spam = False
-
-                            break
-
-                        elif y_n.startswith("y") and main.party_info['gp'] < 250:
-                            print('-'*save_load.divider_size)
-                            main.s_input('Salesman: "Hey, you don\'t have enough money for that!" | [ENTER]')
-                            print('-'*save_load.divider_size)
-
-                            break
-
-                        elif y_n.startswith("n"):
-                            print('-'*save_load.divider_size)
-                            spam = False
-
-                            break
 
     def town_inn(self):
         print('-'*save_load.divider_size)
@@ -561,6 +482,96 @@ class Town:
                 pygame.mixer.music.set_volume(save_load.music_vol)
 
                 break
+
+    @staticmethod
+    def watermelon_store():
+        print('-'*save_load.divider_size)
+        print("Salesman: ")
+        for sentence in [
+            'Greetings, sir! Welcome to the Watermelon Inc. Store! We sell the latest',
+            'Watermelon brand products, including the iSheet, the uPhone, and our most',
+            'popular: the iSound! The latest one is our thinnest yet, at slightly less',
+            'than a micrometer thick! What purpose does that serve, you ask? No clue,',
+            'I just sell the stuff. So, what will it be?'
+        ]:
+
+            main.s_input(sentence)
+
+        print('-'*save_load.divider_size)
+        print('Your party is very confused.')
+        main.s_input("\nPress enter/return ")
+        print('-'*save_load.divider_size)
+
+        while True:
+            print(f"""Shopkeeper Inventory | You have {main.party_info['gp']} GP
+      [1] iSheet ---------> 1000000 GP
+      [2] uPhone ---------> 1000000 GP
+      [3] wePad ----------> 1000000 GP
+      [4] iListen --------> 1000000 GP
+      [5] Watermelon TV --> 1000000 GP
+      [6] iSheet Mini ----> 1000000 GP
+      [7] iSound ---------> 250 GP""")
+
+            spam = True
+            while spam:
+                choice = main.s_input('Input [#] (or type "exit") ').lower()
+
+                try:
+                    choice = int(choice)
+
+                except ValueError:
+                    if choice in ['e', 'x', 'exit', 'b', 'back']:
+                        return
+
+                if choice in [1, 2, 3, 4, 5, 6]:
+                    if main.party_info['gp'] >= 1000000:
+                        print("Salesmen: ")
+                        main.s_input("Oh wow, you actually have a million GP... Sorry these boxes are all empty,")
+                        main.s_input("the only reason we have those on the item list is people don't find out")
+                        print("that all we sell is the iSound.")
+                        main.s_input("\nPress enter/return ")
+
+                        break
+
+                    print('-'*save_load.divider_size)
+                    print('Salesman: Yeah right, as if you actually have that much money.')
+                    main.s_input("\nPress enter/return ")
+                    print('-'*save_load.divider_size)
+
+                    break
+
+                elif choice == 7:
+                    print('-'*save_load.divider_size)
+
+                    while True:
+                        y_n = main.s_input("Do you want to buy an iSound for 250 GP? | Y/N: ").lower()
+
+                        if y_n.startswith("y") and main.party_info['gp'] >= 250:
+                            print('-'*save_load.divider_size)
+                            print('*You exchange the 250 GP for the iSound thing*')
+                            print('It has been added to the Quest Items page of your inventory.')
+                            main.s_input("\nPress enter/return ")
+                            print('-'*save_load.divider_size)
+
+                            main.party_info['gp'] -= 250
+                            inv_system.inventory['q_items'].append(copy.copy(items.iSound))
+                            spam = False
+
+                            break
+
+                        elif y_n.startswith("y") and main.party_info['gp'] < 250:
+                            print('-'*save_load.divider_size)
+                            print("Salesman: Hey, you don't have enough money for that!")
+                            main.s_input("\nPress enter/return ")
+                            print('-'*save_load.divider_size)
+
+                            break
+
+                        elif y_n.startswith("n"):
+                            print('-'*save_load.divider_size)
+                            spam = False
+
+                            break
 
 
 class Tavern:

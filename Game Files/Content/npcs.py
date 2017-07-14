@@ -53,7 +53,7 @@ class NPC:
         print(f"{self.name}, the {self.occupation}:")
         for convo in [x for x in self.conversations if x.active]:
             for sentence in main.chop_by_79(convo.dialogue):
-                main.s_input(f" {sentence}")
+                main.s_input(sentence)
 
             if isinstance(convo, d.Quest) and not convo.started:
                 convo.give_quest()
