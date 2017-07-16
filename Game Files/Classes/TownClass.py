@@ -579,7 +579,9 @@ class Tavern:
         self.name = name
         self.inn_cost = inn_cost
 
-    def get_coords(self, add=True):  # Translate the location of newly-found towns into a string
+    # noinspection PyMethodMayBeStatic
+    def get_coords(self, add=True):
+        # Translate the location of newly-found towns into a string
         mpi = main.party_info
 
         coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"

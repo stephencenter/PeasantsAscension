@@ -298,8 +298,8 @@ valid_provinces = ["Province of Overshire",
                    "Province of Kohrin",
                    "Province of Deltora",  # Deltora quest was one of my favorite book series growing up <3
                    "Province of Flute",
-                   "Province of Chimney",
-                   "Province of Ranghor",
+                   "Province of Chin'tor",
+                   "Province of Whitlock",
                    "Province of Downpour"]
 
 valid_biomes = ["sky",

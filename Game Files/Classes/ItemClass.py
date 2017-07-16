@@ -13,10 +13,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-import copy
 import sys
-
-import ascii_art
 import inv_system
 import save_load
 import sounds
@@ -55,24 +52,25 @@ class Consumable(Item):
 
     def use_item(self, user, is_battle=False):
         print('-'*save_load.divider_size)
-        if is_battle:
-            print(f"-{user.name}'s Turn-")
-            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+        print(f'{user.name} consumes the {self.name}...')
 
-        user.hp += self.heal
-        user.mp += self.mana
-        units.fix_stats()
+        main.smart_sleep(0.75)
         sounds.magic_healing.play()
 
-        print(f'{user.name} consumes the {self.name}.')
+        if self.heal > 0:
+            user.hp += self.heal
+            print(f"{user.name} restored {self.heal} HP with the {self.name}!")
+
+        if self.mana > 0:
+            user.mp += self.mana
+            print(f"{user.name} restored {self.mana} MP with the {self.name}!")
+
+        units.fix_stats()
 
         if not is_battle:
             main.s_input("\nPress enter/return ")
 
-        for x, y in enumerate(inv_system.inventory[self.cat]):
-            if y.name == self.name:
-                inv_system.inventory[self.cat].remove(y)
-                break
+        inv_system.remove_item(self.item_id)
 
 
 class StatusPotion(Item):
@@ -83,22 +81,20 @@ class StatusPotion(Item):
     def use_item(self, user, is_battle=False):
         print('-'*save_load.divider_size)
 
-        if is_battle:
-            print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
-
         if user.status_ail == self.status:
-            for x, y in enumerate(inv_system.inventory[self.cat]):
-                if y.name == self.name:
-                    inv_system.inventory[self.cat].remove(y)
-                    break
-
             sounds.buff_spell.play()
             user.status_ail = 'none'
 
-            print(f'{user.name} drinks the {self.name} and feels much better.')
+            print(f'{user.name} consumes the {self.name}...')
+            main.smart_sleep(0.75)
+            sounds.magic_healing.play()
+
+            print(f"{user.name} is no longer {self.status}!")
 
             if not is_battle:
                 main.s_input("\nPress enter/return ")
+
+            inv_system.remove_item(self.item_id)
 
         else:
             print(f"Drinking this {self.name} probably wouldn't do anything.")
@@ -114,32 +110,20 @@ class Weapon(Item):
         self.type_ = type_
         self.class_ = class_
         self.off_element = off_element
+        self.part = 'weapon'
 
-        if self.class_ != 'none':
-            if isinstance(self.class_, str):
-                self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'])
-
-            else:
-                self.desc = ' '.join([desc, '|', ' and '.join([x.title() for x in self.class_]), 'ONLY'])
+        if self.class_:
+            classes = ' and '.join([f"{x.title()}s" for x in self.class_])
+            self.class_req = f"| For {classes}s only"
 
         else:
-            self.desc = ' '.join([desc, '|', "ANY CLASS"])
+            self.class_req = "| For any class"
+
+        self.desc = f"{desc} {self.class_req}"
 
     def use_item(self, user):
-        if user.class_ in self.class_ or self.class_ == 'none':
-            # Creating a copy of the weapon ensures that
-            # only one weapon can be equipped at a time.
-            spam = copy.copy(self)
-
-            if isinstance(inv_system.equipped[user.name if user != units.player else 'player']['weapon'], Weapon):
-
-                old = copy.copy(inv_system.equipped[user.name if user != units.player else 'player']['weapon'])
-                inv_system.inventory['weapons'].remove(self)
-
-                if old.name != 'Fists':
-                    inv_system.inventory['weapons'].append(old)
-
-                inv_system.equipped[user.name if user != units.player else 'player']['weapon'] = spam
+        if user.class_ in self.class_ or not self.class_:
+            inv_system.equip_item(self.item_id, user)
 
             print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self.name}.')
@@ -147,15 +131,9 @@ class Weapon(Item):
 
         else:
             print('-'*save_load.divider_size)
+            print(f"This {self.name} is f{self.class_req[3:]}.")
 
-            if isinstance(self.class_, list):
-                print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
-
-                main.s_input("\nPress enter/return ")
-
-            else:
-                print(f"{user.name} must be a {self.class_.title()} to equip this.")
-                main.s_input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
 
 class Armor(Item):
@@ -166,32 +144,18 @@ class Armor(Item):
         self.part = part
         self.class_ = class_
 
-        if self.class_ != 'none':
-            if isinstance(self.class_, str):
-                self.desc = ' '.join([desc, '|', self.class_.title(), 'ONLY'])
-
-            else:
-                self.desc = ' '.join([desc, '|', ' and '.join([x.title() for x in self.class_]), 'ONLY'])
+        if self.class_:
+            classes = ' and '.join([f"{x.title()}s" for x in self.class_])
+            self.class_req = f"| For {classes}s only"
 
         else:
-            self.desc = ' '.join([desc, '|', "ANY CLASS"])
+            self.class_req = "| For any class"
+
+        self.desc = f"{desc} {self.class_req}"
 
     def use_item(self, user):
-        if user.class_ in self.class_ or self.class_ == 'none':
-            # A copy of the armor is created for the same
-            # reason as for weapons.
-            fizz = copy.copy(self)
-
-            if isinstance(inv_system.equipped[user.name if user != units.player else 'player'][self.part], Armor):
-
-                old = copy.copy(inv_system.equipped[user.name if user != units.player else 'player'][self.part])
-
-                inv_system.inventory['armor'].append(old)
-                inv_system.inventory['armor'].remove(self)
-
-            else:
-                inv_system.equipped[user.name if user != units.player else 'player'][self.part] = fizz
-                inv_system.inventory['armor'].remove(self)
+        if user.class_ in self.class_ or not self.class_:
+            inv_system.equip_item(self.item_id, user)
 
             print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self.name}.')
@@ -199,14 +163,9 @@ class Armor(Item):
 
         else:
             print('-'*save_load.divider_size)
+            print(f"This {self.name} is f{self.class_req[3:]}.")
 
-            if isinstance(self.class_, list):
-                print(f"{user.name} must be a {self.class_[0].title()} or a {self.class_[1].title()} to equip.")
-                main.s_input("\nPress enter/return ")
-
-            else:
-                print(f"{user.name} must be a {self.class_.title()} to equip this.")
-                main.s_input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ")
 
 
 # -- ACCESSORIES -- #
@@ -227,14 +186,7 @@ class ElementAccessory(Accessory):
         return self.name
 
     def use_item(self, user):
-        spam = copy.copy(self)
-        if isinstance(inv_system.equipped[user.name if user != units.player else 'player']['access'], Accessory):
-
-            old = copy.copy(inv_system.equipped[user.name if user != units.player else 'player']['access'])
-            inv_system.inventory['access'].append(old)
-
-        inv_system.inventory['access'].remove(self)
-        inv_system.equipped[user.name if user != units.player else 'player']['access'] = spam
+        inv_system.equip_item(self.item_id, user)
         user.def_element = self.def_element
 
         print('-'*save_load.divider_size)

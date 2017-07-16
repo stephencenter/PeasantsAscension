@@ -30,8 +30,14 @@ if __name__ == "__main__":
 else:
     main = sys.modules["__main__"]
 
-inventory = {'q_items': [], 'consumables': [_c(items.s_potion), _c(items.s_elixir)], 'coord': [],
-             'weapons': [], 'armor': [], 'tools': [], 'misc': [], 'access': []}
+inventory = {'q_items': [],
+             'consumables': [_c(items.s_potion), _c(items.s_elixir)],
+             'coord': [],
+             'weapons': [],
+             'armor': [],
+             'tools': [],
+             'misc': [],
+             'access': []}
 
 equipped = {
     'player': {
@@ -528,7 +534,8 @@ def view_quests():
             print('-'*save_load.divider_size)
 
 
-def sell_item(cat, item):  # Trade player-owned objects for money (GP)
+# Trade player-owned objects for money (GP)
+def sell_item(cat, item):
     print('-'*save_load.divider_size)
 
     if hasattr(item, "ascart"):
@@ -555,6 +562,57 @@ def sell_item(cat, item):  # Trade player-owned objects for money (GP)
             return
 
 
+# Useful functions for dealing with items
+def find_item_with_id(item_id):
+    # Searches the all_items list, and returns the item that has the given item_id.
+    # If it can't find anything, it returns False (this shouldn't ever happen in this game, but could be
+    # useful if someone else is making something with this engine)
+    for x in items.all_items:
+        if x.item_id == item_id:
+            return x
+
+    return False
+
+
+def add_item(item_id):
+    # Utilizes find_item_with_id() to add a specific item to the player's inventory
+    global inventory
+
+    this_item = _c(find_item_with_id(item_id))
+    inventory[this_item.cat].append(this_item)
+
+
+def remove_item(item_id):
+    # Same as add_item(), but removes the item from the inventory instead.
+    # Returns True if the item in question is actually in the player's inventory, otherwise it returns False.
+    global inventory
+
+    this_item = _c(find_item_with_id(item_id))
+
+    for z in inventory[this_item.cat]:
+        if z.item_id == z.item_id:
+            inventory[this_item.cat].remove(z)
+            return True
+
+    return False
+
+
+def equip_item(item_id, equipper):
+    global equipped
+
+    this_item = _c(find_item_with_id(item_id))
+    inv_name = equipper.name if equipper != units.player else 'player'
+
+    if isinstance(equipped[inv_name][this_item.part], ItemClass.Item):
+        if equipped[inv_name][this_item.part].item_id != "weapon_fist":
+            add_item(equipped[inv_name][this_item.part].item_id)
+
+    remove_item(item_id)
+    equipped[inv_name][this_item.part] = this_item
+
+
+# Makes a dictionary with the item_id's of all items in their respective categories,
+# then saves it to a .json file. Used when saving the game.
 def serialize_inv(path):
     j_inventory = {}
 
@@ -572,6 +630,8 @@ def serialize_inv(path):
         json.dump(j_inventory, f, indent=4, separators=(', ', ': '))
 
 
+# Converts the above dictionary into the actual inventory, by swapping out each item_id for the
+# items they belong to. Used when loading the game.
 def deserialize_inv(path):
     global inventory
     norm_inv = {}
@@ -588,11 +648,13 @@ def deserialize_inv(path):
                 continue
 
             else:
-                norm_inv[category].append(_c(items.find_item_with_id(item_id)))
+                norm_inv[category].append(_c(find_item_with_id(item_id)))
 
     inventory = norm_inv
 
 
+# Identical to serialize_inv(), but specifically for the player's equipped items
+# which are not stored in the inventory.
 def serialize_equip(path):
     j_equipped = {}
 
@@ -600,6 +662,7 @@ def serialize_equip(path):
         j_equipped[user] = {}
         for category in equipped[user]:
             if isinstance(equipped[user][category], ItemClass.Item):
+                # noinspection PyUnresolvedReferences
                 j_equipped[user][category] = equipped[user][category].item_id
 
             else:
@@ -609,6 +672,8 @@ def serialize_equip(path):
         json.dump(j_equipped, f, indent=4, separators=(', ', ': '))
 
 
+# Identical to deserialize_inv(), but specifically for the player's equipped items
+# which are not stored in the inventory.
 def deserialize_equip(path):
     global equipped
     norm_equip = {}
@@ -625,6 +690,12 @@ def deserialize_equip(path):
                 continue
 
             else:
-                norm_equip[user][category] = _c(items.find_item_with_id(j_equipped[user][category]))
+                norm_equip[user][category] = _c(find_item_with_id(j_equipped[user][category]))
 
     equipped = norm_equip
+
+
+# Checks to make sure all items in items.all_items have a unique item_id
+for item1 in items.all_items:
+    if find_item_with_id(item1.item_id) != item1:
+        print(f"{item1.item_id} doesn't have a unique item_id!")

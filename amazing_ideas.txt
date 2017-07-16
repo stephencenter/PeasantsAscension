@@ -77,8 +77,8 @@ PEASANT-RPG GOALS
 			[ ] Flute
 			[ ] Deltora
 			[ ] Downpour
-			[ ] Chimney
-			[ ] Ranghor
+			[ ] Chin'tor
+			[ ] Whitlock
 			
 	[ ] Redo the plot:
 		[ ] Beginning your adventure:
@@ -178,6 +178,14 @@ PEASANT-RPG GOALS
 	[ ] Make the compass enable the coordinate system. Without it, you can write down coordinates in your inventory but cannot read them on the
 		movement system menu.
 		
+[ ] Before v1.0.0 is release, the game NEEDS at least this:
+	[ ] Every boss currenlty programmed placed somewhere on the map
+	[ ] At least 3 main-storyline quests
+	[ ] At least 3 sidequests
+	[ ] At LEAST 7-8 towns placed somewhere on the map
+	[ ] At LEAST all of the Central Forest tiles programmed, as well as possibly a bit of the shore at the edge of the
+		Central Forest and maybe all of Barrier Cave
+	
 -- 1.1 update plans -- 
 [ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing. 
 
