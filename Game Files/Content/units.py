@@ -138,14 +138,16 @@ class PlayableCharacter(Unit):
 
                 else:
                     y_n = main.s_input(f'So, your name is "{self.name}?" | Y/N: ').lower()
-                    print('-'*save_load.divider_size)
 
                     if y_n.startswith('n'):
+                        print('-'*save_load.divider_size)
                         self.name = ''
                         break
 
                     elif not y_n.startswith('y'):
                         continue
+
+                    print('-'*save_load.divider_size)
 
                 return
 
@@ -440,16 +442,17 @@ INT: {self.attributes['int']} | WIS: {self.attributes['wis']} | STR: {self.attri
 XP: {self.exp}/{self.req_xp} | GP: {main.party_info['gp']}
 
 -Equipped Items-
-Weapon: {inv_system.equipped[inv_name]['weapon']}
-Accessory: {inv_system.equipped[inv_name]['access']}
+Weapon: {inv_system.equipped[inv_name]['weapon'].name}
+Accessory: {inv_system.equipped[inv_name]['access'].name}
 Armor:
-  Head: {inv_system.equipped[inv_name]['head']}
-  Body: {inv_system.equipped[inv_name]['body']}
-  Legs: {inv_system.equipped[inv_name]['legs']}""")
+  Head: {inv_system.equipped[inv_name]['head'].name}
+  Body: {inv_system.equipped[inv_name]['body'].name}
+  Legs: {inv_system.equipped[inv_name]['legs'].name}""")
 
         main.s_input('\nPress enter/return ')
 
     def battle_turn(self):
+        sounds.item_pickup.stop()
         inv_name = self.name if self != player else 'player'
         player_weapon = inv_system.equipped[inv_name]['weapon']
 
@@ -485,11 +488,11 @@ Armor:
 
             if inv_system.equipped[inv_name]['weapon'].type_ == 'melee':
                 sounds.sword_slash.play()
-                print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon}...')
+                print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon.name}...')
 
             else:
                 sounds.aim_weapon.play()
-                print(f'{self.name} aims carefully at the {self.target.name} using their {player_weapon}...')
+                print(f'{self.name} aims carefully at the {self.target.name} using their {player_weapon.name}...')
 
             main.smart_sleep(0.75)
 
@@ -1104,6 +1107,7 @@ class Monster(Unit):
         self.class_ = 'ranger'
 
     def base_turn(self):
+        sounds.item_pickup.stop()
         self.get_target()
 
         print(f"-{self.name}'s Turn-")

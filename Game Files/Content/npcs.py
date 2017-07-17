@@ -45,9 +45,6 @@ class NPC:
         self.occupation = occupation
         self.conversations = conversations
 
-    def __str__(self):
-        return self.name
-
     def speak(self):
         # Print the NPC's dialogue to the player
         print(f"{self.name}, the {self.occupation}:")

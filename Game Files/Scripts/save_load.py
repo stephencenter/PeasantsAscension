@@ -68,10 +68,18 @@ base_dir = "Content/Save Files"
 temp_dir = "temp"
 
 # Game Settings. Can be changed in the settings.cfg file.
-music_vol = 1.0  # The volume of the game's Music, on a scale from 0 (muted) to 1.0 (loudest).
-sound_vol = 1.0  # The volume of the game's SFX, on a scale from 0 (muted) to 1.0 (loudest).
+music_vol = 1  # The volume of the game's Music, on a scale from 0 (muted) to 1.0 (loudest).
+sound_vol = 1  # The volume of the game's SFX, on a scale from 0 (muted) to 1.0 (loudest).
 divider_size = 25  # The number of dashes used for dividers between different UI elements
 do_blip = True  # Determines whether or not a "blip" sound is made whenever you press enter
+
+# If the settings.cfg file cannot be found, then create one with this as the contents
+settings_file = """\
+[settings]
+music_vol = 100 
+sound_vol = 100
+divider_size = 25 
+do_blip = 1"""
 
 
 def set_adventure_name():
@@ -164,16 +172,20 @@ def format_save_names():
 def change_settings():
     config = configparser.ConfigParser()
 
-    if os.path.isfile("../settings.cfg"):
-        config.read("../settings.cfg")
-        config = config['settings']
+    if not os.path.isfile("../settings.cfg"):
+        with open("../settings.cfg", mode='w') as f:
+            f.write(settings_file)
 
-        globals()['music_vol'] = float(config['music_vol'])/100
-        globals()['sound_vol'] = float(config['sound_vol'])/100
-        globals()['divider_size'] = int(config['divider_size'])
-        globals()['do_blip'] = int(config['do_blip'])
+    config.read("../settings.cfg")
+    config = config['settings']
 
-        sounds.change_volume()
+    globals()['music_vol'] = float(config['music_vol'])/100
+    globals()['sound_vol'] = float(config['sound_vol'])/100
+    globals()['divider_size'] = int(config['divider_size'])
+    globals()['do_blip'] = int(config['do_blip'])
+
+    sounds.change_volume()
+    pygame.mixer.music.set_volume(music_vol)
 
 
 def save_game(verbose=True):

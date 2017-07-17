@@ -399,7 +399,7 @@ roll.use_ability = use_roll
 
 
 def before_scout(user):
-    pass
+    user.choose_target(f"Who should {user.name} scout?")
 
 
 def use_scout(user):

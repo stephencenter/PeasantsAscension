@@ -46,12 +46,8 @@ class Spell:
         self.class_ = class_  # These are the classes that are able to obtain this spell
         self.spell_id = spell_id
 
-    def __str__(self):
-        return self.name
-
     def use_mana(self, user):
         user.mp -= self.mana
-
         units.fix_stats()
 
     def use_magic(self, user, is_battle):
@@ -64,9 +60,6 @@ class Healing(Spell):
         Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
         self.health = health
         self.thresh = thresh
-
-    def __str__(self):
-        return self.name
 
     def use_magic(self, user, is_battle):
         Spell.use_mana(self, user)
@@ -117,9 +110,6 @@ class Damaging(Spell):
         self.damage = damage
         self.off_element = off_element
 
-    def __str__(self):
-        return self.name
-
     def use_magic(self, user, is_battle=True):
         Spell.use_mana(self, user)
         target = user.target
@@ -150,9 +140,6 @@ class Buff(Spell):
         Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
         self.increase = increase
         self.stat = stat
-
-    def __str__(self):
-        return self.name
 
     def use_magic(self, user, is_battle=True):
         Spell.use_mana(self, user)
@@ -243,7 +230,7 @@ def pick_spell(cat, user, is_battle):
         print(f"{user.name}'s {cat} Spells | {user.mp}/{user.max_mp} MP remaining")
 
         for x, y in enumerate(spellbook[inv_name][cat]):
-            print(f"      [{x + 1}] {y} --{'-'*(padding - len(y.name))}> {y.mana} MP")
+            print(f"      [{x + 1}] {y.name} --{'-'*(padding - len(y.name))}> {y.mana} MP")
 
         while True:
             spell = main.s_input('Input [#] (or type "back"): ').lower()
@@ -312,7 +299,8 @@ def new_spells(character):
                 sounds.item_pickup.play()
                 spellbook[character.name if character != units.player else 'player'][cat].append(spell)
 
-                main.s_input(f'{character.name} has learned "{spell}", a new {cat} spell! | Press enter/return ')
+                main.s_input(f'{character.name} has learned "{spell.name}", a new {cat} spell!')
+                print("\nPress enter/return ")
 
 
 # -- Damaging Spells -- #

@@ -17,11 +17,11 @@ import json
 import sys
 from copy import copy as _c
 
-import dialogue
 import ascii_art
-import units
+import dialogue
 import items
 import save_load
+import units
 import ItemClass
 
 if __name__ == "__main__":
@@ -41,11 +41,11 @@ inventory = {'q_items': [],
 
 equipped = {
     'player': {
-        'weapon': '',
+        'weapon': _c(items.fists),
         'head': _c(items.straw_hat),
         'body': _c(items.cotton_shirt),
         'legs': _c(items.sunday_trousers),
-        'access': '(None)'
+        'access': _c(items.no_access)
     },
 
     'Solou': {
@@ -53,7 +53,7 @@ equipped = {
         'head': _c(items.straw_hat),
         'body': _c(items.cotton_shirt),
         'legs': _c(items.sunday_trousers),
-        'access': '(None)'
+        'access': _c(items.no_access)
     },
 
     'Xoann': {
@@ -61,7 +61,7 @@ equipped = {
         'head': _c(items.straw_hat),
         'body': _c(items.cotton_shirt),
         'legs': _c(items.sunday_trousers),
-        'access': '(None)'
+        'access': _c(items.no_access)
     },
 
     'Parsto': {
@@ -69,7 +69,7 @@ equipped = {
         'head': _c(items.straw_hat),
         'body': _c(items.cotton_shirt),
         'legs': _c(items.sunday_trousers),
-        'access': '(None)'
+        'access': _c(items.no_access)
     },
 
     'Adorine': {
@@ -77,7 +77,7 @@ equipped = {
         'head': _c(items.straw_hat),
         'body': _c(items.cotton_shirt),
         'legs': _c(items.sunday_trousers),
-        'access': '(None)'
+        'access': _c(items.no_access)
     },
 
     'Chyme': {
@@ -85,7 +85,7 @@ equipped = {
         'head': _c(items.straw_hat),
         'body': _c(items.cotton_shirt),
         'legs': _c(items.sunday_trousers),
-        'access': '(None)'
+        'access': _c(items.no_access)
     },
 
     "Ran'Af": {
@@ -93,7 +93,7 @@ equipped = {
         'head': _c(items.straw_hat),
         'body': _c(items.cotton_shirt),
         'legs': _c(items.sunday_trousers),
-        'access': '(None)'
+        'access': _c(items.no_access)
     },
 
 }
@@ -207,8 +207,9 @@ def pick_category():
                 break
 
 
-def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in your inventory
-    # If "gs == True" that means that items are being sold, and not used.
+# Select an object to interact with in your inventory
+# If "gs == True" that means that items are being sold, and not used.
+def pick_item(cat, vis_cat, gs=False):
     while cat in ['quests', 'equipped_items'] or inventory[cat]:
         if cat == 'quests':
             view_quests()
@@ -223,7 +224,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
             if not gs:
                 print(f"{vis_cat}: ")
                 for x, y in enumerate(inventory[cat]):
-                    print(f'      [{x + 1}] {y}')
+                    print(f'      [{x + 1}] {y.name}')
 
             else:
                 try:
@@ -238,7 +239,7 @@ def pick_item(cat, vis_cat, gs=False):  # Select an object to interact with in y
 
                 for x, y in enumerate([it for it in inventory[cat] if not it.imp]):
                     full_padding = '-'*(padding - len(y.name) + (extra_pad - len(str(x + 1))))
-                    print(f"      [{x + 1}] {y} {full_padding}--> {y.sell} GP")
+                    print(f"      [{x + 1}] {y.name} {full_padding}--> {y.sell} GP")
 
         else:
             return
@@ -276,7 +277,7 @@ def pick_action(cat, item):
             use_equip = 'Use'
 
         print('-'*save_load.divider_size)
-        action = main.s_input(f"""What should your party do with the {item}?
+        action = main.s_input(f"""What should your party do with the {item.name}?
       [1] {use_equip}
       [2] Read Description
       [3] Drop
@@ -303,7 +304,7 @@ Input [#] (or type "back"): """)
         elif action == '2':
             # Display the item description
             print('-'*save_load.divider_size)
-            print(f'-{str(item).upper()}-')
+            print(f'-{str(item.name).upper()}-')
 
             if hasattr(item, "ascart"):
                 print(ascii_art.item_sprites[item.ascart])
@@ -320,10 +321,10 @@ Input [#] (or type "back"): """)
 
             else:
                 while True:
-                    y_n = main.s_input(f'Are you sure your party should get rid of the {item}? | Y/N: ').lower()
+                    y_n = main.s_input(f'Are you sure your party should get rid of the {item.name}? | Y/N: ').lower()
 
                     if y_n.startswith('y'):
-                        print(f'Your party tosses the {item} aside and continues on their journey.')
+                        print(f'Your party tosses the {item.name} aside and continues on their journey.')
                         main.s_input("\nPress enter/return ")
 
                         inventory[cat].remove(item)
@@ -332,7 +333,7 @@ Input [#] (or type "back"): """)
 
                     elif y_n.startswith('n'):
                         print('-'*save_load.divider_size)
-                        print(f'Your party decide to keep the {item} with them.')
+                        print(f'Your party decide to keep the {item.name} with them.')
                         main.s_input("\nPress enter/return ")
 
                         break
@@ -352,11 +353,11 @@ def manage_equipped_2(target):
         p_equip = equipped[target.name if target != units.player else 'player']
 
         print(f"""{target.name}'s Equipped Items:
-      [1] Weapon ----> {p_equip['weapon']}
-      [2] Head ------> {p_equip['head']}
-      [3] Body ------> {p_equip['body']}
-      [4] Legs ------> {p_equip['legs']}
-      [5] Accessory -> {p_equip['access']}""")
+      [1] Weapon ----> {p_equip['weapon'].name}
+      [2] Head ------> {p_equip['head'].name}
+      [3] Body ------> {p_equip['body'].name}
+      [4] Legs ------> {p_equip['legs'].name}
+      [5] Accessory -> {p_equip['access'].name}""")
 
         while True:
             selected = main.s_input('Input [#] (or type "back"): ').lower()
@@ -383,7 +384,11 @@ def manage_equipped_2(target):
             else:
                 continue
 
-            if selected == '(None)':
+            if selected.item_id in ["no_head",
+                                    "no_body",
+                                    "no_legs",
+                                    "no_access"]:
+
                 print('-'*save_load.divider_size)
                 print(f"{target.name} doesn't have anything equipped in that slot.")
                 main.s_input("\nPress enter/return ")
@@ -413,7 +418,7 @@ def manage_equipped_3(key, selected, p_equip, target):
     global equipped
 
     while True:
-        print(f"""What should {target.name} do with their {selected}?
+        print(f"""What should {target.name} do with their {selected.name}?
       [1] Unequip
       [2] Read Description""")
 
@@ -421,7 +426,7 @@ def manage_equipped_3(key, selected, p_equip, target):
             action = main.s_input('Input [#] (or type "back"): ').lower()
 
             if action == '1':
-                if selected.name == 'Fists':
+                if selected.item_id == "weapon_fists":
                     print('-'*save_load.divider_size)
                     print("Removing those would be difficult without causing damage.")
                     main.s_input("\nPress enter/return ")
@@ -429,29 +434,11 @@ def manage_equipped_3(key, selected, p_equip, target):
 
                     break
 
-                print('-'*save_load.divider_size)
-                print(f'{target.name} unequips the {selected.name}.')
-                main.s_input("\nPress enter/return ")
-
-                if isinstance(selected, ItemClass.Weapon):
-                    inventory[selected.cat].append(p_equip[key])
-
-                    p_equip[key] = items.fists
-
-                elif isinstance(selected, ItemClass.Armor):
-                    inventory[selected.cat].append(p_equip[key])
-
-                    p_equip[key] = '(None)'
-
-                elif isinstance(selected, ItemClass.Accessory):
-                    if isinstance(selected, ItemClass.ElementAccessory):
-                        target.def_element = 'none'
-
-                        print(f'{target.name} is no longer imbued with the {selected.def_element} element.')
-                        main.s_input("\nPress enter/return ")
-
-                    inventory[selected.cat].append(p_equip[key])
-                    p_equip[key] = '(None)'
+                else:
+                    unequip_item(selected.item_id, target)
+                    print('-'*save_load.divider_size)
+                    print(f'{target.name} unequips the {selected.name}.')
+                    main.s_input("\nPress enter/return ")
 
                 return
 
@@ -543,6 +530,7 @@ def sell_item(cat, item):
 
     print(item.desc)
     print('-'*save_load.divider_size)
+
     while True:
         y_n = main.s_input(f'Should your party sell the {item.name} for {item.sell} GP? | Y/N: ').lower()
 
@@ -562,11 +550,10 @@ def sell_item(cat, item):
             return
 
 
-# Useful functions for dealing with items
+# Searches the all_items list, and returns the item that has the given item_id.
+# If it can't find anything, it returns False (this shouldn't ever happen in this game, but could be
+# useful if someone else is making something with this engine)
 def find_item_with_id(item_id):
-    # Searches the all_items list, and returns the item that has the given item_id.
-    # If it can't find anything, it returns False (this shouldn't ever happen in this game, but could be
-    # useful if someone else is making something with this engine)
     for x in items.all_items:
         if x.item_id == item_id:
             return x
@@ -574,17 +561,17 @@ def find_item_with_id(item_id):
     return False
 
 
+# Utilizes find_item_with_id() to add a specific item to the player's inventory
 def add_item(item_id):
-    # Utilizes find_item_with_id() to add a specific item to the player's inventory
     global inventory
 
     this_item = _c(find_item_with_id(item_id))
     inventory[this_item.cat].append(this_item)
 
 
+# Same as add_item(), but removes the item from the inventory instead.
+# Returns True if the item in question is actually in the player's inventory, otherwise it returns False.
 def remove_item(item_id):
-    # Same as add_item(), but removes the item from the inventory instead.
-    # Returns True if the item in question is actually in the player's inventory, otherwise it returns False.
     global inventory
 
     this_item = _c(find_item_with_id(item_id))
@@ -597,6 +584,7 @@ def remove_item(item_id):
     return False
 
 
+# Utilizes add_item() and remove_item() to equip/unequip items, and remove/add them to the inventory
 def equip_item(item_id, equipper):
     global equipped
 
@@ -604,11 +592,35 @@ def equip_item(item_id, equipper):
     inv_name = equipper.name if equipper != units.player else 'player'
 
     if isinstance(equipped[inv_name][this_item.part], ItemClass.Item):
-        if equipped[inv_name][this_item.part].item_id != "weapon_fist":
+        if equipped[inv_name][this_item.part].item_id not in ["weapon_fist"
+                                                              "no_head",
+                                                              "no_body",
+                                                              "no_legs",
+                                                              "no_access"]:
+
             add_item(equipped[inv_name][this_item.part].item_id)
 
     remove_item(item_id)
     equipped[inv_name][this_item.part] = this_item
+
+
+def unequip_item(item_id, unequipper):
+    global equipped
+
+    this_item = _c(find_item_with_id(item_id))
+    inv_name = unequipper.name if unequipper != units.player else 'player'
+    add_item(this_item.item_id)
+
+    if this_item.part == 'weapon':
+        equip_item("weapon_fist", unequipper)
+    if this_item.part == 'head':
+        equip_item("no_head", unequipper)
+    if this_item.part == 'body':
+        equip_item("no_body", unequipper)
+    if this_item.part == 'legs':
+        equip_item("no_legs", unequipper)
+    if this_item.part == 'access':
+        equip_item("no_access", unequipper)
 
 
 # Makes a dictionary with the item_id's of all items in their respective categories,
@@ -661,12 +673,7 @@ def serialize_equip(path):
     for user in equipped:
         j_equipped[user] = {}
         for category in equipped[user]:
-            if isinstance(equipped[user][category], ItemClass.Item):
-                # noinspection PyUnresolvedReferences
-                j_equipped[user][category] = equipped[user][category].item_id
-
-            else:
-                j_equipped[user][category] = '(None)'
+            j_equipped[user][category] = equipped[user][category].item_id
 
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_equipped, f, indent=4, separators=(', ', ': '))
@@ -685,12 +692,7 @@ def deserialize_equip(path):
         norm_equip[user] = {}
 
         for category in j_equipped[user]:
-            if j_equipped[user][category] == '(None)':
-                norm_equip[user][category] = '(None)'
-                continue
-
-            else:
-                norm_equip[user][category] = _c(find_item_with_id(j_equipped[user][category]))
+            norm_equip[user][category] = _c(find_item_with_id(j_equipped[user][category]))
 
     equipped = norm_equip
 

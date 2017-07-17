@@ -318,7 +318,7 @@ class Town:
                     print(f"{item_cat} (Your party has {main.party_info['gp']} GP): ")
 
                     for num, item in enumerate(stock[item_cat]):
-                        print(f"      [{num + 1}] {item} {(padding - len(item.name))*'-'}--> {item.buy} GP")
+                        print(f"      [{num + 1}] {item.name} {(padding - len(item.name))*'-'}--> {item.buy} GP")
 
                     while True:
                         purchase = main.s_input('Input [#] (or type "back"): ').lower()
@@ -335,22 +335,21 @@ class Town:
                             continue
 
                         print('-'*save_load.divider_size)
-                        print(f'-{str(i).upper()}-')
+                        print(f'-{i.name.upper()}-')
                         print(ascii_art.item_sprites[i.ascart])
                         print(f'"{i.desc}"')
                         print('-'*save_load.divider_size)
 
                         while True:
-                            spam = 'these' if str(i).endswith('s') else 'this'
-                            confirm = main.s_input(f"\"Ya want {spam} {i}? It'll cost ya {i.buy} GP.\" | Y/N: ").lower()
+                            y_n = main.s_input(f"Ya want this {i.name}? Will cost ya {i.buy} GP. | Y/N: ").lower()
 
-                            if confirm.startswith('y'):
+                            if y_n.startswith('y'):
                                 if main.party_info['gp'] >= i.buy:
-                                    inv_system.inventory[i.cat].append(i)
                                     main.party_info['gp'] -= i.buy
+                                    inv_system.add_item(i.item_id)
 
                                     print('-'*save_load.divider_size)
-                                    print(f'You purchase the {i} for {i.buy} GP.')
+                                    print(f'You purchase the {i.name} for {i.buy} GP.')
                                     main.s_input("\nPress enter/return ")
                                     print('-'*save_load.divider_size)
 
@@ -359,7 +358,7 @@ class Town:
 
                                 break
 
-                            elif confirm.startswith('n'):
+                            elif y_n.startswith('n'):
                                 print()
 
                                 break
@@ -427,7 +426,7 @@ class Town:
             npc_list = [x for x in self.people if any([y.active for y in x.conversations])]
 
             for x, npc in enumerate(npc_list):
-                print(f"      [{x + 1}] {npc}")
+                print(f"      [{x + 1}] {npc.name}")
 
             while True:
                 npc = main.s_input('Input [#] (or type "exit"): ').lower()
@@ -745,8 +744,13 @@ class Chest:
     def unlock_chest(self, lockpick):
         print('-'*save_load.divider_size)
         while True:
-            print(f"-{self.tries if self.tries > 1 else 'ONLY ONE'} ATTEMPT{'S' if self.tries > 1 else ''} REMAINING-")
-            print(f"Your party attempts to unlock the chest using your {lockpick.name}...")
+            if self.tries > 1:
+                print(f'-{self.tries} ATTEMPTS REMAINING-')
+
+            else:
+                print('-ONLY ONE ATTEMPT REMAINING-')
+
+            print(f'Your party attempts to unlock the chest using your {lockpick.name}...')
             sounds.lockpicking.play()
 
             main.smart_sleep(2.5)
@@ -763,17 +767,16 @@ class Chest:
                     main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
 
-                    for n, item in enumerate(self.contents):
+                    for item in self.contents:
+                        sounds.item_pickup.play()
+
                         if isinstance(item, int):
                             main.party_info['gp'] += item
-                            sounds.item_pickup.play()
-                            main.s_input(f"Your party obtained {item} gold from the chest! | Press enter/return")
+                            main.s_input(f"The chest had {item} gold in it! | Press enter/return ")
 
                         else:
-                            inv_system.inventory[item.cat].append(item)
-                            sounds.item_pickup.play()
-                            an_a = 'an' if any(map(item.name.startswith, battle.vowels)) else 'a'
-                            main.s_input(f"Your party obtained {an_a} {item.name} from the chest! | Press enter/return")
+                            inv_system.add_item(item.item_id)
+                            main.s_input(f"The chest had a {item.name} in it! | Press enter/return ")
 
                     self.opened = True
                     return

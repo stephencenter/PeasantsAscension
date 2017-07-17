@@ -40,6 +40,12 @@ PEASANT-RPG GOALS
 	
 [x] Rename NPCClass to npcs, rename npcs to dialogue. Move all NPC stuff to npcs, move all dialogue stuff to dialogue.
 
+[ ] Make settings changable in-game
+ 
+[ ] Rewrite the credits, lore, and backstory
+
+[ ] Revamp the inventory to show one instance of each item, with quantity to the right
+
 [ ] Completely rework the world and the plot
 	[ ] Redo the world:
 		[ ] The whole "nation divided into regions, each comprised of a single biome" thing is really stupid. 

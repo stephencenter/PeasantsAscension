@@ -91,8 +91,8 @@ party_info = {'biome': 'forest',
               'do_monster_spawns': True,
               'scout_list': []}
 
-# Set to true when auto-testing
-do_debug = False
+# Set to 1 when auto-testing
+do_debug = 0
 
 # A list of usernames that my friend has used in the past. Adds a few easter eggs.
 friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
@@ -105,7 +105,7 @@ def s_input(string):
     # Also can be used to automatically play the game and find crashes.
     if do_debug:
         print(string, end='')
-        char = random.choice('0123456789ynxpsewrt')
+        char = random.choice('0123456789ynxpsewrtbu')
         print(char)
 
         return char
@@ -122,7 +122,7 @@ def smart_sleep(duration):
     # "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
 
     if do_debug:
-        duration = 0.1
+        duration = 0.05
 
     time.sleep(duration)
 
@@ -210,7 +210,7 @@ def check_region():
         music = 'Content/Music/Island of Peace.ogg'
 
     elif new_biome == 'graveyard':
-        music = 'Content/Music/Frontier.ogg'
+        music = 'Content/Music/song21_02.ogg'
 
     elif new_biome == 'forest':
         music = 'Content/Music/Through the Forest.ogg'
@@ -231,14 +231,15 @@ def check_region():
         music = "Content/Music/We're all under the stars.ogg"
 
     elif new_biome == 'cave':
-        music = 'Content/Music/song21_02.ogg'
+        # TODO!! get music!
+        pass
 
     elif new_biome == 'underworld':
         # TODO!! get music!
         pass
 
-    elif new_biome == 'dungeon':
-        # TODO!! get music!
+    elif new_biome == 'castle':
+        music = "Content/Music/Castle.ogg"
         pass
 
     else:
@@ -325,6 +326,7 @@ def game_ui():
 
 
 def move_command(available_dirs, command):
+    sounds.item_pickup.stop()
     sounds.foot_steps.play()
 
     party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in
@@ -435,6 +437,7 @@ def stats_command():
 
 
 def inv_command():
+    print('-'*save_load.divider_size)
     inv_system.pick_category()
     print('-'*save_load.divider_size)
 
@@ -461,6 +464,7 @@ def look_command():
 def rest_command():
     # Attempt to re-gain health on the world map. There is a chance to get ambushed by an enemy
     # when doing this.
+    # TODO!! THIS DOESN'T WORK AT ALL!!
     print('-'*save_load.divider_size)
 
     if all([units.player.hp == units.player.max_hp and units.player.mp == units.player.max_mp,
@@ -543,7 +547,7 @@ def tools_command():
         print('Tools: ')
 
         for x, y in enumerate(available_tools):
-            print(f"      [{x + 1}] {y}")
+            print(f"      [{x + 1}] {y.name}")
 
         while True:
             tool = s_input('Input [#] (or type "exit"): ').lower()

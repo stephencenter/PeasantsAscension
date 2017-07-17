@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
+import configparser
 import logging
 import sys
 import time
@@ -20,6 +21,7 @@ import os
 
 import pygame
 import save_load
+import sounds
 
 if __name__ == "__main__":
     sys.exit()
@@ -61,8 +63,9 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
         if choice.startswith('p'):
             return
 
-        if choice.startswith("s"):
-            os.system("notepad.exe ../settings.cfg")
+        if choice.startswith("s") and not main.do_debug:
+            edit_settings()
+            print(title_logo)
 
         if choice.startswith('c'):
             show_credits()
@@ -83,7 +86,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
 
             print(title_logo)
 
-        if choice.startswith('e'):
+        if choice.startswith('e') and not main.do_debug:
             # Exit the game
             pygame.quit()
             sys.exit()
@@ -205,3 +208,89 @@ def show_history():
         print('There was an problem opening "peasant_lore.txt".')
 
     print('-'*save_load.divider_size)
+
+
+def edit_settings():
+    "../settings.cfg"
+    print('-'*save_load.divider_size)
+
+    while True:
+        print(f"""\
+Available Settings:
+      [1] Music Volume ---> Currently set to "{int(save_load.music_vol*100)}%"
+      [2] Sound Volume ---> Currently set to "{int(save_load.sound_vol*100)}%"
+      [3] Divider Size ---> Currently set to "{save_load.divider_size}"
+      [4] Enable Blips ---> Currently set to "{bool(save_load.do_blip)}\"""")
+
+        while True:
+            setting = main.s_input('Input [#] (or type "back"): ').lower()
+
+            if setting == '1':
+                print('-'*save_load.divider_size)
+                set_vol("music")
+                print('-'*save_load.divider_size)
+
+                break
+
+            elif setting == '2':
+                print('-'*save_load.divider_size)
+                set_vol("sound")
+                print('-'*save_load.divider_size)
+
+                break
+
+            elif setting.startswith("s"):
+                pass
+
+
+def set_vol(mode):
+    while True:
+        c_volume = save_load.music_vol if mode == "music" else save_load.sound_vol
+
+        print(f"{mode.upper()} VOLUME determines how loud the music is: 0 is silent, 100 is loud")
+        print(f'{mode.upper()} VOLUME is currently set to {int(c_volume*100)}%')
+
+        do_thing = True
+        while do_thing:
+            new_vol = main.s_input('Input # (or type "back"): ').lower()
+
+            if new_vol in ['e', 'x', 'exit', 'b', 'back']:
+                return
+            try:
+                # Convert the player's input into an integer between 0 and 100
+                new_vol = max(0, min(100, int(new_vol)))
+
+            except TypeError:
+                continue
+
+            print('-'*save_load.divider_size)
+            while True:
+                y_n = main.s_input(f"{mode.upper()} VOLUME will be set to {new_vol}%, is that okay? | Y/N: ").lower()
+
+                if y_n.startswith("y"):
+                    if mode == "music":
+                        save_load.music_vol = new_vol/100
+                        pygame.mixer.music.set_volume(new_vol)
+
+                    elif mode == "sound":
+                        save_load.sound_vol = new_vol/100
+                        sounds.change_volume()
+
+                    config = configparser.ConfigParser()
+
+                    if not os.path.isfile("../settings.cfg"):
+                        with open("../settings.cfg", mode='w') as f:
+                            f.write(settings_file)
+
+                    config.read("../settings.cfg")
+                    config.set("settings", f"{mode}_vol", str(new_vol))
+
+                    with open("../settings.cfg", mode="w") as g:
+                        config.write(g)
+
+                    return
+
+                elif y_n.startswith("n"):
+                    do_thing = False
+                    break
+

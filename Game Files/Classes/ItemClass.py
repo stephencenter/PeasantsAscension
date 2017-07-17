@@ -39,9 +39,6 @@ class Item:
         self.cat = cat
         self.item_id = item_id
 
-    def __str__(self):
-        return self.name
-
 
 class Consumable(Item):
     # Items that restore your HP, MP, or both
@@ -114,7 +111,7 @@ class Weapon(Item):
 
         if self.class_:
             classes = ' and '.join([f"{x.title()}s" for x in self.class_])
-            self.class_req = f"| For {classes}s only"
+            self.class_req = f"| For {classes} only"
 
         else:
             self.class_req = "| For any class"
@@ -146,7 +143,7 @@ class Armor(Item):
 
         if self.class_:
             classes = ' and '.join([f"{x.title()}s" for x in self.class_])
-            self.class_req = f"| For {classes}s only"
+            self.class_req = f"| For {classes} only"
 
         else:
             self.class_req = "| For any class"
@@ -181,9 +178,6 @@ class ElementAccessory(Accessory):
         Accessory.__init__(self, name, desc, buy, sell, item_id, ascart, cat, imp)
         self.def_element = def_element
         self.acc_type = acc_type
-
-    def __str__(self):
-        return self.name
 
     def use_item(self, user):
         inv_system.equip_item(self.item_id, user)

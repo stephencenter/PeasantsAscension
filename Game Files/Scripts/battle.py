@@ -174,32 +174,26 @@ def battle_system(is_boss=False, ambush=False):
     else:
         print(ascii_art.monster_art[units.monster.m_name] % '')
 
-        if any(map(units.monster.name.startswith, vowels)):  # Remember to use proper grammar!
-            an_a = 'An'
-
-        else:
-            an_a = 'A'
-
         if len(m_list) == 3:
             if ambush:
-                print(f'{an_a} {units.monster.name} and 2 other monsters ambushed you while you were resting!')
+                print(f'A {units.monster.name} and 2 other monsters ambushed you while you were resting!')
 
             else:
-                print(f'{an_a} {units.monster.name} and 2 other monsters suddenly appeared out of nowhere!')
+                print(f'A {units.monster.name} and 2 other monsters suddenly appeared out of nowhere!')
 
         elif len(m_list) == 2:
             if ambush:
-                print(f'{an_a} {units.monster.name} and 1 other monster ambushed you while you were resting!')
+                print(f'A {units.monster.name} and 1 other monster ambushed you while you were resting!')
 
             else:
-                print(f'{an_a} {units.monster.name} and 1 other monster suddenly appeared out of nowhere!')
+                print(f'A {units.monster.name} and 1 other monster suddenly appeared out of nowhere!')
 
         else:
             if ambush:
-                print(f'{an_a} {units.monster.name} ambushed you while you were resting!')
+                print(f'A {units.monster.name} ambushed you while you were resting!')
 
             else:
-                print(f'{an_a} {units.monster.name} suddenly appeared out of nowhere!')
+                print(f'A {units.monster.name} suddenly appeared out of nowhere!')
 
         pygame.mixer.music.load('Content/Music/Ruari 8-bit Battle.ogg')
         pygame.mixer.music.play(-1)
@@ -412,7 +406,7 @@ def after_battle(is_boss):
 
             # Each monster can drop their own item
             for drop in item_drops:
-                print(f"The {drop[0]} dropped a {drop[1]}! | Press enter/return")
+                print(f"The {drop[0]} dropped a {drop[1].name}! | Press enter/return")
                 inv_system.inventory[drop[1].cat].append(drop[1])
 
             for character in enabled_pcus:
@@ -438,7 +432,7 @@ def battle_inventory(user):
         print('Battle Inventory: ')
 
         for x, y in enumerate(inv_system.inventory['consumables']):
-            print(f'      [{x + 1}] {y}')
+            print(f'      [{x + 1}] {y.name}')
 
         while True:
             item = main.s_input('Input [#] (or type "exit"): ').lower()
