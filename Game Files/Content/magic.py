@@ -300,7 +300,6 @@ def new_spells(character):
                 spellbook[character.name if character != units.player else 'player'][cat].append(spell)
 
                 main.s_input(f'{character.name} has learned "{spell.name}", a new {cat} spell!')
-                print("\nPress enter/return ")
 
 
 # -- Damaging Spells -- #

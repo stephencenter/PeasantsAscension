@@ -97,12 +97,12 @@ do_debug = 0
 # A list of usernames that my friend has used in the past. Adds a few easter eggs.
 friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
                 "flygon jones", "flygonjones", "flygon_jones",
-                "cynder887", "gabe", "gabriel"]
+                "cynder887", "gabe", "gabriel", "gerb"]
 
 
+# Custom input, plays a "blip" sound after the player presses enter.
+# Also can be used to automatically play the game and find crashes.
 def s_input(string):
-    # Custom input, plays a "blip" sound after the player presses enter.
-    # Also can be used to automatically play the game and find crashes.
     if do_debug:
         print(string, end='')
         char = random.choice('0123456789ynxpsewrtbu')
@@ -118,11 +118,10 @@ def s_input(string):
     return x
 
 
+# "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
 def smart_sleep(duration):
-    # "Pauses" the game for a specific duration, and then does some magic to make everything work correctly
-
     if do_debug:
-        duration = 0.05
+        duration = 0.02
 
     time.sleep(duration)
 
@@ -131,15 +130,15 @@ def smart_sleep(duration):
         msvcrt.getwch()
 
 
-def chop_by_79(string, padding=0, num=79):
-    # Takes a string and coverts it into a list, cutting off at every 79th character.
-    # Also does some magic to make sure that sentences don't get cut off mid w
-    # ord
+# Takes a string and coverts it into a list, cutting off at every 79th character.
+# Also does some magic to make sure that sentences don't get cut off mid w
+# ord
+def chop_by_79(string, num=79):
     sentences = []
     current_sentence = ''
 
     for word in string.split():
-        if len(current_sentence + word) > num - padding:
+        if len(current_sentence + word) > num:
             sentences.append(current_sentence)
             current_sentence = ''
 
@@ -159,7 +158,6 @@ def game_loop():
         if not towns.search_towns():
             print('-'*save_load.divider_size)
 
-        # These lists will tell the game how to manipulate the players position in the next part of the function
         available_dirs = game_ui()
 
         while True:
@@ -276,7 +274,6 @@ def check_region():
 
 def game_ui():
     available_dirs = []
-    coord_change = ['x', 0]
     mpi = party_info
     tile = mpi['current_tile']
 
@@ -329,9 +326,6 @@ def move_command(available_dirs, command):
     sounds.item_pickup.stop()
     sounds.foot_steps.play()
 
-    party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in
-                                  [a[1] for a in available_dirs if a[0] == command]][0]
-
     # Translate the player's commandal s_input into a coordinate change
     for drc in [a[0] for a in available_dirs]:
         if drc == command == 'e':
@@ -346,6 +340,9 @@ def move_command(available_dirs, command):
             coord_change = ['z', 1]
         elif drc == command == 'd':
             coord_change = ['z', -1]
+
+    party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in
+                                  [a[1] for a in available_dirs if a[0] == command]][0]
 
     # Change the player's coordinates
     # This is purely visual - tiles are completely independent of coordinates
@@ -462,19 +459,17 @@ def look_command():
 
 
 def rest_command():
-    # Attempt to re-gain health on the world map. There is a chance to get ambushed by an enemy
-    # when doing this.
-    # TODO!! THIS DOESN'T WORK AT ALL!!
+    # Attempt to re-gain health on the world map.
+    # There is a chance to get ambushed by an enemy when doing this.
     print('-'*save_load.divider_size)
 
-    if all([units.player.hp == units.player.max_hp and units.player.mp == units.player.max_mp,
-            units.solou.hp == units.solou.max_hp and units.solou.mp == units.solou.max_mp,
-            units.xoann.hp == units.xoann.max_hp and units.xoann.mp == units.xoann.max_mp,
-            units.chyme.hp == units.chyme.max_hp and units.chyme.mp == units.chyme.max_mp,
-            units.ran_af.hp == units.ran_af.max_hp and units.ran_af.mp == units.ran_af.max_mp,
-            units.parsto.hp == units.parsto.max_hp and units.parsto.mp == units.parsto.max_mp,
-            units.adorine.hp == units.adorine.max_hp and units.adorine.mp == units.adorine.max_mp]):
-
+    if all([x.hp == x.max_hp and x.mp == x.max_mp for x in [units.player,
+                                                            units.solou,
+                                                            units.xoann,
+                                                            units.chyme,
+                                                            units.ran_af,
+                                                            units.parsto,
+                                                            units.adorine]]):
         print('Your party feels fine and decides not to rest.')
         s_input("\nPress enter/return ")
         print('-'*save_load.divider_size)
@@ -482,42 +477,22 @@ def rest_command():
         return
 
     print(ascii_art.locations['Campsite'])
-    print('Your party sets up camp and begin to rest.')
+    print('Your party sets up camp and begin to rest...')
 
     smart_sleep(1)
 
-    is_battle = not random.randint(0, 3)
+    is_battle = random.randint(0, 3)
 
-    if is_battle and party_info['do_monster_spawns']:
+    if is_battle == 3 and party_info['do_monster_spawns']:
         units.spawn_monster()
         battle.battle_system(ambush=True)
 
     else:
-        units.fix_stats()
-
-        # Revive any dead characters
-        if units.player.status_ail == 'dead':
-            units.player.status_ail = 'none'
-
-        if units.solou.status_ail == 'dead':
-            units.solou.status_ail = 'none'
-
-        if units.xoann.status_ail == 'dead':
-            units.xoann.status_ail = 'none'
-
-        if units.chyme.status_ail == 'dead':
-            units.chyme.status_ail = 'none'
-
-        if units.ran_af.status_ail == 'dead':
-            units.ran_af.status_ail = 'none'
-
-        if units.parsto.status_ail == 'dead':
-            units.parsto.status_ail = 'none'
-
-        if units.adorine.status_ail == 'dead':
-            units.adorine.status_ail = 'none'
+        units.heal_pcus(0.25)
 
         print('You rested well and decide to continue on your way.')
+        s_input("\nPress enter/return ")
+
         if not towns.search_towns(enter=False):
             print('-'*save_load.divider_size)
 

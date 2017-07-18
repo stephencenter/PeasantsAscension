@@ -40,9 +40,11 @@ PEASANT-RPG GOALS
 	
 [x] Rename NPCClass to npcs, rename npcs to dialogue. Move all NPC stuff to npcs, move all dialogue stuff to dialogue.
 
+[x] Fix resting - at the moment I'm pretty sure it doesn't even heal you
+
+[ ] Automatic attack redirection if target unit dies before attack goes off
+
 [ ] Make settings changable in-game
- 
-[ ] Rewrite the credits, lore, and backstory
 
 [ ] Revamp the inventory to show one instance of each item, with quantity to the right
 
@@ -123,11 +125,7 @@ PEASANT-RPG GOALS
 			When he dies, his scepter falls to the floor, shattering into pieces. The castle begins crumbling, and after escaping along with everyone inside,
 			it is revealed that the a new era of exploration and prosperity begin.
 
-[ ] Fix resting - at the moment I'm pretty sure it doesn't even heal you
-
 [ ] Support for multiple status effects, including mundane things like "Alive" or "Disarmed"
-
-[ ] Automatic attack redirection if target unit dies before attack goes off
 
 [ ] Make it so Potions can be used on allies, and make items wait until the user's turn to actually go off
 
@@ -184,6 +182,8 @@ PEASANT-RPG GOALS
 	[ ] Make the compass enable the coordinate system. Without it, you can write down coordinates in your inventory but cannot read them on the
 		movement system menu.
 		
+[ ] Rewrite the credits, lore, and backstory
+
 [ ] Before v1.0.0 is release, the game NEEDS at least this:
 	[ ] Every boss currenlty programmed placed somewhere on the map
 	[ ] At least 3 main-storyline quests

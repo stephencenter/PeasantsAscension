@@ -256,8 +256,7 @@ tavern12 = Tavern("The Painted Bard Inn", 15)
 
 
 def search_towns(enter=True):
-    # Check to see if there is a
-    # town where the player is located
+    # Check to see if there is a town where the player is located
 
     if not isinstance(main.party_info['current_tile'], tiles.Tile):
         logging.exception(f"""Error gathering tile data on {time.strftime('%m/%d/%Y at %H:%M:%S')}: """)

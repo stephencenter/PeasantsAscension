@@ -255,17 +255,9 @@ Input [#]: """)
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
 
-            # The player restores all their health and mana when they level up
-            self.hp = copy.copy(self.max_hp)
-            self.mp = copy.copy(self.max_mp)
-            self.status_ail = 'none'
-
             rem_points = 0  # Remaining Skill Points
-
-            if self.exp >= self.req_xp:
-                print('-'*save_load.divider_size)
-
             while self.exp >= self.req_xp:
+                print('-'*save_load.divider_size)
                 self.lvl += 1
                 print(f"{self.name} has advanced to level {self.lvl}!")
 
@@ -280,8 +272,8 @@ Input [#]: """)
                     self.m_dfns += 1
                     self.spd += 1
                     self.evad += 1
-                    self.hp += 4
-                    self.mp += 1
+                    self.max_hp += 4
+                    self.max_mp += 1
 
                 elif self.class_ == 'mage':
                     self.p_dfns += 1
@@ -291,8 +283,8 @@ Input [#]: """)
                     self.m_dfns += 4
                     self.spd += 2
                     self.evad += 2
-                    self.hp += 2
-                    self.mp += 4
+                    self.max_hp += 2
+                    self.max_mp += 4
 
                 elif self.class_ == 'assassin':
                     self.p_dfns += 2
@@ -302,8 +294,8 @@ Input [#]: """)
                     self.m_dfns += 1
                     self.spd += 5
                     self.evad += 3
-                    self.hp += 2
-                    self.mp += 1
+                    self.max_hp += 2
+                    self.max_mp += 1
 
                 elif self.class_ == 'ranger':
                     self.p_attk += 4
@@ -313,8 +305,8 @@ Input [#]: """)
                     self.m_dfns += 2
                     self.spd += 3
                     self.evad += 4
-                    self.hp += 2
-                    self.mp += 2
+                    self.max_hp += 2
+                    self.max_mp += 2
 
                 elif self.class_ == 'monk':
                     self.p_dfns += 1
@@ -324,8 +316,8 @@ Input [#]: """)
                     self.m_dfns += 2
                     self.spd += 3
                     self.evad += 3
-                    self.hp += 3
-                    self.mp += 2
+                    self.max_hp += 3
+                    self.max_mp += 2
 
                 elif self.class_ == 'paladin':
                     self.p_dfns += 3
@@ -335,21 +327,23 @@ Input [#]: """)
                     self.m_dfns += 3
                     self.spd += 1
                     self.evad += 1
-                    self.hp += 3
-                    self.mp += 2
+                    self.max_hp += 3
+                    self.max_mp += 2
 
                 self.exp -= self.req_xp
                 self.req_xp = math.ceil((math.pow(self.lvl*2, 2) - self.lvl))
 
                 fix_stats()
 
+            # The player restores all their health and mana when they level up
+            self.hp = copy.copy(self.max_hp)
+            self.mp = copy.copy(self.max_mp)
+            self.status_ail = 'none'
+
             print('-'*save_load.divider_size)
             self.skill_points(rem_points)
-
-            self.max_hp = copy.copy(self.hp)
-            self.max_mp = copy.copy(self.mp)
-
             print('-'*save_load.divider_size)
+
             save_load.save_game()
 
             return
@@ -684,11 +678,11 @@ Armor:
         if attribute.startswith('i'):
             self.m_dfns += 1
             self.m_attk += 1
-            self.mp += 2
+            self.max_mp += 1
             self.attributes['int'] += 1
 
         elif attribute.startswith('w'):
-            self.mp += 2
+            self.max_mp += 2
             self.attributes['wis'] += 1
 
         elif attribute.startswith('s'):
@@ -1783,6 +1777,21 @@ def fix_stats():
         if not any([isinstance(monster, str), isinstance(monster_2, str), isinstance(monster_3, str)]):
             raise
 
+
+def heal_pcus(percentage):
+    for pcu in [player,
+                solou,
+                xoann,
+                chyme,
+                ran_af,
+                parsto,
+                adorine]:
+
+        pcu.hp += pcu.max_hp*percentage
+        pcu.mp += pcu.max_mp*percentage
+        pcu.status_ail = 'none'
+
+    fix_stats()
 
 def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     # Save the "PlayableCharacter" objects as JSON files

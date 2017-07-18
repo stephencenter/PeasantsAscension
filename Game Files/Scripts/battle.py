@@ -340,8 +340,7 @@ def after_battle(is_boss):
                     y_n = main.s_input('Do you wish to continue playing? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
-                    # If you die, you return to the last town visited or 0'N, 0'E
-                    # if you haven't been to a town yet.
+                    # If you die, you return to the last town visited or 0'N, 0'W if you haven't been to a town yet.
 
                     main.party_info['current_tile'] = main.party_info['prev_town']
                     main.party_info['x'], main.party_info['y'], main.party_info['z'] = main.party_info['p_town_xyz']
