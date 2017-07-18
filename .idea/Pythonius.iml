@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Game Files/Scripts" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Game Files/Content" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Game Files/Classes" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Game Files/Python Files" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Content/Music" />
       <excludeFolder url="file://$MODULE_DIR$/Game Files/Content/Save Files" />

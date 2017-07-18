@@ -54,9 +54,7 @@ import pygame
 
 # Some of the files are in different folders for some reason.
 # Adding those folders to the path allows us to use the import statement to access them.
-sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Content")
-sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Scripts")
-sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Classes")
+sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Python Files")
 
 import tiles
 import title_screen
@@ -65,7 +63,7 @@ import towns
 import sounds
 import units
 import battle
-import inv_system
+import items
 import ascii_art
 import magic
 
@@ -78,7 +76,7 @@ pygame.mixer.init()
 
 # A dictionary containing generic information about the player's party
 party_info = {'biome': 'forest',
-              'music': 'Content/Music/Through the Forest.ogg',
+              'music': '../Music/Through the Forest.ogg',
               'prov': "Province of Overshire",
               'prev_town': tiles.in_for_c,
               'p_town_xyz': [0, 0, 0],
@@ -201,32 +199,34 @@ def game_loop():
 def check_region():
     # Check the coordinates of the player and change the music to match
     # Also alerts the player when they change biomes/provinces
+    global party_info
+
     new_province = party_info['current_tile'].province
     new_biome = party_info['current_tile'].biome
 
     if new_biome == 'sky':
-        music = 'Content/Music/Island of Peace.ogg'
+        music = '../Music/Island of Peace.ogg'
 
     elif new_biome == 'graveyard':
-        music = 'Content/Music/song21_02.ogg'
+        music = '../Music/song21_02.ogg'
 
     elif new_biome == 'forest':
-        music = 'Content/Music/Through the Forest.ogg'
+        music = '../Music/Through the Forest.ogg'
 
     elif new_biome == 'mountain':
-        music = 'Content/Music/Mountain.ogg'
+        music = '../Music/Mountain.ogg'
 
     elif new_biome == 'tundra':
-        music = 'Content/Music/Arpanauts.ogg'
+        music = '../Music/Arpanauts.ogg'
 
     elif new_biome == 'desert':
-        music = 'Content/Music/Come and Find Me.ogg'
+        music = '../Music/Come and Find Me.ogg'
 
     elif new_biome == 'swamp':
-        music = 'Content/Music/Digital Native.ogg'
+        music = '../Music/Digital Native.ogg'
 
     elif new_biome == 'shore':
-        music = "Content/Music/We're all under the stars.ogg"
+        music = "../Music/We're all under the stars.ogg"
 
     elif new_biome == 'cave':
         # TODO!! get music!
@@ -237,12 +237,12 @@ def check_region():
         pass
 
     elif new_biome == 'castle':
-        music = "Content/Music/Castle.ogg"
+        music = "../Music/Castle.ogg"
         pass
 
     else:
         logging.debug(f'No music for biome "{new_biome}" on {time.strftime("%m/%d/%Y at %H:%M:%S")}')
-        music = 'Content/Music/Through the Forest.ogg'
+        music = '../Music/Through the Forest.ogg'
 
     if party_info['prov'] != new_province or party_info['biome'] != new_biome:
 
@@ -263,7 +263,8 @@ def check_region():
 
         if party_info['prov'] != new_province:
             print('-'*save_load.divider_size)
-            print(f"You have left the {party_info['prov']} and are now entering the {new_province}.")
+            print(f"You have left {party_info['prov']} and are now entering {new_province}.")
+            party_info['prov'] = new_province
 
         s_input("\nPress enter/return ")
 
@@ -323,30 +324,17 @@ def game_ui():
 
 
 def move_command(available_dirs, command):
+    global party_info
+
     sounds.item_pickup.stop()
     sounds.foot_steps.play()
-
-    # Translate the player's commandal s_input into a coordinate change
-    for drc in [a[0] for a in available_dirs]:
-        if drc == command == 'e':
-            coord_change = ['x', 1]
-        elif drc == command == 'w':
-            coord_change = ['x', -1]
-        elif drc == command == 'n':
-            coord_change = ['y', 1]
-        elif drc == command == 's':
-            coord_change = ['y', -1]
-        elif drc == command == 'u':
-            coord_change = ['z', 1]
-        elif drc == command == 'd':
-            coord_change = ['z', -1]
 
     party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in
                                   [a[1] for a in available_dirs if a[0] == command]][0]
 
     # Change the player's coordinates
-    # This is purely visual - tiles are completely independent of coordinates
-    party_info[coord_change[0]] += 1 * coord_change[1]
+    pct = party_info['current_tile']
+    party_info['x'], party_info['y'], party_info['z'] = pct.x, pct.y, pct.z
 
     # If none of these fucntions return True, then a battle can occur.
     if not any([check_region(), units.check_bosses(), towns.search_towns(enter=False)]):
@@ -435,7 +423,7 @@ def stats_command():
 
 def inv_command():
     print('-'*save_load.divider_size)
-    inv_system.pick_category()
+    items.pick_category()
     print('-'*save_load.divider_size)
 
 
@@ -501,11 +489,11 @@ def tools_command():
     tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel', 'Boots of Insane Speed']
     available_tools = []
 
-    for cat in inv_system.inventory:
+    for cat in items.inventory:
         if cat in ['coord', 'quests']:
             continue
 
-        for item in inv_system.inventory[cat]:
+        for item in items.inventory[cat]:
             if item.name in tool_names:
                 available_tools.append(item)
 

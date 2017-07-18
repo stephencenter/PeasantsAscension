@@ -41,64 +41,64 @@ mixer.pre_init(frequency=44100, buffer=1024)
 mixer.init()
 
 # Sword Slash -- Played when you attempt to physically attack an enemy
-sword_slash = Sound('Content/Sound FX/sword_slash.wav')
+sword_slash = Sound('../Sound FX/sword_slash.wav')
 
 # Magic Attack -- Played when you attempt to use a magical attack
-magic_attack = Sound('Content/Sound FX/magic_attack.wav')
+magic_attack = Sound('../Sound FX/magic_attack.wav')
 
 # Magic Healing -- Played when you attempt to use a magical healing spell
-magic_healing = Sound('Content/Sound FX/magic_healing.wav')
+magic_healing = Sound('../Sound FX/magic_healing.wav')
 
 # Enemy-hit -- Played when the enemy is hit by a player attack
-enemy_hit = Sound('Content/Sound FX/enemy_hit.wav')
+enemy_hit = Sound('../Sound FX/enemy_hit.wav')
 
 # Foot-steps -- Played when you move on the overworld
-foot_steps = Sound('Content/Sound FX/foot_steps.wav')
+foot_steps = Sound('../Sound FX/foot_steps.wav')
 
 # Aim Weapon -- Played when attempting to attack with a ranged weapon
-aim_weapon = Sound('Content/Sound FX/aim_weapon.wav')
+aim_weapon = Sound('../Sound FX/aim_weapon.wav')
 
 # Attack Miss -- Played when attempting to attack and then failing
-attack_miss = Sound('Content/Sound FX/attack_miss.wav')
+attack_miss = Sound('../Sound FX/attack_miss.wav')
 
 # Got Item -- Played when you receive an item, GP, or XP
-item_pickup = Sound('Content/Sound FX/item_pickup.wav')
+item_pickup = Sound('../Sound FX/item_pickup.wav')
 
 # Low Health -- Played when you have low (less than 20%) health remaining
-health_low = Sound('Content/Sound FX/health_low.wav')
+health_low = Sound('../Sound FX/health_low.wav')
 
 # Poison Damage -- Played when the player or enemy take poison damage
-poison_damage = Sound('Content/Sound FX/poison_damage.wav')
+poison_damage = Sound('../Sound FX/poison_damage.wav')
 
 # Use Buff Spell -- Played when the player or enemy use a buff spell
-buff_spell = Sound('Content/Sound FX/buff_spell.wav')
+buff_spell = Sound('../Sound FX/buff_spell.wav')
 
 # Ally Death -- Played when a member of your party dies
-ally_death = Sound('Content/Sound FX/ally_death.wav')
+ally_death = Sound('../Sound FX/ally_death.wav')
 
 # Enemy Death -- Played when a member of the enemy team dies
-enemy_death = Sound('Content/Sound FX/enemy_death.wav')
+enemy_death = Sound('../Sound FX/enemy_death.wav')
 
 # Critical Hit -- Played when someone lands a critical hit
-critical_hit = Sound('Content/Sound FX/critical_hit.wav')
+critical_hit = Sound('../Sound FX/critical_hit.wav')
 
 # Lockpick Break -- Played when failing to pick a lock (Stolen from Oblivion)
-lockpick_break = Sound('Content/Sound FX/lockpick_break.wav')
+lockpick_break = Sound('../Sound FX/lockpick_break.wav')
 
 # Lockpicking -- Played when attempting to pick a lock
-lockpicking = Sound('Content/Sound FX/lockpicking.wav')
+lockpicking = Sound('../Sound FX/lockpicking.wav')
 
 # Unlock Chest -- Played when succeeding to pick a lock
-unlock_chest = Sound('Content/Sound FX/unlock_chest.wav')
+unlock_chest = Sound('../Sound FX/unlock_chest.wav')
 
 # Debuff -- Played when the player suffers from a debuff
-debuff = Sound('Content/Sound FX/debuff.wav')
+debuff = Sound('../Sound FX/debuff.wav')
 
 # Eerie Sound - No current use
-eerie_sound = Sound('Content/Sound FX/eerie_sound.wav')
+eerie_sound = Sound('../Sound FX/eerie_sound.wav')
 
 # Random encounter -- No current use, will probably be used when encountering an enemy on the overworld
-random_enc = Sound('Content/Sound FX/random_encounter.wav')
+random_enc = Sound('../Sound FX/random_encounter.wav')
 
 
 def change_volume():

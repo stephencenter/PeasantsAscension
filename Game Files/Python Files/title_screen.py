@@ -50,7 +50,7 @@ Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
 {'-'*save_load.divider_size}"""
 
-    pygame.mixer.music.load('Content/Music/Prologue.ogg')
+    pygame.mixer.music.load('../Music/Prologue.ogg')
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -96,13 +96,13 @@ def show_credits():
     print('-'*save_load.divider_size)
 
     try:
-        pygame.mixer.music.load('Content/Music/Credits Music for an 8-bit RPG.ogg')
+        pygame.mixer.music.load('../Music/Credits Music for an 8-bit RPG.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
         # Display the credits one line at a time with specific lengths
         # of time in between each line. Syncs up with the music!
-        with open('Content/Credits.txt') as f:
+        with open('../Credits.txt') as f:
             for number, line in enumerate(f):
                 print(''.join(line.split("\n")))
                 main.smart_sleep([0.75, 1.25, 0.75, 1.25, 1, 1, 0.5, 0.5, 1, 1,
@@ -116,7 +116,7 @@ def show_credits():
 
             main.smart_sleep(3)
 
-            pygame.mixer.music.load('Content/Music/Prologue.ogg')
+            pygame.mixer.music.load('../Music/Prologue.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -141,13 +141,13 @@ def show_story():
     print('-'*save_load.divider_size)
 
     try:
-        pygame.mixer.music.load('Content/Music/CopperNickel.ogg')
+        pygame.mixer.music.load('../Music/CopperNickel.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
         # Display each line one at a time, and require the pressing of enter
         # on lines that aren't solely whitespace
-        with open('Content/peasant_plot.txt', encoding='utf-8') as f:
+        with open('../peasant_plot.txt', encoding='utf-8') as f:
             for line in f:
                 if ''.join(char for char in line.split(" ") if char.isalnum()):
                     main.s_input(''.join(line.split("\n")))
@@ -155,7 +155,7 @@ def show_story():
                 else:
                     print(''.join(line.split("\n")))
 
-        pygame.mixer.music.load('Content/Music/Prologue.ogg')
+        pygame.mixer.music.load('../Music/Prologue.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -182,20 +182,20 @@ def show_history():
     print('-'*save_load.divider_size)
 
     try:
-        pygame.mixer.music.load('Content/Music/CopperNickel.ogg')
+        pygame.mixer.music.load('../Music/CopperNickel.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
         # Display each line one at a time, and require the pressing of enter
         # on lines that aren't solely whitespace
-        with open('Content/peasant_lore.txt', encoding='utf-8') as f:
+        with open('../peasant_lore.txt', encoding='utf-8') as f:
             for line in f:
                 if ''.join(char for char in line.split(" ") if char.isalnum()):
                     main.s_input(''.join(line.split("\n")))
                 else:
                     print(''.join(line.split("\n")))
 
-        pygame.mixer.music.load('Content/Music/Prologue.ogg')
+        pygame.mixer.music.load('../Music/Prologue.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -211,7 +211,6 @@ def show_history():
 
 
 def edit_settings():
-    "../settings.cfg"
     print('-'*save_load.divider_size)
 
     while True:
@@ -280,7 +279,7 @@ def set_vol(mode):
 
                     if not os.path.isfile("../settings.cfg"):
                         with open("../settings.cfg", mode='w') as f:
-                            f.write(settings_file)
+                            f.write(save_load.settings_file)
 
                     config.read("../settings.cfg")
                     config.set("settings", f"{mode}_vol", str(new_vol))

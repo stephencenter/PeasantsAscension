@@ -26,7 +26,6 @@ import dialogue
 import abilities
 import ascii_art
 import battle
-import inv_system
 import items
 import magic
 import save_load
@@ -251,7 +250,7 @@ Input [#]: """)
 
     def level_up(self):
         if self.exp >= self.req_xp:
-            pygame.mixer.music.load('Content/Music/Adventures in Pixels.ogg')
+            pygame.mixer.music.load('../Music/Adventures in Pixels.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -436,19 +435,25 @@ INT: {self.attributes['int']} | WIS: {self.attributes['wis']} | STR: {self.attri
 XP: {self.exp}/{self.req_xp} | GP: {main.party_info['gp']}
 
 -Equipped Items-
-Weapon: {inv_system.equipped[inv_name]['weapon'].name}
-Accessory: {inv_system.equipped[inv_name]['access'].name}
+Weapon: {items.equipped[inv_name]['weapon'].name}
+Accessory: {items.equipped[inv_name]['access'].name}
 Armor:
-  Head: {inv_system.equipped[inv_name]['head'].name}
-  Body: {inv_system.equipped[inv_name]['body'].name}
-  Legs: {inv_system.equipped[inv_name]['legs'].name}""")
+  Head: {items.equipped[inv_name]['head'].name}
+  Body: {items.equipped[inv_name]['body'].name}
+  Legs: {items.equipped[inv_name]['legs'].name}""")
 
         main.s_input('\nPress enter/return ')
 
     def battle_turn(self):
         sounds.item_pickup.stop()
+
+        # If the player's target is an enemy, and the target died before the player's turn began,
+        # then the attack automatically redirects to a random living enemy.
+        if isinstance(self.target, Monster) and self.target.status_ail == 'dead':
+            self.target = random.choice([x for x in battle.m_list if x.status_ail != 'dead'])
+
         inv_name = self.name if self != player else 'player'
-        player_weapon = inv_system.equipped[inv_name]['weapon']
+        player_weapon = items.equipped[inv_name]['weapon']
 
         print(f"-{self.name}'s Turn-")
 
@@ -480,7 +485,7 @@ Armor:
         if self.move == '1':
             print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
 
-            if inv_system.equipped[inv_name]['weapon'].type_ == 'melee':
+            if items.equipped[inv_name]['weapon'].type_ == 'melee':
                 sounds.sword_slash.play()
                 print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon.name}...')
 
@@ -490,7 +495,7 @@ Armor:
 
             main.smart_sleep(0.75)
 
-            if inv_system.equipped[inv_name]['weapon'].type_ == 'melee':
+            if items.equipped[inv_name]['weapon'].type_ == 'melee':
                 dam_dealt = deal_damage(self, self.target, "physical")
 
             else:
@@ -601,7 +606,7 @@ Armor:
             elif self.move == '4':
                 print('-'*save_load.divider_size)
 
-                if not inv_system.inventory['consumables']:
+                if not items.inventory['consumables']:
                     main.s_input('Your party has no battle items! | Press enter/return ')
                     print(battle_options.format(self.name))
 
@@ -1275,8 +1280,8 @@ class Boss(Monster):
 
         new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
 
-        if add and new_coords not in inv_system.inventory['coord']:
-            inv_system.inventory['coord'].append(new_coords)
+        if add and new_coords not in items.inventory['coord']:
+            items.inventory['coord'].append(new_coords)
             print('-'*save_load.divider_size)
             print(f"You quickly mark down the location of {self.name}'s lair.")
             main.s_input("\nPress enter/return ")
@@ -1420,14 +1425,14 @@ def check_bosses():
         if boss.name not in defeated_bosses and boss.active:
             print('-'*save_load.divider_size)
 
-            if boss.new_location(add=False) not in inv_system.inventory['coord']:
+            if boss.new_location(add=False) not in items.inventory['coord']:
                 print('You feel the presence of an unknown entity...')
 
             else:
                 print(f'You come across the lair of the {boss.name}.')
 
             while True:
-                if boss.new_location(add=False) not in inv_system.inventory['coord']:
+                if boss.new_location(add=False) not in items.inventory['coord']:
                     y_n = main.s_input('Do you wish to investigate? | Y/N: ').lower()
 
                 else:
@@ -1457,7 +1462,7 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
     # Absolute - Whether or not the damage should be affected by crits, armor, status ailments, etc.
 
     if isinstance(attacker, PlayableCharacter):
-        t_equip = inv_system.equipped[attacker.name if attacker != player else 'player']
+        t_equip = items.equipped[attacker.name if attacker != player else 'player']
         weapon_dmg = t_equip['weapon'].power
 
         attack = battle.temp_stats[attacker.name]['attk']
@@ -1472,7 +1477,7 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
         weapon_dmg = 0
 
     if isinstance(target, PlayableCharacter):
-        t_equip = inv_system.equipped[target.name if target != player else 'player']
+        t_equip = items.equipped[target.name if target != player else 'player']
         resist = sum([t_equip[armor].defense for armor in t_equip if isinstance(t_equip[armor], items.Armor)])
 
         defense = battle.temp_stats[target.name]['dfns']
@@ -1608,14 +1613,14 @@ def create_player():
         player.attk += 3
         player.spd -= 1
         player.evad -= 1
-        inv_system.equipped['player']['weapon'] = copy.copy(items.wdn_sht)
+        items.equipped['player']['weapon'] = copy.copy(items.wdn_sht)
 
     elif player.class_ == "mage":
         player.max_hp += 1
         player.max_mp += 6
         player.m_attk += 4
         player.m_dfns += 3
-        inv_system.equipped['player']['weapon'] = copy.copy(items.mag_twg)
+        items.equipped['player']['weapon'] = copy.copy(items.mag_twg)
 
     elif player.class_ == "assassin":
         player.max_hp += 2
@@ -1624,7 +1629,7 @@ def create_player():
         player.dfns += 2
         player.spd += 4
         player.evad += 2
-        inv_system.equipped['player']['weapon'] = copy.copy(items.stn_dag)
+        items.equipped['player']['weapon'] = copy.copy(items.stn_dag)
 
     elif player.class_ == "ranger":
         player.max_mp += 2
@@ -1632,7 +1637,7 @@ def create_player():
         player.m_dfns += 2
         player.evad += 3
         player.spd += 3
-        inv_system.equipped['player']['weapon'] = copy.copy(items.slg_sht)
+        items.equipped['player']['weapon'] = copy.copy(items.slg_sht)
 
     elif player.class_ == "monk":
         player.max_hp += 2
@@ -1642,7 +1647,7 @@ def create_player():
         player.evad += 3
         player.spd += 3
         player.dfns -= 1
-        inv_system.equipped['player']['weapon'] = copy.copy(items.fists)
+        items.equipped['player']['weapon'] = copy.copy(items.fists)
 
     elif player.class_ == "paladin":
         player.max_hp += 3
@@ -1656,7 +1661,7 @@ def create_player():
         player.evad -= 1
         magic.spellbook['player']['Healing'].append(magic.min_heal)
         magic.spellbook['player']['Damaging'].append(magic.purify)
-        inv_system.equipped['player']['weapon'] = copy.copy(items.rbr_mlt)
+        items.equipped['player']['weapon'] = copy.copy(items.rbr_mlt)
 
     player.hp = copy.copy(player.max_hp)
     player.mp = copy.copy(player.max_mp)
@@ -1792,6 +1797,7 @@ def heal_pcus(percentage):
         pcu.status_ail = 'none'
 
     fix_stats()
+
 
 def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     # Save the "PlayableCharacter" objects as JSON files

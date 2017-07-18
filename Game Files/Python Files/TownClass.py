@@ -20,8 +20,6 @@ import sys
 import pygame
 
 import ascii_art
-import battle
-import inv_system
 import items
 import sounds
 import units
@@ -61,11 +59,11 @@ class Town:
 
         while True:
             print("""What do you wish to do?
-      [1] --> Town Description
-      [2] --> Buildings
-      [3] --> People
-      [4] --> Player Info
-      [5] --> View Inventory""")
+      [1] Town Description
+      [2] Buildings
+      [3] People
+      [4] Player Info
+      [5] View Inventory""")
 
             while True:
                 choice = main.s_input('Input [#] (or type "exit"): ')
@@ -109,7 +107,7 @@ class Town:
 
                 elif choice == '5':
                     print('-'*save_load.divider_size)
-                    inv_system.pick_category()
+                    items.pick_category()
                     print('-'*save_load.divider_size)
 
                 elif choice.lower() in ['e', 'x', 'exit', 'b', 'back']:
@@ -124,24 +122,44 @@ class Town:
 
                 break
 
-    def new_location(self, add=True):  # Translate the location of newly-found towns into a string
+    def new_location(self):  # Translate the location of newly-found towns into a string
         mpi = main.party_info
 
-        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
-        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
-        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
+        cx_letter = 'W' if mpi['x'] < 0 else 'E'
+        cy_letter = 'S' if mpi['y'] < 0 else 'N'
+        cz_letter = 'DOWN' if mpi['z'] < 0 else 'UP'
 
-        new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
+        coord_x = f"""{mpi['x']}'{cx_letter}"""
+        coord_y = f"""{mpi['y']}'{cy_letter}"""
+        coord_z = f""", {mpi['z']}'{cz_letter}""" if mpi['z'] else ''
 
-        if add and new_coords not in inv_system.inventory['coord']:
-            inv_system.inventory['coord'].append(new_coords)
-            main.party_info['visited_towns'].append(self.name)
+        new_coords = [self.name, self.town_id, f"{coord_y}, {coord_x}{coord_z}"]
 
-            print(f"{self.name}'s location has been added to the coordinates section of your inventory.")
-            main.s_input("\nPress enter/return ")
+        # Remove the previous coordinates from the inventory. This makes sure that the only
+        # set of coordinates in the inventory are completely up to date. So if a town gets renamed
+        # or changes location then the coordinates will update.
+        new_list = []
+        for x in items.inventory['coord']:
+            if x[1] != self.town_id:
+                new_list.append(x)
+
+        items.inventory['coord'] = new_list
+        items.inventory['coord'].append(new_coords)
+
+        # Make sure that this town is not already in visited_towns before you add it
+        for y in mpi['visited_towns']:
+            # We check for town_id instead of the town's name - this means that even if the town is renamed
+            # in the future, the town will still be counted as having been visited before
+            if y[1] == self.town_id:
+                break
 
         else:
-            return new_coords
+            main.party_info['visited_towns'].append(self.name)
+
+        print(f"{self.name}'s location can be found in your coordinates log.")
+        main.s_input("\nPress enter/return ")
+
+        return new_coords
 
     def inside_town(self):
         town_words = ['i', 'g', 'u']
@@ -160,7 +178,7 @@ class Town:
                 selected = main.s_input('Where do you want to go? | Input [L]etter (or type "exit"): ').lower()
 
                 if any(map(selected.startswith, buildings)):
-                    pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
+                    pygame.mixer.music.load('../Music/Mayhem in the Village.ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -178,7 +196,7 @@ class Town:
 
                     print('-'*save_load.divider_size)
 
-                    pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
+                    pygame.mixer.music.load('../Music/Chickens (going peck peck peck).ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -346,7 +364,7 @@ class Town:
                             if y_n.startswith('y'):
                                 if main.party_info['gp'] >= i.buy:
                                     main.party_info['gp'] -= i.buy
-                                    inv_system.add_item(i.item_id)
+                                    items.add_item(i.item_id)
 
                                     print('-'*save_load.divider_size)
                                     print(f'You purchase the {i.name} for {i.buy} GP.')
@@ -400,10 +418,10 @@ class Town:
                         else:
                             continue
 
-                        if cat in inv_system.inventory:
+                        if cat in items.inventory:
 
-                            if inv_system.inventory[cat]:
-                                inv_system.pick_item(cat, vis_cat, gs=True)
+                            if items.inventory[cat]:
+                                items.pick_item(cat, vis_cat, gs=True)
                                 print('-'*save_load.divider_size)
 
                                 break
@@ -440,7 +458,7 @@ class Town:
 
                     continue
 
-                pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
+                pygame.mixer.music.load('../Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -448,7 +466,7 @@ class Town:
 
                 npc.speak()
 
-                pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
+                pygame.mixer.music.load('../Music/Chickens (going peck peck peck).ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -476,7 +494,7 @@ class Town:
 
                 chosen_house.enter_house()
 
-                pygame.mixer.music.load('Content/Music/Mayhem in the Village.ogg')
+                pygame.mixer.music.load('../Music/Mayhem in the Village.ogg')
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -553,7 +571,7 @@ class Town:
                             print('-'*save_load.divider_size)
 
                             main.party_info['gp'] -= 250
-                            inv_system.inventory['q_items'].append(copy.copy(items.iSound))
+                            items.inventory['q_items'].append(copy.copy(items.iSound))
                             spam = False
 
                             break
@@ -578,18 +596,9 @@ class Tavern:
         self.name = name
         self.inn_cost = inn_cost
 
-    # noinspection PyMethodMayBeStatic
     def get_coords(self, add=True):
-        # Translate the location of newly-found towns into a string
-        mpi = main.party_info
-
-        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
-        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
-        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
-
-        coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
-
-        return coords
+        # Coordinates of taverns are not kept in the inventory
+        pass
 
     def town_choice(self):
         print('-'*save_load.divider_size)
@@ -650,7 +659,7 @@ class House:
         self.chests = chests
 
     def enter_house(self):
-        pygame.mixer.music.load('Content/Music/song21_02.ogg')
+        pygame.mixer.music.load('../Music/song21_02.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -660,7 +669,7 @@ class House:
             available_chests = [c for c in self.chests if not (c.destroyed or c.opened)]
 
             lockpicks = []
-            for item in inv_system.inventory['tools']:
+            for item in items.inventory['tools']:
                 if 'Lockpick' in item.name:
                     lockpicks.append(item)
 
@@ -775,7 +784,7 @@ class Chest:
                             main.s_input(f"The chest had {item} gold in it! | Press enter/return ")
 
                         else:
-                            inv_system.add_item(item.item_id)
+                            items.add_item(item.item_id)
                             main.s_input(f"The chest had a {item.name} in it! | Press enter/return ")
 
                     self.opened = True

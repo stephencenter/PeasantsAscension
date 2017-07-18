@@ -17,7 +17,7 @@ import json
 import sys
 import copy
 
-import inv_system
+import items
 import units
 import save_load
 
@@ -598,7 +598,7 @@ def polmor_c2_at():
     any_scales = False
     any_dust = False
 
-    for item in inv_system.inventory['misc']:
+    for item in items.inventory['misc']:
         if item.name == 'Monster Fang':
             any_fangs = True
 
@@ -610,17 +610,17 @@ def polmor_c2_at():
 
     if any_fangs and any_scales and any_dust:
         # Iterate over a copy to prevent problems
-        for item in inv_system.inventory['misc'][:]:
+        for item in items.inventory['misc'][:]:
             if item.name == 'Monster Fang' and any_fangs:
-                inv_system.inventory['misc'].remove(item)
+                items.inventory['misc'].remove(item)
                 any_fangs = False
 
             elif item.name == 'Serpent Scale' and any_scales:
-                inv_system.inventory['misc'].remove(item)
+                items.inventory['misc'].remove(item)
                 any_scales = False
 
             elif item.name == 'Fairy Dust' and any_dust:
-                inv_system.inventory['misc'].remove(item)
+                items.inventory['misc'].remove(item)
                 any_dust = False
 
         polmor_quest_1.finished = True
@@ -657,10 +657,10 @@ def matthew_c2_at():
 
     matthew_convo_2.active = False
 
-    for i in inv_system.inventory['q_items']:
+    for i in items.inventory['q_items']:
         if i.name == "iSound":
             matthew_convo_4.active = True
-            inv_system.inventory['q_items'].remove(i)
+            items.inventory['q_items'].remove(i)
             break
 
     else:

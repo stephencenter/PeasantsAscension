@@ -42,8 +42,15 @@ PEASANT-RPG GOALS
 
 [x] Fix resting - at the moment I'm pretty sure it doesn't even heal you
 
-[ ] Automatic attack redirection if target unit dies before attack goes off
+[x] Automatic attack redirection if target unit dies before attack goes off
 
+[x] Clean up the coordinate inventory system
+
+[x] Make tiles have set coordinates
+	[x] Yes, I know this is sort of a step backwards, but there are just too many issues with the current system:
+		[x] There's a bug where sometimes (and I don't know why, how, or when) the coordiantes just get messed up. And even if that was fixed...
+		[x] If someone manually edits their coordiantes then their coordinates have like a 0% chance of ever being fixed
+		
 [ ] Make settings changable in-game
 
 [ ] Revamp the inventory to show one instance of each item, with quantity to the right
@@ -172,8 +179,6 @@ PEASANT-RPG GOALS
 	[ ] Damage values, blue
 
 [ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.
-
-[ ] Clean up the coordinate inventory system
 	
 [ ] Fix all of the quests that have been broken due to all the above changes
 

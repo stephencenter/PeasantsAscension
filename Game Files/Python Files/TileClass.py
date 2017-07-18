@@ -15,7 +15,7 @@
 
 
 class Tile:
-    def __init__(self, name, tile_id, province, desc, biome,  m_level,
+    def __init__(self, name, tile_id, province, desc, biome,  m_level, x, y, z=0,
                  to_n=None, to_s=None, to_e=None, to_w=None, to_up=None, to_dn=None,
                  town_list=(), boss_list=(), gem_list=(),
                  allow_recursion=False, allow_oneway=False, allow_noneuclidean=False):
@@ -25,6 +25,9 @@ class Tile:
         self.desc = desc
         self.biome = biome
         self.m_level = m_level
+        self.x = x
+        self.y = y
+        self.z = z
         self.to_n = to_n
         self.to_s = to_s
         self.to_e = to_e

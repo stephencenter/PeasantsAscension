@@ -20,7 +20,6 @@ import time
 
 import pygame
 
-import inv_system
 import items
 import npcs
 import save_load
@@ -255,15 +254,15 @@ tavern11 = Tavern("The Thirsty Wizard Tavern", 15)
 tavern12 = Tavern("The Painted Bard Inn", 15)
 
 
+# Check to see if there is a town where the player is located
 def search_towns(enter=True):
-    # Check to see if there is a town where the player is located
-
     if not isinstance(main.party_info['current_tile'], tiles.Tile):
+        # If the player's current tile position is broken, relocate them to 0, 0
         logging.exception(f"""Error gathering tile data on {time.strftime('%m/%d/%Y at %H:%M:%S')}: """)
 
         main.party_info['current_tile'] = tiles.in_for_c
         main.party_info['x'], main.party_info['y'], main.party_info['z'] = 0, 0, 0
-        print("There was an error gathering tile data - your party has been relocated to 0'N, 0'E.")
+        print("Error gathering tile data - relocated to 0'N, 0'E.")
         main.s_input("\nPress enter/return ")
 
     for town in main.party_info['current_tile'].town_list:
@@ -275,14 +274,10 @@ def search_towns(enter=True):
                     y_n = main.s_input("A tavern is nearby! Visit the tavern? | Y/N: ").lower()
 
                 else:
-                    if town.new_location(add=False) not in inv_system.inventory['coord']:
-                        y_n = main.s_input('There is a town nearby. Should your party investigate? | Y/N: ').lower()
-
-                    else:
-                        y_n = main.s_input(f'{town.name} is nearby. Give it a visit? | Y/N: ').lower()
+                    y_n = main.s_input(f'The town of {town.name} is nearby. Give it a visit? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
-                    pygame.mixer.music.load('Content/Music/Chickens (going peck peck peck).ogg')
+                    pygame.mixer.music.load('../Music/Chickens (going peck peck peck).ogg')
                     pygame.mixer.music.play(-1)
                     pygame.mixer.music.set_volume(save_load.music_vol)
 

@@ -21,7 +21,6 @@ from copy import copy as _c
 import pygame
 
 import ascii_art
-import inv_system
 import items
 import save_load
 import sounds
@@ -195,7 +194,7 @@ def battle_system(is_boss=False, ambush=False):
             else:
                 print(f'A {units.monster.name} suddenly appeared out of nowhere!')
 
-        pygame.mixer.music.load('Content/Music/Ruari 8-bit Battle.ogg')
+        pygame.mixer.music.load('../Music/Ruari 8-bit Battle.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -324,7 +323,7 @@ def after_battle(is_boss):
     while True:
         # If the monster wins...
         if any([m.status_ail != 'dead' for m in m_list]) and all([x.status_ail == 'dead' for x in enabled_pcus]):
-            pygame.mixer.music.load('Content/Music/Power-Up.ogg')
+            pygame.mixer.music.load('../Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -378,7 +377,7 @@ def after_battle(is_boss):
 
         # If the player wins...
         elif all([m.status_ail == 'dead' for m in m_list]) and any([x.status_ail != 'dead' for x in enabled_pcus]):
-            pygame.mixer.music.load('Content/Music/Python_RM.ogg')
+            pygame.mixer.music.load('../Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -406,7 +405,7 @@ def after_battle(is_boss):
             # Each monster can drop their own item
             for drop in item_drops:
                 print(f"The {drop[0]} dropped a {drop[1].name}! | Press enter/return")
-                inv_system.inventory[drop[1].cat].append(drop[1])
+                items.inventory[drop[1].cat].append(drop[1])
 
             for character in enabled_pcus:
                 character.level_up()
@@ -430,14 +429,14 @@ def battle_inventory(user):
     while True:
         print('Battle Inventory: ')
 
-        for x, y in enumerate(inv_system.inventory['consumables']):
+        for x, y in enumerate(items.inventory['consumables']):
             print(f'      [{x + 1}] {y.name}')
 
         while True:
             item = main.s_input('Input [#] (or type "exit"): ').lower()
 
             try:
-                item = inv_system.inventory['consumables'][int(item) - 1]
+                item = items.inventory['consumables'][int(item) - 1]
 
             except (IndexError, ValueError):
                 if item in ['e', 'x', 'exit', 'b', 'back']:

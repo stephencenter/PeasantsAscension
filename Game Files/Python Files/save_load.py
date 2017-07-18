@@ -25,7 +25,6 @@ import shutil
 import pygame
 
 import dialogue
-import inv_system
 import items
 import magic
 import sounds
@@ -64,7 +63,7 @@ sav_parsto = '{ADVENTURE_NAME}/parsto_stats.json'    # Parsto's Stats
 sav_adorine = '{ADVENTURE_NAME}/adorine_stats.json'  # Adorine's Stats
 
 adventure_name = ''
-base_dir = "Content/Save Files"
+base_dir = "../Save Files"
 temp_dir = "temp"
 
 # Game Settings. Can be changed in the settings.cfg file.
@@ -364,8 +363,8 @@ def serialize_all(verbose=True):
             json.dump(json_party_info, f, indent=4, separators=(', ', ': '))
 
         items.serialize_gems('/'.join([base_dir, temp_dir, sav_acquired_gems]))
-        inv_system.serialize_equip('/'.join([base_dir, temp_dir, sav_equip_items]))
-        inv_system.serialize_inv('/'.join([base_dir, temp_dir, sav_inventory]))
+        items.serialize_equip('/'.join([base_dir, temp_dir, sav_equip_items]))
+        items.serialize_inv('/'.join([base_dir, temp_dir, sav_inventory]))
         dialogue.serialize_dialogue('/'.join([base_dir, temp_dir, sav_quests_dia]))
         magic.serialize_sb('/'.join([base_dir, temp_dir, sav_spellbook]))
         units.serialize_bosses('/'.join([base_dir, temp_dir, sav_misc_boss_info]))
@@ -402,8 +401,8 @@ def deserialize_all():
 
         # Call functions to serialize more advanced things
         items.deserialize_gems('/'.join([base_dir, sav_acquired_gems]))
-        inv_system.deserialize_equip('/'.join([base_dir, sav_equip_items]))
-        inv_system.deserialize_inv('/'.join([base_dir, sav_inventory]))
+        items.deserialize_equip('/'.join([base_dir, sav_equip_items]))
+        items.deserialize_inv('/'.join([base_dir, sav_inventory]))
         units.deserialize_bosses('/'.join([base_dir, sav_misc_boss_info]))
         dialogue.deserialize_dialogue('/'.join([base_dir, sav_quests_dia]))
         magic.deserialize_sb('/'.join([base_dir, sav_spellbook]))

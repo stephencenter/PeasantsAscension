@@ -40,138 +40,138 @@ other words, it's your standard forest. The Inner Central Forest makes up only a
 small fraction of the 100 million acre Central Forest, and is surrounded by a
 12-foot wide moat."""
 
-in_for_n = Tile("Inner Central Forest", "I-CF-N", "Province of Overshire", icf_desc, "forest", 1,
+in_for_n = Tile("Inner Central Forest", "I-CF-N", "Overshire", icf_desc, "forest", 1, 0, 1,
                 to_s="I-CF-C",
                 to_e="I-CF-NE",
                 to_w="I-CF-NW",
                 to_n="I-CF-Bridge")
-in_for_s = Tile("Inner Central Forest", "I-CF-S", "Province of Overshire", icf_desc, "forest", 1,
+in_for_s = Tile("Inner Central Forest", "I-CF-S", "Overshire", icf_desc, "forest", 1, 0, -1,
                 to_n="I-CF-C",
                 to_w="I-CF-SW",
                 to_e="I-CF-SE",
                 to_s="I-CF-SS")
-in_for_e = Tile("Inner Central Forest", "I-CF-E", "Province of Overshire", icf_desc, "forest", 1,
+in_for_e = Tile("Inner Central Forest", "I-CF-E", "Overshire", icf_desc, "forest", 1, 1, 0,
                 to_n="I-CF-NE",
                 to_w="I-CF-C",
                 to_s="I-CF-SE",
                 to_e="I-CF-EE")
-in_for_w = Tile("Inner Central Forest", "I-CF-W", "Province of Overshire", icf_desc, "forest", 1,
+in_for_w = Tile("Inner Central Forest", "I-CF-W", "Overshire", icf_desc, "forest", 1, -1, 0,
                 to_s="I-CF-SW",
                 to_e="I-CF-C",
                 to_n="I-CF-NW",
                 to_w="I-CF-WW")
-in_for_c = Tile("Inner Central Forest", "I-CF-C", "Province of Overshire", icf_desc, "forest", 1,
+in_for_c = Tile("Inner Central Forest", "I-CF-C", "Overshire", icf_desc, "forest", 1, 0, 0,
                 to_n="I-CF-N",
                 to_w="I-CF-W",
                 to_e="I-CF-E",
                 to_s="I-CF-S")
-in_for_nw = Tile("Inner Central Forest", "I-CF-NW", "Province of Overshire", icf_desc, "forest", 2,
+in_for_nw = Tile("Inner Central Forest", "I-CF-NW", "Overshire", icf_desc, "forest", 2, -1, 1,
                  to_s="I-CF-W",
                  to_e="I-CF-N",
                  to_w="I-CF-NWW")
-in_for_se = Tile("Inner Central Forest", "I-CF-SE", "Province of Overshire", icf_desc, "forest", 2,
+in_for_se = Tile("Inner Central Forest", "I-CF-SE", "Overshire", icf_desc, "forest", 2, 1, -1,
                  to_w="I-CF-S",
                  to_n="I-CF-E",
                  to_s="I-CF-SSE",
                  to_e="I-CF-SEE")
-in_for_sw = Tile("Inner Central Forest", "I-CF-SW", "Province of Overshire", icf_desc, "forest", 2,
+in_for_sw = Tile("Inner Central Forest", "I-CF-SW", "Overshire", icf_desc, "forest", 2, -1, -1,
                  to_e="I-CF-S",
                  to_n="I-CF-W",
                  to_s="I-CF-SSW",
                  to_w="I-CF-SWW")
-in_for_ww = Tile("Inner Central Forest", "I-CF-WW", "Province of Overshire", icf_desc, "forest", 2,
+in_for_ww = Tile("Inner Central Forest", "I-CF-WW", "Overshire", icf_desc, "forest", 2, -2, 0,
                  to_e="I-CF-W",
                  to_n="I-CF-NWW",
                  to_s="I-CF-SWW",
                  to_w="I-CF-WWW")
-in_for_www = Tile("Inner Central Forest", "I-CF-WWW", "Province of Overshire", icf_desc, "forest", 3,
+in_for_www = Tile("Inner Central Forest", "I-CF-WWW", "Overshire", icf_desc, "forest", 3, -3, 0,
                   to_e="I-CF-WW",
                   to_n="I-CF-NWWW",
                   to_s="I-CF-SWWW")
-in_for_ee = Tile("Inner Central Forest", "I-CF-EE", "Province of Overshire", icf_desc, "forest", 2,
+in_for_ee = Tile("Inner Central Forest", "I-CF-EE", "Overshire", icf_desc, "forest", 2, 2, 0,
                  to_e="I-CF-EEE",
                  to_w="I-CF-E",
                  to_n="I-CF-NEE",
                  to_s="I-CF-SEE")
-in_for_eee = Tile("Inner Central Forest", "I-CF-EEE", "Province of Overshire", icf_desc, "forest", 2,
+in_for_eee = Tile("Inner Central Forest", "I-CF-EEE", "Overshire", icf_desc, "forest", 2, 3, 0,
                   to_w="I-CF-EE",
                   to_s="I-CF-SEEE",
                   to_n="I-CF-NEEE")
-in_for_ss = Tile("Inner Central Forest", "I-CF-SS", "Province of Overshire", icf_desc, "forest", 2,
+in_for_ss = Tile("Inner Central Forest", "I-CF-SS", "Overshire", icf_desc, "forest", 2, 0, -2,
                  to_n="I-CF-S",
                  to_w="I-CF-SSW",
                  to_e="I-CF-SSE")
-in_for_ssw = Tile("Inner Central Forest", "I-CF-SSW", "Province of Overshire", icf_desc, "forest", 2,
+in_for_ssw = Tile("Inner Central Forest", "I-CF-SSW", "Overshire", icf_desc, "forest", 2, -1, -2,
                   to_e="I-CF-SS",
                   to_n="I-CF-SW",
                   to_w="I-CF-SSWW")
-in_for_sww = Tile("Inner Central Forest", "I-CF-SWW", "Province of Overshire", icf_desc, "forest", 2,
+in_for_sww = Tile("Inner Central Forest", "I-CF-SWW", "Overshire", icf_desc, "forest", 2, -2, -1,
                   to_n="I-CF-WW",
                   to_e="I-CF-SW",
                   to_s="I-CF-SSWW",
                   to_w="I-CF-SWWW")
-in_for_swww = Tile("Inner Central Forest", "I-CF-SWWW", "Province of Overshire", icf_desc, "forest", 3,
+in_for_swww = Tile("Inner Central Forest", "I-CF-SWWW", "Overshire", icf_desc, "forest", 3, -3, -1,
                    to_n="I-CF-WWW",
                    to_e="I-CF-SWW",
                    to_s="I-CF-SSWWW")
-in_for_sswww = Tile("Inner Central Forest", "I-CF-SSWWW", "Province of Overshire", icf_desc, "forest", 3,
+in_for_sswww = Tile("Inner Central Forest", "I-CF-SSWWW", "Overshire", icf_desc, "forest", 3, -3, -2,
                     to_n="I-CF-SWWW",
                     to_e="I-CF-SSWW")
-in_for_nww = Tile("Inner Central Forest", "I-CF-NWW", "Province of Overshire", icf_desc, "forest", 2,
+in_for_nww = Tile("Inner Central Forest", "I-CF-NWW", "Overshire", icf_desc, "forest", 2, -2, 1,
                   to_w="I-CF-NWWW",
                   to_s="I-CF-WW",
                   to_e="I-CF-NW")
-in_for_nwww = Tile("Inner Central Forest", "I-CF-NWWW", "Province of Overshire", icf_desc, "forest", 3,
+in_for_nwww = Tile("Inner Central Forest", "I-CF-NWWW", "Overshire", icf_desc, "forest", 3, -3, 1,
                    to_e="I-CF-NWW",
                    to_s="I-CF-WWW")
-in_for_nee = Tile("Inner Central Forest", "I-CF-NEE", "Province of Overshire", icf_desc, "forest", 2,
+in_for_nee = Tile("Inner Central Forest", "I-CF-NEE", "Overshire", icf_desc, "forest", 2, 2, 1,
                   to_e="I-CF-NEEE",
                   to_s="I-CF-EE",
                   to_w="I-CF-NE")
-in_for_neee = Tile("Inner Central Forest", "I-CF-NEEE", "Province of Overshire", icf_desc, "forest", 3,
+in_for_neee = Tile("Inner Central Forest", "I-CF-NEEE", "Overshire", icf_desc, "forest", 3, 3, 1,
                    to_w="I-CF-NEE",
                    to_s="I-CF-EEE")
-in_for_sse = Tile("Inner Central Forest", "I-CF-SSE", "Province of Overshire", icf_desc, "forest", 2,
+in_for_sse = Tile("Inner Central Forest", "I-CF-SSE", "Overshire", icf_desc, "forest", 2, 1, -2,
                   to_n="I-CF-SE",
                   to_w="I-CF-SS",
                   to_e="I-CF-SSEE")
-in_for_see = Tile("Inner Central Forest", "I-CF-SEE", "Province of Overshire", icf_desc, "forest", 2,
+in_for_see = Tile("Inner Central Forest", "I-CF-SEE", "Overshire", icf_desc, "forest", 2, 2, -1,
                   to_w="I-CF-SE",
                   to_n="I-CF-EE",
                   to_s="I-CF-SSEE",
                   to_e="I-CF-SEEE")
-in_for_ssee = Tile("Inner Central Forest", "I-CF-SSEE", "Province of Overshire", icf_desc, "forest", 3,
+in_for_ssee = Tile("Inner Central Forest", "I-CF-SSEE", "Overshire", icf_desc, "forest", 3, 2, -2,
                    to_n="I-CF-SEE",
                    to_w="I-CF-SSE",
                    to_e="I-CF-SSEEE")
-in_for_seee = Tile("Inner Central Forest", "I-CF-SEEE", "Province of Overshire", icf_desc, "forest", 3,
+in_for_seee = Tile("Inner Central Forest", "I-CF-SEEE", "Overshire", icf_desc, "forest", 3, 3, -1,
                    to_n="I-CF-EEE",
                    to_w="I-CF-SEE",
                    to_s="I-CF-SSEEE")
-in_for_sseee = Tile("Inner Central Forest", "I-CF-SSEEE", "Province of Overshire", icf_desc, "forest", 3,
+in_for_sseee = Tile("Inner Central Forest", "I-CF-SSEEE", "Overshire", icf_desc, "forest", 3, 3, -2,
                     to_n="I-CF-SEEE",
                     to_w="I-CF-SSEE")
 
-nearton_tile = Tile("Town of Nearton", "I-CF-NE", "Province of Overshire", icf_desc + """\n
+nearton_tile = Tile("Town of Nearton", "I-CF-NE", "Overshire", icf_desc + """\n
 The town of Nearton is mere minutes away from this point! Stopping by
-there might be a smart idea.""", "forest", 2,
+there might be a smart idea.""", "forest", 2, 1, 1,
                     town_list=[towns.town_nearton],
                     to_s="I-CF-E",
                     to_w="I-CF-N",
                     to_e="I-CF-NEE")
 
-southford_tile = Tile("Town of Southford", "I-CF-SSWW", "Province of Overshire", icf_desc + """\n
+southford_tile = Tile("Town of Southford", "I-CF-SSWW", "Overshire", icf_desc + """\n
 The town of Southford is mere minutes away from this point! Stopping by
-there might be a smart idea.""", "forest", 2,
+there might be a smart idea.""", "forest", 2, -2, -2,
                       town_list=[towns.town_southford],
                       to_e="I-CF-SSW",
                       to_n="I-CF-SWW",
                       to_w="I-CF-SSWWW")
 
-icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Province of Overshire", icf_desc + """\n
+icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Overshire", icf_desc + """\n
 This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
 to help protect its citizens from the harmful monsters outside it. Weaker monsters still
-manage to make their way in though.""", "forest", 0,
+manage to make their way in though.""", "forest", 0, 0, 3,
                   to_s="I-CF-N",
                   to_n="W-CF-2A")
 
@@ -192,78 +192,78 @@ hostile to humans and other civilized species, is the perfect breeding ground
 for powerful monsters."""
 
 # Quadrant `A`
-cenf_tile_1a = Tile("Central Forest", "W-CF-1A", "Province of Overshire", cenf_desc, "forest", 3,
+cenf_tile_1a = Tile("Central Forest", "W-CF-1A", "Overshire", cenf_desc, "forest", 3, -1, 4,
                     to_e="W-CF-2A",
                     to_n="W-CF-4A",
                     to_w="W-CF-3B")
-cenf_tile_2a = Tile("Central Forest", "W-CF-2A", "Province of Overshire", cenf_desc, "forest", 3,
+cenf_tile_2a = Tile("Central Forest", "W-CF-2A", "Overshire", cenf_desc, "forest", 3, 0, 4,
                     to_s="I-CF-Bridge",
                     to_w="W-CF-1A",
                     to_e="W-CF-3A",
                     to_n="W-CF-5A")
-cenf_tile_3a = Tile("Central Forest", "W-CF-3A", "Province of Overshire", cenf_desc, "forest", 3,
+cenf_tile_3a = Tile("Central Forest", "W-CF-3A", "Overshire", cenf_desc, "forest", 3, 1, 4,
                     to_w="W-CF-2A",
                     to_n="W-CF-6A")
-cenf_tile_4a = Tile("Central Forest", "W-CF-4A", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_4a = Tile("Central Forest", "W-CF-4A", "Overshire", cenf_desc, "forest", 4, -1, 5,
                     to_s="W-CF-1A",
                     to_e="W-CF-5A",
                     to_n="W-CF-7A",
                     to_w="W-CF-6B")
-cenf_tile_5a = Tile("Central Forest", "W-CF-5A", "Province of Overshire", cenf_desc, "forest", 3,
+cenf_tile_5a = Tile("Central Forest", "W-CF-5A", "Overshire", cenf_desc, "forest", 3, 0, 5,
                     to_s="W-CF-2A",
                     to_w="W-CF-4A",
                     to_e="W-CF-6A",
                     to_n="W-CF-8A")
-cenf_tile_6a = Tile("Central Forest", "W-CF-6A", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_6a = Tile("Central Forest", "W-CF-6A", "Overshire", cenf_desc, "forest", 4, 1, 5,
                     to_s="W-CF-3A",
                     to_w="W-CF-5A",
                     to_n="W-CF-9A")
-cenf_tile_7a = Tile("Central Forest", "W-CF-7A", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_7a = Tile("Central Forest", "W-CF-7A", "Overshire", cenf_desc, "forest", 4, -1, 6,
                     to_s="W-CF-4A",
                     to_e="W-CF-8A",
                     to_w="W-CF-9B")
-cenf_tile_8a = Tile("Central Forest", "W-CF-8A", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_8a = Tile("Central Forest", "W-CF-8A", "Overshire", cenf_desc, "forest", 4, 0, 6,
                     to_s="W-CF-5A",
                     to_w="W-CF-7A",
                     to_e="W-CF-9A")
-cenf_tile_9a = Tile("Central Forest", "W-CF-9A", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_9a = Tile("Central Forest", "W-CF-9A", "Overshire", cenf_desc, "forest", 4, 1, 6,
                     to_s="W-CF-6A",
                     to_w="W-CF-8A")
 
 # Quadrant `B`
-cenf_tile_1b = Tile("Central Forest", "W-CF-1B", "Province of Overshire", cenf_desc, "forest", 5,
+cenf_tile_1b = Tile("Central Forest", "W-CF-1B", "Overshire", cenf_desc, "forest", 5, -4, 4,
                     to_e="W-CF-2B",
                     to_n="W-CF-4B")
-cenf_tile_2b = Tile("Central Forest", "W-CF-2B", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_2b = Tile("Central Forest", "W-CF-2B", "Overshire", cenf_desc, "forest", 4, -3, 4,
                     to_w="W-CF-1B",
                     to_e="W-CF-3B",
                     to_n="W-CF-5B")
-cenf_tile_3b = Tile("Central Forest", "W-CF-3B", "Province of Overshire", cenf_desc, "forest", 3,
+cenf_tile_3b = Tile("Central Forest", "W-CF-3B", "Overshire", cenf_desc, "forest", 3, -2, 4,
                     to_e="W-CF-1A",
                     to_w="W-CF-2B",
                     to_n="W-CF-6B")
-cenf_tile_4b = Tile("Central Forest", "W-CF-4B", "Province of Overshire", cenf_desc, "forest", 5,
+cenf_tile_4b = Tile("Central Forest", "W-CF-4B", "Overshire", cenf_desc, "forest", 5, -4, 5,
                     to_s="W-CF-1B",
                     to_e="W-CF-5B",
                     to_n="W-CF-7B")
-cenf_tile_5b = Tile("Central Forest", "W-CF-5B", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_5b = Tile("Central Forest", "W-CF-5B", "Overshire", cenf_desc, "forest", 4, -3, 5,
                     to_s="W-CF-2B",
                     to_w="W-CF-4B",
                     to_e="W-CF-6B",
                     to_n="W-CF-8B")
-cenf_tile_6b = Tile("Central Forest", "W-CF-6B", "Province of Overshire", cenf_desc, "forest", 3,
+cenf_tile_6b = Tile("Central Forest", "W-CF-6B", "Overshire", cenf_desc, "forest", 3, -2, 5,
                     to_w="W-CF-5B",
                     to_e="W-CF-4A",
                     to_s="W-CF-3B",
                     to_n="W-CF-9B")
-cenf_tile_7b = Tile("Central Forest", "W-CF-7B", "Province of Overshire", cenf_desc, "forest", 5,
+cenf_tile_7b = Tile("Central Forest", "W-CF-7B", "Overshire", cenf_desc, "forest", 5, -4, 6,
                     to_s="W-CF-4B",
                     to_e="W-CF-8B")
-cenf_tile_8b = Tile("Central Forest", "W-CF-8B", "Province of Overshire", cenf_desc, "forest", 4,
+cenf_tile_8b = Tile("Central Forest", "W-CF-8B", "Overshire", cenf_desc, "forest", 4, -3, 6,
                     to_s="W-CF-5B",
                     to_w="W-CF-7B",
                     to_e="W-CF-9B")
-cenf_tile_9b = Tile("Central Forest", "W-CF-9B", "Province of Overshire", cenf_desc, "forest", 3,
+cenf_tile_9b = Tile("Central Forest", "W-CF-9B", "Overshire", cenf_desc, "forest", 3, -2, 6,
                     to_s="W-CF-6B",
                     to_e="W-CF-7A",
                     to_w="W-CF-8B")
@@ -289,18 +289,18 @@ all_tiles = icf_tiles + cenf_tiles_q_a + cenf_tiles_q_b  # + other tiles lists a
 
 # valid_provinces and valid_biomes are lists of strings that are allowed to be used as biome/proivince names
 # This is to prevent errors such as typos and whatnot, as there's no reason to use any other biome/proivince names
-valid_provinces = ["Province of Overshire",
-                   "Province of Thex",
-                   "Province of Celemia",
-                   "Province of Pelamora",
-                   "Province of Simphet",
-                   "Province of Camberlite",
-                   "Province of Kohrin",
-                   "Province of Deltora",  # Deltora quest was one of my favorite book series growing up <3
-                   "Province of Flute",
-                   "Province of Chin'tor",
-                   "Province of Whitlock",
-                   "Province of Downpour"]
+valid_provinces = ["Overshire",
+                   "Thex",
+                   "Celemia",
+                   "Pelamora",
+                   "Simphet",
+                   "Camberlite",
+                   "Kohrin",
+                   "Deltora",  # Deltora quest was one of my favorite book series growing up <3
+                   "Flute",
+                   "Chin'tor",
+                   "Whitlock",
+                   "Downpour"]
 
 valid_biomes = ["sky",
                 "graveyard",
@@ -380,3 +380,8 @@ for item7 in all_tiles:
 
     if item7.biome not in valid_biomes:
         print(f"{item7.tile_id} has an invalid biome name!")
+
+for tile1 in all_tiles:
+    for tile2 in all_tiles:
+        if tile1 != tile2 and tile1.x == tile2.x and tile1.y == tile2.y and tile1.z == tile2.z:
+            print(f"{tile1.tile_id} and {tile2.tile_id} have the same coordiantes!")
