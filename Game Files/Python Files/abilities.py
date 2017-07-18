@@ -16,7 +16,6 @@
 import math
 import sys
 
-import ascii_art
 import units
 import sounds
 import random
@@ -56,7 +55,7 @@ def use_parry(user):
 parry = Ability("Parry", f"""\
 The user readies themselves for an enemy attack. If they are attacked during
 the next turn, they will take no damage  damage and will reflect
-{ascii_art.colorize('[75 + Strength]', 'red')}% of the damage they would have taken to the attacker.""", 5)
+[75 + Strength]% of the damage they would have taken to the attacker.""", 5)
 parry.before_ability = before_parry
 parry.use_ability = use_parry
 
@@ -71,7 +70,7 @@ def use_roll_call(user):
 
 roll_call = Ability("Roll Call", f"""\
 The user rally's their allies to fight, causing the physical defense of each
-one to increase by {ascii_art.colorize('[(5 + Strength) x Number of allies]', 'red')}.""", 5)
+one to increase by [(5 + Strength) x Number of allies].""", 5)
 roll_call.before_ability = before_roll_call
 roll_call.use_ability = use_roll_call
 
@@ -87,7 +86,7 @@ def use_great_cleave(user):
 great_cleave = Ability("Great Cleave", f"""\
 The user deals a 1.25x critical strike to an enemy unit. If this attack
 results in that unit's death, the user gets to target an random additional unit
-for a second attack that deals {ascii_art.colorize('[150 + Strength]% damage', 'red')}.""", 2)
+for a second attack that deals [150 + Strength]% damage.""", 2)
 great_cleave.before_ability = before_great_cleave
 great_cleave.use_ability = use_great_cleave
 
@@ -103,7 +102,7 @@ def use_berserkers_rage(user):
 berserkers_rage = Ability("Berserker's Rage", f"""\
 The user goes into a frenzy, discarding their defensive training and focusing
 their might on destroying an target enemy. Increases speed, damage dealt, and
-damage taken all by {ascii_art.colorize('[15 + Strength]', 'red')}% for 3 turns. Applies to damage from ALL
+damage taken all by [15 + Strength]% for 3 turns. Applies to damage from ALL
 sources, including physical and magical damage. Does not stack with multiple
 uses - repeat uses only refresh the buff duration.""", 2)
 berserkers_rage.before_ability = before_berserkers_rage
@@ -137,7 +136,7 @@ def use_chakra_smash(user):
 
 chakra_smash = Ability("Chakra Smash", f"""\
 Deals a 2x critical strike to a target enemy, lowering their defensive stats
-by {ascii_art.colorize('[5 + Constitution]', 'magenta')}. The armor reduction lasts indefinitely and stacks
+by [5 + Constitution]. The armor reduction lasts indefinitely and stacks
 with multiple uses.""", 5)
 chakra_smash.before_ability = before_chakra_smash
 chakra_smash.use_ability = use_chakra_smash
@@ -153,7 +152,7 @@ def use_shared_experience(user):
 
 shared_experience = Ability("Shared Experience", f"""\
 The user disregards any sense of good judgement they had, throwing themself
-wrecklessly at a target enemy. Deals {ascii_art.colorize('[25 + Constitution]', 'magenta')}% of the target's
+wrecklessly at a target enemy. Deals [25 + Constitution]% of the target's
 current HP in magical damage, while also damaging the user for half the value.
 The self-damage is non-lethal, meaning that the user cannot die from it.""", 5)
 shared_experience.before_ability = before_shared_experience
@@ -172,7 +171,7 @@ aura_swap = Ability("Aura Swap", f"""\
 The user selects two targets and swaps their HP values. Can be used on both
 allies and enemies, and can swap between both allies and enemies. For every
 10% of maximum HP that this alters, the user's evasion goes up by
-{ascii_art.colorize('[5 + Constitution]', 'magenta')}. Stacks with multiple uses. Evasion has a cap of 256.""", 5)
+[5 + Constitution]. Stacks with multiple uses. Evasion has a cap of 256.""", 5)
 aura_swap.before_ability = before_aura_swap
 aura_swap.use_ability = use_aura_swap
 
@@ -189,7 +188,7 @@ breaking_vows = Ability("Breaking Vows", f"""\
 The user realigns their chakras, converting their own pain into an offensive
 weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
 for every 1% of HP the user is missing. If the user's current HP is below
-25%, this ability will lifesteal for {ascii_art.colorize('[10 + Constitution]', 'magenta')}% of the damage
+25%, this ability will lifesteal for '[10 + Constitution]% of the damage
 dealt.""", 5)
 breaking_vows.before_ability = before_breaking_vows
 breaking_vows.use_ability = use_breaking_vows
@@ -217,7 +216,7 @@ def use_inject_poison(user):
 
 
 inject_poison = Ability("Inject Poison", f"""\
-Injects a poison into a target enemy that deals {ascii_art.colorize('[2 + Dexterity]', 'green')} magical
+Injects a poison into a target enemy that deals [2 + Dexterity] magical
 damage per turn. Stacks with multiple uses, with each stack increasing damage
 dealt per turn by 2% of the target's maximum HP.""", 5)
 inject_poison.before_ability = before_inject_poison
@@ -233,7 +232,7 @@ def use_backstab(user):
 
 
 backstab = Ability("Backstab", f"""\
-The user sneaks up on their opponent and deals a {ascii_art.colorize('[125 + Dexterity]', 'green')}% critical
+The user sneaks up on their opponent and deals a [125 + Dexterity]% critical
 strike. If the target was previously affected by Inject Poison, the user's
 weapon will become poisoned, causing it to apply one stack of Inject Poison on
 every attack for the remainder of the battle. The weapon's poison cannot be
@@ -252,7 +251,7 @@ def use_knockout_gas(user):
 
 knockout_gas = Ability("Knockout Gas", f"""\
 The user sneaks behind a target enemy and applies knockout gas to them,
-putting them to sleep. The sleep lasts for {ascii_art.colorize('[Dexterity/25]', 'green')} turns, with
+putting them to sleep. The sleep lasts for [Dexterity/25] turns, with
 a minimum of 1 turn and a maximum of 8. The target has a 5% chance of randomly
 waking up each turn, and is guaranteed to wake up when the timer runs out.
 Does not stack with multiple uses - repeat uses only refresh the sleep duration.""", 2)
@@ -314,7 +313,7 @@ def use_skill_shot(user):
 skill_shot = Ability("Skill Shot", f"""\
 The user launches a splash-damage attack at the enemy team equal to 50% of the
 sum of their levels. If the user is higher level than the highest-levelled
-opponent, Skill Shot does {ascii_art.colorize('[50 + Intelligence]', 'blue')}% more damage.""", 2)
+opponent, Skill Shot does [50 + Intelligence]% more damage.""", 2)
 skill_shot.before_ability = before_skill_shot
 skill_shot.use_ability = use_skill_shot
 
@@ -330,7 +329,7 @@ def use_polymorph(user):
 polymorph = Ability("Polymorph", f"""\
 Turns a target enemy into a harmless frog for one turn, silencing them and
 reducing their attack stats, speed, and evasion to 0. If multiple enemies are
-alive on the field, this spell has a {ascii_art.colorize('[25 + Intelligence]', 'blue')}% chance of affecting a
+alive on the field, this spell has a [25 + Intelligence]% chance of affecting a
 random second target, and a [5 + Intelligence]% chance of affecting a third.""", 5)
 polymorph.before_ability = before_polymorph
 polymorph.use_ability = use_polymorph
@@ -346,7 +345,7 @@ def use_spell_shield(user):
 
 spell_shield = Ability("Spell Shield", f"""\
 Places a protective barrier around your party that lowers incoming magical
-damage by {ascii_art.colorize('[20 + Intelligence]', 'blue')}% for 4 turns. Does not stack with multiple
+damage by [20 + Intelligence]% for 4 turns. Does not stack with multiple
 uses - repeat uses only refresh the buff duration.""", 5)
 spell_shield.before_ability = before_spell_shield
 spell_shield.use_ability = use_spell_shield
@@ -374,7 +373,7 @@ def use_mana_drain(user):
 
 
 mana_drain = Ability("Mana Drain", f"""\
-Depletes the target's current MP by {ascii_art.colorize('[5 + Intelligence]', 'blue')}% of their maximum
+Depletes the target's current MP by [5 + Intelligence]% of their maximum
 MP, while restoring the same amount to the user. Always drains/restores a
 minimum of 5 MP.""", 5)
 mana_drain.before_ability = before_mana_drain
@@ -392,7 +391,7 @@ def use_roll(user):
 
 roll = Ability("Roll", f"""\
 The user does a quick tuck-and-roll, disorienting the enemy team and dodging all
-attacks for one turn. Also increases their speed by {ascii_art.colorize('[25 + Perception]', 'cyan')}.
+attacks for one turn. Also increases their speed by [25 + Perception].
 The speed bonus stacks with multiple uses.""", 3)
 roll.before_ability = before_roll
 roll.use_ability = use_roll
@@ -424,7 +423,7 @@ Def. Element: {user.target.def_element.title()} | Off. Element: {user.target.off
 scout = Ability("Scout", f"""\
 Scouts a target enemy, revealing their stats and elemental weakness. In addition,
 all Standard Attacks on this type of enemy - including in future battles - will have
-an additional {ascii_art.colorize('[5 + Perception]', 'cyan')}% chance to be a critical strike, with a maximum
+an additional [5 + Perception]% chance to be a critical strike, with a maximum
 of +25%. Base critical strike chance is 15%. Casting this on an enemy that has
 already been scouted in the past will not increase the critical strike bonus.""", 1)
 scout.before_ability = before_scout
@@ -441,7 +440,7 @@ def use_powershot(user):
 
 powershot = Ability("Powershot", f"""\
 The user channels the power of the wind, firing an single absurdly powerful
-arrow. Deals {ascii_art.colorize('[175 + Perception]', 'cyan')}% attack damgage to the chosen target, as well
+arrow. Deals [175 + Perception]% attack damgage to the chosen target, as well
 as all units next to them. The user is disabled for one turn after using this
 ability, unable to use abilities, magic, or attacks.""", 2)
 powershot.before_ability = before_powershot
@@ -458,7 +457,7 @@ def use_unstable_footing(user):
 
 unstable_footing = Ability("Unstable Footing", f"""\
 The user takes advantage of the uneven terrain and trips a target enemy.
-Deals {ascii_art.colorize('[10 + Perception]', 'cyan')} damage. If the target has not yet moved this turn,
+Deals [10 + Perception] damage. If the target has not yet moved this turn,
 their turn is skipped. The target is also guaranteed to go last next turn.""", 2)
 unstable_footing.before_ability = before_unstable_footing
 unstable_footing.use_ability = use_unstable_footing
@@ -475,7 +474,7 @@ def use_tip_the_scales(user):
 
 tip_the_scales = Ability("Tip the Scales", f"""\
 The user tips the scales in their favor, causing them and their allies to be
-healed for {ascii_art.colorize('[5% of Maximum HP + Wisdom]', 'yellow')} HP each, while dealing the same in
+healed for [5% of Maximum HP + Wisdom] HP each, while dealing the same in
 magical damage to each member of the enemy team.""", 3)
 tip_the_scales.before_ability = before_tip_the_scales
 tip_the_scales.use_ability = use_tip_the_scales
@@ -522,7 +521,7 @@ def use_unholy_binds(user):
 unholy_binds = Ability("Unholy Binds", f"""\
 Sets a target's defensive element to Darkness, causing Light and Dark spells
 to do more/less damage, respectively. If the target is an enemy, and already
-has Darkness as their element, then Unholy Binds has a {ascii_art.colorize('[10 + Wisdom]', 'yellow')}% chance
+has Darkness as their element, then Unholy Binds has a [10 + Wisdom]% chance
 of instantly killing the target, with a maximum of 50%. The instant-kill
 effect does not work on Bosses.""", 2)
 unholy_binds.before_ability = before_unholy_binds
@@ -540,7 +539,7 @@ def use_judgement(user):
 judgement = Ability("Judgement", f"""\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the
 target's defensive element is Darkness, then the 7 turns will be lowered by
-{ascii_art.colorize('[15 + Wisdom]', 'yellow')}%, with a minimum of 2 turns. When cast on bosses, the turn
+[15 + Wisdom]%, with a minimum of 2 turns. When cast on bosses, the turn
 count is always 10 turns. Re-casting this spell has no effect, unless
 re-casting it would cause the timer to be lower.""", 4)
 judgement.before_ability = before_judgement
@@ -558,7 +557,7 @@ def use_canonize(user):
 canonize = Ability("Canonize", f"""\
 Declares the target ally a holy figure, converting their defensive element to
 Light and causing all healing spells casted on them to heal for an additional
-{ascii_art.colorize('[25 + Wisdom]', 'yellow')}% HP. Lasts 2 turns. Does not stack with multiple uses - repeat
+[25 + Wisdom]% HP. Lasts 2 turns. Does not stack with multiple uses - repeat
 uses only refresh the buff duration.""", 3)
 canonize.before_ability = before_canonize
 canonize.use_ability = use_canonize

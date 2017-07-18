@@ -552,7 +552,8 @@ Armor:
 
                 if self.status_ail == 'silenced':
                     sounds.debuff.play()
-                    main.s_input(f"{self.name} is silenced! | Press enter/return ")
+                    print(f"{self.name} is silenced!")
+                    main.s_input("\nPress enter/return ")
                     print(battle_options.format(self.name))
 
                     continue
@@ -607,14 +608,16 @@ Armor:
                 print('-'*save_load.divider_size)
 
                 if not items.inventory['consumables']:
-                    main.s_input('Your party has no battle items! | Press enter/return ')
+                    print('Your party has no battle items!')
+                    main.s_input("\nPress enter/return ")
                     print(battle_options.format(self.name))
 
                     continue
 
                 if self.status_ail == "muted":
                     sounds.debuff.play()
-                    main.s_input(f"{self.name} is muted! | Press enter/return ")
+                    print(f"{self.name} is muted!")
+                    main.s_input("\nPress enter/return ")
                     print(battle_options.format(self.name))
 
                     continue

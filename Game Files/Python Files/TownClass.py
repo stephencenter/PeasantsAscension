@@ -372,7 +372,8 @@ class Town:
                                     print('-'*save_load.divider_size)
 
                                 else:
-                                    main.s_input(f'"Sorry, you don\'t have enough GP for that!" | Press enter/return ')
+                                    print(f"Sorry, you don't have enough GP for that!")
+                                    main.s_input("\nPress enter/return ")
 
                                 break
 
@@ -781,11 +782,11 @@ class Chest:
 
                         if isinstance(item, int):
                             main.party_info['gp'] += item
-                            main.s_input(f"The chest had {item} gold in it! | Press enter/return ")
+                            main.s_input(f"The chest had {item} gold in it! ")
 
                         else:
                             items.add_item(item.item_id)
-                            main.s_input(f"The chest had a {item.name} in it! | Press enter/return ")
+                            main.s_input(f"The chest had a {item.name} in it! ")
 
                     self.opened = True
                     return

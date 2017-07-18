@@ -13,31 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
-from colorama import Fore
-
-
-def colorize(string, color):
-    # Colors a string styled with a certain color
-    # There aren't very many colors available unfortunately, but that's just
-    # how the command prompt is.
-    if color == 'red':
-        return Fore.RED + string + Fore.RESET
-    if color == 'blue':
-        return Fore.BLUE + string + Fore.RESET
-    if color == 'yellow':
-        return Fore.YELLOW + string + Fore.RESET
-    if color == 'cyan':
-        return Fore.CYAN + string + Fore.RESET
-    if color == 'magenta':
-        return Fore.MAGENTA + string + Fore.RESET
-    if color == 'green':
-        return Fore.GREEN + string + Fore.RESET
-    if color == 'clear':  # Used in conditional formatting, such as  `'green' if x else 'clear'`
-        return string
-    else:
-        raise Exception('Invalid argument for "color" - must be red, green, yellow, magenta, blue, or cyan.')
-
-
 player_art = {
     "Ranger":
     """

@@ -15,14 +15,14 @@
 
 
 import json
-import save_load
-import sounds
 import sys
+from copy import copy as _c
+
 import ascii_art
 import dialogue
+import save_load
+import sounds
 import units
-
-from copy import copy as _c
 
 if __name__ == "__main__":
     sys.exit()

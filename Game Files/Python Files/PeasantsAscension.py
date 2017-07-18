@@ -45,16 +45,12 @@
 import ctypes
 import logging
 import msvcrt
+import random
 import sys
 import time
 import traceback
-import random
 
 import pygame
-
-# Some of the files are in different folders for some reason.
-# Adding those folders to the path allows us to use the import statement to access them.
-sys.path.append("C:\\Users\Stephen Center\\Documents\\Peasants' Ascension\\Game Files\\Python Files")
 
 import tiles
 import title_screen
@@ -376,6 +372,7 @@ def help_command():
 Type the letter in brackets while on the overworld to use the command""")
 
     s_input("\nPress enter/return ")
+    print('-'*save_load.divider_size)
 
 
 def stats_command():
@@ -437,6 +434,7 @@ def magic_command():
         print('-'*save_load.divider_size)
         print(f'{units.player.target.name} has no overworld spells in their spellbook.')
         s_input("\nPress enter/return ")
+
 
 
 def look_command():
@@ -548,11 +546,11 @@ def debug_command():
             break
 
         try:
-            print(ascii_art.colorize(f">{command}", 'green'))
+            print(f">{command}")
             exec(command)
 
         except:
-            print(ascii_art.colorize(f">Invalid Command, `{command}`", 'red'))
+            print(f">Invalid Command, `{command}`", 'red')
 
 
 def set_prompt_properties():

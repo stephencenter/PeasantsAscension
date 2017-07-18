@@ -15,8 +15,8 @@
 
 import sys
 
-import save_load
 import dialogue as d
+import save_load
 
 if __name__ == "__main__":
     sys.exit()

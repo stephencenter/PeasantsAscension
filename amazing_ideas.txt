@@ -135,18 +135,6 @@ PEASANT-RPG GOALS
 [ ] Support for multiple status effects, including mundane things like "Alive" or "Disarmed"
 
 [ ] Make it so Potions can be used on allies, and make items wait until the user's turn to actually go off
-
-[ ] Add abilities that can be used in battle, and add a new Ability class.
-	[ ] Each class will have their own set of four unique abilities, each of which will scale with their "main attribute".
-		(PER for Rangers, WIS for Paladins, etc.)
-	[x] Add Action Points (AP). Every class has a base AP of 10, and it cannot be increased through leveling.
-		Instead, AP is gained via equipping new accessories called "Action Items". Each tier of action item gives 5 more AP than the last, so 5/10/15/20...
-		[ ] Ranger, Quiver
-		[ ] Warrior, Shield
-		[ ] Paladin, Cross Necklace
-		[ ] Monk, Meditation Candles
-		[ ] Assassin, Poisons (nightshade, etc)
-		[ ] Mage, Runestones
 		
 [ ] Add a second Accessory slot, called an "Action Slot"
 
