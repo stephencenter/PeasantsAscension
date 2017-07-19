@@ -1,6 +1,6 @@
 PEASANT-RPG GOALS
 
--- 1.00 update plans -- 
+-- v1.0.0 update plans -- 
 [x] Add several new monster items
 
 [x] Rewrite the monster attack function by seperating the damage formula from the AI
@@ -51,9 +51,9 @@ PEASANT-RPG GOALS
 		[x] There's a bug where sometimes (and I don't know why, how, or when) the coordiantes just get messed up. And even if that was fixed...
 		[x] If someone manually edits their coordiantes then their coordinates have like a 0% chance of ever being fixed
 		
-[ ] Make settings changable in-game
+[x] Revamp the inventory to show one instance of each item, with quantity to the right
 
-[ ] Revamp the inventory to show one instance of each item, with quantity to the right
+[ ] Make settings changable in-game
 
 [ ] Completely rework the world and the plot
 	[ ] Redo the world:
@@ -150,21 +150,6 @@ PEASANT-RPG GOALS
 	[ ] These potions can be used to do various things. Some of them are mundane, doing things as simple as curing status ailments
 		restoring HP/MP, or increasing stats in-battle. But others have cooler effects, such as allowing you to rename your character,
 		and enabling you to re-pick your class. 
-
-[ ] Color "important" text using Colorama
-	[x] Attribute scaling in ability descriptions
-		[x] STR, red
-		[x] DEX, green
-		[x] INT, blue
-		[x] PER, cyan
-		[x] WIS, yellow
-		[x] CON, magenta
-	[x] Dead participants in battle, red
-	[ ] Spell power, weapon damage, damage reduction, green
-	[ ] Coordinates, town names, and NPC names, yellow
-	[ ] (in battle) Health, green | action points, yellow | mana, blue
-	[ ] Critical Strikes, red
-	[ ] Damage values, blue
 
 [ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.
 	

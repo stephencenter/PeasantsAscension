@@ -133,9 +133,8 @@ class Damaging(Spell):
 
 
 class Buff(Spell):
-    # Buffs are spells that temporarily raise the player's stats
-    # during battle. They last until the battle is over, at which
-    # point the player's stats will return to normal.
+    # Buffs are spells that temporarily raise the player's stats during battle. They last until the battle
+    # is over, at which point the player's stats will return to normal.
     def __init__(self, name, desc, mana, req_lvl, increase, stat, class_, spell_id):
         Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
         self.increase = increase
@@ -155,6 +154,9 @@ class Buff(Spell):
 
         sounds.buff_spell.play()
 
+        # Temp stats is, as the name suggests, a temporary stat dictionary that is only used in-battle.
+        # The dictionary is cleared after every battle and re-created when a new one begins, so that
+        # buff spells and other stat increases can be made temporary instead of permanent.
         battle.temp_stats[target.name][self.stat] *= 1 + self.increase
         battle.temp_stats[target.name][self.stat] = math.ceil(battle.temp_stats[user.name][self.stat])
         units.fix_stats()
@@ -229,6 +231,7 @@ def pick_spell(cat, user, is_battle):
         padding = len(max([spell.name for spell in spellbook[inv_name][cat]], key=len))
         print(f"{user.name}'s {cat} Spells | {user.mp}/{user.max_mp} MP remaining")
 
+        # Print the player's spell inventory
         for x, y in enumerate(spellbook[inv_name][cat]):
             print(f"      [{x + 1}] {y.name} --{'-'*(padding - len(y.name))}> {y.mana} MP")
 
@@ -246,6 +249,7 @@ def pick_spell(cat, user, is_battle):
 
                 continue
 
+            # Of course, you can't cast spells without the required amount of MP
             if spell.mana > user.mp:
                 print('-'*save_load.divider_size)
                 print(f"{user.name} doesn't have enough MP to cast {spell.name}!")

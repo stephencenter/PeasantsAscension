@@ -1214,35 +1214,21 @@ def pick_category():
 # If "gs == True" that means that items are being sold, and not used.
 def pick_item(cat, vis_cat, gs=False):
     while cat in ['quests', 'equipped_items'] or inventory[cat]:
+        # Quests have their own function, because they aren't actually "items"
         if cat == 'quests':
             view_quests()
             return
 
+        # Equipped items aren't actually stored in the inventory, so they need their own function to handle them
         if cat == 'equipped_items':
             manage_equipped()
             return
 
         if inventory[cat]:
             print('-'*save_load.divider_size)
-            if not gs:
-                print(f"{vis_cat}: ")
-                for x, y in enumerate(inventory[cat]):
-                    print(f'      [{x + 1}] {y.name}')
 
-            else:
-                try:
-                    padding = len(max([it.name for it in inventory[cat] if not it.imp], key=len))
-
-                except ValueError:
-                    padding = 1
-
-                extra_pad = len(str(len([it.name for it in inventory[cat] if not it.imp]) + 1))
-
-                print(f'{vis_cat}:')
-
-                for x, y in enumerate([it for it in inventory[cat] if not it.imp]):
-                    full_padding = '-'*(padding - len(y.name) + (extra_pad - len(str(x + 1))))
-                    print(f"      [{x + 1}] {y.name} {full_padding}--> {y.sell} GP")
+            # The code that prints the inventory is kind of complicated so it's located in another function
+            q_inventory = print_inventory(cat, vis_cat, gs)
 
         else:
             return
@@ -1251,11 +1237,12 @@ def pick_item(cat, vis_cat, gs=False):
             item = main.s_input('Input [#] (or type "back"): ').lower()
 
             try:
+                # If you're selling items at a general store, you have to call a different function
                 if gs:
-                    sell_item(cat, [x for x in inventory[cat] if not x.imp][int(item) - 1])
+                    sell_item(cat, [x for x in q_inventory][int(item) - 1])
 
                 else:
-                    pick_action(cat, inventory[cat][int(item) - 1])
+                    pick_action(cat, q_inventory[int(item) - 1])
 
             except (IndexError, ValueError):
                 if item in ['e', 'x', 'exit', 'b', 'back']:
@@ -1266,8 +1253,55 @@ def pick_item(cat, vis_cat, gs=False):
             break
 
 
+# Count the number of each item in the player's inventory, and display it alongside one copy of each item
+def print_inventory(cat, vis_cat, gs):
+    q_inventory = []
+    for item_x in inventory[cat]:
+        for num, item_y in enumerate(q_inventory):
+            if item_y[1] == item_x.item_id:
+                q_inventory[num][2] += 1
+
+                break
+
+        else:
+            q_inventory.append([item_x.name, item_x.item_id, 1])
+
+    if not gs:
+        print(f"{vis_cat}: ")
+        for x, y in enumerate(q_inventory):
+            print(f'      [{x + 1}] {y[0]} x {y[2]}')
+
+        return q_inventory
+
+    else:
+        imp_qi = [it for it in q_inventory if not find_item_with_id(it[1]).imp]
+
+        try:
+            padding = len(max([it[0] + f" x {it[2]}" for it in imp_qi], key=len))
+
+        except ValueError:
+            padding = 1
+
+        extra_pad = len(str(len([it[0] for it in imp_qi]) + 1))
+
+        print(f'{vis_cat}:')
+
+        for a, b in enumerate(imp_qi):
+            fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(a + 1))))
+            print(f"      [{a + 1}] {b[0]} x {b[2]} {fp}--> {find_item_with_id(b[1]).sell} GP each")
+
+        return imp_qi
+
+
 def pick_action(cat, item):
     global inventory
+
+    # the "item" variable is actually just a list of item attributes - we have to convert it into
+    # a real item first
+    for x in inventory[cat]:
+        if x.item_id == item[1]:
+            item = x
+            break
 
     # Loop while the item is in the inventory
     while item in inventory[cat]:
@@ -1287,18 +1321,15 @@ def pick_action(cat, item):
 Input [#] (or type "back"): """)
 
         if action == '1':
-            if any([isinstance(item, class_) for class_ in [Accessory,
-                                                            Armor,
-                                                            Consumable,
-                                                            Weapon,
-                                                            StatusPotion]]):
-
+            # Items of these classes require a target to be used, so we have to acquire a target first
+            if any([isinstance(item, class_) for class_ in [Accessory, Armor, Consumable, Weapon, StatusPotion]]):
                 units.player.choose_target(f"Who should {use_equip} the {item.name}?", ally=True, enemy=False)
                 item.use_item(units.player.target)
 
                 if item not in inventory[cat]:
                     return
 
+            # Other items can just be used normally
             else:
                 item.use_item()
                 if item not in inventory[cat]:
@@ -1318,25 +1349,26 @@ Input [#] (or type "back"): """)
         elif action == '3':
             print('-'*save_load.divider_size)
 
+            # You can't throw away important/essential items, such as one-of-a-kind tools and quest items.
+            # This is to prevent the game from becoming unwinnable.
             if item.imp:
                 print('Essential Items cannot be thrown away.')
                 main.s_input("\nPress enter/return ")
 
             else:
                 while True:
-                    y_n = main.s_input(f'Are you sure your party should get rid of the {item.name}? | Y/N: ').lower()
+                    y_n = main.s_input(f'Should you really get rid of the {item.name}? | Y/N: ').lower()
 
                     if y_n.startswith('y'):
-                        print(f'Your party tosses the {item.name} aside and continues on their journey.')
-                        main.s_input("\nPress enter/return ")
+                        remove_item(item.item_id)
 
-                        inventory[cat].remove(item)
+                        print(f'You toss the {item.name} aside and continues on your journey.')
+                        main.s_input("\nPress enter/return ")
 
                         return
 
                     elif y_n.startswith('n'):
-                        print('-'*save_load.divider_size)
-                        print(f'Your party decide to keep the {item.name} with them.')
+                        print(f'Your party decides to keep the {item.name} with them.')
                         main.s_input("\nPress enter/return ")
 
                         break
@@ -1347,15 +1379,12 @@ Input [#] (or type "back"): """)
 
 def manage_equipped():
     units.player.choose_target("Choose party member to view equipment for:", ally=True, enemy=False)
-    manage_equipped_2(units.player.target)
 
-
-def manage_equipped_2(target):
     print('-'*save_load.divider_size)
     while True:
-        p_equip = equipped[target.name if target != units.player else 'player']
+        p_equip = equipped[units.player.target.name if units.player.target != units.player else 'player']
 
-        print(f"""{target.name}'s Equipped Items:
+        print(f"""{units.player.target.name}'s Equipped Items:
       [1] Weapon ----> {p_equip['weapon'].name}
       [2] Head ------> {p_equip['head'].name}
       [3] Body ------> {p_equip['body'].name}
@@ -1393,7 +1422,7 @@ def manage_equipped_2(target):
                                     "no_access"]:
 
                 print('-'*save_load.divider_size)
-                print(f"{target.name} doesn't have anything equipped in that slot.")
+                print(f"{units.player.target.name} doesn't have anything equipped in that slot.")
                 main.s_input("\nPress enter/return ")
                 print('-'*save_load.divider_size)
 
@@ -1412,17 +1441,17 @@ def manage_equipped_2(target):
                 continue
 
             print('-'*save_load.divider_size)
-            manage_equipped_3(key, selected, p_equip, target)
+            manage_equipped_2(key, selected, p_equip)
             print('-'*save_load.divider_size)
 
             break
 
 
-def manage_equipped_3(key, selected, p_equip, target):
+def manage_equipped_2(key, selected, p_equip):
     global equipped
 
     while True:
-        print(f"""What should {target.name} do with their {selected.name}?
+        print(f"""What should {units.player.target.name} do with their {selected.name}?
       [1] Unequip
       [2] Read Description""")
 
@@ -1439,9 +1468,9 @@ def manage_equipped_3(key, selected, p_equip, target):
                     break
 
                 else:
-                    unequip_item(selected.item_id, target)
+                    unequip_item(selected.item_id, units.player.target)
                     print('-'*save_load.divider_size)
-                    print(f'{target.name} unequips the {selected.name}.')
+                    print(f'{units.player.target.name} unequips the {selected.name}.')
                     main.s_input("\nPress enter/return ")
 
                 return
@@ -1527,6 +1556,11 @@ def view_quests():
 
 # Trade player-owned objects for money (GP)
 def sell_item(cat, item):
+    for x in inventory[cat]:
+        if x.item_id == item[1]:
+            item = x
+            break
+
     print('-'*save_load.divider_size)
 
     if hasattr(item, "ascart"):
@@ -1536,7 +1570,7 @@ def sell_item(cat, item):
     print('-'*save_load.divider_size)
 
     while True:
-        y_n = main.s_input(f'Should your party sell the {item.name} for {item.sell} GP? | Y/N: ').lower()
+        y_n = main.s_input(f'Sell the {item.name} for {item.sell} GP? | Y/N: ').lower()
 
         if y_n.startswith('y'):
             for num, it in enumerate(inventory[cat]):
@@ -1545,7 +1579,7 @@ def sell_item(cat, item):
                     inventory[cat].remove(it)
                     main.party_info['gp'] += item.sell
 
-                    print(f'Your party hands the shopkeeper their {item.name} and receives {item.sell} GP.')
+                    print(f'The shopkeeper takes the {item.name} and gives you {item.sell} GP.')
                     main.s_input('\nPress enter/return ')
 
                     return

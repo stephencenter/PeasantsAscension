@@ -73,7 +73,7 @@ pygame.mixer.init()
 # A dictionary containing generic information about the player's party
 party_info = {'biome': 'forest',
               'music': '../Music/Through the Forest.ogg',
-              'prov': "Province of Overshire",
+              'prov': "Overshire",
               'prev_town': tiles.in_for_c,
               'p_town_xyz': [0, 0, 0],
               'is_aethus': False,
@@ -86,7 +86,7 @@ party_info = {'biome': 'forest',
               'scout_list': []}
 
 # Set to 1 when auto-testing
-do_debug = 0
+do_debug = 1
 
 # A list of usernames that my friend has used in the past. Adds a few easter eggs.
 friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
@@ -434,7 +434,6 @@ def magic_command():
         print('-'*save_load.divider_size)
         print(f'{units.player.target.name} has no overworld spells in their spellbook.')
         s_input("\nPress enter/return ")
-
 
 
 def look_command():
