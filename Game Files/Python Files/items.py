@@ -22,6 +22,7 @@ import ascii_art
 import dialogue
 import save_load
 import sounds
+import tiles
 import units
 
 if __name__ == "__main__":
@@ -29,6 +30,8 @@ if __name__ == "__main__":
 
 else:
     main = sys.modules["__main__"]
+
+acquired_gems = []
 
 
 class Item:
@@ -204,16 +207,91 @@ class DiviningRod(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Div Rod'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    def use_item(self):
-        pass
+    @staticmethod
+    def use_item():
+        print('-'*save_load.divider_size)
+        print("Your party begins using the Divining Rod...")
+        main.smart_sleep(1)
+
+        c_tile = main.party_info['current_tile']
+        any_gems = False
+
+        if c_tile.to_n and [x for x in tiles.find_tile_with_id(c_tile.to_n).gem_list
+                            if x.item_id not in acquired_gems]:
+            print("You sense a gem to the north!")
+            any_gems = True
+
+        if c_tile.to_s and [x for x in tiles.find_tile_with_id(c_tile.to_s).gem_list
+                            if x.item_id not in acquired_gems]:
+            print("You sense a gem to the south!")
+            any_gems = True
+
+        if c_tile.to_w and [x for x in tiles.find_tile_with_id(c_tile.to_w).gem_list
+                            if x.item_id not in acquired_gems]:
+            print("You sense a gem to the west!")
+            any_gems = True
+
+        if c_tile.to_e and [x for x in tiles.find_tile_with_id(c_tile.to_e).gem_list
+                            if x.item_id not in acquired_gems]:
+            print("You sense a gem to the east!")
+            any_gems = True
+
+        if c_tile.to_up and [x for x in tiles.find_tile_with_id(c_tile.to_up).gem_list
+                             if x.item_id not in acquired_gems]:
+            print("You sense a gem far above you.")
+            any_gems = True
+
+        if c_tile.to_dn and [x for x in tiles.find_tile_with_id(c_tile.to_dn).gem_list
+                             if x.item_id not in acquired_gems]:
+            print("You sense a gem far down below.")
+            any_gems = True
+
+        if [x for x in c_tile.gem_list if x.item_id not in acquired_gems]:
+            print("You're right on top of a gem!")
+            any_gems = True
+
+        if not any_gems:
+            print("You couldn't find anything.")
+
+        main.s_input("\nPress enter/return ")
 
 
 class Shovel(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    def use_item(self):
-        pass
+    @staticmethod
+    def use_item():
+        print('-'*save_load.divider_size)
+        print("Digging...")
+        sounds.foot_steps.play()
+        main.smart_sleep(1)
+
+        print("Digging...")
+        sounds.foot_steps.play()
+        main.smart_sleep(1)
+
+        print("Still digging...")
+        sounds.foot_steps.play()
+        main.smart_sleep(1)
+
+        try:
+            c_gem = [x for x in main.party_info['current_tile'].gem_list if x.item_id not in acquired_gems][0]
+
+        except IndexError:
+            c_gem = {}
+
+        if c_gem:
+            sounds.unlock_chest.play()
+            print(f"Aha, your party found a {c_gem.name}! Might be a good idea to sell it.")
+            main.s_input("\nPress enter/return ")
+
+            acquired_gems.append(c_gem.item_id)
+            add_item(c_gem.item_id)
+
+        else:
+            print("No luck, your party didn't find anything.")
+            main.s_input("\nPress enter/return ")
 
 
 class TownTeleporter(Item):
@@ -237,11 +315,9 @@ class LockpickKit(Item):
         main.s_input("\nPress enter/return ")
 
 
-# -- OTHERS -- #
 class Valuable(Item):
-    def __init__(self, name, desc, buy, sell, item_id, ascart='Gem', acquired=False, cat='misc', imp=False):
+    def __init__(self, name, desc, buy, sell, item_id, ascart='Gem', cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
-        self.acquired = acquired
 
     # noinspection PyMethodMayBeStatic
     def use_item(self):
@@ -329,16 +405,16 @@ fists = Weapon('Fists',
 # These exist for the same reason as fists. They are only available when unequipping actual
 # armor and accessories. Cannot be unequipped, and therefore cannot be sold.
 no_head = Armor('None',
-                """You should probably get some head armor (No defense bonus).""",
+                "You should probably get some head armor (No defense bonus).",
                 0, 0, 0, 'head', [], 'misc', 'no_head')
 no_body = Armor('None',
-                """You should probably get some body armor (No defense bonus).""",
+                "You should probably get some body armor (No defense bonus).",
                 0, 0, 0, 'body', [], 'misc', 'no_body')
 no_legs = Armor('None',
-                """You should probably get some leg armor (No defense bonus).""",
+                "You should probably get some leg armor (No defense bonus).",
                 0, 0, 0, 'legs', [], 'misc', 'no_legs')
 no_access = Armor('None',
-                  """You should probably get an accessory (No effects).""",
+                  "You should probably get an accessory (No effects).",
                   0, 0, 0, 'access', [], 'misc', 'no_access')
 
 # Weapons -- Warrior
@@ -749,21 +825,18 @@ agate_gem = Valuable('Agate', 'A valuable agate. This could probably be sold for
 aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
                           0, 175, "aquamarine_gem")
 
-valuable_list = [pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem, opal_gem, onyx_gem, diamond_gem,
-                 amethyst_gem, topaz_gem, garnet_gem, quartz_gem, zircon_gem, agate_gem, aquamarine_gem]
-
 # Tools
 magic_compass = MagicCompass('Magical Compass',
-                             'A compass capable of detecting nearby towns.', 0, 0, "magic_compass")
+                             'A compass capable of detecting nearby towns.', 50, 25, "magic_compass")
 
 divining_rod = DiviningRod('Divining Rod',
-                           'A magical stick capable of detecting nearby ores and gems.', 300, 150, "divining_rod")
+                           'A magical stick capable of detecting nearby ores and gems.', 100, 50, "divining_rod")
 
 shovel = Shovel('Shovel',
-                'A simple shovel used to excavate for hidden gems and minerals.', 200, 100, "shovel")
+                'A simple shovel used to excavate for hidden gems and minerals.', 150, 75, "shovel")
 
 map_of_fast_travel = TownTeleporter('Map of Fast Travel',
-                                    'Allows traveling to previously visited towns.', 2000, 100, "fast_map")
+                                    'Allows traveling to previously visited towns.', 1500, 750, "fast_map")
 
 # Tools -- Lockpicks
 wood_lckpck = LockpickKit('Wooden Lockpick Kit',
@@ -775,7 +848,7 @@ iron_lckpck = LockpickKit('Iron Lockpick Kit',
 steel_lckpck = LockpickKit('Steel Lockpick Kit',
                            'A steel lockpick kit with a 75% chance to open chests.', 500, 250, 75, "steel_lckpck")
 mythril_lckpck = LockpickKit('Mythril Lockpick Kit',
-                             'A mythril lockpick kit with a 90% chance to open chests.', 750, 375, 90, "mythril_lckpck")
+                             'A mythril lockpick kit with a 90% chance to open chests.', 700, 350, 90, "mythril_lckpck")
 
 # Monster Drops
 shell_fragment = Misc('Shell Fragment', "A broken fragment of a once-beautiful shell.", 0, 5, "shell_fragment")
@@ -1002,20 +1075,16 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
 # Writes a list of all collected gems to a .json file. Used when saving the game.
 def serialize_gems(path):
     with open(path, mode='w') as j:
-        json.dump([gem.item_id for gem in valuable_list if gem.acquired], j, indent=4, separators=(', ', ': '))
+        json.dump(acquired_gems, j, indent=4, separators=(', ', ': '))
 
 
 # Deserializes the above list. Used when loading the game.
 def deserialize_gems(path):
-    global valuable_list
+    global acquired_gems
 
     with open(path) as j:
-        gems = json.load(j)
+        acquired_gems = json.load(j)
 
-    for item_id in gems:
-        for gem in valuable_list:
-            if gem.item_id == item_id:
-                gem.acquired = True
 
 # Checks to make sure there aren't any major errors with the items (may become more robust in the future)
 for item1 in _c(globals()):

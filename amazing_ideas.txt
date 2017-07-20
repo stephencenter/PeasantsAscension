@@ -55,8 +55,10 @@ PEASANT-RPG GOALS
 
 [x] Make settings changable in-game
 
-[ ] Rework the Divining Rod and the Magic Compass to be compatible with the tile system:
-	[ ] Make the Divining Rod tell whether or not there are any gems within the 9 tiles surrounding the player.
+[ ] Fix the tool items:
+	[x] Fix the shovel
+	[x] Make the Divining Rod tell whether or not there are any gems near the player.
+	[ ] Fix the fast travel boots
 	[ ] Make the compass enable the coordinate system. Without it, you can write down coordinates in your inventory but cannot read them on the
 		movement system menu.
 		

@@ -523,7 +523,7 @@ def tools_command():
 
                 continue
 
-            tool.use_item(units.player)
+            tool.use_item()
 
             print('-'*save_load.divider_size)
 
@@ -586,7 +586,6 @@ def set_prompt_properties():
 def main():
     # main() handles all the setup for the game, and includes the main game loop.
     # Everything happens in this function in one way or another.
-
     set_prompt_properties()  # Set the CMD size and whatnot...
     save_load.change_settings()  # ...set the volume and save file settings...
     title_screen.show_title()  # ...display the titlescreen...

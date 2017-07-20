@@ -19,6 +19,8 @@ import sys
 import pygame
 
 import towns
+import items
+import units
 from TileClass import Tile
 
 if __name__ == "__main__":
@@ -37,14 +39,15 @@ unfortunately, several kinds of monsters. There are trees in all directions as
 far as the eye can see, each towering over a hundred feet tall. The ground is
 scattered with the occasional rock and a plentiful supply of leaves twigs. In
 other words, it's your standard forest. The Inner Central Forest makes up only a
-small fraction of the 100 million acre Central Forest, and is surrounded by a
+small fraction of the 50 million acre Central Forest, and is surrounded by a
 12-foot wide moat."""
 
 in_for_n = Tile("Inner Central Forest", "I-CF-N", "Overshire", icf_desc, "forest", 1, 0, 1,
                 to_s="I-CF-C",
                 to_e="I-CF-NE",
                 to_w="I-CF-NW",
-                to_n="I-CF-Bridge")
+                to_n="I-CF-Bridge",
+                gem_list=[items.amethyst_gem])
 in_for_s = Tile("Inner Central Forest", "I-CF-S", "Overshire", icf_desc, "forest", 1, 0, -1,
                 to_n="I-CF-C",
                 to_w="I-CF-SW",
@@ -87,7 +90,8 @@ in_for_ww = Tile("Inner Central Forest", "I-CF-WW", "Overshire", icf_desc, "fore
 in_for_www = Tile("Inner Central Forest", "I-CF-WWW", "Overshire", icf_desc, "forest", 3, -3, 0,
                   to_e="I-CF-WW",
                   to_n="I-CF-NWWW",
-                  to_s="I-CF-SWWW")
+                  to_s="I-CF-SWWW",
+                  gem_list=[items.opal_gem])
 in_for_ee = Tile("Inner Central Forest", "I-CF-EE", "Overshire", icf_desc, "forest", 2, 2, 0,
                  to_e="I-CF-EEE",
                  to_w="I-CF-E",
@@ -123,7 +127,8 @@ in_for_nww = Tile("Inner Central Forest", "I-CF-NWW", "Overshire", icf_desc, "fo
                   to_e="I-CF-NW")
 in_for_nwww = Tile("Inner Central Forest", "I-CF-NWWW", "Overshire", icf_desc, "forest", 3, -3, 1,
                    to_e="I-CF-NWW",
-                   to_s="I-CF-WWW")
+                   to_s="I-CF-WWW",
+                   boss_list=[units.whisp_goblin])
 in_for_nee = Tile("Inner Central Forest", "I-CF-NEE", "Overshire", icf_desc, "forest", 2, 2, 1,
                   to_e="I-CF-NEEE",
                   to_s="I-CF-EE",
@@ -139,7 +144,8 @@ in_for_see = Tile("Inner Central Forest", "I-CF-SEE", "Overshire", icf_desc, "fo
                   to_w="I-CF-SE",
                   to_n="I-CF-EE",
                   to_s="I-CF-SSEE",
-                  to_e="I-CF-SEEE")
+                  to_e="I-CF-SEEE",
+                  boss_list=[units.master_slime])
 in_for_ssee = Tile("Inner Central Forest", "I-CF-SSEE", "Overshire", icf_desc, "forest", 3, 2, -2,
                    to_n="I-CF-SEE",
                    to_w="I-CF-SSE",
@@ -171,7 +177,7 @@ there might be a smart idea.""", "forest", 2, -2, -2,
 icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Overshire", icf_desc + """\n
 This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
 to help protect its citizens from the harmful monsters outside it. Weaker monsters still
-manage to make their way in though.""", "forest", 0, 0, 3,
+manage to make their way in though.""", "forest", 1, 0, 3,
                   to_s="I-CF-N",
                   to_n="W-CF-2A")
 
@@ -246,11 +252,12 @@ cenf_tile_4b = Tile("Central Forest", "W-CF-4B", "Overshire", cenf_desc, "forest
                     to_s="W-CF-1B",
                     to_e="W-CF-5B",
                     to_n="W-CF-7B")
-cenf_tile_5b = Tile("Central Forest", "W-CF-5B", "Overshire", cenf_desc, "forest", 4, -3, 5,
+cenf_tile_5b = Tile("Overshire City", "W-CF-5B", "Overshire", cenf_desc, "forest", 4, -3, 5,
                     to_s="W-CF-2B",
                     to_w="W-CF-4B",
                     to_e="W-CF-6B",
-                    to_n="W-CF-8B")
+                    to_n="W-CF-8B",
+                    town_list=[towns.town_overshire_city])
 cenf_tile_6b = Tile("Central Forest", "W-CF-6B", "Overshire", cenf_desc, "forest", 3, -2, 5,
                     to_w="W-CF-5B",
                     to_e="W-CF-4A",

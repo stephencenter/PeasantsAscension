@@ -40,13 +40,12 @@ class Conversation:
 
 class Quest(Conversation):
     def __init__(self, name, dialogue, q_giver, reward, conv_id, started=False, finished=False, active=False):
-        Conversation.__init__(self, dialogue, active)
+        Conversation.__init__(self, dialogue, conv_id, active)
         self.name = name  # The name of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
         self.reward = reward  # A list [experience, gold] of your reward for the quest
         self.started = started  # is True if the quest has been started, false otherwise
         self.finished = finished  # is True if the quest is complete, false otherwise
-        self.conv_id = conv_id
 
     def give_quest(self):
         print('-'*save_load.divider_size)
@@ -58,6 +57,7 @@ class Quest(Conversation):
             if accept.startswith('y'):
                 print('-'*save_load.divider_size)
                 print(f'{self.q_giver}: "Terrific! Thank you for your help!"')
+                main.s_input("\nPress enter/return ")
                 self.started = True
                 self.upon_starting()
 
@@ -152,7 +152,7 @@ miss it.""", "Solou", [25, 25], "solou_q1", active=True)
 solou_quest_1.upon_starting = solou_q1_us
 
 
-# -- Name: Joseph -- Town: Overshire
+# -- Name: Joseph -- Town: Overshire City
 joseph_convo_1 = Conversation("Greetings, young adventurer. Welcome to Overshire.", "joseph_c1", active=True)
 
 
@@ -193,7 +193,7 @@ def joseph_q1_us():
     joseph_convo_3.active = True
 
 
-# -- Name: Orius -- Town: Charsulville
+# -- Name: Orius -- Town: Valice
 
 # -- Name: Azura -- Town: Parceon
 azura_convo_1 = Conversation("""\
@@ -204,19 +204,18 @@ to me.""", "azura_c1", active=True)
 azura_convo_2 = Conversation("""\
 Hello, I'm Azura, leader of this town and head of the Sorcerer's Guild.
 I'm quite busy right now, so please come back later if you wish to speak
-to me... Oh, what's that? Joseph of Charsulville sent you? Well in that
+to me... Oh, what's that? Joseph of Overshire City sent you? Well in that
 case, I suppose that I can take some time off from my duties to speak
 to you. What is it that you need? ...I see. I know of a way to rescue
 King Harconius II's daughter, as Joseph probably told you. It's quite
-dangerous, however - none of the King's men have survived the journey
+dangerous, however - none of the King's men have survived the journey.
 Looking at you, however, I see much potential. There is one problem,
 however: Our Kingdom has been infiltrated by the Thexus. I have no way
 of verifying whether or not you are one of them. Actually, now that I
 think about it, perhaps there IS a way... How about this: My father,
 Raidon, has been having some problems lately. If you go help him out,
 then you will have earned my trust. He lives in the town of Ambercreek, a
-village right along the border of the Forest and Mountain regions.
-The town is located at -7\u00b0S, -51\u00b0W. Good luck.""", "azura_c2")
+village right outside the exit of Barrier Cave. Good luck.""", "azura_c2")
 
 
 def azura_c1_at():
@@ -401,7 +400,7 @@ def alfred_q1_uc():
 
 alfred_quest_1 = Quest('A Slimy Specimen', """\
 ...Actually, now that I think about it, do you think you could possibly
-dispose of this vile creature? His location is 1\u00b0N, -1\u00b0W.""", 'Alfred', [30, 50], "alfred_q1", active=True)
+dispose of this vile creature? It's located at -1\u00b0N, 2\u00b0E.""", 'Alfred', [30, 50], "alfred_q1", active=True)
 alfred_quest_1.upon_starting = alfred_q1_us
 alfred_quest_1.upon_completing = alfred_q1_uc
 
@@ -833,8 +832,8 @@ catch up with you soon hopefully!""", "sondalar_c1", active=True)
 # -- Name: Saar -- Town: Nearton
 saar_convo_1 = Conversation("""\
 I haven't really explored too far away from this town. In fact, the only other
-towns I've been to are Southford, located at -6\u00b0S, -2\u00b0W, and
-Overshire, located at 13\u00b0N, -11\u00b0W. Overshire is a pretty big city,
+towns I've been to are Southford, located at -2\u00b0S, -2\u00b0W, and
+Overshire, located at 5\u00b0N, -3\u00b0W. Overshire is a pretty big city,
 though - in fact, it's the capital of our Kingdom!""", "saar_c1", active=True)
 
 
@@ -879,7 +878,7 @@ Welcome to Overshire, stranger! Our Kingdom's capital is pretty big, so try
 not to get lost, haha!""", "harthos_c1", active=True)
 
 
-# -- Name: Ethos -- Town: Charsulville
+# -- Name: Ethos -- Town: Valice
 ethos_convo_1 = Conversation("""\
 Any smart adventurer would keep track of town coordinates and powerful monsters
 in their inventory. If you get lost, check there.""", "ethos_c1", active=True)

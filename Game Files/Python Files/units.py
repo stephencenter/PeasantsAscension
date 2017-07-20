@@ -1272,27 +1272,6 @@ class Boss(Monster):
         self.hp = copy.copy(self.max_hp)
         self.mp = copy.copy(self.max_mp)
 
-    # noinspection PyMethodMayBeStatic
-    def new_location(self, add=True):
-        # Translate the location of the boss into a string, and then store it in the player's inventory
-        mpi = main.party_info
-
-        coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
-        coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
-        coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
-
-        new_coords = f"{self.name}: {coord_y}, {coord_x}, {coord_z}"
-
-        if add and new_coords not in items.inventory['coord']:
-            items.inventory['coord'].append(new_coords)
-            print('-'*save_load.divider_size)
-            print(f"You quickly mark down the location of {self.name}'s lair.")
-            main.s_input("\nPress enter/return ")
-
-        else:
-
-            return new_coords
-
     def upon_defeating(self):
         pass
 
@@ -1427,24 +1406,14 @@ def check_bosses():
     for boss in main.party_info['current_tile'].boss_list:
         if boss.name not in defeated_bosses and boss.active:
             print('-'*save_load.divider_size)
-
-            if boss.new_location(add=False) not in items.inventory['coord']:
-                print('You feel the presence of an unknown entity...')
-
-            else:
-                print(f'You come across the lair of the {boss.name}.')
+            print('You feel the presence of an unknown entity...')
 
             while True:
-                if boss.new_location(add=False) not in items.inventory['coord']:
-                    y_n = main.s_input('Do you wish to investigate? | Y/N: ').lower()
-
-                else:
-                    y_n = main.s_input(f'Do you wish to confront the {boss.name}? | Y/N: ').lower()
+                y_n = main.s_input('Do you wish to investigate? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
                     monster = boss
                     boss.max_stats()
-                    boss.new_location()
                     print('-'*save_load.divider_size)
 
                     battle.battle_system(is_boss=True)

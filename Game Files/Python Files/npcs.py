@@ -66,7 +66,7 @@ npc_solou = NPC("Solou", "Page", [d.solou_convo_1, d.solou_convo_2, d.solou_conv
 
 joseph = NPC('Joseph', "Mayor of Overshire", [d.joseph_convo_1, d.joseph_quest_1, d.joseph_convo_2, d.joseph_convo_3])
 
-orius = NPC("Orius", "Mayor of Charsulville", [])
+orius = NPC("Orius", "Mayor of Valice", [])
 
 azura = NPC('Azura', "Sorcerers' Guildmaster", [d.azura_convo_1, d.azura_convo_2, d.azura_convo_3])
 

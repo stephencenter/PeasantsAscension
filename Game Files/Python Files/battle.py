@@ -143,17 +143,10 @@ def battle_system(is_boss=False, ambush=False):
                                 units.parsto] if x.enabled]
     turn_counter = 0
 
-    # Add monsters to the battle.
-    m_list = list()
-    m_list.append(units.monster)
-    if random.randint(0, 1):
-        m_list.append(units.monster_2)
-        if random.randint(0, 1):
-            m_list.append(units.monster_3)
-
     # Bosses use a different battle music than when battling normal enemies
     if is_boss:
-        pygame.mixer.music.load('Music/Terrible Tarantuloid.ogg')
+        m_list = [units.monster]
+        pygame.mixer.music.load('../Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -171,6 +164,16 @@ def battle_system(is_boss=False, ambush=False):
         main.smart_sleep(0.35)
 
     else:
+        # Add monsters to the battle.
+        m_list = list()
+        m_list.append(units.monster)
+
+        if random.randint(0, 1):
+            m_list.append(units.monster_2)
+
+            if random.randint(0, 1):
+                m_list.append(units.monster_3)
+
         print(ascii_art.monster_art[units.monster.m_name] % '')
 
         if len(m_list) == 3:
