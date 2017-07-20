@@ -94,6 +94,9 @@ unlock_chest = Sound('../Sound FX/unlock_chest.wav')
 # Debuff -- Played when the player suffers from a debuff
 debuff = Sound('../Sound FX/debuff.wav')
 
+# Ability cast -- Used when non-magical abilities are casted
+ability_cast = Sound('../Sound FX/ability_cast.wav')
+
 # Eerie Sound - No current use
 eerie_sound = Sound('../Sound FX/eerie_sound.wav')
 

@@ -19,6 +19,7 @@ import sys
 import units
 import sounds
 import random
+import battle
 
 if __name__ == "__main__":
     sys.exit()
@@ -65,12 +66,21 @@ def before_roll_call(user):
 
 
 def use_roll_call(user):
-    pass
+    sounds.ability_cast.play()
+    print(f"{user.name} begins to motivate their allies with a Roll Call...")
+    main.smart_sleep(0.75)
+
+    for pcu in battle.enabled_pcus:
+        battle.temp_stats[pcu.name]['dfns'] += (user.attributes['str'] + 5)*len(battle.enabled_pcus)
+
+    print(f"All allies physical defense increased by {(user.attributes['str'] + 5)*len(battle.enabled_pcus)}!")
+    sounds.buff_spell.play()
 
 
 roll_call = Ability("Roll Call", f"""\
 The user rally's their allies to fight, causing the physical defense of each
-one to increase by [(5 + Strength) x Number of allies].""", 5)
+one to increase by [(5 + Strength) x Number of allies]. Stacks with multiple
+uses.""", 3)
 roll_call.before_ability = before_roll_call
 roll_call.use_ability = use_roll_call
 
@@ -102,42 +112,42 @@ def use_berserkers_rage(user):
 berserkers_rage = Ability("Berserker's Rage", f"""\
 The user goes into a frenzy, discarding their defensive training and focusing
 their might on destroying an target enemy. Increases speed, damage dealt, and
-damage taken all by [15 + Strength]% for 3 turns. Applies to damage from ALL
-sources, including physical and magical damage. Does not stack with multiple
-uses - repeat uses only refresh the buff duration.""", 2)
+damage taken all by [15 + Strength]%. Applies to damage from ALL three major
+damage types. Does not stack with multiple uses.""", 2)
 berserkers_rage.before_ability = before_berserkers_rage
 berserkers_rage.use_ability = use_berserkers_rage
 
 
 # -- MONK ABILITIES, scales with Constitution -- #
 def before_chakra_smash(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Chakra Smash on?")
 
 
 def use_chakra_smash(user):
     # A 2x crit that lowers the target's armor
-
+    print(f"{user.name} is preparing a Chakra Smash...")
+    sounds.sword_slash.play()
     main.smart_sleep(0.75)
+
     dam_dealt = math.ceil(units.deal_damage(user, user.target, "physical")*2)
     user.target.hp -= dam_dealt
-
-    print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
 
     user.target.dfns -= 5 + user.attributes['con']
     user.target.p_dfns -= 5 + user.attributes['con']
     user.target.m_dfns -= 5 + user.attributes['con']
 
-    user.target.dfns = math.ceil(user.target.dfns)
-    user.target.p_dfns = math.ceil(user.target.p_dfns)
-    user.target.m_dfns = math.ceil(user.target.m_dfns)
+    print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
+    print(f"All of {user.target.name}'s defense stats reduced by {5 + user.attributes['con']}!")
+    sounds.enemy_hit.play()
 
     return True
 
 
 chakra_smash = Ability("Chakra Smash", f"""\
 Deals a 2x critical strike to a target enemy, lowering their defensive stats
-by [5 + Constitution]. The armor reduction lasts indefinitely and stacks
-with multiple uses.""", 5)
+by [5 + Constitution]. This attack can also crit, which would result in a total
+of 3x damage. The armor reduction lasts indefinitely and stacks with multiple 
+uses.""", 5)
 chakra_smash.before_ability = before_chakra_smash
 chakra_smash.use_ability = use_chakra_smash
 
@@ -164,14 +174,50 @@ def before_aura_swap(user):
 
 
 def use_aura_swap(user):
-    pass
+    chosen_enemy = max(battle.m_list, key=lambda x: x.hp)
+    chosen_ally = min([x for x in battle.enabled_pcus if x.status_ail != 'dead'], key=lambda x: x.hp)
+
+    sounds.ability_cast.play()
+    print(f"{user.name} is beginning to cast Aura Swap...")
+    main.smart_sleep(0.75)
+
+    if chosen_enemy.hp <= chosen_ally.hp:
+        print("...But it failed!")
+        sounds.debuff.play()
+
+    else:
+        sounds.buff_spell.play()
+        beginning = [chosen_enemy.hp, chosen_ally.hp]
+
+        if isinstance(chosen_enemy, units.Boss):
+            chosen_ally.hp = chosen_enemy.hp
+
+        else:
+            chosen_enemy.hp, chosen_ally.hp = chosen_ally.hp, chosen_enemy.hp
+
+        units.fix_stats()
+
+        evad_increase = max(math.floor((chosen_ally.hp - chosen_enemy.hp)/5)*(5 + user.attributes['str']), 5)
+        battle.temp_stats[user.name]['evad'] += evad_increase
+
+        print(f"{chosen_ally.name}'s HP rose from {beginning[1]} to {chosen_ally.hp}!")
+
+        if isinstance(chosen_enemy, units.Boss):
+            print(f"{chosen_enemy.name}'s boss aura protected them!")
+
+        else:
+            print(f"{chosen_enemy.name}'s HP dropped from {beginning[0]} to {chosen_enemy.hp}!")
+
+        print(f"{user.name}'s evasion increased by {evad_increase}!")
 
 
 aura_swap = Ability("Aura Swap", f"""\
-The user selects two targets and swaps their HP values. Can be used on both
-allies and enemies, and can swap between both allies and enemies. For every
-10% of maximum HP that this alters, the user's evasion goes up by
-[5 + Constitution]. Stacks with multiple uses. Evasion has a cap of 256.""", 5)
+The user swaps the HP values of the highest-hp enemy and the lowest-hp ally.
+For every 5 HP that this alters, the user's evasion goes up by 
+[5 + Constitution]. Always increases evasion by at least 5. This spell does 
+nothing if it would result in the ally losing HP. Cannot be casted on dead 
+units. When cast on bosses, the boss's HP is not altered, but the ally's HP 
+is. The evasion bonus stacks with  multiple uses. Evasion has a cap of 256.""", 5)
 aura_swap.before_ability = before_aura_swap
 aura_swap.use_ability = use_aura_swap
 
