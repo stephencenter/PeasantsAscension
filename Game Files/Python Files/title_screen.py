@@ -238,6 +238,20 @@ Available Settings:
 
                 break
 
+            elif setting == '3':
+                print('-'*save_load.divider_size)
+                set_divider_size()
+                print('-'*save_load.divider_size)
+
+                break
+
+            elif setting == '4':
+                print('-'*save_load.divider_size)
+                toggle_do_blip()
+                print('-'*save_load.divider_size)
+
+                break
+
             elif setting.startswith("s"):
                 pass
 
@@ -246,8 +260,8 @@ def set_vol(mode):
     while True:
         c_volume = save_load.music_vol if mode == "music" else save_load.sound_vol
 
-        print(f"{mode.upper()} VOLUME determines how loud the music is: 0 is silent, 100 is loud")
-        print(f'{mode.upper()} VOLUME is currently set to {int(c_volume*100)}%')
+        print(f"{mode.title()} Volume determines how loud the {mode} is. 0 is silent, 100 is loud")
+        print(f'{mode.title()} Volume is currently set to {int(c_volume*100)}%')
 
         do_thing = True
         while do_thing:
@@ -264,7 +278,7 @@ def set_vol(mode):
 
             print('-'*save_load.divider_size)
             while True:
-                y_n = main.s_input(f"{mode.upper()} VOLUME will be set to {new_vol}%, is that okay? | Y/N: ").lower()
+                y_n = main.s_input(f"{mode.title()} Volume will be set to {new_vol}%, is that okay? | Y/N: ").lower()
 
                 if y_n.startswith("y"):
                     if mode == "music":
@@ -287,9 +301,100 @@ def set_vol(mode):
                     with open("../settings.cfg", mode="w") as g:
                         config.write(g)
 
+                    print('-' * save_load.divider_size)
+                    print(f'{mode.title()} Volume set to {new_vol}%.')
+                    main.s_input("\nPress enter/return ")
+
                     return
 
                 elif y_n.startswith("n"):
                     do_thing = False
                     break
 
+
+def toggle_do_blip():
+    print("Blips are the sounds that the game make when you press enter.")
+    print("They can get annoying, so you have the option to turn them off.")
+    print(f'Blips are currently {"enabled" if save_load.do_blip else "disabled"}.')
+
+    while True:
+        y_n = main.s_input("Toggle Blips? | Y/N: ")
+
+        if y_n.startswith('y'):
+            if save_load.do_blip:
+                sounds.item_pickup.stop()
+
+            else:
+                sounds.item_pickup.play()
+
+            save_load.do_blip = not save_load.do_blip
+
+            config = configparser.ConfigParser()
+
+            if not os.path.isfile("../settings.cfg"):
+                with open("../settings.cfg", mode='w') as f:
+                    f.write(save_load.settings_file)
+
+            config.read("../settings.cfg")
+            config.set("settings", "do_blip", str(int(save_load.do_blip)))
+
+            with open("../settings.cfg", mode="w") as g:
+                config.write(g)
+
+            print('-'*save_load.divider_size)
+            print(f'Blips are now {"enabled" if save_load.do_blip else "disabled"}.')
+            main.s_input("\nPress enter/return ")
+
+            return
+
+        elif y_n.startswith("n"):
+            return
+
+
+def set_divider_size():
+    while True:
+        print("Dividers are long strings of dashes that seperate different bits of text.")
+        print("You can change the number of dashes if you want to. Max 80, min 5.")
+        print(f"Current divider size: {save_load.divider_size} dashes")
+
+        do_thing = True
+        while do_thing:
+            div_size = main.s_input('Input # (or type "back"): ').lower()
+
+            if div_size in ['e', 'x', 'exit', 'b', 'back']:
+                return
+
+            try:
+                # Convert the player's input into an integer between 5 and 80
+                div_size = max(5, min(80, int(div_size)))
+
+            except TypeError:
+                continue
+
+            print('-' * save_load.divider_size)
+            while True:
+                y_n = main.s_input(f"Divider Size will be set to {div_size}, is that okay? | Y/N: ").lower()
+
+                if y_n.startswith("y"):
+                    save_load.divider_size = div_size
+                    config = configparser.ConfigParser()
+
+                    if not os.path.isfile("../settings.cfg"):
+                        with open("../settings.cfg", mode='w') as f:
+                            f.write(save_load.settings_file)
+
+                    config.read("../settings.cfg")
+                    config.set("settings", "divider_size", str(div_size))
+
+                    with open("../settings.cfg", mode="w") as g:
+                        config.write(g)
+
+                    print('-' * save_load.divider_size)
+                    print(f'Divider Size set to {div_size}.')
+                    main.s_input("\nPress enter/return ")
+
+                    return
+
+                elif y_n.startswith("n"):
+                    do_thing = False
+                    break

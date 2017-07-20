@@ -86,7 +86,7 @@ party_info = {'biome': 'forest',
               'scout_list': []}
 
 # Set to 1 when auto-testing
-do_debug = 1
+do_debug = 0
 
 # A list of usernames that my friend has used in the past. Adds a few easter eggs.
 friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
