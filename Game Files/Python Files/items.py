@@ -86,9 +86,9 @@ class StatusPotion(Item):
     def use_item(self, user, is_battle=False):
         print('-'*save_load.divider_size)
 
-        if user.status_ail == self.status:
+        if self.status in user.status_ail:
             sounds.buff_spell.play()
-            user.status_ail = 'none'
+            user.status_ail = [x for x in user.status_ail if x != self.status]
 
             print(f'{user.name} consumes the {self.name}...')
             main.smart_sleep(0.75)

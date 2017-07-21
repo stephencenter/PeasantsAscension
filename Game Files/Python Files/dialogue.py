@@ -959,31 +959,31 @@ You are our heroes! Here, allow us to treat your wounds.""", "serena_c3")
 def serena_c3_at():
     units.player.hp += (units.player.max_hp - units.player.hp)
     units.player.mp += (units.player.max_mp - units.player.mp)
-    units.player.status_ail = 'none'
+    units.player.status_ail = ['alive']
 
     units.solou.hp += (units.solou.max_hp - units.solou.hp)
     units.solou.mp += (units.solou.max_mp - units.solou.mp)
-    units.solou.status_ail = 'none'
+    units.solou.status_ail = ['alive']
 
     units.ran_af.hp += (units.ran_af.max_hp - units.ran_af.hp)
     units.ran_af.mp += (units.ran_af.max_mp - units.ran_af.mp)
-    units.ran_af.status_ail = 'none'
+    units.ran_af.status_ail = ['alive']
 
     units.adorine.hp += (units.adorine.max_hp - units.adorine.hp)
     units.adorine.mp += (units.adorine.max_mp - units.adorine.mp)
-    units.adorine.status_ail = 'none'
+    units.adorine.status_ail = ['alive']
 
     units.chyme.hp += (units.chyme.max_hp - units.chyme.hp)
     units.chyme.mp += (units.chyme.max_mp - units.chyme.mp)
-    units.chyme.status_ail = 'none'
+    units.chyme.status_ail = ['alive']
 
     units.xoann.hp += (units.xoann.max_hp - units.xoann.hp)
     units.xoann.mp += (units.xoann.max_mp - units.xoann.mp)
-    units.xoann.status_ail = 'none'
+    units.xoann.status_ail = ['alive']
 
     units.parsto.hp += (units.parsto.max_hp - units.parsto.hp)
     units.parsto.mp += (units.parsto.max_mp - units.parsto.mp)
-    units.parsto.status_ail = 'none'
+    units.parsto.status_ail = ['alive']
 
     print('-'*save_load.divider_size)
     print('Polmor and Serena get to work on healing your party.')

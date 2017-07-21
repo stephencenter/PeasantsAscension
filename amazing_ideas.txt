@@ -55,6 +55,8 @@ PEASANT-RPG GOALS
 
 [x] Make settings changable in-game
 
+[x] Support for multiple status effects, including mundane things like "Alive" or "Disarmed"
+
 [ ] Fix the tool items:
 	[x] Fix the shovel
 	[x] Make the Divining Rod tell whether or not there are any gems near the player.
@@ -140,8 +142,6 @@ PEASANT-RPG GOALS
 		[ ] Killing the King reveals that the Royal Family's Lightning/Storm magic has unknowingly caused the extremely dangerous and unnavigable oceans.
 			When he dies, his scepter falls to the floor, shattering into pieces. The castle begins crumbling, and after escaping along with everyone inside,
 			it is revealed that the a new era of exploration and prosperity begin.
-
-[ ] Support for multiple status effects, including mundane things like "Alive" or "Disarmed"
 
 [ ] Make it so Potions can be used on allies, and make items wait until the user's turn to actually go off
 		

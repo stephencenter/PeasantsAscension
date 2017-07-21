@@ -33,6 +33,7 @@ temp_stats = ''
 vowels = 'AEIOU'
 m_list = []
 enabled_pcus = []
+turn_counter = 0
 
 if __name__ == "__main__":
     sys.exit()
@@ -55,7 +56,7 @@ def set_temp_stats():
             'm_dfns': _c(units.player.m_dfns),
             'spd': _c(units.player.spd),
             'evad': _c(units.player.evad),
-            'ability_used': False
+            'attributes': _c(units.player.attributes)
         },
         'Solou': {
             'attk': _c(units.solou.attk),
@@ -66,7 +67,7 @@ def set_temp_stats():
             'm_dfns': _c(units.solou.m_dfns),
             'spd': _c(units.solou.spd),
             'evad': _c(units.solou.evad),
-            'ability_used': False
+            'attributes': _c(units.solou.attributes)
         },
         'Xoann': {
             'attk': _c(units.xoann.attk),
@@ -77,9 +78,8 @@ def set_temp_stats():
             'm_dfns': _c(units.xoann.m_dfns),
             'spd': _c(units.xoann.spd),
             'evad': _c(units.xoann.evad),
-            'ability_used': False
+            'attributes': _c(units.xoann.attributes)
         },
-
         'Chyme': {
             'attk': _c(units.chyme.attk),
             'dfns': _c(units.chyme.dfns),
@@ -89,9 +89,8 @@ def set_temp_stats():
             'm_dfns': _c(units.chyme.m_dfns),
             'spd': _c(units.chyme.spd),
             'evad': _c(units.chyme.evad),
-            'ability_used': False
+            'attributes': _c(units.chyme.attributes)
         },
-
         'Parsto': {
             'attk': _c(units.parsto.attk),
             'dfns': _c(units.parsto.dfns),
@@ -101,7 +100,7 @@ def set_temp_stats():
             'm_dfns': _c(units.parsto.m_dfns),
             'spd': _c(units.parsto.spd),
             'evad': _c(units.parsto.evad),
-            'ability_used': False
+            'attributes': _c(units.parsto.attributes)
         },
 
         "Ran'af": {
@@ -113,9 +112,8 @@ def set_temp_stats():
             'm_dfns': _c(units.ran_af.m_dfns),
             'spd': _c(units.ran_af.spd),
             'evad': _c(units.ran_af.evad),
-            'ability_used': False
+            'attributes': _c(units.ran_af.attributes)
         },
-
         'Adorine': {
             'attk': _c(units.adorine.attk),
             'dfns': _c(units.adorine.dfns),
@@ -125,14 +123,19 @@ def set_temp_stats():
             'm_dfns': _c(units.adorine.m_dfns),
             'spd': _c(units.adorine.spd),
             'evad': _c(units.adorine.evad),
-            'ability_used': False
+            'attributes': _c(units.player.attributes)
         }
+
     }
+
+    for pcu in enabled_pcus:
+        pcu.ability_vars = {'ascend_used': False}
 
 
 def battle_system(is_boss=False, ambush=False):
     global m_list
     global enabled_pcus
+    global turn_counter
 
     enabled_pcus = [x for x in [units.player,
                                 units.solou,
@@ -211,8 +214,9 @@ def battle_system(is_boss=False, ambush=False):
     while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
         turn_counter += 1
 
-        # A list of the battle participants sorted by speed. Updates once per turn
-        speed_list = sorted(m_list + enabled_pcus, key=lambda x: 0.5*x.spd if x.status_ail == "paralyzed" else x.spd,
+        # A list of the battle participants sorted by speed. Updates once per turn.
+        speed_list = sorted(m_list + enabled_pcus,
+                            key=lambda x: 0.5*x.spd if "paralyzed" in x.status_ail else x.spd,
                             reverse=True)
 
         # Display HP, MP, Levels, and Statuses for all battle participants
@@ -226,7 +230,7 @@ def battle_system(is_boss=False, ambush=False):
                 main.smart_sleep(1)
 
             # Let each awake and alive character choose their move
-            if character.status_ail != 'dead':
+            if 'dead' not in character.status_ail:
                 character.player_choice()
 
                 if num + 1 < len([x for x in enabled_pcus if x.status_ail != 'dead']):
@@ -234,7 +238,7 @@ def battle_system(is_boss=False, ambush=False):
 
         # Make sure each participant in the battle goes according to who's fastest
         for char in speed_list:
-            if char.status_ail != 'dead':
+            if 'dead' not in char.status_ail:
                 if all(x.hp <= 0 for x in m_list):
                     break
 
@@ -245,7 +249,7 @@ def battle_system(is_boss=False, ambush=False):
                     return
 
                 if any(x.hp > 0 for x in enabled_pcus):
-                    if any(x.hp > 0 for x in m_list) and char.status_ail != 'dead':
+                    if any(x.hp > 0 for x in m_list) and 'dead' not in char.status_ail:
                         main.s_input('\nPress enter/return ')
 
                     elif all(x.hp <= 0 for x in m_list):
@@ -256,18 +260,18 @@ def battle_system(is_boss=False, ambush=False):
 
             # Check if any characters died on the participants turn
             for char_2 in speed_list:
-                if isinstance(char_2, units.PlayableCharacter) and char_2.hp <= 0 and char_2.status_ail != 'dead':
+                if isinstance(char_2, units.PlayableCharacter) and char_2.hp <= 0 and 'dead' not in char_2.status_ail:
                     char_2.hp = 0
-                    char_2.status_ail = 'dead'
+                    char_2.status_ail = ['dead']
                     sounds.ally_death.play()
 
                     print('-'*save_load.divider_size)
                     print(f"{char_2.name} has fallen to the monsters!")
                     main.s_input("\nPress enter/return ")
 
-                if isinstance(char_2, units.Monster) and char_2.hp <= 0 and char_2.status_ail != 'dead':
+                if isinstance(char_2, units.Monster) and char_2.hp <= 0 and 'dead' not in char_2.status_ail:
                     char_2.hp = 0
-                    char_2.status_ail = 'dead'
+                    char_2.status_ail = ['dead']
                     sounds.enemy_death.play()
 
                     print('-'*save_load.divider_size)
@@ -284,7 +288,7 @@ def run_away(runner):
 
     main.smart_sleep(0.75)
 
-    if runner.status_ail == 'paralyzed':
+    if 'paralyzed' in runner.status_ail:
         # 20% chance of success
         chance = 20
 
@@ -319,13 +323,13 @@ def after_battle(is_boss):
     print('-'*save_load.divider_size)
 
     for unit in enabled_pcus + m_list:
-        if unit.hp <= 0 and unit.status_ail != 'dead':
+        if unit.hp <= 0 and 'dead' not in unit.status_ail:
             unit.hp = 0
-            unit.status_ail = 'dead'
+            unit.status_ail = ['dead']
 
     while True:
         # If the monster wins...
-        if any([m.status_ail != 'dead' for m in m_list]) and all([x.status_ail == 'dead' for x in enabled_pcus]):
+        if any(['dead' not in m.status_ail for m in m_list]) and all(['dead' in x.status_ail for x in enabled_pcus]):
             pygame.mixer.music.load('../Music/Power-Up.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
@@ -346,18 +350,7 @@ def after_battle(is_boss):
 
                     main.party_info['current_tile'] = main.party_info['prev_town']
                     main.party_info['x'], main.party_info['y'], main.party_info['z'] = main.party_info['p_town_xyz']
-
-                    for character in [units.player,
-                                      units.solou,
-                                      units.xoann,
-                                      units.chyme,
-                                      units.ran_af,
-                                      units.parsto,
-                                      units.adorine]:
-
-                        character.hp = _c(character.max_hp)
-                        character.mp = _c(character.max_mp)
-                        character.status_ail = "none"
+                    units.heal_pcus(1)
 
                     pygame.mixer.music.load(main.party_info['music'])
                     pygame.mixer.music.play(-1)
@@ -379,7 +372,7 @@ def after_battle(is_boss):
                             sys.exit()
 
         # If the player wins...
-        elif all([m.status_ail == 'dead' for m in m_list]) and any([x.status_ail != 'dead' for x in enabled_pcus]):
+        elif all(['dead' in m.status_ail for m in m_list]) and any(['dead' not in x.status_ail for x in enabled_pcus]):
             pygame.mixer.music.load('../Music/Python_RM.ogg')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
@@ -422,7 +415,7 @@ def after_battle(is_boss):
 
         else:
             units.player.hp = 1
-            units.player.status_ail = 'none'
+            units.player.status_ail = ['alive']
 
             continue
 
@@ -492,7 +485,7 @@ def bat_stats():
           units.player.name, units.player.hp,
           units.player.max_hp, units.player.mp,
           units.player.max_mp, units.player.lvl,
-          units.player.status_ail.upper(),
+          ', '.join([x.title() for x in units.player.status_ail]),
           pad1=' '*(first_padding - len(units.player.name)),
           pad2=' '*(second_padding - len(f'{units.player.hp}/{units.player.max_hp} HP')),
           pad3=' '*(third_padding - len(f'{units.player.mp}/{units.player.max_mp} MP'))))
@@ -502,7 +495,7 @@ def bat_stats():
               units.solou.name, units.solou.hp,
               units.solou.max_hp, units.solou.mp,
               units.solou.max_mp, units.solou.lvl,
-              units.solou.status_ail.upper(),
+              ', '.join([x.title() for x in units.solou.status_ail]),
               pad1=' '*(first_padding - len(units.solou.name)),
               pad2=' '*(second_padding - len(f'{units.solou.hp}/{units.solou.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.solou.mp}/{units.solou.max_mp} MP'))))
@@ -512,7 +505,7 @@ def bat_stats():
               units.xoann.name, units.xoann.hp,
               units.xoann.max_hp, units.xoann.mp,
               units.xoann.max_mp, units.xoann.lvl,
-              units.xoann.status_ail.upper(),
+              ', '.join([x.title() for x in units.xoann.status_ail]),
               pad1=' '*(first_padding - len(units.xoann.name)),
               pad2=' '*(second_padding - len(f'{units.xoann.hp}/{units.xoann.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.xoann.mp}/{units.xoann.max_mp} MP'))))
@@ -522,7 +515,7 @@ def bat_stats():
               units.chyme.name, units.chyme.hp,
               units.chyme.max_hp, units.chyme.mp,
               units.chyme.max_mp, units.chyme.lvl,
-              units.chyme.status_ail.upper(),
+              ', '.join([x.title() for x in units.chyme.status_ail]),
               pad1=' '*(first_padding - len(units.chyme.name)),
               pad2=' '*(second_padding - len(f'{units.chyme.hp}/{units.chyme.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.chyme.mp}/{units.chyme.max_mp} MP'))))
@@ -532,7 +525,7 @@ def bat_stats():
               units.parsto.name, units.parsto.hp,
               units.parsto.max_hp, units.parsto.mp,
               units.parsto.max_mp, units.parsto.lvl,
-              units.parsto.status_ail.upper(),
+              ', '.join([x.title() for x in units.parsto.status_ail]),
               pad1=' '*(first_padding - len(units.parsto.name)),
               pad2=' '*(second_padding - len(f'{units.parsto.hp}/{units.parsto.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.parsto.mp}/{units.parsto.max_mp} MP'))))
@@ -542,7 +535,7 @@ def bat_stats():
               units.adorine.name, units.adorine.hp,
               units.adorine.max_hp, units.adorine.mp,
               units.adorine.max_mp, units.adorine.lvl,
-              units.adorine.status_ail.upper(),
+              ', '.join([x.title() for x in units.adorine.status_ail]),
               pad1=' '*(first_padding - len(units.adorine.name)),
               pad2=' '*(second_padding - len(f'{units.adorine.hp}/{units.adorine.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.adorine.mp}/{units.adorine.max_mp} MP'))))
@@ -552,7 +545,7 @@ def bat_stats():
               units.ran_af.name, units.ran_af.hp,
               units.ran_af.max_hp, units.ran_af.mp,
               units.ran_af.max_mp, units.ran_af.lvl,
-              units.ran_af.status_ail.upper(),
+              ', '.join([x.title() for x in units.ran_af.status_ail]),
               pad1=' '*(first_padding - len(units.ran_af.name)),
               pad2=' '*(second_padding - len(f'{units.ran_af.hp}/{units.ran_af.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.ran_af.mp}/{units.ran_af.max_mp} MP'))))
@@ -563,7 +556,7 @@ def bat_stats():
               each_monster.name, each_monster.hp,
               each_monster.max_hp, each_monster.mp,
               each_monster.max_mp, each_monster.lvl,
-              each_monster.status_ail.upper(),
+              ', '.join([x.title() for x in each_monster.status_ail]),
               pad1=' '*(first_padding - len(each_monster.name)),
               pad2=' '*(second_padding - len(f'{each_monster.hp}/{each_monster.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{each_monster.mp}/{each_monster.max_mp} MP'))))

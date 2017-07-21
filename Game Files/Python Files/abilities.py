@@ -71,9 +71,10 @@ def use_roll_call(user):
     main.smart_sleep(0.75)
 
     for pcu in battle.enabled_pcus:
-        battle.temp_stats[pcu.name]['dfns'] += (user.attributes['str'] + 5)*len(battle.enabled_pcus)
+        increase = (battle.temp_stats[user.name]['attributes']['str'] + 5)*len(battle.enabled_pcus)
+        battle.temp_stats[pcu.name]['dfns'] += increase
 
-    print(f"All allies physical defense increased by {(user.attributes['str'] + 5)*len(battle.enabled_pcus)}!")
+    print(f"All allies physical defense increased by {increase}!")
     sounds.buff_spell.play()
 
 
@@ -132,12 +133,13 @@ def use_chakra_smash(user):
     dam_dealt = math.ceil(units.deal_damage(user, user.target, "physical")*2)
     user.target.hp -= dam_dealt
 
-    user.target.dfns -= 5 + user.attributes['con']
-    user.target.p_dfns -= 5 + user.attributes['con']
-    user.target.m_dfns -= 5 + user.attributes['con']
+    armor_lower = 5 + battle.temp_stats[user.name]['attributes']['con']
+    user.target.dfns -= armor_lower
+    user.target.p_dfns -= armor_lower
+    user.target.m_dfns -= armor_lower
 
     print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
-    print(f"All of {user.target.name}'s defense stats reduced by {5 + user.attributes['con']}!")
+    print(f"All of {user.target.name}'s defense stats reduced by {armor_lower}!")
     sounds.enemy_hit.play()
 
     return True
@@ -147,7 +149,7 @@ chakra_smash = Ability("Chakra Smash", f"""\
 Deals a 2x critical strike to a target enemy, lowering their defensive stats
 by [5 + Constitution]. This attack can also crit, which would result in a total
 of 3x damage. The armor reduction lasts indefinitely and stacks with multiple 
-uses.""", 5)
+uses.""", 3)
 chakra_smash.before_ability = before_chakra_smash
 chakra_smash.use_ability = use_chakra_smash
 
@@ -164,7 +166,7 @@ shared_experience = Ability("Shared Experience", f"""\
 The user disregards any sense of good judgement they had, throwing themself
 wrecklessly at a target enemy. Deals [25 + Constitution]% of the target's
 current HP in magical damage, while also damaging the user for half the value.
-The self-damage is non-lethal, meaning that the user cannot die from it.""", 5)
+The self-damage is non-lethal, meaning that the user cannot die from it.""", 3)
 shared_experience.before_ability = before_shared_experience
 shared_experience.use_ability = use_shared_experience
 
@@ -174,41 +176,41 @@ def before_aura_swap(user):
 
 
 def use_aura_swap(user):
-    chosen_enemy = max(battle.m_list, key=lambda x: x.hp)
-    chosen_ally = min([x for x in battle.enabled_pcus if x.status_ail != 'dead'], key=lambda x: x.hp)
+    c_enemy = max(battle.m_list, key=lambda x: x.hp)
+    c_ally = min([x for x in battle.enabled_pcus if 'dead' not in x.status_ail], key=lambda x: x.hp)
 
     sounds.ability_cast.play()
     print(f"{user.name} is beginning to cast Aura Swap...")
     main.smart_sleep(0.75)
 
-    if chosen_enemy.hp <= chosen_ally.hp:
+    if c_enemy.hp <= c_ally.hp:
         print("...But it failed!")
         sounds.debuff.play()
 
     else:
         sounds.buff_spell.play()
-        beginning = [chosen_enemy.hp, chosen_ally.hp]
+        beginning = [c_enemy.hp, c_ally.hp]
 
-        if isinstance(chosen_enemy, units.Boss):
-            chosen_ally.hp = chosen_enemy.hp
+        if isinstance(c_enemy, units.Boss):
+            c_ally.hp = c_enemy.hp
 
         else:
-            chosen_enemy.hp, chosen_ally.hp = chosen_ally.hp, chosen_enemy.hp
+            c_enemy.hp, c_ally.hp = c_ally.hp, c_enemy.hp
 
         units.fix_stats()
 
-        evad_increase = max(math.floor((chosen_ally.hp - chosen_enemy.hp)/5)*(5 + user.attributes['str']), 5)
-        battle.temp_stats[user.name]['evad'] += evad_increase
+        evad = max(math.floor((c_ally.hp - c_enemy.hp)/5)*(5 + battle.temp_stats[user.name]['attributes']['str']), 5)
+        battle.temp_stats[user.name]['evad'] += evad
 
-        print(f"{chosen_ally.name}'s HP rose from {beginning[1]} to {chosen_ally.hp}!")
+        print(f"{c_ally.name}'s HP rose from {beginning[1]} to {c_ally.hp}!")
 
-        if isinstance(chosen_enemy, units.Boss):
-            print(f"{chosen_enemy.name}'s boss aura protected them!")
+        if isinstance(c_enemy, units.Boss):
+            print(f"{c_enemy.name}'s boss aura protected them!")
 
         else:
-            print(f"{chosen_enemy.name}'s HP dropped from {beginning[0]} to {chosen_enemy.hp}!")
+            print(f"{c_enemy.name}'s HP dropped from {beginning[0]} to {c_enemy.hp}!")
 
-        print(f"{user.name}'s evasion increased by {evad_increase}!")
+        print(f"{user.name}'s evasion increased by {evad}!")
 
 
 aura_swap = Ability("Aura Swap", f"""\
@@ -217,7 +219,7 @@ For every 5 HP that this alters, the user's evasion goes up by
 [5 + Constitution]. Always increases evasion by at least 5. This spell does 
 nothing if it would result in the ally losing HP. Cannot be casted on dead 
 units. When cast on bosses, the boss's HP is not altered, but the ally's HP 
-is. The evasion bonus stacks with  multiple uses. Evasion has a cap of 256.""", 5)
+is. The evasion bonus stacks with  multiple uses. Evasion has a cap of 256.""", 3)
 aura_swap.before_ability = before_aura_swap
 aura_swap.use_ability = use_aura_swap
 
@@ -234,7 +236,7 @@ breaking_vows = Ability("Breaking Vows", f"""\
 The user realigns their chakras, converting their own pain into an offensive
 weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
 for every 1% of HP the user is missing. If the user's current HP is below
-25%, this ability will lifesteal for '[10 + Constitution]% of the damage
+25%, this ability will lifesteal for [10 + Constitution]% of the damage
 dealt.""", 5)
 breaking_vows.before_ability = before_breaking_vows
 breaking_vows.use_ability = use_breaking_vows
@@ -242,18 +244,18 @@ breaking_vows.use_ability = use_breaking_vows
 
 # -- ASSASSIN ABILITIES, scales with Dexterity -- #
 def before_inject_poison(user):
-    user.choose_target(f"Who should {user.name} inject poison into?", ally=False, enemy=True)
+    user.choose_target(f"Who should {user.name} inject poison into?")
 
 
 def use_inject_poison(user):
-    user.target.status_ail = 'poisoned'
+    user.target.status_ail.append('poisoned')
     user.target.ability_vars['poison_pow'] += 0.02
-    user.target.ability_vars['poison_dex'] = 2 + user.attributes['dex']
+    user.target.ability_vars['poison_dex'] = 2 + battle.temp_stats[user.name]['attributes']['dex']
 
     poison_power = math.ceil(100*user.target.ability_vars['poison_pow'] + user.target.ability_vars['poison_dex'])
 
     print(f"{user.name} is preparing a poison with power {poison_power}...")
-    sounds.aim_weapon.play()
+    sounds.ability_cast.play()
     main.smart_sleep(0.75)
 
     print(f"{user.name} injects the poison into the {user.target.name}!")
@@ -264,43 +266,76 @@ def use_inject_poison(user):
 inject_poison = Ability("Inject Poison", f"""\
 Injects a poison into a target enemy that deals [2 + Dexterity] magical
 damage per turn. Stacks with multiple uses, with each stack increasing damage
-dealt per turn by 2% of the target's maximum HP.""", 5)
+dealt per turn by 2% of the target's maximum HP.""", 2)
 inject_poison.before_ability = before_inject_poison
 inject_poison.use_ability = use_inject_poison
 
 
 def before_backstab(user):
-    pass
+    user.choose_target(f"Who should {user.name} Backstab?")
 
 
 def use_backstab(user):
-    pass
+    print(f"{user.name} is preparing to Backstab {user.target.name}...")
+    sounds.sword_slash.play()
+    main.smart_sleep(0.75)
+
+    damage_multiplier = (125 + battle.temp_stats[user.name]['attributes']['dex'])/100
+    base_damage = damage_multiplier*units.deal_damage(user, user.target, "physical", do_criticals=False)
+
+    if user.target.ability_vars['poison_pow'] >= 0.04:
+        user.target.ability_vars['poison_pow'] -= 0.02
+        base_damage *= 1.5
+        print("Inject Poison increases Backstab damage by 1.5x!")
+
+    base_damage = math.ceil(base_damage)
+
+    if user.target.ability_vars['knockout_turns'] >= 2:
+        user.target.ability_vars['knockout_turns'] -= 1
+        user.hp += math.ceil(0.1*base_damage)
+        units.fix_stats()
+        print(f"Knockout Gas causes Backstab to lifesteal for {math.ceil(0.1*base_damage)} HP!")
+
+    sounds.enemy_hit.play()
+    user.target.hp -= base_damage
+    print(f"{user.name}'s Backstab deals {base_damage} to the {user.target.name}!")
 
 
 backstab = Ability("Backstab", f"""\
 The user sneaks up on their opponent and deals a [125 + Dexterity]% critical
-strike. If the target was previously affected by Inject Poison, the user's
-weapon will become poisoned, causing it to apply one stack of Inject Poison on
-every attack for the remainder of the battle. The weapon's poison cannot be
-buffed through repeat uses.""", 2)
+strike. If the target has 2 or more stacks of Inject Poison on them, Backstab
+will automatically remove one stack in exchange for dealing 1.5x damage. If
+the target has 2 or more turns of Knockout Gas remaining, Backstab will
+automatically remove one turn in exchange for lifestealing 10% of the damage
+dealt. Both effects can happen with a single Backstab.""", 2)
 backstab.before_ability = before_backstab
 backstab.use_ability = use_backstab
 
 
 def before_knockout_gas(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Knockout Gas on?")
 
 
 def use_knockout_gas(user):
-    pass
+    print(f"{user.name} is preparing some Knockout Gas for {user.target.name}...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
+
+    k_dur = math.ceil(battle.temp_stats[user.name]['attributes']['dex']/25)
+    k_dur = min(max(k_dur, 2), 8)
+    user.target.ability_vars['knockout_turns'] = k_dur
+    user.target.status_ail.append("asleep")
+
+    print(f"{user.target.name} was put to sleep for {k_dur} turns!")
+    sounds.poison_damage.play()
 
 
 knockout_gas = Ability("Knockout Gas", f"""\
 The user sneaks behind a target enemy and applies knockout gas to them,
 putting them to sleep. The sleep lasts for [Dexterity/25] turns, with
-a minimum of 1 turn and a maximum of 8. The target has a 5% chance of randomly
-waking up each turn, and is guaranteed to wake up when the timer runs out.
-Does not stack with multiple uses - repeat uses only refresh the sleep duration.""", 2)
+a minimum of 2 turns and a maximum of 8. The target has a 10% chance of randomly
+waking up each turn. Bosses have a 25% chance. Does not stack with multiple 
+uses - repeat uses only refresh the sleep duration.""", 2)
 knockout_gas.before_ability = before_knockout_gas
 knockout_gas.use_ability = use_knockout_gas
 
@@ -310,8 +345,8 @@ def before_disarming_blow(user):
 
 
 def use_disarming_blow(user):
+    sounds.ability_cast.play()
     print(f"{user.name} is preparing to disarm the {user.target.name}")
-    sounds.aim_weapon.play()
     main.smart_sleep(0.75)
 
     if user.target.ability_vars['disarmed']:
@@ -324,7 +359,12 @@ def use_disarming_blow(user):
 
     user.target.ability_vars['disarmed'] = True
 
-    base_ar = (5 + user.attributes['dex'])/2 if isinstance(user.target, units.Boss) else 5 + user.attributes['dex']
+    if isinstance(user.target, units.Boss):
+        base_ar = (5 + battle.temp_stats[user.name]['attributes']['dex'])/2
+
+    else:
+        base_ar = 5 + battle.temp_stats[user.name]['attributes']['dex']
+
     actual_ar = max(0, 100 - base_ar)/100
     user.target.attk *= actual_ar
 
@@ -359,7 +399,7 @@ def use_skill_shot(user):
 skill_shot = Ability("Skill Shot", f"""\
 The user launches a splash-damage attack at the enemy team equal to 50% of the
 sum of their levels. If the user is higher level than the highest-levelled
-opponent, Skill Shot does [50 + Intelligence]% more damage.""", 2)
+opponent, Skill Shot does [50 + Intelligence]% more damage.""", 4)
 skill_shot.before_ability = before_skill_shot
 skill_shot.use_ability = use_skill_shot
 
@@ -376,7 +416,7 @@ polymorph = Ability("Polymorph", f"""\
 Turns a target enemy into a harmless frog for one turn, silencing them and
 reducing their attack stats, speed, and evasion to 0. If multiple enemies are
 alive on the field, this spell has a [25 + Intelligence]% chance of affecting a
-random second target, and a [5 + Intelligence]% chance of affecting a third.""", 5)
+random second target, and a [5 + Intelligence]% chance of affecting a third.""", 3)
 polymorph.before_ability = before_polymorph
 polymorph.use_ability = use_polymorph
 
@@ -403,10 +443,10 @@ def before_mana_drain(user):
 
 def use_mana_drain(user):
     print(f"{user.name} is preparing to cast Mana Drain on the {user.target.name}...")
-    sounds.aim_weapon.play()
+    sounds.ability_cast.play()
     main.smart_sleep(0.75)
 
-    drain = max(((5 + user.attributes['int'])/100)*user.target.max_mp, 5)
+    drain = max(((5 + battle.temp_stats[user.name]['attributes']['int'])/100)*user.target.max_mp, 5)
 
     user.mp += drain
     user.target.mp -= drain
@@ -421,7 +461,7 @@ def use_mana_drain(user):
 mana_drain = Ability("Mana Drain", f"""\
 Depletes the target's current MP by [5 + Intelligence]% of their maximum
 MP, while restoring the same amount to the user. Always drains/restores a
-minimum of 5 MP.""", 5)
+minimum of 5 MP.""", 2)
 mana_drain.before_ability = before_mana_drain
 mana_drain.use_ability = use_mana_drain
 
@@ -515,13 +555,14 @@ def before_tip_the_scales(user):
 
 
 def use_tip_the_scales(user):
+    # heal_value = user.max_hp*0.05 +
     pass
 
 
 tip_the_scales = Ability("Tip the Scales", f"""\
 The user tips the scales in their favor, causing them and their allies to be
-healed for [5% of Maximum HP + Wisdom] HP each, while dealing the same in
-magical damage to each member of the enemy team.""", 3)
+healed for [5% of User's Max HP + Wisdom] HP each, while dealing the same in
+magical damage to a single enemy unit.""", 3)
 tip_the_scales.before_ability = before_tip_the_scales
 tip_the_scales.use_ability = use_tip_the_scales
 
@@ -537,16 +578,16 @@ def use_unholy_binds(user):
     else:
         print(f"{user.target.name} is preparing to cast Unholy Binds on the {user.target.name}!")
 
-    sounds.aim_weapon.play()
+    sounds.ability_cast.play()
     main.smart_sleep(0.75)
 
-    chance = min(10 + user.attributes['wis'], 50)/10
+    chance = min(10 + battle.temp_stats[user.name]['attributes']['wis'], 50)/10
 
     if all([user.target.def_element == 'dark',
             random.randint(1, 10) < chance,
             not isinstance(user.target, units.Boss),
             not isinstance(user.target, units.PlayableCharacter)]):
-        user.target.status_ail = 'dead'
+        user.target.status_ail = ['dead']
         user.target.hp = 0
 
         sounds.enemy_death.play()
@@ -615,13 +656,32 @@ def before_ascend(user):
 
 
 def use_ascend(user):
-    pass
+    print(f"{user.name} is casting Ascend...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
+
+    primary_attr = {"ranger": ["per", "Perception"],
+                    "warrior": ["str", "Strength"],
+                    "paladin": ["wis", "Wisdom"],
+                    "assassin": ["dex", "Dexterity"],
+                    "monk": ["con", "Constitution"],
+                    "mage": ["int", "Intelligence"]}[user.class_]
+
+    increase = min((0.25 + 0.1*battle.turn_counter), 0.75)
+    increase *= battle.temp_stats[user.name]['attributes'][primary_attr[0]]
+    increase = math.ceil(increase)
+    battle.temp_stats[user.name]['attributes'][primary_attr[0]] += increase
+
+    sounds.buff_spell.play()
+    user.ability_vars['ascend_used'] = True
+    print(f"{user.name}'s {primary_attr[1]} increased by {increase}!")
+
 
 ascend = Ability("Ascend", """\
 ULTIMATE ABILITY: The Hero ascends to a higher plane of being, raising their
 main attribute by 25% + [10% per turn since the battle started]. Caps at 75%.
 Can only be used once per battle, and therefore does not stack with multiple
-uses.""", 5)
+uses.""", 0)
 ascend.before_ability = before_ascend
 ascend.use_ability = use_ascend
 
@@ -639,7 +699,7 @@ ULTIMATE ABILITY: Solou chooses a party member and enchants their weapon with
 an element of her choice, while also causing it to deal an additional 10%
 damage. Optionally, Solou can instead choose "random", causing a random element
 to be selected and raising the damage buff to 20%. Can be re-casted to change
-the chosen element, but the damage buff does not stack.""", 2)
+the chosen element, but the damage buff does not stack.""", 1)
 infusion.before_ability = before_infusion
 infusion.use_ability = use_infusion
 
@@ -660,9 +720,3 @@ a_abilities = {
     'Adorine': []
 
 }
-
-# print(sum(len(x) for x in class_abilities.values()))
-# for x in class_abilities.values():
-#     for y in x:
-#         print(y.desc)
-#         main.s_input()

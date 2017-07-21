@@ -63,7 +63,7 @@ class Unit:
         self.evad = evad          # Evasion
         self.lvl = 1              # Level
 
-        self.status_ail = 'none'  # Current Status Ailment
+        self.status_ail = ['alive']  # Current Status Ailment
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
 
@@ -73,16 +73,15 @@ class PlayableCharacter(Unit):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
         Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
-        self.class_ = class_       # PCU's Class
-        self.off_element = 'none'  # PCU's Element
-        self.def_element = 'none'  # PCU's Element
-        self.status_ail = 'none'   # Current Status Ailment
-        self.enabled = enabled     # Whether the PCU has been recruited or not
-        self.exp = 0               # Experience
-        self.req_xp = 3            # Required XP to level up
-        self.move = ''             # What move the character chose during battle
-        self.ap = 10               # The number of "Action Points" that the user has remaining
-        self.max_ap = 10           # The number of maximum Action Points the user can have at one time
+        self.class_ = class_         # PCU's Class
+        self.off_element = 'none'    # PCU's Element
+        self.def_element = 'none'    # PCU's Element
+        self.enabled = enabled       # Whether the PCU has been recruited or not
+        self.exp = 0                 # Experience
+        self.req_xp = 3              # Required XP to level up
+        self.move = ''               # What move the character chose during battle
+        self.ap = 10                 # The number of "Action Points" that the user has remaining
+        self.max_ap = 10             # The number of maximum Action Points the user can have at one time
 
         self.target = Monster('', '', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
         self.c_ability = abilities.Ability('', '', '')  # The ability that the PCU is currently casting
@@ -337,7 +336,7 @@ Input [#]: """)
             # The player restores all their health and mana when they level up
             self.hp = copy.copy(self.max_hp)
             self.mp = copy.copy(self.max_mp)
-            self.status_ail = 'none'
+            self.status_ail = ['alive']
 
             print('-'*save_load.divider_size)
             self.skill_points(rem_points)
@@ -425,7 +424,7 @@ Input [L]etter: """).lower()
 
         print(f"""-{self.name}'s Stats-
 Level: {self.lvl} | Class: {self.class_.title()}
-HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Status Ailment: {self.status_ail.title()}
+HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Statuses: {', '.join([x.title() for x in self.status_ail])}
 Attack: {self.attk} | M. Attack: {self.m_attk} | P. Attack {self.p_attk}
 Defense: {self.dfns} | M. Defense: {self.m_dfns} | P. Defense {self.p_dfns}
 Speed: {self.spd} | Evasion: {self.evad}
@@ -449,8 +448,8 @@ Armor:
 
         # If the player's target is an enemy, and the target died before the player's turn began,
         # then the attack automatically redirects to a random living enemy.
-        if isinstance(self.target, Monster) and self.target.status_ail == 'dead':
-            self.target = random.choice([x for x in battle.m_list if x.status_ail != 'dead'])
+        if isinstance(self.target, Monster) and 'dead' in self.target.status_ail:
+            self.target = random.choice([x for x in battle.m_list if 'dead' not in x.status_ail])
 
         inv_name = self.name if self != player else 'player'
         player_weapon = items.equipped[inv_name]['weapon']
@@ -463,7 +462,7 @@ Armor:
             self.ap += 1
 
         # Check to see if the PCU is poisoned
-        if self.status_ail == 'poisoned' and monster.hp > 0:
+        if 'poisoned' in self.status_ail and monster.hp > 0:
             main.smart_sleep(0.75)
             sounds.poison_damage.play()
             poison_damage = math.floor(self.hp/5)
@@ -475,10 +474,10 @@ Armor:
                 return
 
         # There's a 1 in 4 chance for the players status effect to wear off each turn.
-        if self.status_ail != 'none' and random.randint(0, 3) == 0:
+        if self.status_ail != ['alive'] and random.randint(0, 3) == 0:
             sounds.buff_spell.play()
             print(f"{self.name}'s afflictions have worn off! They are no longer {self.status_ail}.")
-            self.status_ail = 'none'
+            self.status_ail = ['alive']
             main.smart_sleep(0.75)
 
         # Basic Attack
@@ -550,9 +549,10 @@ Armor:
             elif self.move == '2':
                 print('-'*save_load.divider_size)
 
-                if self.status_ail == 'silenced':
+                # Silence is a status ailment that prevents using spells
+                if 'silenced' in self.status_ail:
                     sounds.debuff.play()
-                    print(f"{self.name} is silenced!")
+                    print(f"{self.name} can't use spells when silenced!")
                     main.s_input("\nPress enter/return ")
                     print(battle_options.format(self.name))
 
@@ -572,22 +572,37 @@ Armor:
                     print('-'*save_load.divider_size)
                     print(f"{self.name}'s Abilities | {self.ap}/{self.max_ap} AP remaining")
 
+                    # List of all abilities usable by the PCU's class
                     all_abilities = abilities.a_abilities[self.class_] + \
                         abilities.a_abilities['player' if self == player else self.name]
 
+                    # This is used to make sure that the AP costs of each ability line up. Purely asthetic.
+                    padding = len(max(all_abilities, key=lambda x: x.name).name)
+
+                    # Print out the list of abilities the player's class can uses
                     for num, ability in enumerate(all_abilities):
-                        print(f"      [{num + 1}] {ability.name} --> {ability.ap_cost} AP")
+                        real_pad = padding - len(ability.name)
+                        print(f"      [{num + 1}] {ability.name} {'-'*real_pad}--> {ability.ap_cost} AP")
 
                     while True:
                         try:
                             chosen = main.s_input('Input [#] (or type "back"): ').lower()
                             self.c_ability = all_abilities[int(chosen) - 1]
 
+                            # Abilities cost AP to cast, just like spells cost MP.
                             if self.ap < self.c_ability.ap_cost:
                                 print('-'*save_load.divider_size)
                                 print(f"{self.name} doesn't have enough AP to cast {self.c_ability.name}!")
                                 main.s_input("\nPress enter/return ")
 
+                                break
+
+                            # Ascend is an ability that is more powerful the later in the battle you use it.
+                            # To balance this it's only usable once per battle.
+                            elif self.c_ability == abilities.ascend and self.ability_vars['ascend_used']:
+                                print('-'*save_load.divider_size)
+                                print("Ascend can only be used once per battle.")
+                                main.s_input("\nPress enter/return ")
                                 break
 
                         except (IndexError, ValueError):
@@ -607,17 +622,21 @@ Armor:
             elif self.move == '4':
                 print('-'*save_load.divider_size)
 
+                # You can only use consumable items during battle
                 if not items.inventory['consumables']:
-                    print('Your party has no battle items!')
+                    print('Your party has no consumables!')
                     main.s_input("\nPress enter/return ")
+                    print('-'*save_load.divider_size)
                     print(battle_options.format(self.name))
 
                     continue
 
-                if self.status_ail == "muted":
+                # Mute is a status ailment that prevents using items
+                if 'muted' in self.status_ail:
                     sounds.debuff.play()
-                    print(f"{self.name} is muted!")
+                    print(f"{self.name} can't use items when muted!")
                     main.s_input("\nPress enter/return ")
+                    print('-'*save_load.divider_size)
                     print(battle_options.format(self.name))
 
                     continue
@@ -635,22 +654,25 @@ Armor:
                 return
 
     def choose_target(self, action_desc, ally=False, enemy=True, allow_dead=False):
+        # choose_target is a function that lets the player choose what unit to target with their next action
         pcu_list = [x for x in [player,
                                 solou,
                                 xoann,
                                 chyme,
                                 ran_af,
                                 adorine,
-                                parsto] if x.enabled and (True if x.status_ail != 'dead' or allow_dead else False)]
+                                parsto] if x.enabled and (True if 'dead' not in x.status_ail or allow_dead else False)]
 
+        # Do this if the player is allowed to target enemies but not allies (e.g. attacks, some spells/abilities)
         if enemy and not ally:
-            if len([x for x in battle.m_list if x.status_ail != 'dead']) == 1:
-                self.target = [x for x in battle.m_list if x.status_ail != 'dead'][0]
+            if len([x for x in battle.m_list if 'dead' not in x.status_ail]) == 1:
+                self.target = [x for x in battle.m_list if 'dead' not in x.status_ail][0]
 
                 return
 
-            this_list = [x for x in battle.m_list if x.status_ail != 'dead']
+            this_list = [x for x in battle.m_list if 'dead' not in x.status_ail]
 
+        # Do this if the player is allowed to target allies but not enemies (e.g. items, some spells/abilities)
         elif ally and not enemy:
             if len(pcu_list) == 1:
                 self.target = pcu_list[0]
@@ -659,8 +681,9 @@ Armor:
 
             this_list = pcu_list
 
+        # Do this if both allies and enemies are valid targets (e.g. some abilities and spells)
         elif ally and enemy:
-            this_list = pcu_list + [x for x in battle.m_list if x.status_ail != 'dead']
+            this_list = pcu_list + [x for x in battle.m_list if 'dead' not in x.status_ail]
 
         else:
             raise Exception('Incorrect arguments - at least one of "ally" or "enemy" must be true.')
@@ -719,6 +742,7 @@ Armor:
             self.attributes['per'] += 1
 
         elif attribute.startswith('f'):
+            # Fortune gives you 1 point in two randomly chosen attributes. Can choose the same attribute twice.
             self.attributes['for'] += 1
             rand_attr1 = random.choice([('int', 'Intelligence'),
                                         ('wis', 'Wisdom'),
@@ -760,10 +784,12 @@ class Monster(Unit):
         self.experience = 0
         self.items = 0
 
+        # This dictionary contains numerous variables that interact with abilties in battle
         self.ability_vars = {
             'poison_pow': 0,
             'poison_dex': 0,
-            'disarmed': False}  # This dictionary will contain numerous variables that interact with abilties in battle
+            'disarmed': False,
+            'knockout_turns': 0}
 
     def give_status(self, target):
         # Attempt to give the target a status ailment
@@ -772,7 +798,7 @@ class Monster(Unit):
                                             'weakened',
                                             'blinded',
                                             'paralyzed',
-                                            'muted'] if x != target.status_ail])
+                                            'muted'] if x not in target.status_ail])
 
         print(f'The {self.name} is attempting to make {self.m_target.name} {status}...')
         sounds.aim_weapon.play()
@@ -782,7 +808,7 @@ class Monster(Unit):
         if random.randint(0, 1) == 1:
             sounds.buff_spell.play()
             print(f'{self.m_target.name} is now {status}!')
-            target.status_ail = status
+            target.status_ail.append(status)
 
         else:
             sounds.debuff.play()
@@ -1112,33 +1138,59 @@ class Monster(Unit):
         sounds.item_pickup.stop()
         self.get_target()
 
-        print(f"-{self.name}'s Turn-")
-        print(ascii_art.monster_art[self.m_name] % f"The {self.name} is making a move!\n")
+        if not self.ability_vars['knockout_turns']:
+            print(f"-{self.name}'s Turn-")
+            print(ascii_art.monster_art[self.m_name] % f"The {self.name} is making a move!\n")
+
+        else:
+            print(f"The {self.name} is asleep!")
+
+        if not self.ability_vars['knockout_turns']:
+            self.battle_turn()
+
         self.do_abilities()
-        self.battle_turn()
 
     def do_abilities(self):
-        if self.status_ail == 'poisoned':
+        if 'poisoned' in self.status_ail:
+            main.smart_sleep(0.5)
             damage = math.ceil(self.ability_vars['poison_pow']*self.max_hp + self.ability_vars['poison_dex'])
             self.hp -= damage
             print(f"The {self.name} took {damage} damage from poison!")
             sounds.poison_damage.play()
-            main.smart_sleep(0.75)
+
+        if self.ability_vars['knockout_turns']:
+            self.ability_vars['knockout_turns'] -= 1
+
+            if not self.ability_vars['knockout_turns']:
+                main.smart_sleep(0.5)
+                sounds.buff_spell.play()
+                self.status_ail = [x for x in self.status_ail if x != "asleep"]
+                print(f"The {self.name} woke up!")
+
+            else:
+                chance = 25 if isinstance(self, Boss) else 10
+
+                if random.randint(0, 100) < chance:
+                    main.smart_sleep(0.5)
+                    sounds.buff_spell.play()
+                    self.ability_vars['knockout_turns'] = 0
+                    self.status_ail = [x for x in self.status_ail if x != "asleep"]
+                    print(f"The {self.name} woke up early!")
 
     def get_target(self):
         self.m_target = random.choice([x for x in [
-                                     player,
-                                     solou,
-                                     xoann,
-                                     chyme,
-                                     ran_af,
-                                     parsto,
-                                     adorine
-                                     ] if x.enabled and x.status_ail != 'dead'])
+                                       player,
+                                       solou,
+                                       xoann,
+                                       chyme,
+                                       ran_af,
+                                       parsto,
+                                       adorine
+                                       ] if x.enabled and 'dead' not in x.status_ail])
 
     def magic_ai(self):
         # 16.67% chance for the enemy to give a status ailment
-        if self.m_target.status_ail == "none" and random.randint(0, 5) == 0 and self.mp >= self.max_mp*0.1:
+        if random.randint(0, 7) == 0 and self.mp >= self.max_mp*0.1:
             self.give_status(self.m_target)
 
         # Magic heal
@@ -1271,6 +1323,14 @@ class Boss(Monster):
     def max_stats(self):
         self.hp = copy.copy(self.max_hp)
         self.mp = copy.copy(self.max_mp)
+
+        self.ability_vars = {
+            'poison_pow': 0,
+            'poison_dex': 0,
+            'disarmed': False,
+            'knockout_turns': 0}
+
+        self.status_ail = ['alive']
 
     def upon_defeating(self):
         pass
@@ -1427,7 +1487,7 @@ def check_bosses():
         return False
 
 
-def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
+def deal_damage(attacker, target, damage_type, spell_power=0, do_criticals=True):
     # Attacker - the Unit that is attacking
     # Target - the Unit that is being attacked
     # Damage Type - the type of damage being dealt (magical, physical, or piercing)
@@ -1463,48 +1523,44 @@ def deal_damage(attacker, target, damage_type, absolute=0, spell_power=0):
 
         resist = 0
 
-    if absolute:
-        target.hp -= absolute
+    if damage_type == 'physical':
+        dam_dealt = (attack - defense/2)*(1 + resist)*(1 + weapon_dmg)
+
+        # Mages deal half damage with non-magical attacks
+        if attacker.class_ == 'mage':
+            dam_dealt /= 2
+
+    elif damage_type == 'piercing':
+        dam_dealt = (p_attack - p_defense/2)*(1 + resist)*(1 + weapon_dmg)
+
+        if 'blinded' in attacker.status_ail:
+            dam_dealt /= 2
+            print(f"{attacker.name}'s poor vision reduces their attack damage by half!")
+
+        # Mages deal half damage with non-magical attacks
+        if attacker.class_ == 'mage':
+            dam_dealt /= 2
+
+    elif damage_type == 'magical':
+        dam_dealt = (m_attack - m_defense/2)*(1 + resist)*(1 + spell_power)
+
+        # Classes that aren't mages or paladins deal 0.75x damage with magical attacks
+        if attacker.class_ not in ['mage', 'paladin']:
+            dam_dealt *= 0.75
 
     else:
-        if damage_type == 'physical':
-            dam_dealt = (attack - defense/2)*(1 + resist)*(1 + weapon_dmg)
+        raise Exception('Incorrect value for "damage_type" - must be physical, piercing, or magical')
 
-            # Mages deal half damage with non-magical attacks
-            if attacker.class_ == 'mage':
-                dam_dealt /= 2
+    if random.randint(1, 100) <= 15 and do_criticals:
+        dam_dealt *= 1.5
+        sounds.critical_hit.play()
+        print("It's a critical hit! 1.5x damage!")
 
-        elif damage_type == 'piercing':
-            dam_dealt = (p_attack - p_defense/2)*(1 + resist)*(1 + weapon_dmg)
+        main.smart_sleep(0.5)
 
-            if attacker.status_ail == 'blinded':
-                dam_dealt /= 2
-                print(f"{attacker.name}'s poor vision reduces their attack damage by half!")
+    dam_dealt = min(max(1, eval_element(attacker, target, dam_dealt)), 999)
 
-            # Mages deal half damage with non-magical attacks
-            if attacker.class_ == 'mage':
-                dam_dealt /= 2
-
-        elif damage_type == 'magical':
-            dam_dealt = (m_attack - m_defense/2)*(1 + resist)*(1 + spell_power)
-
-            # Classes that aren't mages or paladins deal 0.75x damage with magical attacks
-            if attacker.class_ not in ['mage', 'paladin']:
-                dam_dealt *= 0.75
-
-        else:
-            raise Exception('Incorrect value for "damage_type" - must be physical, piercing, or magical')
-
-        if random.randint(1, 100) <= 15:
-            dam_dealt *= 1.5
-            sounds.critical_hit.play()
-            print("It's a critical hit! 1.5x damage!")
-
-            main.smart_sleep(0.5)
-
-        dam_dealt = min(max(1, eval_element(attacker, target, dam_dealt)), 999)
-
-        return math.ceil(dam_dealt)
+    return math.ceil(dam_dealt)
 
 
 def eval_element(attacker, target, damage):
@@ -1718,20 +1774,26 @@ def fix_stats():
     ran_af.evad = min(256, ran_af.evad)
     adorine.evad = min(256, adorine.evad)
 
-    if player.hp > 0 and player.status_ail == 'dead':
-        player.status_ail = 'none'
-    if solou.hp > 0 and solou.status_ail == 'dead':
-        solou.status_ail = 'none'
-    if xoann.hp > 0 and xoann.status_ail == 'dead':
-        xoann.status_ail = 'none'
-    if chyme.hp > 0 and chyme.status_ail == 'dead':
-        chyme.status_ail = 'none'
-    if parsto.hp > 0 and parsto.status_ail == 'dead':
-        parsto.status_ail = 'none'
-    if ran_af.hp > 0 and ran_af.status_ail == 'dead':
-        ran_af.status_ail = 'none'
-    if adorine.hp > 0 and adorine.status_ail == 'dead':
-        adorine.status_ail = 'none'
+    for unit in [player, solou, xoann, chyme, parsto, ran_af, adorine] + battle.m_list:
+        unit.status_ail = list(set(unit.status_ail))
+
+        if 'dead' in unit.status_ail:
+            unit.status_ail = ['dead']
+
+    if player.hp > 0 and 'dead' in player.status_ail:
+        player.status_ail = ['alive']
+    if solou.hp > 0 and 'dead' in solou.status_ail:
+        solou.status_ail = ['alive']
+    if xoann.hp > 0 and 'dead' in xoann.status_ail:
+        xoann.status_ail = ['alive']
+    if chyme.hp > 0 and 'dead' in chyme.status_ail:
+        chyme.status_ail = ['alive']
+    if parsto.hp > 0 and 'dead' in parsto.status_ail:
+        parsto.status_ail = ['alive']
+    if ran_af.hp > 0 and 'dead' in ran_af.status_ail:
+        ran_af.status_ail = ['alive']
+    if adorine.hp > 0 and 'dead' in adorine.status_ail:
+        adorine.status_ail = ['alive']
 
     try:
         monster.hp, monster.mp = max(0, monster.hp), max(0, monster.mp)
@@ -1766,7 +1828,8 @@ def heal_pcus(percentage):
 
         pcu.hp += pcu.max_hp*percentage
         pcu.mp += pcu.max_mp*percentage
-        pcu.status_ail = 'none'
+        pcu.ap += pcu.max_ap*percentage
+        pcu.status_ail = ['alive']
 
     fix_stats()
 

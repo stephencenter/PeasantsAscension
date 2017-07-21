@@ -74,7 +74,7 @@ class Town:
                     for x in main.chop_by_79(self.desc):
                         print(x)
 
-                    main.s_input('\nPress Enter/Return ')
+                    main.s_input('\nPress enter/return ')
                     print('-'*save_load.divider_size)
 
                 elif choice == '2':
@@ -239,7 +239,7 @@ class Town:
 
                         character.hp = copy.copy(character.max_hp)
                         character.mp = copy.copy(character.max_mp)
-                        character.status_ail = "none"
+                        character.status_ail = ['alive']
 
                     print("Your party's HP and MP have been fully restored.")
                     print('Your party has been relieved of all status ailments.')
@@ -626,7 +626,7 @@ class Tavern:
 
                         character.hp = copy.copy(character.max_hp)
                         character.mp = copy.copy(character.max_mp)
-                        character.status_ail = "none"
+                        character.status_ail = ['alive']
 
                     print("Your party's HP and MP have been fully restored.")
                     print('Your party has been relieved of its status ailments.')
