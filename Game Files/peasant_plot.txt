@@ -1,44 +1,44 @@
 PEASANTS' ASCENSION PLOT:
     
-    Peasants' Ascension takes place in the Kingdom of Harconia, a nation located on
-the continent of Arcadia. Prior to the events of this game, Harconia was a
-colony of the Flyscorian Empire, which at the time had rule over much of the
-continent, including Hillsbrad, Moroland and Durcuba. The Harconians, led
-by war-general Harconius, helped spark a revolution against Flysconia. After
-a harsh 3-year-long war, the Harconians eventually prevailed and had its
-independence officially recognized by all of the other nations of Arcadia.
-The Flyscorian Empire fell, but was reinstated as the Kingdom of Flyscoria.
-Fly Jones, the King of Flyscoria, had become good friends with Harconius and
-the two formed a strong alliance, securing their places as the two superpowers 
-of the Arcadian continent.
+    Peasants' Ascension takes place in the Kingdom of Harconia, the sole country
+on the only continent on the planet of Arcadia. in the first year of the world, 
+the Forefathers came from an unknown land and settled on the continent. Sometime
+after this, the seas grew restless, and the oceans became completely impossible
+to navigate. Covered in a thick fog, the Arcadian oceans hid away the rest of the
+world, creating a watery barrier that prohibited exploration and stimied potential
+growth of the Kingdom. 
 
-    This powerful alliance continued for several centuries. The immortality
-that Fly Jones possessed allowed him to continue to rule to this day, but Harconius
-was not so lucky. Forty years after the fall of the Flyscorian Empire, Harconius
-died. A line of powerful, intelligent, and fair kings and queens took his place.
-In 1403 A.D., Queen Aristol II died after 52 years as reigning monarch. Her son, 
-Harconius II took her place as the new king, and was the first one to share 
-Harconius's name. It was not long, however, until disaster stuck the kingdom. 
-Unbeknownst to the King, a neighboring island-nation named "Thex" had been plotting 
-a major attack on his Kingdom. To do this, Thex organized a large group of spies
+	Despite this, the Kingdom of Harconia prospered. The first King, King Harconius,
+united the people of the continent into 12 provinces, each of which had a distinct
+culture and feel. For over 70 years Harconius ruled, with each year proving better 
+than the last. After a brief succession crisis in the year 132, King Tapret became 
+ruler, establishing a lineage that would begat Kings and Queens for centuries. A line 
+of powerful, intelligent, and fair kings and queens followed Tapret's rule, and it
+seemed that Harconia was in a Golden Age that would never end.
+
+	In the year 709, King Halios II died after 58 years as reigning monarch. 
+Her son, Harconius II took his place as the new king, and was the first one to 
+share Harconius's name. It was not long, however, until disaster stuck the kingdom. 
+Unbeknownst to the King, the province of Thex had been plotting a major attack 
+on the rest of Kingdom. To do this, Thex organized a large group of spies
 known as the "Thexus" and sent them to Harconia to scout the land. Harconia's army 
 quickly put a stop to this, but the invaders still managed to do one thing that 
 Harconia would have a hard time recovering from: They took King Harconius II's 
 daughter hostage. Harconius was furious and immediately assembled a massive army 
-to recover his beloved daughter and defeat the Thexian enemy.
+to recover his beloved daughter and defeat the Thexian army.
 
     Despite having plenty of man-power, the Harconians were stopped dead in
 their tracks. A magical shield had been placed over the island of Thex,
-destroying any chance of a possible incursion. Local mages and historians
+halting any chance of a possible incursion. Local mages and historians
 attempted to identify the source of the magic and came to the conclusion
 that the shield was coming from a large vein of Magestite that had recently
-been uncovered along the coast of Thex. Magestite possessed magical properties
+been uncovered along the coast of Thex. Magestite possessed magically resistant
 that the Thexians had used to their advantage. All seemed lost until the Headmaster
 of the Sorcerers' Guild mentioned a possible solution: Legend has it that
-a powerful hero/heroine from the town of Nearton would come to defeat
+a lowly peasant from the town of Nearton would ascend to glory, and come to defeat
 Harconia's enemies. That person would present themself to the King at a 
 time when everything seemed hopeless, and would be holding a magical stone guarded 
 by a terrifying monster in the Mountains of Harconia.
 
-    You are this hero. Find the stone and talk to the king.
-Save Harconius's daughter and defeat the Thexians!
+    You are this peasant. Find the stone and talk to the king. Save Harconius's
+daughter and defeat the Thexians!

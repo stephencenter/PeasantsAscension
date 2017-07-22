@@ -1,135 +1,143 @@
-  Peasants' Ascension takes place on Earth in an alternate reality in the year 1407 A.D.
-In this reality, an eighth continent exists known as Arcadia, located in the southern
-Pacific Ocean. This continent was a safe-haven for non-human intelligent life, as it
-was the only place in the world that contained nations that didn't persecute them.
+  Peasants' Ascension takes place on Earth in on the planet Arcadia in the year 
+713. In this world, the oceans are extremely dangerous, obliterating any ships 
+that are foolish enough to attempt to nagivate it. Due to this, as well as a 
+thick fog that covers the seas, the island-nation of Harconia is the only point
+of civilization known to exist. Harconia, a massive continent ruled by a 
+monarchy, is a medieval society that has been in a perpetual golden age for many
+centuries, a golden age that seems to be coming to an end. A civil war is about
+to begin, and a chosen hero/heroine is all that stands between a conspiracy and
+the future of the Kingdom.
 
+--------------------------    
 Races found in Harconia:
   Elves (71%)
   Dwarves (18%)
   Gnomes (7%)
   Humans (4%)
 
-Regions of Harconia:
-  The regions of Harconia are named after the geography of the areas. While the
-  Monarchy of Harconia has given each region an official title, the inhabitants of these
-  areas generally just refer to them using the names of their biomes.
+--------------------------    
+Provinces:
+  The Kingdom of Harconia is divided into 12 provinces of varying sizes.
+  their names are as follows:
+    -Overshire
+    -Celemia
+    -Simphet
+    -Thex
+    -Camberlite
+    -Kohrin
+    -Pelamora
+    -Flute
+    -Deltora
+    -Downpour
+    -Chin'tor
+    -Whitlock
 
-  Colloquial terms for the regions:
-	-The Overshire Graveyard --> The Graveyard
-	-The Harconian Coastline --> The Shore
-	-The Terrius Mt. Range ----> The Mountains
-	-The Arcadian Desert ------> The Desert
-	-The Central Forest -------> The Forest
-	-The Bogthorn Marsh -------> The Swamp
-	-The Glacian Plains -------> The Tundra
-
-Harconia has had many Monarchs over the years.
-
+--------------------------    
 List of Monarchs w/ their period of reign:
-  -King Harconius I --> 451 A.D. to 516 A.D.
-  -King Tapret I -----> 516 A.D. to 573 A.D.
-  -Queen Victoria I --> 573 A.D. to 654 A.D.
-  -King Lazarus I ----> 654 A.D. to 718 A.D.
+  -King Harconius I --> year ??? to 132     
+  -King Tapret I -----> year 133 to 156
+  -Queen Victoria I --> year 156 to 226
+  -King Lazarus I ----> year 226 to 257
 
-  From 718 A.D. to 892 A.D., Harconia had no monarch. The various lords and ladies of
-  each region handled things themselves, but eventually tension between the regions
-  began rising, culminating in the Harconian Civil War from 893 to 901 A.D.
-  Cesura, a brave paladin from the Central Forest, took command of the CF Army and 
-  used his excellent leadership skills to reunite the Kingdom. After the war, he
-  declared his hometown of Overshire as the capital of the Kingdom, and was elected
-  as the new king. He was the first king to have not been a direct descendant of 
-  Harconius. His rule was marked by a transition to a more democratic government,
-  and all monarchs were from here on elected by the people instead of being chosen
-  by birthright.
+  From the year 258 to 313, Harconia had no monarch. The various barons and 
+  baronesses of each province handled things themselves, but eventually 
+  tension between the provinces began rising, culminating in the Harconian Civil
+  War from the year 313 to 342. Eventually, Cesura, a brave paladin from Deltora, 
+  took command of the Deltoran Army and  used his excellent leadership skills to 
+  reunite the Kingdom. After the war, he settled in the Province of Overshire, 
+  and declared Overshire City as the capital of the Kingdom. Cesura was welcomed
+  with open arms as the new king of Harconia. He was the first king to have not 
+  been a direct descendant of Harconius, and marked the beginning of a new 
+  lineage.
 
-  -King Cesura I -----> 901 A.D. to 956 A.D.
-  -Queen Thanatrum I -> 956 A.D. to 958 A.D.
+  -King Cesura I -----> year 345 to 364
+  -Queen Thanatrum I -> year 364 to 365
 
   Queen Thanatrum had the shortest reign of any Harconian monarch. Merely a single year
   into her rule, she became sick with a strange disease. This disease was later identified
   and named "Hatchnuk's Blight" after the town that she was visiting when she contracted
-  the illness. She, along with 35% of the Arcadian population, died from this horrible
+  the illness. She, along with 35% of the Harconian population, died from this horrible
   disease. Nowadays, this disease has been mostly eradicated except for one particularly 
   deadly and incurable strain which can only be found in the town of Hatchnuk.
 
-  -King Pyravia I ----> 958 A.D. to 983 A.D.
-  -King Tapret II ----> 983 A.D. to 1052 A.D.
+  -King Pyravia I ----> year 365 to 398
+  -King Tapret II ----> year 398 to 413
 
   King Tapret II's rule was marked with incredible advancements in mathematics and 
-  technology. He personally invested thousands of PP into helping introduce things
+  technology. He personally invested millions of GP into helping introduce things
   that his predecessors had been neglecting, including running water, aqueducts, 
-  sewer systems, and using brick/cobblestone roads instead of dirt/gravel. These are
-  things that had been in use for several decades in most of the rest of Arcadia, but had
-  failed to make it into Harconia until King Tapret II funded it. As a result of his
-  contributions, he is generally viewed as one of the best monarchs the nation had
-  ever had, along with King Harconius I and King Cesura I.
+  sewer systems, and using brick/cobblestone roads instead of dirt/gravel. As a 
+  result of his contributions, he is generally viewed as one of the best monarchs 
+  the nation had ever had, along with King Harconius I and King Cesura I.
 
-  -Queen Aristol I ---> 1052 A.D. to 1143 A.D.
+  -Queen Aristol I ---> year 413 to 492
 
-  Queen Aristol I has the honor of being one of the longest reigning monarchs of Harconia.
-  Prior to her rule, the small island of Thex was a colony of Harconia. Queen Aristol I
-  allowed her subjects in the colony to vote on whether or not they wanted to become
-  an independent nation. Thex had already been somewhat autonomous, and was generally not
-  required to pay taxes to the Monarchy. The Thexians voted almost unanimously for the
-  formation of a new nation, and Queen Aristol I transferred rule of the island to 
-  King Thexus VII, a direct ancestor of the man that the island was named after.
+  Queen Aristol I has the honor of being one of the longest reigning monarchs of 
+  Harconia. This is often overshadowed however by an even bigger accomplishment
+  that took place during her reign: The discovery of Kohrin. Kohrin had been
+  unknown to the people of Harconia for centuries, completely cut off from the
+  rest of Harconia by the ravenous oceans. By sheer luck, however, excavators from
+  Whitlock had created a tunnel that just so happened to open up right in the middle
+  of the island. After many years of reinforcing the tunnel to make it safe for 
+  travelers, Kohrin was welcomed as an official province of Harconia.
 
-  -King Pyravia II ---> 1143 A.D. to 1213 A.D.
-  -King Harthis I ----> 1213 A.D. to 1290 A.D.
-  -Queen Victoria II -> 1290 A.D. to 1351 A.D.
-  -Queen Aristol II --> 1351 A.D. to 1403 A.D.
-  -King Harconius II -> 1403 A.D. to present (current as of 1407 A.D., the time of writing this)
+  -King Pyravia II ---> year 492 to 512
+  -King Harthis I ----> year 512 to 530
+  -Queen Victoria II -> year 530 to 561
+  -Queen Aristol II --> year 561 to 602
+  -King Halios I -----> year 602 to 651
+  -King Halios II ----> year 651 to 709
+  -King Harconius II -> year 709 to present (current as of 713, the time of writing this)
 
-  King Harconius II is the current monarch of Harconia. He is the first monarch to share his
-  name with the famous war general, and is in fact a direct descendant of the original Harconius.
-	
-Harconian Langauge:	
-  The official language of Harconia is "Hythic" (pronounced hih-thick), a dialect of the Dai'ic 
-  language used in Flyscoria. The two languages are nearly indistinguishable when spoken apart from
-  minor pronunciation differences, but the two utilize entire different alphabets. The Hythic
-  language uses the Elysian alphabet used in much of southern Arcadia, while Dai'ic uses the Latin
-  alphabet that is standard in the northern countries of Arcadia.
+  King Harconius II is the current monarch of Harconia, who is also the first
+  monarch to share their name with the original ruler of Harconia.
+
+--------------------------    
+Harconian Langauge:    
+  The official language of Harconia is "Hythic" (pronounced hih-thick). The 
+  origin of this language is unknown, as even the earliest known written records
+  of the world were written in this language. Historians theorize that the
+  language was originally brought to the continent by the Forefathers, who
+  are believed to have come to the continent from a far away land in the first
+  year.
+
+  "Dai'ic" (day-ick) is another major language, although not nearly as prominent. 
+  It was first discovered by the people of Harconia in 452, as the primary 
+  language of the people of Kohrin. Because of the similarities between Dai'ic
+  and Hythic, Historians theorize that Dai'ic evolved from Hythic due to the
+  differences in culture between Kohrin and the rest of the world.
 
   The language breakup of the nation is as follows:
-	(Natives refer to citizens born in the country who are above the age of 12)
-	
-	78% of natives speak Hythic as their first language
-	12% of natives speak Dai'ic as their first language
-	6% of natives speak English as their first language
-	3% of natives speak French as their first language
-	1% of natives speak some other language
-	
-	People who are able to understand spoken Hythic can almost always understand spoken Dai'ic, and
-	vice versa. These percentages shown are based on which alphabet people claim to have been 
-	taught first (or at all).
-		
+    87% of natives speak Hythic as their first language
+    12% of natives speak Dai'ic as their first language
+    1% of natives speak some other tribal language
+
+--------------------------    
 Currency System:
   The official curreny of Harconia is called the "Harconian Plated". 
 
   There are four different valued plated coins:
-	Copper Plated (abbreviated as "CP")
-	Silver Plated (abbreviated as "SP"), which is worth 12 CP
-	Gold Plated (abbreviated as "GP"), which is worth 12 SP or 144 CP
-	Platinum Plated (abbreviated as "PtP"), which is worth 12 GP or 144 SP or 1728 CP
-	Durasteel Plated (abbreviated as "DsP"), which is worth 12 PtP or 144 GP or 1728 SP or 20736 CP
-	
-	In terms of modern day USD, a modern day CP is valued at around $0.0075, an SP is $0.09,
-	a GP is $1.08, a PtP is $12.96, and a DsP is $155.52.
-	
+    Copper Plated (abbreviated as "CuP")
+    Silver Plated (abbreviated as "SP"), which is worth 12 CuP
+    Gold Plated (abbreviated as "GP"), which is worth 12 SP or 144 CuP
+    Platinum Plated (abbreviated as "PtP"), which is worth 12 GP or 144 SP or 1728 CuP
+    Magestite Plated (abbreviated as "MsP"), which is worth 12 PtP or 144 GP or 1728 SP or 20736 CuP
+    
   When used on its own, Plated generally refers to the Gold Plated, as it is the one used most commonly
   in everyday transactions. The PtP and SP are also fairly common, but most merchants price their
   goods using exclusively GP.
-	
+    
   Notice that the currency is called "plated", and not "pieces". All Harconian coins are actually just
   brass coins that have been plated with their respective metals. This serves three main purposes:
-	1. The cost to produce them is much lower, as acquiring brass and a small amount of gold is much
-	   less expensive than acquiring a large amount of gold.
-	2. The only coin that can be melted down and sold for more than the coin is valued at is the copper
-	   coin. All the other coins were assigned values that are much higher than their actual worth.
-	   This prevents people from melting down the currency to attempt to make a profit.
-	3. Brass is slightly lighter than silver, and is much lighter than gold, platinum and durasteel.
-	   Using metal-coated brass makes carrying money take far less effort.
+    1. The cost to produce them is much lower, as acquiring brass and a small amount of gold is much
+       less expensive than acquiring a large amount of gold.
+    2. The only coin that can be melted down and sold for more than the coin is valued at is the copper
+       coin. All the other coins were assigned values that are much higher than their actual worth.
+       This prevents people from melting down the currency to attempt to make a profit.
+    3. Brass is slightly lighter than silver, and is much lighter than gold, platinum and magestite.
+       Using metal-coated brass makes carrying money take far less effort.
 
+--------------------------    
 Religion in Harconia:
   While Harconia has no official religion, a majority (around 76%) of citizens are members
   of a religion called "Divinity". People in this religion believe in two greater beings,
@@ -141,17 +149,3 @@ Religion in Harconia:
   evil of His Wickedness. Divinites are very accepting of magic, with a majority of them capable
   of using it themselves. They specifically specialize in the magic of Light and Darkness, and use
   them to keep balance in the world.
-	
-Facts about Harconia
-  Fact #1: Name origin
-	The Kingdom was founded in 451 A.D. Prior to this, when Harconia was under Flyscorian rule as a
-	colony, its name was "Arbranok", the Dai'ic/Hythic word for "many regions". This was in reference
-	to the 32 regions that the colony had at the time, many more than any other nation had (albeit, 
-	these regions were quite small, many times smaller than the ones that exist today). When the nation
-	declared independence, Arbranok renamed itself to "Harconia", which comes from the Hythic/Dai'ic 
-	word "Harchenor", meaning "prosperity". King Harconius's name also comes from this word.
-
-  Fact #2: Region numbers
-	Harconia originally had 32 different regions. These regions were named after the lord/lady of 
-	the Flyscorian Empire that had rule of the land. By 462 A.D., these 32 had been consolidated into 
-	only 6 different regions based primarily on geographical differences.
