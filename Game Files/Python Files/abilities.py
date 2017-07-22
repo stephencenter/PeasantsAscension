@@ -271,47 +271,6 @@ inject_poison.before_ability = before_inject_poison
 inject_poison.use_ability = use_inject_poison
 
 
-def before_backstab(user):
-    user.choose_target(f"Who should {user.name} Backstab?")
-
-
-def use_backstab(user):
-    print(f"{user.name} is preparing to Backstab {user.target.name}...")
-    sounds.sword_slash.play()
-    main.smart_sleep(0.75)
-
-    damage_multiplier = (125 + battle.temp_stats[user.name]['attributes']['dex'])/100
-    base_damage = damage_multiplier*units.deal_damage(user, user.target, "physical", do_criticals=False)
-
-    if user.target.ability_vars['poison_pow'] >= 0.04:
-        user.target.ability_vars['poison_pow'] -= 0.02
-        base_damage *= 1.5
-        print("Inject Poison increases Backstab damage by 1.5x!")
-
-    base_damage = math.ceil(base_damage)
-
-    if user.target.ability_vars['knockout_turns'] >= 2:
-        user.target.ability_vars['knockout_turns'] -= 1
-        user.hp += math.ceil(0.1*base_damage)
-        units.fix_stats()
-        print(f"Knockout Gas causes Backstab to lifesteal for {math.ceil(0.1*base_damage)} HP!")
-
-    sounds.enemy_hit.play()
-    user.target.hp -= base_damage
-    print(f"{user.name}'s Backstab deals {base_damage} to the {user.target.name}!")
-
-
-backstab = Ability("Backstab", f"""\
-The user sneaks up on their opponent and deals a [125 + Dexterity]% critical
-strike. If the target has 2 or more stacks of Inject Poison on them, Backstab
-will automatically remove one stack in exchange for dealing 1.5x damage. If
-the target has 2 or more turns of Knockout Gas remaining, Backstab will
-automatically remove one turn in exchange for lifestealing 10% of the damage
-dealt. Both effects can happen with a single Backstab.""", 2)
-backstab.before_ability = before_backstab
-backstab.use_ability = use_backstab
-
-
 def before_knockout_gas(user):
     user.choose_target(f"Who should {user.name} cast Knockout Gas on?")
 
@@ -358,6 +317,7 @@ def use_disarming_blow(user):
     sounds.buff_spell.play()
 
     user.target.ability_vars['disarmed'] = True
+    user.target.status_ail.append('disarmed')
 
     if isinstance(user.target, units.Boss):
         base_ar = (5 + battle.temp_stats[user.name]['attributes']['dex'])/2
@@ -385,6 +345,47 @@ trading it in for an amount of GP equal to the target's level, with a minimum
 of 5 GP.""", 2)
 disarming_blow.before_ability = before_disarming_blow
 disarming_blow.use_ability = use_disarming_blow
+
+
+def before_backstab(user):
+    user.choose_target(f"Who should {user.name} Backstab?")
+
+
+def use_backstab(user):
+    print(f"{user.name} is preparing to Backstab {user.target.name}...")
+    sounds.sword_slash.play()
+    main.smart_sleep(0.75)
+
+    damage_multiplier = (125 + battle.temp_stats[user.name]['attributes']['dex'])/100
+    base_damage = damage_multiplier*units.deal_damage(user, user.target, "physical", do_criticals=False)
+
+    if user.target.ability_vars['poison_pow']:
+        print("Inject Poison increases Backstab damage by 1.5x!")
+
+    base_damage = math.ceil(base_damage)
+
+    if user.target.ability_vars['knockout_turns']:
+        user.hp += math.ceil(0.1*base_damage)
+        units.fix_stats()
+        print(f"Knockout Gas causes Backstab to lifesteal for {math.ceil(0.1*base_damage)} HP!")
+
+    if user.target.ability_vars['disarmed']:
+        user.target.dfns *= math.ceil(user.target.dfns*0.9)
+        print(f"Disarming Blow lowers {user.target.name}'s armor by {math.ceil(user.target.dfns*0.9)}!")
+
+    sounds.enemy_hit.play()
+    user.target.hp -= base_damage
+    print(f"{user.name}'s Backstab deals {base_damage} to the {user.target.name}!")
+
+
+backstab = Ability("Backstab", f"""\
+The user sneaks up on their opponent and deals a [125 + Dexterity]% critical
+strike. If the target is poisoned, Backstab will deal 1.5x damage. If the 
+target is asleep, Backstab will lifesteal for 10% of the damage dealt. If the
+target is disarmed, Backstab will lower the target's physical defense by 10%.
+All three effects can happen with a single Backstab.""", 2)
+backstab.before_ability = before_backstab
+backstab.use_ability = use_backstab
 
 
 # -- MAGE ABILITIES, scales with Intelligence -- #
@@ -707,7 +708,7 @@ a_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],
     'mage': [mana_drain, polymorph, spell_shield, skill_shot],
     'warrior': [roll_call, parry, great_cleave, berserkers_rage],
-    'assassin': [inject_poison, backstab, knockout_gas, disarming_blow],
+    'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],
     'ranger': [scout, roll, powershot, unstable_footing],
     'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],
 

@@ -263,65 +263,65 @@ Input [#]: """)
                 magic.new_spells(self)
 
                 if self.class_ == 'warrior':
-                    self.p_dfns += 4
-                    self.attk += 4
-                    self.dfns += 4
+                    self.attk += 3
+                    self.dfns += 3
                     self.m_attk += 1
                     self.m_dfns += 1
+                    self.p_dfns += 3
                     self.spd += 1
                     self.evad += 1
-                    self.max_hp += 4
+                    self.max_hp += 2
                     self.max_mp += 1
 
                 elif self.class_ == 'mage':
                     self.p_dfns += 1
-                    self.attk += 1
+                    self.p_attk += 2
+                    self.m_attk += 3
+                    self.m_dfns += 3
                     self.dfns += 1
-                    self.m_attk += 4
-                    self.m_dfns += 4
-                    self.spd += 2
-                    self.evad += 2
-                    self.max_hp += 2
-                    self.max_mp += 4
+                    self.spd += 1
+                    self.evad += 1
+                    self.max_hp += 1
+                    self.max_mp += 3
 
                 elif self.class_ == 'assassin':
                     self.p_dfns += 2
-                    self.attk += 4
-                    self.dfns += 2
+                    self.attk += 3
+                    self.dfns += 1
                     self.m_attk += 1
                     self.m_dfns += 1
-                    self.spd += 5
+                    self.spd += 3
                     self.evad += 3
-                    self.max_hp += 2
+                    self.max_hp += 1
                     self.max_mp += 1
 
                 elif self.class_ == 'ranger':
-                    self.p_attk += 4
-                    self.p_dfns += 2
-                    self.dfns += 1
+                    self.p_attk += 3
+                    self.p_dfns += 1
                     self.m_attk += 1
-                    self.m_dfns += 2
+                    self.m_dfns += 1
+                    self.dfns += 1
                     self.spd += 3
-                    self.evad += 4
-                    self.max_hp += 2
+                    self.evad += 3
+                    self.max_hp += 1
                     self.max_mp += 2
 
                 elif self.class_ == 'monk':
                     self.p_dfns += 1
-                    self.attk += 4
+                    self.attk += 3
                     self.dfns += 1
-                    self.m_attk += 2
-                    self.m_dfns += 2
+                    self.m_attk += 1
+                    self.m_dfns += 1
                     self.spd += 3
                     self.evad += 3
-                    self.max_hp += 3
+                    self.max_hp += 1
                     self.max_mp += 2
 
                 elif self.class_ == 'paladin':
-                    self.p_dfns += 3
-                    self.attk += 3
+                    self.p_dfns += 1
+                    self.attk += 1
                     self.dfns += 3
-                    self.m_attk += 2
+                    self.m_attk += 1
                     self.m_dfns += 3
                     self.spd += 1
                     self.evad += 1
@@ -428,7 +428,7 @@ HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Statuses: {', '.join
 Attack: {self.attk} | M. Attack: {self.m_attk} | P. Attack {self.p_attk}
 Defense: {self.dfns} | M. Defense: {self.m_dfns} | P. Defense {self.p_dfns}
 Speed: {self.spd} | Evasion: {self.evad}
-Def. Element: {self.def_element.title()} | Off. Element: {self.off_element.title()}
+D. Elem: {self.def_element.title()} | O. Elem: {self.off_element.title()}
 INT: {self.attributes['int']} | WIS: {self.attributes['wis']} | STR: {self.attributes['str']} | CON: \
 {self.attributes['con']} | DEX: {self.attributes['dex']} | PER: {self.attributes['per']} | FOR: {self.attributes['for']}
 XP: {self.exp}/{self.req_xp} | GP: {main.party_info['gp']}
@@ -473,10 +473,15 @@ Armor:
             if self.hp <= 0:
                 return
 
-        # There's a 1 in 4 chance for the players status effect to wear off each turn.
+        for x in self.status_ail:
+            if x != "alive" and random.randint(0, 3) == 3:
+                sounds.buff_spell.play()
+                self.status_ail = [y for y in self.status_ail if y != x]
+                print(f"{self.name} is no longer {x}!")
+                break
+
         if self.status_ail != ['alive'] and random.randint(0, 3) == 0:
-            sounds.buff_spell.play()
-            print(f"{self.name}'s afflictions have worn off! They are no longer {self.status_ail}.")
+            print(f"{self.name} no longer {self.status_ail}.")
             self.status_ail = ['alive']
             main.smart_sleep(0.75)
 
@@ -898,56 +903,38 @@ class Monster(Unit):
         if self.name == "Calculator":
             self.def_element = 'grass'
             self.off_element = 'grass'
-            self.status = 'japed'
-            self.status_msg = "was thouroughly japed by the great Calculator!"
 
         elif main.party_info['biome'] == 'tundra':
             self.def_element = 'ice'
             self.off_element = 'ice'
-            self.status = 'frostbitten'
-            self.status_msg = "was imbued with frost, causing painful frostbite!"
 
         elif main.party_info['biome'] == 'desert':
             self.def_element = 'fire'
             self.off_element = 'fire'
-            self.status = 'blinded'
-            self.status_msg = "brought upon a sandstorm, causing temporary blindness!"
 
         elif main.party_info['biome'] == 'mountain':
             self.def_element = 'earth'
             self.off_element = 'earth'
-            self.status = 'paralyzed'
-            self.status_msg = "hit a nerve ending, causing temporary paralysis!"
 
         elif main.party_info['biome'] == 'shore':
             self.def_element = 'water'
             self.off_element = 'water'
-            self.status = 'muted'
-            self.status_msg = "caused organizational issues, leading to impaired item usage!"
 
         elif main.party_info['biome'] == 'forest':
             self.def_element = 'electric'
             self.off_element = 'electric'
-            self.status = 'weakened'
-            self.status_msg = "drained its target's energy, causing temporary weakness!"
 
         elif main.party_info['biome'] == 'swamp':
             self.def_element = 'grass'
             self.off_element = 'grass'
-            self.status = 'poisoned'
-            self.status_msg = "was imbued with deadly toxins that will slowly drain health!"
 
         elif main.party_info['biome'] == 'graveyard':
             self.def_element = 'death'
             self.off_element = 'death'
-            self.status = 'poisoned'
-            self.status_msg = "poisoned their target using noxious fumes!"
 
         elif main.party_info['biome'] == 'sky':
             self.def_element = 'wind'
             self.off_element = 'wind'
-            self.status = 'blinded'
-            self.status_msg = "brought upon the winds, dampening their target's vision!"
 
         # Give the monster a set of items to drop if RNGsus wills it
         if random.randint(0, 4) == 0:  # 20% chance
@@ -1491,7 +1478,6 @@ def deal_damage(attacker, target, damage_type, spell_power=0, do_criticals=True)
     # Attacker - the Unit that is attacking
     # Target - the Unit that is being attacked
     # Damage Type - the type of damage being dealt (magical, physical, or piercing)
-    # Absolute - Whether or not the damage should be affected by crits, armor, status ailments, etc.
 
     if isinstance(attacker, PlayableCharacter):
         t_equip = items.equipped[attacker.name if attacker != player else 'player']
@@ -1526,6 +1512,11 @@ def deal_damage(attacker, target, damage_type, spell_power=0, do_criticals=True)
     if damage_type == 'physical':
         dam_dealt = (attack - defense/2)*(1 + resist)*(1 + weapon_dmg)
 
+        # Weakeness reduces physical damage by 1/2
+        if 'weakened' in attacker.status_ail:
+            dam_dealt /= 2
+            print(f"{attacker.name}'s weakness reduces their attack damage by half!")
+
         # Mages deal half damage with non-magical attacks
         if attacker.class_ == 'mage':
             dam_dealt /= 2
@@ -1533,9 +1524,10 @@ def deal_damage(attacker, target, damage_type, spell_power=0, do_criticals=True)
     elif damage_type == 'piercing':
         dam_dealt = (p_attack - p_defense/2)*(1 + resist)*(1 + weapon_dmg)
 
+        # Blindness reduces piercing damage by 1/2
         if 'blinded' in attacker.status_ail:
             dam_dealt /= 2
-            print(f"{attacker.name}'s poor vision reduces their attack damage by half!")
+            print(f"{attacker.name}'s blindness reduces their attack damage by half!")
 
         # Mages deal half damage with non-magical attacks
         if attacker.class_ == 'mage':
