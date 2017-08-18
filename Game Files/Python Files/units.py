@@ -478,12 +478,8 @@ Armor:
                 sounds.buff_spell.play()
                 self.status_ail = [y for y in self.status_ail if y != x]
                 print(f"{self.name} is no longer {x}!")
+                main.smart_sleep(0.5)
                 break
-
-        if self.status_ail != ['alive'] and random.randint(0, 3) == 0:
-            print(f"{self.name} no longer {self.status_ail}.")
-            self.status_ail = ['alive']
-            main.smart_sleep(0.75)
 
         # Basic Attack
         if self.move == '1':
@@ -794,7 +790,8 @@ class Monster(Unit):
             'poison_pow': 0,
             'poison_dex': 0,
             'disarmed': False,
-            'knockout_turns': 0}
+            'knockout_turns': 0,
+            'judgement_day': 0}
 
     def give_status(self, target):
         # Attempt to give the target a status ailment
@@ -900,9 +897,9 @@ class Monster(Unit):
         elif self.name in math_monsters:
             self.attk_msg = "begins calculating the hell out of"
 
-        if self.name == "Calculator":
-            self.def_element = 'grass'
-            self.off_element = 'grass'
+        if main.party_info['biome'] == 'forest':
+            self.def_element = 'electric'
+            self.off_element = 'electric'
 
         elif main.party_info['biome'] == 'tundra':
             self.def_element = 'ice'
@@ -919,10 +916,6 @@ class Monster(Unit):
         elif main.party_info['biome'] == 'shore':
             self.def_element = 'water'
             self.off_element = 'water'
-
-        elif main.party_info['biome'] == 'forest':
-            self.def_element = 'electric'
-            self.off_element = 'electric'
 
         elif main.party_info['biome'] == 'swamp':
             self.def_element = 'grass'
@@ -945,12 +938,12 @@ class Monster(Unit):
 
         for x in range(1, self.lvl):
             self.hp += 5
-            self.mp += 4
-            self.attk += 4
+            self.mp += 3
+            self.attk += 3
             self.dfns += 3
-            self.p_attk += 4
+            self.p_attk += 3
             self.p_dfns += 3
-            self.m_attk += 4
+            self.m_attk += 3
             self.m_dfns += 3
             self.spd += 3
             self.evad += 2
@@ -1125,8 +1118,9 @@ class Monster(Unit):
         sounds.item_pickup.stop()
         self.get_target()
 
+        print(f"-{self.name}'s Turn-")
+
         if not self.ability_vars['knockout_turns']:
-            print(f"-{self.name}'s Turn-")
             print(ascii_art.monster_art[self.m_name] % f"The {self.name} is making a move!\n")
 
         else:
@@ -1138,13 +1132,6 @@ class Monster(Unit):
         self.do_abilities()
 
     def do_abilities(self):
-        if 'poisoned' in self.status_ail:
-            main.smart_sleep(0.5)
-            damage = math.ceil(self.ability_vars['poison_pow']*self.max_hp + self.ability_vars['poison_dex'])
-            self.hp -= damage
-            print(f"The {self.name} took {damage} damage from poison!")
-            sounds.poison_damage.play()
-
         if self.ability_vars['knockout_turns']:
             self.ability_vars['knockout_turns'] -= 1
 
@@ -1163,6 +1150,19 @@ class Monster(Unit):
                     self.ability_vars['knockout_turns'] = 0
                     self.status_ail = [x for x in self.status_ail if x != "asleep"]
                     print(f"The {self.name} woke up early!")
+
+        if 'poisoned' in self.status_ail:
+            main.smart_sleep(0.5)
+            damage = math.ceil(self.ability_vars['poison_pow']*self.max_hp + self.ability_vars['poison_dex'])
+            self.hp -= damage
+            print(f"The {self.name} took {damage} damage from poison!")
+            sounds.poison_damage.play()
+
+        if self.ability_vars['judgement_day'] == battle.turn_counter:
+            main.smart_sleep(0.5)
+            print(f"{self.name}'s judgement day has arrived. The darkness devours it...")
+            sounds.poison_damage.play()
+            self.hp = 0
 
     def get_target(self):
         self.m_target = random.choice([x for x in [
@@ -1315,7 +1315,8 @@ class Boss(Monster):
             'poison_pow': 0,
             'poison_dex': 0,
             'disarmed': False,
-            'knockout_turns': 0}
+            'knockout_turns': 0,
+            'judgement_day': 0}
 
         self.status_ail = ['alive']
 

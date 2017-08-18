@@ -168,9 +168,7 @@ def battle_system(is_boss=False, ambush=False):
 
     else:
         # Add monsters to the battle.
-        m_list = list()
-        m_list.append(units.monster)
-
+        m_list = [units.monster]
         if random.randint(0, 1):
             m_list.append(units.monster_2)
 

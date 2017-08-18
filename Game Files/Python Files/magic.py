@@ -88,15 +88,19 @@ class Healing(Spell):
         target.hp = math.ceil(target.hp)
         units.fix_stats()
 
-        sounds.magic_healing.play()
-
         if is_battle:
             print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+            print(f"{user.name} is preparing to cast {self.name}...")
+            sounds.ability_cast.play()
+            main.smart_sleep(0.75)
+
             print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
+            sounds.magic_healing.play()
 
         else:
             print('-'*save_load.divider_size)
             print(f'Using "{self.name}", {target.name} is healed by {total_heal} HP!')
+            sounds.magic_healing.play()
             main.s_input("\nPress enter/return ")
             print('-'*save_load.divider_size)
 
@@ -145,6 +149,9 @@ class Buff(Spell):
         target = user.target
 
         print(ascii_art.player_art[user.class_.title()] % f"{user.name} is making a move!\n")
+        print(f"{user.name} is preparing to cast {self.name}...")
+        sounds.ability_cast.play()
+        main.smart_sleep(0.75)
 
         if user == target:
             print(f"{user.name} raises their stats using the power of {self.name}!")

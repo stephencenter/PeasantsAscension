@@ -61,8 +61,7 @@ PEASANT-RPG GOALS
 	[x] Fix the shovel
 	[x] Make the Divining Rod tell whether or not there are any gems near the player.
 	[ ] Fix the fast travel boots
-	[ ] Make the compass enable the coordinate system. Without it, you can write down coordinates in your inventory but cannot read them on the
-		movement system menu.
+	[ ] Remove the compass
 		
 [ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.
 
@@ -142,6 +141,7 @@ PEASANT-RPG GOALS
 		[ ] Killing the King reveals that the Royal Family's Lightning/Storm magic has unknowingly caused the extremely dangerous and unnavigable oceans.
 			When he dies, his scepter falls to the floor, shattering into pieces. The castle begins crumbling, and after escaping along with everyone inside,
 			it is revealed that the a new era of exploration and prosperity begin.
+		[ ] Every few turns during the final boss, it will say "The 1st/2nd/3rd...etc part of the prophecy has been fulfilled in a far off land"
 
 [ ] Make it so Potions can be used on allies, and make items wait until the user's turn to actually go off
 		
@@ -164,26 +164,21 @@ PEASANT-RPG GOALS
 		
 [ ] Rewrite the credits, lore, and backstory
 
-[ ] Before v1.0.0 is release, the game NEEDS at least this:
-	[ ] Every boss currenlty programmed placed somewhere on the map
+[ ] Before v1.0.0 is released, the game NEEDS at least this:
+	[ ] Every boss currently programmed placed somewhere on the map
 	[ ] At least 3 main-storyline quests
 	[ ] At least 3 sidequests
 	[ ] At LEAST 7-8 towns placed somewhere on the map
 	[ ] At LEAST all of the Central Forest tiles programmed, as well as possibly a bit of the shore at the edge of the
 		Central Forest and maybe all of Barrier Cave
+		
+[ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.
 	
 -- 1.1 update plans -- 
-[ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing. 
-
-[ ] Add a gender select option (no gameplay effects)
-	[ ] This would also require rewording a LOT of the game's text
-
 [ ] Add races (Elves, Dwarves, Gnomes, etc)
 	[ ] These races would have a slight effect on the players stats
-	[ ] Also add a PlayableCharacter.generate_lore() method that generates 2-3 pseudo-random paragraphs based on the player's gender, class, and race.
+	[ ] Also add a PlayableCharacter.generate_lore() method that generates 2-3 pseudo-random paragraphs based on the player's class and race.
 		The lore would be stored in a player_object.lore attribute, and would be viewable from the [P]arty section of the menu.
-
-[ ] Add attribute training
 
 [ ] Add a neat weather system.
 	[ ] Weather has a 5% chance of occuring each time you enter a tile, and

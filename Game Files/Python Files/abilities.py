@@ -328,7 +328,7 @@ def use_disarming_blow(user):
     actual_ar = max(0, 100 - base_ar)/100
     user.target.attk *= actual_ar
 
-    user.target.hp -= 10
+    user.target.hp -= max(10 - user.target.dfns/2, 1)
 
     if random.randint(0, 3) == 3:
         main.smart_sleep(0.75)
@@ -339,10 +339,10 @@ def use_disarming_blow(user):
 
 disarming_blow = Ability("Disarming Blow", f"""\
 The user knocks the weapon out of a target enemy's hands, taking it for
-themselves. Deals 10 damage, and lowers the target's physical attack by
-[5 + Dexterity]%. The user has a 25% chance to steal the weapon, immediately
-trading it in for an amount of GP equal to the target's level, with a minimum
-of 5 GP.""", 2)
+themselves. Deals 10 physical damage, and lowers the target's physical attack 
+by [5 + Dexterity]%. The attack-reduction has half the effect on bosses. The 
+user has a 25% chance to steal the weapon, immediately trading it in for an 
+amount of GP equal to the target's level, with a minimum of 5 GP.""", 2)
 disarming_blow.before_ability = before_disarming_blow
 disarming_blow.use_ability = use_disarming_blow
 
@@ -370,8 +370,8 @@ def use_backstab(user):
         print(f"Knockout Gas causes Backstab to lifesteal for {math.ceil(0.1*base_damage)} HP!")
 
     if user.target.ability_vars['disarmed']:
-        user.target.dfns *= math.ceil(user.target.dfns*0.9)
-        print(f"Disarming Blow lowers {user.target.name}'s armor by {math.ceil(user.target.dfns*0.9)}!")
+        user.target.dfns = math.ceil(user.target.dfns*0.9)
+        print(f"Disarming Blow lowers {user.target.name}'s defense by {math.floor(user.target.dfns*0.1)}!")
 
     sounds.enemy_hit.play()
     user.target.hp -= base_damage
@@ -394,13 +394,30 @@ def before_skill_shot(user):
 
 
 def use_skill_shot(user):
-    pass
+    if user.lvl > max(battle.m_list, key=lambda x: x.lvl).lvl:
+        multiplier = (1 + (user.attributes['int'] + 50)/100)
 
+    else:
+        multiplier = 1
+
+    base_damage = math.ceil(0.5*sum([x.lvl for x in battle.m_list])*multiplier)
+
+    print(f"{user.name} is preparing to cast Skill Shot...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
+
+    for enemy in battle.m_list:
+        actual_damage = max(math.ceil((base_damage - enemy.m_dfns/2)), 5)
+        enemy.hp -= actual_damage
+        print(f"{user.name}'s Skill Shot deals {actual_damage} damage to the {enemy.name}")
+
+    sounds.enemy_hit.play()
 
 skill_shot = Ability("Skill Shot", f"""\
-The user launches a splash-damage attack at the enemy team equal to 50% of the
-sum of their levels. If the user is higher level than the highest-levelled
-opponent, Skill Shot does [50 + Intelligence]% more damage.""", 4)
+The user launches a magic damage attack at the enemy team, damaging each
+target equal to 50% of the sum of their levels. If the user is higher level
+than the highest-levelled opponent, Skill Shot does [50 + Intelligence]% more 
+damage. Always deals a minimum of 5 damage.""", 4)
 skill_shot.before_ability = before_skill_shot
 skill_shot.use_ability = use_skill_shot
 
@@ -431,9 +448,9 @@ def use_spell_shield(user):
 
 
 spell_shield = Ability("Spell Shield", f"""\
-Places a protective barrier around your party that lowers incoming magical
-damage by [20 + Intelligence]% for 4 turns. Does not stack with multiple
-uses - repeat uses only refresh the buff duration.""", 5)
+Places a protective barrier around your party that increases magical defense by
+[20 + Intelligence] for 3 turns. Does not stack with multiple uses - repeat uses
+only refresh the buff duration.""", 5)
 spell_shield.before_ability = before_spell_shield
 spell_shield.use_ability = use_spell_shield
 
@@ -617,19 +634,41 @@ unholy_binds.use_ability = use_unholy_binds
 
 
 def before_judgement(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Judgement on?")
 
 
 def use_judgement(user):
-    pass
+    if isinstance(user.target, units.Boss):
+        rem_turns = 10
 
+    elif user.target.def_element == 'dark':
+        rem_turns = max(math.ceil(7*(1 - (15 + user.attributes['wis'])/100)), 2)
+
+    else:
+        rem_turns = 7
+
+    judgement_day = battle.turn_counter + rem_turns
+
+    print(f"{user.name} is preparing to cast Judgement on {user.target.name}...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
+
+    if user.target.ability_vars['judgement_day'] and user.target.ability_vars['judgement_day'] <= judgement_day:
+        print(f"...But {user.target.name}'s jugdement day is already on its way!")
+        sounds.debuff.play()
+
+    else:
+        print(f"{user.target.name} is doomed. They will die in {rem_turns} turns.")
+        user.target.ability_vars['judgement_day'] = judgement_day
+        user.target.status_ail.append("Doomed")
+        sounds.poison_damage.play()
 
 judgement = Ability("Judgement", f"""\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the
 target's defensive element is Darkness, then the 7 turns will be lowered by
-[15 + Wisdom]%, with a minimum of 2 turns. When cast on bosses, the turn
-count is always 10 turns. Re-casting this spell has no effect, unless
-re-casting it would cause the timer to be lower.""", 4)
+[15 + Wisdom]%, with a minimum of 2 turns. When cast on bosses, the turn count
+is always 10 turns. Re-casting this spell has no effect, unless re-casting it 
+would cause the timer to be lower.""", 4)
 judgement.before_ability = before_judgement
 judgement.use_ability = use_judgement
 
