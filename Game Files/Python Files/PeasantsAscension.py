@@ -76,7 +76,6 @@ party_info = {'biome': 'forest',
               'prov': "Overshire",
               'prev_town': tiles.in_for_c,
               'p_town_xyz': [0, 0, 0],
-              'is_aethus': False,
               'gp': 20,
               'visited_towns': [],
               'current_tile': tiles.in_for_c,
@@ -483,7 +482,7 @@ def rest_command():
 
 
 def tools_command():
-    tool_names = ['Divining Rod', 'Shovel', 'Magical Compass', 'Map of Fast Travel', 'Boots of Insane Speed']
+    tool_names = ['Divining Rod', 'Shovel', 'Map of Fast Travel', 'Boots of Insane Speed']
     available_tools = []
 
     for cat in items.inventory:

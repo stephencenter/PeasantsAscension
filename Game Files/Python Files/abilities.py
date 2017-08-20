@@ -45,20 +45,37 @@ class Ability:
 
 
 # -- WARRIOR ABILITES, scales with Strength -- #
-def before_parry(user):
+def before_taunt(user):
     pass
 
 
-def use_parry(user):
-    pass
+def use_taunt(user):
+    for x in battle.m_list:
+        x.ability_vars['taunted'] = [battle.turn_counter + 1, user]
+        x.status_ail.append("Taunted")
 
+    print(f"{user.name} is preparing to cast Taunt...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
 
-parry = Ability("Parry", f"""\
-The user readies themselves for an enemy attack. If they are attacked during
-the next turn, they will take no damage  damage and will reflect
-[75 + Strength]% of the damage they would have taken to the attacker.""", 5)
-parry.before_ability = before_parry
-parry.use_ability = use_parry
+    phys = 10 + user.attributes['str']
+    other = math.ceil(phys/2)
+
+    battle.temp_stats[user.name]['dfns'] += phys
+    battle.temp_stats[user.name]['p_dfns'] += other
+    battle.temp_stats[user.name]['m_dfns'] += other
+
+    print(f"{user.name} taunts the enemy team!")
+    print(f"{user.name} gains {phys}/{other}/{other} physical/magical/pierce defense!")
+
+taunt = Ability("Taunt", f"""\
+The user taunts the enemy team, forcing all enemies to attack him for 1 turn.
+The enemies can only use standard attacks while taunted, and cannot cast
+spells or defend. Does not go into effect until the current turn is finished.
+Provides a bonus [10 + Strength] Physical Defense during this turn, and half 
+values for Magical and Pierce Defense.""", 2)
+taunt.before_ability = before_taunt
+taunt.use_ability = use_taunt
 
 
 def before_roll_call(user):
@@ -71,7 +88,8 @@ def use_roll_call(user):
     main.smart_sleep(0.75)
 
     for pcu in battle.enabled_pcus:
-        increase = (battle.temp_stats[user.name]['attributes']['str'] + 5)*len(battle.enabled_pcus)
+        increase = (battle.temp_stats[user.name]['attributes']['str'] + 5)/len(battle.enabled_pcus)
+        increase = max(math.ceil(increase), 5)
         battle.temp_stats[pcu.name]['dfns'] += increase
 
     print(f"All allies physical defense increased by {increase}!")
@@ -80,8 +98,8 @@ def use_roll_call(user):
 
 roll_call = Ability("Roll Call", f"""\
 The user rally's their allies to fight, causing the physical defense of each
-one to increase by [(5 + Strength) x Number of allies]. Stacks with multiple
-uses.""", 3)
+one to increase by [(5 + Strength)/Number of allies]. Always increases defense
+by at least 5. Stacks with multiple uses.""", 3)
 roll_call.before_ability = before_roll_call
 roll_call.use_ability = use_roll_call
 
@@ -219,18 +237,31 @@ For every 5 HP that this alters, the user's evasion goes up by
 [5 + Constitution]. Always increases evasion by at least 5. This spell does 
 nothing if it would result in the ally losing HP. Cannot be casted on dead 
 units. When cast on bosses, the boss's HP is not altered, but the ally's HP 
-is. The evasion bonus stacks with  multiple uses. Evasion has a cap of 256.""", 3)
+is. The evasion bonus stacks with multiple uses. Evasion has a cap of 256.""", 3)
 aura_swap.before_ability = before_aura_swap
 aura_swap.use_ability = use_aura_swap
 
 
 def before_breaking_vows(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Breaking Vows on?")
 
 
 def use_breaking_vows(user):
-    pass
+    hp_missing = (user.max_hp - user.hp)/(user.max_hp*100)
+    damage = 5 + math.ceil(hp_missing*user.target.max_hp)
+    lifesteal = 0 if hp_missing <= 75 else max((0.1 + user.attributes['con']/100)*damage, 1)
 
+    print(f"{user.name} is preparing to cast Breaking Vows...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
+
+    user.target.hp -= damage
+    user.hp += lifesteal
+
+    print(f"{user.name}'s Breaking Vows deals {damage} damage to the {user.target.name}!")
+
+    if lifesteal:
+        print(f"{user.target.name} lifesteals for {lifesteal} HP!")
 
 breaking_vows = Ability("Breaking Vows", f"""\
 The user realigns their chakras, converting their own pain into an offensive
@@ -242,7 +273,7 @@ breaking_vows.before_ability = before_breaking_vows
 breaking_vows.use_ability = use_breaking_vows
 
 
-# -- ASSASSIN ABILITIES, scales with Dexterity -- #
+# -- ASSASSIN ABILITIES, scales with Dex terity -- #
 def before_inject_poison(user):
     user.choose_target(f"Who should {user.name} inject poison into?")
 
@@ -431,7 +462,7 @@ def use_polymorph(user):
 
 
 polymorph = Ability("Polymorph", f"""\
-Turns a target enemy into a harmless frog for one turn, silencing them and
+Turns a target enemy into a harmless frog for 1 turn, silencing them and
 reducing their attack stats, speed, and evasion to 0. If multiple enemies are
 alive on the field, this spell has a [25 + Intelligence]% chance of affecting a
 random second target, and a [5 + Intelligence]% chance of affecting a third.""", 3)
@@ -506,30 +537,13 @@ def before_scout(user):
 
 
 def use_scout(user):
-    m_w = {'fire': 'Water',
-           'water': 'Electric',
-           'electric': 'Earth',
-           'earth': 'Wind',
-           'wind': 'Grass',
-           'grass': 'Ice',
-           'ice': 'Fire',
-           'none': 'None',
-           'light': 'Dark',
-           'dark': 'Light'}[user.target.def_element]
-
-    print(f"""{user.target.name.upper()}'s STATS:
-Attack: {user.target.attk} | M. Attack: {user.target.m_attk} | P. Attack: {user.target.p_attk}
-Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {user.target.p_dfns}
-Evasion: {user.target.evad} | Speed: {user.target.spd}
-Def. Element: {user.target.def_element.title()} | Off. Element: {user.target.off_element.title()} | Weakness: {m_w}""")
+    pass
 
 
 scout = Ability("Scout", f"""\
-Scouts a target enemy, revealing their stats and elemental weakness. In addition,
-all Standard Attacks on this type of enemy - including in future battles - will have
-an additional [5 + Perception]% chance to be a critical strike, with a maximum
-of +25%. Base critical strike chance is 15%. Casting this on an enemy that has
-already been scouted in the past will not increase the critical strike bonus.""", 1)
+Scouts a target enemy, identifying its weak point. For 1 turn, all pierce
+attacks (Mages and Rangers) on the target will be critical strikes,
+dealing [125 + Perception]% damage. Also prevents the attacks from missing.""", 1)
 scout.before_ability = before_scout
 scout.use_ability = use_scout
 
@@ -545,7 +559,7 @@ def use_powershot(user):
 powershot = Ability("Powershot", f"""\
 The user channels the power of the wind, firing an single absurdly powerful
 arrow. Deals [175 + Perception]% attack damgage to the chosen target, as well
-as all units next to them. The user is disabled for one turn after using this
+as all units next to them. The user is disabled for 1 turn after using this
 ability, unable to use abilities, magic, or attacks.""", 2)
 powershot.before_ability = before_powershot
 powershot.use_ability = use_powershot
@@ -744,12 +758,12 @@ infusion.before_ability = before_infusion
 infusion.use_ability = use_infusion
 
 a_abilities = {
-    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],
-    'mage': [mana_drain, polymorph, spell_shield, skill_shot],
-    'warrior': [roll_call, parry, great_cleave, berserkers_rage],
-    'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],
+    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # 2 3
+    'mage': [mana_drain, polymorph, spell_shield, skill_shot],  # 1 4
+    'warrior': [roll_call, taunt, great_cleave, berserkers_rage],  # 1
+    'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],  # 1 2 3 4
     'ranger': [scout, roll, powershot, unstable_footing],
-    'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],
+    'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],  # 1 2 3
 
     'player': [ascend],
     'Solou': [infusion],

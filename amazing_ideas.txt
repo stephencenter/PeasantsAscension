@@ -61,7 +61,9 @@ PEASANT-RPG GOALS
 	[x] Fix the shovel
 	[x] Make the Divining Rod tell whether or not there are any gems near the player.
 	[ ] Fix the fast travel boots
-	[ ] Remove the compass
+	[x] Remove the compass
+	[ ] Add new item: Monster Encyclopedia - Identical to the Rangers' old "Scout" ability, without the crit bonus.
+		Can only be used during battle.
 		
 [ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.
 
@@ -191,3 +193,7 @@ PEASANT-RPG GOALS
 		[ ] Snow (the tundra) 
 		[ ] Wind (all regions)
 		[ ] Sandstorms (desert only)
+		
+[ ] Random Events in towns:
+	[ ] Angry Mobs
+	[ ] Monster Attacks

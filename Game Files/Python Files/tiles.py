@@ -185,17 +185,15 @@ manage to make their way in though.""", "forest", 1, 0, 3,
 cenf_desc = """The Central Forest is a massive forest that comprises about
 one-third the area of the Overshire Province. With trees that tower over even
 the tallest giants in Harconia, the towns here have made quite a fortune off
-of selling lumber to the more barren parts of the Kingdom. Unfornunately, one
-set of trees tends to look like another set of trees, and so it tends to be
-incredibly difficult to maintain ones whereabouts here without a compass. The
-Central Forest is cut off from the rest of Overshire by the collosal Terrius
-Mountain Range, nearly impossible to climb without expensive equipment or flight
-magic. If one does wish to pass the Mountain, however, there are alternatives.
-A sprawling cave system known as the "Barrier Cave" is built into the mountain.
-If one were brave enough, and strong enough, it would be possible to traverse
-this cave without dying. The environment in the Barrier Cave, while incredibly
-hostile to humans and other civilized species, is the perfect breeding ground
-for powerful monsters."""
+of selling lumber to the more barren parts of the Kingdom. The Central Forest 
+is cut off from the rest of Overshire by the collosal Terrius Mountain Range, 
+nearly impossible to climb without expensive equipment or flight magic. If one 
+does wish to pass the Mountain, however, there are alternatives. A sprawling 
+cave system known as the "Barrier Cave" is built into the mountain. If one were
+brave enough, and strong enough, it would be possible to traverse this cave 
+without dying. The environment in the Barrier Cave, while incredibly hostile to
+humans and other civilized species, is the perfect breeding ground for powerful 
+monsters."""
 
 # Quadrant `A`
 cenf_tile_1a = Tile("Central Forest", "W-CF-1A", "Overshire", cenf_desc, "forest", 3, -1, 4,

@@ -195,14 +195,6 @@ class ElementAccessory(Accessory):
         main.s_input("\nPress enter/return ")
 
 
-class MagicCompass(Item):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Compass'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
-
-    def use_item(self):
-        pass
-
-
 class DiviningRod(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Div Rod'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
@@ -313,6 +305,40 @@ class LockpickKit(Item):
         print("Your party could certainly make a quick buck lockpicking chests with this thing.")
         print("But that's illegal - you wouldn't break the law, would you?")
         main.s_input("\nPress enter/return ")
+
+
+class MonsterEncyclopedia(Item):
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+
+    @staticmethod
+    def use_item(user):
+        m_w = {'fire': 'Water',
+               'water': 'Electric',
+               'electric': 'Earth',
+               'earth': 'Wind',
+               'wind': 'Grass',
+               'grass': 'Ice',
+               'ice': 'Fire',
+               'none': 'None',
+               'light': 'Dark',
+               'dark': 'Light'}[user.target.def_element]
+
+        print(f"""{user.target.name.upper()}'s STATS:
+Attack: {user.target.attk} | M. Attack: {user.target.m_attk} | P. Attack: {user.target.p_attk}
+Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {user.target.p_dfns}
+Evasion: {user.target.evad} | Speed: {user.target.spd}
+Def. Element: {user.target.def_element.title()} | Off. Element: {user.target.off_element.title()} | \
+Weakness: {m_w}""")
+
+
+class PocketAlchemyLab(Item):
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+
+    @staticmethod
+    def use_item():
+        pass
 
 
 class Valuable(Item):
@@ -826,9 +852,6 @@ aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could proba
                           0, 175, "aquamarine_gem")
 
 # Tools
-magic_compass = MagicCompass('Magical Compass',
-                             'A compass capable of detecting nearby towns.', 50, 25, "magic_compass")
-
 divining_rod = DiviningRod('Divining Rod',
                            'A magical stick capable of detecting nearby ores and gems.', 100, 50, "divining_rod")
 
@@ -837,6 +860,14 @@ shovel = Shovel('Shovel',
 
 map_of_fast_travel = TownTeleporter('Map of Fast Travel',
                                     'Allows traveling to previously visited towns.', 1500, 750, "fast_map")
+
+monster_book = MonsterEncyclopedia('Monster Encyclopedia',
+                                   'A book that can be used on an enemy to learn its stats and elemental weakness.',
+                                   200, 100, "monster_book")
+
+pocket_lab = PocketAlchemyLab('Pocket Alchemy Lab',
+                              'A pocket alchemy kit that combines monster drops to create different potions.',
+                               200, 100, "pocket_lab")
 
 # Tools -- Lockpicks
 wood_lckpck = LockpickKit('Wooden Lockpick Kit',
@@ -1054,7 +1085,7 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
              calculus_homework, graph_paper, ruler, protractor, textbook, message_joseph, message_philliard, iSound,
              pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem, opal_gem, onyx_gem, diamond_gem,
              amethyst_gem, topaz_gem, garnet_gem, quartz_gem, zircon_gem, agate_gem, aquamarine_gem, wood_lckpck,
-             copper_lckpck, iron_lckpck, steel_lckpck, mythril_lckpck, magic_compass, divining_rod, shovel,
+             copper_lckpck, iron_lckpck, steel_lckpck, mythril_lckpck, divining_rod, shovel, pocket_lab, monster_book,
              map_of_fast_travel, s_potion, m_potion, l_potion, x_potion, s_elixir, m_elixir, l_elixir, x_elixir,
              s_rejuv, m_rejuv, l_rejuv, silence_potion, poison_potion, weakness_potion, blindness_potion,
              paralyzation_potion, fists, wdn_sht, bnz_swd, en_bnz_swd, stl_spr, en_stl_spr, durs_axe, en_durs_axe,

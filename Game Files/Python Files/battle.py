@@ -129,7 +129,7 @@ def set_temp_stats():
     }
 
     for pcu in enabled_pcus:
-        pcu.ability_vars = {'ascend_used': False}
+        pcu.reset_ability_vars()
 
 
 def battle_system(is_boss=False, ambush=False):

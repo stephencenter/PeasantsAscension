@@ -95,7 +95,8 @@ class PlayableCharacter(Unit):
                            'per': 1,  # Perception, for Rangers
                            'for': 1}  # Fortune
 
-        self.ability_vars = {}  # This dictionary will contain numerous variables that interact with abilties in battle
+        # This dictionary will contain numerous variables that interact with abilties in battle
+        self.ability_vars = {'ascend_used': False}
 
     def choose_name(self):
         while True:
@@ -428,7 +429,7 @@ HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Statuses: {', '.join
 Attack: {self.attk} | M. Attack: {self.m_attk} | P. Attack {self.p_attk}
 Defense: {self.dfns} | M. Defense: {self.m_dfns} | P. Defense {self.p_dfns}
 Speed: {self.spd} | Evasion: {self.evad}
-D. Elem: {self.def_element.title()} | O. Elem: {self.off_element.title()}
+Def. Element: {self.def_element.title()} | Off. Element: {self.off_element.title()}
 INT: {self.attributes['int']} | WIS: {self.attributes['wis']} | STR: {self.attributes['str']} | CON: \
 {self.attributes['con']} | DEX: {self.attributes['dex']} | PER: {self.attributes['per']} | FOR: {self.attributes['for']}
 XP: {self.exp}/{self.req_xp} | GP: {main.party_info['gp']}
@@ -767,6 +768,9 @@ Armor:
             print(f"{self.name} gained one point in {rand_attr2[1]} from Fortune!")
             main.s_input("\nPress enter/return ")
 
+    def reset_ability_vars(self):
+        self.ability_vars = {'ascend_used': False}
+
 
 class Monster(Unit):
     # All monsters use this class. Bosses use a sub-class called "Boss" which inherits from this.
@@ -791,7 +795,8 @@ class Monster(Unit):
             'poison_dex': 0,
             'disarmed': False,
             'knockout_turns': 0,
-            'judgement_day': 0}
+            'judgement_day': 0,
+            'taunted': [0, None]}
 
     def give_status(self, target):
         # Attempt to give the target a status ailment
@@ -1175,63 +1180,72 @@ class Monster(Unit):
                                        adorine
                                        ] if x.enabled and 'dead' not in x.status_ail])
 
+        if self.ability_vars['taunted'][0] == battle.turn_counter:
+            self.m_target = self.ability_vars['taunted'][1]
+
     def magic_ai(self):
         # 16.67% chance for the enemy to give a status ailment
-        if random.randint(0, 7) == 0 and self.mp >= self.max_mp*0.1:
-            self.give_status(self.m_target)
+        if not self.ability_vars['taunted'][0] == battle.turn_counter or 'silenced' in self.status_ail:
+            if random.randint(0, 7) == 0 and self.mp >= self.max_mp*0.1:
+                self.give_status(self.m_target)
 
-        # Magic heal
-        elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
-            print(f'The {self.name} is casting a healing spell on itself...')
-            main.smart_sleep(0.75)
+                return
 
-            healing_power = math.ceil(max([self.hp*0.2, 5]))
-            self.hp += min([self.hp*0.2, 5])
-            self.mp -= self.max_mp*0.2
+            # Magic heal
+            elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
+                print(f'The {self.name} is casting a healing spell on itself...')
+                main.smart_sleep(0.75)
 
-            print(f'The {self.name} heals itself for {healing_power} HP!')
-            sounds.magic_healing.play()
+                healing_power = math.ceil(max([self.hp*0.2, 5]))
+                self.hp += min([self.hp*0.2, 5])
+                self.mp -= self.max_mp*0.2
 
-        # Magic Attack
-        elif self.mp >= self.max_mp*0.15:
+                print(f'The {self.name} heals itself for {healing_power} HP!')
+                sounds.magic_healing.play()
 
-            sounds.magic_attack.play()
+                return
 
-            print(f'The {self.name} is preparing to cast a spell on {self.m_target.name}!')
-            main.smart_sleep(0.75)
+            # Magic Attack
+            elif self.mp >= self.max_mp*0.15:
 
-            dam_dealt = deal_damage(self, self.m_target, "magical")
+                sounds.magic_attack.play()
 
-            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
-                sounds.enemy_hit.play()
-                print(f"The {self.name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
+                print(f'The {self.name} is preparing to cast a spell on {self.m_target.name}!')
+                main.smart_sleep(0.75)
 
-                self.m_target.hp -= dam_dealt
+                dam_dealt = deal_damage(self, self.m_target, "magical")
 
-            else:
-                sounds.attack_miss.play()
-                print(f"The {self.name}'s spell narrowly misses {self.m_target.name}!")
+                if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
+                    sounds.enemy_hit.play()
+                    print(f"The {self.name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
 
-            self.mp -= self.max_mp*0.15
+                    self.m_target.hp -= dam_dealt
 
-        # Non-magic Attack
+                else:
+                    sounds.attack_miss.play()
+                    print(f"The {self.name}'s spell narrowly misses {self.m_target.name}!")
+
+                self.mp -= self.max_mp*0.15
+
+                return
+
+        # Non-magical Attack (Pierce Damage). Only happens if taunted, silenced, or if out of mana.
+        sounds.aim_weapon.play()
+        print(f'The {self.name} {self.attk_msg} {self.m_target.name}')
+
+        main.smart_sleep(0.75)
+
+        dam_dealt = deal_damage(self, self.m_target, "piercing")
+
+        if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
+            sounds.enemy_hit.play()
+            print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+
+            self.m_target.hp -= dam_dealt
+
         else:
-            sounds.aim_weapon.play()
-            print(f'The {self.name} {self.attk_msg} {self.m_target.name}')
-
-            main.smart_sleep(0.75)
-
-            dam_dealt = deal_damage(self, self.m_target, "piercing")
-
-            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
-                sounds.enemy_hit.play()
-                print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
-
-                self.m_target.hp -= dam_dealt
-
-            else:
-                sounds.attack_miss.play()
-                print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
+            sounds.attack_miss.play()
+            print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
     def ranged_ai(self):
         # At the moment, Ranged monsters are only capable of attacking
@@ -1254,7 +1268,8 @@ class Monster(Unit):
 
     def melee_ai(self):
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
-        if random.randint(0, 5) == 0 and not self.is_defending:
+        if random.randint(0, 5) == 0 and not self.is_defending \
+                and not self.ability_vars['taunted'][0] == battle.turn_counter:
             self.is_defending = True
             print(f"The {self.name} is preparing itself for enemy attacks...")
             main.smart_sleep(0.75)
@@ -1316,7 +1331,8 @@ class Boss(Monster):
             'poison_dex': 0,
             'disarmed': False,
             'knockout_turns': 0,
-            'judgement_day': 0}
+            'judgement_day': 0,
+            'taunted': [0, None]}
 
         self.status_ail = ['alive']
 
