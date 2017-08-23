@@ -125,14 +125,32 @@ def before_berserkers_rage(user):
 
 
 def use_berserkers_rage(user):
-    pass
+    if user.ability_vars['berserk']:
+        values = 0.10
+
+    else:
+        values = 0.15 + user.attributes['str']/100
+
+    print(f"{user.name} is preparing to cast Berserker's Rage...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
+
+    print(f"Speed and Physical Attack increased by {math.ceil(values*100)}%!")
+    print(f"Armor Stats decreased by {math.ceil(values*50)}%!")
+
+    battle.temp_stats[user.name]['spd'] += math.ceil(battle.temp_stats[user.name]['spd']*values)
+    battle.temp_stats[user.name]['attk'] += math.ceil(battle.temp_stats[user.name]['spd']*values)
+    battle.temp_stats[user.name]['dfns'] -= math.ceil(battle.temp_stats[user.name]['spd']*values/2)
+    battle.temp_stats[user.name]['m_dfns'] -= math.ceil(battle.temp_stats[user.name]['spd']*values/2)
+    battle.temp_stats[user.name]['p_dfns'] -= math.ceil(battle.temp_stats[user.name]['spd']*values/2)
+    user.ability_vars['berserk'] = True
 
 
 berserkers_rage = Ability("Berserker's Rage", f"""\
 The user goes into a frenzy, discarding their defensive training and focusing
-their might on destroying an target enemy. Increases speed, damage dealt, and
-damage taken all by [15 + Strength]%. Applies to damage from ALL three major
-damage types. Does not stack with multiple uses.""", 2)
+their might on destroying a target enemy. Increases speed and physical attack
+by [15 + Strength]%, and reduces all three armor stats by the half the value. 
+Repeat casts only affect these stats by 10/5% each, with no attribute bonus.""", 2)
 berserkers_rage.before_ability = before_berserkers_rage
 berserkers_rage.use_ability = use_berserkers_rage
 
@@ -760,10 +778,10 @@ infusion.use_ability = use_infusion
 a_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # 2 3
     'mage': [mana_drain, polymorph, spell_shield, skill_shot],  # 1 4
-    'warrior': [roll_call, taunt, great_cleave, berserkers_rage],  # 1
+    'warrior': [roll_call, taunt, great_cleave, berserkers_rage],  # 1 2 4
     'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],  # 1 2 3 4
     'ranger': [scout, roll, powershot, unstable_footing],
-    'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],  # 1 2 3
+    'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],  # 1 2 3 4
 
     'player': [ascend],
     'Solou': [infusion],

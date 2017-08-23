@@ -57,6 +57,8 @@ PEASANT-RPG GOALS
 
 [x] Support for multiple status effects, including mundane things like "Alive" or "Disarmed"
 
+[ ] Redo all item descriptions to be multi-line
+
 [ ] Fix the tool items:
 	[x] Fix the shovel
 	[x] Make the Divining Rod tell whether or not there are any gems near the player.

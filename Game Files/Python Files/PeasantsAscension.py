@@ -124,6 +124,7 @@ def smart_sleep(duration):
 
 
 # Takes a string and coverts it into a list, cutting off at every 79th character.
+# This is so that text, such as item/tile descriptions or NPC dialogue, does not get word-wrapped.
 # Also does some magic to make sure that sentences don't get cut off mid w
 # ord
 def chop_by_79(string, num=79):

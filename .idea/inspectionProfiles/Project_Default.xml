@@ -67,6 +67,8 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="dict.item_id" />
+          <option value="int.hp" />
+          <option value="int.name" />
         </list>
       </option>
     </inspection_tool>

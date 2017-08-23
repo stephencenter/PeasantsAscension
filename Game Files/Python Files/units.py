@@ -96,7 +96,9 @@ class PlayableCharacter(Unit):
                            'for': 1}  # Fortune
 
         # This dictionary will contain numerous variables that interact with abilties in battle
-        self.ability_vars = {'ascend_used': False}
+        self.ability_vars = {'ascend_used': False,
+                             'berserk': False,
+                             'rolling': False}
 
     def choose_name(self):
         while True:
@@ -769,7 +771,9 @@ Armor:
             main.s_input("\nPress enter/return ")
 
     def reset_ability_vars(self):
-        self.ability_vars = {'ascend_used': False}
+        self.ability_vars = {'ascend_used': False,
+                             'berserk': False,
+                             'rolling': False}
 
 
 class Monster(Unit):
@@ -1628,7 +1632,7 @@ def create_player():
     # Pronounced "Adore-een"
     adorine = PlayableCharacter('Adorine', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='warrior', enabled=False)
     # Pronounced "Rahn-ahf"
-    ran_af = PlayableCharacter("Ran'Af", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='monk', enabled=False)
+    ran_af = PlayableCharacter("Ran'af", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='monk', enabled=False)
     # Pronounced "Parse-toe"
     parsto = PlayableCharacter("Parsto", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='ranger', enabled=False)
     # Rhymes with "Chime"
@@ -1730,100 +1734,37 @@ def fix_stats():
     global adorine
     global monster
 
-    player.hp, player.mp, player.ap = max(0, player.hp), max(0, player.mp), max(0, player.ap)
-    solou.hp, solou.mp, solou.ap = max(0, solou.hp), max(0, solou.mp), max(0, solou.ap)
-    xoann.hp, xoann.mp, xoann.ap = max(0, xoann.hp), max(0, xoann.mp), max(0, xoann.ap)
-    chyme.hp, chyme.mp, chyme.ap = max(0, chyme.hp), max(0, chyme.mp), max(0, chyme.ap)
-    parsto.hp, parsto.mp, parsto.ap = max(0, parsto.hp), max(0, parsto.mp), max(0, parsto.ap)
-    ran_af.hp, ran_af.mp, ran_af.ap = max(0, ran_af.hp), max(0, ran_af.mp), max(0, ran_af.ap)
-    adorine.hp, adorine.mp, adorine.ap = max(0, adorine.hp), max(0, adorine.mp), max(0, adorine.ap)
+    # Make an abbreviation for battle.temp_stats so a later part doesn't have to be muilti-line
+    bts = battle.temp_stats
 
-    player.hp, player.mp, player.ap = \
-        min(player.max_hp, player.hp), \
-        min(player.max_mp, player.mp), \
-        min(player.max_ap, player.ap)
-    solou.hp, solou.mp, solou.ap = \
-        min(solou.max_hp, solou.hp), \
-        min(solou.max_mp, solou.mp), \
-        min(solou.max_ap, solou.ap)
-    xoann.hp, xoann.mp, xoann.ap = \
-        min(xoann.max_hp, xoann.hp), \
-        min(xoann.max_mp, xoann.mp), \
-        min(xoann.max_ap, xoann.ap)
-    chyme.hp, chyme.mp, chyme.ap = \
-        min(chyme.max_hp, chyme.hp), \
-        min(chyme.max_mp, chyme.mp), \
-        min(chyme.max_ap, chyme.ap)
-    parsto.hp, parsto.mp, parsto.ap = \
-        min(parsto.max_hp, parsto.hp), \
-        min(parsto.max_mp, parsto.mp), \
-        min(parsto.max_ap, parsto.ap)
-    ran_af.hp, ran_af.mp, ran_af.ap = \
-        min(ran_af.max_hp, ran_af.hp), \
-        min(ran_af.max_mp, ran_af.mp), \
-        min(ran_af.max_ap, ran_af.ap)
-    adorine.hp, adorine.mp, adorine.ap = \
-        min(adorine.max_hp, adorine.hp), \
-        min(adorine.max_mp, adorine.mp), \
-        min(adorine.max_ap, adorine.ap)
+    for x in [player, solou, xoann, chyme, parsto, ran_af, adorine]:
+        print(x.name)
+        x.hp, x.mp, x.ap = max(0, x.hp), max(0, x.mp), max(0, x.ap)
+        x.hp, x.mp, x.ap = min(x.max_hp, x.hp), min(x.max_mp, x.mp), min(x.max_ap, x.ap)
+        x.hp, x.mp, x.ap = math.ceil(x.hp), math.ceil(x.mp), math.ceil(x.ap)
+        x.evad = min(256, x.evad)
+        x.status_ail = list(set(x.status_ail))
 
-    player.hp, player.mp, player.ap = math.ceil(player.hp), math.ceil(player.mp), math.ceil(player.ap)
-    solou.hp, solou.mp, solou.ap = math.ceil(solou.hp), math.ceil(solou.mp), math.ceil(solou.ap)
-    parsto.hp, parsto.mp, parsto.ap = math.ceil(parsto.hp), math.ceil(parsto.mp), math.ceil(parsto.ap)
-    xoann.hp, xoann.mp, xoann.ap = math.ceil(xoann.hp), math.ceil(xoann.mp), math.ceil(xoann.ap)
-    chyme.hp, chyme.mp, chyme.ap = math.ceil(chyme.hp), math.ceil(chyme.mp), math.ceil(chyme.ap)
-    ran_af.hp, ran_af.mp, ran_af.ap = math.ceil(ran_af.hp), math.ceil(ran_af.mp), math.ceil(ran_af.ap)
-    adorine.hp, adorine.mp, adorine.ap = math.ceil(adorine.hp), math.ceil(adorine.mp), math.ceil(adorine.ap)
+        if isinstance(bts, dict):
+            bts[x.name]['evad'] = min(512 if x.ability_vars['rolling'] else 256, bts[x.name]['evad'])
 
-    player.evad = min(256, player.evad)
-    solou.evad = min(256, solou.evad)
-    xoann.evad = min(256, xoann.evad)
-    chyme.evad = min(256, chyme.evad)
-    parsto.evad = min(256, parsto.evad)
-    ran_af.evad = min(256, ran_af.evad)
-    adorine.evad = min(256, adorine.evad)
+        if x.hp > 0 and 'dead' in x.status_ail:
+            x.status_ail = ['alive']
 
-    for unit in [player, solou, xoann, chyme, parsto, ran_af, adorine] + battle.m_list:
-        unit.status_ail = list(set(unit.status_ail))
+        if 'dead' in x.status_ail:
+            x.status_ail = ['dead']
 
-        if 'dead' in unit.status_ail:
-            unit.status_ail = ['dead']
+    for y in battle.m_list:
+        y.hp, y.mp = max(0, y.hp), max(0, y.mp)
+        y.hp, y.mp = min(y.max_hp, y.hp), min(y.max_mp, y.mp)
+        y.hp, y.mp = math.ceil(y.hp), math.ceil(y.mp)
+        y.evad = min(256, y.evad)
 
-    if player.hp > 0 and 'dead' in player.status_ail:
-        player.status_ail = ['alive']
-    if solou.hp > 0 and 'dead' in solou.status_ail:
-        solou.status_ail = ['alive']
-    if xoann.hp > 0 and 'dead' in xoann.status_ail:
-        xoann.status_ail = ['alive']
-    if chyme.hp > 0 and 'dead' in chyme.status_ail:
-        chyme.status_ail = ['alive']
-    if parsto.hp > 0 and 'dead' in parsto.status_ail:
-        parsto.status_ail = ['alive']
-    if ran_af.hp > 0 and 'dead' in ran_af.status_ail:
-        ran_af.status_ail = ['alive']
-    if adorine.hp > 0 and 'dead' in adorine.status_ail:
-        adorine.status_ail = ['alive']
+        if y.hp > 0 and 'dead' in y.status_ail:
+            y.status_ail = ['alive']
 
-    try:
-        monster.hp, monster.mp = max(0, monster.hp), max(0, monster.mp)
-        monster_2.hp, monster_2.mp = max(0, monster_2.hp), max(0, monster_2.mp)
-        monster_3.hp, monster_3.mp = max(0, monster_3.hp), max(0, monster_3.mp)
-
-        monster.hp, monster.mp = min(monster.max_hp, monster.hp), min(monster.max_mp, monster.mp)
-        monster_2.hp, monster_2.mp = min(monster_2.max_hp, monster_2.hp), min(monster_2.max_mp, monster_2.mp)
-        monster_3.hp, monster_3.mp = min(monster_3.max_hp, monster_3.hp), min(monster_3.max_mp, monster_3.mp)
-
-        monster.hp, monster.mp = math.ceil(monster.hp), math.ceil(monster.mp)
-        monster_2.hp, monster_2.mp = math.ceil(monster_2.hp), math.ceil(monster_2.mp)
-        monster_3.hp, monster_3.mp = math.ceil(monster_3.hp), math.ceil(monster_3.mp)
-
-        monster.evad = min(256, monster.evad)
-        monster_2.evad = min(256, monster_2.evad)
-        monster_3.evad = min(256, monster_3.evad)
-
-    except (AttributeError, TypeError):
-        if not any([isinstance(monster, str), isinstance(monster_2, str), isinstance(monster_3, str)]):
-            raise
+        if 'dead' in y.status_ail:
+            y.status_ail = ['dead']
 
 
 def heal_pcus(percentage):
@@ -1917,6 +1858,9 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
         ran_af.__dict__ = json.load(f)
     with open(p_path, encoding='utf-8') as f:
         parsto.__dict__ = json.load(f)
+
+    for x in [player, solou, xoann, adorine, chyme, ran_af, parsto]:
+        x.reset_ability_vars()
 
 
 def serialize_bosses(path):
