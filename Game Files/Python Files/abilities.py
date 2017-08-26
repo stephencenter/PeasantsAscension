@@ -105,7 +105,7 @@ roll_call.use_ability = use_roll_call
 
 
 def before_great_cleave(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Great Cleave on?")
 
 
 def use_great_cleave(user):
@@ -114,7 +114,7 @@ def use_great_cleave(user):
 
 great_cleave = Ability("Great Cleave", f"""\
 The user deals a 1.25x critical strike to an enemy unit. If this attack
-results in that unit's death, the user gets to target an random additional unit
+results in that unit's death, the user gets to target a random additional unit
 for a second attack that deals [150 + Strength]% damage.""", 2)
 great_cleave.before_ability = before_great_cleave
 great_cleave.use_ability = use_great_cleave
@@ -438,37 +438,20 @@ backstab.use_ability = use_backstab
 
 
 # -- MAGE ABILITIES, scales with Intelligence -- #
-def before_skill_shot(user):
+def before_skill_syphon(user):
+    pass
+
+def use_skill_syphon(user):
     pass
 
 
-def use_skill_shot(user):
-    if user.lvl > max(battle.m_list, key=lambda x: x.lvl).lvl:
-        multiplier = (1 + (user.attributes['int'] + 50)/100)
-
-    else:
-        multiplier = 1
-
-    base_damage = math.ceil(0.5*sum([x.lvl for x in battle.m_list])*multiplier)
-
-    print(f"{user.name} is preparing to cast Skill Shot...")
-    sounds.ability_cast.play()
-    main.smart_sleep(0.75)
-
-    for enemy in battle.m_list:
-        actual_damage = max(math.ceil((base_damage - enemy.m_dfns/2)), 5)
-        enemy.hp -= actual_damage
-        print(f"{user.name}'s Skill Shot deals {actual_damage} damage to the {enemy.name}")
-
-    sounds.enemy_hit.play()
-
-skill_shot = Ability("Skill Shot", f"""\
-The user launches a magic damage attack at the enemy team, damaging each
-target equal to 50% of the sum of their levels. If the user is higher level
-than the highest-levelled opponent, Skill Shot does [50 + Intelligence]% more 
-damage. Always deals a minimum of 5 damage.""", 4)
-skill_shot.before_ability = before_skill_shot
-skill_shot.use_ability = use_skill_shot
+skill_syphon = Ability("Skill Syphon", f"""\
+The user channels their power to literally drain the skill from a target enemy.
+Reduces the target's 3 Attack Stats, 3 Armor Stats, Speed and Evasion by 
+[1 + Intelligence] each, and increases the respective stat by the same
+for the user. Stat loss/gain is capped at 20% the target's original stat value.
+Will always increase the users stats by at least 1 each. Can only be used once 
+per enemy per battle..""", 5)
 
 
 def before_polymorph(user):
@@ -480,10 +463,11 @@ def use_polymorph(user):
 
 
 polymorph = Ability("Polymorph", f"""\
-Turns a target enemy into a harmless frog for 1 turn, silencing them and
-reducing their attack stats, speed, and evasion to 0. If multiple enemies are
-alive on the field, this spell has a [25 + Intelligence]% chance of affecting a
-random second target, and a [5 + Intelligence]% chance of affecting a third.""", 3)
+The user turns a target enemy into a harmless frog for 1 turn, silencing them 
+and reducing their attack stats, speed, and evasion to 0. If multiple enemies 
+are alive on the field, this spell has a [25 + Intelligence]% chance of 
+affecting a random second target, and a [5 + Intelligence]% chance of 
+affecting a third.""", 3)
 polymorph.before_ability = before_polymorph
 polymorph.use_ability = use_polymorph
 
@@ -561,7 +545,7 @@ def use_scout(user):
 scout = Ability("Scout", f"""\
 Scouts a target enemy, identifying its weak point. For 1 turn, all pierce
 attacks (Mages and Rangers) on the target will be critical strikes,
-dealing [125 + Perception]% damage. Also prevents the attacks from missing.""", 1)
+dealing [150 + Perception]% damage. Also prevents the attacks from missing.""", 1)
 scout.before_ability = before_scout
 scout.use_ability = use_scout
 
@@ -591,6 +575,7 @@ def use_unstable_footing(user):
     pass
 
 
+# Needs redesigned - does not make good enough use of attributes
 unstable_footing = Ability("Unstable Footing", f"""\
 The user takes advantage of the uneven terrain and trips a target enemy.
 Deals [10 + Perception] damage. If the target has not yet moved this turn,
@@ -777,7 +762,7 @@ infusion.use_ability = use_infusion
 
 a_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # 2 3
-    'mage': [mana_drain, polymorph, spell_shield, skill_shot],  # 1 4
+    'mage': [mana_drain, polymorph, spell_shield, skill_syphon],  # 1
     'warrior': [roll_call, taunt, great_cleave, berserkers_rage],  # 1 2 4
     'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],  # 1 2 3 4
     'ranger': [scout, roll, powershot, unstable_footing],

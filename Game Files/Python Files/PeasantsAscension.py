@@ -87,10 +87,13 @@ party_info = {'biome': 'forest',
 # Set to 1 when auto-testing
 do_debug = 0
 
-# A list of usernames that my friend has used in the past. Adds a few easter eggs.
+# A list of usernames that apply to some of my friends. Adds a few easter eggs.
 friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
                 "flygon jones", "flygonjones", "flygon_jones",
-                "cynder887", "gabe", "gabriel", "gerb"]
+                "cynder887",
+                "starkiller106024", "starkiller", "star killer",
+                "atomic vexal", "vexal", "wave vex",
+                "therichpig", "therichpig64", "spaghettipig64", "spaghettipig"]
 
 
 # Custom input, plays a "blip" sound after the player presses enter.
@@ -98,7 +101,7 @@ friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
 def s_input(string):
     if do_debug:
         print(string, end='')
-        char = random.choice('0123456789ynxpsewrtbu')
+        char = random.choice('0123456789ynxpsewrtbucdfi')
         print(char)
 
         return char

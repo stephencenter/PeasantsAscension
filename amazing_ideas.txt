@@ -199,3 +199,6 @@ PEASANT-RPG GOALS
 [ ] Random Events in towns:
 	[ ] Angry Mobs
 	[ ] Monster Attacks
+	
+[ ] Passive abilities
+	[ ] Each class would have one of them. Their affects would occur in every battle without requiring additional input.
