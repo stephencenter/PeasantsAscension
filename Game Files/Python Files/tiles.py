@@ -177,7 +177,7 @@ there might be a smart idea.""", "forest", 2, -2, -2,
 icf_bridge = Tile("Inner Forest Bridge", "I-CF-Bridge", "Overshire", icf_desc + """\n
 This bridge extends over the 12ft-wide moat surrounding the Inner Central Forest, meant
 to help protect its citizens from the harmful monsters outside it. Weaker monsters still
-manage to make their way in though.""", "forest", 1, 0, 3,
+manage to make their way in though.""", "forest", 1, 0, 2,
                   to_s="I-CF-N",
                   to_n="W-CF-2A")
 
@@ -196,79 +196,79 @@ humans and other civilized species, is the perfect breeding ground for powerful
 monsters."""
 
 # Quadrant `A`
-cenf_tile_1a = Tile("Central Forest", "W-CF-1A", "Overshire", cenf_desc, "forest", 3, -1, 4,
+cenf_tile_1a = Tile("Central Forest", "W-CF-1A", "Overshire", cenf_desc, "forest", 3, -1, 3,
                     to_e="W-CF-2A",
                     to_n="W-CF-4A",
                     to_w="W-CF-3B")
-cenf_tile_2a = Tile("Central Forest", "W-CF-2A", "Overshire", cenf_desc, "forest", 3, 0, 4,
+cenf_tile_2a = Tile("Central Forest", "W-CF-2A", "Overshire", cenf_desc, "forest", 3, 0, 3,
                     to_s="I-CF-Bridge",
                     to_w="W-CF-1A",
                     to_e="W-CF-3A",
                     to_n="W-CF-5A")
-cenf_tile_3a = Tile("Central Forest", "W-CF-3A", "Overshire", cenf_desc, "forest", 3, 1, 4,
+cenf_tile_3a = Tile("Central Forest", "W-CF-3A", "Overshire", cenf_desc, "forest", 3, 1, 3,
                     to_w="W-CF-2A",
                     to_n="W-CF-6A")
-cenf_tile_4a = Tile("Central Forest", "W-CF-4A", "Overshire", cenf_desc, "forest", 4, -1, 5,
+cenf_tile_4a = Tile("Central Forest", "W-CF-4A", "Overshire", cenf_desc, "forest", 4, -1, 4,
                     to_s="W-CF-1A",
                     to_e="W-CF-5A",
                     to_n="W-CF-7A",
                     to_w="W-CF-6B")
-cenf_tile_5a = Tile("Central Forest", "W-CF-5A", "Overshire", cenf_desc, "forest", 3, 0, 5,
+cenf_tile_5a = Tile("Central Forest", "W-CF-5A", "Overshire", cenf_desc, "forest", 3, 0, 4,
                     to_s="W-CF-2A",
                     to_w="W-CF-4A",
                     to_e="W-CF-6A",
                     to_n="W-CF-8A")
-cenf_tile_6a = Tile("Central Forest", "W-CF-6A", "Overshire", cenf_desc, "forest", 4, 1, 5,
+cenf_tile_6a = Tile("Central Forest", "W-CF-6A", "Overshire", cenf_desc, "forest", 4, 1, 4,
                     to_s="W-CF-3A",
                     to_w="W-CF-5A",
                     to_n="W-CF-9A")
-cenf_tile_7a = Tile("Central Forest", "W-CF-7A", "Overshire", cenf_desc, "forest", 4, -1, 6,
+cenf_tile_7a = Tile("Central Forest", "W-CF-7A", "Overshire", cenf_desc, "forest", 4, -1, 5,
                     to_s="W-CF-4A",
                     to_e="W-CF-8A",
                     to_w="W-CF-9B")
-cenf_tile_8a = Tile("Central Forest", "W-CF-8A", "Overshire", cenf_desc, "forest", 4, 0, 6,
+cenf_tile_8a = Tile("Central Forest", "W-CF-8A", "Overshire", cenf_desc, "forest", 4, 0, 5,
                     to_s="W-CF-5A",
                     to_w="W-CF-7A",
                     to_e="W-CF-9A")
-cenf_tile_9a = Tile("Central Forest", "W-CF-9A", "Overshire", cenf_desc, "forest", 4, 1, 6,
+cenf_tile_9a = Tile("Central Forest", "W-CF-9A", "Overshire", cenf_desc, "forest", 4, 1, 5,
                     to_s="W-CF-6A",
                     to_w="W-CF-8A")
 
 # Quadrant `B`
-cenf_tile_1b = Tile("Central Forest", "W-CF-1B", "Overshire", cenf_desc, "forest", 5, -4, 4,
+cenf_tile_1b = Tile("Central Forest", "W-CF-1B", "Overshire", cenf_desc, "forest", 5, -4, 3,
                     to_e="W-CF-2B",
                     to_n="W-CF-4B")
-cenf_tile_2b = Tile("Central Forest", "W-CF-2B", "Overshire", cenf_desc, "forest", 4, -3, 4,
+cenf_tile_2b = Tile("Central Forest", "W-CF-2B", "Overshire", cenf_desc, "forest", 4, -3, 3,
                     to_w="W-CF-1B",
                     to_e="W-CF-3B",
                     to_n="W-CF-5B")
-cenf_tile_3b = Tile("Central Forest", "W-CF-3B", "Overshire", cenf_desc, "forest", 3, -2, 4,
+cenf_tile_3b = Tile("Central Forest", "W-CF-3B", "Overshire", cenf_desc, "forest", 3, -2, 3,
                     to_e="W-CF-1A",
                     to_w="W-CF-2B",
                     to_n="W-CF-6B")
-cenf_tile_4b = Tile("Central Forest", "W-CF-4B", "Overshire", cenf_desc, "forest", 5, -4, 5,
+cenf_tile_4b = Tile("Central Forest", "W-CF-4B", "Overshire", cenf_desc, "forest", 5, -4, 4,
                     to_s="W-CF-1B",
                     to_e="W-CF-5B",
                     to_n="W-CF-7B")
-cenf_tile_5b = Tile("Overshire City", "W-CF-5B", "Overshire", cenf_desc, "forest", 4, -3, 5,
+cenf_tile_5b = Tile("Overshire City", "W-CF-5B", "Overshire", cenf_desc, "forest", 4, -3, 4,
                     to_s="W-CF-2B",
                     to_w="W-CF-4B",
                     to_e="W-CF-6B",
                     to_n="W-CF-8B",
                     town_list=[towns.town_overshire_city])
-cenf_tile_6b = Tile("Central Forest", "W-CF-6B", "Overshire", cenf_desc, "forest", 3, -2, 5,
+cenf_tile_6b = Tile("Central Forest", "W-CF-6B", "Overshire", cenf_desc, "forest", 3, -2, 4,
                     to_w="W-CF-5B",
                     to_e="W-CF-4A",
                     to_s="W-CF-3B",
                     to_n="W-CF-9B")
-cenf_tile_7b = Tile("Central Forest", "W-CF-7B", "Overshire", cenf_desc, "forest", 5, -4, 6,
+cenf_tile_7b = Tile("Central Forest", "W-CF-7B", "Overshire", cenf_desc, "forest", 5, -4, 5,
                     to_s="W-CF-4B",
                     to_e="W-CF-8B")
-cenf_tile_8b = Tile("Central Forest", "W-CF-8B", "Overshire", cenf_desc, "forest", 4, -3, 6,
+cenf_tile_8b = Tile("Central Forest", "W-CF-8B", "Overshire", cenf_desc, "forest", 4, -3, 5,
                     to_s="W-CF-5B",
                     to_w="W-CF-7B",
                     to_e="W-CF-9B")
-cenf_tile_9b = Tile("Central Forest", "W-CF-9B", "Overshire", cenf_desc, "forest", 3, -2, 6,
+cenf_tile_9b = Tile("Central Forest", "W-CF-9B", "Overshire", cenf_desc, "forest", 3, -2, 5,
                     to_s="W-CF-6B",
                     to_e="W-CF-7A",
                     to_w="W-CF-8B")

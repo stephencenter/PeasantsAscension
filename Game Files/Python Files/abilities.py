@@ -349,7 +349,7 @@ knockout_gas.use_ability = use_knockout_gas
 
 
 def before_disarming_blow(user):
-    user.choose_target(f"Who should {user.name} disarm?", ally=False, enemy=True)
+    user.choose_target(f"Who should {user.name} disarm?")
 
 
 def use_disarming_blow(user):
@@ -560,9 +560,9 @@ def use_powershot(user):
 
 powershot = Ability("Powershot", f"""\
 The user channels the power of the wind, firing an single absurdly powerful
-arrow. Deals [175 + Perception]% attack damgage to the chosen target, as well
-as all units next to them. The user is disabled for 1 turn after using this
-ability, unable to use abilities, magic, or attacks.""", 2)
+arrow. Deals [175 + Perception]% attack damgage to the chosen target, and 
+[50 + Perception]% attack damage to all other enemy targets. The user is
+completely disabled for 1 turn after using this ability.""", 2)
 powershot.before_ability = before_powershot
 powershot.use_ability = use_powershot
 
@@ -586,18 +586,54 @@ unstable_footing.use_ability = use_unstable_footing
 
 # -- PALADIN ABILITIES, scales with Wisdom -- #
 def before_tip_the_scales(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Tip the Scales on?", ally=True)
 
 
 def use_tip_the_scales(user):
-    # heal_value = user.max_hp*0.05 +
-    pass
+    print(f"{user.name} is preparing to cast Tip the Scales...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
+
+    power_value = math.ceil(user.max_hp*0.05 + user.attributes['wis'])
+    total = 0
+
+    if isinstance(user.target, units.PlayableCharacter):
+        for enemy in [x for x in battle.m_list if x.hp > 0]:
+            damage = math.ceil(power_value - enemy.m_dfns/2)
+            total += damage
+            enemy.hp -= damage
+            print(f"Tip the Scales deals {damage} damage to the {enemy.name}!")
+
+        sounds.enemy_hit.play()
+        main.smart_sleep(0.5)
+        sounds.enemy_hit.stop()
+
+        user.target.hp += total
+        print(f"Tip the scales heals {user.target.name} by {total} HP!")
+        sounds.magic_healing.play()
+
+    else:
+        for ally in [x for x in battle.enabled_pcus if x.hp > 0]:
+            total += power_value
+            ally.hp += power_value
+            print(f"Tip the Scales heals {user.name} by {power_value} HP! ")
+
+        sounds.magic_healing.play()
+        main.smart_sleep(0.5)
+        sounds.magic_healing.stop()
+
+        user.target.hp -= total
+        print(f"Tip the Scales deals {total} damage to the {user.target.name}!")
+        sounds.enemy_hit.play()
 
 
 tip_the_scales = Ability("Tip the Scales", f"""\
-The user tips the scales in their favor, causing them and their allies to be
-healed for [5% of User's Max HP + Wisdom] HP each, while dealing the same in
-magical damage to a single enemy unit.""", 3)
+The user tips the scales in their favor, healing allies and damaging enemies.
+Has a 'power value' of [5% Max HP + Wisdom]. If casted on an ally, this will 
+deal the power value in magical damage to all enemy units, while healing the
+ally for the total damage dealt. If casted on an enemy, this will restore HP
+equal to the power value for each ally unit, while damaging the enemy for the
+total healing done in magical damage.""", 3)
 tip_the_scales.before_ability = before_tip_the_scales
 tip_the_scales.use_ability = use_tip_the_scales
 
@@ -761,7 +797,7 @@ infusion.before_ability = before_infusion
 infusion.use_ability = use_infusion
 
 a_abilities = {
-    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # 2 3
+    'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # 1 2 3
     'mage': [mana_drain, polymorph, spell_shield, skill_syphon],  # 1
     'warrior': [roll_call, taunt, great_cleave, berserkers_rage],  # 1 2 4
     'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],  # 1 2 3 4

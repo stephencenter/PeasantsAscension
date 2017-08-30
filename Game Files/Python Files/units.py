@@ -1738,7 +1738,6 @@ def fix_stats():
     bts = battle.temp_stats
 
     for x in [player, solou, xoann, chyme, parsto, ran_af, adorine]:
-        print(x.name)
         x.hp, x.mp, x.ap = max(0, x.hp), max(0, x.mp), max(0, x.ap)
         x.hp, x.mp, x.ap = min(x.max_hp, x.hp), min(x.max_mp, x.mp), min(x.max_ap, x.ap)
         x.hp, x.mp, x.ap = math.ceil(x.hp), math.ceil(x.mp), math.ceil(x.ap)
