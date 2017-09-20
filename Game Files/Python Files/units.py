@@ -800,7 +800,8 @@ class Monster(Unit):
             'disarmed': False,
             'knockout_turns': 0,
             'judgement_day': 0,
-            'taunted': [0, None]}
+            'taunted': [0, None],
+            'drained': False}
 
     def give_status(self, target):
         # Attempt to give the target a status ailment
@@ -1336,7 +1337,8 @@ class Boss(Monster):
             'disarmed': False,
             'knockout_turns': 0,
             'judgement_day': 0,
-            'taunted': [0, None]}
+            'taunted': [0, None],
+            'drained': False}
 
         self.status_ail = ['alive']
 

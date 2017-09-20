@@ -186,6 +186,9 @@ def game_loop():
             elif command.startswith('r'):
                 rest_command()
 
+            elif command.startswith('c'):
+                title_screen.edit_settings()
+
             elif command.startswith('h'):
                 help_command()
 
@@ -371,7 +374,8 @@ def help_command():
  [M]agic - Allows you to use healing spells outside of battle
  [R]est - Heals your party member while in the overworld
  [I]nventory - Displays your inventory and lets you equip/use items
- [H]elp - Reopen this list of commands
+ [C]onfig - Opens the settings list and allows you to change them in-game
+ [H]elp - Reopens this list of commands
 Type the letter in brackets while on the overworld to use the command""")
 
     s_input("\nPress enter/return ")
@@ -485,6 +489,7 @@ def rest_command():
             print('-'*save_load.divider_size)
 
 
+# Needs reworked to work with new tools and use item_ids instead of item names
 def tools_command():
     tool_names = ['Divining Rod', 'Shovel', 'Map of Fast Travel', 'Boots of Insane Speed']
     available_tools = []
@@ -552,7 +557,7 @@ def debug_command():
             exec(command)
 
         except:
-            print(f">Invalid Command, `{command}`", 'red')
+            print(f">Invalid Command")
 
 
 def set_prompt_properties():
@@ -590,7 +595,7 @@ def main():
     # main() handles all the setup for the game, and includes the main game loop.
     # Everything happens in this function in one way or another.
     set_prompt_properties()  # Set the CMD size and whatnot...
-    save_load.change_settings()  # ...set the volume and save file settings...
+    save_load.apply_settings()  # ...set the volume and save file settings...
     title_screen.show_title()  # ...display the titlescreen...
     save_load.load_game()  # ...check for save files...
     game_loop()  # ...and then start the game!

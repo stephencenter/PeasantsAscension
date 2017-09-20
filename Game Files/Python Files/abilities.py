@@ -439,19 +439,52 @@ backstab.use_ability = use_backstab
 
 # -- MAGE ABILITIES, scales with Intelligence -- #
 def before_skill_syphon(user):
-    pass
+    user.choose_target(f"Who should {user.name} cast Skill Syphon on?")
+
 
 def use_skill_syphon(user):
-    pass
+    print(f"{user.name} is preparing to cast Skill Syphon...")
+    sounds.ability_cast.play()
+    main.smart_sleep(0.75)
 
+    if user.target.ability_vars['drained']:
+        print(f"...But the {user.target.name} has already been drained!")
+        sounds.debuff.play()
+
+    else:
+        sounds.buff_spell.play()
+        user.target.ability_vars['drained'] = True
+        user.target.status_ail.append('Drained')
+
+        total = 0
+
+        # I don't know of any better way to do this than like this so here we go
+        for x in ['attk', 'm_attk', 'p_attk', 'dfns', 'dfns', 'dfns', 'spd', 'evad']:
+            value = eval(f"max(1, min(math.ceil(0.2*user.target.{x}), 1 + user.attributes['int']))")
+            total += value
+
+            if not isinstance(user.target, units.Boss):
+                exec(f"user.target.{x} -= value")
+
+            exec(f"battle.temp_stats[user.name]['{x}'] += value")
+
+        print(f"{user.name} stats increased by {total}!")
+
+        if isinstance(user.target, units.Boss):
+            print(f"{user.target.name}'s boss aura protected them!")
+
+        else:
+            print(f"{user.target.name} stats decreased by {total}!")
 
 skill_syphon = Ability("Skill Syphon", f"""\
 The user channels their power to literally drain the skill from a target enemy.
 Reduces the target's 3 Attack Stats, 3 Armor Stats, Speed and Evasion by 
 [1 + Intelligence] each, and increases the respective stat by the same
 for the user. Stat loss/gain is capped at 20% the target's original stat value.
-Will always increase the users stats by at least 1 each. Can only be used once 
-per enemy per battle..""", 5)
+Will always drain at least 1 of each stat. Will only affect the user's stats if
+casted on bosses. Can only be used once per enemy per battle.""", 5)
+skill_syphon.before_ability = before_skill_syphon
+skill_syphon.use_ability = use_skill_syphon
 
 
 def before_polymorph(user):
@@ -493,7 +526,7 @@ def before_mana_drain(user):
 
 
 def use_mana_drain(user):
-    print(f"{user.name} is preparing to cast Mana Drain on the {user.target.name}...")
+    print(f"{user.name} is preparing to cast Mana Drain...")
     sounds.ability_cast.play()
     main.smart_sleep(0.75)
 
@@ -644,10 +677,10 @@ def before_unholy_binds(user):
 
 def use_unholy_binds(user):
     if isinstance(user.target, units.PlayableCharacter):
-        print(f"{user.target.name} is preparing to cast Unholy Binds on {user.target.name}!")
+        print(f"{user.target.name} is preparing to cast Unholy Binds...")
 
     else:
-        print(f"{user.target.name} is preparing to cast Unholy Binds on the {user.target.name}!")
+        print(f"{user.target.name} is preparing to cast Unholy Binds...")
 
     sounds.ability_cast.play()
     main.smart_sleep(0.75)
@@ -702,7 +735,7 @@ def use_judgement(user):
 
     judgement_day = battle.turn_counter + rem_turns
 
-    print(f"{user.name} is preparing to cast Judgement on {user.target.name}...")
+    print(f"{user.name} is preparing to cast Judgement...")
     sounds.ability_cast.play()
     main.smart_sleep(0.75)
 
@@ -798,7 +831,7 @@ infusion.use_ability = use_infusion
 
 a_abilities = {
     'paladin': [tip_the_scales, unholy_binds, judgement, canonize],  # 1 2 3
-    'mage': [mana_drain, polymorph, spell_shield, skill_syphon],  # 1
+    'mage': [skill_syphon, mana_drain, polymorph, spell_shield],  # 1 2
     'warrior': [roll_call, taunt, great_cleave, berserkers_rage],  # 1 2 4
     'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],  # 1 2 3 4
     'ranger': [scout, roll, powershot, unstable_footing],

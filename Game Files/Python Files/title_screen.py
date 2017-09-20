@@ -215,7 +215,7 @@ def edit_settings():
 
     while True:
         print(f"""\
-Available Settings:
+Config Menu:
       [1] Music Volume ---> Currently set to "{int(save_load.music_vol*100)}%"
       [2] Sound Volume ---> Currently set to "{int(save_load.sound_vol*100)}%"
       [3] Divider Size ---> Currently set to "{save_load.divider_size}"
@@ -252,8 +252,9 @@ Available Settings:
 
                 break
 
-            elif setting.startswith("s"):
-                pass
+            elif setting in ['e', 'x', 'exit', 'b', 'back']:
+                print('-'*save_load.divider_size)
+                return
 
 
 def set_vol(mode):
@@ -308,6 +309,7 @@ def set_vol(mode):
                     return
 
                 elif y_n.startswith("n"):
+                    print('-'*save_load.divider_size)
                     do_thing = False
                     break
 

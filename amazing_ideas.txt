@@ -168,6 +168,10 @@ PEASANT-RPG GOALS
 		
 [ ] Rewrite the credits, lore, and backstory
 
+[ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.
+
+[ ] Make the party members less important (less dialogue, no quests attached to them)
+
 [ ] Before v1.0.0 is released, the game NEEDS at least this:
 	[ ] Every boss currently programmed placed somewhere on the map
 	[ ] At least 3 main-storyline quests
@@ -175,8 +179,8 @@ PEASANT-RPG GOALS
 	[ ] At LEAST 7-8 towns placed somewhere on the map
 	[ ] At LEAST all of the Central Forest tiles programmed, as well as possibly a bit of the shore at the edge of the
 		Central Forest and maybe all of Barrier Cave
+	[ ] At LEAST 3 party members obtainable
 		
-[ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.
 	
 -- 1.1 update plans -- 
 [ ] Add races (Elves, Dwarves, Gnomes, etc)

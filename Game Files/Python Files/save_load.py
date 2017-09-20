@@ -168,7 +168,7 @@ def format_save_names():
         globals()[x] = globals()[x].format(ADVENTURE_NAME=adventure_name)
 
 
-def change_settings():
+def apply_settings():
     config = configparser.ConfigParser()
 
     if not os.path.isfile("../settings.cfg"):
