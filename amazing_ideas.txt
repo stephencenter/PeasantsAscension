@@ -164,6 +164,11 @@ PEASANT-RPG GOALS
 		restoring HP/MP, or increasing stats in-battle. But others have cooler effects, such as allowing you to rename your character,
 		and enabling you to re-pick your class. 
 	
+[ ] Try to rework quests:
+	[ ] Quests should have a dictionary full of flags that have to be set to true for the quest to progress.
+	    [ ] Make a function that automatically changes each NPCs available dialogue depending on the flags.
+		[ ] Each conversation would have a set of required flags. 
+		
 [ ] Fix all of the quests that have been broken due to all the above changes
 		
 [ ] Rewrite the credits, lore, and backstory
