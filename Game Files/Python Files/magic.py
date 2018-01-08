@@ -72,17 +72,17 @@ class Healing(Spell):
         # Paladin in which case it it 4*User-wisdom.
         if self.health < target.hp*self.thresh:
             if user.class_ == 'paladin':
-                total_heal = target.hp*self.thresh + 4*user.attributes['wis']
+                total_heal = target.hp*self.thresh + 2*user.attributes['wis']
 
             else:
-                total_heal = 2*user.attributes['wis']
+                total_heal = target.hp*self.thresh + user.attributes['wis']
 
         else:
             if user.class_ == 'paladin':
-                total_heal = self.health + 4*user.attributes['wis']
+                total_heal = self.health + 2*user.attributes['wis']
 
             else:
-                total_heal = self.health + 2*user.attributes['wis']
+                total_heal = self.health + user.attributes['wis']
 
         target.hp += total_heal
         target.hp = math.ceil(target.hp)

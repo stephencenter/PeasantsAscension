@@ -274,7 +274,7 @@ def set_vol(mode):
                 # Convert the player's input into an integer between 0 and 100
                 new_vol = max(0, min(100, int(new_vol)))
 
-            except TypeError:
+            except ValueError:
                 continue
 
             print('-'*save_load.divider_size)
@@ -370,7 +370,7 @@ def set_divider_size():
                 # Convert the player's input into an integer between 5 and 80
                 div_size = max(5, min(80, int(div_size)))
 
-            except TypeError:
+            except ValueError:
                 continue
 
             print('-' * save_load.divider_size)

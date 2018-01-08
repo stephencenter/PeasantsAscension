@@ -93,7 +93,7 @@ class PlayableCharacter(Unit):
                            'con': 1,  # Constitution, for Monks
                            'dex': 1,  # Dexterity, for Assassins
                            'per': 1,  # Perception, for Rangers
-                           'for': 1}  # Fortune
+                           'fte': 1}  # Fate
 
         # This dictionary will contain numerous variables that interact with abilties in battle
         self.ability_vars = {'ascend_used': False,
@@ -354,46 +354,107 @@ Input [#]: """)
             print(f"{self.name} has {rem_points} skill point{'s' if rem_points > 1 else ''} left to spend.")
 
             skill = main.s_input("""Choose a skill to increase:
-      [I]ntelligence - The attribute of Mages. Increases magic stats and MP.
-      [W]isdom - The attribute of Paladins. Improves healing spells and increases MP.
-      [S]trength -  The attribute of Warriors. Increases physical attack and defense.
-      [C]onstitution - The attribute of Monks. Increases defensive stats and HP.
-      [D]exterity - The attribute of Assassins. Increases evasion, speed and physical attack.
-      [P]erception - The attribute of Rangers. Increases pierce stats and evasion.
-      [F]ortune - No direct class affiliation. Increases 2 random attributes by 1 each.
-Input [L]etter: """).lower()
+      [1] INTELLIGENCE, The attribute of MAGES
+      [2] WIDSOM, the attribute of PALADINS
+      [3] STRENGTH,The attribute of WARRIORS
+      [4] CONSTITUTION, the attribute of MONKS
+      [5] DEXTERITY, the attribute of ASSASSINS
+      [6] PERCEPTION, the attribute of RANGERS
+      [7] FATE, the forgotten attribute
+      [8] DIFFICULTY, the forbidden attribute
+Input [#]: """).lower()
 
-            if any(map(skill.startswith, ['i', 'w', 's', 'c', 'd', 'p', 'f'])):
-                if skill.startswith('i'):
+            if skill and skill[0] in ['1', '2', '3', '4', '5', '6', '7', '8']:
+                if skill[0] == '1':
                     act_skill = 'int'
-                    vis_skill = 'Intelligence'
+                    vis_skill = 'INTELLIGENCE'
+                    message = """\
+Increasing INTELLIGENCE will provide:
+    +1 Magic Attack
+    +1 Magic Defense
+    +1 MP
+    +Mage Ability Power"""
 
-                elif skill.startswith('w'):
+                elif skill[0] == '2':
                     act_skill = 'wis'
-                    vis_skill = 'Wisdom'
+                    vis_skill = 'WISDOM'
+                    message = """\
+Increasing WISDOM will provide:
+    +1 Heal from healing spells (Non-paladins)
+    +2 Heal from healing spells (Paladins)
+    +2 MP
+    +Paladin Ability Power"""
 
-                elif skill.startswith('s'):
+                elif skill[0] == '3':
                     act_skill = 'str'
-                    vis_skill = 'Strength'
+                    vis_skill = 'STRENGTH'
+                    message = """\
+Increasing STRENGTH will provide:
+    +1 Physical Attack
+    +1 Physical Defense
+    +1 Pierce Defense
+    +Warrior Ability Power"""
 
-                elif skill.startswith('c'):
+                elif skill[0] == '4':
                     act_skill = 'con'
-                    vis_skill = 'Constitution'
+                    vis_skill = 'CONSTITUTION'
+                    message = """\
+Increasing CONSTITUTION will provide:
+    +1 HP
+    +1 Physical Defense
+    +1 Pierce Defense
+    +1 Magic Defense
+    +Monk Ability Power"""
 
-                elif skill.startswith('d'):
+                elif skill[0] == '5':
                     act_skill = 'dex'
-                    vis_skill = 'Dexterity'
+                    vis_skill = 'DEXTERITY'
+                    message = """\
+Increasing DEXTERITY will provide:
+    +1 Physical Attack
+    +1 Speed
+    +1 Evasion
+    +Assassin Ability Power"""
 
-                elif skill.startswith('p'):
+                elif skill[0] == '6':
                     act_skill = 'per'
-                    vis_skill = 'Perception'
+                    vis_skill = 'PERCEPTION'
+                    message = """\
+Increasing PERCEPTION will provide:
+    +1 Pierce Attack
+    +1 Pierce Defense
+    +1 Evasion
+    +Ranger Ability Power"""
 
-                else:
-                    act_skill = 'for'
-                    vis_skill = 'Fortune'
+                elif skill[0] == '7':
+                    act_skill = 'fte'
+                    vis_skill = 'FATE'
+                    message = """\
+Increasing FATE will provide:
+    +1 to a random attribute (won't choose DIFFICULTY or FATE)
+    +1 to a second random attribute (won't choose DIFFICULTY or FATE)
+    +Knowledge that your destiny is predetermined and nothing matters"""
+
+                elif skill[0] == '8':
+                    act_skill = "dif"
+                    vis_skill = "DIFFICULTY"
+                    message = """\
+Increasing DIFFICULTY will provide:
+    +0.5% Enemy Physical Attack (Applies to entire party)
+    +0.5% Enemy Pierce Attack (Applies to entire party)
+    +0.5% Enemy Magic Attack (Applies to entire party)
+    +More challenging experience"""
 
                 print('-'*save_load.divider_size)
-                print(f'Current {vis_skill}: {self.attributes[act_skill]}')
+
+                if act_skill == 'dif':
+                    print(f"Current {vis_skill}: {main.party_info['dif']}")
+
+                else:
+                    print(f"Current {vis_skill}: {self.attributes[act_skill]}")
+
+                print(message)
+                print('-'*save_load.divider_size)
 
                 while True:
                     y_n = main.s_input(f"Increase {self.name}'s {vis_skill}? | Y/N: ").lower()
@@ -402,13 +463,18 @@ Input [L]etter: """).lower()
                         print('-'*save_load.divider_size)
                         break
 
-                    elif y_n.startswith('y') and any(map(skill.startswith, ['d', 'c', 'i', 'w', 'p', 'f', 's'])):
-                        self.increase_attribute(skill)
+                    elif y_n.startswith('y'):
+                        self.increase_attribute(act_skill)
 
                     else:
                         continue
 
-                    if act_skill != 'for':
+                    if act_skill == 'dif':
+                        print('-'*save_load.divider_size)
+                        print("Difficulty increased!")
+                        print("The enemies of your world have grown in power!")
+
+                    if act_skill != 'fte':
                         print('-'*save_load.divider_size)
                         print(f"{self.name}'s {vis_skill} has increased!")
 
@@ -428,21 +494,28 @@ Input [L]etter: """).lower()
         print(f"""-{self.name}'s Stats-
 Level: {self.lvl} | Class: {self.class_.title()}
 HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Statuses: {', '.join([x.title() for x in self.status_ail])}
-Attack: {self.attk} | M. Attack: {self.m_attk} | P. Attack {self.p_attk}
-Defense: {self.dfns} | M. Defense: {self.m_dfns} | P. Defense {self.p_dfns}
+Physical Attack: {self.attk} | Magic Attack: {self.m_attk} | Pierce Attack {self.p_attk}
+Phsyical Defense: {self.dfns} | Magic Defense: {self.m_dfns} | Pierce Defense {self.p_dfns}
 Speed: {self.spd} | Evasion: {self.evad}
-Def. Element: {self.def_element.title()} | Off. Element: {self.off_element.title()}
-INT: {self.attributes['int']} | WIS: {self.attributes['wis']} | STR: {self.attributes['str']} | CON: \
-{self.attributes['con']} | DEX: {self.attributes['dex']} | PER: {self.attributes['per']} | FOR: {self.attributes['for']}
 XP: {self.exp}/{self.req_xp} | GP: {main.party_info['gp']}
 
--Equipped Items-
+-Attributes-
+Intelligence: {self.attributes['int']} 
+Wisdom: {self.attributes['wis']}
+Strength: {self.attributes['str']}
+Constitution: {self.attributes['con']}
+Dexterity: {self.attributes['dex']}
+Perception: {self.attributes['per']}
+Difficulty: {main.party_info['dif']}
+
+-Equipment-
 Weapon: {items.equipped[inv_name]['weapon'].name}
 Accessory: {items.equipped[inv_name]['access'].name}
 Armor:
   Head: {items.equipped[inv_name]['head'].name}
   Body: {items.equipped[inv_name]['body'].name}
-  Legs: {items.equipped[inv_name]['legs'].name}""")
+  Legs: {items.equipped[inv_name]['legs'].name}
+Defensive Element: {self.def_element.title()} | Offensive Element: {self.off_element.title()}""")
 
         main.s_input('\nPress enter/return ')
 
@@ -710,44 +783,45 @@ Armor:
             return
 
     def increase_attribute(self, attribute):
-        if attribute.startswith('i'):
+        if attribute == 'int':
             self.m_dfns += 1
             self.m_attk += 1
             self.max_mp += 1
             self.attributes['int'] += 1
 
-        elif attribute.startswith('w'):
+        elif attribute == 'wis':
             self.max_mp += 2
             self.attributes['wis'] += 1
 
-        elif attribute.startswith('s'):
+        elif attribute == 'str':
             self.attk += 1
             self.p_dfns += 1
             self.dfns += 1
             self.attributes['str'] += 1
 
-        elif attribute.startswith('c'):
+        elif attribute == 'con':
             self.max_hp += 1
             self.dfns += 1
             self.p_dfns += 1
             self.m_dfns += 1
             self.attributes['con'] += 1
 
-        elif attribute.startswith('d'):
+        elif attribute == 'dex':
             self.attk += 1
             self.spd += 1
             self.evad += 1
             self.attributes['dex'] += 1
 
-        elif attribute.startswith('p'):
+        elif attribute == 'per':
             self.p_attk += 1
             self.p_dfns += 1
             self.evad += 1
             self.attributes['per'] += 1
 
-        elif attribute.startswith('f'):
-            # Fortune gives you 1 point in two randomly chosen attributes. Can choose the same attribute twice.
-            self.attributes['for'] += 1
+        elif attribute == 'fte':
+            # Fate gives you 1 point in two randomly chosen attributes. Can choose the same attribute twice.
+            # Cannot choose Fate or Difficulty as the attribute.
+            self.attributes['fte'] += 1
             rand_attr1 = random.choice([('int', 'Intelligence'),
                                         ('wis', 'Wisdom'),
                                         ('str', 'Strength'),
@@ -766,9 +840,12 @@ Armor:
             self.increase_attribute(rand_attr2[0])
 
             print('-'*save_load.divider_size)
-            print(f"{self.name} gained one point in {rand_attr1[1]} from Fortune!")
-            print(f"{self.name} gained one point in {rand_attr2[1]} from Fortune!")
+            print(f"{self.name} gained one point in {rand_attr1[1]} from FATE!")
+            print(f"{self.name} gained one point in {rand_attr2[1]} from FATE!")
             main.s_input("\nPress enter/return ")
+
+        elif attribute == 'dif':
+            main.party_info['dif'] += 1
 
     def reset_ability_vars(self):
         self.ability_vars = {'ascend_used': False,
@@ -850,31 +927,6 @@ class Monster(Unit):
             m_type['forest'].append("Calculator")
 
         self.name = random.choice(m_type[main.party_info['biome']])
-
-        # A list of monster-types and what AI they are to have
-        magic_enemies = ['Naiad', "Will-o'the-wisp", 'Anubis', 'Oread', 'Necromancer', 'Wraith',
-                         'Alicorn', 'Flying Serpent', 'Imp', 'Corrupt Thaumaturge', 'Spriggan']
-
-        melee_enemies = ['Shell Mimic', 'Giant Crab', 'Bog Slime', 'Mummy', 'Sand Golem',
-                         'Moss Ogre', 'Vine Lizard', 'Troll', 'Ghoul', 'Griffin', 'Tengu',
-                         'Giant Worm', 'Zombie', 'Arctic Wolf', 'Minor Yeti', 'Sludge Rat',
-                         'Sea Serpent', 'Beetle', 'Calculator', 'Harpy']
-
-        ranged_enemies = ['Fire Ant', 'Naga', 'Ice Soldier', 'Frost Bat', 'Bat',
-                          'Skeleton', 'Squid', 'Rock Giant', 'Undead Archer', 'Goblin Archer']
-
-        # Assign the correct AI and stats to each kind of monster
-        if self.name in magic_enemies:
-            self.battle_turn = self.magic_ai
-            self.magic_stats()
-
-        elif self.name in melee_enemies:
-            self.battle_turn = self.melee_ai
-            self.melee_stats()
-
-        elif self.name in ranged_enemies:
-            self.battle_turn = self.ranged_ai
-            self.ranger_stats()
 
         # Set the flavor text to match the attack style of various monsters
         biting_monsters = ['Vine Lizard', 'Beetle', 'Zombie', 'Ghoul', 'Arctic Wolf', 'Sea Serpent', 'Shell Mimic']
@@ -1034,95 +1086,127 @@ class Monster(Unit):
             self.m_attk /= 1.2
             self.m_dfns /= 1.2
 
-        # Adjust for problems that may happen with enemy stats
-        for stat in ['self.attk', 'self.dfns', 'self.p_attk', 'self.p_dfns', 'self.m_attk', 'self.m_dfns',
-                     'self.spd', 'self.evad', 'self.mp', 'self.max_mp', 'self.hp', 'self.max_hp']:
+    def monster_class_stats(self):
+        # A list of monster-types and what AI they are to have
+        magic_enemies = ['Naiad', "Will-o'the-wisp", 'Anubis', 'Oread', 'Necromancer', 'Wraith',
+                         'Alicorn', 'Flying Serpent', 'Imp', 'Corrupt Thaumaturge', 'Spriggan']
 
-            exec(f"{stat} = max(1, math.ceil({stat}))")  # Enemy stats must be integers
+        melee_enemies = ['Shell Mimic', 'Giant Crab', 'Bog Slime', 'Mummy', 'Sand Golem',
+                         'Moss Ogre', 'Vine Lizard', 'Troll', 'Ghoul', 'Griffin', 'Tengu',
+                         'Giant Worm', 'Zombie', 'Arctic Wolf', 'Minor Yeti', 'Sludge Rat',
+                         'Sea Serpent', 'Beetle', 'Calculator', 'Harpy']
 
-    def melee_stats(self):
+        ranged_enemies = ['Fire Ant', 'Naga', 'Ice Soldier', 'Frost Bat', 'Bat',
+                          'Skeleton', 'Squid', 'Rock Giant', 'Undead Archer', 'Goblin Archer']
+
+        # Assign the correct AI and stats to each kind of monster
+        if self.name in magic_enemies:
+            self.battle_turn = self.magic_ai
+
+            self.mp *= 1.5
+            self.mp = math.ceil(self.mp)
+            self.max_mp = copy.copy(self.mp)
+
+            self.attk *= 0.5
+            self.attk = math.ceil(self.attk)
+
+            self.p_attk *= 0.5
+            self.p_attk = math.ceil(self.p_attk)
+
+            self.m_attk *= 1.5
+            self.m_attk = math.ceil(self.m_attk)
+
+            self.dfns *= 0.65
+            self.dfns = math.ceil(self.dfns)
+
+            self.p_dfns *= 0.65
+            self.p_dfns = math.ceil(self.p_dfns)
+
+            self.m_dfns *= 1.5
+            self.m_dfns = math.ceil(self.m_dfns)
+
+            self.class_ = 'mage'
+
+        elif self.name in melee_enemies:
+            self.battle_turn = self.melee_ai
+
+            self.hp *= 1.2
+            self.hp = math.ceil(self.hp)
+            self.max_hp = copy.copy(self.hp)
+
+            self.attk *= 1.5
+            self.attk = math.ceil(self.attk)
+
+            self.p_attk *= 0.5
+            self.p_attk = math.ceil(self.p_attk)
+
+            self.m_attk *= 0.5
+            self.m_attk = math.ceil(self.m_attk)
+
+            self.dfns *= 1.5
+            self.dfns = math.ceil(self.dfns)
+
+            self.p_dfns *= 1.5
+            self.p_dfns = math.ceil(self.p_dfns)
+
+            self.m_dfns *= 0.5
+            self.m_dfns = math.ceil(self.m_dfns)
+
+            self.spd *= 0.5
+            self.spd = math.ceil(self.spd)
+
+            self.class_ = 'warrior'
+
+        elif self.name in ranged_enemies:
+            self.battle_turn = self.ranged_ai
+
+            self.hp *= 0.9
+            self.hp = math.ceil(self.hp)
+            self.max_hp = copy.copy(self.hp)
+
+            self.attk *= 0.8
+            self.attk = math.ceil(self.attk)
+
+            self.p_attk *= 1.5
+            self.p_attk = math.ceil(self.p_attk)
+
+            self.m_attk *= 0.8
+            self.m_attk = math.ceil(self.m_attk)
+
+            self.dfns *= 0.8
+            self.dfns = math.ceil(self.dfns)
+
+            self.p_dfns *= 1.2
+            self.p_dfns = math.ceil(self.p_dfns)
+
+            self.spd *= 1.5
+            self.spd = math.ceil(self.spd)
+
+            self.evad *= 1.5
+            self.evad = math.ceil(self.evad)
+
+            self.class_ = 'ranger'
         # Set stats for melee-class monsters
-        self.hp *= 1.2
-        self.hp = math.ceil(self.hp)
-        self.max_hp = copy.copy(self.hp)
 
-        self.attk *= 1.5
-        self.attk = math.ceil(self.attk)
+    def monster_difficulty(self):
+        self.attk += self.attk*0.0005*main.party_info['dif']
+        self.m_attk += self.m_attk*0.0005*main.party_info['dif']
+        self.p_attk += self.p_attk*0.0005*main.party_info['dif']
 
-        self.p_attk *= 0.5
-        self.p_attk = math.ceil(self.p_attk)
-
-        self.m_attk *= 0.5
-        self.m_attk = math.ceil(self.m_attk)
-
-        self.dfns *= 1.5
-        self.dfns = math.ceil(self.dfns)
-
-        self.p_dfns *= 1.5
-        self.p_dfns = math.ceil(self.p_dfns)
-
-        self.m_dfns *= 0.5
-        self.m_dfns = math.ceil(self.m_dfns)
-
-        self.spd *= 0.5
-        self.spd = math.ceil(self.spd)
-
-        self.class_ = 'warrior'
-
-    def magic_stats(self):
-        # Set stats for Mage-class monsters
-        self.mp *= 1.5
-        self.mp = math.ceil(self.mp)
-        self.max_mp = copy.copy(self.mp)
-
-        self.attk *= 0.5
-        self.attk = math.ceil(self.attk)
-
-        self.p_attk *= 0.5
-        self.p_attk = math.ceil(self.p_attk)
-
-        self.m_attk *= 1.5
-        self.m_attk = math.ceil(self.m_attk)
-
-        self.dfns *= 0.65
-        self.dfns = math.ceil(self.dfns)
-
-        self.p_dfns *= 0.65
-        self.p_dfns = math.ceil(self.p_dfns)
-
-        self.m_dfns *= 1.5
-        self.m_dfns = math.ceil(self.m_dfns)
-
-        self.class_ = 'mage'
-
-    def ranger_stats(self):
-        # Set stats for Ranger-class monsters
-        self.hp *= 0.9
-        self.hp = math.ceil(self.hp)
-        self.max_hp = copy.copy(self.hp)
-
-        self.attk *= 0.8
-        self.attk = math.ceil(self.attk)
-
-        self.p_attk *= 1.5
-        self.p_attk = math.ceil(self.p_attk)
-
-        self.m_attk *= 0.8
-        self.m_attk = math.ceil(self.m_attk)
-
-        self.dfns *= 0.8
-        self.dfns = math.ceil(self.dfns)
-
-        self.p_dfns *= 1.2
-        self.p_dfns = math.ceil(self.p_dfns)
-
-        self.spd *= 1.5
-        self.spd = math.ceil(self.spd)
-
-        self.evad *= 1.5
-        self.evad = math.ceil(self.evad)
-
-        self.class_ = 'ranger'
+    def monster_fix_stats(self):
+        # Adjust for problems that may happen with enemy stats
+        self.attk = max(1, math.ceil(self.attk))
+        self.dfns = max(1, math.ceil(self.dfns))
+        self.p_attk = max(1, math.ceil(self.p_attk))
+        self.p_dfns = max(1, math.ceil(self.p_dfns))
+        self.m_attk = max(1, math.ceil(self.m_attk))
+        self.m_dfns = max(1, math.ceil(self.m_dfns))
+        self.spd = max(1, math.ceil(self.spd))
+        self.evad = max(1, math.ceil(self.evad))
+        self.mp = max(1, math.ceil(self.mp))
+        self.max_mp = max(1, math.ceil(self.max_mp))
+        self.hp = max(1, math.ceil(self.hp))
+        self.max_hp = max(1, math.ceil(self.max_hp))
 
     def base_turn(self):
         sounds.item_pickup.stop()
@@ -1717,7 +1801,9 @@ def spawn_monster():
         globals()[unit_object] = Monster('', 10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
         globals()[unit_object].monster_generation()
         globals()[unit_object].monster_level()
+        globals()[unit_object].monster_class_stats()
         globals()[unit_object].monster_modifiers()
+        globals()[unit_object].monster_fix_stats()
 
 
 def fix_stats():

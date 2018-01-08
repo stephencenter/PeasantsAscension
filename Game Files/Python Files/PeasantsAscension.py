@@ -82,7 +82,8 @@ party_info = {'biome': 'forest',
               'x': 0, 'y': 0, 'z': 0,
               'steps_without_battle': 0,
               'do_monster_spawns': True,
-              'scout_list': []}
+              'scout_list': [],
+              'dif': 0}
 
 # Set to 1 when auto-testing
 do_debug = 0
