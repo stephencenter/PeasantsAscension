@@ -42,7 +42,7 @@ nearton_h2_c1 = Chest([5, items.bone_bag, items.fairy_dust, items.feathers], 1, 
 nearton_h2 = House("Alfred", [nearton_h2_c1])
 
 town_nearton = Town('Nearton', """\
-Nearton: A small village in in the Inner Central Forest. It is in this
+Nearton: A small village in in the Inner Forest. It is in this
 very town where numerous brave adventurers have begun their journey. Nearton
 is just your standard run-of-the-mill village: it has a general store, an inn,
 and a few small houses. An old man  is standing near one of the houses, and
@@ -54,7 +54,7 @@ southford_h1_c1 = Chest([35], 2, "S-H1-C1")
 southford_h1 = House("Lazaro", [southford_h1_c1])
 
 town_southford = Town('Southford', """\
-Southford: A fair-size town in the Southeast of the Inner Central Forest.
+Southford: A fair-size town in the Southeast of the Inner Forest.
 The inhabitants of this town are known for being quite wise, and may
 provide you with helpful advice. """, [npcs.wesley, npcs.sondalar, npcs.lazaro], [southford_h1], 2, 1, "southford")
 
@@ -67,7 +67,7 @@ overshire_h2_c1 = Chest([50], 2, "OC-H2-C1")
 overshite_h2 = House("Stewson", [overshire_h2_c1])
 
 town_overshire_city = Town('Overshire City', """\
-Overshire City: A city just outside the Inner Central Forest. Overshire is the
+Overshire City: A city just outside the Inner Forest. Overshire is the
 capital of The Province of Overshire, and therefore the capital of the entire
 Kingdom of Harconia. As such, the city is very densely populated. The city is
 separated into three sectors: the upper-class inner portion consisting ofn a 
@@ -88,7 +88,7 @@ both one of the biggest towns in Overshire, and also one of the poorest.""",
                    [npcs.ethos, npcs.typhen], [], 2, 2, "valice")
 
 town_fort_sigil = Town('Fort Sigil', """\
-Fort Sigil: A small village in the Central Forest. As the name suggests, the
+Fort Sigil: A small village in the Barrier Forest. As the name suggests, the
 town was built around an old fort, named Fort Sigil. Originally comprised of
 just a few tents meant to house soldiers, many of these soldiers eventually
 put down their arms and settled. Despite it's rich backstory and pleasant
@@ -173,7 +173,7 @@ the southwest portion of the town near a few smaller houses.""",
 
 town_whistumn = Town('Whistumn', """\
 Whistumn: An ancient city situated on the border
-between the Arcadian Desert and the Central Forest. The inhabitants of this town
+between the Arcadian Desert and the Barrier Forest. The inhabitants of this town
 are known for their skepticism and reasoning. Many of them are scientists and are
 skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
@@ -197,7 +197,7 @@ Cesura: A town of great historical significance.
 This town was named after King Cesura I, the war general during the Harconian Civil War
 who helped to reunite the nation's six regions. Cesura was built on top of the site
 of the Battle of Parchak, the definitive battle in the Civil War that Cesura used
-to help the Central Forest win. There is a large monument to the King in the middle of
+to help the Barrier Forest win. There is a large monument to the King in the middle of
 town, with the words "Here's to prosperity" written on a plaque at its feet.
 An interesting thing to note is that Cesura is the only town that has a train
 station. Construction of the town of Cesura was outsourced to Elysium, who is

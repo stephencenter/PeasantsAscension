@@ -365,7 +365,6 @@ def move_command(available_dirs, command):
 
 
 def help_command():
-    # Peasant's Ascension
     print('-'*save_load.divider_size)
     print("""Command List:
  [NSEW] - Moves your party if the selected direction is unobstructed
