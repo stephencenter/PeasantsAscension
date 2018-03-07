@@ -252,7 +252,7 @@ bfor_tile_4b = Tile("Barrier Forest", "BF-4B", "Overshire", bfor_desc, "forest",
                     to_e="BF-5B",
                     to_n="BF-7B",
                     to_w="BF-6C")
-bfor_tile_5b = Tile("Overshire City", "BF-5B", "Overshire", bfor_desc, "forest", 4, -3, 4,
+overshire_city_tile = Tile("Overshire City", "BF-5B", "Overshire", bfor_desc, "forest", 4, -3, 4,
                     to_s="BF-2B",
                     to_w="BF-4B",
                     to_e="BF-6B",
@@ -326,7 +326,7 @@ icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_
 bfor_tiles_q_a = [bfor_tile_1a, bfor_tile_2a, bfor_tile_3a, bfor_tile_4a, bfor_tile_5a,
                   bfor_tile_6a, bfor_tile_7a, bfor_tile_8a, bfor_tile_9a]
 
-bfor_tiles_q_b = [bfor_tile_1b, bfor_tile_2b, bfor_tile_3b, bfor_tile_4b, bfor_tile_5b,
+bfor_tiles_q_b = [bfor_tile_1b, bfor_tile_2b, bfor_tile_3b, bfor_tile_4b, overshire_city_tile,
                   bfor_tile_6b, bfor_tile_7b, bfor_tile_8b, bfor_tile_9b]
 
 bfor_tiles_q_c = [bfor_tile_1c, bfor_tile_2c, bfor_tile_3c, bfor_tile_4c, bfor_tile_5c,

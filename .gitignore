@@ -16,3 +16,5 @@ Game Files/Python Files/__pycache__/
 Game Files/Python Files/build/
 Game Files/settings.cfg
 settings.cfg
+build/
+dist/

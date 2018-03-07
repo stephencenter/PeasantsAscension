@@ -364,7 +364,7 @@ def move_command(available_dirs, command):
             party_info['steps_without_battle'] += 1
 
 
-def help_command():
+def help_command():                       
     print('-'*save_load.divider_size)
     print("""Command List:
  [NSEW] - Moves your party if the selected direction is unobstructed
