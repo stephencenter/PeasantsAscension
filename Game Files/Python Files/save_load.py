@@ -56,7 +56,7 @@ sav_chests = '{ADVENTURE_NAME}/chests.json'                  # Chest Info
 # PCU Save Files
 sav_play = '{ADVENTURE_NAME}/play_stats.json'        # Player Stats
 sav_solou = '{ADVENTURE_NAME}/solou_stats.json'      # Solou's Stats
-sav_xoann = '{ADVENTURE_NAME}/xoann_stats.json'      # Xoann's Stats
+sav_chili = '{ADVENTURE_NAME}/chili_stats.json'      # Chili's Stats
 sav_chyme = '{ADVENTURE_NAME}/chyme_stats.json'      # Chyme's Stats
 sav_ran_af = '{ADVENTURE_NAME}/ran_af_stats.json'    # Ran'af's Stats
 sav_parsto = '{ADVENTURE_NAME}/parsto_stats.json'    # Parsto's Stats
@@ -162,7 +162,7 @@ def format_save_names():
     # e.g. "Save Files/{ADVENTURE_NAME}/sav_acquired_gems" --> "Save Files/ADV/sav_acquired_gems
 
     for x in sorted(['sav_acquired_gems', 'sav_def_bosses', 'sav_equip_items', 'sav_inventory', 'sav_misc_boss_info',
-                     'sav_party_info', 'sav_spellbook', 'sav_quests_dia', 'sav_play', 'sav_solou', 'sav_xoann',
+                     'sav_party_info', 'sav_spellbook', 'sav_quests_dia', 'sav_play', 'sav_solou', 'sav_chili',
                      'sav_chyme', 'sav_adorine', 'sav_ran_af', 'sav_parsto', 'sav_chests'], key=str.lower):
 
         globals()[x] = globals()[x].format(ADVENTURE_NAME=adventure_name)
@@ -194,7 +194,7 @@ def save_game(verbose=True):
 
     save_file_list = [
         sav_acquired_gems, sav_def_bosses, sav_equip_items, sav_inventory, sav_misc_boss_info, sav_party_info,
-        sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_chyme,
+        sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_chili, sav_ran_af, sav_adorine, sav_parsto, sav_chyme,
         sav_chests
     ]
 
@@ -202,15 +202,19 @@ def save_game(verbose=True):
         y_n = main.s_input('Do you wish to save your progress? | Y/N: ').lower() if verbose else 'y'
 
         if y_n.startswith('y'):
+
             print('Saving...') if verbose else ''
             main.smart_sleep(0.1) if verbose else ''
 
-            # Check if the temp directory already exists, and create it if it doesn't
+            # Make sure there isn't already a temp directory
             try:
-                os.makedirs('/'.join([base_dir, temp_dir, adventure_name]))
+                shutil.rmtree('/'.join([base_dir, temp_dir]))
 
-            except FileExistsError:
+            except FileNotFoundError:
                 pass
+
+            # Crete a temporary folder to store the save data in, so that if the saving fails data isn't corrupted
+            os.makedirs('/'.join([base_dir, temp_dir, adventure_name]))
 
             format_save_names()
             serialize_all(verbose)
@@ -275,7 +279,7 @@ def load_game():  # Check for save files and load the game if they're found
 
     save_file_list = [
         sav_acquired_gems, sav_def_bosses, sav_equip_items, sav_inventory, sav_misc_boss_info, sav_party_info,
-        sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_xoann, sav_ran_af, sav_adorine, sav_parsto, sav_chyme,
+        sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_chili, sav_ran_af, sav_adorine, sav_parsto, sav_chyme,
         sav_chests
     ]
 
@@ -372,7 +376,7 @@ def serialize_all(verbose=True):
 
         units.serialize_player('/'.join([base_dir, temp_dir, sav_play]),
                                '/'.join([base_dir, temp_dir, sav_solou]),
-                               '/'.join([base_dir, temp_dir, sav_xoann]),
+                               '/'.join([base_dir, temp_dir, sav_chili]),
                                '/'.join([base_dir, temp_dir, sav_adorine]),
                                '/'.join([base_dir, temp_dir, sav_chyme]),
                                '/'.join([base_dir, temp_dir, sav_ran_af]),
@@ -410,7 +414,7 @@ def deserialize_all():
 
         units.deserialize_player('/'.join([base_dir, sav_play]),
                                  '/'.join([base_dir, sav_solou]),
-                                 '/'.join([base_dir, sav_xoann]),
+                                 '/'.join([base_dir, sav_chili]),
                                  '/'.join([base_dir, sav_adorine]),
                                  '/'.join([base_dir, sav_chyme]),
                                  '/'.join([base_dir, sav_ran_af]),

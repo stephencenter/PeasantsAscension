@@ -429,7 +429,7 @@ def use_backstab(user):
 
 backstab = Ability("Backstab", f"""\
 The user sneaks up on their opponent and deals a [125 + Dexterity]% critical
-strike. If the target is poisoned, Backstab will deal 1.5x damage. If the 
+strike. If the target is poisoned, Backstab will deal 1.5x base damage. If the 
 target is asleep, Backstab will lifesteal for 10% of the damage dealt. If the
 target is disarmed, Backstab will lower the target's physical defense by 10%.
 All three effects can happen with a single Backstab.""", 2)
@@ -842,7 +842,7 @@ a_abilities = {
     'Ran_af': [],
     'Chyme': [],
     'Parsto': [],
-    'Xoann': [],
+    'Chili': [],
     'Adorine': []
 
 }

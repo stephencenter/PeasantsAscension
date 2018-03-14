@@ -1135,7 +1135,6 @@ for item2 in all_items:
 
 inventory = {'q_items': [],
              'consumables': [_c(s_potion), _c(s_elixir)],
-             'coord': [],
              'weapons': [],
              'armor': [],
              'tools': [],
@@ -1159,7 +1158,7 @@ equipped = {
         'access': _c(no_access)
     },
 
-    'Xoann': {
+    'Chili': {
         'weapon': _c(stn_dag),
         'head': _c(straw_hat),
         'body': _c(cotton_shirt),
@@ -1215,7 +1214,6 @@ def pick_category():
       [6] Quest Items
       [7] Miscellaneous
        |---->[I] Equipped Items
-       |---->[C] Coordinates
        |---->[Q] Quests""")
         while True:
             cat = main.s_input('Input [#] or [L]etter (or type "exit"): ').lower()
@@ -1248,9 +1246,6 @@ def pick_category():
             elif cat == 'i':
                 cat = 'equipped_items'
                 vis_cat = 'Equipped Items'
-            elif cat == 'c':
-                cat = 'coord'
-                vis_cat = 'Coordinates'
             elif cat == 'q':
                 cat = 'quests'
                 vis_cat = 'Quests'
@@ -1260,18 +1255,8 @@ def pick_category():
 
             if cat in inventory:
                 if inventory[cat]:
-                    if cat not in ['coord', 'weapons', 'armor', 'access']:
+                    if cat not in ['weapons', 'armor', 'access']:
                         pick_item(cat, vis_cat)
-                        print('-'*save_load.divider_size)
-
-                    elif cat == 'coord':
-                        print('-'*save_load.divider_size)
-                        print('Coordinates: ')
-
-                        for item in inventory[cat]:
-                            print(f"{item[0]} --> {item[2]}")
-
-                        main.s_input("\nPress enter/return ")
                         print('-'*save_load.divider_size)
 
                     else:
@@ -1770,11 +1755,7 @@ def serialize_inv(path):
         j_inventory[category] = []
 
         for item in inventory[category]:
-            if category != 'coord':
-                j_inventory[category].append(item.item_id)
-
-            else:
-                j_inventory[category].append(item)
+            j_inventory[category].append(item.item_id)
 
     with open(path, mode='w', encoding='utf-8') as f:
         json.dump(j_inventory, f, indent=4, separators=(', ', ': '))
@@ -1793,12 +1774,7 @@ def deserialize_inv(path):
         norm_inv[category] = []
 
         for item_id in j_inventory[category]:
-            if category == 'coord':
-                norm_inv[category].append(item_id)
-                continue
-
-            else:
-                norm_inv[category].append(_c(find_item_with_id(item_id)))
+            norm_inv[category].append(_c(find_item_with_id(item_id)))
 
     inventory = norm_inv
 

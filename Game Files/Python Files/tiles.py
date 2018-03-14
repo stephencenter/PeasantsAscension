@@ -20,7 +20,6 @@ import pygame
 
 import towns
 import items
-import units
 from TileClass import Tile
 
 if __name__ == "__main__":
@@ -32,307 +31,174 @@ else:
 pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
-# -- Inner Forest -- #
-if_desc = """Your party lies in the inner portion of the Barrier Forest. This
-very forest is home to thousands of people and animal species, and,
-unfortunately, several kinds of monsters. There are trees in all directions as
-far as the eye can see, each towering over a hundred feet tall. The ground is
-scattered with the occasional rock and a plentiful supply of leaves twigs. In
-other words, it's your standard forest. The Inner Forest makes up only a
-small fraction of the gargantuan Barrier Forest, and is surrounded by a
-12-foot wide moat."""
+# NEARTON
+nearton_desc = """\
+Nearton is surrounded by a large, natural moat. Past that, trees as far as the
+eyes can see."""
 
-in_for_n = Tile("Inner Forest", "I-BF-N", "Overshire", if_desc, "forest", 1, 0, 1,
-                to_s="I-BF-C",
-                to_e="I-BF-NE",
-                to_w="I-BF-NW",
-                to_n="I-BF-Bridge",
-                gem_list=[items.amethyst_gem])
-in_for_s = Tile("Inner Forest", "I-BF-S", "Overshire", if_desc, "forest", 1, 0, -1,
-                to_n="I-BF-C",
-                to_w="I-BF-SW",
-                to_e="I-BF-SE",
-                to_s="I-BF-SS")
-in_for_e = Tile("Inner Forest", "I-BF-E", "Overshire", if_desc, "forest", 1, 1, 0,
-                to_n="I-BF-NE",
-                to_w="I-BF-C",
-                to_s="I-BF-SE",
-                to_e="I-BF-EE")
-in_for_w = Tile("Inner Forest", "I-BF-W", "Overshire", if_desc, "forest", 1, -1, 0,
-                to_s="I-BF-SW",
-                to_e="I-BF-C",
-                to_n="I-BF-NW",
-                to_w="I-BF-WW")
-in_for_c = Tile("Inner Forest", "I-BF-C", "Overshire", if_desc, "forest", 1, 0, 0,
-                to_n="I-BF-N",
-                to_w="I-BF-W",
-                to_e="I-BF-E",
-                to_s="I-BF-S")
-in_for_nw = Tile("Inner Forest", "I-BF-NW", "Overshire", if_desc, "forest", 2, -1, 1,
-                 to_s="I-BF-W",
-                 to_e="I-BF-N",
-                 to_w="I-BF-NWW")
-in_for_se = Tile("Inner Forest", "I-BF-SE", "Overshire", if_desc, "forest", 2, 1, -1,
-                 to_w="I-BF-S",
-                 to_n="I-BF-E",
-                 to_s="I-BF-SSE",
-                 to_e="I-BF-SEE")
-in_for_sw = Tile("Inner Forest", "I-BF-SW", "Overshire", if_desc, "forest", 2, -1, -1,
-                 to_e="I-BF-S",
-                 to_n="I-BF-W",
-                 to_s="I-BF-SSW",
-                 to_w="I-BF-SWW")
-in_for_ww = Tile("Inner Forest", "I-BF-WW", "Overshire", if_desc, "forest", 2, -2, 0,
-                 to_e="I-BF-W",
-                 to_n="I-BF-NWW",
-                 to_s="I-BF-SWW",
-                 to_w="I-BF-WWW")
-in_for_www = Tile("Inner Forest", "I-BF-WWW", "Overshire", if_desc, "forest", 3, -3, 0,
-                  to_e="I-BF-WW",
-                  to_n="I-BF-NWWW",
-                  to_s="I-BF-SWWW",
-                  gem_list=[items.opal_gem])
-in_for_ee = Tile("Inner Forest", "I-BF-EE", "Overshire", if_desc, "forest", 2, 2, 0,
-                 to_e="I-BF-EEE",
-                 to_w="I-BF-E",
-                 to_n="I-BF-NEE",
-                 to_s="I-BF-SEE")
-in_for_eee = Tile("Inner Forest", "I-BF-EEE", "Overshire", if_desc, "forest", 2, 3, 0,
-                  to_w="I-BF-EE",
-                  to_s="I-BF-SEEE",
-                  to_n="I-BF-NEEE")
-in_for_ss = Tile("Inner Forest", "I-BF-SS", "Overshire", if_desc, "forest", 2, 0, -2,
-                 to_n="I-BF-S",
-                 to_w="I-BF-SSW",
-                 to_e="I-BF-SSE")
-in_for_ssw = Tile("Inner Forest", "I-BF-SSW", "Overshire", if_desc, "forest", 2, -1, -2,
-                  to_e="I-BF-SS",
-                  to_n="I-BF-SW",
-                  to_w="I-BF-SSWW")
-in_for_sww = Tile("Inner Forest", "I-BF-SWW", "Overshire", if_desc, "forest", 2, -2, -1,
-                  to_n="I-BF-WW",
-                  to_e="I-BF-SW",
-                  to_s="I-BF-SSWW",
-                  to_w="I-BF-SWWW")
-in_for_swww = Tile("Inner Forest", "I-BF-SWWW", "Overshire", if_desc, "forest", 3, -3, -1,
-                   to_n="I-BF-WWW",
-                   to_e="I-BF-SWW",
-                   to_s="I-BF-SSWWW")
-in_for_sswww = Tile("Inner Forest", "I-BF-SSWWW", "Overshire", if_desc, "forest", 3, -3, -2,
-                    to_n="I-BF-SWWW",
-                    to_e="I-BF-SSWW")
-in_for_nww = Tile("Inner Forest", "I-BF-NWW", "Overshire", if_desc, "forest", 2, -2, 1,
-                  to_w="I-BF-NWWW",
-                  to_s="I-BF-WW",
-                  to_e="I-BF-NW")
-in_for_nwww = Tile("Inner Forest", "I-BF-NWWW", "Overshire", if_desc, "forest", 3, -3, 1,
-                   to_e="I-BF-NWW",
-                   to_s="I-BF-WWW",
-                   boss_list=[units.whisp_goblin])
-in_for_nee = Tile("Inner Forest", "I-BF-NEE", "Overshire", if_desc, "forest", 2, 2, 1,
-                  to_e="I-BF-NEEE",
-                  to_s="I-BF-EE",
-                  to_w="I-BF-NE")
-in_for_neee = Tile("Inner Forest", "I-BF-NEEE", "Overshire", if_desc, "forest", 3, 3, 1,
-                   to_w="I-BF-NEE",
-                   to_s="I-BF-EEE")
-in_for_sse = Tile("Inner Forest", "I-BF-SSE", "Overshire", if_desc, "forest", 2, 1, -2,
-                  to_n="I-BF-SE",
-                  to_w="I-BF-SS",
-                  to_e="I-BF-SSEE")
-in_for_see = Tile("Inner Forest", "I-BF-SEE", "Overshire", if_desc, "forest", 2, 2, -1,
-                  to_w="I-BF-SE",
-                  to_n="I-BF-EE",
-                  to_s="I-BF-SSEE",
-                  to_e="I-BF-SEEE",
-                  boss_list=[units.master_slime])
-in_for_ssee = Tile("Inner Forest", "I-BF-SSEE", "Overshire", if_desc, "forest", 3, 2, -2,
-                   to_n="I-BF-SEE",
-                   to_w="I-BF-SSE",
-                   to_e="I-BF-SSEEE")
-in_for_seee = Tile("Inner Forest", "I-BF-SEEE", "Overshire", if_desc, "forest", 3, 3, -1,
-                   to_n="I-BF-EEE",
-                   to_w="I-BF-SEE",
-                   to_s="I-BF-SSEEE")
-in_for_sseee = Tile("Inner Forest", "I-BF-SSEEE", "Overshire", if_desc, "forest", 3, 3, -2,
-                    to_n="I-BF-SEEE",
-                    to_w="I-BF-SSEE")
-
-nearton_tile = Tile("Town of Nearton", "I-BF-NE", "Overshire", if_desc + """\n
+nearton_tile = Tile("Town of Nearton", "NEARTON", "Overshire", nearton_desc + """\n
 The town of Nearton is mere minutes away from this point! Stopping by
-there might be a smart idea.""", "forest", 2, 1, 1,
+there might be a smart idea.""", "forest", 2,
                     town_list=[towns.town_nearton],
-                    to_s="I-BF-E",
-                    to_w="I-BF-N",
-                    to_e="I-BF-NEE")
+                    to_n="I-BF-N",
+                    to_w="I-BF-W",
+                    to_e="I-BF-E",
+                    to_s="I-BF-S")
+nearton_sw = Tile("Nearton Outskirts", "I-BF-SW", "Overshire", nearton_desc, "forest", 2,
+                  to_e="I-BF-S",
+                  to_n="I-BF-W")
+nearton_s = Tile("Nearton Outskirts", "I-BF-S", "Overshire", nearton_desc, "forest", 1,
+                 to_n="NEARTON",
+                 to_w="I-BF-SW",
+                 to_e="I-BF-SE")
+nearton_se = Tile("Nearton Outskirts", "I-BF-SE", "Overshire", nearton_desc, "forest", 2,
+                  to_w="I-BF-S",
+                  to_n="I-BF-E")
+nearton_w = Tile("Nearton Outskirts", "I-BF-W", "Overshire", nearton_desc, "forest", 1,
+                 to_s="I-BF-SW",
+                 to_e="NEARTON",
+                 to_n="I-BF-NW")
+nearton_e = Tile("Nearton Outskirts", "I-BF-E", "Overshire", nearton_desc, "forest", 1,
+                 to_n="I-BF-NE",
+                 to_w="NEARTON",
+                 to_s="I-BF-SE")
+nearton_nw = Tile("Nearton Outskirts", "I-BF-NW", "Overshire", nearton_desc, "forest", 2,
+                  to_s="I-BF-W",
+                  to_e="I-BF-N")
+nearton_n = Tile("Nearton Outskirts", "I-BF-N", "Overshire", nearton_desc, "forest", 1,
+                 to_s="NEARTON",
+                 to_e="I-BF-NE",
+                 to_w="I-BF-NW",
+                 gem_list=[items.amethyst_gem])
+nearton_ne = Tile("Nearton Outskirts", "I-BF-NE", "Overshire", nearton_desc, "forest", 1,
+                  to_w="I-BF-N",
+                  to_s="I-BF-E")
 
-southford_tile = Tile("Town of Southford", "I-BF-SSWW", "Overshire", if_desc + """\n
+# SOUTHFORD
+southford_desc = """"""
+
+southford_tile = Tile("Town of Southford", "SOUTHFORD", "Overshire", southford_desc + """\n
 The town of Southford is mere minutes away from this point! Stopping by
-there might be a smart idea.""", "forest", 2, -2, -2,
-                      town_list=[towns.town_southford],
-                      to_e="I-BF-SSW",
-                      to_n="I-BF-SWW",
-                      to_w="I-BF-SSWWW")
-
-if_bridge = Tile("Inner Forest Bridge", "I-BF-Bridge", "Overshire", if_desc + """\n
-This bridge extends over the 12ft-wide moat surrounding the Inner Forest, meant
-to help protect its citizens from the harmful monsters outside it. Weaker monsters still
-manage to make their way in though.""", "forest", 1, 0, 2,
-                 to_s="I-BF-N",
-                 to_n="BF-2A")
-
-# -- Barrier Forest -- #
-bfor_desc = """The Barrier Forest is a massive forest that comprises about
-one-third the area of the Overshire Province. With trees that tower over even
-the tallest giants in Harconia, the towns here have made quite a fortune off
-of selling lumber to the more barren parts of the Kingdom. The Barrier Forest 
-is cut off from the rest of Overshire by the collosal Terrius Mountain Range, 
-nearly impossible to climb without expensive equipment or flight magic. If one 
-does wish to pass the Mountain, however, there are alternatives. A sprawling 
-cave system known as the "Barrier Cave" is built into the mountain. If one were
-brave enough, and strong enough, it would be possible to traverse this cave 
-without dying. The environment in the Barrier Cave, while incredibly hostile to
-humans and other civilized species, is the perfect breeding ground for powerful 
-monsters."""
-
-# Quadrant `A`
-bfor_tile_1a = Tile("Barrier Forest", "BF-1A", "Overshire", bfor_desc, "forest", 3, -1, 3,
+there might be a smart idea.""", "forest", 3,
+                      to_s="BF-2A",
+                      to_w="BF-4A",
+                      to_e="BF-6A",
+                      to_n="BF-8A")
+southford_sw = Tile("Southford Outskirts", "BF-1A", "Overshire", southford_desc, "forest", 3,
                     to_e="BF-2A",
-                    to_n="BF-4A",
-                    to_w="BF-3B")
-bfor_tile_2a = Tile("Barrier Forest", "BF-2A", "Overshire", bfor_desc, "forest", 3, 0, 3,
-                    to_s="I-BF-Bridge",
-                    to_w="BF-1A",
-                    to_e="BF-3A",
-                    to_n="BF-5A")
-bfor_tile_3a = Tile("Barrier Forest", "BF-3A", "Overshire", bfor_desc, "forest", 3, 1, 3,
+                    to_n="BF-4A")
+southford_s = Tile("Southford Outskirts", "BF-2A", "Overshire", southford_desc, "forest", 3,
+                   to_w="BF-1A",
+                   to_e="BF-3A",
+                   to_n="SOUTHFORD")
+southford_se = Tile("Southford Outskirts", "BF-3A", "Overshire", southford_desc, "forest", 3,
                     to_w="BF-2A",
                     to_n="BF-6A")
-bfor_tile_4a = Tile("Barrier Forest", "BF-4A", "Overshire", bfor_desc, "forest", 4, -1, 4,
-                    to_s="BF-1A",
-                    to_e="BF-5A",
-                    to_n="BF-7A",
-                    to_w="BF-6B")
-bfor_tile_5a = Tile("Barrier Forest", "BF-5A", "Overshire", bfor_desc, "forest", 3, 0, 4,
-                    to_s="BF-2A",
-                    to_w="BF-4A",
-                    to_e="BF-6A",
-                    to_n="BF-8A")
-bfor_tile_6a = Tile("Barrier Forest", "BF-6A", "Overshire", bfor_desc, "forest", 4, 1, 4,
-                    to_s="BF-3A",
-                    to_w="BF-5A",
-                    to_n="BF-9A")
-bfor_tile_7a = Tile("Barrier Forest", "BF-7A", "Overshire", bfor_desc, "forest", 4, -1, 5,
+southford_w = Tile("Southford Outskirts", "BF-4A", "Overshire", southford_desc, "forest", 3,
+                   to_s="BF-1A",
+                   to_e="SOUTHFORD",
+                   to_n="BF-7A")
+southford_e = Tile("Southford Outskirts", "BF-6A", "Overshire", southford_desc, "forest", 3,
+                   to_s="BF-3A",
+                   to_w="SOUTHFORD",
+                   to_n="BF-9A")
+southford_nw = Tile("Southford Outskirts", "BF-7A", "Overshire", southford_desc, "forest", 3,
                     to_s="BF-4A",
-                    to_e="BF-8A",
-                    to_w="BF-9B")
-bfor_tile_8a = Tile("Barrier Forest", "BF-8A", "Overshire", bfor_desc, "forest", 4, 0, 5,
-                    to_s="BF-5A",
-                    to_w="BF-7A",
-                    to_e="BF-9A")
-bfor_tile_9a = Tile("Barrier Forest", "BF-9A", "Overshire", bfor_desc, "forest", 4, 1, 5,
+                    to_e="BF-8A")
+southford_n = Tile("Southford Outskirts", "BF-8A", "Overshire", southford_desc, "forest", 3,
+                   to_s="SOUTHFORD",
+                   to_w="BF-7A",
+                   to_e="BF-9A")
+southford_ne = Tile("Southford Outskirts", "BF-9A", "Overshire", southford_desc, "forest", 3,
                     to_s="BF-6A",
                     to_w="BF-8A")
 
-# Quadrant `B`
-bfor_tile_1b = Tile("Barrier Forest", "BF-1B", "Overshire", bfor_desc, "forest", 5, -4, 3,
-                    to_e="BF-2B",
-                    to_n="BF-4B",
-                    to_w="BF-3C")
-bfor_tile_2b = Tile("Barrier Forest", "BF-2B", "Overshire", bfor_desc, "forest", 4, -3, 3,
-                    to_w="BF-1B",
-                    to_e="BF-3B",
-                    to_n="BF-5B")
-bfor_tile_3b = Tile("Barrier Forest", "BF-3B", "Overshire", bfor_desc, "forest", 3, -2, 3,
-                    to_e="BF-1A",
-                    to_w="BF-2B",
-                    to_n="BF-6B")
-bfor_tile_4b = Tile("Barrier Forest", "BF-4B", "Overshire", bfor_desc, "forest", 5, -4, 4,
-                    to_s="BF-1B",
-                    to_e="BF-5B",
-                    to_n="BF-7B",
-                    to_w="BF-6C")
-overshire_city_tile = Tile("Overshire City", "BF-5B", "Overshire", bfor_desc, "forest", 4, -3, 4,
-                    to_s="BF-2B",
-                    to_w="BF-4B",
-                    to_e="BF-6B",
-                    to_n="BF-8B",
-                    town_list=[towns.town_overshire_city])
-bfor_tile_6b = Tile("Barrier Forest", "BF-6B", "Overshire", bfor_desc, "forest", 3, -2, 4,
-                    to_w="BF-5B",
-                    to_e="BF-4A",
-                    to_s="BF-3B",
-                    to_n="BF-9B")
-bfor_tile_7b = Tile("Barrier Forest", "BF-7B", "Overshire", bfor_desc, "forest", 5, -4, 5,
-                    to_s="BF-4B",
-                    to_e="BF-8B",
-                    to_w="BF-9C")
-bfor_tile_8b = Tile("Barrier Forest", "BF-8B", "Overshire", bfor_desc, "forest", 4, -3, 5,
-                    to_s="BF-5B",
-                    to_w="BF-7B",
-                    to_e="BF-9B")
-bfor_tile_9b = Tile("Barrier Forest", "BF-9B", "Overshire", bfor_desc, "forest", 3, -2, 5,
-                    to_s="BF-6B",
-                    to_e="BF-7A",
-                    to_w="BF-8B")
+# OVERSHIRE
+o_city_desc = """"""
 
-bfor_tile_1c = Tile("Barrier Forest", "BF-1C", "Overshire", bfor_desc, "forest", 5, -7, 3,
-                    to_e="BF-2C",
-                    to_n="BF-4C")
-bfor_tile_2c = Tile("Barrier Forest", "BF-2C", "Overshire", bfor_desc, "forest", 5, -6, 3,
-                    to_e="BF-3C",
-                    to_n="BF-5C",
-                    to_w="BF-1C")
-bfor_tile_3c = Tile("Barrier Forest", "BF-3C", "Overshire", bfor_desc, "forest", 5, -5, 3,
-                    to_e="BF-1B",
-                    to_n="BF-6C",
-                    to_w="BF-2C")
-bfor_tile_4c = Tile("Barrier Forest", "BF-4C", "Overshire", bfor_desc, "forest", 5, -7, 4,
-                    to_e="BF-5C",
-                    to_n="BF-7C",
-                    to_s="BF-1C")
-bfor_tile_5c = Tile("Barrier Forest", "BF-5C", "Overshire", bfor_desc, "forest", 5, -6, 4,
-                    to_e="BF-6C",
-                    to_n="BF-8C",
-                    to_s="BF-2C",
-                    to_w="BF-4C")
-bfor_tile_6c = Tile("Barrier Forest", "BF-6C", "Overshire", bfor_desc, "forest", 5, -5, 4,
-                    to_e="BF-4B",
-                    to_s="BF-3C",
-                    to_w="BF-5C",
-                    to_n="BF-9C")
-bfor_tile_7c = Tile("Barrier Forest", "BF-7C", "Overshire", bfor_desc, "forest", 5, -7, 5,
-                    to_e="BF-8C",
-                    to_s="BF-4C")
-bfor_tile_8c = Tile("Barrier Forest", "BF-8C", "Overshire", bfor_desc, "forest", 5, -6, 5,
-                    to_e="BF-9C",
-                    to_s="BF-5C",
-                    to_w="BF-7C")
-bfor_tile_9c = Tile("Barrier Forest", "BF-9C", "Overshire", bfor_desc, "forest", 5, -5, 5,
-                    to_e="BF-7B",
-                    to_w="BF-8C",
-                    to_s="BF-6C")
+o_city_tile = Tile("Overshire City", "BF-5B", "Overshire", o_city_desc, "forest", 4,
+                   to_s="BF-2B",
+                   to_w="BF-4B",
+                   to_e="BF-6B",
+                   to_n="BF-8B",
+                   town_list=[towns.town_overshire_city])
+o_city_sw = Tile("Overshire City Outskirts", "BF-1B", "Overshire", o_city_desc, "forest", 5,
+                 to_e="BF-2B",
+                 to_n="BF-4B")
+o_city_s = Tile("Overshire City Outskirts", "BF-2B", "Overshire", o_city_desc, "forest", 5,
+                to_w="BF-1B",
+                to_e="BF-3B",
+                to_n="BF-5B")
+o_city_se = Tile("Overshire City Outskirts", "BF-3B", "Overshire", o_city_desc, "forest", 5,
+                 to_w="BF-2B",
+                 to_n="BF-6B")
+o_city_w = Tile("Overshire City Outskirts", "BF-4B", "Overshire", o_city_desc, "forest", 5,
+                to_s="BF-1B",
+                to_e="BF-5B",
+                to_n="BF-7B")
+o_city_e = Tile("Overshire City Outskirts", "BF-6B", "Overshire", o_city_desc, "forest", 5,
+                to_w="BF-5B",
+                to_s="BF-3B",
+                to_n="BF-9B")
+o_city_nw = Tile("Overshire City Outskirts", "BF-7B", "Overshire", o_city_desc, "forest", 5,
+                 to_s="BF-4B",
+                 to_e="BF-8B")
+o_city_n = Tile("Overshire City Outskirts", "BF-8B", "Overshire", o_city_desc, "forest", 5,
+                to_s="BF-5B",
+                to_w="BF-7B",
+                to_e="BF-9B")
+o_city_ne = Tile("Overshire City Outskirts", "BF-9B", "Overshire", o_city_desc, "forest", 5,
+                 to_s="BF-6B",
+                 to_w="BF-8B")
+#
+# bfor_tile_1c = Tile("Barrier Forest", "BF-1C", "Overshire", bfor_desc, "forest", 5, -7, 3,
+#                     to_e="BF-2C",
+#                     to_n="BF-4C")
+# bfor_tile_2c = Tile("Barrier Forest", "BF-2C", "Overshire", bfor_desc, "forest", 5, -6, 3,
+#                     to_e="BF-3C",
+#                     to_n="BF-5C",
+#                     to_w="BF-1C")
+# bfor_tile_3c = Tile("Barrier Forest", "BF-3C", "Overshire", bfor_desc, "forest", 5, -5, 3,
+#                     to_e="BF-1B",
+#                     to_n="BF-6C",
+#                     to_w="BF-2C")
+# bfor_tile_4c = Tile("Barrier Forest", "BF-4C", "Overshire", bfor_desc, "forest", 5, -7, 4,
+#                     to_e="BF-5C",
+#                     to_n="BF-7C",
+#                     to_s="BF-1C")
+# bfor_tile_5c = Tile("Barrier Forest", "BF-5C", "Overshire", bfor_desc, "forest", 5, -6, 4,
+#                     to_e="BF-6C",
+#                     to_n="BF-8C",
+#                     to_s="BF-2C",
+#                     to_w="BF-4C")
+# bfor_tile_6c = Tile("Barrier Forest", "BF-6C", "Overshire", bfor_desc, "forest", 5, -5, 4,
+#                     to_e="BF-4B",
+#                     to_s="BF-3C",
+#                     to_w="BF-5C",
+#                     to_n="BF-9C")
+# bfor_tile_7c = Tile("Barrier Forest", "BF-7C", "Overshire", bfor_desc, "forest", 5, -7, 5,
+#                     to_e="BF-8C",
+#                     to_s="BF-4C")
+# bfor_tile_8c = Tile("Barrier Forest", "BF-8C", "Overshire", bfor_desc, "forest", 5, -6, 5,
+#                     to_e="BF-9C",
+#                     to_s="BF-5C",
+#                     to_w="BF-7C")
+# bfor_tile_9c = Tile("Barrier Forest", "BF-9C", "Overshire", bfor_desc, "forest", 5, -5, 5,
+#                     to_e="BF-7B",
+#                     to_w="BF-8C",
+#                     to_s="BF-6C")
 
+# Overshire Tiles
+nearton_tiles = [nearton_tile, nearton_w, nearton_ne, nearton_e, nearton_s,
+                 nearton_n, nearton_se, nearton_nw, nearton_sw]
+southford_tiles = [southford_tile, southford_w, southford_ne, southford_e, southford_s,
+                   southford_n, southford_se, southford_nw, southford_sw]
+o_city_tiles = [o_city_tile, o_city_w, o_city_ne, o_city_e, o_city_s, o_city_n,
+                o_city_se, o_city_nw, o_city_sw]
 
-# -- Barrier Forest TILESETS -- #
+overshire_tiles = nearton_tiles + southford_tiles + o_city_tiles
 
-# Inner Forest
-icf_tiles = [nearton_tile, southford_tile, in_for_c, in_for_w, in_for_e, in_for_s, in_for_n, in_for_se, in_for_nw,
-             if_bridge, in_for_ww, in_for_www, in_for_ee, in_for_eee, in_for_ss, in_for_sw, in_for_ssw, in_for_sww,
-             in_for_swww, in_for_sswww, in_for_nww, in_for_nwww, in_for_nee, in_for_neee, in_for_sse, in_for_see,
-             in_for_ssee, in_for_seee, in_for_sseee]
-
-# Barrier Forest
-bfor_tiles_q_a = [bfor_tile_1a, bfor_tile_2a, bfor_tile_3a, bfor_tile_4a, bfor_tile_5a,
-                  bfor_tile_6a, bfor_tile_7a, bfor_tile_8a, bfor_tile_9a]
-
-bfor_tiles_q_b = [bfor_tile_1b, bfor_tile_2b, bfor_tile_3b, bfor_tile_4b, overshire_city_tile,
-                  bfor_tile_6b, bfor_tile_7b, bfor_tile_8b, bfor_tile_9b]
-
-bfor_tiles_q_c = [bfor_tile_1c, bfor_tile_2c, bfor_tile_3c, bfor_tile_4c, bfor_tile_5c,
-                  bfor_tile_6c, bfor_tile_7c, bfor_tile_8c, bfor_tile_9c]
-
-all_tiles = icf_tiles + bfor_tiles_q_a + bfor_tiles_q_b  + bfor_tiles_q_c
+all_tiles = overshire_tiles
 
 # valid_provinces and valid_biomes are lists of strings that are allowed to be used as biome/proivince names
 # This is to prevent errors such as typos and whatnot, as there's no reason to use any other biome/proivince names
@@ -372,26 +238,34 @@ def find_tile_with_id(tile_id):
 
     return False
 
-# These loops run checks on the world map, checking for errors in order to prevent crashes and weird behaviors
+# --These loops run checks on the world map, checking for errors in order to prevent crashes and weird behaviors--
+
+# This loop checks to make sure that every tile is in the all_tiles list, because otherwise
+# the find_tile_with_id() function won't be able to access that tile.
 for item in copy.copy(locals()):
     if isinstance(locals()[item], Tile) and locals()[item] not in all_tiles:
         print(f"{locals()[item].tile_id} is not in all_tiles!")
 
+# This loop checks to make sure that all set directions for each tile correspond to valid tiles.
 for item2 in all_tiles:
     for direction in [item2.to_s, item2.to_n, item2.to_e, item2.to_w]:
         if direction and not find_tile_with_id(direction):
             print(f"{item2.tile_id} has an invalid direction ({direction})!")
 
+# This loop checks to make sure all tile_id's are unique
 for item3 in all_tiles:
     if item3 != find_tile_with_id(item3.tile_id):
         print(f"{item3.tile_id} is being used as a Tile ID for multiple tiles!")
 
-
+# This optional loop checks to make sure no tiles are "adjacent to themselves"
+# e.g. North on tile_a leads to tile_a
 for item4 in all_tiles:
     for direction in [item4.to_s, item4.to_n, item4.to_e, item4.to_w]:
         if direction == item4.tile_id and not item4.allow_recursion:
             print(f"{item4.tile_id} leads to itself - is this intended?")
 
+# This optional loop checks to make sure tiles are two-way passages
+# e.g. North on tile_a leads to tile_b, South on tile_b does nothing
 for item5 in all_tiles:
     if any([item5.to_s and not find_tile_with_id(item5.to_s).to_n,
             item5.to_n and not find_tile_with_id(item5.to_n).to_s,
@@ -399,6 +273,8 @@ for item5 in all_tiles:
             item5.to_e and not find_tile_with_id(item5.to_e).to_w]) and not item5.allow_oneway:
         print(f"{item5.tile_id} has one-way passages - is this intended?")
 
+# This optional loop checks to make sure all tiles are two-way passages that specifically correspond to eachother
+# e.g. North on tile_a leads to tile_b, South on tile_b leads to tile_c
 for item6 in all_tiles:
     is_error = False
 
@@ -421,14 +297,10 @@ for item6 in all_tiles:
     if is_error:
         print(f"{item6.tile_id} has non-euclidean passages - is this intended?")
 
+# This loop checks to make sure all tiles have valid province/biome names
 for item7 in all_tiles:
     if item7.province not in valid_provinces:
         print(f"{item7.tile_id} has an invalid province name!")
 
     if item7.biome not in valid_biomes:
         print(f"{item7.tile_id} has an invalid biome name!")
-
-for tile1 in all_tiles:
-    for tile2 in all_tiles:
-        if tile1 != tile2 and tile1.x == tile2.x and tile1.y == tile2.y and tile1.z == tile2.z:
-            print(f"{tile1.tile_id} and {tile2.tile_id} have the same coordiantes!")

@@ -540,7 +540,7 @@ spellbook = {
         'Previous Spell': []
     },
 
-    'Xoann': {
+    'Chili': {
         'Healing': [pit_heal],
         'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],

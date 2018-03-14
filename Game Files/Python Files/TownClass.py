@@ -54,7 +54,6 @@ class Town:
         print('-'*save_load.divider_size)
         print(ascii_art.locations['Town'])
         print(f'Welcome to {self.name}!')
-        self.new_location()
         print('-'*save_load.divider_size)
 
         while True:
@@ -121,45 +120,6 @@ class Town:
                     continue
 
                 break
-
-    def new_location(self):  # Translate the location of newly-found towns into a string
-        mpi = main.party_info
-
-        cx_letter = 'W' if mpi['x'] < 0 else 'E'
-        cy_letter = 'S' if mpi['y'] < 0 else 'N'
-        cz_letter = 'DOWN' if mpi['z'] < 0 else 'UP'
-
-        coord_x = f"""{mpi['x']}'{cx_letter}"""
-        coord_y = f"""{mpi['y']}'{cy_letter}"""
-        coord_z = f""", {mpi['z']}'{cz_letter}""" if mpi['z'] else ''
-
-        new_coords = [self.name, self.town_id, f"{coord_y}, {coord_x}{coord_z}"]
-
-        # Remove the previous coordinates from the inventory. This makes sure that the only
-        # set of coordinates in the inventory are completely up to date. So if a town gets renamed
-        # or changes location then the coordinates will update.
-        new_list = []
-        for x in items.inventory['coord']:
-            if x[1] != self.town_id:
-                new_list.append(x)
-
-        items.inventory['coord'] = new_list
-        items.inventory['coord'].append(new_coords)
-
-        # Make sure that this town is not already in visited_towns before you add it
-        for y in mpi['visited_towns']:
-            # We check for town_id instead of the town's name - this means that even if the town is renamed
-            # in the future, the town will still be counted as having been visited before
-            if y[1] == self.town_id:
-                break
-
-        else:
-            main.party_info['visited_towns'].append(self.name)
-
-        print(f"{self.name}'s location can be found in your coordinates log.")
-        main.s_input("\nPress enter/return ")
-
-        return new_coords
 
     def inside_town(self):
         town_words = ['i', 'g', 'u']
@@ -230,7 +190,7 @@ class Town:
                     for character in [
                         units.player,
                         units.solou,
-                        units.xoann,
+                        units.chili,
                         units.chyme,
                         units.ran_af,
                         units.parsto,
@@ -597,10 +557,6 @@ class Tavern:
         self.name = name
         self.inn_cost = inn_cost
 
-    def get_coords(self, add=True):
-        # Coordinates of taverns are not kept in the inventory
-        pass
-
     def town_choice(self):
         print('-'*save_load.divider_size)
         print(f'Inn Keeper: "Hello, traveler! Welcome to the {self.name}!"')
@@ -621,7 +577,7 @@ class Tavern:
 
                     main.party_info['gp'] -= self.inn_cost
 
-                    for character in [units.player, units.solou, units.xoann,
+                    for character in [units.player, units.solou, units.chili,
                                       units.chyme, units.ran_af, units.parsto, units.adorine]:
 
                         character.hp = copy.copy(character.max_hp)

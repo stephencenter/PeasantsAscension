@@ -74,12 +74,10 @@ pygame.mixer.init()
 party_info = {'biome': 'forest',
               'music': '../Music/Through the Forest.ogg',
               'prov': "Overshire",
-              'prev_town': tiles.in_for_c,
-              'p_town_xyz': [0, 0, 0],
+              'prev_town': tiles.nearton_tile,
               'gp': 20,
               'visited_towns': [],
-              'current_tile': tiles.in_for_c,
-              'x': 0, 'y': 0, 'z': 0,
+              'current_tile': tiles.nearton_tile,
               'steps_without_battle': 0,
               'do_monster_spawns': True,
               'scout_list': [],
@@ -200,7 +198,7 @@ def game_loop():
 
 
 def check_region():
-    # Check the coordinates of the player and change the music to match
+    # Check the location of the player and change the music to match
     # Also alerts the player when they change biomes/provinces
     global party_info
 
@@ -284,15 +282,7 @@ def game_ui():
     print(f"-CURRENT LOCATION-")
     print(mpi['current_tile'].generate_ascii())
 
-    # Calculate the character's X, Y, and Z coordinates and create a string from them. The Z coordinate does not
-    # change nearly as often as the other two, so don't display it unless it != 0.
-    coord_x = f"{mpi['x']}'{'W' if mpi['x'] < 0 else 'E'}{', ' if mpi['z'] != 0 else ''}"
-    coord_y = f"{mpi['y']}'{'S' if mpi['y'] < 0 else 'N'}, "
-    coord_z = f"""{mpi["z"] if mpi["z"] != 0 else ""}{"'UP" if mpi["z"] > 0 else "'DOWN" if mpi['z'] < 0 else ""}"""
-
-    coordinates = ''.join([coord_y, coord_x, coord_z])
-
-    print(f"Coordinates: {coordinates} | Province: [{tile.province}] | Region [{tile.name}]")
+    print(f"Region [{tile.name}] | Province: [{tile.province}]")
 
     # Tells the player which directions are available to go in
     for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
@@ -334,10 +324,6 @@ def move_command(available_dirs, command):
 
     party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in
                                   [a[1] for a in available_dirs if a[0] == command]][0]
-
-    # Change the player's coordinates
-    pct = party_info['current_tile']
-    party_info['x'], party_info['y'], party_info['z'] = pct.x, pct.y, pct.z
 
     # If none of these fucntions return True, then a battle can occur.
     if not any([check_region(), units.check_bosses(), towns.search_towns(enter=False)]):
@@ -388,7 +374,7 @@ def stats_command():
 
     target_options = [x for x in [units.player,
                                   units.solou,
-                                  units.xoann,
+                                  units.chili,
                                   units.adorine,
                                   units.ran_af,
                                   units.parsto,
@@ -457,7 +443,7 @@ def rest_command():
 
     if all([x.hp == x.max_hp and x.mp == x.max_mp for x in [units.player,
                                                             units.solou,
-                                                            units.xoann,
+                                                            units.chili,
                                                             units.chyme,
                                                             units.ran_af,
                                                             units.parsto,
@@ -495,7 +481,7 @@ def tools_command():
     available_tools = []
 
     for cat in items.inventory:
-        if cat in ['coord', 'quests']:
+        if cat == 'quests':
             continue
 
         for item in items.inventory[cat]:

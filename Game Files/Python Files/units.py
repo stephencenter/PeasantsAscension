@@ -734,7 +734,7 @@ Defensive Element: {self.def_element.title()} | Offensive Element: {self.off_ele
         # choose_target is a function that lets the player choose what unit to target with their next action
         pcu_list = [x for x in [player,
                                 solou,
-                                xoann,
+                                chili,
                                 chyme,
                                 ran_af,
                                 adorine,
@@ -1262,7 +1262,7 @@ class Monster(Unit):
         self.m_target = random.choice([x for x in [
                                        player,
                                        solou,
-                                       xoann,
+                                       chili,
                                        chyme,
                                        ran_af,
                                        parsto,
@@ -1703,7 +1703,7 @@ def eval_element(attacker, target, damage):
 def create_player():
     global player
     global solou
-    global xoann
+    global chili
     global adorine
     global ran_af
     global parsto
@@ -1714,7 +1714,7 @@ def create_player():
     # Pronounced "So-low"
     solou = PlayableCharacter('Solou', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='mage', enabled=False)
     # Pronounced "Zo-ann"
-    xoann = PlayableCharacter('Xoann', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='assassin', enabled=False)
+    chili = PlayableCharacter('Chili', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='assassin', enabled=False)
     # Pronounced "Adore-een"
     adorine = PlayableCharacter('Adorine', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='warrior', enabled=False)
     # Pronounced "Rahn-ahf"
@@ -1815,7 +1815,7 @@ def fix_stats():
 
     global player
     global solou
-    global xoann
+    global chili
     global chyme
     global parsto
     global ran_af
@@ -1825,7 +1825,7 @@ def fix_stats():
     # Make an abbreviation for battle.temp_stats so a later part doesn't have to be muilti-line
     bts = battle.temp_stats
 
-    for x in [player, solou, xoann, chyme, parsto, ran_af, adorine]:
+    for x in [player, solou, chili, chyme, parsto, ran_af, adorine]:
         x.hp, x.mp, x.ap = max(0, x.hp), max(0, x.mp), max(0, x.ap)
         x.hp, x.mp, x.ap = min(x.max_hp, x.hp), min(x.max_mp, x.mp), min(x.max_ap, x.ap)
         x.hp, x.mp, x.ap = math.ceil(x.hp), math.ceil(x.mp), math.ceil(x.ap)
@@ -1857,7 +1857,7 @@ def fix_stats():
 def heal_pcus(percentage):
     for pcu in [player,
                 solou,
-                xoann,
+                chili,
                 chyme,
                 ran_af,
                 parsto,
@@ -1877,7 +1877,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     parsto.target = ''
     adorine.target = ''
     ran_af.target = ''
-    xoann.target = ''
+    chili.target = ''
     solou.target = ''
     chyme.target = ''
 
@@ -1885,7 +1885,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     parsto.c_spell = ''
     adorine.c_spell = ''
     ran_af.c_spell = ''
-    xoann.c_spell = ''
+    chili.c_spell = ''
     solou.c_spell = ''
     chyme.c_spell = ''
 
@@ -1893,7 +1893,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     parsto.c_ability = ''
     adorine.c_ability = ''
     ran_af.c_ability = ''
-    xoann.c_ability = ''
+    chili.c_ability = ''
     solou.c_ability = ''
     chyme.c_ability = ''
 
@@ -1902,7 +1902,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     with open(s_path, mode='w', encoding='utf-8') as f:
         json.dump(solou.__dict__, f, indent=4, separators=(', ', ': '))
     with open(x_path, mode='w', encoding='utf-8') as f:
-        json.dump(xoann.__dict__, f, indent=4, separators=(', ', ': '))
+        json.dump(chili.__dict__, f, indent=4, separators=(', ', ': '))
     with open(a_path, mode='w', encoding='utf-8') as f:
         json.dump(adorine.__dict__, f, indent=4, separators=(', ', ': '))
     with open(r_path, mode='w', encoding='utf-8') as f:
@@ -1917,7 +1917,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     # Load the JSON files and translate them into "PlayableCharacter" objects
     global player
     global solou
-    global xoann
+    global chili
     global adorine
     global chyme
     global ran_af
@@ -1925,7 +1925,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
 
     player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
     solou = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
-    xoann = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
+    chili = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
     adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
     chyme = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
     ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
@@ -1936,7 +1936,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     with open(s_path, encoding='utf-8') as f:
         solou.__dict__ = json.load(f)
     with open(x_path, encoding='utf-8') as f:
-        xoann.__dict__ = json.load(f)
+        chili.__dict__ = json.load(f)
     with open(a_path, encoding='utf-8') as f:
         adorine.__dict__ = json.load(f)
     with open(r_path, encoding='utf-8') as f:
@@ -1946,7 +1946,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     with open(p_path, encoding='utf-8') as f:
         parsto.__dict__ = json.load(f)
 
-    for x in [player, solou, xoann, adorine, chyme, ran_af, parsto]:
+    for x in [player, solou, chili, adorine, chyme, ran_af, parsto]:
         x.reset_ability_vars()
 
 
@@ -1973,7 +1973,7 @@ def deserialize_bosses(path):
 
 player = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 solou = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
-xoann = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+chili = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 adorine = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 ran_af = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 parsto = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')

@@ -69,16 +69,16 @@ def set_temp_stats():
             'evad': _c(units.solou.evad),
             'attributes': _c(units.solou.attributes)
         },
-        'Xoann': {
-            'attk': _c(units.xoann.attk),
-            'dfns': _c(units.xoann.dfns),
-            'p_attk': _c(units.xoann.p_attk),
-            'p_dfns': _c(units.xoann.p_dfns),
-            'm_attk': _c(units.xoann.m_attk),
-            'm_dfns': _c(units.xoann.m_dfns),
-            'spd': _c(units.xoann.spd),
-            'evad': _c(units.xoann.evad),
-            'attributes': _c(units.xoann.attributes)
+        'Chili': {
+            'attk': _c(units.chili.attk),
+            'dfns': _c(units.chili.dfns),
+            'p_attk': _c(units.chili.p_attk),
+            'p_dfns': _c(units.chili.p_dfns),
+            'm_attk': _c(units.chili.m_attk),
+            'm_dfns': _c(units.chili.m_dfns),
+            'spd': _c(units.chili.spd),
+            'evad': _c(units.chili.evad),
+            'attributes': _c(units.chili.attributes)
         },
         'Chyme': {
             'attk': _c(units.chyme.attk),
@@ -139,7 +139,7 @@ def battle_system(is_boss=False, ambush=False):
 
     enabled_pcus = [x for x in [units.player,
                                 units.solou,
-                                units.xoann,
+                                units.chili,
                                 units.chyme,
                                 units.ran_af,
                                 units.adorine,
@@ -347,7 +347,6 @@ def after_battle(is_boss):
                     # If you die, you return to the last town visited or 0'N, 0'W if you haven't been to a town yet.
 
                     main.party_info['current_tile'] = main.party_info['prev_town']
-                    main.party_info['x'], main.party_info['y'], main.party_info['z'] = main.party_info['p_town_xyz']
                     units.heal_pcus(1)
 
                     pygame.mixer.music.load(main.party_info['music'])
@@ -459,7 +458,7 @@ def bat_stats():
 
     second_padding = len(max([f'{units.player.hp}/{units.player.max_hp} HP' if units.player.enabled else '',
                               f'{units.solou.hp}/{units.solou.max_hp} HP' if units.solou.enabled else '',
-                              f'{units.xoann.hp}/{units.xoann.max_hp} HP' if units.xoann.enabled else '',
+                              f'{units.chili.hp}/{units.chili.max_hp} HP' if units.chili.enabled else '',
                               f'{units.adorine.hp}/{units.adorine.max_hp} HP' if units.adorine.enabled else '',
                               f'{units.chyme.hp}/{units.chyme.max_hp} HP' if units.chyme.enabled else '',
                               f'{units.ran_af.hp}/{units.ran_af.max_hp} HP' if units.ran_af.enabled else '',
@@ -470,7 +469,7 @@ def bat_stats():
 
     third_padding = len(max([f'{units.player.mp}/{units.player.max_mp} MP' if units.player.enabled else '',
                              f'{units.solou.mp}/{units.solou.max_mp} MP' if units.solou.enabled else '',
-                             f'{units.xoann.mp}/{units.xoann.max_mp} MP' if units.xoann.enabled else '',
+                             f'{units.chili.mp}/{units.chili.max_mp} MP' if units.chili.enabled else '',
                              f'{units.adorine.mp}/{units.adorine.max_mp} MP' if units.adorine.enabled else '',
                              f'{units.chyme.mp}/{units.chyme.max_mp} MP' if units.chyme.enabled else '',
                              f'{units.ran_af.mp}/{units.ran_af.max_mp} MP' if units.ran_af.enabled else '',
@@ -498,15 +497,15 @@ def bat_stats():
               pad2=' '*(second_padding - len(f'{units.solou.hp}/{units.solou.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.solou.mp}/{units.solou.max_mp} MP'))))
 
-    if units.xoann.enabled:
+    if units.chili.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.xoann.name, units.xoann.hp,
-              units.xoann.max_hp, units.xoann.mp,
-              units.xoann.max_mp, units.xoann.lvl,
-              ', '.join([x.title() for x in units.xoann.status_ail]),
-              pad1=' '*(first_padding - len(units.xoann.name)),
-              pad2=' '*(second_padding - len(f'{units.xoann.hp}/{units.xoann.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.xoann.mp}/{units.xoann.max_mp} MP'))))
+              units.chili.name, units.chili.hp,
+              units.chili.max_hp, units.chili.mp,
+              units.chili.max_mp, units.chili.lvl,
+              ', '.join([x.title() for x in units.chili.status_ail]),
+              pad1=' '*(first_padding - len(units.chili.name)),
+              pad2=' '*(second_padding - len(f'{units.chili.hp}/{units.chili.max_hp} HP')),
+              pad3=' '*(third_padding - len(f'{units.chili.mp}/{units.chili.max_mp} MP'))))
 
     if units.chyme.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
