@@ -19,7 +19,7 @@
 # Music by Ben Landis: http://www.benlandis.com/
 # And Eric Skiff: http://ericskiff.com/music/
 # --------------------------------------------------------------------------- #
-# Contact me via Twitter (@TheFrozenMawile) or email (ninjafurret@gmail.com)
+# Contact me via Twitter (@TheFrozenMawile) or email (stephenbcenter@gmail.com)
 # for questions/feedback. Visit the subreddit at http://reddit.com/PeasantsAscension
 # --------------------------------------------------------------------------- #
 # Notes for people reading this code:
@@ -32,9 +32,8 @@
 #     too! Contact information is near the top of this module.
 #
 #  3. If you encounter an error message at any point when playing this, please
-#     email the error code to me. If you could provide a description of what
-#     you did to cause the bug, that'd be great. Contact information is near
-#     the top of the module.
+#     email the error_log.out file to stephenbcenter@gmail.com. If you could
+#     provide a description of what you did to cause the bug, that'd be great.
 #
 #  4. I made an attempt to comment most of my code, and hopefully the rest is
 #     pretty self-explanatory. But if you have any questions about how something
@@ -601,7 +600,7 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
         print(traceback.format_exc())
         print("""\
 Peasants' Ascension encountered an error and crashed! Send the error message
-shown above to TheFrozenMawile (ninjafurret@gmail.com) to make sure the bug
+shown above to TheFrozenMawile (stephenbcenter@gmail.com) to make sure the bug
 gets fixed. The error message, along with any errors messages encountered,
 can also be found in the error_log.out file.""")
         s_input("\nPress enter/return")

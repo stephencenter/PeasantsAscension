@@ -85,7 +85,7 @@ What to do if the game crashes:
     the error message from being read. To counteract this, the game
     automatically logs the error in a file named "error_log.out". If 
     you encounter an error, the message will be located there, and the 
-    file can be sent to me (ninjafurret@gmail.com) so I can fix the 
+    file can be sent to me (stephenbcenter@gmail.com) so I can fix the
     problem. Don't worry, the only information located in the file is
     a generic error message and nothing else. (If you want to verify 
     this, you can open the file using a program like TextWrangler, Notepad++, 
