@@ -284,7 +284,7 @@ def set_vol(mode):
                 if y_n.startswith("y"):
                     if mode == "music":
                         save_load.music_vol = new_vol/100
-                        pygame.mixer.music.set_volume(new_vol)
+                        pygame.mixer.music.set_volume(new_vol/100)
 
                     elif mode == "sound":
                         save_load.sound_vol = new_vol/100

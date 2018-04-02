@@ -104,6 +104,7 @@ def solou_c3_at():
     print("Solou the Mage has been added to your party!")
     main.s_input('\nPress enter/return ')
 
+
 solou_convo_1 = Conversation("""
 H-hello! My name is Solou, wizard in training! Well, the truth is that I'm actually a page for King Harconius II, but my
 one dream is to become a master sorceress! Uh, well anyway I'm here delivering a letter to a person named... oh wait a
@@ -161,6 +162,7 @@ def joseph_c2_at():
 
     joseph_convo_2.active = False
     solou_quest_1.completion()
+
 
 joseph_convo_2 = Conversation("""\
 Ah, Solou! Long time no see! I see you've taken up adventuring.
@@ -580,6 +582,7 @@ def polmor_q1_uc():
 
     print('-'*save_load.divider_size)
     print('Serena and Polmor will now heal you for free if you visit them!')
+
 
 polmor_quest_1 = Quest("Fight Against the Blight", """\
 Wait a minute... I am so stupid! According to my calculations, you are the

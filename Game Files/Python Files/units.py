@@ -1971,6 +1971,7 @@ def deserialize_bosses(path):
             if key == boss.name:
                 boss.active = json_bosslist[key]
 
+
 player = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 solou = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 chili = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')

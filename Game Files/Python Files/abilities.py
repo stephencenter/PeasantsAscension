@@ -68,6 +68,7 @@ def use_taunt(user):
     print(f"{user.name} taunts the enemy team!")
     print(f"{user.name} gains {phys}/{other}/{other} physical/magical/pierce defense!")
 
+
 taunt = Ability("Taunt", f"""\
 The user taunts the enemy team, forcing all enemies to attack him for 1 turn.
 The enemies can only use standard attacks while taunted, and cannot cast
@@ -281,6 +282,7 @@ def use_breaking_vows(user):
     if lifesteal:
         print(f"{user.target.name} lifesteals for {lifesteal} HP!")
 
+
 breaking_vows = Ability("Breaking Vows", f"""\
 The user realigns their chakras, converting their own pain into an offensive
 weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
@@ -475,6 +477,7 @@ def use_skill_syphon(user):
 
         else:
             print(f"{user.target.name} stats decreased by {total}!")
+
 
 skill_syphon = Ability("Skill Syphon", f"""\
 The user channels their power to literally drain the skill from a target enemy.
@@ -709,6 +712,7 @@ def use_unholy_binds(user):
     else:
         print(f"The {user.target.name} had their defensive element set to Darkness!")
 
+
 unholy_binds = Ability("Unholy Binds", f"""\
 Sets a target's defensive element to Darkness, causing Light and Dark spells
 to do more/less damage, respectively. If the target is an enemy, and already
@@ -748,6 +752,7 @@ def use_judgement(user):
         user.target.ability_vars['judgement_day'] = judgement_day
         user.target.status_ail.append("Doomed")
         sounds.poison_damage.play()
+
 
 judgement = Ability("Judgement", f"""\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the

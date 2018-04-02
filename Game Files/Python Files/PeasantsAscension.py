@@ -541,7 +541,7 @@ def debug_command():
             print(f">{command}")
             exec(command)
 
-        except:
+        except Exception:
             print(f">Invalid Command")
 
 
