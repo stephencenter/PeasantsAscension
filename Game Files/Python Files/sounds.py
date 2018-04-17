@@ -14,6 +14,7 @@
 # along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import copy
 
 from pygame import mixer
 from pygame.mixer import Sound
@@ -103,16 +104,24 @@ eerie_sound = Sound('../Sound FX/eerie_sound.wav')
 # Random encounter -- No current use, will probably be used when encountering an enemy on the overworld
 random_enc = Sound('../Sound FX/random_encounter.wav')
 
+all_sounds = [sword_slash, magic_attack,
+              magic_healing, enemy_hit,
+              foot_steps, aim_weapon,
+              attack_miss,item_pickup,
+              health_low, poison_damage,
+              buff_spell, ally_death,
+              critical_hit, lockpicking,
+              lockpick_break, unlock_chest,
+              debuff, eerie_sound,
+              random_enc, enemy_death,
+              ability_cast]
+
 
 def change_volume():
-    for x in ['sword_slash', 'magic_attack',
-              'magic_healing', 'enemy_hit',
-              'foot_steps', 'aim_weapon',
-              'attack_miss', 'item_pickup',
-              'health_low', 'poison_damage',
-              'buff_spell', 'ally_death',
-              'critical_hit', 'lockpicking',
-              'lockpick_break', 'unlock_chest',
-              'debuff', 'eerie_sound',
-              'random_enc', 'enemy_death']:
-        globals()[x].set_volume(save_load.sound_vol)
+    for x in all_sounds:
+        x.set_volume(save_load.sound_vol)
+
+
+for item in copy.copy(globals()):
+    if isinstance(globals()[item], Sound) and globals()[item] not in all_sounds:
+        print(f'{item} not in all_sounds!')

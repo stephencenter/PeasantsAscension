@@ -14,10 +14,10 @@ Game Files/Save Files/
 Game Files/Music/
 Game Files/Python Files/__pycache__/
 Game Files/Python Files/build/
-Game Files/settings.cfg
 settings.cfg
 build/
 dist/
 /.idea
 /.idea
 /.tmp.drivedownload/
+/Game Files/settings.cfg
