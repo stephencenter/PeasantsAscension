@@ -148,18 +148,18 @@ def battle_system(is_boss=False, ambush=False):
 
     # Bosses use a different battle music than when battling normal enemies
     if is_boss:
-        m_list = [units.monster]
+        m_list = ([units.monster] + units.monster.lackies) if units.monster.lackies else [units.monster]
         pygame.mixer.music.load('../Music/Terrible Tarantuloid.ogg')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
         print(ascii_art.monster_art[units.monster.m_name] % '')
 
-        if len(m_list) == 3:
-            print(f'The legendary {units.monster.name} and 2 other monsters have awoken!')
+        if len(m_list) > 2:
+            print(f'The legendary {units.monster.name} and its lackys have awoken!')
 
         elif len(m_list) == 2:
-            print(f'The legendary {units.monster.name} and 1 other monster have awoken!')
+            print(f'The legendary {units.monster.name} and its lacky have awoken!')
 
         else:
             print(f'The legendary {units.monster.name} has awoken!')
@@ -207,6 +207,7 @@ def battle_system(is_boss=False, ambush=False):
     # Record the player's non-hp/mp stats (e.g. defense)
     # So they can go back to normal after the battle
     set_temp_stats()
+    main.party_info['gamestate'] = 'battle'
 
     # While all active party members are alive, continue the battle
     while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):

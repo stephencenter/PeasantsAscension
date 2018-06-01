@@ -98,7 +98,7 @@ PEASANT-RPG GOALS
 		[ ] 12 Provinces:
 			[ ] Overshire
 			[ ] Celemia
-			[ ] Simphet
+			[ ] Parriway
 			[ ] Thex
 			[ ] Camberlite
 			[ ] Kohrin

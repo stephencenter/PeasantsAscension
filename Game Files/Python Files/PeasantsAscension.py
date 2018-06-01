@@ -80,7 +80,9 @@ party_info = {'biome': 'forest',
               'steps_without_battle': 0,
               'do_monster_spawns': True,
               'scout_list': [],
-              'dif': 0}
+              'dif': 0,
+              'map_pow': 1,
+              'gamestate': "overworld"}
 
 # Set to 1 when auto-testing
 do_debug = 0
@@ -156,6 +158,7 @@ def game_loop():
         available_dirs = game_ui()
 
         while True:
+            party_info['gamestate'] = 'overworld'
             command = s_input('Input Command (type "help" to view command list): ').lower()
 
             if command == "debug-menu":
@@ -201,8 +204,8 @@ def check_region():
     # Also alerts the player when they change biomes/provinces
     global party_info
 
-    new_province = party_info['current_tile'].province
-    new_biome = party_info['current_tile'].biome
+    new_province = tiles.find_prov_with_tile_id(party_info['current_tile'].tile_id).name
+    new_biome = tiles.find_cell_with_tile_id(party_info['current_tile'].tile_id).biome
 
     if new_biome == 'sky':
         music = '../Music/Island of Peace.ogg'
@@ -281,7 +284,7 @@ def game_ui():
     print(f"-CURRENT LOCATION-")
     print(mpi['current_tile'].generate_ascii())
 
-    print(f"Region [{tile.name}] | Province: [{tile.province}]")
+    print(f"Region [{tile.name}] | Province: [{tiles.find_prov_with_tile_id(tile.tile_id).name}]")
 
     # Tells the player which directions are available to go in
     for drc in [x for x in [tile.to_n, tile.to_s, tile.to_e, tile.to_w, tile.to_dn, tile.to_up] if x is not None]:
@@ -476,16 +479,12 @@ def rest_command():
 
 # Needs reworked to work with new tools and use item_ids instead of item names
 def tools_command():
-    tool_names = ['Divining Rod', 'Shovel', 'Map of Fast Travel', 'Boots of Insane Speed']
+    valid_tools = ['monster_book', 'shovel', 'musicbox', 'pocket_lab', 'fast_map']
     available_tools = []
 
-    for cat in items.inventory:
-        if cat == 'quests':
-            continue
-
-        for item in items.inventory[cat]:
-            if item.name in tool_names:
-                available_tools.append(item)
+    for item in items.inventory['tools']:
+        if item.item_id in valid_tools:
+            available_tools.append(item)
 
     print('-'*save_load.divider_size)
 
@@ -516,7 +515,11 @@ def tools_command():
 
                 continue
 
+            print('-'*save_load.divider_size)
+
             tool.use_item()
+            if tool.item_id == 'fast_map':
+                return
 
             print('-'*save_load.divider_size)
 

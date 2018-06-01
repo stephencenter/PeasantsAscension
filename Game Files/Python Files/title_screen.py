@@ -50,7 +50,7 @@ Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
 {'-'*save_load.divider_size}"""
 
-    pygame.mixer.music.load('../Music/Prologue.ogg')
+    pygame.mixer.music.load('../Music/Title Screen.flac')
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -63,7 +63,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
         if choice.startswith('p'):
             return
 
-        if choice.startswith("s") and not main.do_debug:
+        if choice.startswith("s"):
             edit_settings()
             print(title_logo)
 
@@ -105,18 +105,11 @@ def show_credits():
         with open('../Credits.txt') as f:
             for number, line in enumerate(f):
                 print(''.join(line.split("\n")))
-                main.smart_sleep([0.75, 1.25, 0.75, 1.25, 1, 1, 0.5, 0.5, 1, 1,
-                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                  1, 1, 1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5,
-                                  0.5, 1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
-                                  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
-                                  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5,
-                                  0.5, 0.5, 0.5, 0.5][number])
+                main.smart_sleep([0.75])
 
             main.smart_sleep(3)
 
-            pygame.mixer.music.load('../Music/Prologue.ogg')
+            pygame.mixer.music.load('../Music/Title Screen.flac')
             pygame.mixer.music.play(-1)
             pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -155,7 +148,7 @@ def show_story():
                 else:
                     print(''.join(line.split("\n")))
 
-        pygame.mixer.music.load('../Music/Prologue.ogg')
+        pygame.mixer.music.load('../Music/Title Screen.flac')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -195,7 +188,7 @@ def show_history():
                 else:
                     print(''.join(line.split("\n")))
 
-        pygame.mixer.music.load('../Music/Prologue.ogg')
+        pygame.mixer.music.load('../Music/Title Screen.flac')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(save_load.music_vol)
 
@@ -211,6 +204,9 @@ def show_history():
 
 
 def edit_settings():
+    if main.do_debug:
+        return
+
     print('-'*save_load.divider_size)
 
     while True:

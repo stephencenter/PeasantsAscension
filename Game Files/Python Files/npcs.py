@@ -126,7 +126,7 @@ sakura = NPC('Sakura', "Head of the Royal Guard", [d.sakura_convo_1])
 
 strathius = NPC("Strathius", "Druid", [d.strathius_convo_1])
 
-sugulat = NPC('Sugulat', "Baron of Simphet", [d.sugulat_convo_1])
+sugulat = NPC('Sugulat', "Baron of Parriway", [d.sugulat_convo_1])
 
 serena = NPC('Serena', "Scientist", [d.serena_convo_1, d.serena_convo_2, d.serena_convo_3])
 

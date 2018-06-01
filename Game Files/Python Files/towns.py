@@ -275,7 +275,7 @@ def search_towns(enter=True):
         logging.exception(f"""Error gathering tile data on {time.strftime('%m/%d/%Y at %H:%M:%S')}: """)
 
         main.party_info['current_tile'] = tiles.nearton_tile
-        print("Error gathering tile data - relocated to NEARTON.")
+        print("Error gathering tile data - relocated to nearton_tile.")
         main.s_input("\nPress enter/return ")
 
     for town in main.party_info['current_tile'].town_list:

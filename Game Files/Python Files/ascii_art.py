@@ -733,7 +733,14 @@ item_sprites = {
     |---|
     |   |
     |___|
-"""
+""",
+
+    "Music Box": """
+    ___  o   o
+   | - | |   |
+   |   |  \\ /
+   |_o_|   |
+      \\___/"""
 }
 
 
@@ -903,3 +910,4 @@ locations = {
 
 # for x in item_sprites.keys():
 #     print(item_sprites[x])
+

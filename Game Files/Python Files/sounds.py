@@ -21,15 +21,6 @@ from pygame.mixer import Sound
 
 import save_load
 
-# THIS IF FOR AUTOMATED BUG-TESTING!!
-# THIS SHOULD BE COMMENTED OUT FOR NORMAL USE!!
-# def test_input(string):
-#    spam = random.choice('0123456789ynxpsewrt')
-#    print(string, spam)
-#    return spam
-#
-# main.s_input = test_input
-
 
 if __name__ == "__main__":
     sys.exit()
@@ -107,7 +98,7 @@ random_enc = Sound('../Sound FX/random_encounter.wav')
 all_sounds = [sword_slash, magic_attack,
               magic_healing, enemy_hit,
               foot_steps, aim_weapon,
-              attack_miss,item_pickup,
+              attack_miss, item_pickup,
               health_low, poison_damage,
               buff_spell, ally_death,
               critical_hit, lockpicking,

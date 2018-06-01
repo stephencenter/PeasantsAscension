@@ -21,7 +21,7 @@ Provinces:
   their names are as follows:
     -Overshire
     -Celemia
-    -Simphet
+    -Parriway
     -Thex
     -Camberlite
     -Kohrin

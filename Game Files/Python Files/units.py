@@ -1398,7 +1398,7 @@ class Monster(Unit):
 
 class Boss(Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, lvl, b_items, gold,
-                 experience, attk_msg, active=True, off_element='none', def_element='none'):
+                 experience, attk_msg, active=True, off_element='none', def_element='none', lackies=None):
         Monster.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
         self.off_element = off_element
@@ -1409,6 +1409,7 @@ class Boss(Monster):
         self.experience = experience
         self.gold = gold
         self.attk_msg = attk_msg
+        self.lackies = lackies
         self.m_name = copy.copy(self.name)
 
     def max_stats(self):

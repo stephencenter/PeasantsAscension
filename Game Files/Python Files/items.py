@@ -22,8 +22,9 @@ import ascii_art
 import dialogue
 import save_load
 import sounds
-import tiles
+import battle
 import units
+import tiles
 
 if __name__ == "__main__":
     sys.exit()
@@ -195,66 +196,17 @@ class ElementAccessory(Accessory):
         main.s_input("\nPress enter/return ")
 
 
-class DiviningRod(Item):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Div Rod'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
-
-    @staticmethod
-    def use_item():
-        print('-'*save_load.divider_size)
-        print("Your party begins using the Divining Rod...")
-        main.smart_sleep(1)
-
-        c_tile = main.party_info['current_tile']
-        any_gems = False
-
-        if c_tile.to_n and [x for x in tiles.find_tile_with_id(c_tile.to_n).gem_list
-                            if x.item_id not in acquired_gems]:
-            print("You sense a gem to the north!")
-            any_gems = True
-
-        if c_tile.to_s and [x for x in tiles.find_tile_with_id(c_tile.to_s).gem_list
-                            if x.item_id not in acquired_gems]:
-            print("You sense a gem to the south!")
-            any_gems = True
-
-        if c_tile.to_w and [x for x in tiles.find_tile_with_id(c_tile.to_w).gem_list
-                            if x.item_id not in acquired_gems]:
-            print("You sense a gem to the west!")
-            any_gems = True
-
-        if c_tile.to_e and [x for x in tiles.find_tile_with_id(c_tile.to_e).gem_list
-                            if x.item_id not in acquired_gems]:
-            print("You sense a gem to the east!")
-            any_gems = True
-
-        if c_tile.to_up and [x for x in tiles.find_tile_with_id(c_tile.to_up).gem_list
-                             if x.item_id not in acquired_gems]:
-            print("You sense a gem far above you.")
-            any_gems = True
-
-        if c_tile.to_dn and [x for x in tiles.find_tile_with_id(c_tile.to_dn).gem_list
-                             if x.item_id not in acquired_gems]:
-            print("You sense a gem far down below.")
-            any_gems = True
-
-        if [x for x in c_tile.gem_list if x.item_id not in acquired_gems]:
-            print("You're right on top of a gem!")
-            any_gems = True
-
-        if not any_gems:
-            print("You couldn't find anything.")
-
-        main.s_input("\nPress enter/return ")
-
-
 class Shovel(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
     @staticmethod
     def use_item():
-        print('-'*save_load.divider_size)
+        if main.party_info['gamestate'] == 'town':
+            print("What, here? You can't just start digging up a town!")
+            main.s_input("\nPress enter/return")
+            return
+
         print("Digging...")
         sounds.foot_steps.play()
         main.smart_sleep(1)
@@ -271,7 +223,7 @@ class Shovel(Item):
             c_gem = [x for x in main.party_info['current_tile'].gem_list if x.item_id not in acquired_gems][0]
 
         except IndexError:
-            c_gem = {}
+            c_gem = None
 
         if c_gem:
             sounds.unlock_chest.play()
@@ -286,12 +238,105 @@ class Shovel(Item):
             main.s_input("\nPress enter/return ")
 
 
-class TownTeleporter(Item):
+class FastTravelAtlus(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self):
-        pass
+        if main.party_info['gamestate'] == 'town':
+            print("Fast Travel Atluses can't be used in towns.")
+            main.s_input("\nPress enter/return")
+            return
+
+        while True:
+            prov = self.choose_prov()
+            if prov:
+                if self.choose_cell(prov):
+                    return
+
+            else:
+                return
+
+    @staticmethod
+    def choose_prov():
+        avail_provs = tiles.all_provinces[:main.party_info['map_pow']]
+
+        if len(avail_provs) == 1:
+            return avail_provs[0]
+
+        while True:
+            print(f"Available Provinces [MAP POWER {main.party_info['map_pow']}): ")
+            for num, x in enumerate(avail_provs):
+                print(f"      [{num + 1}] {x.name}")
+
+            while True:
+                chosen = main.s_input('Input [#] (or type "exit"): ')
+
+                try:
+                    chosen = avail_provs[int(chosen) - 1]
+
+                except (IndexError, ValueError):
+                    if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                        print('-'*save_load.divider_size)
+                        return False
+
+                    continue
+
+                print('-' * save_load.divider_size)
+                return chosen
+
+    @staticmethod
+    def choose_cell(prov):
+        while True:
+            print(f"{prov.name} Province Locations: ")
+            for num, x in enumerate(prov.cells):
+                print(f"      [{num + 1}] {x.name}")
+
+            do_loop = True
+            while do_loop:
+                chosen = main.s_input('Input [#] (or type "back"): ')
+
+                try:
+                    chosen = prov.cells[int(chosen) - 1]
+
+                except (IndexError, ValueError):
+                    if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                        print('-' * save_load.divider_size)
+                        return False
+
+                    continue
+
+                while True:
+                    y_n = main.s_input(f"Warp to {chosen.name}? | Yes or No: ").lower()
+
+                    if y_n.startswith('y'):
+                        main.party_info['prov'] = prov.name
+                        main.party_info['biome'] = chosen.biome
+                        main.party_info['current_tile'] = chosen.primary_tile
+
+                        print("-"*25)
+                        print("You begin to feel strange - your body feels light and all you hear is silence.")
+                        print("Your vision starts going blank... All of your senses quickly turning off until")
+                        print("you're left with nothing but your thoughts...")
+                        main.s_input("\nPress enter/return ")
+                        print("...")
+                        main.smart_sleep(1)
+                        print("...")
+                        main.smart_sleep(1)
+                        print("...")
+                        main.smart_sleep(1)
+                        sounds.enemy_hit.play()
+                        print("CRASH! Your senses re-emerge you've landed on your back... Oh, you're exactly where")
+                        print("you teleported to!")
+                        main.s_input("\nPress enter/return ")
+                        print("-"*25)
+
+                        return True
+
+                    if y_n.startswith('n'):
+                        print('-' * save_load.divider_size)
+                        do_loop = False
+                        break
 
 
 class LockpickKit(Item):
@@ -313,6 +358,7 @@ class MonsterEncyclopedia(Item):
 
     @staticmethod
     def use_item(user):
+        print(battle.turn_counter)
         m_w = {'fire': 'Water',
                'water': 'Electric',
                'electric': 'Earth',
@@ -333,6 +379,15 @@ Weakness: {m_w}""")
 
 
 class PocketAlchemyLab(Item):
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
+        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+
+    @staticmethod
+    def use_item():
+        pass
+
+
+class MusicBox(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
@@ -798,10 +853,6 @@ message_joseph = Misc('Message from Joseph', 'A neatly written message addressed
 message_philliard = Misc('Message from Philliard', 'A neatly written message addressed to Joseph.',
                          0, 0, "message_philliard", cat='q_items', imp=True)
 
-iSound = Misc('iSound', "You can't even begin to imagine how one would go about using this.",
-              250, 75, "i_sound", cat='q_items', imp=False)
-
-
 # Gems & Valuables
 pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
                      0, 175, "pearl_gem")
@@ -852,22 +903,33 @@ aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could proba
                           0, 175, "aquamarine_gem")
 
 # Tools
-divining_rod = DiviningRod('Divining Rod',
-                           'A magical stick capable of detecting nearby ores and gems.', 100, 50, "divining_rod")
-
 shovel = Shovel('Shovel',
                 'A simple shovel used to excavate for hidden gems and minerals.', 150, 75, "shovel")
 
-map_of_fast_travel = TownTeleporter('Map of Fast Travel',
-                                    'Allows traveling to previously visited towns.', 1500, 750, "fast_map")
+fast_travel_atlus = FastTravelAtlus('Atlus of Fast Travel', """\
+A convenient tome that allows teleportation between towns. These aren't
+being made anymore, after having been banned by the King due to its use in
+many recent abductions and murders. Most of the pages appear to be missing,
+but they can be restored by obtaining Travel Gems. Adding a gem will improve
+your 'Travel Power' enabling access to a new province.""", 1500, 750, "fast_map")
 
-monster_book = MonsterEncyclopedia('Monster Encyclopedia',
-                                   'A book that can be used on an enemy to learn its stats and elemental weakness.',
-                                   200, 100, "monster_book")
+monster_book = MonsterEncyclopedia('Monster Encyclopedia', """\
+A book containing information on monsters. When used in battle, this will 
+identify the stats and weaknesses of an enemy. When used outside of battle,
+this will let you check what biome monsters are found in, what items they drop,
+and how many of them you've killed. Out-of-battle use only works for enemies
+you've encountered.""", 200, 100, "monster_book")
 
 pocket_lab = PocketAlchemyLab('Pocket Alchemy Lab',
                               'A pocket alchemy kit that combines monster drops to create different potions.',
                               200, 100, "pocket_lab")
+
+musicbox = MusicBox('Portable Musicbox', """\
+Somehow this small device has the ability to play music without need for a 
+bard or instruments. Select a folder full of music on your computer and this
+device will replace the in-game music with your tunes!""",
+                    250, 75, "i_sound")
+
 
 # Tools -- Lockpicks
 wood_lckpck = LockpickKit('Wooden Lockpick Kit',
@@ -1063,14 +1125,14 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                             [dark_amulet, dark_amulet, dark_amulet,
                              dark_amulet, dark_amulet, dark_amulet]],
 
-            'Tools': [[divining_rod, divining_rod, divining_rod,
-                       divining_rod, divining_rod, divining_rod],
-
-                      [shovel, shovel, shovel,
+            'Tools': [[shovel, shovel, shovel,
                        shovel, shovel, shovel],
 
-                      [map_of_fast_travel, map_of_fast_travel, map_of_fast_travel,
-                       map_of_fast_travel, map_of_fast_travel, map_of_fast_travel],
+                      [monster_book, monster_book, monster_book,
+                       monster_book, monster_book, monster_book],
+
+                      [musicbox, musicbox, musicbox,
+                       musicbox, musicbox, musicbox],
 
                       [wood_lckpck, copper_lckpck, iron_lckpck, steel_lckpck,
                        mythril_lckpck, mythril_lckpck]]}
@@ -1082,11 +1144,11 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
              ripped_cloth, beetle_shell, wing_piece, monster_fang, animal_fur, golem_rock, burnt_ash, antennae,
              ectoplasm, chain_link, unicorn_horn, demonic_essence, angelic_essence, eye_balls, mysterious_runes,
              rodent_tail, serpent_tongue, feathers, broken_crystal, slime_vial, blood_vial, water_vial,
-             calculus_homework, graph_paper, ruler, protractor, textbook, message_joseph, message_philliard, iSound,
+             calculus_homework, graph_paper, ruler, protractor, textbook, message_joseph, message_philliard, musicbox,
              pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem, opal_gem, onyx_gem, diamond_gem,
              amethyst_gem, topaz_gem, garnet_gem, quartz_gem, zircon_gem, agate_gem, aquamarine_gem, wood_lckpck,
-             copper_lckpck, iron_lckpck, steel_lckpck, mythril_lckpck, divining_rod, shovel, pocket_lab, monster_book,
-             map_of_fast_travel, s_potion, m_potion, l_potion, x_potion, s_elixir, m_elixir, l_elixir, x_elixir,
+             copper_lckpck, iron_lckpck, steel_lckpck, mythril_lckpck, shovel, pocket_lab, monster_book,
+             fast_travel_atlus, s_potion, m_potion, l_potion, x_potion, s_elixir, m_elixir, l_elixir, x_elixir,
              s_rejuv, m_rejuv, l_rejuv, silence_potion, poison_potion, weakness_potion, blindness_potion,
              paralyzation_potion, fists, wdn_sht, bnz_swd, en_bnz_swd, stl_spr, en_stl_spr, titan_axe, en_titan_axe,
              stn_dag, ser_knf, en_ser_knf, stiletto, en_stiletto, myth_sb, en_myth_sb, slg_sht, sht_bow, en_sht_bow,
