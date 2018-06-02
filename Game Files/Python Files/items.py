@@ -239,7 +239,7 @@ class Shovel(Item):
 
 
 class FastTravelAtlus(Item):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Map'):
+    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self):
@@ -314,7 +314,7 @@ class FastTravelAtlus(Item):
                         main.party_info['biome'] = chosen.biome
                         main.party_info['current_tile'] = chosen.primary_tile
 
-                        print("-"*25)
+                        print("-"*save_load.divider_size)
                         print("You begin to feel strange - your body feels light and all you hear is silence.")
                         print("Your vision starts going blank... All of your senses quickly turning off until")
                         print("you're left with nothing but your thoughts...")
@@ -329,12 +329,12 @@ class FastTravelAtlus(Item):
                         print("CRASH! Your senses re-emerge you've landed on your back... Oh, you're exactly where")
                         print("you teleported to!")
                         main.s_input("\nPress enter/return ")
-                        print("-"*25)
+                        print("-"*save_load.divider_size)
 
                         return True
 
                     if y_n.startswith('n'):
-                        print('-' * save_load.divider_size)
+                        print('-'*save_load.divider_size)
                         do_loop = False
                         break
 
@@ -396,14 +396,14 @@ class MusicBox(Item):
         pass
 
 
-class Valuable(Item):
-    def __init__(self, name, desc, buy, sell, item_id, ascart='Gem', cat='misc', imp=False):
+class Ingredient(Item):
+    def __init__(self, name, desc, buy, sell, flavor, item_id, ascart='Misc', cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        self.flavor = flavor
 
-    # noinspection PyMethodMayBeStatic
     def use_item(self):
         print('-'*save_load.divider_size)
-        print(f'Your party admires the {self.name}. It looks very valuable.')
+        print(self.desc)
         main.s_input("\nPress enter/return ")
 
 
@@ -411,9 +411,10 @@ class Misc(Item):
     def __init__(self, name, desc, buy, sell, item_id, ascart='Misc', cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
+    @staticmethod
     def use_item(self):
         print('-'*save_load.divider_size)
-        print(self.desc)
+        print("You can't use this right now.")
         main.s_input("\nPress enter/return ")
 
 
@@ -854,64 +855,67 @@ message_philliard = Misc('Message from Philliard', 'A neatly written message add
                          0, 0, "message_philliard", cat='q_items', imp=True)
 
 # Gems & Valuables
-pearl_gem = Valuable('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
-                     0, 175, "pearl_gem")
+pearl_gem = Misc('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
+                 0, 175, "pearl_gem")
 
-ruby_gem = Valuable('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
-                    0, 175, "ruby_gem")
+ruby_gem = Misc('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
+                0, 175, "ruby_gem")
 
-sapphire_gem = Valuable('Sapphire', 'A valuable sapphire. This could probably be sold for quite a bit.',
-                        0, 175, "sapphire_gem")
+sapphire_gem = Misc('Sapphire', 'A valuable sapphire. This could probably be sold for quite a bit.',
+                    0, 175, "sapphire_gem")
 
-emerald_gem = Valuable('Emerald', 'A valuable emerald. This could probably be sold for quite a bit.',
-                       0, 175, "emerald_gem")
+emerald_gem = Misc('Emerald', 'A valuable emerald. This could probably be sold for quite a bit.',
+                   0, 175, "emerald_gem")
 
-citrine_gem = Valuable('Citrine', 'A valuable citrine. This could probably be sold for quite a bit.',
-                       0, 175, "citrine_gem")
+citrine_gem = Misc('Citrine', 'A valuable citrine. This could probably be sold for quite a bit.',
+                   0, 175, "citrine_gem")
 
-jade_gem = Valuable('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
-                    0, 175, "jade_gem")
+jade_gem = Misc('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
+                0, 175, "jade_gem")
 
-opal_gem = Valuable('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
-                    0, 175, "opal_gem")
+opal_gem = Misc('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
+                0, 175, "opal_gem")
 
-onyx_gem = Valuable('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
-                    0, 175, "onyx_gem")
+onyx_gem = Misc('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
+                0, 175, "onyx_gem")
 
-diamond_gem = Valuable('Diamond', 'A valuable diamond. This could probably be sold for quite a bit.',
-                                  0, 175, "diamond_gem")
+diamond_gem = Misc('Diamond', 'A valuable diamond. This could probably be sold for quite a bit.',
+                   0, 175, "diamond_gem")
 
-amethyst_gem = Valuable('Amethyst', 'A valuable amethyst. This could probably be sold for quite a bit.',
-                                    0, 175, "amethyst_gem")
+amethyst_gem = Misc('Amethyst', 'A valuable amethyst. This could probably be sold for quite a bit.',
+                    0, 175, "amethyst_gem")
 
-topaz_gem = Valuable('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
-                              0, 175, "topaz_gem")
+topaz_gem = Misc('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
+                 0, 175, "topaz_gem")
 
-garnet_gem = Valuable('Garnet', 'A valuable garnet. This could probably be sold for quite a bit.',
-                                0, 175, "garnet_gem")
+garnet_gem = Misc('Garnet', 'A valuable garnet. This could probably be sold for quite a bit.',
+                  0, 175, "garnet_gem")
 
-quartz_gem = Valuable('Quartz', 'A valuable quartz. This could probably be sold for quite a bit.',
-                                0, 175, "quartz_gem")
+quartz_gem = Misc('Quartz', 'A valuable quartz. This could probably be sold for quite a bit.',
+                  0, 175, "quartz_gem")
 
-zircon_gem = Valuable('Zircon', 'A valuable zircon. This could probably be sold for quite a bit.',
-                                0, 175, "zircon_gem")
+zircon_gem = Misc('Zircon', 'A valuable zircon. This could probably be sold for quite a bit.',
+                  0, 175, "zircon_gem")
 
-agate_gem = Valuable('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
-                              0, 175, "agate_gem")
+agate_gem = Misc('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
+                 0, 175, "agate_gem")
 
-aquamarine_gem = Valuable('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
-                          0, 175, "aquamarine_gem")
+aquamarine_gem = Misc('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
+                      0, 175, "aquamarine_gem")
 
 # Tools
-shovel = Shovel('Shovel',
-                'A simple shovel used to excavate for hidden gems and minerals.', 150, 75, "shovel")
+shovel = Shovel('Expert Mining Tool', """\
+A tool used to excavate for hidden gems and minerals. Comines the functions
+of a pickaxe, shovel, and hammer all into one device! Use while on the
+overworld to dig for gems. Gems have pre-determined locations and do not
+respawn - there is no luck involved with this tool.""", 150, 75, "shovel")
 
 fast_travel_atlus = FastTravelAtlus('Atlus of Fast Travel', """\
 A convenient tome that allows teleportation between towns. These aren't
 being made anymore, after having been banned by the King due to its use in
 many recent abductions and murders. Most of the pages appear to be missing,
 but they can be restored by obtaining Travel Gems. Adding a gem will improve
-your 'Travel Power' enabling access to a new province.""", 1500, 750, "fast_map")
+your 'Travel Power' enabling access to a new province.""", 0, 0, "fast_map")
 
 monster_book = MonsterEncyclopedia('Monster Encyclopedia', """\
 A book containing information on monsters. When used in battle, this will 
@@ -920,8 +924,12 @@ this will let you check what biome monsters are found in, what items they drop,
 and how many of them you've killed. Out-of-battle use only works for enemies
 you've encountered.""", 200, 100, "monster_book")
 
-pocket_lab = PocketAlchemyLab('Pocket Alchemy Lab',
-                              'A pocket alchemy kit that combines monster drops to create different potions.',
+pocket_lab = PocketAlchemyLab('Pocket Alchemy Lab', """\
+A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to
+convert everyday ingredients into useful potions can fit in your pocket.
+There are six flavors of ingredients, and each flavor corresponds to a specific
+potion. Combine three ingredients to make a potion. The ratio of flavors used
+determines the probability of getting each flavor potion.""",
                               200, 100, "pocket_lab")
 
 musicbox = MusicBox('Portable Musicbox', """\
@@ -943,44 +951,188 @@ steel_lckpck = LockpickKit('Steel Lockpick Kit',
 mythril_lckpck = LockpickKit('Mythril Lockpick Kit',
                              'A mythril lockpick kit with a 90% chance to open chests.', 700, 350, 90, "mythril_lckpck")
 
-# Monster Drops
-shell_fragment = Misc('Shell Fragment', "A broken fragment of a once-beautiful shell.", 0, 5, "shell_fragment")
-crab_claw = Misc('Crab Claw', 'A reddish claw from a giant crab.', 0, 5, "crab_claw")
-fairy_dust = Misc('Fairy Dust', 'Dust from a fairy. It has strange, magical properties.', 0, 5, "fairy_dust")
-serpent_scale = Misc('Serpent Scale', 'A rough scale from an unknown reptile.', 0, 5, "s_scale")
-ink_sack = Misc('Ink Sack', 'A small pouch full of an inky substance.', 0, 5, "ink_sack")
-bone_bag = Misc('Bag of Bones', 'A bag full of various bones from a now deceased creature.', 0, 5, "bone_bag")
-monster_skull = Misc('Monster Skull', 'A broken skull from a strange creature.', 0, 5, "m_skull")
-living_bark = Misc('Living Bark', 'This bark has a fleshy texture to it.', 0, 5, "living_bark")
-ripped_cloth = Misc('Ripped Cloth', 'A thick, torn cloth made out of an unknown fabric.', 0, 5, "ripped_cloth")
-beetle_shell = Misc('Beetle Shell', 'A bluish shell from a large beetle.', 0, 5, "beetle_shell")
-wing_piece = Misc('Wing Piece', 'A piece of wing from a flying creature.', 0, 5, "wing_piece")
-monster_fang = Misc('Monster Fang', 'The sharp fang of a frightening creature.', 0, 5, "monster_fang")
-animal_fur = Misc('Animal Fur', 'A wet clump of fur from a strange animal.', 0, 5, "animal_fur")
-golem_rock = Misc('Golem Rock', 'A small rock that seems to glow slightly.', 0, 5, "golem_rcok")
-burnt_ash = Misc('Burnt Ash', 'The ashy remains of a once-living creature.', 0, 5, "burnt_ash")
-antennae = Misc('Gooey Antennae', 'A pair of antennae from a massive, slimy insect.', 0, 5, "antennae")
-ectoplasm = Misc('Ectoplasm', 'The gooey remains from a terrifying apparition.', 0, 5, "ectoplasm")
-chain_link = Misc('Chain links', 'A couple joined links of chain made from steel.', 0, 5, "chain_link")
-unicorn_horn = Misc('Unicorn Horn', 'A tough and shiny horn from a mythical creature.', 0, 5, "unicorn_horn")
-demonic_essence = Misc('Demonic Essence', 'A strange orb that exudes a terrifying aura.', 0, 5, "d_essence")
-angelic_essence = Misc('Angelic Essence', 'A strange orb that radiates an incredible aura.', 0, 5, "a_essence")
-eye_balls = Misc('Eyeballs', 'The visual receptors of some disgusting creature.', 0, 5, "eyeballs")
-mysterious_runes = Misc('Strange Runestone', 'Strange stones with even stranger symbols on it.', 0, 5, "runestone")
-rodent_tail = Misc('Rodent Tail', 'The detached tail of a hideous rodent.', 0, 5, "rodent_tail")
-serpent_tongue = Misc('Serpent Tongue', 'A dried-up tongue from a slithery serpent.', 0, 5, "s_tongue")
-feathers = Misc('Feathers', 'A veiny feather from an unknown avian creature.', 0, 5, "feathers")
-broken_crystal = Misc('Broken Crystal', 'A chunk of crystal too powdery to be of any value.', 0, 5, "b_crystal")
-slime_vial = Misc('Vial of Slime', 'A small glass vial filled with gooey slime.', 0, 5, "s_vial")
-blood_vial = Misc('Vial of Blood', 'A small glass vial filled with the blood of some creature.', 0, 5, "b_vial")
-water_vial = Misc('Vial of Water', 'A small glass vial filled with enchanted water.', 0, 5, "w_vial")
+# ALCHEMY INGREDIENTS - Dropped by monsters, used to make potions
+# Strange
+broken_crystal = Ingredient('Broken Crystal', """\
+A chunk of crystal too powdery to be of any value. Could have useful alchemical
+applications. Has a "Strange" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "b_crystal")
 
-# Easter egg for my friend
-calculus_homework = Misc('Calculus Homework', 'A load of random symbols and gibberish.', 0, 25, "c_homework")
-graph_paper = Misc('Graph Paper', 'Useful paper for graphing points and lines.', 0, 25, "g_paper")
-ruler = Misc('Ruler', 'A piece of wood with lines on it. Neat!', 0, 25, "ruler")
-protractor = Misc('Protractor and Compass', 'Instruments used to make shapes and angles.', 0, 25, "protractor")
-textbook = Misc('AtW Textbook', 'More like Algebra that sucks amiright?', 0, 25, "textbook")
+chain_link = Ingredient('Chain links', """\
+A couple joined links of chain made from steel. Could have useful alchemical
+applications. Has a "Strange" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "chain_link")
+
+bone_bag = Ingredient('Bag of Bones', """\
+A bag full of various bones from a now deceased creature. Could have useful 
+alchemical applications. Has a "Strange" alchemical flavor. Combine with two 
+other ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "bone_bag")
+
+ripped_cloth = Ingredient('Ripped Cloth', """\
+A thick, torn cloth made out of an unknown fabric. Could have useful alchemical
+applications. Has a "Strange" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "ripped_cloth")
+
+living_bark = Ingredient('Living Bark', """\
+This bark has a fleshy texture to it. Could have useful alchemical
+applications. Has a "Strange" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "living_bark")
+
+# Mystic
+demonic_essence = Ingredient('Demonic Essence', """\
+A strange orb that exudes a terrifying aura. Could have useful alchemical
+applications. Has a "Mystic" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "d_essence")
+
+angelic_essence = Ingredient('Angelic Essence', """\
+A strange orb that radiates an incredible aura. Could have useful alchemical
+applications. Has a "Mystic" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "a_essence")
+
+mysterious_runes = Ingredient('Strange Runestone', """\
+Strange stones with even stranger symbols on it. Could have useful alchemical
+applications. Has a "Mystic" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "runestone")
+
+unicorn_horn = Ingredient('Unicorn Horn', """\
+A tough and shiny horn from a mythical creature. Could have useful alchemical
+applications. Has a "Mystic" alchemical flavor. Combine with two other
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "unicorn_horn")
+
+fairy_dust = Ingredient('Fairy Dust', """\
+Dust from a fairy. It has strange, magical properties. Could have useful 
+alchemical applications. Has a "Mystic" alchemical flavor. Combine with two 
+other ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "fairy_dust")
+
+# Rigid
+crab_claw = Ingredient('Crab Claw', """\
+A reddish claw from a giant crab. Could have useful alchemical applications.
+Has a "Rigid" alchemical flavor. Combine with two other ingredients in a 
+Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "crab_claw")
+
+shell_fragment = Ingredient('Shell Fragment', """\
+A broken fragment of a once-beautiful shell. Could have useful alchemical 
+applications. Has a "Rigid" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "shell_fragment")
+
+golem_rock = Ingredient('Golem Rock', """\
+A small rock that seems to glow slightly. Could have useful alchemical 
+applications. Has a "Rigid" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "golem_rcok")
+
+beetle_shell = Ingredient('Beetle Shell', """\
+A bluish shell from a large beetle. Could have useful alchemical applications.
+Has a "Rigid" alchemical flavor. Combine with two other ingredients in a 
+Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "beetle_shell")
+
+monster_skull = Ingredient('Monster Skull', """\
+A broken skull from a strange creature. Could have useful alchemical 
+applications. Has a "Rigid" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "m_skull")
+
+# Flowing
+slime_vial = Ingredient('Vial of Slime', """\
+A small glass vial filled with gooey slime. Could have useful alchemical 
+applications. Has a "Flowing" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "s_vial")
+
+blood_vial = Ingredient('Vial of Blood', """\
+A small glass vial filled with the blood of some creature. Could have useful 
+alchemical applications. Has a "Flowing" alchemical flavor. Combine with two 
+other ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "b_vial")
+
+water_vial = Ingredient('Vial of Water', """\
+A small glass vial filled with enchanted water. Could have useful alchemical 
+applications. Has a "Flowing" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "w_vial")
+
+ink_sack = Ingredient('Ink Sack', """\
+A small pouch full of an inky substance. Could have useful alchemical 
+applications. Has a "Flowing" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "ink_sack")
+
+ectoplasm = Ingredient('Ectoplasm', """\
+The gooey remains from a terrifying apparition. Could have useful alchemical 
+applications. Has a "Flowing" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "ectoplasm")
+
+# Dark
+burnt_ash = Ingredient('Burnt Ash', """\
+The ashy remains of a once-living creature. Could have useful alchemical 
+applications. Has a "Dark" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "burnt_ash")
+
+monster_fang = Ingredient('Monster Fang', """\
+The sharp fang of a frightening creature. Could have useful alchemical 
+applications. Has a "Dark" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "monster_fang")
+
+antennae = Ingredient('Gooey Antennae', """\
+A pair of antennae from a massive, slimy insect. Could have useful alchemical 
+applications. Has a "Dark" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "antennae")
+
+eye_balls = Ingredient('Eyeballs', """\
+The visual receptors of some disgusting creature. Could have useful alchemical 
+applications. Has a "Dark" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "eyeballs")
+
+serpent_scale = Ingredient('Serpent Scale', """\
+A rough scale from an unknown reptile. Could have useful alchemical 
+applications. Has a "Dark" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "s_scale")
+
+# Natural
+wing_piece = Ingredient('Wing Piece', """\
+A piece of wing from a flying creature. Could have useful alchemical 
+applications. Has a "Natural" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "wing_piece")
+
+animal_fur = Ingredient('Animal Fur', """\
+A wet clump of fur from a strange animal. Could have useful alchemical 
+applications. Has a "Natural" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "animal_fur")
+
+rodent_tail = Ingredient('Rodent Tail', """\
+The detached tail of a hideous rodent. Could have useful alchemical 
+applications. Has a "Natural" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "rodent_tail")
+
+serpent_tongue = Ingredient('Serpent Tongue', """\
+A dried-up tongue from a slithery serpent. Could have useful alchemical 
+applications. Has a "Natural" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "s_tongue")
+
+feathers = Ingredient('Feathers', """\
+A veiny feather from an unknown avian creature. Could have useful alchemical 
+applications. Has a "Natural" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "feathers")
+
+# Mathematical
+calculus_homework = Ingredient('Calculus Homework', """\
+A load of random symbols and gibberish. Could have useful alchemical 
+applications. Has a "Mathematical" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "c_homework")
+
+graph_paper = Ingredient('Graph Paper', """\
+Useful paper for graphing points and lines. Could have useful alchemical 
+applications. Has a "Mathematical" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "g_paper")
+
+ruler = Ingredient('Ruler', """\
+A piece of wood with lines on it. Neat! Could have useful alchemical 
+applications. Has a "Mathematical" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "ruler")
+
+protractor = Ingredient('Protractor and Compass', """\
+Instruments used to make shapes and angles. Could have useful alchemical 
+applications. Has a "Mathematical" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "protractor")
+
+textbook = Ingredient('AtW Textbook', """\
+More like Algebra that sucks amiright? Could have useful alchemical 
+applications. Has a "Mathematical" alchemical flavor. Combine with two other 
+ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "textbook")
 
 # Each monster can drop two different items, with the exception of the Calculator which is an easter egg monster
 monster_drop_list = {'Shell Mimic': [shell_fragment, water_vial],
