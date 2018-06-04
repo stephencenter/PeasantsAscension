@@ -644,7 +644,6 @@ class MusicBox(Item):
                     pass
 
             except pygame.error:
-                raise
                 pass
 
 
