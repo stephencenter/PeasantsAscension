@@ -109,9 +109,8 @@ class Town:
                     print('-'*save_load.divider_size)
 
                 elif choice.lower() in ['e', 'x', 'exit', 'b', 'back']:
-                    pygame.mixer.music.load(main.party_info['music'])
-                    pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(save_load.music_vol)
+                    sounds.play_music(main.party_info['music'])
+
                     print('-'*save_load.divider_size)
                     return
 
@@ -130,9 +129,7 @@ class Town:
                 selected = main.s_input('Where do you want to go? | Input [L]etter (or type "exit"): ').lower()
 
                 if any(map(selected.startswith, buildings)):
-                    pygame.mixer.music.load('../Music/Mayhem in the Village.ogg')
-                    pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(save_load.music_vol)
+                    sounds.play_music('../Music/Mayhem in the Village.ogg')
 
                     if selected.startswith('u'):
                         self.town_houses()
@@ -145,9 +142,7 @@ class Town:
 
                     print('-'*save_load.divider_size)
 
-                    pygame.mixer.music.load('../Music/Chickens (going peck peck peck).ogg')
-                    pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(save_load.music_vol)
+                    sounds.play_music('../Music/Chickens (going peck peck peck).ogg')
 
                     break
 
@@ -408,17 +403,13 @@ class Town:
 
                     continue
 
-                pygame.mixer.music.load('../Music/Mayhem in the Village.ogg')
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(save_load.music_vol)
+                sounds.play_music('../Music/Mayhem in the Village.ogg')
 
                 print('-'*save_load.divider_size)
 
                 npc.speak()
 
-                pygame.mixer.music.load('../Music/Chickens (going peck peck peck).ogg')
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(save_load.music_vol)
+                sounds.play_music('../Music/Chickens (going peck peck peck).ogg')
 
                 break
 
@@ -444,9 +435,7 @@ class Town:
 
                 chosen_house.enter_house()
 
-                pygame.mixer.music.load('../Music/Mayhem in the Village.ogg')
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(save_load.music_vol)
+                sounds.play_music('../Music/Mayhem in the Village.ogg')
 
                 break
 
@@ -493,17 +482,14 @@ class Tavern:
                 else:
                     print('"You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
 
-                pygame.mixer.music.load(main.party_info['music'])
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(save_load.music_vol)
+                sounds.play_music(main.party_info['music'])
                 print('-'*save_load.divider_size)
 
                 return
 
             elif choice.startswith('n'):
-                pygame.mixer.music.load(main.party_info['music'])
-                pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(save_load.music_vol)
+                sounds.play_music(main.party_info['music'])
+
                 print('-'*save_load.divider_size)
 
                 return
@@ -515,9 +501,7 @@ class House:
         self.chests = chests
 
     def enter_house(self):
-        pygame.mixer.music.load('../Music/song21_02.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+        sounds.play_music('../Music/song21_02.ogg')
 
         print('-'*save_load.divider_size)
         print(f"Your party enters the house of {self.owner}, completely undetected.")

@@ -108,6 +108,13 @@ all_sounds = [sword_slash, magic_attack,
               ability_cast]
 
 
+def play_music(song, num_plays=-1):
+    if not main.party_info['musicbox_isplaying']:
+        mixer.music.load(song)
+        mixer.music.play(num_plays)
+        mixer.music.set_volume(save_load.music_vol)
+
+
 def change_volume():
     for x in all_sounds:
         x.set_volume(save_load.sound_vol)

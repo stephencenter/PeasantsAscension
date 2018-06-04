@@ -252,9 +252,7 @@ Input [#]: """)
 
     def level_up(self):
         if self.exp >= self.req_xp:
-            pygame.mixer.music.load('../Music/Adventures in Pixels.ogg')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(save_load.music_vol)
+            sounds.play_music('../Music/Adventures in Pixels.ogg')
 
             rem_points = 0  # Remaining Skill Points
             while self.exp >= self.req_xp:
@@ -597,9 +595,7 @@ Defensive Element: {self.def_element.title()} | Offensive Element: {self.off_ele
 
         # Run away!
         elif self.move == '5' and battle.run_away(self):
-            pygame.mixer.music.load(main.party_info['music'])
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(save_load.music_vol)
+            sounds.play_music(main.party_info['music'])
 
             return 'Ran'
 

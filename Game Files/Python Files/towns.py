@@ -18,12 +18,11 @@ import logging
 import sys
 import time
 
-import pygame
-
 import items
 import npcs
 import save_load
 import tiles
+import sounds
 from TownClass import Town, Tavern, Chest, House
 
 if __name__ == "__main__":
@@ -290,9 +289,7 @@ def search_towns(enter=True):
                     y_n = main.s_input(f'The town of {town.name} is nearby. Give it a visit? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
-                    pygame.mixer.music.load('../Music/Chickens (going peck peck peck).ogg')
-                    pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(save_load.music_vol)
+                    sounds.play_music('../Music/Chickens (going peck peck peck).ogg')
 
                     main.party_info['prev_town'] = main.party_info['current_tile']
 

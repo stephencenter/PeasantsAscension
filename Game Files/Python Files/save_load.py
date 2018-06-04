@@ -295,7 +295,6 @@ def load_game():  # Check for save files and load the game if they're found
 
             except FileNotFoundError:
                 menu_info[folder] = "Unable to load preview info"
-
     main.smart_sleep(0.1)
 
     if not save_files:
@@ -341,6 +340,7 @@ def load_game():  # Check for save files and load the game if they're found
 
         format_save_names()
         deserialize_all()
+        main.party_info['musicbox_isplaying'] = False
 
         return
 

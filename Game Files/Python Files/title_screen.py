@@ -50,9 +50,7 @@ Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
 Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
 {'-'*save_load.divider_size}"""
 
-    pygame.mixer.music.load('../Music/Title Screen.flac')
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(save_load.music_vol)
+    sounds.play_music('../Music/Title Screen.flac')
 
     print(title_logo)
 
@@ -96,9 +94,7 @@ def show_credits():
     print('-'*save_load.divider_size)
 
     try:
-        pygame.mixer.music.load('../Music/Credits Music for an 8-bit RPG.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+        sounds.play_music('../Music/Credits Music for an 8-bit RPG.ogg')
 
         # Display the credits one line at a time with specific lengths
         # of time in between each line. Syncs up with the music!
@@ -109,9 +105,7 @@ def show_credits():
 
             main.smart_sleep(3)
 
-            pygame.mixer.music.load('../Music/Title Screen.flac')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(save_load.music_vol)
+            sounds.play_music('../Music/Title Screen.flac')
 
     except FileNotFoundError:
         # Display this is the Credits.txt file couldn't be found
@@ -134,9 +128,7 @@ def show_story():
     print('-'*save_load.divider_size)
 
     try:
-        pygame.mixer.music.load('../Music/CopperNickel.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+        sounds.play_music('../Music/CopperNickel.ogg')
 
         # Display each line one at a time, and require the pressing of enter
         # on lines that aren't solely whitespace
@@ -148,9 +140,7 @@ def show_story():
                 else:
                     print(''.join(line.split("\n")))
 
-        pygame.mixer.music.load('../Music/Title Screen.flac')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+        sounds.play_music('../Music/Title Screen.flac')
 
     except FileNotFoundError:
         # Display this is the peasant_plot.txt file couldn't be found
@@ -175,9 +165,7 @@ def show_history():
     print('-'*save_load.divider_size)
 
     try:
-        pygame.mixer.music.load('../Music/CopperNickel.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+        sounds.play_music('../Music/CopperNickel.ogg')
 
         # Display each line one at a time, and require the pressing of enter
         # on lines that aren't solely whitespace
@@ -188,9 +176,7 @@ def show_history():
                 else:
                     print(''.join(line.split("\n")))
 
-        pygame.mixer.music.load('../Music/Title Screen.flac')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+        sounds.play_music('../Music/Title Screen.flac')
 
     except FileNotFoundError:
         logging.exception(f'Error finding peasant_lore.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')

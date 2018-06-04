@@ -629,7 +629,7 @@ def polmor_c2_at():
         print('-'*save_load.divider_size)
 
         # TODO!!
-        npcs.polmor.speak()
+        # npcs.polmor.speak()
 
 
 polmor_convo_2.after_talking = polmor_c2_at
@@ -659,17 +659,10 @@ def matthew_c2_at():
 
     matthew_convo_2.active = False
 
-    for i in items.inventory['q_items']:
-        if i.name == "iSound":
-            matthew_convo_4.active = True
-            items.inventory['q_items'].remove(i)
-            break
-
-    else:
-        matthew_convo_3.active = True
+    items.remove_item("musicbox")
 
     # TODO!!
-    npcs.matthew.speak()
+    # npcs.matthew.speak()
 
 
 matthew_convo_2 = Conversation("""\
@@ -696,7 +689,7 @@ def matthew_c4_at():
     matthew_convo_4.active = False
 
     # TODO!!
-    npcs.matthew.speak()
+    # npcs.matthew.speak()
 
 
 matthew_convo_4 = Conversation("""\

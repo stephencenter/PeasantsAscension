@@ -15,16 +15,21 @@
 
 
 import json
+import os
+import random
 import sys
+import multiprocessing
 from copy import copy as _c
 
+import pygame
+
 import ascii_art
+import battle
 import dialogue
 import save_load
 import sounds
-import battle
-import units
 import tiles
+import units
 
 if __name__ == "__main__":
     sys.exit()
@@ -48,6 +53,11 @@ class Item:
         self.cat = cat
         self.item_id = item_id
 
+    @staticmethod
+    def use_item(self):
+        print("You can't use this right now.")
+        main.s_input("\nPress enter/return ")
+
 
 class Consumable(Item):
     # Items that restore your HP, MP, or both
@@ -57,7 +67,6 @@ class Consumable(Item):
         self.mana = mana
 
     def use_item(self, user, is_battle=False):
-        print('-'*save_load.divider_size)
         print(f'{user.name} consumes the {self.name}...')
 
         main.smart_sleep(0.75)
@@ -85,8 +94,6 @@ class StatusPotion(Item):
         self.status = status
 
     def use_item(self, user, is_battle=False):
-        print('-'*save_load.divider_size)
-
         if self.status in user.status_ail:
             sounds.buff_spell.play()
             user.status_ail = [x for x in user.status_ail if x != self.status]
@@ -131,12 +138,10 @@ class Weapon(Item):
         if user.class_ in self.class_ or not self.class_:
             equip_item(self.item_id, user)
 
-            print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self.name}.')
             main.s_input("\nPress enter/return ")
 
         else:
-            print('-'*save_load.divider_size)
             print(f"This {self.name} is f{self.class_req[3:]}.")
 
             main.s_input("\nPress enter/return ")
@@ -162,13 +167,10 @@ class Armor(Item):
     def use_item(self, user):
         if user.class_ in self.class_ or not self.class_:
             equip_item(self.item_id, user)
-
-            print('-'*save_load.divider_size)
             print(f'{user.name} equips the {self.name}.')
             main.s_input("\nPress enter/return ")
 
         else:
-            print('-'*save_load.divider_size)
             print(f"This {self.name} is f{self.class_req[3:]}.")
 
             main.s_input("\nPress enter/return ")
@@ -191,7 +193,6 @@ class ElementAccessory(Accessory):
         equip_item(self.item_id, user)
         user.def_element = self.def_element
 
-        print('-'*save_load.divider_size)
         print(f'{user.name} equips the {self.name}. Their element is now set to {self.def_element}.')
         main.s_input("\nPress enter/return ")
 
@@ -200,8 +201,7 @@ class Shovel(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    @staticmethod
-    def use_item():
+    def use_item(self):
         if main.party_info['gamestate'] == 'town':
             print("What, here? You can't just start digging up a town!")
             main.s_input("\nPress enter/return")
@@ -265,7 +265,7 @@ class FastTravelAtlus(Item):
             return avail_provs[0]
 
         while True:
-            print(f"Available Provinces [MAP POWER {main.party_info['map_pow']}): ")
+            print(f"Available Provinces [Pages {main.party_info['map_pow']}): ")
             for num, x in enumerate(avail_provs):
                 print(f"      [{num + 1}] {x.name}")
 
@@ -330,6 +330,7 @@ class FastTravelAtlus(Item):
                         print("you teleported to!")
                         main.s_input("\nPress enter/return ")
                         print("-"*save_load.divider_size)
+                        main.check_region()
 
                         return True
 
@@ -343,13 +344,6 @@ class LockpickKit(Item):
     def __init__(self, name, desc, buy, sell, power, item_id, cat='tools', imp=False, ascart='Lockpick'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
         self.power = power
-
-    @staticmethod
-    def use_item():
-        print('-'*save_load.divider_size)
-        print("Your party could certainly make a quick buck lockpicking chests with this thing.")
-        print("But that's illegal - you wouldn't break the law, would you?")
-        main.s_input("\nPress enter/return ")
 
 
 class MonsterEncyclopedia(Item):
@@ -382,8 +376,7 @@ class PocketAlchemyLab(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    @staticmethod
-    def use_item():
+    def use_item(self):
         pass
 
 
@@ -391,9 +384,268 @@ class MusicBox(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
+    def use_item(self):
+        print(f"Musicbox is currently {'on' if main.party_info['musicbox_isplaying'] else 'off'}")
+        print(f"Musicbox is set to {main.party_info['musicbox_mode']}")
+
+        if main.party_info['musicbox_folder']:
+            print(f"Musicbox is set to play music from {main.party_info['musicbox_folder']}/")
+
+        else:
+            print("Musicbox does not have a directory set")
+
+        self.choose_option()
+
+    def choose_option(self):
+        print("-"*save_load.divider_size)
+        while True:
+            print("What should you do with the Musicbox?")
+            print(f"      [1] Turn {'off' if main.party_info['musicbox_isplaying'] else 'on'}")
+            print("      [2] Change play order")
+            print("      [3] Set music directory")
+
+            while True:
+                chosen = main.s_input('Input [#] (or type "exit"): ')
+
+                if chosen == '1':
+                    if main.party_info['musicbox_folder']:
+                        main.party_info['musicbox_isplaying'] = not main.party_info['musicbox_isplaying']
+
+                        if main.party_info['musicbox_isplaying']:
+                            pygame.mixer.music.stop()
+                            self.create_process()
+                            self.music_process.start()
+
+                        else:
+                            self.music_process.terminate()
+                            pygame.mixer.music.play(-1)
+
+                        print("-"*save_load.divider_size)
+                        print(f"You turn {'on' if main.party_info['musicbox_isplaying'] else 'off'} the musicbox")
+                        main.s_input("\nPress enter/return ")
+                        print("-"*save_load.divider_size)
+
+                        break
+
+                    else:
+                        print("-"*save_load.divider_size)
+                        print("You need to set a music directory first!")
+                        main.s_input("\nPress enter/return ")
+                        print("-"*save_load.divider_size)
+
+                        break
+
+                elif chosen == '2':
+                    print("-"*save_load.divider_size)
+                    self.play_order()
+                    print("-"*save_load.divider_size)
+
+                    break
+
+                elif chosen == '3':
+                    print("-"*save_load.divider_size)
+                    self.choose_directory()
+                    print("-"*save_load.divider_size)
+
+                    break
+
+                elif chosen in ['e', 'x', 'exit', 'b', 'back']:
+                    return
+
+    def create_process(self):
+        self.music_process = multiprocessing.Process(target=self.playlist, args=(main.party_info['musicbox_folder'],
+                                                                                 main.party_info['musicbox_mode']))
+
     @staticmethod
-    def use_item():
-        pass
+    def play_order():
+        print("Which setting do you want for the musicbox?")
+        print("      [1] A->Z")
+        print("      [2] Z->A")
+        print("      [3] Shuffle")
+
+        while True:
+            chosen = main.s_input('Input [#] (or type "back"): ')
+
+            if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                return
+
+            elif chosen == '1':
+                main.party_info['musicbox_mode'] = "A->Z"
+                print("-"*save_load.divider_size)
+                print("Musicbox set to play from A->Z.")
+
+            elif chosen == '2':
+                main.party_info['musicbox_mode'] = "Z->A"
+                print("-"*save_load.divider_size)
+                print("Musicbox set to play from Z->A.")
+
+            elif chosen == '3':
+                main.party_info['musicbox_mode'] = "shuffle"
+                print("-"*save_load.divider_size)
+                print("Musicbox set to shuffle.")
+
+            else:
+                continue
+
+            if main.party_info['musicbox_isplaying']:
+                print("You'll need to restart your musicbox to apply this change.")
+
+            main.s_input("\nPress enter/return ")
+
+            return
+
+    def choose_directory(self):
+        while True:
+            folder = main.s_input("Type the directory path, type 'explore', or type 'back': ")
+
+            if folder.lower() == "explore":
+                print("-" * save_load.divider_size)
+                folder = self.select_root()
+
+                if not folder:
+                    print("-" * save_load.divider_size)
+                    continue
+
+            elif folder.lower() in ['e', 'x', 'exit', 'b', 'back']:
+                return
+
+            else:
+                if not os.path.isdir(folder):
+                    print("-" * save_load.divider_size)
+                    print(f"{folder} is not a valid directory")
+                    main.s_input("\nPress enter/return ")
+                    print("-" * save_load.divider_size)
+                    continue
+
+            print("-" * save_load.divider_size)
+            for file in os.listdir(folder):
+                if any(map(file.endswith, ['.ogg', 'flac', '.mp3', '.wav'])):
+
+                    main.party_info['musicbox_folder'] = folder
+                    print(f"Directory set to {folder}")
+
+                    if main.party_info['musicbox_isplaying']:
+                        print("You'll need to restart your musicbox to apply this change.")
+
+                    main.s_input("\nPress enter/return ")
+
+                    return
+
+            else:
+                print("Couldn't find any .ogg, .flac, .mp3, or .wav files in that directory.")
+                while True:
+                    y_n = main.s_input("Select a different directory? | Yes or No: ")
+
+                    if y_n.startswith("y"):
+                        print("-" * save_load.divider_size)
+                        break
+
+                    elif y_n.startswith("n"):
+                        return
+
+    def select_root(self):
+        drive_list = []
+        for drive in range(ord('A'), ord('N')):
+            if os.path.exists(chr(drive) + ':'):
+                drive_list.append(chr(drive))
+
+        if len(drive_list) > 1:
+            while True:
+                print("Select a drive: ")
+
+                for num, x in enumerate(drive_list):
+                    print(f"      [{num + 1}] {x}:/")
+
+                while True:
+                    chosen = main.s_input("Input [#] (or type back): ")
+
+                    try:
+                        chosen = drive_list[int(chosen) - 1]
+
+                    except (IndexError, ValueError):
+                        if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                            return False
+
+                        else:
+                            continue
+
+                    return self.file_explorer(f"{chosen}:")
+
+        else:
+            return self.file_explorer(f"{drive_list[0]}:")
+
+    @staticmethod
+    def file_explorer(root):
+        current_path = [root]
+
+        while True:
+            print("-"*save_load.divider_size)
+            available_dirs = []
+
+            print(f"Current Path: {'/'.join(current_path)}/")
+            for file in os.listdir(f"{'/'.join(current_path)}/"):
+                if os.path.isdir('/'.join([x for x in current_path] + [file])):
+                    available_dirs.append(file)
+                    print(f"      [{len(available_dirs)}] {file}")
+
+                else:
+                    print(f"          {file}")
+
+            while True:
+                chosen = main.s_input('Input [#], type "choose" to choose this folder, or type "back": ').lower()
+
+                try:
+                    chosen = available_dirs[int(chosen) - 1]
+                    current_path.append(chosen)
+
+                    break
+
+                except (IndexError, ValueError):
+                    if chosen == "choose":
+                        return '/'.join(current_path)
+
+                    elif chosen in ['e', 'x', 'exit', 'b', 'back']:
+                        if len(current_path) > 1:
+                            current_path.pop()
+                            break
+
+                        else:
+                            return False
+
+    @staticmethod
+    def playlist(folder, mode):
+        import pygame
+
+        pygame.mixer.pre_init()
+        pygame.mixer.init()
+
+        song_list = []
+
+        for file in os.listdir(folder):
+            if any(map(file.endswith, ['.ogg', 'flac', '.mp3', '.wav'])):
+                song_list.append(file)
+
+        if mode == 'A->Z':
+            song_list = sorted(song_list)
+
+        if mode == 'Z->A':
+            song_list = sorted(song_list, reverse=True)
+
+        if mode == 'shuffle':
+            random.shuffle(song_list)
+
+        for song in song_list:
+            try:
+                pygame.mixer.music.load(f"{folder}/{song}")
+                pygame.mixer.music.play()
+                music_sound = pygame.mixer.Sound(f"{folder}/{song}")
+
+                while 0 <= (pygame.mixer.music.get_pos()/1000)/music_sound.get_length() < 1:
+                    pass
+
+            except pygame.error:
+                raise
+                pass
 
 
 class Ingredient(Item):
@@ -401,21 +653,10 @@ class Ingredient(Item):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
         self.flavor = flavor
 
-    def use_item(self):
-        print('-'*save_load.divider_size)
-        print(self.desc)
-        main.s_input("\nPress enter/return ")
-
 
 class Misc(Item):
     def __init__(self, name, desc, buy, sell, item_id, ascart='Misc', cat='misc', imp=False):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
-
-    @staticmethod
-    def use_item(self):
-        print('-'*save_load.divider_size)
-        print("You can't use this right now.")
-        main.s_input("\nPress enter/return ")
 
 
 # --- ITEMS --- #
@@ -910,12 +1151,10 @@ of a pickaxe, shovel, and hammer all into one device! Use while on the
 overworld to dig for gems. Gems have pre-determined locations and do not
 respawn - there is no luck involved with this tool.""", 150, 75, "shovel")
 
-fast_travel_atlus = FastTravelAtlus('Atlus of Fast Travel', """\
+fast_travel_atlus = FastTravelAtlus('Fast Travel Atlus', """\
 A convenient tome that allows teleportation between towns. These aren't
 being made anymore, after having been banned by the King due to its use in
-many recent abductions and murders. Most of the pages appear to be missing,
-but they can be restored by obtaining Travel Gems. Adding a gem will improve
-your 'Travel Power' enabling access to a new province.""", 0, 0, "fast_map")
+many recent abductions and murders. Most of the pages appear to be missing.""", 0, 0, "fast_map")
 
 monster_book = MonsterEncyclopedia('Monster Encyclopedia', """\
 A book containing information on monsters. When used in battle, this will 
@@ -936,20 +1175,29 @@ musicbox = MusicBox('Portable Musicbox', """\
 Somehow this small device has the ability to play music without need for a 
 bard or instruments. Select a folder full of music on your computer and this
 device will replace the in-game music with your tunes!""",
-                    250, 75, "i_sound")
+                    250, 75, "musicbox")
 
 
 # Tools -- Lockpicks
-wood_lckpck = LockpickKit('Wooden Lockpick Kit',
-                          'A wooden lockpick kit with a 30% chance to open chests.', 30, 15, 30, "wood_lckpck")
-copper_lckpck = LockpickKit('Copper Lockpick Kit',
-                            'A copper lockpick kit with a 45% chance to open chests.', 200, 100, 45, "copper_lckpck")
-iron_lckpck = LockpickKit('Iron Lockpick Kit',
-                          'An iron lockpick kit with a 60% chance to open chests.', 300, 150, 60, "iron_lckpck")
-steel_lckpck = LockpickKit('Steel Lockpick Kit',
-                           'A steel lockpick kit with a 75% chance to open chests.', 500, 250, 75, "steel_lckpck")
-mythril_lckpck = LockpickKit('Mythril Lockpick Kit',
-                             'A mythril lockpick kit with a 90% chance to open chests.', 700, 350, 90, "mythril_lckpck")
+wood_lckpck = LockpickKit('Wooden Lockpick Kit', """\
+A wooden lockpick kit with a 30% chance to open chests. Chests can be found
+by sneaking into houses in towns.""", 30, 15, 30, "wood_lckpck")
+
+copper_lckpck = LockpickKit('Copper Lockpick Kit', """\
+A copper lockpick kit with a 45% chance to open chests. Chests can be found
+by sneaking into houses in towns.""", 200, 100, 45, "copper_lckpck")
+
+iron_lckpck = LockpickKit('Iron Lockpick Kit', """\
+An iron lockpick kit with a 60% chance to open chests. Chests can be found
+by sneaking into houses in towns.""", 300, 150, 60, "iron_lckpck")
+
+steel_lckpck = LockpickKit('Steel Lockpick Kit', """\
+A steel lockpick kit with a 75% chance to open chests. Chests can be found
+by sneaking into houses in towns.""", 500, 250, 75, "steel_lckpck")
+
+mythril_lckpck = LockpickKit('Mythril Lockpick Kit', """\
+A mythril lockpick kit with a 90% chance to open chests. Chests can be found
+by sneaking into houses in towns.""", 700, 350, 90, "mythril_lckpck")
 
 # ALCHEMY INGREDIENTS - Dropped by monsters, used to make potions
 # Strange
@@ -1351,7 +1599,7 @@ inventory = {'q_items': [],
              'consumables': [_c(s_potion), _c(s_elixir)],
              'weapons': [],
              'armor': [],
-             'tools': [],
+             'tools': [fast_travel_atlus, musicbox],
              'misc': [],
              'access': []}
 
@@ -1480,7 +1728,7 @@ def pick_category():
 
                         else:
                             print('-'*save_load.divider_size)
-                            print(f'The {vis_cat} category is empty.')
+                            print(f'Your party has no {vis_cat}.')
                             main.s_input("\nPress enter/return ")
                             print('-'*save_load.divider_size)
 
@@ -1488,7 +1736,7 @@ def pick_category():
 
                 else:
                     print('-'*save_load.divider_size)
-                    print(f'The {vis_cat} category is empty.')
+                    print(f'Your party has no {vis_cat}.')
                     main.s_input("\nPress enter/return ")
                     print('-'*save_load.divider_size)
                     break
@@ -1623,6 +1871,8 @@ Input [#] (or type "back"): """)
             # Items of these classes require a target to be used, so we have to acquire a target first
             if any([isinstance(item, class_) for class_ in [Accessory, Armor, Consumable, Weapon, StatusPotion]]):
                 units.player.choose_target(f"Who should {use_equip} the {item.name}?", ally=True, enemy=False)
+
+                print('-' * save_load.divider_size)
                 item.use_item(units.player.target)
 
                 if item not in inventory[cat]:
@@ -1630,6 +1880,7 @@ Input [#] (or type "back"): """)
 
             # Other items can just be used normally
             else:
+                print('-'*save_load.divider_size)
                 item.use_item()
                 if item not in inventory[cat]:
                     return
@@ -1642,7 +1893,9 @@ Input [#] (or type "back"): """)
             if hasattr(item, "ascart"):
                 print(ascii_art.item_sprites[item.ascart])
 
-            print(f'"{item.desc}"')
+            for x in main.chop_by_79(item.desc):
+                print(x)
+
             main.s_input("\nPress enter/return ")
 
         elif action == '3':
@@ -1865,7 +2118,9 @@ def sell_item(cat, item):
     if hasattr(item, "ascart"):
         print(ascii_art.item_sprites[item.ascart])
 
-    print(item.desc)
+    for x in main.chop_by_79(item.desc):
+        print(x)
+
     print('-'*save_load.divider_size)
 
     while True:
@@ -1988,7 +2243,8 @@ def deserialize_inv(path):
         norm_inv[category] = []
 
         for item_id in j_inventory[category]:
-            norm_inv[category].append(_c(find_item_with_id(item_id)))
+            if find_item_with_id(item_id):
+                norm_inv[category].append(_c(find_item_with_id(item_id)))
 
     inventory = norm_inv
 

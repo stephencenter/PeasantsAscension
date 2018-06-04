@@ -82,7 +82,10 @@ party_info = {'biome': 'forest',
               'scout_list': [],
               'dif': 0,
               'map_pow': 1,
-              'gamestate': "overworld"}
+              'gamestate': "overworld",
+              'musicbox_folder': '',
+              'musicbox_isplaying': False,
+              'musicbox_mode': 'A->Z'}
 
 # Set to 1 when auto-testing
 do_debug = 0
@@ -98,7 +101,7 @@ friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
 
 # Custom input, plays a "blip" sound after the player presses enter.
 # Also can be used to automatically play the game and find crashes.
-def s_input(string):
+def s_input(string=''):
     if do_debug:
         print(string, end='')
         char = random.choice('0123456789ynxpsewrtbucdfi')
@@ -147,9 +150,8 @@ def chop_by_79(string, num=79):
 
 
 def game_loop():
-    pygame.mixer.music.load(party_info['music'])
-    pygame.mixer.music.play(-1)
-    pygame.mixer.music.set_volume(save_load.music_vol)
+    check_region()
+    sounds.play_music(party_info['music'])
 
     while True:
         if not towns.search_towns():
@@ -257,9 +259,7 @@ def check_region():
             party_info['music'] = music
 
             # Play that funky music
-            pygame.mixer.music.load(music)
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(save_load.music_vol)
+            sounds.play_music(music)
 
             if not towns.search_towns(enter=False):
                 print('-'*save_load.divider_size)

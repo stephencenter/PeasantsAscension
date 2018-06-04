@@ -149,9 +149,6 @@ def battle_system(is_boss=False, ambush=False):
     # Bosses use a different battle music than when battling normal enemies
     if is_boss:
         m_list = ([units.monster] + units.monster.lackies) if units.monster.lackies else [units.monster]
-        pygame.mixer.music.load('../Music/Terrible Tarantuloid.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
 
         print(ascii_art.monster_art[units.monster.m_name] % '')
 
@@ -198,9 +195,7 @@ def battle_system(is_boss=False, ambush=False):
             else:
                 print(f'A {units.monster.name} suddenly appeared out of nowhere!')
 
-        pygame.mixer.music.load('../Music/Ruari 8-bit Battle.ogg')
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(save_load.music_vol)
+        sounds.play_music('../Music/Ruari 8-bit Battle.ogg')
 
         main.smart_sleep(1)
 
@@ -329,9 +324,7 @@ def after_battle(is_boss):
     while True:
         # If the monster wins...
         if any(['dead' not in m.status_ail for m in m_list]) and all(['dead' in x.status_ail for x in enabled_pcus]):
-            pygame.mixer.music.load('../Music/Power-Up.ogg')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(save_load.music_vol)
+            sounds.play_music('../Music/Power-Up.ogg')
 
             print(f'Despite your best efforts, the {units.monster.name} has killed your party.')
             print('-'*save_load.divider_size)
@@ -350,9 +343,7 @@ def after_battle(is_boss):
                     main.party_info['current_tile'] = main.party_info['prev_town']
                     units.heal_pcus(1)
 
-                    pygame.mixer.music.load(main.party_info['music'])
-                    pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(save_load.music_vol)
+                    sounds.play_music(main.party_info['music'])
 
                     return
 
@@ -371,9 +362,7 @@ def after_battle(is_boss):
 
         # If the player wins...
         elif all(['dead' in m.status_ail for m in m_list]) and any(['dead' not in x.status_ail for x in enabled_pcus]):
-            pygame.mixer.music.load('../Music/Python_RM.ogg')
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(save_load.music_vol)
+            sounds.play_music('../Music/Python_RM.ogg')
 
             if not is_boss:
                 print(f'The {units.monster.name} falls to the ground, dead as a stone.')
@@ -404,10 +393,7 @@ def after_battle(is_boss):
             for character in enabled_pcus:
                 character.level_up()
 
-            pygame.mixer.music.load(main.party_info['music'])
-            pygame.mixer.music.play(-1)
-            pygame.mixer.music.set_volume(save_load.music_vol)
-            pygame.mixer.music.set_volume(save_load.music_vol)
+            sounds.play_music(main.party_info['music'])
 
             return
 
@@ -444,6 +430,7 @@ def battle_inventory(user):
                     print(f'{user.name} is not {user.status} - they have no reason to drink that.')
                     break
 
+            print('-' * save_load.divider_size)
             item.use_item(user, is_battle=True)
             return True
 
