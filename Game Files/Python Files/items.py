@@ -53,8 +53,7 @@ class Item:
         self.cat = cat
         self.item_id = item_id
 
-    @staticmethod
-    def use_item(self):
+    def use_item(self, user):
         print("You can't use this right now.")
         main.s_input("\nPress enter/return ")
 
@@ -66,7 +65,7 @@ class Consumable(Item):
         self.heal = heal
         self.mana = mana
 
-    def use_item(self, user, is_battle=False):
+    def use_item(self, user):
         print(f'{user.name} consumes the {self.name}...')
 
         main.smart_sleep(0.75)
@@ -82,7 +81,7 @@ class Consumable(Item):
 
         units.fix_stats()
 
-        if not is_battle:
+        if main.party_info['gamestate'] != 'battle':
             main.s_input("\nPress enter/return ")
 
         remove_item(self.item_id)
@@ -93,7 +92,7 @@ class StatusPotion(Item):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
         self.status = status
 
-    def use_item(self, user, is_battle=False):
+    def use_item(self, user):
         if self.status in user.status_ail:
             sounds.buff_spell.play()
             user.status_ail = [x for x in user.status_ail if x != self.status]
@@ -104,7 +103,7 @@ class StatusPotion(Item):
 
             print(f"{user.name} is no longer {self.status}!")
 
-            if not is_battle:
+            if main.party_info['gamestate'] != 'battle':
                 main.s_input("\nPress enter/return ")
 
             remove_item(self.item_id)
@@ -201,7 +200,7 @@ class Shovel(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    def use_item(self):
+    def use_item(self, user):
         if main.party_info['gamestate'] == 'town':
             print("What, here? You can't just start digging up a town!")
             main.s_input("\nPress enter/return")
@@ -242,7 +241,7 @@ class FastTravelAtlus(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Map'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    def use_item(self):
+    def use_item(self, user):
         if main.party_info['gamestate'] == 'town':
             print("Fast Travel Atluses can't be used in towns.")
             main.s_input("\nPress enter/return")
@@ -350,8 +349,7 @@ class MonsterEncyclopedia(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    @staticmethod
-    def use_item(user):
+    def use_item(self, user):
         print(battle.turn_counter)
         m_w = {'fire': 'Water',
                'water': 'Electric',
@@ -376,7 +374,7 @@ class PocketAlchemyLab(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    def use_item(self):
+    def use_item(self, user):
         pass
 
 
@@ -384,7 +382,7 @@ class MusicBox(Item):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
         Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
-    def use_item(self):
+    def use_item(self, user):
         print(f"Musicbox is currently {'on' if main.party_info['musicbox_isplaying'] else 'off'}")
         print(f"Musicbox is set to {main.party_info['musicbox_mode']}")
 
@@ -414,10 +412,10 @@ class MusicBox(Item):
                         if main.party_info['musicbox_isplaying']:
                             pygame.mixer.music.stop()
                             self.create_process()
-                            self.music_process.start()
+                            main.party_info['musicbox_process'].start()
 
                         else:
-                            self.music_process.terminate()
+                            main.party_info['musicbox_process'].terminate()
                             pygame.mixer.music.play(-1)
 
                         print("-"*save_load.divider_size)
@@ -453,8 +451,9 @@ class MusicBox(Item):
                     return
 
     def create_process(self):
-        self.music_process = multiprocessing.Process(target=self.playlist, args=(main.party_info['musicbox_folder'],
-                                                                                 main.party_info['musicbox_mode']))
+        main.party_info['musicbox_process'] = multiprocessing.Process(target=self.playlist,
+                                                                      args=(main.party_info['musicbox_folder'],
+                                                                            main.party_info['musicbox_mode']))
 
     @staticmethod
     def play_order():
@@ -638,9 +637,8 @@ class MusicBox(Item):
             try:
                 pygame.mixer.music.load(f"{folder}/{song}")
                 pygame.mixer.music.play()
-                music_sound = pygame.mixer.Sound(f"{folder}/{song}")
 
-                while 0 <= (pygame.mixer.music.get_pos()/1000)/music_sound.get_length() < 1:
+                while pygame.mixer.music.get_busy():
                     pass
 
             except pygame.error:
@@ -1598,7 +1596,7 @@ inventory = {'q_items': [],
              'consumables': [_c(s_potion), _c(s_elixir)],
              'weapons': [],
              'armor': [],
-             'tools': [fast_travel_atlus, musicbox],
+             'tools': [_c(fast_travel_atlus), _c(musicbox)],
              'misc': [],
              'access': []}
 
@@ -1620,7 +1618,7 @@ equipped = {
     },
 
     'Chili': {
-        'weapon': _c(stn_dag),
+        'weapon': _c(fists),
         'head': _c(straw_hat),
         'body': _c(cotton_shirt),
         'legs': _c(sunday_trousers),
@@ -1651,8 +1649,8 @@ equipped = {
         'access': _c(no_access)
     },
 
-    "Ran'af": {
-        'weapon': _c(fists),
+    "Storm": {
+        'weapon': _c(stn_dag),
         'head': _c(straw_hat),
         'body': _c(cotton_shirt),
         'legs': _c(sunday_trousers),
@@ -1673,7 +1671,7 @@ def pick_category():
       [4] Consumables
       [5] Tools
       [6] Quest Items
-      [7] Miscellaneous
+      [7] Misc. Items
        |---->[I] Equipped Items
        |---->[Q] Quests""")
         while True:
@@ -1702,7 +1700,7 @@ def pick_category():
                 vis_cat = 'Quest Items'
             elif cat == '7':
                 cat = 'misc'
-                vis_cat = 'Miscellaneous'
+                vis_cat = 'Misc. Items'
 
             elif cat == 'i':
                 cat = 'equipped_items'
@@ -1757,8 +1755,8 @@ def pick_category():
 
 
 # Select an object to interact with in your inventory
-# If "gs == True" that means that items are being sold, and not used.
-def pick_item(cat, vis_cat, gs=False):
+# If "selling == True" that means that items are being sold, and not used.
+def pick_item(cat, vis_cat, selling=False):
     while cat in ['quests', 'equipped_items'] or inventory[cat]:
         # Quests have their own function, because they aren't actually "items"
         if cat == 'quests':
@@ -1774,33 +1772,35 @@ def pick_item(cat, vis_cat, gs=False):
             print('-'*save_load.divider_size)
 
             # The code that prints the inventory is kind of complicated so it's located in another function
-            q_inventory = print_inventory(cat, vis_cat, gs)
+            item_ids = print_inventory(cat, vis_cat, selling)
 
         else:
             return
 
         while True:
-            item = main.s_input('Input [#] (or type "back"): ').lower()
+            chosen = main.s_input('Input [#] (or type "back"): ').lower()
 
             try:
-                # If you're selling items at a general store, you have to call a different function
-                if gs:
-                    sell_item(cat, [x for x in q_inventory][int(item) - 1])
-
-                else:
-                    pick_action(cat, q_inventory[int(item) - 1])
+                item_id = item_ids[int(chosen) - 1]
 
             except (IndexError, ValueError):
-                if item in ['e', 'x', 'exit', 'b', 'back']:
+                if chosen in ['e', 'x', 'exit', 'b', 'back']:
                     return
 
                 continue
+
+            # If you're selling items at a general store, you have to call a different function
+            if selling:
+                sell_item(item_id)
+
+            else:
+                pick_action(item_id)
 
             break
 
 
 # Count the number of each item in the player's inventory, and display it alongside one copy of each item
-def print_inventory(cat, vis_cat, gs):
+def print_inventory(cat, vis_cat, selling):
     q_inventory = []
     for item_x in inventory[cat]:
         for num, item_y in enumerate(q_inventory):
@@ -1812,12 +1812,12 @@ def print_inventory(cat, vis_cat, gs):
         else:
             q_inventory.append([item_x.name, item_x.item_id, 1])
 
-    if not gs:
+    if not selling:
         print(f"{vis_cat}: ")
         for x, y in enumerate(q_inventory):
             print(f'      [{x + 1}] {y[0]} x {y[2]}')
 
-        return q_inventory
+        return [x[1] for x in q_inventory]
 
     else:
         imp_qi = [it for it in q_inventory if not find_item_with_id(it[1]).imp]
@@ -1832,25 +1832,20 @@ def print_inventory(cat, vis_cat, gs):
 
         print(f'{vis_cat}:')
 
-        for a, b in enumerate(imp_qi):
-            fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(a + 1))))
-            print(f"      [{a + 1}] {b[0]} x {b[2]} {fp}--> {find_item_with_id(b[1]).sell} GP each")
+        for num, b in enumerate(imp_qi):
+            fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
+            print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {find_item_with_id(b[1]).sell} GP each")
 
         return imp_qi
 
 
-def pick_action(cat, item):
+def pick_action(item_id):
     global inventory
 
-    # the "item" variable is actually just a list of item attributes - we have to convert it into
-    # a real item first
-    for x in inventory[cat]:
-        if x.item_id == item[1]:
-            item = x
-            break
+    item = find_item_with_id(item_id)
 
     # Loop while the item is in the inventory
-    while item in inventory[cat]:
+    while True:
         if any([isinstance(item, class_) for class_ in [Weapon, Armor, Accessory]]):
             # You equip weapons/armor/accessories
             use_equip = 'Equip'
@@ -1871,18 +1866,17 @@ Input [#] (or type "back"): """)
             if any([isinstance(item, class_) for class_ in [Accessory, Armor, Consumable, Weapon, StatusPotion]]):
                 units.player.choose_target(f"Who should {use_equip} the {item.name}?", ally=True, enemy=False)
 
-                print('-' * save_load.divider_size)
+                print('-'*save_load.divider_size)
                 item.use_item(units.player.target)
 
-                if item not in inventory[cat]:
-                    return
+                return
 
             # Other items can just be used normally
             else:
                 print('-'*save_load.divider_size)
-                item.use_item()
-                if item not in inventory[cat]:
-                    return
+                item.use_item(units.player)
+
+                return
 
         elif action == '2':
             # Display the item description
@@ -1925,6 +1919,35 @@ Input [#] (or type "back"): """)
                         break
 
         elif action in ['e', 'x', 'exit', 'b', 'back']:
+            return
+
+
+# Trade player-owned objects for money (GP)
+def sell_item(item_id):
+
+    item = find_item_with_id(item_id)
+
+    print('-'*save_load.divider_size)
+
+    if hasattr(item, "ascart"):
+        print(ascii_art.item_sprites[item.ascart])
+
+    for x in main.chop_by_79(item.desc):
+        print(x)
+
+    print('-'*save_load.divider_size)
+
+    while True:
+        y_n = main.s_input(f'Sell the {item.name} for {item.sell} GP? | Y/N: ').lower()
+
+        if y_n.startswith('y'):
+            remove_item(item.item_id)
+            print(f'The shopkeeper takes the {item.name} and gives you {item.sell} GP.')
+            main.s_input('\nPress enter/return ')
+
+            return
+
+        elif y_n.startswith('n'):
             return
 
 
@@ -2105,42 +2128,6 @@ def view_quests():
             print('-'*save_load.divider_size)
 
 
-# Trade player-owned objects for money (GP)
-def sell_item(cat, item):
-    for x in inventory[cat]:
-        if x.item_id == item[1]:
-            item = x
-            break
-
-    print('-'*save_load.divider_size)
-
-    if hasattr(item, "ascart"):
-        print(ascii_art.item_sprites[item.ascart])
-
-    for x in main.chop_by_79(item.desc):
-        print(x)
-
-    print('-'*save_load.divider_size)
-
-    while True:
-        y_n = main.s_input(f'Sell the {item.name} for {item.sell} GP? | Y/N: ').lower()
-
-        if y_n.startswith('y'):
-            for num, it in enumerate(inventory[cat]):
-                if it.name == item.name:
-
-                    inventory[cat].remove(it)
-                    main.party_info['gp'] += item.sell
-
-                    print(f'The shopkeeper takes the {item.name} and gives you {item.sell} GP.')
-                    main.s_input('\nPress enter/return ')
-
-                    return
-
-        elif y_n.startswith('n'):
-            return
-
-
 # Searches the all_items list, and returns the item that has the given item_id.
 # If it can't find anything, it returns False (this shouldn't ever happen in this game, but could be
 # useful if someone else is making something with this engine)
@@ -2164,6 +2151,11 @@ def add_item(item_id):
 # Returns True if the item in question is actually in the player's inventory, otherwise it returns False.
 def remove_item(item_id):
     global inventory
+
+    if item_id == 'musicbox' and main.party_info['musicbox_process']:
+        main.party_info['musicbox_process'].terminate()
+        main.party_info['musicbox_process'] = None
+        sounds.play_music(main.party_info['music'])
 
     this_item = _c(find_item_with_id(item_id))
 

@@ -732,7 +732,7 @@ Defensive Element: {self.def_element.title()} | Offensive Element: {self.off_ele
                                 solou,
                                 chili,
                                 chyme,
-                                ran_af,
+                                storm,
                                 adorine,
                                 parsto] if x.enabled and (True if 'dead' not in x.status_ail or allow_dead else False)]
 
@@ -1260,7 +1260,7 @@ class Monster(Unit):
                                        solou,
                                        chili,
                                        chyme,
-                                       ran_af,
+                                       storm,
                                        parsto,
                                        adorine
                                        ] if x.enabled and 'dead' not in x.status_ail])
@@ -1702,7 +1702,7 @@ def create_player():
     global solou
     global chili
     global adorine
-    global ran_af
+    global storm
     global parsto
     global chyme
 
@@ -1710,16 +1710,16 @@ def create_player():
 
     # Pronounced "So-low"
     solou = PlayableCharacter('Solou', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='mage', enabled=False)
-    # Pronounced "Zo-ann"
-    chili = PlayableCharacter('Chili', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='assassin', enabled=False)
+    # Pronounced... Chili
+    chili = PlayableCharacter('Chili', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='monk', enabled=False)
     # Pronounced "Adore-een"
     adorine = PlayableCharacter('Adorine', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='warrior', enabled=False)
-    # Pronounced "Rahn-ahf"
-    ran_af = PlayableCharacter("Ran'af", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='monk', enabled=False)
     # Pronounced "Parse-toe"
     parsto = PlayableCharacter("Parsto", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='ranger', enabled=False)
     # Rhymes with "Chime"
     chyme = PlayableCharacter("Chyme", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='paladin', enabled=False)
+    # Pronounced... Storm
+    storm = PlayableCharacter("Storm", 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, class_='assassin', enabled=False)
 
     # Set the player's max HP and MP
     player.max_hp = copy.copy(player.hp)
@@ -1815,14 +1815,14 @@ def fix_stats():
     global chili
     global chyme
     global parsto
-    global ran_af
+    global storm
     global adorine
     global monster
 
     # Make an abbreviation for battle.temp_stats so a later part doesn't have to be muilti-line
     bts = battle.temp_stats
 
-    for x in [player, solou, chili, chyme, parsto, ran_af, adorine]:
+    for x in [player, solou, chili, chyme, parsto, storm, adorine]:
         x.hp, x.mp, x.ap = max(0, x.hp), max(0, x.mp), max(0, x.ap)
         x.hp, x.mp, x.ap = min(x.max_hp, x.hp), min(x.max_mp, x.mp), min(x.max_ap, x.ap)
         x.hp, x.mp, x.ap = math.ceil(x.hp), math.ceil(x.mp), math.ceil(x.ap)
@@ -1856,7 +1856,7 @@ def heal_pcus(percentage):
                 solou,
                 chili,
                 chyme,
-                ran_af,
+                storm,
                 parsto,
                 adorine]:
 
@@ -1873,7 +1873,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     player.target = ''
     parsto.target = ''
     adorine.target = ''
-    ran_af.target = ''
+    storm.target = ''
     chili.target = ''
     solou.target = ''
     chyme.target = ''
@@ -1881,7 +1881,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     player.c_spell = ''
     parsto.c_spell = ''
     adorine.c_spell = ''
-    ran_af.c_spell = ''
+    storm.c_spell = ''
     chili.c_spell = ''
     solou.c_spell = ''
     chyme.c_spell = ''
@@ -1889,7 +1889,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     player.c_ability = ''
     parsto.c_ability = ''
     adorine.c_ability = ''
-    ran_af.c_ability = ''
+    storm.c_ability = ''
     chili.c_ability = ''
     solou.c_ability = ''
     chyme.c_ability = ''
@@ -1905,7 +1905,7 @@ def serialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     with open(r_path, mode='w', encoding='utf-8') as f:
         json.dump(chyme.__dict__, f, indent=4, separators=(', ', ': '))
     with open(f_path, mode='w', encoding='utf-8') as f:
-        json.dump(ran_af.__dict__, f, indent=4, separators=(', ', ': '))
+        json.dump(storm.__dict__, f, indent=4, separators=(', ', ': '))
     with open(p_path, mode='w', encoding='utf-8') as f:
         json.dump(parsto.__dict__, f, indent=4, separators=(', ', ': '))
 
@@ -1917,7 +1917,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     global chili
     global adorine
     global chyme
-    global ran_af
+    global storm
     global parsto
 
     player = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3)
@@ -1925,7 +1925,7 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     chili = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
     adorine = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
     chyme = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
-    ran_af = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
+    storm = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
     parsto = PlayableCharacter('', 20, 5, 8, 5, 8, 5, 8, 5, 6, 3, enabled=False)
 
     with open(path, encoding='utf-8') as f:
@@ -1939,11 +1939,11 @@ def deserialize_player(path, s_path, x_path, a_path, r_path, f_path, p_path):
     with open(r_path, encoding='utf-8') as f:
         chyme.__dict__ = json.load(f)
     with open(f_path, encoding='utf-8') as f:
-        ran_af.__dict__ = json.load(f)
+        storm.__dict__ = json.load(f)
     with open(p_path, encoding='utf-8') as f:
         parsto.__dict__ = json.load(f)
 
-    for x in [player, solou, chili, adorine, chyme, ran_af, parsto]:
+    for x in [player, solou, chili, adorine, chyme, storm, parsto]:
         x.reset_ability_vars()
 
 
@@ -1973,7 +1973,7 @@ player = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 solou = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 chili = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 adorine = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
-ran_af = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
+storm = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 parsto = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 chyme = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 monster = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)

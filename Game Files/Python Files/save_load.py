@@ -58,9 +58,9 @@ sav_play = '{ADVENTURE_NAME}/play_stats.json'        # Player Stats
 sav_solou = '{ADVENTURE_NAME}/solou_stats.json'      # Solou's Stats
 sav_chili = '{ADVENTURE_NAME}/chili_stats.json'      # Chili's Stats
 sav_chyme = '{ADVENTURE_NAME}/chyme_stats.json'      # Chyme's Stats
-sav_ran_af = '{ADVENTURE_NAME}/ran_af_stats.json'    # Ran'af's Stats
 sav_parsto = '{ADVENTURE_NAME}/parsto_stats.json'    # Parsto's Stats
 sav_adorine = '{ADVENTURE_NAME}/adorine_stats.json'  # Adorine's Stats
+sav_ran_af = '{ADVENTURE_NAME}/storm_stats.json'    # Storm's Stats
 
 adventure_name = ''
 base_dir = "../Save Files"
@@ -353,12 +353,11 @@ def serialize_all(verbose=True):
         json_party_info = {}
 
         for key in main.party_info:
-            if key in ['current_tile', 'prev_town']:
-                if isinstance(main.party_info[key], tiles.Tile):
-                    json_party_info[key] = main.party_info[key].tile_id
+            if isinstance(main.party_info[key], tiles.Tile):
+                json_party_info[key] = main.party_info[key].tile_id
 
-                else:
-                    json_party_info[key] = main.party_info[key]
+            elif key == "musicbox_process":
+                pass
 
             else:
                 json_party_info[key] = main.party_info[key]

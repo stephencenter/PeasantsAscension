@@ -176,7 +176,7 @@ class Town:
                         units.solou,
                         units.chili,
                         units.chyme,
-                        units.ran_af,
+                        units.storm,
                         units.parsto,
                         units.adorine
                     ]:
@@ -337,7 +337,7 @@ class Town:
       [2] Consumables
       [3] Weapons
       [4] Accessories
-      [5] Miscellaneous""")
+      [5] Misc. Items'""")
                     while True:
                         cat = main.s_input('Input [#] (or type "back"): ').lower()
 
@@ -359,14 +359,14 @@ class Town:
                             vis_cat = 'Accessories'
                         elif cat == '5':
                             cat = 'misc'
-                            vis_cat = 'Miscellaneous'
+                            vis_cat = 'Misc. Items'
                         else:
                             continue
 
                         if cat in items.inventory:
 
                             if items.inventory[cat]:
-                                items.pick_item(cat, vis_cat, gs=True)
+                                items.pick_item(cat, vis_cat, selling=True)
                                 print('-'*save_load.divider_size)
 
                                 break
@@ -466,7 +466,7 @@ class Tavern:
                     main.party_info['gp'] -= self.inn_cost
 
                     for character in [units.player, units.solou, units.chili,
-                                      units.chyme, units.ran_af, units.parsto, units.adorine]:
+                                      units.chyme, units.storm, units.parsto, units.adorine]:
 
                         character.hp = copy.copy(character.max_hp)
                         character.mp = copy.copy(character.max_mp)

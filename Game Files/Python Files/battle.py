@@ -103,17 +103,6 @@ def set_temp_stats():
             'attributes': _c(units.parsto.attributes)
         },
 
-        "Ran'af": {
-            'attk': _c(units.ran_af.attk),
-            'dfns': _c(units.ran_af.dfns),
-            'p_attk': _c(units.ran_af.p_attk),
-            'p_dfns': _c(units.ran_af.p_dfns),
-            'm_attk': _c(units.ran_af.m_attk),
-            'm_dfns': _c(units.ran_af.m_dfns),
-            'spd': _c(units.ran_af.spd),
-            'evad': _c(units.ran_af.evad),
-            'attributes': _c(units.ran_af.attributes)
-        },
         'Adorine': {
             'attk': _c(units.adorine.attk),
             'dfns': _c(units.adorine.dfns),
@@ -123,7 +112,21 @@ def set_temp_stats():
             'm_dfns': _c(units.adorine.m_dfns),
             'spd': _c(units.adorine.spd),
             'evad': _c(units.adorine.evad),
-            'attributes': _c(units.player.attributes)
+            'attributes': _c(units.player.attributes),
+
+        },
+
+        "Storm": {
+            'attk': _c(units.storm.attk),
+            'dfns': _c(units.storm.dfns),
+            'p_attk': _c(units.storm.p_attk),
+            'p_dfns': _c(units.storm.p_dfns),
+            'm_attk': _c(units.storm.m_attk),
+            'm_dfns': _c(units.storm.m_dfns),
+            'spd': _c(units.storm.spd),
+            'evad': _c(units.storm.evad),
+            'attributes': _c(units.storm.attributes)
+
         }
 
     }
@@ -141,7 +144,7 @@ def battle_system(is_boss=False, ambush=False):
                                 units.solou,
                                 units.chili,
                                 units.chyme,
-                                units.ran_af,
+                                units.storm,
                                 units.adorine,
                                 units.parsto] if x.enabled]
     turn_counter = 0
@@ -431,7 +434,7 @@ def battle_inventory(user):
                     break
 
             print('-' * save_load.divider_size)
-            item.use_item(user, is_battle=True)
+            item.use_item(user)
             return True
 
 
@@ -449,7 +452,7 @@ def bat_stats():
                               f'{units.chili.hp}/{units.chili.max_hp} HP' if units.chili.enabled else '',
                               f'{units.adorine.hp}/{units.adorine.max_hp} HP' if units.adorine.enabled else '',
                               f'{units.chyme.hp}/{units.chyme.max_hp} HP' if units.chyme.enabled else '',
-                              f'{units.ran_af.hp}/{units.ran_af.max_hp} HP' if units.ran_af.enabled else '',
+                              f'{units.storm.hp}/{units.storm.max_hp} HP' if units.storm.enabled else '',
                               f'{units.parsto.hp}/{units.parsto.max_hp} HP' if units.parsto.enabled else '',
                               f'{units.monster_2.hp}/{units.monster_2.max_hp} HP' if units.monster_2 in m_list else '',
                               f'{units.monster_3.hp}/{units.monster_3.max_hp} HP' if units.monster_3 in m_list else '',
@@ -460,7 +463,7 @@ def bat_stats():
                              f'{units.chili.mp}/{units.chili.max_mp} MP' if units.chili.enabled else '',
                              f'{units.adorine.mp}/{units.adorine.max_mp} MP' if units.adorine.enabled else '',
                              f'{units.chyme.mp}/{units.chyme.max_mp} MP' if units.chyme.enabled else '',
-                             f'{units.ran_af.mp}/{units.ran_af.max_mp} MP' if units.ran_af.enabled else '',
+                             f'{units.storm.mp}/{units.storm.max_mp} MP' if units.storm.enabled else '',
                              f'{units.parsto.mp}/{units.parsto.max_mp} MP' if units.parsto.enabled else '',
                              f'{units.monster_2.mp}/{units.monster_2.max_mp} MP' if units.monster_2 in m_list else '',
                              f'{units.monster_3.mp}/{units.monster_3.max_mp} MP' if units.monster_3 in m_list else '',
@@ -525,15 +528,15 @@ def bat_stats():
               pad2=' '*(second_padding - len(f'{units.adorine.hp}/{units.adorine.max_hp} HP')),
               pad3=' '*(third_padding - len(f'{units.adorine.mp}/{units.adorine.max_mp} MP'))))
 
-    if units.ran_af.enabled:
+    if units.storm.enabled:
         print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.ran_af.name, units.ran_af.hp,
-              units.ran_af.max_hp, units.ran_af.mp,
-              units.ran_af.max_mp, units.ran_af.lvl,
-              ', '.join([x.title() for x in units.ran_af.status_ail]),
-              pad1=' '*(first_padding - len(units.ran_af.name)),
-              pad2=' '*(second_padding - len(f'{units.ran_af.hp}/{units.ran_af.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.ran_af.mp}/{units.ran_af.max_mp} MP'))))
+              units.storm.name, units.storm.hp,
+              units.storm.max_hp, units.storm.mp,
+              units.storm.max_mp, units.storm.lvl,
+              ', '.join([x.title() for x in units.storm.status_ail]),
+              pad1=' '*(first_padding - len(units.storm.name)),
+              pad2=' '*(second_padding - len(f'{units.storm.hp}/{units.storm.max_hp} HP')),
+              pad3=' '*(third_padding - len(f'{units.storm.mp}/{units.storm.max_mp} MP'))))
 
     # Monster Stats
     for each_monster in m_list:

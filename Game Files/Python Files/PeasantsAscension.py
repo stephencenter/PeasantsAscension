@@ -85,7 +85,8 @@ party_info = {'biome': 'forest',
               'gamestate': "overworld",
               'musicbox_folder': '',
               'musicbox_isplaying': False,
-              'musicbox_mode': 'A->Z'}
+              'musicbox_mode': 'A->Z',
+              'musicbox_process': None}
 
 # Set to 1 when auto-testing
 do_debug = 0
@@ -378,7 +379,7 @@ def stats_command():
                                   units.solou,
                                   units.chili,
                                   units.adorine,
-                                  units.ran_af,
+                                  units.storm,
                                   units.parsto,
                                   units.chyme] if x.enabled]
 
@@ -447,7 +448,7 @@ def rest_command():
                                                             units.solou,
                                                             units.chili,
                                                             units.chyme,
-                                                            units.ran_af,
+                                                            units.storm,
                                                             units.parsto,
                                                             units.adorine]]):
         print('Your party feels fine and decides not to rest.')
@@ -517,7 +518,7 @@ def tools_command():
 
             print('-'*save_load.divider_size)
 
-            tool.use_item()
+            tool.use_item(units.player)
             if tool.item_id == 'fast_map':
                 return
 

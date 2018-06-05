@@ -554,13 +554,6 @@ spellbook = {
         'Previous Spell': []
     },
 
-    "Ran'af": {
-        'Healing': [pit_heal],
-        'Damaging': [magic_shot],
-        'Buffs': [m_evade, m_quick],
-        'Previous Spell': []
-    },
-
     'Adorine': {
         'Healing': [pit_heal],
         'Damaging': [magic_shot],
@@ -571,6 +564,13 @@ spellbook = {
     'Chyme': {
         'Healing': [pit_heal, min_heal],
         'Damaging': [magic_shot, purify],
+        'Buffs': [m_evade, m_quick],
+        'Previous Spell': []
+    },
+
+    "Storm": {
+        'Healing': [pit_heal],
+        'Damaging': [magic_shot],
         'Buffs': [m_evade, m_quick],
         'Previous Spell': []
     }
