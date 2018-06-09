@@ -430,7 +430,7 @@ def battle_inventory(user):
 
             if isinstance(item, items.StatusPotion):
                 if item.status != user.status_ail:
-                    print(f'{user.name} is not {user.status} - they have no reason to drink that.')
+                    print(f'{user.name} is not {item.status} - they have no reason to drink that.')
                     break
 
             print('-' * save_load.divider_size)

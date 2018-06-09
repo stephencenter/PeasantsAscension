@@ -337,7 +337,7 @@ class Town:
       [2] Consumables
       [3] Weapons
       [4] Accessories
-      [5] Misc. Items'""")
+      [5] Misc. Items""")
                     while True:
                         cat = main.s_input('Input [#] (or type "back"): ').lower()
 
@@ -526,6 +526,7 @@ class House:
             elif len(available_chests) == 1:
                 print(f"a single locked chest of Difficulty {available_chests[0].difficulty}.")
                 print("The contents could be very valuable!\n")
+                main.s_input("\nPress enter/return ")
 
                 if not lockpicks:
                     print("Unfortunately, you do not own any lockpick kits and thus cannot attempt")

@@ -1908,7 +1908,6 @@ def pick_item(cat, vis_cat, selling=False):
 
         while True:
             chosen = main.s_input('Input [#] (or type "back"): ').lower()
-
             try:
                 item_id = item_ids[int(chosen) - 1]
 
@@ -1965,7 +1964,7 @@ def print_inventory(cat, vis_cat, selling):
             fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
             print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {find_item_with_id(b[1]).sell} GP each")
 
-        return imp_qi
+        return [x[1] for x in imp_qi]
 
 
 def pick_action(item_id):
@@ -2213,7 +2212,7 @@ def view_quests():
         else:
             continue
 
-        if dialogue:
+        if dia_:
             while fizz:
                 if choice.startswith("f"):
                     print("Finished:")
@@ -2221,7 +2220,7 @@ def view_quests():
                 else:
                     print("Active:")
 
-                for num, x in enumerate(dialogue):
+                for num, x in enumerate(dia_):
                     print(f'      [{num + 1}] {x.name}')
 
                 while True:

@@ -105,7 +105,7 @@ friend_names = ["apollo kalar", "apollokalar", "apollo_kalar",
 def s_input(string=''):
     if do_debug:
         print(string, end='')
-        char = random.choice('0123456789ynxpsewrtbucdfi')
+        char = random.choice('0123456789abcdefghijklmnopqrstuvwxyz')
         print(char)
 
         return char
