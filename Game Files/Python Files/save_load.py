@@ -402,6 +402,9 @@ def deserialize_all():
         main.party_info['current_tile'] = tiles.find_tile_with_id(main.party_info['current_tile'])
         main.party_info['prev_town'] = tiles.find_tile_with_id(main.party_info['prev_town'])
 
+        if "musicbox_process" not in main.party_info:
+            main.party_info["musicbox_process"] = None
+
         # Call functions to serialize more advanced things
         items.deserialize_gems('/'.join([base_dir, sav_acquired_gems]))
         items.deserialize_equip('/'.join([base_dir, sav_equip_items]))

@@ -880,10 +880,10 @@ Any smart adventurer would keep track of town coordinates and powerful monsters
 in their inventory. If you get lost, check there.""", "ethos_c1", active=True)
 
 
-# -- Name: Flysio -- Town: New Ekanmar
-flysio_convo_1 = Conversation("""\
-Hello, adventurer! My name is Flysio, Duke of the Province of Celemia. I'm
-quite busy right now, please come back later if you wish to speak to me.""", "flysio_c1", active=True)
+# -- Name: Fly -- Town: New Ekanmar
+fly_convo_1 = Conversation("""\
+Hello, adventurer! My name is Fly, Duke of Celemia. I'm
+quite busy right now, please come back later if you wish to speak to me.""", "fly_c1", active=True)
 
 
 # -- Name: Stravi -- Town: New Ekanmar
@@ -891,14 +891,14 @@ stravi_convo_1 = Conversation("""\
 Greetings, young traveller. I am Stravi, Duchess of Celemia. My husband
 and I are on important business relating to the recent kidnapping of King
 Harconius II's daughter, Celeste. Please return in a few weeks if you wish
-to speak to Flysio and me. Oh, and whatever you do, do not under ANY
+to speak to Fly and me. Oh, and whatever you do, do not under ANY
 circumstances mention the word 'chandelier' to my husband. It makes him very
 upset for some reason.""", "stravi_c1", active=True)
 
 
 # -- Name: Caesar -- Town: New Ekanmar
 caesar_convo_1 = Conversation("""\
-*Caesar, Flysio's pet strawberry dragon, runs away and hides behind
+*Caesar, Fly's pet strawberry dragon, runs away and hides behind
 his owner before you get a chance to converse with him.*""", "caesar_c1", active=True)
 
 
@@ -931,12 +931,11 @@ Always keep a stash of items to cure these sicknesses man.""", "strathius_c1", a
 
 # -- Name: Sugulat -- Town: Ambercreek
 sugulat_convo_1 = Conversation("""\
-Greetings! My name is Sugulat, Emperor of Chin'tor and legendary digger of
+Greetings! My name is Sugulat, Duke of Chin'tor and legendary digger of
 holes. Y'know, you look like a nice guy. I'm going to tell you a little
 secret: If you buy a shovel from the general store, you can dig up valuable
-gems in certain places! They can be tricky to find, though, so that's why I
-invented the Divining Rod! Simply use it, and it will tell if you are near
-any gems. Very handy! You can buy it at the general store.""", "sugalat_c1", active=True)
+gems in certain places! They're all over the place, there's usually at least
+one in every area you visit.""", "sugalat_c1", active=True)
 
 
 # -- Name: Serena -- Town: Whistumn
@@ -1023,7 +1022,7 @@ all_dialogue = [
     lazaro_convo_1, lazaro_convo_2, lazaro_convo_3,
 
     philliard_convo_1,
-    flysio_convo_1,
+    fly_convo_1,
     stravi_convo_1,
     sakura_convo_1,
     sugulat_convo_1,

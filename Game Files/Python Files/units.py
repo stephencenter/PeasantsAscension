@@ -30,6 +30,7 @@ import items
 import magic
 import save_load
 import sounds
+import tiles
 
 if __name__ == "__main__":
     sys.exit()
@@ -992,7 +993,8 @@ class Monster(Unit):
             self.items = random.choice(items.monster_drop_list[self.name])
 
     def monster_level(self):
-        self.lvl = main.party_info['current_tile'].m_level
+        minlvl, maxlvl = tiles.find_cell_with_tile_id(main.party_info['current_tile'].tile_id).m_level
+        self.lvl = random.randrange(minlvl, maxlvl)
 
         for x in range(1, self.lvl):
             self.hp += 5

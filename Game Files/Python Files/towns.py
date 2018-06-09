@@ -153,7 +153,7 @@ a large number of them defected to the Harconian side and stayed. After the
 war, the citizens gave up their weapons and became a peaceful town. The vast
 majority of the inhabitants of this town are, naturally, Flyscors. It seems
 that the Flyscorian Royal Family is visiting here - perhaps you can talk with
-them for a bit.""", [npcs.flysio, npcs.stravi, npcs.caesar], [], 2, 3, "new_ekanmar")
+them for a bit.""", [npcs.fly, npcs.stravi, npcs.caesar], [], 2, 3, "new_ekanmar")
 
 # Ravenstone
 town_ravenstone = Town("Ravenstone", """\
@@ -236,14 +236,14 @@ tending to his flock in a small pasture behind the building. There doesn't
 appear be any other people near here.""", [npcs.alden], [], -1, -1, "cottage1")
 
 # Valenfall
-a_town_valenfall = Town("Valenfall", """\
+town_valenfall = Town("Valenfall", """\
 Valenfall is a city in the Aether. Not much is known about this ancient city. 
 It's inhabitants claim that it was lifted up from the mainland several millenia ago
 by his Divinity. The gods supposedly used Valenfall as the cornerstone,
 constructing all of the surrounding land of Aethus around it. Valenfall is
 deeply intertwined with nature, and monuments depicting the nature deities can
 be seen on every corner.
-""", [npcs.fitzgerald], [], 2, 4, "a_valenfall")
+""", [npcs.fitzgerald], [], 2, 4, "valenfall")
 
 # These three lists are used to serialize chest data. It's easier than having to constantly add chests to lists
 all_towns = [town_nearton, town_southford, town_ambercreek, town_capwild, town_valice,

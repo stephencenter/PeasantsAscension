@@ -343,7 +343,9 @@ def move_command(available_dirs, command):
             is_battle = False
 
         # Certain tiles can have battling disabled on them
-        if is_battle and party_info['current_tile'].m_level != -1 and party_info['do_monster_spawns']:
+        if is_battle and tiles.find_cell_with_tile_id(party_info['current_tile'].tile_id) != -1 \
+                and party_info['do_monster_spawns']:
+
             print('-' * save_load.divider_size)
             units.spawn_monster()
             battle.battle_system()

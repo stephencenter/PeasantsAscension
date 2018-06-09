@@ -59,9 +59,22 @@ class Item:
 
 
 class Consumable(Item):
+    # Items that are removed from your inventory after use. Includes Potions, Armor, Weapons, etc.
+    # By definition these items are not considered "important", and can be freely sold and thrown away
+    def __init__(self, name, desc, buy, sell, item_id, ascart, cat):
+        super().__init__(name, desc, buy, sell, item_id, False, ascart, cat)
+
+
+class NonConsumable(Item):
+    # Items that remain in your inventory after use. Includes tools, ingredients
+    def __init__(self, name, desc, buy, sell, item_id, imp, ascart, cat):
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+
+
+class HealthManaPotion(Consumable):
     # Items that restore your HP, MP, or both
     def __init__(self, name, desc, buy, sell, item_id, cat='consumables', imp=False, heal=0, mana=0, ascart='Potion'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
         self.heal = heal
         self.mana = mana
 
@@ -87,9 +100,9 @@ class Consumable(Item):
         remove_item(self.item_id)
 
 
-class StatusPotion(Item):
-    def __init__(self, name, desc, buy, sell, status, item_id, cat='consumables', imp=False, ascart='Potion'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+class StatusPotion(Consumable):
+    def __init__(self, name, desc, buy, sell, status, item_id, ascart='Potion', cat='consumables'):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
         self.status = status
 
     def use_item(self, user):
@@ -113,15 +126,41 @@ class StatusPotion(Item):
             main.s_input("\nPress enter/return ")
 
 
-class Weapon(Item):
+class AttractPotion(Consumable):
+    def __init__(self, name, desc, buy, sell, num_steps, m_count, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+        self.num_steps = num_steps
+        self.m_count = m_count
+
+
+class RepelPotion(Consumable):
+    def __init__(self, name, desc, buy, sell, num_steps, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+        self.num_steps = num_steps
+
+
+class BombPotion(Consumable):
+    def __init__(self, name, desc, buy, sell, multitarget, damage, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+        self.multitarget = multitarget
+        self.damage = damage
+
+
+class XPGoldPotion(Consumable):
+    def __init__(self, name, desc, buy, sell, gold_change, xp_change, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+        self.gold_change = gold_change
+        self.xp_change = xp_change
+
+
+class Weapon(Consumable):
     # Items that increase your damage by a percentage.
-    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart, item_id, off_element='none', cat='weapons',
-                 imp=False):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart, item_id, element='none', cat='weapons'):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
         self.power = power
         self.type_ = type_
         self.class_ = class_
-        self.off_element = off_element
+        self.element = element
         self.part = 'weapon'
 
         if self.class_:
@@ -146,10 +185,10 @@ class Weapon(Item):
             main.s_input("\nPress enter/return ")
 
 
-class Armor(Item):
+class Armor(Consumable):
     # Items that give the player a percent increase in defense when hit.
-    def __init__(self, name, desc, buy, sell, defense, part, class_, ascart, item_id, cat='armor', imp=False):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, buy, sell, defense, part, class_, ascart, item_id, cat='armor'):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
         self.defense = defense
         self.part = part
         self.class_ = class_
@@ -175,18 +214,17 @@ class Armor(Item):
             main.s_input("\nPress enter/return ")
 
 
-class Accessory(Item):
-    def __init__(self, name, desc, buy, sell, item_id, ascart='a', cat='access', imp=False):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+class Accessory(Consumable):
+    def __init__(self, name, desc, buy, sell, item_id, ascart='Amulet', cat='access'):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+        self.part = 'access'
 
 
 class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
-    def __init__(self, name, desc, buy, sell, def_element, item_id, ascart='Amulet', acc_type='elemental',
-                 cat='access', imp=False):
-        Accessory.__init__(self, name, desc, buy, sell, item_id, ascart, cat, imp)
+    def __init__(self, name, desc, buy, sell, def_element, item_id, ascart='Amulet', cat='access'):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
         self.def_element = def_element
-        self.acc_type = acc_type
 
     def use_item(self, user):
         equip_item(self.item_id, user)
@@ -196,9 +234,16 @@ class ElementAccessory(Accessory):
         main.s_input("\nPress enter/return ")
 
 
-class Shovel(Item):
+class ActionAccessory(Consumable):
+    def __init__(self, name, desc, buy, sell, class_, ap_gain, item_id, ascart='Amulet', cat='access'):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+        self.class_ = class_
+        self.ap_gain = ap_gain
+
+
+class Shovel(NonConsumable):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         if main.party_info['gamestate'] == 'town':
@@ -237,9 +282,9 @@ class Shovel(Item):
             main.s_input("\nPress enter/return ")
 
 
-class FastTravelAtlus(Item):
+class FastTravelAtlus(NonConsumable):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Map'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         if main.party_info['gamestate'] == 'town':
@@ -339,15 +384,15 @@ class FastTravelAtlus(Item):
                         break
 
 
-class LockpickKit(Item):
-    def __init__(self, name, desc, buy, sell, power, item_id, cat='tools', imp=False, ascart='Lockpick'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+class LockpickKit(NonConsumable):
+    def __init__(self, name, desc, buy, sell, power, item_id, imp=False, ascart='Lockpick', cat='tools'):
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
         self.power = power
 
 
-class MonsterEncyclopedia(Item):
+class MonsterEncyclopedia(NonConsumable):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         print(battle.turn_counter)
@@ -370,17 +415,38 @@ Def. Element: {user.target.def_element.title()} | Off. Element: {user.target.off
 Weakness: {m_w}""")
 
 
-class PocketAlchemyLab(Item):
+class PocketAlchemyLab(NonConsumable):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         pass
 
+    @staticmethod
+    def make_potion(ingredients):
+        flavor_map = {
+            "strange": [attract_potion_1, attract_potion_2, attract_potion_3],
+            "mystic": [repel_potion_1, repel_potion_2, repel_potion_3],
+            "rigid": [missile_potion_1, missile_potion_2, missile_potion_3],
+            "flowing": [grenade_potion_1, grenade_potion_2, grenade_potion_3],
+            "dark": [greed_potion_1, greed_potion_2, greed_potion_3],
+            "natural": [temperance_potion_1, temperance_potion_2, temperance_potion_3]
+        }
 
-class MusicBox(Item):
+        added_flavors = []
+
+        for ing in ingredients:
+            added_flavors.append(ing.flavor)
+            remove_item(ing.item_id)
+
+        chosen_flavor = random.choice(added_flavors)
+        chosen_power = added_flavors.count(chosen_flavor)
+        chosen_potion = flavor_map[chosen_flavor][chosen_power - 1]
+
+
+class MusicBox(NonConsumable):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         print(f"Musicbox is currently {'on' if main.party_info['musicbox_isplaying'] else 'off'}")
@@ -645,58 +711,53 @@ class MusicBox(Item):
                 pass
 
 
-class Ingredient(Item):
+class Ingredient(NonConsumable):
     def __init__(self, name, desc, buy, sell, flavor, item_id, ascart='Misc', cat='misc', imp=False):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
+        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
         self.flavor = flavor
-
-
-class Misc(Item):
-    def __init__(self, name, desc, buy, sell, item_id, ascart='Misc', cat='misc', imp=False):
-        Item.__init__(self, name, desc, buy, sell, item_id, imp, ascart, cat)
 
 
 # --- ITEMS --- #
 # Potions -- Health
-s_potion = Consumable('Weak Potion',
-                      'A small potion that restores 15 HP when consumed.',
-                      15, 5, "s_potion", heal=15)
-m_potion = Consumable('Basic Potion',
-                      'A regular potion that restores 45 HP when consumed.',
-                      30, 10, "m_potion", heal=45)
-l_potion = Consumable('Strong Potion',
-                      'A powerful potion that restores 100 HP when consumed.',
-                      60, 20, "l_potion", heal=100)
-x_potion = Consumable('Super Potion',
-                      'A super powerful potion that restores 200 HP when consumed.',
-                      120, 40, "x_potion", heal=200)
+s_potion = HealthManaPotion('Weak Potion',
+                            'A small potion that restores 15 HP when consumed.',
+                            15, 5, "s_potion", heal=15)
+m_potion = HealthManaPotion('Basic Potion',
+                            'A regular potion that restores 45 HP when consumed.',
+                            30, 10, "m_potion", heal=45)
+l_potion = HealthManaPotion('Strong Potion',
+                            'A powerful potion that restores 100 HP when consumed.',
+                            60, 20, "l_potion", heal=100)
+x_potion = HealthManaPotion('Super Potion',
+                            'A super powerful potion that restores 200 HP when consumed.',
+                            120, 40, "x_potion", heal=200)
 
 # Potions -- Mana
-s_elixir = Consumable('Basic Elixir',
-                      'A generic elixir that restores 15 MP when consumed.',
-                      10, 3, "s_elixir", mana=10, ascart='Elixir')
-m_elixir = Consumable('Enhanced Elixir',
-                      'A more potent elixir that restores 45 MP when consumed.',
-                      25, 8, "m_elixir", mana=35, ascart='Elixir')
-l_elixir = Consumable('Grand Elixir',
-                      'A powerful elixir that restores 100 MP when consumed.',
-                      50, 17, "l_elixir", mana=75, ascart='Elixir')
-x_elixir = Consumable('Extreme Elixir',
-                      'A super powerful elixir that restores 175 MP when consumed.',
-                      100, 35, "x_elixir", mana=175, ascart='Elixir')
+s_elixir = HealthManaPotion('Basic Elixir',
+                            'A generic elixir that restores 15 MP when consumed.',
+                            10, 3, "s_elixir", mana=10, ascart='Elixir')
+m_elixir = HealthManaPotion('Enhanced Elixir',
+                            'A more potent elixir that restores 45 MP when consumed.',
+                            25, 8, "m_elixir", mana=35, ascart='Elixir')
+l_elixir = HealthManaPotion('Grand Elixir',
+                            'A powerful elixir that restores 100 MP when consumed.',
+                            50, 17, "l_elixir", mana=75, ascart='Elixir')
+x_elixir = HealthManaPotion('Extreme Elixir',
+                            'A super powerful elixir that restores 175 MP when consumed.',
+                            100, 35, "x_elixir", mana=175, ascart='Elixir')
 
 # Potions -- Both
-s_rejuv = Consumable('Minor Rejuvenation Potion',
-                     'A basic mixture that restores 15 HP and 15 MP when consumed.',
-                     35, 12, "s_rejuv", heal=15, mana=15, ascart='Rejuv')
+s_rejuv = HealthManaPotion('Minor Rejuvenation Potion',
+                           'A basic mixture that restores 15 HP and 15 MP when consumed.',
+                           35, 12, "s_rejuv", heal=15, mana=15, ascart='Rejuv')
 
-m_rejuv = Consumable('Refined Rejuvenation Potion',
-                     'A higher quality mixture that restores 45 HP and 45 MP when consumed.',
-                     65, 22, "m_rejuv", heal=45, mana=45, ascart='Rejuv')
+m_rejuv = HealthManaPotion('Refined Rejuvenation Potion',
+                           'A higher quality mixture that restores 45 HP and 45 MP when consumed.',
+                           65, 22, "m_rejuv", heal=45, mana=45, ascart='Rejuv')
 
-l_rejuv = Consumable('Mighty Rejuvenation Potion',
-                     'A super powerful mixture that restores 100 HP and 100 MP when consumed.',
-                     225, 80, "l_rejuv", heal=100, mana=100, ascart='Rejuv')
+l_rejuv = HealthManaPotion('Mighty Rejuvenation Potion',
+                           'A super powerful mixture that restores 100 HP and 100 MP when consumed.',
+                           225, 80, "l_rejuv", heal=100, mana=100, ascart='Rejuv')
 
 # Potions - Status
 silence_potion = StatusPotion('Potion of Allowing Speech',
@@ -714,6 +775,73 @@ blindness_potion = StatusPotion('Potion of Enabling Sight',
 paralyzation_potion = StatusPotion('Potion of Inducing Motion',
                                    'A potion designed to cure minor paralysis in most of the body.',
                                    50, 25, 'paralyzed', "paralyze_pot", ascart='Status')
+
+# Potions - Alchemy
+attract_potion_1 = AttractPotion("Attract Potion I", """\
+A potion that can only be obtained through alchemy. Guarantees a one-monster
+encounter for the next 5 steps on the overworld. Some areas don't
+have monster spawns. Made using 'strange' ingredients.""", 0, 25, 5, 1, "attractpot1")
+attract_potion_2 = AttractPotion("Attract Potion II", """\
+A potion that can only be obtained through alchemy. Guarantees a two-monster
+encounter for the next 5 steps on the overworld. Some areas don't
+have monster spawns. Made using 'strange' ingredients.""", 0, 25, 5, 2, "attractpot2")
+attract_potion_3 = AttractPotion("Attract Potion III", """\
+A potion that can only be obtained through alchemy. Guarantees a three-monster
+encounter for the next 5 steps on the overworld. Some areas don't
+have monster spawns. Made using 'strange' ingredients.""", 0, 25, 5, 3, "attractpot3")
+
+repel_potion_1 = RepelPotion("Repel Potion I", """\
+A potion that can only be obtained through alchemy. Prevents monster encounters
+on the overworld for 10 steps. Bosses can still be fought while this potion is
+active. Made using 'natural' ingredients.""", 0, 25, 10, "repelpot1")
+repel_potion_2 = RepelPotion("Repel Potion II", """\
+A potion that can only be obtained through alchemy. Prevents monster encounters
+on the overworld for 15 steps. Bosses can still be fought while this potion is
+active. Made using 'natural' ingredients.""", 0, 25, 15, "repelpot2")
+repel_potion_3 = RepelPotion("Repel Potion III", """\
+A potion that can only be obtained through alchemy. Prevents monster encounters
+on the overworld for 20 steps. Bosses can still be fought while this potion is
+active. Made using 'natural' ingredients.""", 0, 25, 20, "repelpot3")
+
+grenade_potion_1 = BombPotion("Grenade Potion I", """\
+A potion that can only be obtained through alchemy. Deals 20 physical damage to
+all enemies in the battle. Made using 'flowing' ingredients.""", 0, 25, True, 20, "grenadepot1")
+grenade_potion_2 = BombPotion("Grenade Potion II", """\
+A potion that can only be obtained through alchemy. Deals 40 physical damage to
+all enemies in the battle. Made using 'flowing' ingredients.""", 0, 25, True, 40, "grenadepot2")
+grenade_potion_3 = BombPotion("Grenade Potion III", """\
+A potion that can only be obtained through alchemy. Deals 80 physical damage to
+all enemies in the battle. Made using 'flowing' ingredients.""", 0, 25, True, 80, "grenadepot3")
+
+missile_potion_1 = BombPotion("Missile Potion I", """\
+A potion that can only be obtained through alchemy. Deals 40 physical damage to
+a single target enemy. Made using 'rigid' ingredients.""", 0, 25, False, 40, "missilepot1")
+missile_potion_2 = BombPotion("Missile Potion II", """\
+A potion that can only be obtained through alchemy. Deals 80 physical damage to
+a single target enemy. Made using 'rigid' ingredients.""", 0, 25, False, 80, "missilepot2")
+missile_potion_3 = BombPotion("Missile Potion III", """\
+A potion that can only be obtained through alchemy. Deals 160 physical damage to
+a single target enemy. Made using 'rigid' ingredients.""", 0, 25, False, 160, "missilepot3")
+
+greed_potion_1 = XPGoldPotion("Greed Potion I", """\
+A potion that can only be obtained through alchemy. Used on an ally to convert 
+50 XP into 50 GP. Made using 'dark' ingredients.""", 0, 25, 50, -50, "greedpot1")
+greed_potion_2 = XPGoldPotion("Greed Potion II", """\
+A potion that can only be obtained through alchemy. Used on an ally to convert 
+100 XP into 100 GP. Made using 'dark' ingredients.""", 0, 25, 100, -100, "greedpot2")
+greed_potion_3 = XPGoldPotion("Greed Potion III", """\
+A potion that can only be obtained through alchemy. Used on an ally to convert 
+200 XP into 200 GP. Made using 'dark' ingredients.""", 0, 25, 200, -200, "greedpot3")
+
+temperance_potion_1 = XPGoldPotion("Temperance Potion I", """\
+A potion that can only be obtained through alchemy. Used on an ally to convert
+50 GP into 50 XP. Made using 'mystic' ingredients.""", 0, 25, -50, 50, "temppot1")
+temperance_potion_2 = XPGoldPotion("Temperance Potion II", """\
+A potion that can only be obtained through alchemy. Used on an ally to convert
+100 GP into 100 XP. Made using 'mystic' ingredients.""", 0, 25, -50, 50, "temppot2")
+temperance_potion_3 = XPGoldPotion("Temperance Potion III", """\
+A potion that can only be obtained through alchemy. Used on an ally to convert
+200 GP into 200 XP. Made using 'mystic' ingredients.""", 0, 25, -50, 50, "temppot3")
 
 
 # Fists exist to prevent bugs caused by not having any weapon equipped. Also the starting
@@ -1086,60 +1214,60 @@ dark_amulet = ElementAccessory('Umbral Amulet', 'An amulet that imbues its weare
                                375, 175, 'Dark', "dark_amulet")
 
 # Quest items
-message_joseph = Misc('Message from Joseph', 'A neatly written message addressed to Philliard.',
-                      0, 0, "message_joseph", cat='q_items', imp=True)
+message_joseph = Item('Message from Joseph', 'A neatly written message addressed to Philliard.',
+                      0, 0, "message_joseph", True, "Misc", 'q_items')
 
-message_philliard = Misc('Message from Philliard', 'A neatly written message addressed to Joseph.',
-                         0, 0, "message_philliard", cat='q_items', imp=True)
+message_philliard = Item('Message from Philliard', 'A neatly written message addressed to Joseph.',
+                         0, 0, "message_philliard", True, "Misc", 'q_items')
 
 # Gems & Valuables
-pearl_gem = Misc('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
-                 0, 175, "pearl_gem")
+pearl_gem = Item('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
+                 0, 175, "pearl_gem", False, "Gem", "misc")
 
-ruby_gem = Misc('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
-                0, 175, "ruby_gem")
+ruby_gem = Item('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
+                0, 175, "ruby_gem", False, "Gem", "misc")
 
-sapphire_gem = Misc('Sapphire', 'A valuable sapphire. This could probably be sold for quite a bit.',
-                    0, 175, "sapphire_gem")
+sapphire_gem = Item('Sapphire', 'A valuable sapphire. This could probably be sold for quite a bit.',
+                    0, 175, "sapphire_gem", False, "Gem", "misc")
 
-emerald_gem = Misc('Emerald', 'A valuable emerald. This could probably be sold for quite a bit.',
-                   0, 175, "emerald_gem")
+emerald_gem = Item('Emerald', 'A valuable emerald. This could probably be sold for quite a bit.',
+                   0, 175, "emerald_gem", False, "Gem", "misc")
 
-citrine_gem = Misc('Citrine', 'A valuable citrine. This could probably be sold for quite a bit.',
-                   0, 175, "citrine_gem")
+citrine_gem = Item('Citrine', 'A valuable citrine. This could probably be sold for quite a bit.',
+                   0, 175, "citrine_gem", False, "Gem", "misc")
 
-jade_gem = Misc('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
-                0, 175, "jade_gem")
+jade_gem = Item('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
+                0, 175, "jade_gem", False, "Gem", "misc")
 
-opal_gem = Misc('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
-                0, 175, "opal_gem")
+opal_gem = Item('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
+                0, 175, "opal_gem", False, "Gem", "misc")
 
-onyx_gem = Misc('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
-                0, 175, "onyx_gem")
+onyx_gem = Item('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
+                0, 175, "onyx_gem", False, "Gem", "misc")
 
-diamond_gem = Misc('Diamond', 'A valuable diamond. This could probably be sold for quite a bit.',
-                   0, 175, "diamond_gem")
+diamond_gem = Item('Diamond', 'A valuable diamond. This could probably be sold for quite a bit.',
+                   0, 175, "diamond_gem", False, "Gem", "misc")
 
-amethyst_gem = Misc('Amethyst', 'A valuable amethyst. This could probably be sold for quite a bit.',
-                    0, 175, "amethyst_gem")
+amethyst_gem = Item('Amethyst', 'A valuable amethyst. This could probably be sold for quite a bit.',
+                    0, 175, "amethyst_gem", False, "Gem", "misc")
 
-topaz_gem = Misc('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
-                 0, 175, "topaz_gem")
+topaz_gem = Item('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
+                 0, 175, "topaz_gem", False, "Gem", "misc")
 
-garnet_gem = Misc('Garnet', 'A valuable garnet. This could probably be sold for quite a bit.',
-                  0, 175, "garnet_gem")
+garnet_gem = Item('Garnet', 'A valuable garnet. This could probably be sold for quite a bit.',
+                  0, 175, "garnet_gem", False, "Gem", "misc")
 
-quartz_gem = Misc('Quartz', 'A valuable quartz. This could probably be sold for quite a bit.',
-                  0, 175, "quartz_gem")
+quartz_gem = Item('Quartz', 'A valuable quartz. This could probably be sold for quite a bit.',
+                  0, 175, "quartz_gem", False, "Gem", "misc")
 
-zircon_gem = Misc('Zircon', 'A valuable zircon. This could probably be sold for quite a bit.',
-                  0, 175, "zircon_gem")
+zircon_gem = Item('Zircon', 'A valuable zircon. This could probably be sold for quite a bit.',
+                  0, 175, "zircon_gem", False, "Gem", "misc")
 
-agate_gem = Misc('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
-                 0, 175, "agate_gem")
+agate_gem = Item('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
+                 0, 175, "agate_gem", False, "Gem", "misc")
 
-aquamarine_gem = Misc('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
-                      0, 175, "aquamarine_gem")
+aquamarine_gem = Item('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
+                      0, 175, "aquamarine_gem", False, "Gem", "misc")
 
 # Tools
 shovel = Shovel('Expert Mining Tool', """\
@@ -1165,14 +1293,13 @@ A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to
 convert everyday ingredients into useful potions can fit in your pocket.
 There are six flavors of ingredients, and each flavor corresponds to a specific
 potion. Combine three ingredients to make a potion. The ratio of flavors used
-determines the probability of getting each flavor potion.""",
-                              200, 100, "pocket_lab")
+determines the probability of getting each flavor potion. The quantity of the
+prevailing ingredient determines the potion strength.""", 200, 100, "pocket_lab")
 
 musicbox = MusicBox('Portable Musicbox', """\
 Somehow this small device has the ability to play music without need for a 
 bard or instruments. Select a folder full of music on your computer and this
-device will replace the in-game music with your tunes!""",
-                    250, 75, "musicbox")
+device will replace the in-game music with your tunes!""", 250, 75, "musicbox")
 
 
 # Tools -- Lockpicks
@@ -1558,8 +1685,10 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
              en_myst_rob, en_myst_gar, std_cwl, std_bdy, std_leg, en_std_cwl, en_std_bdy, en_std_leg, ori_hlm, ori_cst,
              ori_leg, elem_hat, elem_rob, elem_gar, drg_cwl, drg_bdy, drg_leg, water_amulet, fire_amulet, earth_amulet,
              electric_amulet, wind_amulet, grass_amulet, ice_amulet, light_amulet, dark_amulet, no_head, no_body,
-             no_legs, no_access
-             ]
+             no_legs, no_access, attract_potion_1, attract_potion_2, attract_potion_3, repel_potion_1, repel_potion_2,
+             repel_potion_3, grenade_potion_1, grenade_potion_2, grenade_potion_3, missile_potion_1, missile_potion_2,
+             missile_potion_3, greed_potion_1, greed_potion_2, greed_potion_3, temperance_potion_1, temperance_potion_2,
+             temperance_potion_3]
 
 
 # Writes a list of all collected gems to a .json file. Used when saving the game.
@@ -1597,8 +1726,8 @@ inventory = {'q_items': [],
              'weapons': [],
              'armor': [],
              'tools': [_c(fast_travel_atlus), _c(musicbox)],
-             'misc': [],
-             'access': []}
+             'access': [],
+             'misc': []}
 
 equipped = {
     'player': {
@@ -1863,7 +1992,7 @@ Input [#] (or type "back"): """)
 
         if action == '1':
             # Items of these classes require a target to be used, so we have to acquire a target first
-            if any([isinstance(item, class_) for class_ in [Accessory, Armor, Consumable, Weapon, StatusPotion]]):
+            if any([isinstance(item, class_) for class_ in [Accessory, Armor, HealthManaPotion, Weapon, StatusPotion]]):
                 units.player.choose_target(f"Who should {use_equip} the {item.name}?", ally=True, enemy=False)
 
                 print('-'*save_load.divider_size)

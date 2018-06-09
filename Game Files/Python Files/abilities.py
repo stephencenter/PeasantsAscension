@@ -603,21 +603,34 @@ powershot.before_ability = before_powershot
 powershot.use_ability = use_powershot
 
 
-def before_unstable_footing(user):
+def before_natures_call(user):
     pass
 
 
-def use_unstable_footing(user):
-    pass
+def use_natures_call(user):
+    animal_dict = {"Mouse": 1,
+                   "Chipmunk": 5,
+                   "Weasel": 10,
+                   "Snake": 15,
+                   "Mongoose": 20,
+                   "Fox": 25,
+                   "Badger": 30,
+                   "Eagle": 35,
+                   "Coyote": 40,
+                   "Moose": 45,
+                   "Bear": 50,
+                   "Goose": 75,
+                   "Pack of Wolves": 100
+                   }
 
 
-# Needs redesigned - does not make good enough use of attributes
-unstable_footing = Ability("Unstable Footing", f"""\
-The user takes advantage of the uneven terrain and trips a target enemy.
-Deals [10 + Perception] damage. If the target has not yet moved this turn,
-their turn is skipped. The target is also guaranteed to go last next turn.""", 2)
-unstable_footing.before_ability = before_unstable_footing
-unstable_footing.use_ability = use_unstable_footing
+natures_call = Ability("Nature's Call", f"""\
+The user calls upon nature, requesting help from the most powerful of animal
+allies! Deals a base damage dependent on what animal arrives, plus
+[100 + Perception]% additional damage.
+""", 2)
+natures_call.before_ability = before_natures_call
+natures_call.use_ability = use_natures_call
 
 
 # -- PALADIN ABILITIES, scales with Wisdom -- #
@@ -839,15 +852,15 @@ a_abilities = {
     'mage': [skill_syphon, mana_drain, polymorph, spell_shield],  # 1 2
     'warrior': [roll_call, taunt, great_cleave, berserkers_rage],  # 1 2 4
     'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],  # 1 2 3 4
-    'ranger': [scout, roll, powershot, unstable_footing],
+    'ranger': [scout, roll, powershot, natures_call],
     'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],  # 1 2 3 4
 
     'player': [ascend],
     'Solou': [infusion],
-    'Ran_af': [],
     'Chyme': [],
     'Parsto': [],
     'Chili': [],
-    'Adorine': []
+    'Adorine': [],
+    'Storm': []
 
 }

@@ -116,17 +116,17 @@ harthos = NPC("Harthos", "Lumberjack", [d.harthos_convo_1])
 
 ethos = NPC('Ethos', "Courier", [d.ethos_convo_1])
 
-flysio = NPC('Flysio', "Baron of Celemia", [d.flysio_convo_1])
+fly = NPC('Fly', "Duke of Celemia", [d.fly_convo_1])
 
-stravi = NPC('Stravi', "Flysio's Wife", [d.stravi_convo_1])
+stravi = NPC('Stravi', "Duchess of Celemia", [d.stravi_convo_1])
 
-caesar = NPC('Caesar', "Flysio's Pet", [d.caesar_convo_1])
+caesar = NPC('Caesar', "Fly's Pet", [d.caesar_convo_1])
 
 sakura = NPC('Sakura', "Head of the Royal Guard", [d.sakura_convo_1])
 
 strathius = NPC("Strathius", "Druid", [d.strathius_convo_1])
 
-sugulat = NPC('Sugulat', "Baron of Parriway", [d.sugulat_convo_1])
+sugulat = NPC('Sugulat', "Duke of Chin'tor", [d.sugulat_convo_1])
 
 serena = NPC('Serena', "Scientist", [d.serena_convo_1, d.serena_convo_2, d.serena_convo_3])
 
