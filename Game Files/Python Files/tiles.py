@@ -291,7 +291,11 @@ class Province:
         self.prov_id = prov_id
 
 
-# nearton_tile
+# =========================== #
+#       OVERSHIRE TOWNS       #
+# =========================== #
+
+# NEARTON
 nearton_desc = """\
 Nearton is surrounded by a large, natural moat. Past that, trees as far as the
 eyes can see."""
@@ -313,7 +317,8 @@ nearton_s = Tile("Nearton Outskirts", "I-BF-S", nearton_desc,
                  to_e="I-BF-SE")
 nearton_se = Tile("Nearton Outskirts", "I-BF-SE", nearton_desc,
                   to_w="I-BF-S",
-                  to_n="I-BF-E")
+                  to_n="I-BF-E",
+                  gem_list=[items.agate_gem])
 nearton_w = Tile("Nearton Outskirts", "I-BF-W", nearton_desc,
                  to_s="I-BF-SW",
                  to_e="nearton_tile",
@@ -345,7 +350,7 @@ nearton_cell = Cell("Nearton", "forest", [nearton_tile,
                                           nearton_sw],
                     nearton_tile, (1, 4), "nearton_cell")
 
-# southford_tile
+# SOUTHFORD
 southford_desc = """"""
 
 southford_tile = Tile("Town of Southford", "southford_tile", southford_desc + """\n
@@ -368,7 +373,8 @@ southford_se = Tile("Southford Outskirts", "BF-3A", southford_desc,
 southford_w = Tile("Southford Outskirts", "BF-4A", southford_desc,
                    to_s="BF-1A",
                    to_e="southford_tile",
-                   to_n="BF-7A")
+                   to_n="BF-7A",
+                   gem_list=[items.sapphire_gem])
 southford_e = Tile("Southford Outskirts", "BF-6A", southford_desc,
                    to_s="BF-3A",
                    to_w="southford_tile",
@@ -394,7 +400,8 @@ southford_cell = Cell("Southford", "forest", [southford_tile,
                                               southford_nw,
                                               southford_sw],
                       southford_tile, (2, 5), "southford_cell")
-# OVERSHIRE
+
+# OVERSHIRE CITY
 o_city_desc = """"""
 
 o_city_tile = Tile("Overshire City", "o_city_tile", o_city_desc,
@@ -409,7 +416,8 @@ o_city_sw = Tile("Overshire City Outskirts", "o_city_sw", o_city_desc,
 o_city_s = Tile("Overshire City Outskirts", "o_city_s", o_city_desc,
                 to_w="o_city_sw",
                 to_e="o_city_se",
-                to_n="o_city_tile")
+                to_n="o_city_tile",
+                gem_list=[items.citrine_gem])
 o_city_se = Tile("Overshire City Outskirts", "o_city_se", o_city_desc,
                  to_w="o_city_s",
                  to_n="o_city_e")
@@ -430,7 +438,8 @@ o_city_n = Tile("Overshire City Outskirts", "o_city_n", o_city_desc,
                 to_e="o_city_ne")
 o_city_ne = Tile("Overshire City Outskirts", "o_city_ne", o_city_desc,
                  to_s="o_city_e",
-                 to_w="o_city_n")
+                 to_w="o_city_n",
+                 gem_list=[items.garnet_gem])
 o_city_cell = Cell("Overshire City", "forest", [o_city_tile,
                                                 o_city_w,
                                                 o_city_ne,
@@ -441,6 +450,103 @@ o_city_cell = Cell("Overshire City", "forest", [o_city_tile,
                                                 o_city_nw,
                                                 o_city_sw],
                    o_city_tile, (3, 6), "o_city_cell")
+
+# PRINCIPALIA
+principalia_desc = """"""
+
+principalia_tile = Tile("City of Principalia", "principalia_tile", principalia_desc,
+                        to_s="principalia_s",
+                        to_w="principalia_w",
+                        to_e="principalia_e",
+                        to_n="principalia_n",
+                        town_list=[towns.town_principalia])
+principalia_sw = Tile("Principalia Outskirts", "principalia_sw", principalia_desc,
+                      to_e="principalia_s",
+                      to_n="principalia_w")
+principalia_s = Tile("Principalia Outskirts", "principalia_s", principalia_desc,
+                     to_w="principalia_sw",
+                     to_e="principalia_se",
+                     to_n="principalia_tile")
+principalia_se = Tile("Principalia Outskirts", "principalia_se", principalia_desc,
+                      to_w="principalia_s",
+                      to_n="principalia_e",
+                      gem_list=[items.diamond_gem])
+principalia_w = Tile("Principalia Outskirts", "principalia_w", principalia_desc,
+                     to_s="principalia_sw",
+                     to_e="principalia_tile",
+                     to_n="principalia_nw")
+principalia_e = Tile("Principalia Outskirts", "principalia_e", principalia_desc,
+                     to_w="principalia_tile",
+                     to_s="principalia_se",
+                     to_n="principalia_ne")
+principalia_nw = Tile("Principalia Outskirts", "principalia_nw", principalia_desc,
+                      to_s="principalia_w",
+                      to_e="principalia_n")
+principalia_n = Tile("Principalia Outskirts", "principalia_n", principalia_desc,
+                     to_s="principalia_tile",
+                     to_w="principalia_nw",
+                     to_e="principalia_ne")
+principalia_ne = Tile("Principalia Outskirts", "principalia_ne", principalia_desc,
+                      to_s="principalia_e",
+                      to_w="principalia_n")
+principalia_cell = Cell("Principalia", "forest", [principalia_tile,
+                                                  principalia_w,
+                                                  principalia_ne,
+                                                  principalia_e,
+                                                  principalia_s,
+                                                  principalia_n,
+                                                  principalia_se,
+                                                  principalia_nw,
+                                                  principalia_sw],
+                        principalia_tile, (4, 7), "principalia_cell")
+
+# FORT SIGIL
+fort_sigil_desc = """"""
+
+fort_sigil_tile = Tile("Town of Fort Sigil", "fort_sigil_tile", fort_sigil_desc,
+                       to_s="fort_sigil_s",
+                       to_w="fort_sigil_w",
+                       to_e="fort_sigil_e",
+                       to_n="fort_sigil_n",
+                       town_list=[towns.town_fort_sigil])
+fort_sigil_sw = Tile("Fort Sigil Outskirts", "fort_sigil_sw", fort_sigil_desc,
+                     to_e="fort_sigil_s",
+                     to_n="fort_sigil_w")
+fort_sigil_s = Tile("Fort Sigil Outskirts", "fort_sigil_s", fort_sigil_desc,
+                    to_w="fort_sigil_sw",
+                    to_e="fort_sigil_se",
+                    to_n="fort_sigil_tile")
+fort_sigil_se = Tile("Fort Sigil Outskirts", "fort_sigil_se", fort_sigil_desc,
+                     to_w="fort_sigil_s",
+                     to_n="fort_sigil_e")
+fort_sigil_w = Tile("Fort Sigil Outskirts", "fort_sigil_w", fort_sigil_desc,
+                    to_s="fort_sigil_sw",
+                    to_e="fort_sigil_tile",
+                    to_n="fort_sigil_nw")
+fort_sigil_e = Tile("Fort Sigil Outskirts", "fort_sigil_e", fort_sigil_desc,
+                    to_w="fort_sigil_tile",
+                    to_s="fort_sigil_se",
+                    to_n="fort_sigil_ne")
+fort_sigil_nw = Tile("Fort Sigil Outskirts", "fort_sigil_nw", fort_sigil_desc,
+                     to_s="fort_sigil_w",
+                     to_e="fort_sigil_n")
+fort_sigil_n = Tile("Fort Sigil Outskirts", "fort_sigil_n", fort_sigil_desc,
+                    to_s="fort_sigil_tile",
+                    to_w="fort_sigil_nw",
+                    to_e="fort_sigil_ne")
+fort_sigil_ne = Tile("Fort Sigil Outskirts", "fort_sigil_ne", fort_sigil_desc,
+                     to_s="fort_sigil_e",
+                     to_w="fort_sigil_n")
+fort_sigil_cell = Cell("Fort Sigil", "forest", [fort_sigil_tile,
+                                                fort_sigil_w,
+                                                fort_sigil_ne,
+                                                fort_sigil_e,
+                                                fort_sigil_s,
+                                                fort_sigil_n,
+                                                fort_sigil_se,
+                                                fort_sigil_nw,
+                                                fort_sigil_sw],
+                       fort_sigil_tile, (5, 8), "fort_sigil_cell")
 #
 # bfor_tile_1c = Tile("Barrier Forest", "BF-1C", bfor_desc, 5,
 #                     to_e="BF-2C",
@@ -480,7 +586,9 @@ o_city_cell = Cell("Overshire City", "forest", [o_city_tile,
 #                     to_s="BF-6C")
 overshire_province = Province("Overshire", [nearton_cell,
                                             southford_cell,
-                                            o_city_cell],
+                                            o_city_cell,
+                                            principalia_cell,
+                                            fort_sigil_cell],
                               "overshire_prov")
 
 downpour_province = Province("Downpour", [], "downpour_prov")

@@ -199,7 +199,7 @@ def game_loop():
             else:
                 continue
 
-            game_ui()
+            available_dirs = game_ui()
 
 
 def check_region():
@@ -317,8 +317,7 @@ def move_command(available_dirs, command):
     sounds.item_pickup.stop()
     sounds.foot_steps.play()
 
-    party_info['current_tile'] = [b for b in tiles.all_tiles if b.tile_id in
-                                  [a[1] for a in available_dirs if a[0] == command]][0]
+    party_info['current_tile'] = tiles.find_tile_with_id([a[1] for a in available_dirs if a[0] == command][0])
 
     # If none of these fucntions return True, then a battle can occur.
     if not any([check_region(), units.check_bosses(), towns.search_towns(enter=False)]):

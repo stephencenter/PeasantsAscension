@@ -274,6 +274,8 @@ town_trintooli = Town("Trintooli", """""", [], [], 3, "trintooli")
 # Foqwhitte
 town_foqwhitte = Town("Foqwhitte", """""", [], [], 3, "foqwhitte")
 
+# Don'kohrin
+town_don_kohrin = Town("Don'kohrin", """""", [], [], 3, "donkohrin")
 
 # =========================== #
 #        PELAMORA TOWNS       #
@@ -319,7 +321,7 @@ all_towns = [town_nearton, town_southford, town_ambercreek, town_capwild, town_v
              town_fallville, town_hatchnuk, town_rymn_outpost, town_lantonum, town_fort_sigil, town_sanguion,
              town_ravenstone, town_principalia, town_whistumn, town_new_ekanmar, town_overshire_city, town_sardooth,
              town_tripton, town_valenfall, town_parceon, town_mardoviancaverns, town_mtfalenkarth, town_coran_outpost,
-             town_dewfrost, town_clayroost, town_simphet, town_cesura, town_trintooli, town_foqwhitte
+             town_dewfrost, town_clayroost, town_simphet, town_cesura, town_trintooli, town_foqwhitte, town_don_kohrin
              ]
 all_houses = [house for sublist in [town.houses for town in all_towns] for house in sublist]
 all_chests = [chest for sublist in [house.chests for house in all_houses] for chest in sublist]
