@@ -25,6 +25,7 @@ import sounds
 import units
 import save_load
 import text_scroll
+import tiles
 
 if __name__ == "__main__":
     sys.exit()
@@ -37,10 +38,9 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, houses, gs_level, town_id):
+    def __init__(self, name, desc, people, houses, town_id):
         self.name = name  # The town's name (e.g. New York City)
         self.desc = desc  # A brief description of the town
-        self.gs_level = gs_level  # The higher this value is, the better the items the store will sell
 
         self.people = people  # A list that contains the NPCs you can talk to
         self.houses = houses  # A list that contains random buildings you can enter
@@ -75,13 +75,7 @@ class Town:
 
                 elif choice == '2':
                     print('-'*save_load.divider_size)
-
-                    if self.gs_level != -1:
-                        self.inside_town()
-
-                    else:
-                        print("There don't appear to be any unlocked buildings to enter.")
-
+                    self.inside_town()
                     print('-'*save_load.divider_size)
 
                 elif choice == '3':
@@ -118,7 +112,6 @@ class Town:
                 break
 
     def inside_town(self):
-
         while True:
             print('There is a [G]eneral Store, an [I]nn, and some [U]nlocked houses in this town.')
             buildings = ['i', 'g', 'u']
@@ -192,132 +185,30 @@ class Town:
                 return
 
     def town_gen(self):
-        # Let the player purchase items from the General Store
-        # A dictionary containing objects the player can purchase
+        # A dictionary containing objects the player can purchase. This list is populated based on the current
+        # cell's store_level attribute
+        stock = {'All': []}
 
-        stock = {}
+        store_level = tiles.find_cell_with_tile_id(main.party_info['current_tile'].tile_id).store_level - 1
+
         for category in items.gs_stock:
             stock[category] = []
 
             for item_group in items.gs_stock[category]:
-                stock[category].append(item_group[self.gs_level - 1])
-
-        stock['All'] = []
-
-        for category in stock.keys():
-            if category == 'All':
-                continue
-
-            for item in stock[category]:
-                stock['All'].append(item)
+                stock[category].append(item_group[store_level])
+                stock['All'].append(item_group[store_level])
 
         print('-'*save_load.divider_size)
         print('Merchant: "Welcome, Traveler!"')
 
         while True:
-            eggs = False
-            b_s = main.s_input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ').lower()
+            chosen = main.s_input('Do you want to [b]uy or [s]ell items? | Input letter (or type "exit"): ').lower()
 
-            if b_s.startswith('b'):
+            if chosen.startswith('b'):
                 print('-'*save_load.divider_size)
-                print("""Which category of items would you like to check out?
-      [1] Armor
-      [2] Weapons
-      [3] Potions
-      [4] Accessories
-      [5] Tools
-      [6] All""")
-                while True:
-                    chosen_cat = main.s_input('Input [#] (or type "back"): ')
+                self.buy_choose_cat(stock)
 
-                    if chosen_cat == '1':
-                        item_cat = 'Armor'
-
-                    elif chosen_cat == '2':
-                        item_cat = 'Weapons'
-
-                    elif chosen_cat == '3':
-                        item_cat = 'Potions'
-
-                    elif chosen_cat == '4':
-                        item_cat = 'Accessories'
-
-                    elif chosen_cat == '5':
-                        item_cat = 'Tools'
-
-                    elif chosen_cat == '6':
-                        item_cat = 'All'
-
-                    elif chosen_cat in ['e', 'x', 'exit', 'b', 'back']:
-                        eggs = True
-                        break
-
-                    else:
-                        continue
-
-                    print('-'*save_load.divider_size)
-
-                    break
-
-                if eggs:
-                    continue
-
-                fizz = True
-
-                while fizz:
-                    padding = len(max([item.name for item in stock[item_cat]], key=len))
-                    print(f"{item_cat} (Your party has {main.party_info['gp']} GP): ")
-
-                    for num, item in enumerate(stock[item_cat]):
-                        print(f"      [{num + 1}] {item.name} {(padding - len(item.name))*'-'}--> {item.buy} GP")
-
-                    while True:
-                        purchase = main.s_input('Input [#] (or type "back"): ').lower()
-
-                        try:
-                            i = stock[item_cat][int(purchase) - 1]
-
-                        except (IndexError, ValueError):
-                            if purchase in ['e', 'x', 'exit', 'b', 'back']:
-                                print('-'*save_load.divider_size)
-                                fizz = False
-                                break
-
-                            continue
-
-                        print('-'*save_load.divider_size)
-                        print(f'-{i.name.upper()}-')
-                        print(ascii_art.item_sprites[i.ascart])
-                        print(f'"{i.desc}"')
-                        print('-'*save_load.divider_size)
-
-                        while True:
-                            y_n = main.s_input(f"Ya want this {i.name}? Will cost ya {i.buy} GP. | Y/N: ").lower()
-
-                            if y_n.startswith('y'):
-                                if main.party_info['gp'] >= i.buy:
-                                    main.party_info['gp'] -= i.buy
-                                    items.add_item(i.item_id)
-
-                                    print('-'*save_load.divider_size)
-                                    print(f'You purchase the {i.name} for {i.buy} GP.')
-                                    main.s_input("\nPress enter/return ")
-                                    print('-'*save_load.divider_size)
-
-                                else:
-                                    print(f"Sorry, you don't have enough GP for that!")
-                                    main.s_input("\nPress enter/return ")
-
-                                break
-
-                            elif y_n.startswith('n'):
-                                print()
-
-                                break
-
-                        break
-
-            elif b_s.startswith('s'):
+            elif chosen.startswith('s'):
                 print('-'*save_load.divider_size)
                 spam = True
                 while spam:
@@ -326,7 +217,8 @@ class Town:
       [2] Consumables
       [3] Weapons
       [4] Accessories
-      [5] Misc. Items""")
+      [5] Tools
+      [6] Misc. Items""")
                     while True:
                         cat = main.s_input('Input [#] (or type "back"): ').lower()
 
@@ -347,28 +239,131 @@ class Town:
                             cat = 'access'
                             vis_cat = 'Accessories'
                         elif cat == '5':
+                            cat = 'tools'
+                            vis_cat = 'Tools'
+                        elif cat == '6':
                             cat = 'misc'
                             vis_cat = 'Misc. Items'
                         else:
                             continue
 
-                        if cat in items.inventory:
+                        if items.inventory[cat] and any([not i.imp for i in items.inventory[cat]]):
+                            items.pick_item(cat, vis_cat, selling=True)
+                            print('-'*save_load.divider_size)
 
-                            if items.inventory[cat]:
-                                items.pick_item(cat, vis_cat, selling=True)
-                                print('-'*save_load.divider_size)
+                            break
 
-                                break
+                        else:
+                            print('-'*save_load.divider_size)
+                            print(f"You don't have any sellable items in the {vis_cat} category.")
+                            main.s_input("\nPress enter/return")
+                            print('-'*save_load.divider_size)
 
-                            else:
-                                print('-'*save_load.divider_size)
-                                print(f"You don't have any items in the {vis_cat} category.")
-                                main.s_input("\nPress enter/return")
-                                print('-'*save_load.divider_size)
+                            break
 
-                                break
+            elif chosen in ['e', 'x', 'exit', 'b', 'back']:
+                return
 
-            elif b_s in ['e', 'x', 'exit', 'b', 'back']:
+    def buy_choose_cat(self, stock):
+        while True:
+            print("""Which category of items would you like to check out?
+      [1] Armor
+      [2] Weapons
+      [3] Potions
+      [4] Accessories
+      [5] Tools
+      [6] All""")
+
+            while True:
+                chosen_cat = main.s_input('Input [#] (or type "back"): ')
+
+                if chosen_cat == '1':
+                    item_cat = 'Armor'
+
+                elif chosen_cat == '2':
+                    item_cat = 'Weapons'
+
+                elif chosen_cat == '3':
+                    item_cat = 'Potions'
+
+                elif chosen_cat == '4':
+                    item_cat = 'Accessories'
+
+                elif chosen_cat == '5':
+                    item_cat = 'Tools'
+
+                elif chosen_cat == '6':
+                    item_cat = 'All'
+
+                elif chosen_cat in ['e', 'x', 'exit', 'b', 'back']:
+                    print('-' * save_load.divider_size)
+
+                    return
+
+                else:
+                    continue
+
+                print('-' * save_load.divider_size)
+                self.buy_choose_item(item_cat, stock)
+
+                break
+
+    def buy_choose_item(self, item_cat, stock):
+        while True:
+            padding = len(max([item.name for item in stock[item_cat]], key=len))
+            print(f"{item_cat} (Your party has {main.party_info['gp']} GP): ")
+
+            for num, item in enumerate(stock[item_cat]):
+                print(f"      [{num + 1}] {item.name} {(padding - len(item.name))*'-'}--> {item.buy} GP")
+
+            while True:
+                chosen = main.s_input('Input [#] (or type "back"): ').lower()
+
+                try:
+                    chosen = stock[item_cat][int(chosen) - 1]
+
+                except (IndexError, ValueError):
+                    if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                        print('-'*save_load.divider_size)
+                        return
+
+                    continue
+
+                print('-' * save_load.divider_size)
+                print(f'-{chosen.name.upper()}-')
+                print(ascii_art.item_sprites[chosen.ascart])
+                print(f'"{chosen.desc}"')
+                print('-' * save_load.divider_size)
+
+                self.buy_yes_or_no(chosen)
+
+                break
+
+    @staticmethod
+    def buy_yes_or_no(chosen):
+        while True:
+            y_n = main.s_input(f"Ya want this {chosen.name}? Will cost ya {chosen.buy} GP. | Y/N: ").lower()
+
+            if y_n.startswith('y'):
+                if main.party_info['gp'] >= chosen.buy:
+                    main.party_info['gp'] -= chosen.buy
+                    items.add_item(chosen.item_id)
+
+                    print('-' * save_load.divider_size)
+                    print(f'You purchase the {chosen.name} for {chosen.buy} GP.')
+                    main.s_input("\nPress enter/return ")
+
+                else:
+                    print(f"Sorry, you don't have enough GP for that!")
+                    main.s_input("\nPress enter/return ")
+
+                print('-' * save_load.divider_size)
+
+                return
+
+            elif y_n.startswith('n'):
+                print('-' * save_load.divider_size)
+
                 return
 
     def speak_to_npcs(self):

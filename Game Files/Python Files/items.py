@@ -779,16 +779,16 @@ paralyzation_potion = StatusPotion('Potion of Inducing Motion',
 # Potions - Alchemy
 attract_potion_1 = AttractPotion("Attract Potion I", """\
 A potion that can only be obtained through alchemy. Guarantees a one-monster
-encounter for the next 5 steps on the overworld. Some areas don't
-have monster spawns. Made using 'strange' ingredients.""", 0, 25, 5, 1, "attractpot1")
+encounter for the next 3 steps on the overworld. Some areas don't
+have monster spawns. Made using 'strange' ingredients.""", 0, 25, 3, 1, "attractpot1")
 attract_potion_2 = AttractPotion("Attract Potion II", """\
 A potion that can only be obtained through alchemy. Guarantees a two-monster
-encounter for the next 5 steps on the overworld. Some areas don't
-have monster spawns. Made using 'strange' ingredients.""", 0, 25, 5, 2, "attractpot2")
+encounter for the next 3 steps on the overworld. Some areas don't
+have monster spawns. Made using 'strange' ingredients.""", 0, 25, 3, 2, "attractpot2")
 attract_potion_3 = AttractPotion("Attract Potion III", """\
 A potion that can only be obtained through alchemy. Guarantees a three-monster
-encounter for the next 5 steps on the overworld. Some areas don't
-have monster spawns. Made using 'strange' ingredients.""", 0, 25, 5, 3, "attractpot3")
+encounter for the next 3 steps on the overworld. Some areas don't
+have monster spawns. Made using 'strange' ingredients.""", 0, 25, 3, 3, "attractpot3")
 
 repel_potion_1 = RepelPotion("Repel Potion I", """\
 A potion that can only be obtained through alchemy. Prevents monster encounters
@@ -1550,8 +1550,8 @@ monster_drop_list = {'Shell Mimic': [shell_fragment, water_vial],
                      'Calculator': [calculus_homework, graph_paper, protractor, ruler, textbook]
                      }
 
-# "gs_stock" is a list of all items in the General Store's stock. The GS's level determines
-# what items are in its stock via: [category[self.gs_level - 1] for category in gs_stock]
+# "gs_stock" is a list of all items in the General Store's stock. The quality of the items
+# sold is determined by the cell, store_stock[category][cell.store_level - 1]
 
 gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                          l_potion, l_potion, x_potion],  # Health Potions
@@ -1886,8 +1886,8 @@ def pick_category():
 # Select an object to interact with in your inventory
 # If "selling == True" that means that items are being sold, and not used.
 def pick_item(cat, vis_cat, selling=False):
-    while cat in ['quests', 'equipped_items'] or inventory[cat]:
-        # Quests have their own function, because they aren't actually "items"
+    while True:
+        # Quests have their own function, because they aren't actually instances of the Item class
         if cat == 'quests':
             view_quests()
             return
@@ -1897,14 +1897,9 @@ def pick_item(cat, vis_cat, selling=False):
             manage_equipped()
             return
 
-        if inventory[cat]:
-            print('-'*save_load.divider_size)
-
-            # The code that prints the inventory is kind of complicated so it's located in another function
-            item_ids = print_inventory(cat, vis_cat, selling)
-
-        else:
-            return
+        # The code that prints the inventory is kind of complicated so it's located in another function
+        print('-'*save_load.divider_size)
+        item_ids = print_inventory(cat, vis_cat, selling)
 
         while True:
             chosen = main.s_input('Input [#] (or type "back"): ').lower()
@@ -1921,50 +1916,57 @@ def pick_item(cat, vis_cat, selling=False):
             if selling:
                 sell_item(item_id)
 
+                if not any([not i.imp for i in inventory[cat]]):
+                    return
+
             else:
                 pick_action(item_id)
+
+                if not inventory[cat]:
+                    return
 
             break
 
 
 # Count the number of each item in the player's inventory, and display it alongside one copy of each item
 def print_inventory(cat, vis_cat, selling):
-    q_inventory = []
+    quantity_inv = []
+
+    temp_inv = []
     for item_x in inventory[cat]:
-        for num, item_y in enumerate(q_inventory):
-            if item_y[1] == item_x.item_id:
-                q_inventory[num][2] += 1
+        if item_x.item_id not in temp_inv:
+            temp_inv.append(item_x.item_id)
 
-                break
-
-        else:
-            q_inventory.append([item_x.name, item_x.item_id, 1])
+    for item_y in temp_inv:
+        quantity_inv.append((find_item_with_id(item_y).name,
+                             item_y,
+                             sum(i.item_id == item_y for i in inventory[cat])))
 
     if not selling:
         print(f"{vis_cat}: ")
-        for x, y in enumerate(q_inventory):
+        for x, y in enumerate(quantity_inv):
             print(f'      [{x + 1}] {y[0]} x {y[2]}')
 
-        return [x[1] for x in q_inventory]
+        return [x[1] for x in quantity_inv]
 
     else:
-        imp_qi = [it for it in q_inventory if not find_item_with_id(it[1]).imp]
+        sellable_inv = [it for it in quantity_inv if not find_item_with_id(it[1]).imp]
 
         try:
-            padding = len(max([it[0] + f" x {it[2]}" for it in imp_qi], key=len))
+            padding = len(max([it2[0] + f" x {it2[2]}" for it2 in sellable_inv], key=len))
 
         except ValueError:
             padding = 1
 
-        extra_pad = len(str(len([it[0] for it in imp_qi]) + 1))
+        extra_pad = len(str(len([it3[0] for it3 in sellable_inv]) + 1))
 
         print(f'{vis_cat}:')
 
-        for num, b in enumerate(imp_qi):
+        for num, b in enumerate(sellable_inv):
             fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
             print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {find_item_with_id(b[1]).sell} GP each")
 
-        return [x[1] for x in imp_qi]
+        return [x[1] for x in sellable_inv]
 
 
 def pick_action(item_id):
@@ -2052,7 +2054,6 @@ Input [#] (or type "back"): """)
 
 # Trade player-owned objects for money (GP)
 def sell_item(item_id):
-
     item = find_item_with_id(item_id)
 
     print('-'*save_load.divider_size)
@@ -2276,7 +2277,7 @@ def remove_item(item_id):
     this_item = _c(find_item_with_id(item_id))
 
     for z in inventory[this_item.cat]:
-        if z.item_id == z.item_id:
+        if z.item_id == this_item.item_id:
             inventory[this_item.cat].remove(z)
             return True
 

@@ -50,7 +50,7 @@ where numerous brave adventurers have begun their journey. Nearton is just
 your standard run-of-the-mill village: it has a general store, an inn, and 
 a few small houses. An old man  is standing near one of the houses, and
 appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, npcs.saar, npcs.npc_solou],
-                                                 [nearton_h1, nearton_h2], 1, "nearton")
+                                                 [nearton_h1, nearton_h2], "nearton")
 
 # Southford
 southford_h1_c1 = Chest([35], 2, "S-H1-C1")
@@ -59,7 +59,7 @@ southford_h1 = House("Lazaro", [southford_h1_c1])
 town_southford = Town("Southford", """\
 Southford is a fair-size town in the Southeast of the Inner Forest. The 
 inhabitants of this town are known for being quite wise, and may provide you 
-with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], [southford_h1], 1, "southford")
+with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], [southford_h1], "southford")
 
 # Overshire City
 overshire_h1_c1 = Chest([items.en_lth_bdy, items.en_bnz_cst, items.en_wiz_rob], 2, "OC-H1-C1")
@@ -77,7 +77,7 @@ castle surrounded by reinforced stone walls, a lower-class outer portion
 comprised of smalls buildings and huts, and a middle-class section situated in
 between. As an outsider, you are forbidden to enter the upper two, but are
 welcome to do as you wish in the lower.""", [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos],
-                                            [overshire_h1, overshite_h2], 2, "overshire_city")
+                                            [overshire_h1, overshite_h2], "overshire_city")
 
 # Principalia
 town_principalia = Town("Principalia", """\
@@ -91,7 +91,7 @@ several things since his ancestor lived here, however. The cottage now has
 access to running water,and the cottage is surrounded by a ring of 12 archer 
 towers, each with 2 crossbowmen and one archer at the top. Each tower is about
 100 yards from the cottage. In addition, there are numerous guards standing 
-watch all around the building.""", [npcs.sakura], [], 3, "principalia")
+watch all around the building.""", [npcs.sakura], [], "principalia")
 
 # Fort Sigil
 town_fort_sigil = Town("Fort Sigil", """\
@@ -100,7 +100,7 @@ town was built around an old fort, named Fort Sigil. Originally comprised of
 just a few tents meant to house soldiers, many of these soldiers eventually
 put down their arms and settled. Despite it's rich backstory and pleasant
 scenery, Fort Sigil doesn't get many visitors. Perhaps there's a reason why...""",
-                       [npcs.seriph, npcs.rivesh], [], 3, "fort_sigil")
+                       [npcs.seriph, npcs.rivesh], [], "fort_sigil")
 
 # =========================== #
 #        DOWNPOUR TOWNS       #
@@ -113,7 +113,7 @@ located mere meters away from the new town's borders. Merchants in Tripton
 became very successful, as their superior bartering tactics allowed them to
 easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
-village leaders.""", [npcs.kyle], [], 3, "tripton")
+village leaders.""", [npcs.kyle], [], "tripton")
 
 # Fallville
 town_fallville = Town("Fallville", """\
@@ -123,7 +123,7 @@ located mere meters away from the new town's borders. Merchants in Tripton
 became very successful, as their superior bartering tactics allowed them to
 easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
-village leaders.""", [npcs.krystin, npcs.frederick], [], 2, "fallville")
+village leaders.""", [npcs.krystin, npcs.frederick], [], "fallville")
 
 # =========================== #
 #          FLUTE TOWNS        #
@@ -138,7 +138,7 @@ discovered to be lying beneath the surface of Valice, the town grew
 tremendously in both size and wealth. This wealth did not last, as the gems 
 quickly became rarer and rarer and are now nowhere to be seen. This, 
 unfortunately, means that Valice is both one of the biggest towns in Overshire,
-and also one of the poorest.""", [npcs.ethos, npcs.typhen], [], 2, "valice")
+and also one of the poorest.""", [npcs.ethos, npcs.typhen], [], "valice")
 
 # Valenfall
 town_valenfall = Town("Valenfall", """\
@@ -148,7 +148,7 @@ by his Divinity. The gods supposedly used Valenfall as the cornerstone,
 constructing all of the surrounding land of Aethus around it. Valenfall is
 deeply intertwined with nature, and monuments depicting the nature deities can
 be seen on every corner.
-""", [npcs.fitzgerald], [], 4, "valenfall")
+""", [npcs.fitzgerald], [], "valenfall")
 
 # =========================== #
 #        DELTORA TOWNS        #
@@ -164,7 +164,7 @@ Parceon is a highly populated town renown for it's rich magical background.
 Parceon is home to the famous Sorcerers' Guild, a group of unbelievably
 skilled and wise mages who work together to establish and enforce magical law.
 The head of the guild, Azura, lives in a large tower in the southwest side of
-the town.""", [npcs.azura], [], 3, "parceon")
+the town.""", [npcs.azura], [], "parceon")
 
 # =========================== #
 #        CHIN'TOR TOWNS       #
@@ -175,16 +175,16 @@ town_rymn_outpost = Town("Rymn Outpost", """\
 Rymn Outpost is one of the several small villages established
 after the Thexian Incursion. All of the residents of this town are soldiers or
 family members of soldiers, with the exception a few merchants. Rymn Outpost
-is named after Rymnes, the Divinic gods of defense.""", [], [], 4, "rymn_outpost")
+is named after Rymnes, the Divinic gods of defense.""", [], [], "rymn_outpost")
 
 # Mardovian Caverns
-town_mardoviancaverns = Town("Mardovian Caverns", """""", [], [], 3, "mardoviancaverns")
+town_mardoviancaverns = Town("Mardovian Caverns", """""", [], [], "mardoviancaverns")
 
 # Mt. Falenkarth
-town_mtfalenkarth = Town("Dewfrost", """""", [], [], 3, "mtfalenkarth")
+town_mtfalenkarth = Town("Dewfrost", """""", [], [], "mtfalenkarth")
 
 # Coran Outpost
-town_coran_outpost = Town("Coran Outpost", """""", [], [], 3, "coranoutpost")
+town_coran_outpost = Town("Coran Outpost", """""", [], [], "coranoutpost")
 
 
 # Sardooth
@@ -193,17 +193,17 @@ Sardooth is a ghost town. There has not been a single permanent inhabitant of
 this town for more than 75 years. It is completely run down, due to its 
 proximity to the ocean. The Arcadian oceans are extremely dangerous, with 
 tsunamis being extremely common. While this town may seem interesting and 
-historic, there is nothing of value here.""", [], [], -1, "sardooth")
+historic, there is nothing of value here.""", [], [], "sardooth")
 
 # =========================== #
 #       CAMBERLITE TOWNS      #
 # =========================== #
 
 # Dewfrost
-town_dewfrost = Town("Dewfrost", """""", [], [], 3, "dewfrost")
+town_dewfrost = Town("Dewfrost", """""", [], [], "dewfrost")
 
 # Clayroost
-town_clayroost = Town("Clayroost", """""", [], [], 3, "clayroost")
+town_clayroost = Town("Clayroost", """""", [], [], "clayroost")
 
 # Ravenstone
 town_ravenstone = Town("Ravenstone", """\
@@ -213,7 +213,7 @@ Druids and other nature-magicians. Ravenstone is also the home of the Druids'
 section of the Sorcerers' Guild. Vegetation grows on almost every building and 
 statue in the town. When the population of the town is calculated, animals are 
 counted as people. More than 35% of the population are various species of 
-animals.""", [npcs.strathius], [], 3, "ravenstone")
+animals.""", [npcs.strathius], [], "ravenstone")
 
 # Ambercreek
 town_ambercreek = Town("Ambercreek", """\
@@ -221,7 +221,7 @@ Ambercreek is a large mining town located in the Chin'tor. The Chin'toric
 embassy can be found in the middle of this town surrounded by large stone walls
 and a few guard-towers. Sugulat, the Lord of Chin'tor, can often be found mining
 on the outskirts of town. A very troubled-looking old man is in the southwest 
-portion of the town near a few smaller houses.""", [npcs.raidon, npcs.sugulat], [], 4, "ambercreek")
+portion of the town near a few smaller houses.""", [npcs.raidon, npcs.sugulat], [], "ambercreek")
 
 # Capwild
 town_capwild = Town("Capwild", """\
@@ -229,13 +229,13 @@ Capwild is a medium sized town situated in the Terrius Mt. Range.
 Capwild is a supplier of grains and herbs for the entire region, and makes
 extensive use of terrace farming to make up for the lack of arable land.
 Further investigation reveals that water mages have created self-sustaining
-irrigation systems as well, further enhancing Capwild's farming capabilities.""", [], [], 4, "capwild")
+irrigation systems as well, further enhancing Capwild's farming capabilities.""", [], [], "capwild")
 
 # =========================== #
 #        WHITLOCK TOWNS       #
 # =========================== #
 # Simphet
-town_simphet = Town("Simphet", """""", [], [], 3, "simphet")
+town_simphet = Town("Simphet", """""", [], [], "simphet")
 
 # Whistumn
 town_whistumn = Town("Whistumn", """\
@@ -245,7 +245,7 @@ are known for their skepticism and reasoning. Many of them are scientists and ar
 skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
-on the steps of the general store.""", [npcs.polmor, npcs.serena], [], 4, "whistumn")
+on the steps of the general store.""", [npcs.polmor, npcs.serena], [], "whistumn")
 
 # Hatchnuk
 town_hatchnuk = Town("Hatchnuk", """\
@@ -259,23 +259,23 @@ to be walking out in the open doing business together. As a result, there are no
 buildings that you are able to enter, and no people to talk to. The only people 
 who are around to speak to are the guards, but their plague-doctor-esque
 apparel and stern looks make it clear that they are not in the mood for 
-chit-chat.""", [], [], -1, "hatchnuk")
+chit-chat.""", [], [], "hatchnuk")
 
 
 # =========================== #
 #         KOHRIN TOWNS        #
 # =========================== #
 # Cesura
-town_cesura = Town("Cesura", """""", [], [], 3, "cesura")
+town_cesura = Town("Cesura", """""", [], [], "cesura")
 
 # Trintooli
-town_trintooli = Town("Trintooli", """""", [], [], 3, "trintooli")
+town_trintooli = Town("Trintooli", """""", [], [], "trintooli")
 
 # Foqwhitte
-town_foqwhitte = Town("Foqwhitte", """""", [], [], 3, "foqwhitte")
+town_foqwhitte = Town("Foqwhitte", """""", [], [], "foqwhitte")
 
 # Don'kohrin
-town_don_kohrin = Town("Don'kohrin", """""", [], [], 3, "donkohrin")
+town_don_kohrin = Town("Don'kohrin", """""", [], [], "donkohrin")
 
 # =========================== #
 #        PELAMORA TOWNS       #
@@ -287,7 +287,7 @@ Sanguion is a safe-haven for vampires. Vampires are feared throughout
 Harconia, so this fairly unknown town is the only place they can go without
 being persecuted. The vampires in this town are peaceful, and actually refuse
 to drink the blood of intelligent lifeforms. Beware, though, as not all
-vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.ariver], [], 4, "sanguion")
+vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.ariver], [], "sanguion")
 
 # Lamtonum
 town_lantonum = Town("Lamtonum", """\
@@ -295,7 +295,7 @@ Lantonum is a small town that has the best forge in all of Arcadia.
 Nearly 2/3s of all citizens of this town are experienced blacksmiths, and 90%
 of all ores and minerals mined in Chin'tor or Ambercreek are brought here. It
 is one of the wealthiest cities in all of the desert region due to its Mythril,
-Magestite, and Necrite bar exports.""", [npcs.matthew], [], 4, "lantonum")
+Magestite, and Necrite bar exports.""", [npcs.matthew], [], "lantonum")
 
 # =========================== #
 #        CELEMIA TOWNS        #
@@ -310,7 +310,7 @@ a large number of them defected to the Harconian side and stayed. After the
 war, the citizens gave up their weapons and became a peaceful town. The vast
 majority of the inhabitants of this town are, naturally, Flyscors. It seems
 that the Flyscorian Royal Family is visiting here - perhaps you can talk with
-them for a bit.""", [npcs.fly, npcs.stravi, npcs.caesar], [], 3, "new_ekanmar")
+them for a bit.""", [npcs.fly, npcs.stravi, npcs.caesar], [], "new_ekanmar")
 
 # =========================== #
 #          THEX TOWNS         #

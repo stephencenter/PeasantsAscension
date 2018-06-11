@@ -274,12 +274,13 @@ class Tile:
 
 class Cell:
     # A cell is a cluster of adjacent tiles accessible by teleportation via the world map
-    def __init__(self, name, biome, tiles, primary_tile, m_level, cell_id):
+    def __init__(self, name, biome, tiles, primary_tile, m_level, store_level, cell_id):
         self.name = name
         self.biome = biome
         self.tiles = tiles
         self.primary_tile = primary_tile  # Where you appear when you teleport to this cell
         self.m_level = m_level  # A tuple that specifies the level range enemies can be encountered at
+        self.store_level = store_level  # An integer that specifies what level the stores in this cell are at
         self.cell_id = cell_id
 
 
@@ -348,7 +349,7 @@ nearton_cell = Cell("Nearton", "forest", [nearton_tile,
                                           nearton_se,
                                           nearton_nw,
                                           nearton_sw],
-                    nearton_tile, (1, 4), "nearton_cell")
+                    nearton_tile, (1, 4), 1, "nearton_cell")
 
 # SOUTHFORD
 southford_desc = """"""
@@ -399,7 +400,7 @@ southford_cell = Cell("Southford", "forest", [southford_tile,
                                               southford_se,
                                               southford_nw,
                                               southford_sw],
-                      southford_tile, (2, 5), "southford_cell")
+                      southford_tile, (2, 5), 2, "southford_cell")
 
 # OVERSHIRE CITY
 o_city_desc = """"""
@@ -449,7 +450,7 @@ o_city_cell = Cell("Overshire City", "forest", [o_city_tile,
                                                 o_city_se,
                                                 o_city_nw,
                                                 o_city_sw],
-                   o_city_tile, (3, 6), "o_city_cell")
+                   o_city_tile, (3, 6), 2, "o_city_cell")
 
 # PRINCIPALIA
 principalia_desc = """"""
@@ -498,7 +499,7 @@ principalia_cell = Cell("Principalia", "forest", [principalia_tile,
                                                   principalia_se,
                                                   principalia_nw,
                                                   principalia_sw],
-                        principalia_tile, (4, 7), "principalia_cell")
+                        principalia_tile, (4, 7), 2, "principalia_cell")
 
 # FORT SIGIL
 fort_sigil_desc = """"""
@@ -546,44 +547,8 @@ fort_sigil_cell = Cell("Fort Sigil", "forest", [fort_sigil_tile,
                                                 fort_sigil_se,
                                                 fort_sigil_nw,
                                                 fort_sigil_sw],
-                       fort_sigil_tile, (5, 8), "fort_sigil_cell")
-#
-# bfor_tile_1c = Tile("Barrier Forest", "BF-1C", bfor_desc, 5,
-#                     to_e="BF-2C",
-#                     to_n="BF-4C")
-# bfor_tile_2c = Tile("Barrier Forest", "BF-2C", bfor_desc, 5,
-#                     to_e="BF-3C",
-#                     to_n="BF-5C",
-#                     to_w="BF-1C")
-# bfor_tile_3c = Tile("Barrier Forest", "BF-3C", bfor_desc, 5,
-#                     to_e="BF-1B",
-#                     to_n="BF-6C",
-#                     to_w="BF-2C")
-# bfor_tile_4c = Tile("Barrier Forest", "BF-4C", bfor_desc, 5,
-#                     to_e="BF-5C",
-#                     to_n="BF-7C",
-#                     to_s="BF-1C")
-# bfor_tile_5c = Tile("Barrier Forest", "BF-5C", bfor_desc, 5,
-#                     to_e="BF-6C",
-#                     to_n="BF-8C",
-#                     to_s="BF-2C",
-#                     to_w="BF-4C")
-# bfor_tile_6c = Tile("Barrier Forest", "BF-6C", bfor_desc, 5,
-#                     to_e="BF-4B",
-#                     to_s="BF-3C",
-#                     to_w="BF-5C",
-#                     to_n="BF-9C")
-# bfor_tile_7c = Tile("Barrier Forest", "BF-7C", bfor_desc, 5,
-#                     to_e="BF-8C",
-#                     to_s="BF-4C")
-# bfor_tile_8c = Tile("Barrier Forest", "BF-8C", bfor_desc, 5,
-#                     to_e="BF-9C",
-#                     to_s="BF-5C",
-#                     to_w="BF-7C")
-# bfor_tile_9c = Tile("Barrier Forest", "BF-9C", bfor_desc, 5,
-#                     to_e="BF-7B",
-#                     to_w="BF-8C",
-#                     to_s="BF-6C")
+                       fort_sigil_tile, (5, 8), 2, "fort_sigil_cell")
+
 overshire_province = Province("Overshire", [nearton_cell,
                                             southford_cell,
                                             o_city_cell,
