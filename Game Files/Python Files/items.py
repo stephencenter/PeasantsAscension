@@ -73,7 +73,7 @@ class NonConsumable(Item):
 
 class HealthManaPotion(Consumable):
     # Items that restore your HP, MP, or both
-    def __init__(self, name, desc, buy, sell, item_id, cat='consumables', imp=False, heal=0, mana=0, ascart='Potion'):
+    def __init__(self, name, desc, buy, sell, item_id, cat='consumables', heal=0, mana=0, ascart='Potion'):
         super().__init__(name, desc, buy, sell, item_id, ascart, cat)
         self.heal = heal
         self.mana = mana
@@ -282,13 +282,13 @@ class Shovel(NonConsumable):
             main.s_input("\nPress enter/return ")
 
 
-class FastTravelAtlus(NonConsumable):
+class FastTravelAtlas(NonConsumable):
     def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Map'):
         super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         if main.party_info['gamestate'] == 'town':
-            print("Fast Travel Atluses can't be used in towns.")
+            print("Fast Travel Atlases can't be used in towns.")
             main.s_input("\nPress enter/return")
             return
 
@@ -1276,7 +1276,7 @@ of a pickaxe, shovel, and hammer all into one device! Use while on the
 overworld to dig for gems. Gems have pre-determined locations and do not
 respawn - there is no luck involved with this tool.""", 150, 75, "shovel")
 
-fast_travel_atlus = FastTravelAtlus('Fast Travel Atlus', """\
+fast_travel_atlas = FastTravelAtlas('Fast Travel Atlas', """\
 A convenient tome that allows teleportation between towns. These aren't
 being made anymore, after having been banned by the King due to its use in
 many recent abductions and murders. Most of the pages appear to be missing.""", 0, 0, "fast_map")
@@ -1672,7 +1672,7 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
              pearl_gem, ruby_gem, sapphire_gem, emerald_gem, citrine_gem, jade_gem, opal_gem, onyx_gem, diamond_gem,
              amethyst_gem, topaz_gem, garnet_gem, quartz_gem, zircon_gem, agate_gem, aquamarine_gem, wood_lckpck,
              copper_lckpck, iron_lckpck, steel_lckpck, mythril_lckpck, shovel, pocket_lab, monster_book,
-             fast_travel_atlus, s_potion, m_potion, l_potion, x_potion, s_elixir, m_elixir, l_elixir, x_elixir,
+             fast_travel_atlas, s_potion, m_potion, l_potion, x_potion, s_elixir, m_elixir, l_elixir, x_elixir,
              s_rejuv, m_rejuv, l_rejuv, silence_potion, poison_potion, weakness_potion, blindness_potion,
              paralyzation_potion, fists, wdn_sht, bnz_swd, en_bnz_swd, stl_spr, en_stl_spr, titan_axe, en_titan_axe,
              stn_dag, ser_knf, en_ser_knf, stiletto, en_stiletto, myth_sb, en_myth_sb, slg_sht, sht_bow, en_sht_bow,
@@ -1725,7 +1725,7 @@ inventory = {'q_items': [],
              'consumables': [_c(s_potion), _c(s_elixir)],
              'weapons': [],
              'armor': [],
-             'tools': [_c(fast_travel_atlus), _c(musicbox)],
+             'tools': [_c(fast_travel_atlas), _c(musicbox)],
              'access': [],
              'misc': []}
 
@@ -2130,26 +2130,14 @@ def manage_equipped():
 
                 break
 
-            if isinstance(selected, Weapon):
-                key = 'weapon'
-
-            elif isinstance(selected, Accessory):
-                key = 'access'
-
-            elif isinstance(selected, Armor):
-                key = selected.part
-
-            else:
-                continue
-
             print('-'*save_load.divider_size)
-            manage_equipped_2(key, selected, p_equip)
+            manage_equipped_2(selected)
             print('-'*save_load.divider_size)
 
             break
 
 
-def manage_equipped_2(key, selected, p_equip):
+def manage_equipped_2(selected):
     global equipped
 
     while True:
@@ -2319,7 +2307,6 @@ def unequip_item(item_id, unequipper):
     global equipped
 
     this_item = _c(find_item_with_id(item_id))
-    inv_name = unequipper.name if unequipper != units.player else 'player'
     add_item(this_item.item_id)
 
     if this_item.part == 'weapon':

@@ -44,6 +44,7 @@ class NPC:
         self.name = name
         self.occupation = occupation
         self.conversations = conversations
+        self.active = active
 
     def speak(self):
         # Print the NPC's dialogue to the player
@@ -62,7 +63,7 @@ class NPC:
             print('-'*save_load.divider_size)
 
 
-npc_solou = NPC("Solou", "Page", [d.solou_convo_1, d.solou_convo_2, d.solou_convo_3, d.solou_quest_1])
+npc_solou = NPC("Solou", "Page", [d.solou_convo_1, d.solou_quest_1])
 
 joseph = NPC('Joseph', "Mayor of Overshire", [d.joseph_convo_1, d.joseph_quest_1, d.joseph_convo_2, d.joseph_convo_3])
 

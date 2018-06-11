@@ -234,14 +234,6 @@ def check_region():
     elif new_biome == 'shore':
         music = "../Music/We're all under the stars.ogg"
 
-    elif new_biome == 'cave':
-        # TODO!! get music!
-        pass
-
-    elif new_biome == 'underworld':
-        # TODO!! get music!
-        pass
-
     elif new_biome == 'castle':
         music = "../Music/Castle.ogg"
         pass

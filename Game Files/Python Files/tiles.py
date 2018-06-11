@@ -487,12 +487,12 @@ downpour_province = Province("Downpour", [], "downpour_prov")
 flute_province = Province("Flute", [], "flute_prov")
 deltora_province = Province("Deltora", [], "deltora_prov")
 parriway_province = Province("Parriway", [], "parriway_prov")
-celemia_province = Province("Celemia", [], "celemia_prov")
 chintor_province = Province("Chin'tor", [], "chintor_prov")
 camberlite_province = Province("Camberlite", [], "camberlite_prov")
 whitlock_province = Province("Whitlock", [], "whitlock_prov")
 kohrin_province = Province("Kohrin", [], "kohrin_prov")
 pelamora_province = Province("Pelamora", [], "pelamora_prov")
+celemia_province = Province("Celemia", [], "celemia_prov")
 thex_province = Province("Thex", [], "thex_prov")
 
 all_provinces = [overshire_province,
@@ -500,12 +500,12 @@ all_provinces = [overshire_province,
                  flute_province,
                  deltora_province,
                  parriway_province,
-                 celemia_province,
                  chintor_province,
                  camberlite_province,
                  whitlock_province,
                  kohrin_province,
                  pelamora_province,
+                 celemia_province,
                  thex_province]
 all_cells = [cell for sublist in [prov.cells for prov in all_provinces] for cell in sublist]
 all_tiles = [tile for sublist in [cell.tiles for cell in all_cells] for tile in sublist]

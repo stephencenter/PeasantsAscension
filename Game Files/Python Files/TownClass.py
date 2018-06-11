@@ -37,11 +37,9 @@ pygame.mixer.init()
 
 
 class Town:
-    def __init__(self, name, desc, people, houses, inn_cost, gs_level, town_id):
+    def __init__(self, name, desc, people, houses, gs_level, town_id):
         self.name = name  # The town's name (e.g. New York City)
         self.desc = desc  # A brief description of the town
-
-        self.inn_cost = inn_cost  # How much money it costs to sleep at the inn
         self.gs_level = gs_level  # The higher this value is, the better the items the store will sell
 
         self.people = people  # A list that contains the NPCs you can talk to
@@ -78,7 +76,7 @@ class Town:
                 elif choice == '2':
                     print('-'*save_load.divider_size)
 
-                    if self.gs_level != -1 or self.inn_cost != -1:
+                    if self.gs_level != -1:
                         self.inside_town()
 
                     else:
@@ -149,53 +147,44 @@ class Town:
                 elif selected in ['e', 'x', 'exit', 'b', 'back']:
                     return
 
-    def town_inn(self):
+    @staticmethod
+    def town_inn():
         print('-'*save_load.divider_size)
         print('Inn Keeper: "Greetings, Traveler!"')
-        cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
 
         while True:
-            choice = main.s_input(f'"Would you like to stay at our inn? {cost_string}" | Y/N: ').lower()
+            choice = main.s_input(f'"Would you like to stay at our inn? It\'s free, y\'know." | Y/N: ').lower()
 
             if choice.startswith('y'):
+
+                print('\n"Goodnight, Traveler."')
+                print('Sleeping', end='')
+
+                sys.stdout.flush()
+
+                text_scroll.text_scroll('...', spacing=0.75)
                 print()
-                if main.party_info['gp'] >= self.inn_cost:
 
-                    print('"Goodnight, Traveler."')
-                    print('Sleeping', end='')
+                for character in [
+                    units.player,
+                    units.solou,
+                    units.chili,
+                    units.chyme,
+                    units.storm,
+                    units.parsto,
+                    units.adorine
+                ]:
 
-                    sys.stdout.flush()
+                    character.hp = copy.copy(character.max_hp)
+                    character.mp = copy.copy(character.max_mp)
+                    character.status_ail = ['alive']
 
-                    text_scroll.text_scroll('...', spacing=0.75)
-                    print()
+                print("Your party's HP and MP have been fully restored.")
+                print('Your party has been relieved of all status ailments.')
+                main.s_input("\nPress enter/return ")
+                print('-'*save_load.divider_size)
 
-                    main.party_info['gp'] -= self.inn_cost
-
-                    for character in [
-                        units.player,
-                        units.solou,
-                        units.chili,
-                        units.chyme,
-                        units.storm,
-                        units.parsto,
-                        units.adorine
-                    ]:
-
-                        character.hp = copy.copy(character.max_hp)
-                        character.mp = copy.copy(character.max_mp)
-                        character.status_ail = ['alive']
-
-                    print("Your party's HP and MP have been fully restored.")
-                    print('Your party has been relieved of all status ailments.')
-                    main.s_input("\nPress enter/return ")
-                    print('-'*save_load.divider_size)
-
-                    save_load.save_game()
-
-                else:
-                    print('"...You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
-                    main.s_input("\nPress enter/return ")
-                    print('-'*save_load.divider_size)
+                save_load.save_game()
 
                 return
 
@@ -438,61 +427,6 @@ class Town:
                 sounds.play_music('../Music/Mayhem in the Village.ogg')
 
                 break
-
-
-class Tavern:
-    def __init__(self, name, inn_cost):
-        self.name = name
-        self.inn_cost = inn_cost
-
-    def town_choice(self):
-        print('-'*save_load.divider_size)
-        print(f'Inn Keeper: "Hello, traveler! Welcome to the {self.name}!"')
-
-        cost_string = f'"One Night is {self.inn_cost} GP."' if self.inn_cost else "It's free, y'know."
-
-        while True:
-            choice = main.s_input(f'"Would you like to stay at our inn? {cost_string}" | Y/N: ').lower()
-
-            if choice.startswith('y'):
-                print()
-                if main.party_info['gp'] >= self.inn_cost:
-
-                    print('"Goodnight, Traveler."')
-                    print('Sleeping...')
-
-                    main.smart_sleep(1)
-
-                    main.party_info['gp'] -= self.inn_cost
-
-                    for character in [units.player, units.solou, units.chili,
-                                      units.chyme, units.storm, units.parsto, units.adorine]:
-
-                        character.hp = copy.copy(character.max_hp)
-                        character.mp = copy.copy(character.max_mp)
-                        character.status_ail = ['alive']
-
-                    print("Your party's HP and MP have been fully restored.")
-                    print('Your party has been relieved of its status ailments.')
-
-                    print('-'*save_load.divider_size)
-
-                    save_load.save_game()
-
-                else:
-                    print('"You don\'t have enough GP. Sorry, Traveler, you can\'t stay here."')
-
-                sounds.play_music(main.party_info['music'])
-                print('-'*save_load.divider_size)
-
-                return
-
-            elif choice.startswith('n'):
-                sounds.play_music(main.party_info['music'])
-
-                print('-'*save_load.divider_size)
-
-                return
 
 
 class House:

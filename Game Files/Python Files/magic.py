@@ -295,6 +295,8 @@ def new_spells(character):
             cat = 'Healing'
         elif isinstance(spell, Buff):
             cat = 'Buffs'
+        else:
+            continue
 
         # Only give the character spells that they are a high enough level for
         if character.lvl >= spell.req_lvl:

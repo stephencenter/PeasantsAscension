@@ -444,6 +444,9 @@ Increasing DIFFICULTY will provide:
     +0.5% Enemy Magic Attack (Applies to entire party)
     +More challenging experience"""
 
+                else:
+                    continue
+
                 print('-'*save_load.divider_size)
 
                 if act_skill == 'dif':
@@ -659,25 +662,9 @@ Defensive Element: {self.def_element.title()} | Offensive Element: {self.off_ele
                         print(f"      [{num + 1}] {ability.name} {'-'*real_pad}--> {ability.ap_cost} AP")
 
                     while True:
+                        chosen = main.s_input('Input [#] (or type "back"): ').lower()
                         try:
-                            chosen = main.s_input('Input [#] (or type "back"): ').lower()
                             self.c_ability = all_abilities[int(chosen) - 1]
-
-                            # Abilities cost AP to cast, just like spells cost MP.
-                            if self.ap < self.c_ability.ap_cost:
-                                print('-'*save_load.divider_size)
-                                print(f"{self.name} doesn't have enough AP to cast {self.c_ability.name}!")
-                                main.s_input("\nPress enter/return ")
-
-                                break
-
-                            # Ascend is an ability that is more powerful the later in the battle you use it.
-                            # To balance this it's only usable once per battle.
-                            elif self.c_ability == abilities.ascend and self.ability_vars['ascend_used']:
-                                print('-'*save_load.divider_size)
-                                print("Ascend can only be used once per battle.")
-                                main.s_input("\nPress enter/return ")
-                                break
 
                         except (IndexError, ValueError):
                             if chosen in ['e', 'x', 'exit', 'b', 'back']:
@@ -688,8 +675,24 @@ Defensive Element: {self.def_element.title()} | Offensive Element: {self.off_ele
 
                             continue
 
+                        # Abilities cost AP to cast, just like spells cost MP.
+                        if self.ap < self.c_ability.ap_cost:
+                            print('-' * save_load.divider_size)
+                            print(f"{self.name} doesn't have enough AP to cast {self.c_ability.name}!")
+                            main.s_input("\nPress enter/return ")
+                            break
+
+                        # Ascend is an ability that is more powerful the later in the battle you use it.
+                        # To balance this it's only usable once per battle.
+                        elif self.c_ability == abilities.ascend and self.ability_vars['ascend_used']:
+                            print('-' * save_load.divider_size)
+                            print("Ascend can only be used once per battle.")
+                            main.s_input("\nPress enter/return ")
+                            break
+
                         self.ap -= self.c_ability.ap_cost
                         self.c_ability.before_ability(self)
+
                         return
 
             # Use Items
