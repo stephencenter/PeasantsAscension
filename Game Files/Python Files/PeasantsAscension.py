@@ -539,7 +539,10 @@ def debug_command():
             exec(command)
 
         except Exception:
-            print(f">Invalid Command")
+            print('-'*save_load.divider_size)
+            print(f"Invalid Command, error encountered: ")
+            print(traceback.format_exc(), end='')
+            print('-'*save_load.divider_size)
 
 
 def set_prompt_properties():
@@ -597,9 +600,9 @@ if __name__ == "__main__":  # If this file is being run and not imported, run ma
         print(traceback.format_exc())
         print("""\
 Peasants' Ascension encountered an error and crashed! Send the error message
-shown above to TheFrozenMawile (stephenbcenter@gmail.com) to make sure the bug
-gets fixed. The error message, along with any errors messages encountered,
-can also be found in the error_log.out file.""")
+shown above to TheFrozenMawile (https://reddit.com/u/TheFrozenMawile) to make 
+sure the bug gets fixed. The error message, along with any errors messages 
+encountered, can also be found in the error_log.out file.""")
         s_input("\nPress enter/return")
 
         pygame.quit()

@@ -153,6 +153,14 @@ class XPGoldPotion(Consumable):
         self.xp_change = xp_change
 
 
+class GameCrashPotion(Consumable):
+    def __init__(self, name, desc, buy, sell, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+
+    def use_item(self, user):
+        raise Exception("I told you this would crash the game.")
+
+
 class Weapon(Consumable):
     # Items that increase your damage by a percentage.
     def __init__(self, name, desc, buy, sell, power, type_, class_, ascart, item_id, element='none', cat='weapons'):
@@ -292,24 +300,18 @@ class FastTravelAtlas(NonConsumable):
             main.s_input("\nPress enter/return")
             return
 
-        while True:
-            prov = self.choose_prov()
-            if prov:
-                if self.choose_cell(prov):
-                    return
+        self.choose_prov()
 
-            else:
-                return
-
-    @staticmethod
-    def choose_prov():
+    def choose_prov(self):
         avail_provs = tiles.all_provinces[:main.party_info['map_pow']]
 
         if len(avail_provs) == 1:
-            return avail_provs[0]
+            self.choose_cell(avail_provs[0])
+
+            return
 
         while True:
-            print(f"Available Provinces [Pages {main.party_info['map_pow']}): ")
+            print(f"Available Provinces [Pages: {main.party_info['map_pow']}]: ")
             for num, x in enumerate(avail_provs):
                 print(f"      [{num + 1}] {x.name}")
 
@@ -327,7 +329,9 @@ class FastTravelAtlas(NonConsumable):
                     continue
 
                 print('-' * save_load.divider_size)
-                return chosen
+                self.choose_cell(chosen)
+
+                return
 
     @staticmethod
     def choose_cell(prov):
@@ -350,6 +354,7 @@ class FastTravelAtlas(NonConsumable):
 
                     continue
 
+                print("-"*save_load.divider_size)
                 while True:
                     y_n = main.s_input(f"Warp to {chosen.name}? | Yes or No: ").lower()
 
@@ -420,7 +425,94 @@ class PocketAlchemyLab(NonConsumable):
         super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
 
     def use_item(self, user):
-        pass
+        chosen_ingredients = []
+        available_flavors = {}
+
+        for item in inventory['misc']:
+            if isinstance(item, Ingredient):
+                if item.flavor in available_flavors:
+                    available_flavors[item.flavor].append(item)
+
+                else:
+                    available_flavors[item.flavor] = [item]
+
+        if not (available_flavors and len([val for lst in available_flavors.values() for val in lst]) >= 3):
+            print("You need at least three flavors to make a potion!")
+            main.s_input("\nPress enter/return ")
+
+            return
+
+        while len(chosen_ingredients) != 3:
+            available_flavors = {}
+
+            for item in inventory['misc']:
+                if isinstance(item, Ingredient):
+                    if item.flavor in available_flavors:
+                        available_flavors[item.flavor].append(item)
+
+                    else:
+                        available_flavors[item.flavor] = [item]
+
+            print("Flavors in your inventory: ")
+
+            list_flavors = sorted(list(available_flavors.keys()))
+
+            for num, flavor in enumerate(list_flavors):
+                print(f"      [{num + 1}] {flavor.title()}")
+
+            while True:
+                chosen = main.s_input('Input [#] (or type "exit"): ').lower()
+
+                try:
+                    chosen = available_flavors[list_flavors[int(chosen) - 1]]
+
+                except (IndexError, ValueError):
+                    if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                        return
+
+                    continue
+
+                chosen_ingredient = self.choose_ingredients(chosen)
+                chosen_ingredients.append(chosen_ingredient)
+
+                print('-' * save_load.divider_size)
+                print(f"Added a {chosen_ingredient.name} to the mix.")
+
+                if len(chosen_ingredients) != 3:
+                    print(f"{3 - len(chosen_ingredients)} ingredients remaining!")
+
+                    main.s_input("\nPress enter/return ")
+                    print('-'*save_load.divider_size)
+
+                else:
+                    print("All ingredients added! Time to start brewing!")
+                    main.s_input("\nPress enter/return ")
+                    print('-'*save_load.divider_size)
+
+                break
+
+        self.make_potion(chosen_ingredients)
+
+    @staticmethod
+    def choose_ingredients(ingredients):
+        print('-'*save_load.divider_size)
+        print(f"'{ingredients[0].flavor.title()}' Ingredients: ")
+
+        for num, ingredient in enumerate(ingredients):
+            print(f"      [{num + 1}] {ingredient.name}")
+
+        while True:
+            chosen = main.s_input("Input [#]: ")
+
+            try:
+                chosen = ingredients[int(chosen) - 1]
+
+            except (IndexError, ValueError):
+                continue
+
+            remove_item(chosen.item_id)
+
+            return chosen
 
     @staticmethod
     def make_potion(ingredients):
@@ -430,18 +522,17 @@ class PocketAlchemyLab(NonConsumable):
             "rigid": [missile_potion_1, missile_potion_2, missile_potion_3],
             "flowing": [grenade_potion_1, grenade_potion_2, grenade_potion_3],
             "dark": [greed_potion_1, greed_potion_2, greed_potion_3],
-            "natural": [temperance_potion_1, temperance_potion_2, temperance_potion_3]
+            "natural": [temperance_potion_1, temperance_potion_2, temperance_potion_3],
+            "mathematical": [gamecrash_potion, gamecrash_potion, gamecrash_potion]
         }
 
-        added_flavors = []
-
-        for ing in ingredients:
-            added_flavors.append(ing.flavor)
-            remove_item(ing.item_id)
-
+        added_flavors = [ing.flavor for ing in ingredients]
         chosen_flavor = random.choice(added_flavors)
         chosen_power = added_flavors.count(chosen_flavor)
         chosen_potion = flavor_map[chosen_flavor][chosen_power - 1]
+
+        print(chosen_potion.name)
+
 
 
 class MusicBox(NonConsumable):
@@ -843,6 +934,18 @@ temperance_potion_3 = XPGoldPotion("Temperance Potion III", """\
 A potion that can only be obtained through alchemy. Used on an ally to convert
 200 GP into 200 XP. Made using 'mystic' ingredients.""", 0, 25, -50, 50, "temppot3")
 
+gamecrash_potion = GameCrashPotion("Game Crash Potion", """\
+Instantly crashes the game when used. Speaking of which, why would drink this?
+Maybe you think I'm lying. Maybe you think it will grant you an ultra-powerful
+weapon, or maybe it will make you level 100, or maybe it will instantly defeat
+an important boss coming up. Well you'd be wrong, it really does just crash the
+game. That's all this potion does, you wasted those mathematical ingredients on
+this useless potion. You could have sold those for money, unlike this potion 
+which has no sale value. Instead you make a potion whose only purpose is to
+crash the game. You probably don't believe me, do you? You think I'm lying and 
+you're gonna drink this thing regardless of what I tell you. Well fine, but
+at least save the game before you do, and don't yell at me if you didn't and
+your progress is lost.""", 0, 0, "gamecrashpot")
 
 # Fists exist to prevent bugs caused by not having any weapon equipped. Also the starting
 # weapon for the Monk. Cannot be unequipped, and therefore cannot be sold.
@@ -1550,6 +1653,15 @@ monster_drop_list = {'Shell Mimic': [shell_fragment, water_vial],
                      'Calculator': [calculus_homework, graph_paper, protractor, ruler, textbook]
                      }
 
+# A list of all ingredients, used to power the ingredient_bomb() cheat. Doesn't include the Mathematical potions.
+ingredient_list = [
+    shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bone_bag, monster_skull, living_bark,
+    ripped_cloth, beetle_shell, wing_piece, monster_fang, animal_fur, golem_rock, burnt_ash, antennae,
+    ectoplasm, chain_link, unicorn_horn, demonic_essence, angelic_essence, eye_balls, mysterious_runes,
+    rodent_tail, serpent_tongue, feathers, broken_crystal, slime_vial, blood_vial, water_vial
+]
+
+
 # "gs_stock" is a list of all items in the General Store's stock. The quality of the items
 # sold is determined by the cell, store_stock[category][cell.store_level - 1]
 
@@ -1658,8 +1770,10 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                       [musicbox, musicbox, musicbox,
                        musicbox, musicbox, musicbox],
 
-                      [wood_lckpck, copper_lckpck, iron_lckpck, steel_lckpck,
-                       mythril_lckpck, mythril_lckpck]]}
+                      [wood_lckpck, copper_lckpck, iron_lckpck,
+                       steel_lckpck, mythril_lckpck, mythril_lckpck],
+                      [pocket_lab, pocket_lab, pocket_lab,
+                       pocket_lab, pocket_lab, pocket_lab]]}
 
 
 # As the name suggests, this is a list of every item in the entire game.
@@ -1688,7 +1802,7 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
              no_legs, no_access, attract_potion_1, attract_potion_2, attract_potion_3, repel_potion_1, repel_potion_2,
              repel_potion_3, grenade_potion_1, grenade_potion_2, grenade_potion_3, missile_potion_1, missile_potion_2,
              missile_potion_3, greed_potion_1, greed_potion_2, greed_potion_3, temperance_potion_1, temperance_potion_2,
-             temperance_potion_3]
+             temperance_potion_3, gamecrash_potion]
 
 
 # Writes a list of all collected gems to a .json file. Used when saving the game.
@@ -2243,6 +2357,12 @@ def view_quests():
             print(f'Your party has no {"active" if choice.startswith("a") else "finished"} quests!')
             main.s_input('\nPress enter/return ')
             print('-'*save_load.divider_size)
+
+
+# Cheat used for testing the alchemy kit. Adds 'num' random ingredients to the player's inventory.
+def ingredient_bomb(num):
+    for ingredient in random.sample(ingredient_list, num):
+        add_item(ingredient.item_id)
 
 
 # Searches the all_items list, and returns the item that has the given item_id.
