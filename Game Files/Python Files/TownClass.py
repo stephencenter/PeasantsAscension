@@ -314,7 +314,7 @@ class Town:
             print(f"{item_cat} (Your party has {main.party_info['gp']} GP): ")
 
             for num, item in enumerate(stock[item_cat]):
-                print(f"      [{num + 1}] {item.name} {(padding - len(item.name))*'-'}--> {item.buy} GP")
+                print(f"      [{num + 1}] {item.name} {(padding - len(item.name))*'-'}--> {item.value} GP")
 
             while True:
                 chosen = main.s_input('Input [#] (or type "back"): ').lower()
@@ -342,7 +342,7 @@ class Town:
     @staticmethod
     def buy_yes_or_no(chosen):
         while True:
-            y_n = main.s_input(f"Ya want this {chosen.name}? Will cost ya {chosen.buy} GP. | Y/N: ").lower()
+            y_n = main.s_input(f"Ya want this {chosen.name}? Will cost ya {chosen.value} GP. | Y/N: ").lower()
 
             if y_n.startswith('y'):
                 if main.party_info['gp'] >= chosen.value:
@@ -350,7 +350,7 @@ class Town:
                     items.add_item(chosen.item_id)
 
                     print('-' * save_load.divider_size)
-                    print(f'You purchase the {chosen.name} for {chosen.buy} GP.')
+                    print(f'You purchase the {chosen.name} for {chosen.value} GP.')
                     main.s_input("\nPress enter/return ")
 
                 else:
