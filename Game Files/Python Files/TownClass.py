@@ -345,8 +345,8 @@ class Town:
             y_n = main.s_input(f"Ya want this {chosen.name}? Will cost ya {chosen.buy} GP. | Y/N: ").lower()
 
             if y_n.startswith('y'):
-                if main.party_info['gp'] >= chosen.buy:
-                    main.party_info['gp'] -= chosen.buy
+                if main.party_info['gp'] >= chosen.value:
+                    main.party_info['gp'] -= chosen.value
                     items.add_item(chosen.item_id)
 
                     print('-' * save_load.divider_size)

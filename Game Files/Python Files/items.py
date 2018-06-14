@@ -43,11 +43,10 @@ acquired_gems = []
 class Item:
     # The basic item class. Items are stored in the "inventory" dictionary. All
     # item-subclasses inherit from this class.
-    def __init__(self, name, desc, buy, sell, item_id, imp, ascart, cat):
+    def __init__(self, name, desc, value, item_id, imp, ascart, cat):
         self.name = name
         self.desc = desc
-        self.buy = buy
-        self.sell = sell
+        self.value = value
         self.imp = imp
         self.ascart = ascart
         self.cat = cat
@@ -55,26 +54,28 @@ class Item:
 
     def use_item(self, user):
         print("You can't use this right now.")
-        main.s_input("\nPress enter/return ")
+
+        if main.party_info['gamestate'] != 'battle':
+            main.s_input("\nPress enter/return ")
 
 
 class Consumable(Item):
     # Items that are removed from your inventory after use. Includes Potions, Armor, Weapons, etc.
     # By definition these items are not considered "important", and can be freely sold and thrown away
-    def __init__(self, name, desc, buy, sell, item_id, ascart, cat):
-        super().__init__(name, desc, buy, sell, item_id, False, ascart, cat)
+    def __init__(self, name, desc, value, item_id, ascart, cat):
+        super().__init__(name, desc, value, item_id, False, ascart, cat)
 
 
 class NonConsumable(Item):
     # Items that remain in your inventory after use. Includes tools, ingredients
-    def __init__(self, name, desc, buy, sell, item_id, imp, ascart, cat):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, item_id, imp, ascart, cat):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
 
 class HealthManaPotion(Consumable):
     # Items that restore your HP, MP, or both
-    def __init__(self, name, desc, buy, sell, item_id, cat='consumables', heal=0, mana=0, ascart='Potion'):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, item_id, cat='consumables', heal=0, mana=0, ascart='Potion'):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.heal = heal
         self.mana = mana
 
@@ -101,8 +102,8 @@ class HealthManaPotion(Consumable):
 
 
 class StatusPotion(Consumable):
-    def __init__(self, name, desc, buy, sell, status, item_id, ascart='Potion', cat='consumables'):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, status, item_id, ascart='Potion', cat='consumables'):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.status = status
 
     def use_item(self, user):
@@ -127,35 +128,35 @@ class StatusPotion(Consumable):
 
 
 class AttractPotion(Consumable):
-    def __init__(self, name, desc, buy, sell, num_steps, m_count, item_id, ascart="Potion", cat="consumables"):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, num_steps, m_count, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.num_steps = num_steps
         self.m_count = m_count
 
 
 class RepelPotion(Consumable):
-    def __init__(self, name, desc, buy, sell, num_steps, item_id, ascart="Potion", cat="consumables"):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, num_steps, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.num_steps = num_steps
 
 
 class BombPotion(Consumable):
-    def __init__(self, name, desc, buy, sell, multitarget, damage, item_id, ascart="Potion", cat="consumables"):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, multitarget, damage, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.multitarget = multitarget
         self.damage = damage
 
 
 class XPGoldPotion(Consumable):
-    def __init__(self, name, desc, buy, sell, gold_change, xp_change, item_id, ascart="Potion", cat="consumables"):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, gold_change, xp_change, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.gold_change = gold_change
         self.xp_change = xp_change
 
 
 class GameCrashPotion(Consumable):
-    def __init__(self, name, desc, buy, sell, item_id, ascart="Potion", cat="consumables"):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, item_id, ascart="Potion", cat="consumables"):
+        super().__init__(name, desc, value, item_id, ascart, cat)
 
     def use_item(self, user):
         raise Exception("I told you this would crash the game.")
@@ -163,8 +164,8 @@ class GameCrashPotion(Consumable):
 
 class Weapon(Consumable):
     # Items that increase your damage by a percentage.
-    def __init__(self, name, desc, buy, sell, power, type_, class_, ascart, item_id, element='none', cat='weapons'):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, power, type_, class_, ascart, item_id, element='none', cat='weapons'):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.power = power
         self.type_ = type_
         self.class_ = class_
@@ -195,8 +196,8 @@ class Weapon(Consumable):
 
 class Armor(Consumable):
     # Items that give the player a percent increase in defense when hit.
-    def __init__(self, name, desc, buy, sell, defense, part, class_, ascart, item_id, cat='armor'):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, defense, part, class_, ascart, item_id, cat='armor'):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.defense = defense
         self.part = part
         self.class_ = class_
@@ -223,15 +224,15 @@ class Armor(Consumable):
 
 
 class Accessory(Consumable):
-    def __init__(self, name, desc, buy, sell, item_id, ascart='Amulet', cat='access'):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, item_id, ascart='Amulet', cat='access'):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.part = 'access'
 
 
 class ElementAccessory(Accessory):
     # Gives the player an element used when taking damage
-    def __init__(self, name, desc, buy, sell, def_element, item_id, ascart='Amulet', cat='access'):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, def_element, item_id, ascart='Amulet', cat='access'):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.def_element = def_element
 
     def use_item(self, user):
@@ -243,15 +244,15 @@ class ElementAccessory(Accessory):
 
 
 class ActionAccessory(Consumable):
-    def __init__(self, name, desc, buy, sell, class_, ap_gain, item_id, ascart='Amulet', cat='access'):
-        super().__init__(name, desc, buy, sell, item_id, ascart, cat)
+    def __init__(self, name, desc, value, class_, ap_gain, item_id, ascart='Amulet', cat='access'):
+        super().__init__(name, desc, value, item_id, ascart, cat)
         self.class_ = class_
         self.ap_gain = ap_gain
 
 
 class Shovel(NonConsumable):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Shovel'):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, item_id, cat='tools', imp=True, ascart='Shovel'):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         if main.party_info['gamestate'] == 'town':
@@ -291,8 +292,8 @@ class Shovel(NonConsumable):
 
 
 class FastTravelAtlas(NonConsumable):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=True, ascart='Map'):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, item_id, cat='tools', imp=True, ascart='Map'):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         if main.party_info['gamestate'] == 'town':
@@ -390,14 +391,14 @@ class FastTravelAtlas(NonConsumable):
 
 
 class LockpickKit(NonConsumable):
-    def __init__(self, name, desc, buy, sell, power, item_id, imp=False, ascart='Lockpick', cat='tools'):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, power, item_id, imp=False, ascart='Lockpick', cat='tools'):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
         self.power = power
 
 
 class MonsterEncyclopedia(NonConsumable):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, item_id, cat='tools', imp=False, ascart='Book'):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         print(battle.turn_counter)
@@ -421,8 +422,8 @@ Weakness: {m_w}""")
 
 
 class PocketAlchemyLab(NonConsumable):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, item_id, cat='tools', imp=False, ascart='Book'):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         chosen_ingredients = []
@@ -531,13 +532,25 @@ class PocketAlchemyLab(NonConsumable):
         chosen_power = added_flavors.count(chosen_flavor)
         chosen_potion = flavor_map[chosen_flavor][chosen_power - 1]
 
-        print(chosen_potion.name)
+        print("Brewing...")
+        sounds.potion_brew.play()
+        main.smart_sleep(1)
+        print("Brewing...")
+        sounds.potion_brew.play()
+        main.smart_sleep(1)
+        print("Brewing...")
+        sounds.potion_brew.play()
+        main.smart_sleep(1)
 
+        sounds.unlock_chest.play()
+        add_item(chosen_potion.item_id)
+        print(f"Success! You brewed a {chosen_potion.name}!")
+        main.s_input("\nPress enter/return ")
 
 
 class MusicBox(NonConsumable):
-    def __init__(self, name, desc, buy, sell, item_id, cat='tools', imp=False, ascart='Book'):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, item_id, cat='tools', imp=False, ascart='Book'):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
     def use_item(self, user):
         print(f"Musicbox is currently {'on' if main.party_info['musicbox_isplaying'] else 'off'}")
@@ -803,8 +816,8 @@ class MusicBox(NonConsumable):
 
 
 class Ingredient(NonConsumable):
-    def __init__(self, name, desc, buy, sell, flavor, item_id, ascart='Misc', cat='misc', imp=False):
-        super().__init__(name, desc, buy, sell, item_id, imp, ascart, cat)
+    def __init__(self, name, desc, value, flavor, item_id, ascart='Misc', cat='misc', imp=False):
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
         self.flavor = flavor
 
 
@@ -812,127 +825,127 @@ class Ingredient(NonConsumable):
 # Potions -- Health
 s_potion = HealthManaPotion('Weak Potion',
                             'A small potion that restores 15 HP when consumed.',
-                            15, 5, "s_potion", heal=15)
+                            15, "s_potion", heal=15)
 m_potion = HealthManaPotion('Basic Potion',
                             'A regular potion that restores 45 HP when consumed.',
-                            30, 10, "m_potion", heal=45)
+                            30, "m_potion", heal=45)
 l_potion = HealthManaPotion('Strong Potion',
                             'A powerful potion that restores 100 HP when consumed.',
-                            60, 20, "l_potion", heal=100)
+                            60, "l_potion", heal=100)
 x_potion = HealthManaPotion('Super Potion',
                             'A super powerful potion that restores 200 HP when consumed.',
-                            120, 40, "x_potion", heal=200)
+                            120, "x_potion", heal=200)
 
 # Potions -- Mana
 s_elixir = HealthManaPotion('Basic Elixir',
                             'A generic elixir that restores 15 MP when consumed.',
-                            10, 3, "s_elixir", mana=10, ascart='Elixir')
+                            10, "s_elixir", mana=10, ascart='Elixir')
 m_elixir = HealthManaPotion('Enhanced Elixir',
                             'A more potent elixir that restores 45 MP when consumed.',
-                            25, 8, "m_elixir", mana=35, ascart='Elixir')
+                            20, "m_elixir", mana=35, ascart='Elixir')
 l_elixir = HealthManaPotion('Grand Elixir',
                             'A powerful elixir that restores 100 MP when consumed.',
-                            50, 17, "l_elixir", mana=75, ascart='Elixir')
+                            40, "l_elixir", mana=75, ascart='Elixir')
 x_elixir = HealthManaPotion('Extreme Elixir',
                             'A super powerful elixir that restores 175 MP when consumed.',
-                            100, 35, "x_elixir", mana=175, ascart='Elixir')
+                            80, "x_elixir", mana=175, ascart='Elixir')
 
 # Potions -- Both
 s_rejuv = HealthManaPotion('Minor Rejuvenation Potion',
                            'A basic mixture that restores 15 HP and 15 MP when consumed.',
-                           35, 12, "s_rejuv", heal=15, mana=15, ascart='Rejuv')
+                           30, "s_rejuv", heal=15, mana=15, ascart='Rejuv')
 
 m_rejuv = HealthManaPotion('Refined Rejuvenation Potion',
                            'A higher quality mixture that restores 45 HP and 45 MP when consumed.',
-                           65, 22, "m_rejuv", heal=45, mana=45, ascart='Rejuv')
+                           60, 22, "m_rejuv", heal=45, mana=45, ascart='Rejuv')
 
 l_rejuv = HealthManaPotion('Mighty Rejuvenation Potion',
                            'A super powerful mixture that restores 100 HP and 100 MP when consumed.',
-                           225, 80, "l_rejuv", heal=100, mana=100, ascart='Rejuv')
+                           120, 80, "l_rejuv", heal=100, mana=100, ascart='Rejuv')
 
 # Potions - Status
 silence_potion = StatusPotion('Potion of Allowing Speech',
                               "A potion designed to enable the usage of damaged vocal chords.",
-                              50, 25, 'silenced', "silence_pot", ascart='Status')
+                              50, 'silenced', "silence_pot", ascart='Status')
 poison_potion = StatusPotion('Potion of Curing Disease',
                              'A potion designed to cure even the most deadly of illnesses.',
-                             50, 25, 'poisoned', "poison_pot", ascart='Status')
+                             50, 'poisoned', "poison_pot", ascart='Status')
 weakness_potion = StatusPotion('Potion of Regaining Strength',
                                'A potion designed to help regain lost muscle-mass and stamina.',
-                               50, 25, 'weakened', "weakness_pot", ascart='Status')
+                               50, 'weakened', "weakness_pot", ascart='Status')
 blindness_potion = StatusPotion('Potion of Enabling Sight',
                                 'A potion designed to help the blind regain their eyesight.',
-                                50, 25, 'blinded', "blindness_pot", ascart='Status')
+                                50, 'blinded', "blindness_pot", ascart='Status')
 paralyzation_potion = StatusPotion('Potion of Inducing Motion',
                                    'A potion designed to cure minor paralysis in most of the body.',
-                                   50, 25, 'paralyzed', "paralyze_pot", ascart='Status')
+                                   50, 'paralyzed', "paralyze_pot", ascart='Status')
 
 # Potions - Alchemy
 attract_potion_1 = AttractPotion("Attract Potion I", """\
 A potion that can only be obtained through alchemy. Guarantees a one-monster
 encounter for the next 3 steps on the overworld. Some areas don't
-have monster spawns. Made using 'strange' ingredients.""", 0, 25, 3, 1, "attractpot1")
+have monster spawns. Made using 'strange' ingredients.""", 100, 3, 1, "attractpot1")
 attract_potion_2 = AttractPotion("Attract Potion II", """\
 A potion that can only be obtained through alchemy. Guarantees a two-monster
 encounter for the next 3 steps on the overworld. Some areas don't
-have monster spawns. Made using 'strange' ingredients.""", 0, 25, 3, 2, "attractpot2")
+have monster spawns. Made using 'strange' ingredients.""", 100, 3, 2, "attractpot2")
 attract_potion_3 = AttractPotion("Attract Potion III", """\
 A potion that can only be obtained through alchemy. Guarantees a three-monster
 encounter for the next 3 steps on the overworld. Some areas don't
-have monster spawns. Made using 'strange' ingredients.""", 0, 25, 3, 3, "attractpot3")
+have monster spawns. Made using 'strange' ingredients.""", 100, 3, 3, "attractpot3")
 
 repel_potion_1 = RepelPotion("Repel Potion I", """\
 A potion that can only be obtained through alchemy. Prevents monster encounters
 on the overworld for 10 steps. Bosses can still be fought while this potion is
-active. Made using 'natural' ingredients.""", 0, 25, 10, "repelpot1")
+active. Made using 'natural' ingredients.""", 100, 10, "repelpot1")
 repel_potion_2 = RepelPotion("Repel Potion II", """\
 A potion that can only be obtained through alchemy. Prevents monster encounters
 on the overworld for 15 steps. Bosses can still be fought while this potion is
-active. Made using 'natural' ingredients.""", 0, 25, 15, "repelpot2")
+active. Made using 'natural' ingredients.""", 100, 15, "repelpot2")
 repel_potion_3 = RepelPotion("Repel Potion III", """\
 A potion that can only be obtained through alchemy. Prevents monster encounters
 on the overworld for 20 steps. Bosses can still be fought while this potion is
-active. Made using 'natural' ingredients.""", 0, 25, 20, "repelpot3")
+active. Made using 'natural' ingredients.""", 100, 20, "repelpot3")
 
 grenade_potion_1 = BombPotion("Grenade Potion I", """\
 A potion that can only be obtained through alchemy. Deals 20 physical damage to
-all enemies in the battle. Made using 'flowing' ingredients.""", 0, 25, True, 20, "grenadepot1")
+all enemies in the battle. Made using 'flowing' ingredients.""", 100, True, 20, "grenadepot1")
 grenade_potion_2 = BombPotion("Grenade Potion II", """\
 A potion that can only be obtained through alchemy. Deals 40 physical damage to
-all enemies in the battle. Made using 'flowing' ingredients.""", 0, 25, True, 40, "grenadepot2")
+all enemies in the battle. Made using 'flowing' ingredients.""", 100, True, 40, "grenadepot2")
 grenade_potion_3 = BombPotion("Grenade Potion III", """\
 A potion that can only be obtained through alchemy. Deals 80 physical damage to
-all enemies in the battle. Made using 'flowing' ingredients.""", 0, 25, True, 80, "grenadepot3")
+all enemies in the battle. Made using 'flowing' ingredients.""", 100, True, 80, "grenadepot3")
 
 missile_potion_1 = BombPotion("Missile Potion I", """\
 A potion that can only be obtained through alchemy. Deals 40 physical damage to
-a single target enemy. Made using 'rigid' ingredients.""", 0, 25, False, 40, "missilepot1")
+a single target enemy. Made using 'rigid' ingredients.""", 100, False, 40, "missilepot1")
 missile_potion_2 = BombPotion("Missile Potion II", """\
 A potion that can only be obtained through alchemy. Deals 80 physical damage to
-a single target enemy. Made using 'rigid' ingredients.""", 0, 25, False, 80, "missilepot2")
+a single target enemy. Made using 'rigid' ingredients.""", 100, False, 80, "missilepot2")
 missile_potion_3 = BombPotion("Missile Potion III", """\
 A potion that can only be obtained through alchemy. Deals 160 physical damage to
-a single target enemy. Made using 'rigid' ingredients.""", 0, 25, False, 160, "missilepot3")
+a single target enemy. Made using 'rigid' ingredients.""", 100, False, 160, "missilepot3")
 
 greed_potion_1 = XPGoldPotion("Greed Potion I", """\
 A potion that can only be obtained through alchemy. Used on an ally to convert 
-50 XP into 50 GP. Made using 'dark' ingredients.""", 0, 25, 50, -50, "greedpot1")
+50 XP into 50 GP. Made using 'dark' ingredients.""", 100, 50, -50, "greedpot1")
 greed_potion_2 = XPGoldPotion("Greed Potion II", """\
 A potion that can only be obtained through alchemy. Used on an ally to convert 
-100 XP into 100 GP. Made using 'dark' ingredients.""", 0, 25, 100, -100, "greedpot2")
+100 XP into 100 GP. Made using 'dark' ingredients.""", 100, 100, -100, "greedpot2")
 greed_potion_3 = XPGoldPotion("Greed Potion III", """\
 A potion that can only be obtained through alchemy. Used on an ally to convert 
-200 XP into 200 GP. Made using 'dark' ingredients.""", 0, 25, 200, -200, "greedpot3")
+200 XP into 200 GP. Made using 'dark' ingredients.""", 100, 200, -200, "greedpot3")
 
 temperance_potion_1 = XPGoldPotion("Temperance Potion I", """\
 A potion that can only be obtained through alchemy. Used on an ally to convert
-50 GP into 50 XP. Made using 'mystic' ingredients.""", 0, 25, -50, 50, "temppot1")
+50 GP into 50 XP. Made using 'mystic' ingredients.""", 100, -50, 50, "temppot1")
 temperance_potion_2 = XPGoldPotion("Temperance Potion II", """\
 A potion that can only be obtained through alchemy. Used on an ally to convert
-100 GP into 100 XP. Made using 'mystic' ingredients.""", 0, 25, -50, 50, "temppot2")
+100 GP into 100 XP. Made using 'mystic' ingredients.""", 100, -50, 50, "temppot2")
 temperance_potion_3 = XPGoldPotion("Temperance Potion III", """\
 A potion that can only be obtained through alchemy. Used on an ally to convert
-200 GP into 200 XP. Made using 'mystic' ingredients.""", 0, 25, -50, 50, "temppot3")
+200 GP into 200 XP. Made using 'mystic' ingredients.""", 100, -50, 50, "temppot3")
 
 gamecrash_potion = GameCrashPotion("Game Crash Potion", """\
 Instantly crashes the game when used. Speaking of which, why would drink this?
@@ -945,451 +958,450 @@ which has no sale value. Instead you make a potion whose only purpose is to
 crash the game. You probably don't believe me, do you? You think I'm lying and 
 you're gonna drink this thing regardless of what I tell you. Well fine, but
 at least save the game before you do, and don't yell at me if you didn't and
-your progress is lost.""", 0, 0, "gamecrashpot")
+your progress is lost.""", 0, "gamecrashpot")
 
 # Fists exist to prevent bugs caused by not having any weapon equipped. Also the starting
 # weapon for the Monk. Cannot be unequipped, and therefore cannot be sold.
 fists = Weapon('Fists',
-               """The oldest weapon known to man (No damage bonus)""",
-               0, 0, 0, 'melee', [], 'Fists', "weapon_fist")
+               """The oldest weapon known to man (No damage bonus)""", 0, 0, 'melee', [], 'Fists', "weapon_fist")
 
 # These exist for the same reason as fists. They are only available when unequipping actual
 # armor and accessories. Cannot be unequipped, and therefore cannot be sold.
 no_head = Armor('None',
                 "You should probably get some head armor (No defense bonus).",
-                0, 0, 0, 'head', [], 'misc', 'no_head')
+                0, 0, 'head', [], 'misc', 'no_head')
 no_body = Armor('None',
                 "You should probably get some body armor (No defense bonus).",
-                0, 0, 0, 'body', [], 'misc', 'no_body')
+                0, 0, 'body', [], 'misc', 'no_body')
 no_legs = Armor('None',
                 "You should probably get some leg armor (No defense bonus).",
-                0, 0, 0, 'legs', [], 'misc', 'no_legs')
+                0, 0, 'legs', [], 'misc', 'no_legs')
 no_access = Armor('None',
                   "You should probably get an accessory (No effects).",
-                  0, 0, 0, 'access', [], 'misc', 'no_access')
+                  0, 0, 'access', [], 'misc', 'no_access')
 
 # Weapons -- Warrior
 wdn_sht = Weapon('Wooden Shortsword',
                  'A small sword carved from an oak branch (+5% Damage)',
-                 10, 5, 0.05, 'melee', ['warrior'], 'Short Sword', "wdn_sht")
+                 10, 0.05, 'melee', ['warrior'], 'Short Sword', "wdn_sht")
 
 bnz_swd = Weapon('Bronze Sword',
                  'A light yet sturdy sword smelted from bronze (+10% Damage)',
-                 50, 15, 0.1, 'melee', ['warrior'], 'Sword', "bnz_swd")
+                 100, 0.1, 'melee', ['warrior'], 'Sword', "bnz_swd")
 en_bnz_swd = Weapon('Enhanced Bronze Sword',
                     'Even better than your typical Bronze Sword (+25% Damage)',
-                    100, 25, 0.25, 'melee', ['warrior'], 'Sword', "en_bnz_swd")
+                    250, 0.25, 'melee', ['warrior'], 'Sword', "en_bnz_swd")
 
 stl_spr = Weapon('Steel Spear',
                  'A fair-sized spear crafted from well made steel (+40% Damage)',
-                 225, 75, 0.4, 'melee', ['warrior'], 'Spear', "stl_spr")
+                 600, 0.4, 'melee', ['warrior'], 'Spear', "stl_spr")
 en_stl_spr = Weapon('Enhanced Steel Spear',
                     'Even better than your typical Steel Spear (+60% Damage)',
-                    350, 125, 0.6, 'melee', ['warrior'], 'Spear', "en_stl_spr")
+                    900, 0.6, 'melee', ['warrior'], 'Spear', "en_stl_spr")
 
 titan_axe = Weapon('Titanium Battleaxe',
                    'A heavy and powerful axe made of high quality Titanium (+80% Damage)',
-                   500, 225, 0.8, 'melee', ['warrior'], 'Axe', "titan_axe")
+                   1200, 0.8, 'melee', ['warrior'], 'Axe', "titan_axe")
 en_titan_axe = Weapon('Enhanced Titanium Battleaxe',
                       'Even better than your typical Titanium Battleaxe (+100% Damage)',
-                      750, 325, 1, 'melee', ['warrior'], 'Axe', "en_titan_axe")
+                      1500, 1, 'melee', ['warrior'], 'Axe', "en_titan_axe")
 
 # Weapons -- Assassin
 stn_dag = Weapon('Stone Dagger',
                  'A crude yet effective knife carved from a light stone (+5% Damage)',
-                 10, 5, 0.05, 'melee', ['assassin'], 'Dagger', "stn_dag")
+                 10, 0.05, 'melee', ['assassin'], 'Dagger', "stn_dag")
 
 ser_knf = Weapon('Serrated Knife',
                  'A durable knife made of iron, with one side made jagged (+10% Damage)',
-                 50, 15, 0.1, 'melee', ['assassin'], 'Dagger', "ser_knf")
+                 100, 0.1, 'melee', ['assassin'], 'Dagger', "ser_knf")
 en_ser_knf = Weapon('Enhanced Serrated Knife',
                     'Even better than your typical Serrated Knife (+25% Damage)',
-                    100, 25, 0.25, 'melee', ['assassin'], 'Dagger', "en_ser_knf")
+                    250, 0.25, 'melee', ['assassin'], 'Dagger', "en_ser_knf")
 
 stiletto = Weapon('Stiletto',
                   'A long, cross-shaped knife perfect for "removing" your enemies (+40% Damage)',
-                  225, 75, 0.4, 'melee', ['assassin'], 'Stiletto', "stiletto")
+                  600, 0.4, 'melee', ['assassin'], 'Stiletto', "stiletto")
 en_stiletto = Weapon('Enhanced Stiletto',
                      'Even better than your typical Stiletto (+60% Damage)',
-                     350, 125, 0.6, 'melee', ['assassin'], 'Stiletto', "en_stiletto")
+                     900, 0.6, 'melee', ['assassin'], 'Stiletto', "en_stiletto")
 
 myth_sb = Weapon('Mythril Shortblade',
                  'A knife made of a rare and powerful material (+80% Damage)',
-                 500, 225, 0.8, 'melee', ['assassin'], 'Short Sword', "myth_sb")
+                 1200, 0.8, 'melee', ['assassin'], 'Short Sword', "myth_sb")
 en_myth_sb = Weapon('Enhanced Mythril Shortblade',
                     'Even better than your typical Mythril Shortblade (+100% Damage)',
-                    750, 325, 1, 'melee', ['assassin'], 'Short Sword', "en_myth_sb")
+                    1500, 1, 'melee', ['assassin'], 'Short Sword', "en_myth_sb")
 
 # Weapons -- Ranger
 slg_sht = Weapon('Sling Shot',
                  'A weapon that could scare even the mightiest of tin-cans (+5% Damage)',
-                 10, 5, 0.05, 'ranged', ['ranger'], 'Sling Shot', "slg_sht")
+                 10, 0.05, 'ranged', ['ranger'], 'Sling Shot', "slg_sht")
 
 sht_bow = Weapon('Short Bow',
                  "A bow of great craftsmanship. It's kinda small, though (+10% Damage)",
-                 50, 15, 0.10, 'ranged', ['ranger'], 'Bow', "sht_bow")
+                 100, 0.10, 'ranged', ['ranger'], 'Bow', "sht_bow")
 en_sht_bow = Weapon('Enhanced Short Bow',
                     " Even better than your typical Short Bow (+25% Damage)",
-                    100, 25, 0.25, 'ranged', ['ranger'], 'Bow', "en_sht_bow")
+                    250, 0.25, 'ranged', ['ranger'], 'Bow', "en_sht_bow")
 
 lng_bow = Weapon('Long Bow',
                  'A much more impressive bow capable of accuracy at long distances (+40% Damage)',
-                 225, 75, 0.4, 'ranged', ['ranger'], 'Bow', "lng_bow")
+                 600, 0.4, 'ranged', ['ranger'], 'Bow', "lng_bow")
 en_lng_bow = Weapon('Enhanced Long Bow',
                     'Even better than your typical Long Bow (+60% Damage)',
-                    350, 125, 0.6, 'ranged', ['ranger'], 'Bow', "en_lng_bow")
+                    900, 0.6, 'ranged', ['ranger'], 'Bow', "en_lng_bow")
 
 ash_cbow = Weapon('Ashen Crossbow',
                   'A beautifully-crafted crossbow made from the wood of an ash tree. (+80% Damage)',
-                  500, 225, 0.8, 'ranged', ['ranger'], 'Crossbow', "ash_cbow")
+                  1200, 0.8, 'ranged', ['ranger'], 'Crossbow', "ash_cbow")
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
                      'Even better than your typical Ashen Crossbow (+100% Damage)',
-                     750, 325, 1, 'ranged', ['ranger'], 'Crossbow', "en_ash_cbow")
+                     1500, 1, 'ranged', ['ranger'], 'Crossbow', "en_ash_cbow")
 
 # Weapons -- Mage
 mag_twg = Weapon('Magical Twig',
                  'A small stick with basic magical properties (+5% Damage)',
-                 10, 5, 0.05, 'ranged', ['mage'], 'Twig', "mag_twg")
+                 10, 0.05, 'ranged', ['mage'], 'Twig', "mag_twg")
 
 oak_stf = Weapon('Oak Staff',
                  'A wooden staff imbued with weak magical abilities (+10% Damage)',
-                 50, 15, 0.1, 'ranged', ['mage'], 'Staff', "oak_stf")
+                 100, 0.1, 'ranged', ['mage'], 'Staff', "oak_stf")
 en_oak_stf = Weapon('Enhanced Oak Staff',
                     'Even better than your typical Oak Staff (+15% Damage)',
-                    100, 25, 0.15, 'ranged', ['mage'], 'Staff', "en_oak_stf")
+                    250, 0.15, 'ranged', ['mage'], 'Staff', "en_oak_stf")
 
 arc_spb = Weapon('Arcane Spellbook',
                  'An intermediate spellbook for combat purposes (+20% Damage)',
-                 225, 75, 0.2, 'ranged', ['mage'], 'Book', "arc_spb")
+                 600, 0.2, 'ranged', ['mage'], 'Book', "arc_spb")
 en_arc_spb = Weapon('Enhanced Arcane Spellbook',
                     'Even better than your typical Arcane Spellbook (+30% Damage)',
-                    350, 125, 0.3, 'ranged', ['mage'], 'Book', "en_arc_spb")
+                    900, 0.3, 'ranged', ['mage'], 'Book', "en_arc_spb")
 
 rnc_stf = Weapon('Runic Staff',
                  'A powerful staff enchanted with ancient magic (+40% Damage)',
-                 500, 225, 0.4, 'ranged', ['mage'], 'Staff', "rnc_stf")
+                 1200, 0.4, 'ranged', ['mage'], 'Staff', "rnc_stf")
 en_rnc_stf = Weapon('Enhanced Runic Staff',
                     'Even better than your typical Runic Staff (+50% Damage)',
-                    750, 325, 0.5, 'ranged', ['mage'], 'Staff', "en_rnc_stf")
+                    1500, 0.5, 'ranged', ['mage'], 'Staff', "en_rnc_stf")
 
 # Weapons -- Paladin
 rbr_mlt = Weapon('Rubber Mallet',
                  'This can barely hammer nails, what do you expect to kill with it? (+5% Damage)',
-                 10, 5, 0.05, 'melee', ['paladin'], 'Hammer', "rbr_mlt")
+                 10, 0.05, 'melee', ['paladin'], 'Hammer', "rbr_mlt")
 
 holy_mace = Weapon('Holy Mace',
                    'An well-made iron mace imbued with the power of the heavens (+10% Damage)',
-                   50, 15, 0.1, 'melee', ['paladin'], 'Mace', "holy_mace")
+                   100, 0.1, 'melee', ['paladin'], 'Mace', "holy_mace")
 en_holy_mace = Weapon('Enhanced Holy Mace',
                       'Even better than your typical Holy Mace (+25% Damage)',
-                      100, 25, 0.25, 'melee', ['paladin'], 'Mace', "en_holy_mace")
+                      250, 0.25, 'melee', ['paladin'], 'Mace', "en_holy_mace")
 
 hmr_of_mgt = Weapon('Hammer of Might',
                     'A hammer often used by holy warriors to smash their foes (+40% Damage)',
-                    225, 75, 0.4, 'melee', ['paladin'], 'Hammer', "hmr_of_mgt")
+                    600, 0.4, 'melee', ['paladin'], 'Hammer', "hmr_of_mgt")
 en_hmr_of_mgt = Weapon('Enhanced Hammer of Might',
                        'Even better than your typical Hammer of Might (+60% Damage)',
-                       350, 125, 0.6, 'melee', ['paladin'], 'Hammer', "en_hmr_of_mgt")
+                       900, 0.6, 'melee', ['paladin'], 'Hammer', "en_hmr_of_mgt")
 
-ngt_bane = Weapon("Night's Bane",  # Reference to Terraria's "Light's Bane"
+ngt_bane = Weapon("Night's Bane",
                   'A forbidden hammer used throughout history to crush unholy creatures (+80% Damage)',
-                  500, 225, 0.8, 'melee', ['paladin'], 'Hammer', "ngt_bane")
+                  1200, 0.8, 'melee', ['paladin'], 'Hammer', "ngt_bane")
 en_ngt_bane = Weapon("Enhanced Night's Bane",
                      "Even better than your typical Night's Bane (+100% Damage)",
-                     750, 325, 1, 'melee', ['paladin'], 'Hammer', "en_ngt_bane")
+                     1500, 1, 'melee', ['paladin'], 'Hammer', "en_ngt_bane")
 
 # Weapon -- Monk
 brass_kncls = Weapon('Brass Knuckles',
                      'A brass adornment for your knuckles providing extra punching power (+10% Damage)',
-                     50, 15, 0.1, 'melee', ['monk'], 'Knuckles', "brass_kncls")
+                     100, 0.1, 'melee', ['monk'], 'Knuckles', "brass_kncls")
 en_brass_kncls = Weapon('Enhanced Brass Knuckles',
                         'Even better than your typical Brass Knuckles (+25% Damage)',
-                        100, 25, 0.25, 'melee', ['monk'], 'Knuckles', "en_brass_kncls")
+                        250, 0.25, 'melee', ['monk'], 'Knuckles', "en_brass_kncls")
 
 bladed_gloves = Weapon('Bladed Gloves',
                        'Leather gloves with sturdy steel blades protruding from them (+40% Damage)',
-                       225, 75, 0.4, 'melee', ['monk'], 'Gloves', "bladed_gloves")
+                       600, 0.4, 'melee', ['monk'], 'Gloves', "bladed_gloves")
 en_bladed_gloves = Weapon('Enhanced Bladed Gloves',
                           'Even better than your typical Bladed Gloves (+60% Damage)',
-                          350, 125, 0.6, 'melee', ['monk'], 'Gloves', "en_bladed_gloves")
+                          900, 0.6, 'melee', ['monk'], 'Gloves', "en_bladed_gloves")
 
 lead_bg = Weapon('Lead-Weighted Mitts',
                  'Weighted with 5 pounds of lead and tipped with steel blades (+80% Damage)',
-                 500, 225, 0.8, 'melee', ['monk'], 'Gloves', "lead_bg")
+                 1200, 0.8, 'melee', ['monk'], 'Gloves', "lead_bg")
 en_lead_bg = Weapon('Enhanced Lead Mitts',
                     'Even better than your typical Lead-Weighted Mitts (+100% Damage)',
-                    750, 325, 1, 'melee', ['monk'], 'Gloves', "en_lead_bg")
+                    1500, 1, 'melee', ['monk'], 'Gloves', "en_lead_bg")
 
 # Starting Armor (Useless)
 straw_hat = Armor('Straw Hat',
                   "Not much of a helmet, huh? (No defense bonus)",
-                  0, 2, 0, 'head', [], 'Hat', "straw_hat")
+                  10, 0, 'head', [], 'Hat', "straw_hat")
 cotton_shirt = Armor('Cotton Shirt',
                      "All torn up and stained... (No defense bonus)",
-                     0, 2, 0, 'body', [], 'Shirt', "cotton_shirt")
+                     10, 0, 'body', [], 'Shirt', "cotton_shirt")
 sunday_trousers = Armor('Sunday Trousers',
                         "At least they look nice... (No defense bonus)",
-                        0, 2, 0, 'legs', [], 'Pants', "sunday_trousers")
+                        10, 0, 'legs', [], 'Pants', "sunday_trousers")
 
 # Armor -- Warrior + Paladin -- Weak
 bnz_hlm = Armor('Bronze Helmet',
                 'A simple helmet crafted from bronze (+5% Defense)',
-                25, 10, 0.05, 'head', ['warrior', 'paladin'], 'Helmet', "bnz_hlm")
+                100, 0.05, 'head', ['warrior', 'paladin'], 'Helmet', "bnz_hlm")
 bnz_cst = Armor('Bronze Chestpiece',
                 'Simple chest armor crafted from bronze (+10% Defense)',
-                25, 10, 0.1, 'body', ['warrior', 'paladin'], 'Shirt', "bnz_cst")
+                100, 0.1, 'body', ['warrior', 'paladin'], 'Shirt', "bnz_cst")
 bnz_leg = Armor('Bronze Greaves',
                 'Simple leg armor crafted from bronze (+5% Defense)',
-                25, 10, 0.05, 'legs', ['warrior', 'paladin'], 'Pants', "bnz_leg")
+                100, 0.05, 'legs', ['warrior', 'paladin'], 'Pants', "bnz_leg")
 
 en_bnz_hlm = Armor('Enhanced Bronze Helmet',
                    'Even better than your typical Bronze Helmet (+10% Defense)',
-                   75, 35, 0.1, 'head', ['warrior', 'paladin'], 'Helmet', "en_bnz_hlm")
+                   250, 0.1, 'head', ['warrior', 'paladin'], 'Helmet', "en_bnz_hlm")
 en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
                    'Even better than your typical Bronze Chestpiece (+15% Defense)',
-                   75, 35, 0.15, 'body', ['warrior', 'paladin'], 'Shirt', "en_bnz_cst")
+                   250, 0.15, 'body', ['warrior', 'paladin'], 'Shirt', "en_bnz_cst")
 en_bnz_leg = Armor('Enhanced Bronze Greaves',
                    'Even better than your typical Bronze Greaves (+10% Defense)',
-                   75, 35, 0.1, 'legs', ['warrior', 'paladin'], 'Pants', "en_bnz_leg")
+                   250, 0.1, 'legs', ['warrior', 'paladin'], 'Pants', "en_bnz_leg")
 
 # Armor -- Mage + Monk -- Weak
 wiz_hat = Armor('Silk Hat',
                 'A silk hat woven with magic thread (+3% Defense)',
-                25, 10, 0.03, 'head', ['mage', 'monk'], 'Wizard Hat', "wiz_hat")
+                100, 0.03, 'head', ['mage', 'monk'], 'Wizard Hat', "wiz_hat")
 wiz_rob = Armor('Silk Robe',
                 'A silk robe woven with magic thread (+5% Defense)',
-                25, 10, 0.05, 'body', ['mage', 'monk'], 'Robe', "wiz_rob")
+                100, 0.05, 'body', ['mage', 'monk'], 'Robe', "wiz_rob")
 wiz_gar = Armor('Silk Garments',
                 'Silk garments woven with magic thread (+3% Defense)',
-                25, 10, 0.03, 'legs', ['mage', 'monk'], 'Robe Pants', "wiz_gar")
+                100, 0.03, 'legs', ['mage', 'monk'], 'Robe Pants', "wiz_gar")
 
 en_wiz_hat = Armor('Enhanced Silk Hat',
                    'Even better than your typical Wizard Hat (+5% Defense)',
-                   75, 35, 0.05, 'head', ['mage', 'monk'], 'Wizard Hat', "en_wiz_hat")
+                   250, 0.05, 'head', ['mage', 'monk'], 'Wizard Hat', "en_wiz_hat")
 en_wiz_rob = Armor('Enhanced Silk Robe',
                    'Even better than your typical Wizard Robe (+10% Defense)',
-                   75, 35, 0.1, 'body', ['mage', 'monk'], 'Robe', "en_wiz_rob")
+                   250, 0.1, 'body', ['mage', 'monk'], 'Robe', "en_wiz_rob")
 en_wiz_gar = Armor('Enhanced Silk Garments',
                    'Even better than your typical Wizard Garments (+5% Defense)',
-                   75, 35, 0.05, 'legs', ['mage', 'monk'], 'Robe Pants', "en_wiz_gar")
+                   250, 0.05, 'legs', ['mage', 'monk'], 'Robe Pants', "en_wiz_gar")
 
 # Armor -- Assassin + Ranger -- Weak
 lth_cap = Armor('Leather Cap',
                 'A simple leather cap providing equally simple protection (+2% Defense)',
-                25, 10, 0.02, 'head', ['assassin', 'ranger'], 'Cap', "lth_cap")
+                100, 0.02, 'head', ['assassin', 'ranger'], 'Cap', "lth_cap")
 lth_bdy = Armor('Leather Bodyarmor',
                 'Simple body armor providing equally simple protection (+4% Defense)',
-                25, 10, 0.04, 'body', ['assassin', 'ranger'], 'Shirt', "lth_bdy")
+                100, 0.04, 'body', ['assassin', 'ranger'], 'Shirt', "lth_bdy")
 lth_leg = Armor('Leather Leggings',
                 'Simple leggings providing equally simple protection (+2% Defense)',
-                25, 10, 0.02, 'legs', ['assassin', 'ranger'], 'Pants', "lth_leg")
+                100, 0.02, 'legs', ['assassin', 'ranger'], 'Pants', "lth_leg")
 
 en_lth_cap = Armor('Enhanced Leather Cap',
                    'Even better than your typical Leather Cap (+7% Defense)',
-                   75, 35, 0.07, 'head', ['assassin', 'ranger'], 'Cap', "en_lth_cap")
+                   250, 0.07, 'head', ['assassin', 'ranger'], 'Cap', "en_lth_cap")
 en_lth_bdy = Armor('Enhanced Leather Bodyarmor',
                    'Even better than your typical Leather Bodyarmor (+12% Defense)',
-                   75, 35, 0.12, 'body', ['assassin', 'ranger'], 'Shirt', "en_lth_bdy")
+                   250, 0.12, 'body', ['assassin', 'ranger'], 'Shirt', "en_lth_bdy")
 en_lth_leg = Armor('Enhanced Leather Leggings',
                    'Even better than your typical Leather Leggings (+7% Defense)',
-                   75, 35, 0.07, 'legs', ['assassin', 'ranger'], 'Pants', "en_lth_leg")
+                   250, 0.07, 'legs', ['assassin', 'ranger'], 'Pants', "en_lth_leg")
 
 # Armor -- Warrior + Paladin -- Mid
 stl_hlm = Armor('Steel Helmet',
                 'A decent helmet created from a solid metal (+15% Defense)',
-                200, 100, 0.15, 'head', ['warrior', 'paladin'], 'Helmet', "stl_hlm")
+                600, 0.15, 'head', ['warrior', 'paladin'], 'Helmet', "stl_hlm")
 stl_cst = Armor('Steel Chestpiece',
                 'Decent body armor made from a solid metal (+20% Defense)',
-                200, 100, 0.20, 'body', ['warrior', 'paladin'], 'Shirt', "stl_cst")
+                600, 0.20, 'body', ['warrior', 'paladin'], 'Shirt', "stl_cst")
 stl_leg = Armor('Steel Greaves',
                 'Decent greaves made from a solid metal (+15% Defense)',
-                200, 100, 0.15, 'legs', ['warrior', 'paladin'], 'Pants', "stl_leg")
+                600, 0.15, 'legs', ['warrior', 'paladin'], 'Pants', "stl_leg")
 
 en_stl_hlm = Armor('Enhanced Steel Helmet',
                    'Even better than your typical Steel Helmet (+20% Defense)',
-                   325, 150, 0.20, 'head', ['warrior', 'paladin'], 'Helmet', "en_stl_hlm")
+                   900, 0.20, 'head', ['warrior', 'paladin'], 'Helmet', "en_stl_hlm")
 en_stl_cst = Armor('Enhanced Steel Chestpiece',
                    'Even better than your typical Steel Chestpiece (+25% Defense)',
-                   325, 150, 0.25, 'body', ['warrior', 'paladin'], 'Shirt', "en_stl_cst")
+                   900, 0.25, 'body', ['warrior', 'paladin'], 'Shirt', "en_stl_cst")
 en_stl_leg = Armor('Enhanced Steel Leggings',
                    'Even better than your typical Steel Greaves (+20% Defense)',
-                   325, 150, 0.20, 'legs', ['warrior', 'paladin'], 'Pants', "en_stl_leg")
+                   900, 0.20, 'legs', ['warrior', 'paladin'], 'Pants', "en_stl_leg")
 
 
 # Armor -- Mage + Monk -- Mid
 myst_hat = Armor('Mystical Hood',
                  'A mysterious hood with strange symbols sewn into it (+8% Defense)',
-                 200, 100, 0.08, 'head', ['mage', 'monk'], 'Wizard Hat', "myst_hat")
+                 600, 0.08, 'head', ['mage', 'monk'], 'Wizard Hat', "myst_hat")
 myst_rob = Armor('Mystical Robe',
                  'A mysterious robe with strange symbols sewn into it (+12% Defense)',
-                 200, 100, 0.12, 'body', ['mage', 'monk'], 'Robe', "myst_rob")
+                 600, 0.12, 'body', ['mage', 'monk'], 'Robe', "myst_rob")
 myst_gar = Armor('Mystical Garments',
                  'Mysterious garments with strange symbols sewn into it (+8% Defense)',
-                 200, 100, 0.08, 'legs', ['mage', 'monk'], 'Robe Pants', "myst_gar")
+                 600, 0.08, 'legs', ['mage', 'monk'], 'Robe Pants', "myst_gar")
 
 en_myst_hat = Armor('Enhanced Mystical Hood',
                     'Even better than your typical Mystical Hood (+15% Defense)',
-                    325, 150, 0.15, 'head', ['mage', 'monk'], 'Wizard Hat', "en_myst_hat")
+                    900, 0.15, 'head', ['mage', 'monk'], 'Wizard Hat', "en_myst_hat")
 en_myst_rob = Armor('Enhanced Mystical Robe',
                     'Even better than your typical Mystical Robe (+20% Defense)',
-                    325, 150, 0.2, 'body', ['mage', 'monk'], 'Robe', "en_myst_rob")
+                    900, 0.2, 'body', ['mage', 'monk'], 'Robe', "en_myst_rob")
 en_myst_gar = Armor('Enhanced Mystical Garments',
                     'Even better than your typical Mystical Garments (+15% Defense)',
-                    325, 150, 0.15, 'legs', ['mage', 'monk'], 'Robe Pants', "en_myst_gar")
+                    900, 0.15, 'legs', ['mage', 'monk'], 'Robe Pants', "en_myst_gar")
 
 # Armor -- Assassin + Ranger -- Mid
 std_cwl = Armor('Studded Cowl',
                 'A soft leather cap studded with steel pieces (+12% Defense)',
-                200, 100, 0.12, 'head', ['assassin', 'ranger'], 'Cap', "std_cwl")
+                600, 0.12, 'head', ['assassin', 'ranger'], 'Cap', "std_cwl")
 std_bdy = Armor('Studded Body-armor',
                 'Soft leather body armor studded with steel pieces (+18% Defense)',
-                200, 100, 0.18, 'body', ['assassin', 'ranger'], 'Shirt', "std_bdy")
+                600, 0.18, 'body', ['assassin', 'ranger'], 'Shirt', "std_bdy")
 std_leg = Armor('Studded Leggings',
                 'Soft leather leggings studded with steel pieces (+12% Defense)',
-                200, 100, 0.12, 'legs', ['assassin', 'ranger'], 'Pants', "std_leg")
+                600, 0.12, 'legs', ['assassin', 'ranger'], 'Pants', "std_leg")
 
 en_std_cwl = Armor('Enhanced Studded Cowl',
                    'Even better than your typical Studded Hood (+17% Defense)',
-                   325, 150, 0.17, 'head', ['assassin', 'ranger'], 'Cap', "en_std_cwl")
+                   900, 0.17, 'head', ['assassin', 'ranger'], 'Cap', "en_std_cwl")
 en_std_bdy = Armor('Enhanced Studded Body-armor',
                    'Even better than your typical Studded Bodyarmor (+22% Defense)',
-                   325, 150, 0.22, 'body', ['assassin', 'ranger'], 'Shirt', "en_std_bdy")
+                   900, 0.22, 'body', ['assassin', 'ranger'], 'Shirt', "en_std_bdy")
 en_std_leg = Armor('Enhanced Studded Leggings',
                    'Even better than your typical Studded Leggings (+17% Defense)',
-                   325, 150, 0.17, 'legs', ['assassin', 'ranger'], 'Pants', "en_std_leg")
+                   900, 0.17, 'legs', ['assassin', 'ranger'], 'Pants', "en_std_leg")
 
 
 # Armor -- Warrior + Paladin -- Pow
 # 90% Defense
 ori_hlm = Armor('Orichalcum Helmet',
                 'A strong helmet smelted from rare mountain copper  (+25% Defense)',
-                475, 225, 0.25, 'head', ['warrior', 'paladin'], 'Helmet', "ori_hlm")
+                1200, 0.25, 'head', ['warrior', 'paladin'], 'Helmet', "ori_hlm")
 ori_cst = Armor('Orichalcum Chestplate',
                 'Strong chest armor smelted from rare mountain copper  (+35% Defense)',
-                475, 225, 0.35, 'body', ['warrior', 'paladin'], 'Shirt', "ori_cst")
+                1200, 0.35, 'body', ['warrior', 'paladin'], 'Shirt', "ori_cst")
 ori_leg = Armor('Orichalcum Greaves',
                 'Strong leg armor smelted from rare mountain copper (+25% Defense)',
-                475, 225, 0.25, 'legs', ['warrior', 'paladin'], 'Pants', "ori_leg")
+                1200, 0.25, 'legs', ['warrior', 'paladin'], 'Pants', "ori_leg")
 
 # Armor -- Mage + Monk -- Pow
 # 65% Defense
 elem_hat = Armor('Armored Cloth Hat',
                  'A silk hat lined with chainmail in important parts (+20% Defense)',
-                 475, 225, 0.20, 'head', ['mage', 'monk'], 'Wizard Hat', "elem_hat")
+                 1200, 0.20, 'head', ['mage', 'monk'], 'Wizard Hat', "elem_hat")
 elem_rob = Armor('Armored Cloth Robe',
                  'A silk robe lined with chainmail in important parts (+25% Defense)',
-                 475, 225, 0.25, 'body', ['mage', 'monk'], 'Robe', "elem_rob")
+                 1200, 0.25, 'body', ['mage', 'monk'], 'Robe', "elem_rob")
 elem_gar = Armor('Armored Cloth Garments',
                  'Silk garments lined with chainmail in important parts (+20% Defense)',
-                 475, 225, 0.20, 'legs', ['mage', 'monk'], 'Robe Pants', "elem_gar")
+                 1200, 0.20, 'legs', ['mage', 'monk'], 'Robe Pants', "elem_gar")
 
 # Armor -- Assassin + Ranger -- Pow
 # 80% Defense
 drg_cwl = Armor('Dragonhide Cowl',
                 'A tough hood crafted from high-quality dragonskin (+25% Defense)',
-                475, 225, 0.25, 'head', ['assassin', 'ranger'], 'Cap', "drg_cwl")
+                1200, 0.25, 'head', ['assassin', 'ranger'], 'Cap', "drg_cwl")
 drg_bdy = Armor('Dragonhide Bodyarmor',
                 'Tough bodyarmor crafted from high-quality dragonskin (+30% Defense)',
-                475, 225, 0.3, 'body', ['assassin', 'ranger'], 'Shirt', "drg_bdy")
+                1200, 0.3, 'body', ['assassin', 'ranger'], 'Shirt', "drg_bdy")
 drg_leg = Armor('Dragonhide Leggings',
                 'Tough leggings crafted from high-quality dragonskin (+25% Defense)',
-                475, 225, 0.25, 'legs', ['assassin', 'ranger'], 'Pants', "drg_leg")
+                1200, 0.25, 'legs', ['assassin', 'ranger'], 'Pants', "drg_leg")
 
 # Accessories
 # -- Elemental Accessories
 water_amulet = ElementAccessory('Aquatic Amulet', 'An amulet that imbues its wearer with the power of WATER',
-                                375, 175, 'Water', "aquatic_amulet")
+                                375, 'Water', "aquatic_amulet")
 fire_amulet = ElementAccessory('Infernal Amulet', 'An amulet that imbues its wearer with the power of FIRE',
-                               375, 175, 'Fire', "fire_amulet")
+                               375, 'Fire', "fire_amulet")
 earth_amulet = ElementAccessory('Ground Amulet', 'An amulet that imbues its wearer with the power of EARTH',
-                                375, 175, 'Earth', "earth_amulet")
+                                375, 'Earth', "earth_amulet")
 electric_amulet = ElementAccessory('Galvanic Amulet', 'An amulet that imbues its wearer with the power of ELECTRICITY',
-                                   375, 175, 'Electric', "electric_amulet")
+                                   375, 'Electric', "electric_amulet")
 wind_amulet = ElementAccessory('Tempestuous Amulet', 'An amulet that imbues its wearer with the power of WIND',
-                               375, 175, 'Wind', "wind_amulet")
+                               375, 'Wind', "wind_amulet")
 grass_amulet = ElementAccessory('Verdant Amulet', 'An amulet that imbues its wearer with the power of GRASS',
-                                375, 175, 'Grass', "grass_amulet")
+                                375, 'Grass', "grass_amulet")
 ice_amulet = ElementAccessory('Glacial Amulet', 'An amulet that imbues its wearer with the power of ICE',
-                              375, 175, 'Ice', "ice_amulet")
+                              375, 'Ice', "ice_amulet")
 light_amulet = ElementAccessory('Divine Amulet', 'An amulet that imbues its wearer with the power of LIGHT',
-                                375, 175, 'Light', "light_amulet")
+                                375, 'Light', "light_amulet")
 dark_amulet = ElementAccessory('Umbral Amulet', 'An amulet that imbues its wearer with the power of DARKNESS',
-                               375, 175, 'Dark', "dark_amulet")
+                               375, 'Dark', "dark_amulet")
 
 # Quest items
 message_joseph = Item('Message from Joseph', 'A neatly written message addressed to Philliard.',
-                      0, 0, "message_joseph", True, "Misc", 'q_items')
+                      0, "message_joseph", True, "Misc", 'q_items')
 
 message_philliard = Item('Message from Philliard', 'A neatly written message addressed to Joseph.',
-                         0, 0, "message_philliard", True, "Misc", 'q_items')
+                         0, "message_philliard", True, "Misc", 'q_items')
 
 # Gems & Valuables
 pearl_gem = Item('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
-                 0, 175, "pearl_gem", False, "Gem", "misc")
+                 875, "pearl_gem", False, "Gem", "misc")
 
 ruby_gem = Item('Ruby', 'A valuable ruby. This could be sold for quite a bit.',
-                0, 175, "ruby_gem", False, "Gem", "misc")
+                875, "ruby_gem", False, "Gem", "misc")
 
 sapphire_gem = Item('Sapphire', 'A valuable sapphire. This could probably be sold for quite a bit.',
-                    0, 175, "sapphire_gem", False, "Gem", "misc")
+                    875, "sapphire_gem", False, "Gem", "misc")
 
 emerald_gem = Item('Emerald', 'A valuable emerald. This could probably be sold for quite a bit.',
-                   0, 175, "emerald_gem", False, "Gem", "misc")
+                   875, "emerald_gem", False, "Gem", "misc")
 
 citrine_gem = Item('Citrine', 'A valuable citrine. This could probably be sold for quite a bit.',
-                   0, 175, "citrine_gem", False, "Gem", "misc")
+                   875, "citrine_gem", False, "Gem", "misc")
 
 jade_gem = Item('Jade', 'A valuable jade. This could probably be sold for quite a bit.',
-                0, 175, "jade_gem", False, "Gem", "misc")
+                875, "jade_gem", False, "Gem", "misc")
 
 opal_gem = Item('Opal', 'A valuable opal. This could probably be sold for quite a bit.',
-                0, 175, "opal_gem", False, "Gem", "misc")
+                875, "opal_gem", False, "Gem", "misc")
 
 onyx_gem = Item('Onyx', 'A valuable onyx. This could probably be sold for quite a bit.',
-                0, 175, "onyx_gem", False, "Gem", "misc")
+                875, "onyx_gem", False, "Gem", "misc")
 
 diamond_gem = Item('Diamond', 'A valuable diamond. This could probably be sold for quite a bit.',
-                   0, 175, "diamond_gem", False, "Gem", "misc")
+                   875, "diamond_gem", False, "Gem", "misc")
 
 amethyst_gem = Item('Amethyst', 'A valuable amethyst. This could probably be sold for quite a bit.',
-                    0, 175, "amethyst_gem", False, "Gem", "misc")
+                    875, "amethyst_gem", False, "Gem", "misc")
 
 topaz_gem = Item('Topaz', 'A valuable topaz. This could probably be sold for quite a bit.',
-                 0, 175, "topaz_gem", False, "Gem", "misc")
+                 875, "topaz_gem", False, "Gem", "misc")
 
 garnet_gem = Item('Garnet', 'A valuable garnet. This could probably be sold for quite a bit.',
-                  0, 175, "garnet_gem", False, "Gem", "misc")
+                  875, "garnet_gem", False, "Gem", "misc")
 
 quartz_gem = Item('Quartz', 'A valuable quartz. This could probably be sold for quite a bit.',
-                  0, 175, "quartz_gem", False, "Gem", "misc")
+                  875, "quartz_gem", False, "Gem", "misc")
 
 zircon_gem = Item('Zircon', 'A valuable zircon. This could probably be sold for quite a bit.',
-                  0, 175, "zircon_gem", False, "Gem", "misc")
+                  875, "zircon_gem", False, "Gem", "misc")
 
 agate_gem = Item('Agate', 'A valuable agate. This could probably be sold for quite a bit.',
-                 0, 175, "agate_gem", False, "Gem", "misc")
+                 875, "agate_gem", False, "Gem", "misc")
 
 aquamarine_gem = Item('Aquamarine', 'A valuable aquamarine. This could probably be sold for quite a bit.',
-                      0, 175, "aquamarine_gem", False, "Gem", "misc")
+                      875, "aquamarine_gem", False, "Gem", "misc")
 
 # Tools
 shovel = Shovel('Expert Mining Tool', """\
 A tool used to excavate for hidden gems and minerals. Comines the functions
 of a pickaxe, shovel, and hammer all into one device! Use while on the
 overworld to dig for gems. Gems have pre-determined locations and do not
-respawn - there is no luck involved with this tool.""", 150, 75, "shovel")
+respawn - there is no luck involved with this tool.""", 150, "shovel")
 
 fast_travel_atlas = FastTravelAtlas('Fast Travel Atlas', """\
 A convenient tome that allows teleportation between towns. These aren't
 being made anymore, after having been banned by the King due to its use in
-many recent abductions and murders. Most of the pages appear to be missing.""", 0, 0, "fast_map")
+many recent abductions and murders. Most of the pages appear to be missing.""", 0, "fast_map")
 
 monster_book = MonsterEncyclopedia('Monster Encyclopedia', """\
 A book containing information on monsters. When used in battle, this will 
 identify the stats and weaknesses of an enemy. When used outside of battle,
 this will let you check what biome monsters are found in, what items they drop,
 and how many of them you've killed. Out-of-battle use only works for enemies
-you've encountered.""", 200, 100, "monster_book")
+you've encountered.""", 200, "monster_book")
 
 pocket_lab = PocketAlchemyLab('Pocket Alchemy Lab', """\
 A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to
@@ -1397,217 +1409,217 @@ convert everyday ingredients into useful potions can fit in your pocket.
 There are six flavors of ingredients, and each flavor corresponds to a specific
 potion. Combine three ingredients to make a potion. The ratio of flavors used
 determines the probability of getting each flavor potion. The quantity of the
-prevailing ingredient determines the potion strength.""", 200, 100, "pocket_lab")
+prevailing ingredient determines the potion strength.""", 200, "pocket_lab")
 
 musicbox = MusicBox('Portable Musicbox', """\
 Somehow this small device has the ability to play music without need for a 
 bard or instruments. Select a folder full of music on your computer and this
-device will replace the in-game music with your tunes!""", 250, 75, "musicbox")
+device will replace the in-game music with your tunes!""", 250, "musicbox")
 
 
 # Tools -- Lockpicks
 wood_lckpck = LockpickKit('Wooden Lockpick Kit', """\
 A wooden lockpick kit with a 30% chance to open chests. Chests can be found
-by sneaking into houses in towns.""", 30, 15, 30, "wood_lckpck")
+by sneaking into houses in towns.""", 30, 30, "wood_lckpck")
 
 copper_lckpck = LockpickKit('Copper Lockpick Kit', """\
 A copper lockpick kit with a 45% chance to open chests. Chests can be found
-by sneaking into houses in towns.""", 200, 100, 45, "copper_lckpck")
+by sneaking into houses in towns.""", 200, 45, "copper_lckpck")
 
 iron_lckpck = LockpickKit('Iron Lockpick Kit', """\
 An iron lockpick kit with a 60% chance to open chests. Chests can be found
-by sneaking into houses in towns.""", 300, 150, 60, "iron_lckpck")
+by sneaking into houses in towns.""", 300, 60, "iron_lckpck")
 
 steel_lckpck = LockpickKit('Steel Lockpick Kit', """\
 A steel lockpick kit with a 75% chance to open chests. Chests can be found
-by sneaking into houses in towns.""", 500, 250, 75, "steel_lckpck")
+by sneaking into houses in towns.""", 500, 75, "steel_lckpck")
 
 mythril_lckpck = LockpickKit('Mythril Lockpick Kit', """\
 A mythril lockpick kit with a 90% chance to open chests. Chests can be found
-by sneaking into houses in towns.""", 700, 350, 90, "mythril_lckpck")
+by sneaking into houses in towns.""", 700, 90, "mythril_lckpck")
 
 # ALCHEMY INGREDIENTS - Dropped by monsters, used to make potions
 # Strange
 broken_crystal = Ingredient('Broken Crystal', """\
 A chunk of crystal too powdery to be of any value. Could have useful alchemical
 applications. Has a "Strange" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "b_crystal")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "strange", "b_crystal")
 
 chain_link = Ingredient('Chain links', """\
 A couple joined links of chain made from steel. Could have useful alchemical
 applications. Has a "Strange" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "chain_link")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "strange", "chain_link")
 
 bone_bag = Ingredient('Bag of Bones', """\
 A bag full of various bones from a now deceased creature. Could have useful 
 alchemical applications. Has a "Strange" alchemical flavor. Combine with two 
-other ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "bone_bag")
+other ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "strange", "bone_bag")
 
 ripped_cloth = Ingredient('Ripped Cloth', """\
 A thick, torn cloth made out of an unknown fabric. Could have useful alchemical
 applications. Has a "Strange" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "ripped_cloth")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "strange", "ripped_cloth")
 
 living_bark = Ingredient('Living Bark', """\
 This bark has a fleshy texture to it. Could have useful alchemical
 applications. Has a "Strange" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "strange", "living_bark")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "strange", "living_bark")
 
 # Mystic
 demonic_essence = Ingredient('Demonic Essence', """\
 A strange orb that exudes a terrifying aura. Could have useful alchemical
 applications. Has a "Mystic" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "d_essence")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mystic", "d_essence")
 
 angelic_essence = Ingredient('Angelic Essence', """\
 A strange orb that radiates an incredible aura. Could have useful alchemical
 applications. Has a "Mystic" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "a_essence")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mystic", "a_essence")
 
 mysterious_runes = Ingredient('Strange Runestone', """\
 Strange stones with even stranger symbols on it. Could have useful alchemical
 applications. Has a "Mystic" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "runestone")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mystic", "runestone")
 
 unicorn_horn = Ingredient('Unicorn Horn', """\
 A tough and shiny horn from a mythical creature. Could have useful alchemical
 applications. Has a "Mystic" alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "unicorn_horn")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mystic", "unicorn_horn")
 
 fairy_dust = Ingredient('Fairy Dust', """\
 Dust from a fairy. It has strange, magical properties. Could have useful 
 alchemical applications. Has a "Mystic" alchemical flavor. Combine with two 
-other ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "mystic", "fairy_dust")
+other ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mystic", "fairy_dust")
 
 # Rigid
 crab_claw = Ingredient('Crab Claw', """\
 A reddish claw from a giant crab. Could have useful alchemical applications.
 Has a "Rigid" alchemical flavor. Combine with two other ingredients in a 
-Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "crab_claw")
+Pocket Alchemy Lab to make a potion.""", 25, "rigid", "crab_claw")
 
 shell_fragment = Ingredient('Shell Fragment', """\
 A broken fragment of a once-beautiful shell. Could have useful alchemical 
 applications. Has a "Rigid" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "shell_fragment")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "rigid", "shell_fragment")
 
 golem_rock = Ingredient('Golem Rock', """\
 A small rock that seems to glow slightly. Could have useful alchemical 
 applications. Has a "Rigid" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "golem_rcok")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "rigid", "golem_rcok")
 
 beetle_shell = Ingredient('Beetle Shell', """\
 A bluish shell from a large beetle. Could have useful alchemical applications.
 Has a "Rigid" alchemical flavor. Combine with two other ingredients in a 
-Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "beetle_shell")
+Pocket Alchemy Lab to make a potion.""", 25, "rigid", "beetle_shell")
 
 monster_skull = Ingredient('Monster Skull', """\
 A broken skull from a strange creature. Could have useful alchemical 
 applications. Has a "Rigid" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "rigid", "m_skull")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "rigid", "m_skull")
 
 # Flowing
 slime_vial = Ingredient('Vial of Slime', """\
 A small glass vial filled with gooey slime. Could have useful alchemical 
 applications. Has a "Flowing" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "s_vial")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "flowing", "s_vial")
 
 blood_vial = Ingredient('Vial of Blood', """\
 A small glass vial filled with the blood of some creature. Could have useful 
 alchemical applications. Has a "Flowing" alchemical flavor. Combine with two 
-other ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "b_vial")
+other ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "flowing", "b_vial")
 
 water_vial = Ingredient('Vial of Water', """\
 A small glass vial filled with enchanted water. Could have useful alchemical 
 applications. Has a "Flowing" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "w_vial")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "flowing", "w_vial")
 
 ink_sack = Ingredient('Ink Sack', """\
 A small pouch full of an inky substance. Could have useful alchemical 
 applications. Has a "Flowing" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "ink_sack")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "flowing", "ink_sack")
 
 ectoplasm = Ingredient('Ectoplasm', """\
 The gooey remains from a terrifying apparition. Could have useful alchemical 
 applications. Has a "Flowing" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "flowing", "ectoplasm")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "flowing", "ectoplasm")
 
 # Dark
 burnt_ash = Ingredient('Burnt Ash', """\
 The ashy remains of a once-living creature. Could have useful alchemical 
 applications. Has a "Dark" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "burnt_ash")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "dark", "burnt_ash")
 
 monster_fang = Ingredient('Monster Fang', """\
 The sharp fang of a frightening creature. Could have useful alchemical 
 applications. Has a "Dark" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "monster_fang")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "dark", "monster_fang")
 
 antennae = Ingredient('Gooey Antennae', """\
 A pair of antennae from a massive, slimy insect. Could have useful alchemical 
 applications. Has a "Dark" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "antennae")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "dark", "antennae")
 
 eye_balls = Ingredient('Eyeballs', """\
 The visual receptors of some disgusting creature. Could have useful alchemical 
 applications. Has a "Dark" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "eyeballs")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "dark", "eyeballs")
 
 serpent_scale = Ingredient('Serpent Scale', """\
 A rough scale from an unknown reptile. Could have useful alchemical 
 applications. Has a "Dark" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "dark", "s_scale")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "dark", "s_scale")
 
 # Natural
 wing_piece = Ingredient('Wing Piece', """\
 A piece of wing from a flying creature. Could have useful alchemical 
 applications. Has a "Natural" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "wing_piece")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "natural", "wing_piece")
 
 animal_fur = Ingredient('Animal Fur', """\
 A wet clump of fur from a strange animal. Could have useful alchemical 
 applications. Has a "Natural" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "animal_fur")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "natural", "animal_fur")
 
 rodent_tail = Ingredient('Rodent Tail', """\
 The detached tail of a hideous rodent. Could have useful alchemical 
 applications. Has a "Natural" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "rodent_tail")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "natural", "rodent_tail")
 
 serpent_tongue = Ingredient('Serpent Tongue', """\
 A dried-up tongue from a slithery serpent. Could have useful alchemical 
 applications. Has a "Natural" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "s_tongue")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "natural", "s_tongue")
 
 feathers = Ingredient('Feathers', """\
 A veiny feather from an unknown avian creature. Could have useful alchemical 
 applications. Has a "Natural" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 5, "natural", "feathers")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "natural", "feathers")
 
 # Mathematical
 calculus_homework = Ingredient('Calculus Homework', """\
 A load of random symbols and gibberish. Could have useful alchemical 
 applications. Has a "Mathematical" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "c_homework")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mathematical", "c_homework")
 
 graph_paper = Ingredient('Graph Paper', """\
 Useful paper for graphing points and lines. Could have useful alchemical 
 applications. Has a "Mathematical" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "g_paper")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mathematical", "g_paper")
 
 ruler = Ingredient('Ruler', """\
 A piece of wood with lines on it. Neat! Could have useful alchemical 
 applications. Has a "Mathematical" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "ruler")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mathematical", "ruler")
 
 protractor = Ingredient('Protractor and Compass', """\
 Instruments used to make shapes and angles. Could have useful alchemical 
 applications. Has a "Mathematical" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "protractor")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mathematical", "protractor")
 
 textbook = Ingredient('AtW Textbook', """\
 More like Algebra that sucks amiright? Could have useful alchemical 
 applications. Has a "Mathematical" alchemical flavor. Combine with two other 
-ingredients in a Pocket Alchemy Lab to make a potion.""", 0, 25, "mathematical", "textbook")
+ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mathematical", "textbook")
 
 # Each monster can drop two different items, with the exception of the Calculator which is an easter egg monster
 monster_drop_list = {'Shell Mimic': [shell_fragment, water_vial],
@@ -2078,7 +2090,8 @@ def print_inventory(cat, vis_cat, selling):
 
         for num, b in enumerate(sellable_inv):
             fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
-            print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {find_item_with_id(b[1]).sell} GP each")
+            sell_value = find_item_with_id(b[1]).value//5
+            print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {sell_value} GP each")
 
         return [x[1] for x in sellable_inv]
 
@@ -2181,11 +2194,13 @@ def sell_item(item_id):
     print('-'*save_load.divider_size)
 
     while True:
-        y_n = main.s_input(f'Sell the {item.name} for {item.sell} GP? | Y/N: ').lower()
+        sell_value = item.value//5
+        y_n = main.s_input(f'Sell the {item.name} for {sell_value} GP? | Y/N: ').lower()
 
         if y_n.startswith('y'):
             remove_item(item.item_id)
-            print(f'The shopkeeper takes the {item.name} and gives you {item.sell} GP.')
+            main.party_info['gp'] += sell_value
+            print(f'The shopkeeper takes the {item.name} and gives you {sell_value} GP.')
             main.s_input('\nPress enter/return ')
 
             return

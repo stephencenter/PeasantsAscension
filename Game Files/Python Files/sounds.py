@@ -89,10 +89,13 @@ debuff = Sound('../Sound FX/debuff.wav')
 # Ability cast -- Used when non-magical abilities are casted
 ability_cast = Sound('../Sound FX/ability_cast.wav')
 
-# Eerie Sound - No current use
+# Potion Brew -- Used when brewing potions
+potion_brew = Sound('../Sound FX/potion_brew.wav')
+
+# Eerie Sound -- No current use
 eerie_sound = Sound('../Sound FX/eerie_sound.wav')
 
-# Random encounter -- No current use, will probably be used when encountering an enemy on the overworld
+# Random encounter -- No current use
 random_enc = Sound('../Sound FX/random_encounter.wav')
 
 all_sounds = [sword_slash, magic_attack,
@@ -105,7 +108,7 @@ all_sounds = [sword_slash, magic_attack,
               lockpick_break, unlock_chest,
               debuff, eerie_sound,
               random_enc, enemy_death,
-              ability_cast]
+              ability_cast, potion_brew]
 
 
 def play_music(song, num_plays=-1):
