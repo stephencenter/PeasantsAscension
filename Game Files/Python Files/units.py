@@ -74,15 +74,15 @@ class PlayableCharacter(Unit):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
         Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
-        self.class_ = class_         # PCU's Class
-        self.off_element = 'none'    # PCU's Element
-        self.def_element = 'none'    # PCU's Element
-        self.enabled = enabled       # Whether the PCU has been recruited or not
-        self.exp = 0                 # Experience
-        self.req_xp = 3              # Required XP to level up
-        self.move = ''               # What move the character chose during battle
-        self.ap = 10                 # The number of "Action Points" that the user has remaining
-        self.max_ap = 10             # The number of maximum Action Points the user can have at one time
+        self.class_ = class_          # PCU's Class
+        self.off_element = 'neutral'  # PCU's Element
+        self.def_element = 'neutral'  # PCU's Element
+        self.enabled = enabled        # Whether the PCU has been recruited or not
+        self.exp = 0                  # Experience
+        self.req_xp = 3               # Required XP to level up
+        self.move = ''                # What move the character chose during battle
+        self.ap = 10                  # The number of "Action Points" that the user has remaining
+        self.max_ap = 10              # The number of maximum Action Points the user can have at one time
 
         self.target = Monster('', '', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
         self.c_ability = abilities.Ability('', '', '')  # The ability that the PCU is currently casting
@@ -493,31 +493,38 @@ Increasing DIFFICULTY will provide:
         inv_name = self.name if self != player else 'player'
         fix_stats()
 
-        print(f"""-{self.name}'s Stats-
-Level: {self.lvl} | Class: {self.class_.title()}
-HP: {self.hp}/{self.max_hp} | MP: {self.mp}/{self.max_mp} | Statuses: {', '.join([x.title() for x in self.status_ail])}
-Physical Attack: {self.attk} | Magic Attack: {self.m_attk} | Pierce Attack {self.p_attk}
-Phsyical Defense: {self.dfns} | Magic Defense: {self.m_dfns} | Pierce Defense {self.p_dfns}
-Speed: {self.spd} | Evasion: {self.evad}
-XP: {self.exp}/{self.req_xp} | GP: {main.party_info['gp']}
+        m_w = {'fire': 'water',
+               'water': 'electric',
+               'electric': 'earth',
+               'earth': 'wind',
+               'wind': 'grass',
+               'grass': 'ice',
+               'ice': 'fire',
+               'neutral': 'neutral',
+               'light': 'dark',
+               'dark': 'light'}[self.def_element]
 
--Attributes-
+        print(f"""-{self.name}'s Stats-
+Level {self.lvl} {self.class_.title()}
+Statuses: {', '.join([x.title() for x in self.status_ail])}
+XP: {self.exp}/{self.req_xp} / GP: {main.party_info['gp']}
+
+HP: {self.hp}/{self.max_hp} / MP: {self.mp}/{self.max_mp} / AP: {self.ap}/{self.max_ap}
+Physical: {self.attk} Attack / {self.dfns} Defense
+Magical: {self.m_attk} Attack / {self.m_dfns} Defense
+Piercing: {self.p_attk} Attack / {self.p_dfns} Defense
+Speed: {self.spd}
+Evasion: {self.evad}
+Elements: Attacks are {self.off_element.title()} / Defense is {self.def_element.title()} / \
+Weak to {m_w.title()}
+
 Intelligence: {self.attributes['int']} 
 Wisdom: {self.attributes['wis']}
 Strength: {self.attributes['str']}
 Constitution: {self.attributes['con']}
 Dexterity: {self.attributes['dex']}
 Perception: {self.attributes['per']}
-Difficulty: {main.party_info['dif']}
-
--Equipment-
-Weapon: {items.equipped[inv_name]['weapon'].name}
-Accessory: {items.equipped[inv_name]['access'].name}
-Armor:
-  Head: {items.equipped[inv_name]['head'].name}
-  Body: {items.equipped[inv_name]['body'].name}
-  Legs: {items.equipped[inv_name]['legs'].name}
-Defensive Element: {self.def_element.title()} | Offensive Element: {self.off_element.title()}""")
+Difficulty: {main.party_info['dif']}""")
 
         main.s_input('\nPress enter/return ')
 
@@ -863,8 +870,8 @@ class Monster(Unit):
         self.is_defending = False
         self.class_ = None
 
-        self.off_element = 'none'
-        self.def_element = 'none'
+        self.off_element = 'neutral'
+        self.def_element = 'neutral'
 
         self.gold = 0
         self.experience = 0
@@ -1399,7 +1406,7 @@ class Monster(Unit):
 
 class Boss(Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, lvl, b_items, gold,
-                 experience, attk_msg, active=True, off_element='none', def_element='none', lackies=None):
+                 experience, attk_msg, active=True, off_element='neutral', def_element='neutral', lackies=None):
         Monster.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
         self.off_element = off_element
@@ -1667,12 +1674,11 @@ def deal_damage(attacker, target, damage_type, spell_power=0, do_criticals=True)
 def eval_element(attacker, target, damage):
     # Fire < Water < Electricity < Earth < Wind < Grass < Ice < Fire
     # Light < Dark and Dark < Light
-    # "None" element is neutral to all elements
+    # "Neutral" element is neutral to all elements
     # All other interactions are neutral
 
-    # Set everything to be lowercase, just incase
-    a_elem = attacker.off_element.lower()
-    t_elem = target.def_element.lower()
+    a_elem = attacker.off_element
+    t_elem = target.def_element
 
     # element_matchup[key][0] is the element that key is weak to
     # element_matchup[key][1] is the element that key is resistant to
@@ -1690,7 +1696,7 @@ def eval_element(attacker, target, damage):
 
     # If either the attacker or the target have no element, OR the target and the attacker both have the same element,
     # then do not modify the damage (1x multiplier)
-    if (a_elem == 'none' or t_elem == 'none') or (a_elem == t_elem):
+    if (a_elem == 'neutral' or t_elem == 'neutral') or (a_elem == t_elem):
         return damage
 
     if element_matchup[a_elem][1] == t_elem:

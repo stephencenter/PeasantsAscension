@@ -318,13 +318,13 @@ def new_spells(character):
 # -- Damaging Spells -- #
 # Neutral
 magic_shot = Damaging('Magical Shot', "Hurl a small ball of magical energy at your enemies! (25% Spell Power)",
-                      3, 1, 0.25, "none", [], "no_elem_1")
+                      3, 1, 0.25, "neutral", [], "no_elem_1")
 
 magic_burst = Damaging('Magical Burst', "Shatter your enemy with a wave of magical energy! (50% Spell Power)",
-                       9, 11, 0.5, "none", [], "no_elem_2")
+                       9, 11, 0.5, "neutral", [], "no_elem_2")
 
 magic_blast = Damaging('Magical Blast', "Annihilate your enemies with a blast of magical energy! (100% Spell Power)",
-                       18, 23, 1, "none", ['mage'], "no_elem_3")
+                       18, 23, 1, "neutral", ['mage'], "no_elem_3")
 
 # Fire
 flame_bolt = Damaging('Flame Bolt', "Summon a small fireball to destroy your foes! (25% Spell Power)",

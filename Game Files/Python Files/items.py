@@ -102,7 +102,7 @@ class HealthManaPotion(Consumable):
 
 
 class StatusPotion(Consumable):
-    def __init__(self, name, desc, value, status, item_id, ascart='Potion', cat='consumables'):
+    def __init__(self, name, desc, value, status, item_id, ascart='Status', cat='consumables'):
         super().__init__(name, desc, value, item_id, ascart, cat)
         self.status = status
 
@@ -128,34 +128,34 @@ class StatusPotion(Consumable):
 
 
 class AttractPotion(Consumable):
-    def __init__(self, name, desc, value, num_steps, m_count, item_id, ascart="Potion", cat="consumables"):
+    def __init__(self, name, desc, value, num_steps, m_count, item_id, ascart="Alchemy", cat="consumables"):
         super().__init__(name, desc, value, item_id, ascart, cat)
         self.num_steps = num_steps
         self.m_count = m_count
 
 
 class RepelPotion(Consumable):
-    def __init__(self, name, desc, value, num_steps, item_id, ascart="Potion", cat="consumables"):
+    def __init__(self, name, desc, value, num_steps, item_id, ascart="Alchemy", cat="consumables"):
         super().__init__(name, desc, value, item_id, ascart, cat)
         self.num_steps = num_steps
 
 
 class BombPotion(Consumable):
-    def __init__(self, name, desc, value, multitarget, damage, item_id, ascart="Potion", cat="consumables"):
+    def __init__(self, name, desc, value, multitarget, damage, item_id, ascart="Alchemy", cat="consumables"):
         super().__init__(name, desc, value, item_id, ascart, cat)
         self.multitarget = multitarget
         self.damage = damage
 
 
 class XPGoldPotion(Consumable):
-    def __init__(self, name, desc, value, gold_change, xp_change, item_id, ascart="Potion", cat="consumables"):
+    def __init__(self, name, desc, value, gold_change, xp_change, item_id, ascart="Alchemy", cat="consumables"):
         super().__init__(name, desc, value, item_id, ascart, cat)
         self.gold_change = gold_change
         self.xp_change = xp_change
 
 
 class GameCrashPotion(Consumable):
-    def __init__(self, name, desc, value, item_id, ascart="Potion", cat="consumables"):
+    def __init__(self, name, desc, value, item_id, ascart="Alchemy", cat="consumables"):
         super().__init__(name, desc, value, item_id, ascart, cat)
 
     def use_item(self, user):
@@ -164,7 +164,7 @@ class GameCrashPotion(Consumable):
 
 class Weapon(Consumable):
     # Items that increase your damage by a percentage.
-    def __init__(self, name, desc, value, power, type_, class_, ascart, item_id, element='none', cat='weapons'):
+    def __init__(self, name, desc, value, power, type_, class_, ascart, item_id, element='neutral', cat='weapons'):
         super().__init__(name, desc, value, item_id, ascart, cat)
         self.power = power
         self.type_ = type_
@@ -401,28 +401,34 @@ class MonsterEncyclopedia(NonConsumable):
         super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
     def use_item(self, user):
-        print(battle.turn_counter)
-        m_w = {'fire': 'Water',
-               'water': 'Electric',
-               'electric': 'Earth',
-               'earth': 'Wind',
-               'wind': 'Grass',
-               'grass': 'Ice',
-               'ice': 'Fire',
-               'none': 'None',
-               'light': 'Dark',
-               'dark': 'Light'}[user.target.def_element]
+        if main.party_info['gamestate'] == 'battle':
+            m_w = {'fire': 'water',
+                   'water': 'electric',
+                   'electric': 'earth',
+                   'earth': 'wind',
+                   'wind': 'grass',
+                   'grass': 'ice',
+                   'ice': 'fire',
+                   'neutral': 'neutral',
+                   'light': 'dark',
+                   'dark': 'light'}[user.target.def_element]
 
-        print(f"""{user.target.name.upper()}'s STATS:
-Attack: {user.target.attk} | M. Attack: {user.target.m_attk} | P. Attack: {user.target.p_attk}
-Defense: {user.target.dfns} | M. Defense: {user.target.m_dfns} | P. Defense: {user.target.p_dfns}
-Evasion: {user.target.evad} | Speed: {user.target.spd}
-Def. Element: {user.target.def_element.title()} | Off. Element: {user.target.off_element.title()} | \
-Weakness: {m_w}""")
+            print(f"""{user.target.name.upper()}'s STATS:
+Physical: {user.target.attk} Attack / {user.target.dfns} Defense
+Magical: {user.target.m_attk} Attack / {user.target.m_dfns} Defense
+Piercing: {user.target.p_attk} Attack / {user.target.p_dfns} Defense
+Speed: {user.target.spd}
+Evasion: {user.target.evad}
+Elements: Attacks are {user.target.def_element.title()} / Defense is {user.target.off_element.title()} / \
+Weak to {m_w.title()}""")
+
+        else:
+            print("This feature doesn't work yet, sorry :(")
+            main.s_input("\nPress enter/return ")
 
 
 class PocketAlchemyLab(NonConsumable):
-    def __init__(self, name, desc, value, item_id, cat='tools', imp=False, ascart='Book'):
+    def __init__(self, name, desc, value, item_id, cat='tools', imp=False, ascart='alchemy_kit'):
         super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
     def use_item(self, user):
@@ -864,21 +870,25 @@ l_rejuv = HealthManaPotion('Mighty Rejuvenation Potion',
                            120, 80, "l_rejuv", heal=100, mana=100, ascart='Rejuv')
 
 # Potions - Status
-silence_potion = StatusPotion('Potion of Allowing Speech',
-                              "A potion designed to enable the usage of damaged vocal chords.",
-                              50, 'silenced', "silence_pot", ascart='Status')
-poison_potion = StatusPotion('Potion of Curing Disease',
-                             'A potion designed to cure even the most deadly of illnesses.',
-                             50, 'poisoned', "poison_pot", ascart='Status')
-weakness_potion = StatusPotion('Potion of Regaining Strength',
-                               'A potion designed to help regain lost muscle-mass and stamina.',
-                               50, 'weakened', "weakness_pot", ascart='Status')
-blindness_potion = StatusPotion('Potion of Enabling Sight',
-                                'A potion designed to help the blind regain their eyesight.',
-                                50, 'blinded', "blindness_pot", ascart='Status')
-paralyzation_potion = StatusPotion('Potion of Inducing Motion',
-                                   'A potion designed to cure minor paralysis in most of the body.',
-                                   50, 'paralyzed', "paralyze_pot", ascart='Status')
+silence_potion = StatusPotion('Potion of Allowing Speech', """\
+A potion designed to enable the usage of damaged vocal chords. Relieves a party
+member of the "Silenced" debuff.""", 50, 'silenced', "silence_pot")
+
+poison_potion = StatusPotion('Potion of Curing Disease', """\
+A potion designed to cure even the most deadly of illnesses.Relieves a party
+member of the "Poisoned" debuff.""", 50, 'poisoned', "poison_pot")
+
+weakness_potion = StatusPotion('Potion of Regaining Strength', """\
+A potion designed to help regain lost muscle-mass and stamina. Relieves a party
+member of the "Weakened" debuff.""", 50, 'weakened', "weakness_pot")
+
+blindness_potion = StatusPotion('Potion of Enabling Sight', """\
+A potion designed to help the blind regain their eyesight. Relieves a party
+member of the "Blinded" debuff.""", 50, 'blinded', "blindness_pot")
+
+paralyzation_potion = StatusPotion('Potion of Inducing Motion', """\
+A potion designed to cure minor paralysis in most of the body. Relieves a party
+member of the "Paralyzed" debuff.""", 50, 'paralyzed', "paralyze_pot")
 
 # Potions - Alchemy
 attract_potion_1 = AttractPotion("Attract Potion I", """\
@@ -1310,23 +1320,23 @@ drg_leg = Armor('Dragonhide Leggings',
 # Accessories
 # -- Elemental Accessories
 water_amulet = ElementAccessory('Aquatic Amulet', 'An amulet that imbues its wearer with the power of WATER',
-                                375, 'Water', "aquatic_amulet")
+                                375, 'water', "aquatic_amulet")
 fire_amulet = ElementAccessory('Infernal Amulet', 'An amulet that imbues its wearer with the power of FIRE',
-                               375, 'Fire', "fire_amulet")
+                               375, 'fire', "fire_amulet")
 earth_amulet = ElementAccessory('Ground Amulet', 'An amulet that imbues its wearer with the power of EARTH',
-                                375, 'Earth', "earth_amulet")
+                                375, 'earth', "earth_amulet")
 electric_amulet = ElementAccessory('Galvanic Amulet', 'An amulet that imbues its wearer with the power of ELECTRICITY',
-                                   375, 'Electric', "electric_amulet")
+                                   375, 'electric', "electric_amulet")
 wind_amulet = ElementAccessory('Tempestuous Amulet', 'An amulet that imbues its wearer with the power of WIND',
-                               375, 'Wind', "wind_amulet")
+                               375, 'wind', "wind_amulet")
 grass_amulet = ElementAccessory('Verdant Amulet', 'An amulet that imbues its wearer with the power of GRASS',
-                                375, 'Grass', "grass_amulet")
+                                375, 'grass', "grass_amulet")
 ice_amulet = ElementAccessory('Glacial Amulet', 'An amulet that imbues its wearer with the power of ICE',
-                              375, 'Ice', "ice_amulet")
+                              375, 'ice', "ice_amulet")
 light_amulet = ElementAccessory('Divine Amulet', 'An amulet that imbues its wearer with the power of LIGHT',
-                                375, 'Light', "light_amulet")
+                                375, 'light', "light_amulet")
 dark_amulet = ElementAccessory('Umbral Amulet', 'An amulet that imbues its wearer with the power of DARKNESS',
-                               375, 'Dark', "dark_amulet")
+                               375, 'dark', "dark_amulet")
 
 # Quest items
 message_joseph = Item('Message from Joseph', 'A neatly written message addressed to Philliard.',

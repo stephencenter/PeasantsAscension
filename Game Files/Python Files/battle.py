@@ -430,7 +430,10 @@ def battle_inventory(user):
 
             if isinstance(item, items.StatusPotion):
                 if item.status != user.status_ail:
-                    print(f'{user.name} is not {item.status} - they have no reason to drink that.')
+                    print('-'*save_load.divider_size)
+                    print(f'{user.name} is not {item.status}, they have no reason to drink that.')
+                    main.s_input("\nPress enter/return ")
+                    print('-'*save_load.divider_size)
                     break
 
             print('-' * save_load.divider_size)
@@ -440,113 +443,38 @@ def battle_inventory(user):
 
 def bat_stats():
     units.fix_stats()
-
     print('-'*save_load.divider_size)
 
-    # Sorry this section is kinda complicated. Basically, this calculates the length of certain
-    # strings to see how much padding (extra spaces) is needed to make things line up.
-    first_padding = max([len(x.name) for x in enabled_pcus + m_list])
-
-    second_padding = len(max([f'{units.player.hp}/{units.player.max_hp} HP' if units.player.enabled else '',
-                              f'{units.solou.hp}/{units.solou.max_hp} HP' if units.solou.enabled else '',
-                              f'{units.chili.hp}/{units.chili.max_hp} HP' if units.chili.enabled else '',
-                              f'{units.adorine.hp}/{units.adorine.max_hp} HP' if units.adorine.enabled else '',
-                              f'{units.chyme.hp}/{units.chyme.max_hp} HP' if units.chyme.enabled else '',
-                              f'{units.storm.hp}/{units.storm.max_hp} HP' if units.storm.enabled else '',
-                              f'{units.parsto.hp}/{units.parsto.max_hp} HP' if units.parsto.enabled else '',
-                              f'{units.monster_2.hp}/{units.monster_2.max_hp} HP' if units.monster_2 in m_list else '',
-                              f'{units.monster_3.hp}/{units.monster_3.max_hp} HP' if units.monster_3 in m_list else '',
-                              f'{units.monster.hp}/{units.monster.max_hp} HP'], key=len))
-
-    third_padding = len(max([f'{units.player.mp}/{units.player.max_mp} MP' if units.player.enabled else '',
-                             f'{units.solou.mp}/{units.solou.max_mp} MP' if units.solou.enabled else '',
-                             f'{units.chili.mp}/{units.chili.max_mp} MP' if units.chili.enabled else '',
-                             f'{units.adorine.mp}/{units.adorine.max_mp} MP' if units.adorine.enabled else '',
-                             f'{units.chyme.mp}/{units.chyme.max_mp} MP' if units.chyme.enabled else '',
-                             f'{units.storm.mp}/{units.storm.max_mp} MP' if units.storm.enabled else '',
-                             f'{units.parsto.mp}/{units.parsto.max_mp} MP' if units.parsto.enabled else '',
-                             f'{units.monster_2.mp}/{units.monster_2.max_mp} MP' if units.monster_2 in m_list else '',
-                             f'{units.monster_3.mp}/{units.monster_3.max_mp} MP' if units.monster_3 in m_list else '',
-                             f'{units.monster.mp}/{units.monster.max_mp} MP'], key=len))
     # Player Stats
-    print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-          units.player.name, units.player.hp,
-          units.player.max_hp, units.player.mp,
-          units.player.max_mp, units.player.lvl,
-          ', '.join([x.title() for x in units.player.status_ail]),
-          pad1=' '*(first_padding - len(units.player.name)),
-          pad2=' '*(second_padding - len(f'{units.player.hp}/{units.player.max_hp} HP')),
-          pad3=' '*(third_padding - len(f'{units.player.mp}/{units.player.max_mp} MP'))))
+    player_pad1 = max([len(x.name) for x in enabled_pcus])
+    player_pad2 = len(max([f'{unit.hp}/{unit.max_hp} HP' for unit in enabled_pcus], key=len))
+    player_pad3 = len(max([f'{unit.mp}/{unit.max_mp} MP' for unit in enabled_pcus], key=len))
 
-    if units.solou.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.solou.name, units.solou.hp,
-              units.solou.max_hp, units.solou.mp,
-              units.solou.max_mp, units.solou.lvl,
-              ', '.join([x.title() for x in units.solou.status_ail]),
-              pad1=' '*(first_padding - len(units.solou.name)),
-              pad2=' '*(second_padding - len(f'{units.solou.hp}/{units.solou.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.solou.mp}/{units.solou.max_mp} MP'))))
-
-    if units.chili.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.chili.name, units.chili.hp,
-              units.chili.max_hp, units.chili.mp,
-              units.chili.max_mp, units.chili.lvl,
-              ', '.join([x.title() for x in units.chili.status_ail]),
-              pad1=' '*(first_padding - len(units.chili.name)),
-              pad2=' '*(second_padding - len(f'{units.chili.hp}/{units.chili.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.chili.mp}/{units.chili.max_mp} MP'))))
-
-    if units.chyme.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.chyme.name, units.chyme.hp,
-              units.chyme.max_hp, units.chyme.mp,
-              units.chyme.max_mp, units.chyme.lvl,
-              ', '.join([x.title() for x in units.chyme.status_ail]),
-              pad1=' '*(first_padding - len(units.chyme.name)),
-              pad2=' '*(second_padding - len(f'{units.chyme.hp}/{units.chyme.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.chyme.mp}/{units.chyme.max_mp} MP'))))
-
-    if units.parsto.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.parsto.name, units.parsto.hp,
-              units.parsto.max_hp, units.parsto.mp,
-              units.parsto.max_mp, units.parsto.lvl,
-              ', '.join([x.title() for x in units.parsto.status_ail]),
-              pad1=' '*(first_padding - len(units.parsto.name)),
-              pad2=' '*(second_padding - len(f'{units.parsto.hp}/{units.parsto.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.parsto.mp}/{units.parsto.max_mp} MP'))))
-
-    if units.adorine.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.adorine.name, units.adorine.hp,
-              units.adorine.max_hp, units.adorine.mp,
-              units.adorine.max_mp, units.adorine.lvl,
-              ', '.join([x.title() for x in units.adorine.status_ail]),
-              pad1=' '*(first_padding - len(units.adorine.name)),
-              pad2=' '*(second_padding - len(f'{units.adorine.hp}/{units.adorine.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.adorine.mp}/{units.adorine.max_mp} MP'))))
-
-    if units.storm.enabled:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-              units.storm.name, units.storm.hp,
-              units.storm.max_hp, units.storm.mp,
-              units.storm.max_mp, units.storm.lvl,
-              ', '.join([x.title() for x in units.storm.status_ail]),
-              pad1=' '*(first_padding - len(units.storm.name)),
-              pad2=' '*(second_padding - len(f'{units.storm.hp}/{units.storm.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{units.storm.mp}/{units.storm.max_mp} MP'))))
+    print("Your party: ")
+    for pcu in enabled_pcus:
+        print("  {0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+              pcu.name, pcu.hp,
+              pcu.max_hp, pcu.mp,
+              pcu.max_mp, pcu.lvl,
+              ', '.join([x.title() for x in pcu.status_ail]),
+              pad1=' '*(player_pad1 - len(pcu.name)),
+              pad2=' '*(player_pad2 - len(f'{pcu.hp}/{pcu.max_hp} HP')),
+              pad3=' '*(player_pad3 - len(f'{pcu.mp}/{pcu.max_mp} MP'))))
 
     # Monster Stats
+    monster_pad1 = max([len(x.name) for x in m_list])
+    monster_pad2 = len(max([f'{unit.hp}/{unit.max_hp} HP' for unit in m_list], key=len))
+    monster_pad3 = len(max([f'{unit.mp}/{unit.max_mp} MP' for unit in m_list], key=len))
+
+    print("\nEnemy Team: ")
     for each_monster in m_list:
-        print("{0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
+        print("  {0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
               each_monster.name, each_monster.hp,
               each_monster.max_hp, each_monster.mp,
               each_monster.max_mp, each_monster.lvl,
               ', '.join([x.title() for x in each_monster.status_ail]),
-              pad1=' '*(first_padding - len(each_monster.name)),
-              pad2=' '*(second_padding - len(f'{each_monster.hp}/{each_monster.max_hp} HP')),
-              pad3=' '*(third_padding - len(f'{each_monster.mp}/{each_monster.max_mp} MP'))))
+              pad1=' '*(monster_pad1 - len(each_monster.name)),
+              pad2=' '*(monster_pad2 - len(f'{each_monster.hp}/{each_monster.max_hp} HP')),
+              pad3=' '*(monster_pad3 - len(f'{each_monster.mp}/{each_monster.max_mp} MP'))))
 
     print('-'*save_load.divider_size)
