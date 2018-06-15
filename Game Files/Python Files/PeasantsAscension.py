@@ -59,7 +59,6 @@ import sounds
 import units
 import battle
 import items
-import ascii_art
 import magic
 
 # Log everything and send it to stderr.
@@ -187,9 +186,6 @@ def game_loop():
             elif command.startswith('l'):
                 look_command()
 
-            elif command.startswith('r'):
-                rest_command()
-
             elif command.startswith('c'):
                 title_screen.edit_settings()
 
@@ -245,7 +241,6 @@ def check_region():
     if party_info['prov'] != new_province or party_info['biome'] != new_biome:
 
         if party_info['biome'] != new_biome:
-            print(ascii_art.locations['new_biome'])
             print(f"Looks like your party's entering a {new_biome.title()}.")
 
             party_info['biome'] = new_biome
@@ -354,7 +349,6 @@ def help_command():
  [P]arty Stats - Displays the stats of a specific party member
  [T]ool Menu - Allows you to quickly use tools without opening your inventory
  [M]agic - Allows you to use healing spells outside of battle
- [R]est - Heals your party member while in the overworld
  [I]nventory - Displays your inventory and lets you equip/use items
  [C]onfig - Opens the settings list and allows you to change them in-game
  [H]elp - Reopens this list of commands
@@ -432,46 +426,6 @@ def look_command():
     print('-'*save_load.divider_size)
 
 
-def rest_command():
-    # Attempt to re-gain health on the world map.
-    # There is a chance to get ambushed by an enemy when doing this.
-    print('-'*save_load.divider_size)
-
-    if all([x.hp == x.max_hp and x.mp == x.max_mp for x in [units.player,
-                                                            units.solou,
-                                                            units.chili,
-                                                            units.chyme,
-                                                            units.storm,
-                                                            units.parsto,
-                                                            units.adorine]]):
-        print('Your party feels fine and decides not to rest.')
-        s_input("\nPress enter/return ")
-        print('-'*save_load.divider_size)
-
-        return
-
-    print(ascii_art.locations['Campsite'])
-    print('Your party sets up camp and begin to rest...')
-
-    smart_sleep(1)
-
-    is_battle = random.randint(0, 3)
-
-    if is_battle == 3 and party_info['do_monster_spawns']:
-        units.spawn_monster()
-        battle.battle_system(ambush=True)
-
-    else:
-        units.heal_pcus(0.25)
-
-        print('You rested well and decide to continue on your way.')
-        s_input("\nPress enter/return ")
-
-        if not towns.search_towns(enter=False):
-            print('-'*save_load.divider_size)
-
-
-# Needs reworked to work with new tools and use item_ids instead of item names
 def tools_command():
     valid_tools = ['monster_book', 'shovel', 'musicbox', 'pocket_lab', 'fast_map']
     available_tools = []

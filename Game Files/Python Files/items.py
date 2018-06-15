@@ -24,7 +24,6 @@ from copy import copy as _c
 import pygame
 
 import ascii_art
-import battle
 import dialogue
 import save_load
 import sounds
@@ -351,7 +350,7 @@ class FastTravelAtlas(NonConsumable):
                 except (IndexError, ValueError):
                     if chosen in ['e', 'x', 'exit', 'b', 'back']:
                         print('-' * save_load.divider_size)
-                        return False
+                        return
 
                     continue
 
@@ -360,33 +359,45 @@ class FastTravelAtlas(NonConsumable):
                     y_n = main.s_input(f"Warp to {chosen.name}? | Yes or No: ").lower()
 
                     if y_n.startswith('y'):
+                        if 'has_teleported' not in main.party_info:
+                            main.party_info['has_teleported'] = False
+
+                        if main.party_info['has_teleported']:
+                            print("-"*save_load.divider_size)
+                            print("Your party peers into the Fast Travel Atlas and begins to phase out of reality")
+                            print("Upon waking you're exactly where you wanted to be.")
+                            main.s_input("\nPress enter/return ")
+
+                        else:
+                            print("-"*save_load.divider_size)
+                            print("You begin to feel strange - your body feels light and all you hear is silence.")
+                            print("Your vision starts going blank... All of your senses quickly turning off until")
+                            print("you're left with nothing but your thoughts...")
+                            main.s_input("\nPress enter/return ")
+                            print("...")
+                            main.smart_sleep(1)
+                            print("...")
+                            main.smart_sleep(1)
+                            print("...")
+                            main.smart_sleep(1)
+                            sounds.enemy_hit.play()
+                            print("CRASH! Your senses re-emerge you've landed on your back... Oh, you're exactly where")
+                            print("you teleported to!")
+                            main.s_input("\nPress enter/return ")
+                            print("-"*save_load.divider_size)
+
+                        main.party_info['has_teleported'] = True
                         main.party_info['prov'] = prov.name
                         main.party_info['biome'] = chosen.biome
                         main.party_info['current_tile'] = chosen.primary_tile
-
-                        print("-"*save_load.divider_size)
-                        print("You begin to feel strange - your body feels light and all you hear is silence.")
-                        print("Your vision starts going blank... All of your senses quickly turning off until")
-                        print("you're left with nothing but your thoughts...")
-                        main.s_input("\nPress enter/return ")
-                        print("...")
-                        main.smart_sleep(1)
-                        print("...")
-                        main.smart_sleep(1)
-                        print("...")
-                        main.smart_sleep(1)
-                        sounds.enemy_hit.play()
-                        print("CRASH! Your senses re-emerge you've landed on your back... Oh, you're exactly where")
-                        print("you teleported to!")
-                        main.s_input("\nPress enter/return ")
-                        print("-"*save_load.divider_size)
                         main.check_region()
 
-                        return True
+                        return
 
                     if y_n.startswith('n'):
                         print('-'*save_load.divider_size)
                         do_loop = False
+
                         break
 
 

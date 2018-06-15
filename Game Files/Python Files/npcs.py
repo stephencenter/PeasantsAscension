@@ -49,18 +49,22 @@ class NPC:
     def speak(self):
         # Print the NPC's dialogue to the player
         print(f"{self.name}, the {self.occupation}:")
-        for convo in [x for x in self.conversations if x.active]:
+        for convo in [x for x in self.conversations if not isinstance(x, d.Quest) and x.active]:
+            for sentence in main.chop_by_79(convo.dialogue):
+                main.s_input(sentence)
+
+            convo.after_talking()
+            print('-'*save_load.divider_size)
+
+        for convo in [x for x in self.conversations if isinstance(x, d.Quest) and x.active]:
+            if isinstance(convo, d.Quest) and convo.finished:
+                convo.completion()
+
             for sentence in main.chop_by_79(convo.dialogue):
                 main.s_input(sentence)
 
             if isinstance(convo, d.Quest) and not convo.started:
                 convo.give_quest()
-
-            elif isinstance(convo, d.Quest) and convo.finished:
-                convo.completion()
-
-            convo.after_talking()
-            print('-'*save_load.divider_size)
 
 
 npc_solou = NPC("Solou", "Page", [d.solou_convo_1, d.solou_quest_1])

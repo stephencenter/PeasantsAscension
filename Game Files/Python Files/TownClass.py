@@ -48,7 +48,6 @@ class Town:
 
     def town_choice(self):
         print('-'*save_load.divider_size)
-        print(ascii_art.locations['Town'])
         print(f'Welcome to {self.name}!')
         print('-'*save_load.divider_size)
 

@@ -22,11 +22,11 @@ import sys
 
 import pygame
 
+import items
 import dialogue
 import abilities
 import ascii_art
 import battle
-import items
 import magic
 import save_load
 import sounds
@@ -490,7 +490,6 @@ Increasing DIFFICULTY will provide:
         print(f'\n{self.name} is out of skill points.')
 
     def player_info(self):
-        inv_name = self.name if self != player else 'player'
         fix_stats()
 
         m_w = {'fire': 'water',
@@ -875,7 +874,7 @@ class Monster(Unit):
 
         self.gold = 0
         self.experience = 0
-        self.items = 0
+        self.items = []
 
         # This dictionary contains numerous variables that interact with abilties in battle
         self.ability_vars = {
@@ -1000,7 +999,7 @@ class Monster(Unit):
 
         # Give the monster a set of items to drop if RNGsus wills it
         if random.randint(0, 4) == 0:  # 20% chance
-            self.items = random.choice(items.monster_drop_list[self.name])
+            self.items = [random.choice(items.monster_drop_list[self.name]).item_id]
 
     def monster_level(self):
         minlvl, maxlvl = tiles.find_cell_with_tile_id(main.party_info['current_tile'].tile_id).m_level
@@ -1405,8 +1404,9 @@ class Monster(Unit):
 
 
 class Boss(Monster):
-    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, lvl, b_items, gold,
-                 experience, attk_msg, active=True, off_element='neutral', def_element='neutral', lackies=None):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                 lvl, b_items, gold, experience, attk_msg, boss_id, active=True, off_element='neutral',
+                 def_element='neutral', lackies=None):
         Monster.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
         self.off_element = off_element
@@ -1419,6 +1419,7 @@ class Boss(Monster):
         self.attk_msg = attk_msg
         self.lackies = lackies
         self.m_name = copy.copy(self.name)
+        self.boss_id = boss_id
 
     def max_stats(self):
         self.hp = copy.copy(self.max_hp)
@@ -1439,66 +1440,71 @@ class Boss(Monster):
         pass
 
 
-# Boss: Master Slime -- Position: 0'N, 1'E
-def mastslim_ud():
+# =========================== #
+#           BOSSES            #
+# =========================== #
+
+# == MASTER SLIME == #
+def master_slime_ud():
     dialogue.alfred_quest_1.finished = True
     dialogue.alfred_convo_2.active = False
+    dialogue.alfred_convo_3.active = True
 
 
 master_slime = Boss('Master Slime',
                     35, 5,   # 35 HP and 5 MP
-                    12, 5,   # 12 Attack, 5 Defense
-                    6, 5,    # 6 Pierce Attack, 5 Pierce Defense
+                    15, 10,  # 12 Attack, 5 Defense
+                    6, 10,   # 6 Pierce Attack, 5 Pierce Defense
                     8, 0,    # 8 Magic Attack, 0 Magic Defense
                     6, 6,    # 6 Speed, 6 Evasion
                     3,       # Level 3
-                    None,    # Drops no items
+                    ["s_vial", "s_vial", "s_vial"],  # Drops 3 slime vials
                     25, 25,  # Gives 25 XP and 25 GP
-                    "jiggles ferociously and begins to attack",
+                    "jiggles ferociously and begins to attack", "master_slime",
                     active=False)
 
 master_slime.battle_turn = master_slime.melee_ai
-master_slime.upon_defeating = mastslim_ud
+master_slime.upon_defeating = master_slime_ud
 
-# Boss: Goblin Chieftain -- Position: 4'N, -2'W
-whisp_goblin = Boss('Goblin Chieftain',
-                    50, 10,  # 50 HP and 10 MP
-                    20, 20,  # 20 Attack, 20 Defense
-                    12, 15,  # 12 Pierce Attack, 15 Pierce Defense
-                    8, 12,   # 8 Magic Attack, 12 Magic Defense
-                    15, 7,   # 15 Speed, 7 Evasion
-                    5,       # Level 5
-                    None,    # Drops no items
-                    45, 45,  # Gives 45 XP and 45 GP
-                    "readies his great spear and begins to stab")
+# == GOBLIN CHIEFTAIN == #
+goblin_chieftain = Boss('Goblin Chieftain',
+                        50, 10,  # 50 HP and 10 MP
+                        20, 20,  # 20 Attack, 20 Defense
+                        12, 15,  # 12 Pierce Attack, 15 Pierce Defense
+                        8, 12,   # 8 Magic Attack, 12 Magic Defense
+                        15, 7,   # 15 Speed, 7 Evasion
+                        5,       # Level 5
+                        [],      # Drops no items
+                        45, 45,  # Gives 45 XP and 45 GP
+                        "readies his great spear and begins to stab", "goblin_cheiftain")
 
-whisp_goblin.battle_turn = whisp_goblin.melee_ai
+goblin_chieftain.battle_turn = goblin_chieftain.melee_ai
 
 
-# Boss: Menacing Phantom -- Position: 8'N, -12'W
+# == MENACING PHANTOM == #
 def menacphan_ud():
     # Stands for "Menacing Phantom -- Upon Defeating"
     dialogue.stewson_quest_1.finished = True
     dialogue.stewson_convo_2.active = False
 
 
-menac_phantom = Boss('Menacing Phantom',
-                     75, 50,  # 75 HP and 50 MP
-                     10, 20,  # 10 Attack, 20 Defense
-                     5, 20,   # 5 Pierce Attack, 20 Pierce Defense
-                     35, 25,  # 35 Magic Attack, 25 Magic Defense
-                     20, 15,  # 20 Speed, 15 Evasion
-                     8,       # Level 8
-                     None,    # Drops no items
-                     75, 75,  # Gives 75 XP and 75 GP
-                     "calls upon its ethereal power and casts a hex on",
-                     off_element='dark', def_element='dark', active=False)
+menacing_phantom = Boss('Menacing Phantom',
+                        75, 50,  # 75 HP and 50 MP
+                        10, 20,  # 10 Attack, 20 Defense
+                        5, 20,   # 5 Pierce Attack, 20 Pierce Defense
+                        35, 25,  # 35 Magic Attack, 25 Magic Defense
+                        20, 15,  # 20 Speed, 15 Evasion
+                        8,       # Level 8
+                        [],      # Drops no items
+                        75, 75,  # Gives 75 XP and 75 GP
+                        "calls upon its ethereal power and casts a hex on", "menacing_phantom",
+                        off_element='dark', def_element='dark', active=False)
 
-menac_phantom.battle_turn = menac_phantom.magic_ai
-menac_phantom.upon_defeating = menacphan_ud
+menacing_phantom.battle_turn = menacing_phantom.magic_ai
+menacing_phantom.upon_defeating = menacphan_ud
 
 
-# Boss: Terrible Tarantuloid -- Position: -23'S, -11'W  (Adventure in Pixels)
+# == TERRIBLE TARANTULOID == #  (Adventure in Pixels)
 def terrtar_ud():
     dialogue.krystin_convo_2.active = False
     dialogue.krystin_convo_3.active = True
@@ -1515,36 +1521,36 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    15, 25,    # 15 Magic Attack, 25 Magic Defense
                    35, 25,    # 35 Speed, 25 Evasion
                    12,        # Level 12
-                   None,      # Drops no items
+                   [],        # Drops no items
                    150, 150,  # Gives 150 XP and 150 GP
-                   "readies its venomous fangs and bites")
+                   "readies its venomous fangs and bites", "terrible_tarantuloid")
 
 terr_tarant.battle_turn = terr_tarant.melee_ai
 terr_tarant.upon_defeating = terrtar_ud
 
 
-# Boss: Cursed Spectre -- Position 22'N, 3'E
-def cursspect_ud():
+# == CURSED SPECTRE == #
+def cursed_spectre_ud():
     dialogue.rivesh_convo_3.active = False
     dialogue.rivesh_quest_1.finished = True
 
 
-cursed_spect = Boss('Cursed Spectre',
-                    125, 75,             # 125 Health, 75 Mana
-                    15, 30,              # 15 Attack, 30 Defense
-                    20, 25,              # 20 Pierce Attack, 25 Pierce Defense
-                    50, 35,              # 50 Magic Attack, 35 Magic Defense
-                    25, 20,              # 25 Speed, 20 Evasion
-                    15,                  # Level 15
-                    None,                # Drops no items
-                    250, 250,            # Gives 250 XP and 250 GP
-                    "calls upon its ethereal power and casts a hex on",
-                    off_element='dark', def_element='dark', active=False)
+cursed_spectre = Boss('Cursed Spectre',
+                      125, 75,             # 125 Health, 75 Mana
+                      15, 30,              # 15 Attack, 30 Defense
+                      20, 25,              # 20 Pierce Attack, 25 Pierce Defense
+                      50, 35,              # 50 Magic Attack, 35 Magic Defense
+                      25, 20,              # 25 Speed, 20 Evasion
+                      15,                  # Level 15
+                      [],                  # Drops no items
+                      250, 250,            # Gives 250 XP and 250 GP
+                      "calls upon its ethereal power and casts a hex on", "cursed_spectre",
+                      off_element='dark', def_element='dark', active=False)
 
-cursed_spect.battle_turn = cursed_spect.magic_ai
-cursed_spect.upon_defeating = cursspect_ud
+cursed_spectre.battle_turn = cursed_spectre.magic_ai
+cursed_spectre.upon_defeating = cursed_spectre_ud
 
-# Boss: Ent -- Position: 27'N, 15'E
+# == GIANT ENT == #
 giant_ent = Boss('Giant Ent',
                  125, 35,         # 125 Health, 75 Mana
                  35, 50,          # 35 Attack, 50 Defense
@@ -1552,14 +1558,14 @@ giant_ent = Boss('Giant Ent',
                  20, 15,          # 20 Magic Attack, 15 Magic Defense
                  15, 5,           # 15 Speed, 5 Evasion
                  15,              # Level 15
-                 None,            # Drops no items
+                 [],              # Drops no items
                  250, 250,        # Gives 250 XP and 250 GP
-                 "slowly lumbers over and whacks",
+                 "slowly lumbers over and whacks", "giant_ent",
                  off_element='grass', def_element='grass', active=True)
 
 giant_ent.battle_turn = giant_ent.melee_ai
 
-boss_list = [whisp_goblin, master_slime, menac_phantom, terr_tarant, cursed_spect, giant_ent]
+boss_list = [goblin_chieftain, master_slime, menacing_phantom, terr_tarant, cursed_spectre, giant_ent]
 defeated_bosses = []  # Make sure you can only defeat the boss one time
 
 
@@ -1567,7 +1573,7 @@ def check_bosses():
     global monster
 
     for boss in main.party_info['current_tile'].boss_list:
-        if boss.name not in defeated_bosses and boss.active:
+        if boss.boss_id not in defeated_bosses and boss.active:
             print('-'*save_load.divider_size)
             print('You feel the presence of an unknown entity...')
 
@@ -1962,7 +1968,7 @@ def serialize_bosses(path):
     json_bosslist = {}
 
     for boss in boss_list:
-        json_bosslist[boss.name] = boss.active
+        json_bosslist[boss.boss_id] = boss.active
 
     with open(path, encoding='utf-8', mode='w') as i:
         json.dump(json_bosslist, i)
@@ -1976,7 +1982,7 @@ def deserialize_bosses(path):
 
     for key in json_bosslist:
         for boss in boss_list:
-            if key == boss.name:
+            if key == boss.boss_id:
                 boss.active = json_bosslist[key]
 
 

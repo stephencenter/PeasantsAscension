@@ -135,7 +135,7 @@ def set_temp_stats():
         pcu.reset_ability_vars()
 
 
-def battle_system(is_boss=False, ambush=False):
+def battle_system(is_boss=False):
     global m_list
     global enabled_pcus
     global turn_counter
@@ -164,6 +164,8 @@ def battle_system(is_boss=False, ambush=False):
         else:
             print(f'The legendary {units.monster.name} has awoken!')
 
+        sounds.play_music('../Music/Terrible Tarantuloid.ogg')
+
         main.smart_sleep(0.35)
 
     else:
@@ -178,25 +180,13 @@ def battle_system(is_boss=False, ambush=False):
         print(ascii_art.monster_art[units.monster.m_name] % '')
 
         if len(m_list) == 3:
-            if ambush:
-                print(f'A {units.monster.name} and 2 other monsters ambushed you while you were resting!')
-
-            else:
-                print(f'A {units.monster.name} and 2 other monsters suddenly appeared out of nowhere!')
+            print(f'A {units.monster.name} and 2 other monsters suddenly appeared out of nowhere!')
 
         elif len(m_list) == 2:
-            if ambush:
-                print(f'A {units.monster.name} and 1 other monster ambushed you while you were resting!')
-
-            else:
-                print(f'A {units.monster.name} and 1 other monster suddenly appeared out of nowhere!')
+            print(f'A {units.monster.name} and 1 other monster suddenly appeared out of nowhere!')
 
         else:
-            if ambush:
-                print(f'A {units.monster.name} ambushed you while you were resting!')
-
-            else:
-                print(f'A {units.monster.name} suddenly appeared out of nowhere!')
+            print(f'A {units.monster.name} suddenly appeared out of nowhere!')
 
         sounds.play_music('../Music/Ruari 8-bit Battle.ogg')
 
@@ -367,18 +357,22 @@ def after_battle(is_boss):
         elif all(['dead' in m.status_ail for m in m_list]) and any(['dead' not in x.status_ail for x in enabled_pcus]):
             sounds.play_music('../Music/Python_RM.ogg')
 
-            if not is_boss:
-                print(f'The {units.monster.name} falls to the ground, dead as a stone.')
+            if is_boss:
+                print(f'The almighty {units.monster.name} has been slain!')
+                units.defeated_bosses.append(units.monster.boss_id)
+                units.monster.upon_defeating()
 
             else:
-                print(f'The almighty {units.monster.name} has been slain!')
-                units.defeated_bosses.append(units.monster.name)
-                units.monster.upon_defeating()
+                print(f'The {units.monster.name} falls to the ground, dead as a stone.')
 
             # Formulas for item, gold, and experience drops
             gold_drops = math.ceil(sum([max(1, x.gold, 2.5*x.lvl) for x in m_list]))
             expr_drops = math.ceil(sum([max(1, y.experience, 1.5**y.lvl)/2 for y in m_list]))
-            item_drops = [(z.name, z.items) for z in m_list if z.items]
+            item_drops = []
+
+            for monster in m_list:
+                for item in monster.items:
+                    item_drops.append((monster.name, item))
 
             main.party_info['gp'] += gold_drops
             main.s_input(f'Your party has gained {gold_drops} GP! ')
@@ -390,8 +384,8 @@ def after_battle(is_boss):
 
             # Each monster can drop their own item
             for drop in item_drops:
-                print(f"The {drop[0]} dropped a {drop[1].name}! ")
-                items.inventory[drop[1].cat].append(drop[1])
+                main.s_input(f"The {drop[0]} dropped a {items.find_item_with_id(drop[1]).name}! ")
+                items.add_item(drop[1])
 
             for character in enabled_pcus:
                 character.level_up()

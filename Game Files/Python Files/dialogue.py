@@ -267,7 +267,7 @@ stewson_convo_4 = Conversation("Thank you again for your help, adventurer!", "st
 def stewson_q1_us():
     global stewson_convo_1
     global stewson_convo_2
-    units.menac_phantom.active = True
+    units.menacing_phantom.active = True
     stewson_convo_1.active = False
     stewson_convo_2.active = True
 
@@ -345,7 +345,7 @@ def rivesh_q1_us():
     rivesh_convo_3.active = True
     seriph_convo_1.active = False
     seriph_convo_2.active = True
-    units.cursed_spect.active = True
+    units.cursed_spectre.active = True
 
 
 def rivesh_q1_uc():
@@ -365,17 +365,14 @@ rivesh_quest_1.upon_completing = rivesh_q1_uc
 # ---------------------------------------------------------------------------- #
 # SIDEQUESTS
 
-# -- Name: Alfred -- Town: Nearton
+# --ALFRED OF NEARTON--
 alfred_convo_1 = Conversation("""\
-It is rumored that a mighty gel-creature lives south-east of this very town.
-I'd be careful around there if I were you.""", "alfred_c1", active=True)
-
-alfred_convo_2 = Conversation("Come back here when you defeat the evil Master Slime. Good luck!", "alfred_c2")
-
-alfred_convo_3 = Conversation("Greetings, Hero! Good luck on your adventures!", "alfred_c3")
-
-alfred_convo_4 = Conversation("""\
-"You defeated the evil Master Slime?! Amazing! Take this, adventurer, you've earned it.""", "aldred_c4")
+It is rumored that a mighty jelly-creature lives south of this very town. 
+Supposedly he's been devourering wild animals in the forest at a terrifying
+rate, which is causing a lot of trouble for local hunters! And we're worried
+that if he gets bored of his food in the forest that he'll come for us!
+Unfortunately, the local militia is busy dealing with something else, so we
+can't count on them to stop it. I'd be careful around there if I were you.""", "alfred_c1", active=True)
 
 
 def alfred_q1_us():
@@ -391,14 +388,26 @@ def alfred_q1_us():
 def alfred_q1_uc():
     # Stands for "Alfred Quest 1 -- Upon Completing
     global alfred_convo_3
-    alfred_convo_3.active = True
+    global alfred_convo_4
+    alfred_convo_3.active = False
+    alfred_convo_4.active = True
 
 
 alfred_quest_1 = Quest('A Slimy Specimen', """\
 ...Actually, now that I think about it, do you think you could possibly
-dispose of this vile creature? It's located at -1\u00b0N, 2\u00b0E.""", 'Alfred', [30, 50], "alfred_q1", active=True)
+dispose of this vile creature? It's located just south of here.""", 'Alfred', [30, 50], "alfred_q1", active=True)
 alfred_quest_1.upon_starting = alfred_q1_us
 alfred_quest_1.upon_completing = alfred_q1_uc
+
+alfred_convo_2 = Conversation("""\
+Come back here when you defeat the evil Master Slime. Good luck!""", "alfred_c2")
+
+alfred_convo_3 = Conversation("""\
+You defeated the evil Master Slime?! Amazing! Now we can sleep easy at night
+knowing our animals are safe. Take this, adventurer, you've earned it.""", "aldred_c3")
+
+alfred_convo_4 = Conversation("""\
+Greetings, Hero! Good luck on your adventures!""", "alfred_c4")
 
 # -- Name: Kyle -- Town: Tripton
 kyle_convo_1 = Conversation("""\

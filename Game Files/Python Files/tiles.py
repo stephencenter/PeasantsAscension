@@ -19,6 +19,7 @@ import pygame
 
 import towns
 import items
+import units
 
 if __name__ == "__main__":
     sys.exit()
@@ -315,7 +316,8 @@ nearton_sw = Tile("Nearton Outskirts", "I-BF-SW", nearton_desc,
 nearton_s = Tile("Nearton Outskirts", "I-BF-S", nearton_desc,
                  to_n="nearton_tile",
                  to_w="I-BF-SW",
-                 to_e="I-BF-SE")
+                 to_e="I-BF-SE",
+                 boss_list=[units.master_slime])
 nearton_se = Tile("Nearton Outskirts", "I-BF-SE", nearton_desc,
                   to_w="I-BF-S",
                   to_n="I-BF-E",
@@ -330,7 +332,8 @@ nearton_e = Tile("Nearton Outskirts", "I-BF-E", nearton_desc,
                  to_s="I-BF-SE")
 nearton_nw = Tile("Nearton Outskirts", "I-BF-NW", nearton_desc,
                   to_s="I-BF-W",
-                  to_e="I-BF-N")
+                  to_e="I-BF-N",
+                  boss_list=[units.goblin_chieftain])
 nearton_n = Tile("Nearton Outskirts", "I-BF-N", nearton_desc,
                  to_s="nearton_tile",
                  to_e="I-BF-NE",
@@ -357,6 +360,7 @@ southford_desc = """"""
 southford_tile = Tile("Town of Southford", "southford_tile", southford_desc + """\n
 The town of Southford is mere minutes away from this point! Stopping by
 there might be a smart idea.""",
+                      town_list=[towns.town_southford],
                       to_s="BF-2A",
                       to_w="BF-4A",
                       to_e="BF-6A",

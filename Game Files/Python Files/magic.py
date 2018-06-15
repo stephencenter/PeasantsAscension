@@ -309,7 +309,9 @@ def new_spells(character):
                 if (character.class_ not in spell.class_) and spell.class_:
                     continue
 
-                sounds.item_pickup.play()
+                if not save_load.do_blip:
+                    sounds.item_pickup.play()
+
                 spellbook[character.name if character != units.player else 'player'][cat].append(spell)
 
                 main.s_input(f'{character.name} has learned "{spell.name}", a new {cat} spell!')
