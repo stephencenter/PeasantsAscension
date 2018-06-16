@@ -51,6 +51,12 @@ class Item:
         self.cat = cat
         self.item_id = item_id
 
+        try:
+            assert self.ascart in ascii_art.item_sprites
+
+        except AssertionError:
+            raise Exception(f"{self.item_id} has invalid ascii art!")
+
     def use_item(self, user):
         print("You can't use this right now.")
 
@@ -173,10 +179,10 @@ class Weapon(Consumable):
 
         if self.class_:
             classes = ' and '.join([f"{x.title()}s" for x in self.class_])
-            self.class_req = f"| For {classes} only"
+            self.class_req = f"\nOnly equippable by {classes}."
 
         else:
-            self.class_req = "| For any class"
+            self.class_req = "\nEquippable by any class."
 
         self.desc = f"{desc} {self.class_req}"
 
@@ -203,10 +209,10 @@ class Armor(Consumable):
 
         if self.class_:
             classes = ' and '.join([f"{x.title()}s" for x in self.class_])
-            self.class_req = f"| For {classes} only"
+            self.class_req = f"\nOnly equippable by {classes}."
 
         else:
-            self.class_req = "| For any class"
+            self.class_req = "\nEquippable by any class."
 
         self.desc = f"{desc} {self.class_req}"
 
@@ -833,7 +839,7 @@ class MusicBox(NonConsumable):
 
 
 class Ingredient(NonConsumable):
-    def __init__(self, name, desc, value, flavor, item_id, ascart='Misc', cat='misc', imp=False):
+    def __init__(self, name, desc, value, flavor, item_id, ascart='misc', cat='misc', imp=False):
         super().__init__(name, desc, value, item_id, imp, ascart, cat)
         self.flavor = flavor
 
@@ -983,350 +989,368 @@ your progress is lost.""", 0, "gamecrashpot")
 
 # Fists exist to prevent bugs caused by not having any weapon equipped. Also the starting
 # weapon for the Monk. Cannot be unequipped, and therefore cannot be sold.
-fists = Weapon('Fists',
-               """The oldest weapon known to man (No damage bonus)""", 0, 0, 'melee', [], 'Fists', "weapon_fist")
+fists = Weapon('Fists', """\
+The oldest weapon known to man [+0% Damage].""",
+               0, 0, 'melee', [], 'Fists', "weapon_fist")
 
 # These exist for the same reason as fists. They are only available when unequipping actual
 # armor and accessories. Cannot be unequipped, and therefore cannot be sold.
 no_head = Armor('None',
-                "You should probably get some head armor (No defense bonus).",
+                "You should probably get some head armor [+0% Damage Resistance].",
                 0, 0, 'head', [], 'misc', 'no_head')
 no_body = Armor('None',
-                "You should probably get some body armor (No defense bonus).",
+                "You should probably get some body armor [+0% Damage Resistance].",
                 0, 0, 'body', [], 'misc', 'no_body')
 no_legs = Armor('None',
-                "You should probably get some leg armor (No defense bonus).",
+                "You should probably get some leg armor [+0% Damage Resistance].",
                 0, 0, 'legs', [], 'misc', 'no_legs')
 no_access = Armor('None',
-                  "You should probably get an accessory (No effects).",
+                  "You should probably get an accessory [No Effects].",
                   0, 0, 'access', [], 'misc', 'no_access')
 
 # Weapons -- Warrior
-wdn_sht = Weapon('Wooden Shortsword',
-                 'A small sword carved from an oak branch (+5% Damage)',
-                 10, 0.05, 'melee', ['warrior'], 'Short Sword', "wdn_sht")
+iron_hoe = Weapon('Iron Hoe', """\
+Not much of a weapon, unless you really hate dirt [+5% Damage].""",
+                  10, 0.05, 'melee', ['warrior'], 'hoe', "wdn_sht")
 
 bnz_swd = Weapon('Bronze Sword',
-                 'A light yet sturdy sword smelted from bronze (+10% Damage)',
-                 100, 0.1, 'melee', ['warrior'], 'Sword', "bnz_swd")
+                 'A light yet sturdy sword smelted from bronze [+10% Damage].',
+                 150, 0.1, 'melee', ['warrior'], 'Sword', "bnz_swd")
 en_bnz_swd = Weapon('Enhanced Bronze Sword',
-                    'Even better than your typical Bronze Sword (+25% Damage)',
-                    250, 0.25, 'melee', ['warrior'], 'Sword', "en_bnz_swd")
+                    'Even better than your typical Bronze Sword [+25% Damage].',
+                    300, 0.25, 'melee', ['warrior'], 'Sword', "en_bnz_swd")
 
 stl_spr = Weapon('Steel Spear',
-                 'A fair-sized spear crafted from well made steel (+40% Damage)',
+                 'A fair-sized spear crafted from well made steel [+40% Damage].',
                  600, 0.4, 'melee', ['warrior'], 'Spear', "stl_spr")
 en_stl_spr = Weapon('Enhanced Steel Spear',
-                    'Even better than your typical Steel Spear (+60% Damage)',
+                    'Even better than your typical Steel Spear [+60% Damage].',
                     900, 0.6, 'melee', ['warrior'], 'Spear', "en_stl_spr")
 
 titan_axe = Weapon('Titanium Battleaxe',
-                   'A heavy and powerful axe made of high quality Titanium (+80% Damage)',
+                   'A heavy and powerful axe made of high quality Titanium [+80% Damage].',
                    1200, 0.8, 'melee', ['warrior'], 'Axe', "titan_axe")
 en_titan_axe = Weapon('Enhanced Titanium Battleaxe',
-                      'Even better than your typical Titanium Battleaxe (+100% Damage)',
-                      1500, 1, 'melee', ['warrior'], 'Axe', "en_titan_axe")
+                      'Even better than your typical Titanium Battleaxe [+100% Damage].',
+                      2400, 1, 'melee', ['warrior'], 'Axe', "en_titan_axe")
 
 # Weapons -- Assassin
-stn_dag = Weapon('Stone Dagger',
-                 'A crude yet effective knife carved from a light stone (+5% Damage)',
+stn_dag = Weapon('Stone Dagger', """\
+A stone knife that you made yourself! Used to shear sheep and cut meat [+5% Damage]""",
                  10, 0.05, 'melee', ['assassin'], 'Dagger', "stn_dag")
 
 ser_knf = Weapon('Serrated Knife',
-                 'A durable knife made of iron, with one side made jagged (+10% Damage)',
-                 100, 0.1, 'melee', ['assassin'], 'Dagger', "ser_knf")
+                 'A durable knife made of iron, with one side made jagged [+10% Damage]',
+                 150, 0.1, 'melee', ['assassin'], 'Dagger', "ser_knf")
 en_ser_knf = Weapon('Enhanced Serrated Knife',
-                    'Even better than your typical Serrated Knife (+25% Damage)',
-                    250, 0.25, 'melee', ['assassin'], 'Dagger', "en_ser_knf")
+                    'Even better than your typical Serrated Knife [+25% Damage].',
+                    300, 0.25, 'melee', ['assassin'], 'Dagger', "en_ser_knf")
 
 stiletto = Weapon('Stiletto',
-                  'A long, cross-shaped knife perfect for "removing" your enemies (+40% Damage)',
+                  'A long, cross-shaped knife perfect for "removing" your enemies [+40% Damage].',
                   600, 0.4, 'melee', ['assassin'], 'Stiletto', "stiletto")
 en_stiletto = Weapon('Enhanced Stiletto',
-                     'Even better than your typical Stiletto (+60% Damage)',
+                     'Even better than your typical Stiletto [+60% Damage].',
                      900, 0.6, 'melee', ['assassin'], 'Stiletto', "en_stiletto")
 
 myth_sb = Weapon('Mythril Shortblade',
-                 'A knife made of a rare and powerful material (+80% Damage)',
+                 'A knife made of a rare and powerful material [+80% Damage].',
                  1200, 0.8, 'melee', ['assassin'], 'Short Sword', "myth_sb")
 en_myth_sb = Weapon('Enhanced Mythril Shortblade',
-                    'Even better than your typical Mythril Shortblade (+100% Damage)',
-                    1500, 1, 'melee', ['assassin'], 'Short Sword', "en_myth_sb")
+                    'Even better than your typical Mythril Shortblade [+100% Damage].',
+                    2400, 1, 'melee', ['assassin'], 'Short Sword', "en_myth_sb")
 
 # Weapons -- Ranger
-slg_sht = Weapon('Sling Shot',
-                 'A weapon that could scare even the mightiest of tin-cans (+5% Damage)',
+slg_sht = Weapon('Sling Shot', """\
+A weapon that could scare even the mightiest of tin-cans [+5% Damage].""",
                  10, 0.05, 'ranged', ['ranger'], 'Sling Shot', "slg_sht")
 
 sht_bow = Weapon('Short Bow',
-                 "A bow of great craftsmanship. It's kinda small, though (+10% Damage)",
-                 100, 0.10, 'ranged', ['ranger'], 'Bow', "sht_bow")
+                 "A bow of great craftsmanship. It's kinda small, though [+10% Damage].",
+                 150, 0.10, 'ranged', ['ranger'], 'Bow', "sht_bow")
 en_sht_bow = Weapon('Enhanced Short Bow',
-                    " Even better than your typical Short Bow (+25% Damage)",
-                    250, 0.25, 'ranged', ['ranger'], 'Bow', "en_sht_bow")
+                    "Even better than your typical Short Bow [+25% Damage].",
+                    300, 0.25, 'ranged', ['ranger'], 'Bow', "en_sht_bow")
 
 lng_bow = Weapon('Long Bow',
-                 'A much more impressive bow capable of accuracy at long distances (+40% Damage)',
+                 'A much more impressive bow capable of accuracy at long distances [+40% Damage].',
                  600, 0.4, 'ranged', ['ranger'], 'Bow', "lng_bow")
 en_lng_bow = Weapon('Enhanced Long Bow',
-                    'Even better than your typical Long Bow (+60% Damage)',
+                    'Even better than your typical Long Bow [+60% Damage].',
                     900, 0.6, 'ranged', ['ranger'], 'Bow', "en_lng_bow")
 
 ash_cbow = Weapon('Ashen Crossbow',
-                  'A beautifully-crafted crossbow made from the wood of an ash tree. (+80% Damage)',
+                  'A beautifully-crafted crossbow made from the wood of an ash tree. [+80% Damage].',
                   1200, 0.8, 'ranged', ['ranger'], 'Crossbow', "ash_cbow")
 en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
-                     'Even better than your typical Ashen Crossbow (+100% Damage)',
-                     1500, 1, 'ranged', ['ranger'], 'Crossbow', "en_ash_cbow")
+                     'Even better than your typical Ashen Crossbow [+100% Damage].',
+                     2400, 1, 'ranged', ['ranger'], 'Crossbow', "en_ash_cbow")
 
 # Weapons -- Mage
-mag_twg = Weapon('Magical Twig',
-                 'A small stick with basic magical properties (+5% Damage)',
+mag_twg = Weapon('Magical Twig', """\
+Not actually magical but it makes you feel cooler when you use it [+5% Damage].""",
                  10, 0.05, 'ranged', ['mage'], 'Twig', "mag_twg")
 
 oak_stf = Weapon('Oak Staff',
-                 'A wooden staff imbued with weak magical abilities (+10% Damage)',
-                 100, 0.1, 'ranged', ['mage'], 'Staff', "oak_stf")
+                 'A wooden staff imbued with weak magical abilities [+10% Damage].',
+                 150, 0.1, 'ranged', ['mage'], 'Staff', "oak_stf")
 en_oak_stf = Weapon('Enhanced Oak Staff',
-                    'Even better than your typical Oak Staff (+15% Damage)',
-                    250, 0.15, 'ranged', ['mage'], 'Staff', "en_oak_stf")
+                    'Even better than your typical Oak Staff [+15% Damage].',
+                    300, 0.15, 'ranged', ['mage'], 'Staff', "en_oak_stf")
 
 arc_spb = Weapon('Arcane Spellbook',
-                 'An intermediate spellbook for combat purposes (+20% Damage)',
+                 'An intermediate spellbook for combat purposes [+20% Damage].',
                  600, 0.2, 'ranged', ['mage'], 'Book', "arc_spb")
 en_arc_spb = Weapon('Enhanced Arcane Spellbook',
-                    'Even better than your typical Arcane Spellbook (+30% Damage)',
+                    'Even better than your typical Arcane Spellbook [+30% Damage].',
                     900, 0.3, 'ranged', ['mage'], 'Book', "en_arc_spb")
 
 rnc_stf = Weapon('Runic Staff',
-                 'A powerful staff enchanted with ancient magic (+40% Damage)',
+                 'A powerful staff enchanted with ancient magic [+40% Damage].',
                  1200, 0.4, 'ranged', ['mage'], 'Staff', "rnc_stf")
 en_rnc_stf = Weapon('Enhanced Runic Staff',
-                    'Even better than your typical Runic Staff (+50% Damage)',
-                    1500, 0.5, 'ranged', ['mage'], 'Staff', "en_rnc_stf")
+                    'Even better than your typical Runic Staff [+50% Damage].',
+                    2400, 0.5, 'ranged', ['mage'], 'Staff', "en_rnc_stf")
 
 # Weapons -- Paladin
-rbr_mlt = Weapon('Rubber Mallet',
-                 'This can barely hammer nails, what do you expect to kill with it? (+5% Damage)',
+rbr_mlt = Weapon('Rubber Mallet', """\
+This can barely hammer nails, what do you expect to kill with it? [+5% Damage].""",
                  10, 0.05, 'melee', ['paladin'], 'Hammer', "rbr_mlt")
 
 holy_mace = Weapon('Holy Mace',
-                   'An well-made iron mace imbued with the power of the heavens (+10% Damage)',
-                   100, 0.1, 'melee', ['paladin'], 'Mace', "holy_mace")
+                   'An well-made iron mace imbued with the power of the heavens [+10% Damage].',
+                   150, 0.1, 'melee', ['paladin'], 'Mace', "holy_mace")
 en_holy_mace = Weapon('Enhanced Holy Mace',
-                      'Even better than your typical Holy Mace (+25% Damage)',
-                      250, 0.25, 'melee', ['paladin'], 'Mace', "en_holy_mace")
+                      'Even better than your typical Holy Mace [+25% Damage].',
+                      300, 0.25, 'melee', ['paladin'], 'Mace', "en_holy_mace")
 
 hmr_of_mgt = Weapon('Hammer of Might',
-                    'A hammer often used by holy warriors to smash their foes (+40% Damage)',
+                    'A hammer often used by holy warriors to smash their foes [+40% Damage].',
                     600, 0.4, 'melee', ['paladin'], 'Hammer', "hmr_of_mgt")
 en_hmr_of_mgt = Weapon('Enhanced Hammer of Might',
-                       'Even better than your typical Hammer of Might (+60% Damage)',
+                       'Even better than your typical Hammer of Might [+60% Damage].',
                        900, 0.6, 'melee', ['paladin'], 'Hammer', "en_hmr_of_mgt")
 
 ngt_bane = Weapon("Night's Bane",
-                  'A forbidden hammer used throughout history to crush unholy creatures (+80% Damage)',
+                  'A forbidden hammer used throughout history to crush unholy creatures [+80% Damage].',
                   1200, 0.8, 'melee', ['paladin'], 'Hammer', "ngt_bane")
 en_ngt_bane = Weapon("Enhanced Night's Bane",
-                     "Even better than your typical Night's Bane (+100% Damage)",
-                     1500, 1, 'melee', ['paladin'], 'Hammer', "en_ngt_bane")
+                     "Even better than your typical Night's Bane [+100% Damage].",
+                     2400, 1, 'melee', ['paladin'], 'Hammer', "en_ngt_bane")
 
-# Weapon -- Monk
+# Weapons -- Monk
+garden_gloves = Weapon("Gardening Gloves", """\
+Used to prevent getting cut on thorns or the teeth of your enemies [+5% Damage].""",
+                       10, 0.05, 'melee', ['monk'], 'Gloves', "gardening_gloves")
+
 brass_kncls = Weapon('Brass Knuckles',
-                     'A brass adornment for your knuckles providing extra punching power (+10% Damage)',
-                     100, 0.1, 'melee', ['monk'], 'Knuckles', "brass_kncls")
+                     'A brass adornment for your knuckles providing extra punching power [+10% Damage].',
+                     150, 0.1, 'melee', ['monk'], 'Knuckles', "brass_kncls")
 en_brass_kncls = Weapon('Enhanced Brass Knuckles',
-                        'Even better than your typical Brass Knuckles (+25% Damage)',
-                        250, 0.25, 'melee', ['monk'], 'Knuckles', "en_brass_kncls")
+                        'Even better than your typical Brass Knuckles [+25% Damage].',
+                        300, 0.25, 'melee', ['monk'], 'Knuckles', "en_brass_kncls")
 
 bladed_gloves = Weapon('Bladed Gloves',
-                       'Leather gloves with sturdy steel blades protruding from them (+40% Damage)',
+                       'Leather gloves with sturdy steel blades protruding from them [+40% Damage].',
                        600, 0.4, 'melee', ['monk'], 'Gloves', "bladed_gloves")
 en_bladed_gloves = Weapon('Enhanced Bladed Gloves',
-                          'Even better than your typical Bladed Gloves (+60% Damage)',
+                          'Even better than your typical Bladed Gloves [+60% Damage].',
                           900, 0.6, 'melee', ['monk'], 'Gloves', "en_bladed_gloves")
 
 lead_bg = Weapon('Lead-Weighted Mitts',
-                 'Weighted with 5 pounds of lead and tipped with steel blades (+80% Damage)',
+                 'Weighted with 5 pounds of lead and tipped with steel blades [+80% Damage].',
                  1200, 0.8, 'melee', ['monk'], 'Gloves', "lead_bg")
 en_lead_bg = Weapon('Enhanced Lead Mitts',
-                    'Even better than your typical Lead-Weighted Mitts (+100% Damage)',
-                    1500, 1, 'melee', ['monk'], 'Gloves', "en_lead_bg")
+                    'Even better than your typical Lead-Weighted Mitts [+100% Damage].',
+                    2400, 1, 'melee', ['monk'], 'Gloves', "en_lead_bg")
 
-# Starting Armor (Useless)
-straw_hat = Armor('Straw Hat',
-                  "Not much of a helmet, huh? (No defense bonus)",
+# Weapons -- Bard
+kazoo = Weapon("Kazoo", """\
+A wooden kazoo that does more to annoy your enemies than damage them [+5% Damage].""",
+               10, 0.05, 'magic', ['bard'], 'kazoo', "kazoo")
+
+flute = Weapon("Flute", """\
+A good-quality flute made out of wood and silver [+10% Damage].""",
+               150, 0.1, 'magic', ['bard'], 'flute', "flute")
+
+snare_drum = Weapon("Snare Drum", """\
+A marching drum used to inspire courage in the hearts of your allies [+30% Damage].""",
+                    300, 0.3, 'magic', ['bard'], 'drum', "snare_drum")
+
+trumpet = Weapon("Trumpet", """\
+A mighty brass trumpet that can be heard blaring from miles away [+50% Damage].""",
+                 600, 0.5, 'magic', ['bard'], 'trumpet', "trumpet")
+
+violin = Weapon("Violin", """\
+A beautiful violin that could make even the most stone-cold weep [+70% Damage].""",
+                1200, 0.7, 'magic', ['bard'], 'violin', "violin")
+
+bagpipes = Weapon("Bagpipes", """\
+A ridiculously loud and extravagent bagpipe made from plaid fabric. Your
+allies will probably hate you if you use this [+90% Damage].""",
+                  2400, 0.9, 'magic', ['bard'], 'bagpipes', "bagpipes")
+
+# Starting Armor (All classes)
+straw_hat = Armor('Straw Hat', """\
+Useful for keeping the sun out of your eyes and not much else [+0% Resistance].""",
                   10, 0, 'head', [], 'Hat', "straw_hat")
-cotton_shirt = Armor('Cotton Shirt',
-                     "All torn up and stained... (No defense bonus)",
+
+cotton_shirt = Armor('Cotton Shirt', """\
+This shirt is all torn up and stained from years of use [+0% Resistance].""",
                      10, 0, 'body', [], 'Shirt', "cotton_shirt")
-sunday_trousers = Armor('Sunday Trousers',
-                        "At least they look nice... (No defense bonus)",
+
+sunday_trousers = Armor('Sunday Trousers', """\
+Unfortuantely you have to wear these uncomfortable pants on more than just
+sundays [+0% Resistance].""",
                         10, 0, 'legs', [], 'Pants', "sunday_trousers")
 
 # Armor -- Warrior + Paladin -- Weak
+# 30% Resistance
 bnz_hlm = Armor('Bronze Helmet',
-                'A simple helmet crafted from bronze (+5% Defense)',
-                100, 0.05, 'head', ['warrior', 'paladin'], 'Helmet', "bnz_hlm")
+                'A simple helmet crafted from bronze [+10% Resistance].',
+                100, 0.1, 'head', ['warrior', 'paladin'], 'Helmet', "bnz_hlm")
 bnz_cst = Armor('Bronze Chestpiece',
-                'Simple chest armor crafted from bronze (+10% Defense)',
+                'Simple chest armor crafted from bronze [+10% Resistance].',
                 100, 0.1, 'body', ['warrior', 'paladin'], 'Shirt', "bnz_cst")
 bnz_leg = Armor('Bronze Greaves',
-                'Simple leg armor crafted from bronze (+5% Defense)',
-                100, 0.05, 'legs', ['warrior', 'paladin'], 'Pants', "bnz_leg")
-
-en_bnz_hlm = Armor('Enhanced Bronze Helmet',
-                   'Even better than your typical Bronze Helmet (+10% Defense)',
-                   250, 0.1, 'head', ['warrior', 'paladin'], 'Helmet', "en_bnz_hlm")
-en_bnz_cst = Armor('Enhanced Bronze Chestpiece',
-                   'Even better than your typical Bronze Chestpiece (+15% Defense)',
-                   250, 0.15, 'body', ['warrior', 'paladin'], 'Shirt', "en_bnz_cst")
-en_bnz_leg = Armor('Enhanced Bronze Greaves',
-                   'Even better than your typical Bronze Greaves (+10% Defense)',
-                   250, 0.1, 'legs', ['warrior', 'paladin'], 'Pants', "en_bnz_leg")
-
-# Armor -- Mage + Monk -- Weak
-wiz_hat = Armor('Silk Hat',
-                'A silk hat woven with magic thread (+3% Defense)',
-                100, 0.03, 'head', ['mage', 'monk'], 'Wizard Hat', "wiz_hat")
-wiz_rob = Armor('Silk Robe',
-                'A silk robe woven with magic thread (+5% Defense)',
-                100, 0.05, 'body', ['mage', 'monk'], 'Robe', "wiz_rob")
-wiz_gar = Armor('Silk Garments',
-                'Silk garments woven with magic thread (+3% Defense)',
-                100, 0.03, 'legs', ['mage', 'monk'], 'Robe Pants', "wiz_gar")
-
-en_wiz_hat = Armor('Enhanced Silk Hat',
-                   'Even better than your typical Wizard Hat (+5% Defense)',
-                   250, 0.05, 'head', ['mage', 'monk'], 'Wizard Hat', "en_wiz_hat")
-en_wiz_rob = Armor('Enhanced Silk Robe',
-                   'Even better than your typical Wizard Robe (+10% Defense)',
-                   250, 0.1, 'body', ['mage', 'monk'], 'Robe', "en_wiz_rob")
-en_wiz_gar = Armor('Enhanced Silk Garments',
-                   'Even better than your typical Wizard Garments (+5% Defense)',
-                   250, 0.05, 'legs', ['mage', 'monk'], 'Robe Pants', "en_wiz_gar")
-
-# Armor -- Assassin + Ranger -- Weak
-lth_cap = Armor('Leather Cap',
-                'A simple leather cap providing equally simple protection (+2% Defense)',
-                100, 0.02, 'head', ['assassin', 'ranger'], 'Cap', "lth_cap")
-lth_bdy = Armor('Leather Bodyarmor',
-                'Simple body armor providing equally simple protection (+4% Defense)',
-                100, 0.04, 'body', ['assassin', 'ranger'], 'Shirt', "lth_bdy")
-lth_leg = Armor('Leather Leggings',
-                'Simple leggings providing equally simple protection (+2% Defense)',
-                100, 0.02, 'legs', ['assassin', 'ranger'], 'Pants', "lth_leg")
-
-en_lth_cap = Armor('Enhanced Leather Cap',
-                   'Even better than your typical Leather Cap (+7% Defense)',
-                   250, 0.07, 'head', ['assassin', 'ranger'], 'Cap', "en_lth_cap")
-en_lth_bdy = Armor('Enhanced Leather Bodyarmor',
-                   'Even better than your typical Leather Bodyarmor (+12% Defense)',
-                   250, 0.12, 'body', ['assassin', 'ranger'], 'Shirt', "en_lth_bdy")
-en_lth_leg = Armor('Enhanced Leather Leggings',
-                   'Even better than your typical Leather Leggings (+7% Defense)',
-                   250, 0.07, 'legs', ['assassin', 'ranger'], 'Pants', "en_lth_leg")
+                'Simple leg armor crafted from bronze [+10% Resistance].',
+                100, 0.1, 'legs', ['warrior', 'paladin'], 'Pants', "bnz_leg")
 
 # Armor -- Warrior + Paladin -- Mid
+# 45% Resistance
 stl_hlm = Armor('Steel Helmet',
-                'A decent helmet created from a solid metal (+15% Defense)',
+                'A decent helmet created from a solid metal [+15% Resistance].',
                 600, 0.15, 'head', ['warrior', 'paladin'], 'Helmet', "stl_hlm")
 stl_cst = Armor('Steel Chestpiece',
-                'Decent body armor made from a solid metal (+20% Defense)',
-                600, 0.20, 'body', ['warrior', 'paladin'], 'Shirt', "stl_cst")
+                'Decent body armor made from a solid metal [+15% Resistance].',
+                600, 0.15, 'body', ['warrior', 'paladin'], 'Shirt', "stl_cst")
 stl_leg = Armor('Steel Greaves',
-                'Decent greaves made from a solid metal (+15% Defense)',
+                'Decent greaves made from a solid metal [+15% Resistance].',
                 600, 0.15, 'legs', ['warrior', 'paladin'], 'Pants', "stl_leg")
 
-en_stl_hlm = Armor('Enhanced Steel Helmet',
-                   'Even better than your typical Steel Helmet (+20% Defense)',
-                   900, 0.20, 'head', ['warrior', 'paladin'], 'Helmet', "en_stl_hlm")
-en_stl_cst = Armor('Enhanced Steel Chestpiece',
-                   'Even better than your typical Steel Chestpiece (+25% Defense)',
-                   900, 0.25, 'body', ['warrior', 'paladin'], 'Shirt', "en_stl_cst")
-en_stl_leg = Armor('Enhanced Steel Leggings',
-                   'Even better than your typical Steel Greaves (+20% Defense)',
-                   900, 0.20, 'legs', ['warrior', 'paladin'], 'Pants', "en_stl_leg")
+# Armor -- Warrior + Paladin -- Pow
+# 60% Resistance
+ori_hlm = Armor('Orichalcum Helmet',
+                'A strong helmet smelted from rare mountain copper  [+20% Resistance].',
+                1200, 0.2, 'head', ['warrior', 'paladin'], 'Helmet', "ori_hlm")
+ori_cst = Armor('Orichalcum Chestplate',
+                'Strong chest armor smelted from rare mountain copper  [+20% Resistance].',
+                1200, 0.2, 'body', ['warrior', 'paladin'], 'Shirt', "ori_cst")
+ori_leg = Armor('Orichalcum Greaves',
+                'Strong leg armor smelted from rare mountain copper [+20% Resistance].',
+                1200, 0.2, 'legs', ['warrior', 'paladin'], 'Pants', "ori_leg")
 
+# Armor -- Mage + Monk -- Weak
+# 18% Resistance
+wiz_hat = Armor('Silk Hat',
+                'A silk hat woven with magic thread [+5% Resistance].',
+                100, 0.05, 'head', ['mage', 'monk'], 'Wizard Hat', "wiz_hat")
+wiz_rob = Armor('Silk Robe',
+                'A silk robe woven with magic thread [+5% Resistance].',
+                100, 0.05, 'body', ['mage', 'monk'], 'Robe', "wiz_rob")
+wiz_gar = Armor('Silk Garments',
+                'Silk garments woven with magic thread [+5% Resistance].',
+                100, 0.05, 'legs', ['mage', 'monk'], 'Robe Pants', "wiz_gar")
 
 # Armor -- Mage + Monk -- Mid
+# 27% Resistance
 myst_hat = Armor('Mystical Hood',
-                 'A mysterious hood with strange symbols sewn into it (+8% Defense)',
-                 600, 0.08, 'head', ['mage', 'monk'], 'Wizard Hat', "myst_hat")
+                 'A mysterious hood with strange symbols sewn into it [+9% Resistance].',
+                 600, 0.09, 'head', ['mage', 'monk'], 'Wizard Hat', "myst_hat")
 myst_rob = Armor('Mystical Robe',
-                 'A mysterious robe with strange symbols sewn into it (+12% Defense)',
-                 600, 0.12, 'body', ['mage', 'monk'], 'Robe', "myst_rob")
+                 'A mysterious robe with strange symbols sewn into it [+9% Resistance].',
+                 600, 0.09, 'body', ['mage', 'monk'], 'Robe', "myst_rob")
 myst_gar = Armor('Mystical Garments',
-                 'Mysterious garments with strange symbols sewn into it (+8% Defense)',
-                 600, 0.08, 'legs', ['mage', 'monk'], 'Robe Pants', "myst_gar")
-
-en_myst_hat = Armor('Enhanced Mystical Hood',
-                    'Even better than your typical Mystical Hood (+15% Defense)',
-                    900, 0.15, 'head', ['mage', 'monk'], 'Wizard Hat', "en_myst_hat")
-en_myst_rob = Armor('Enhanced Mystical Robe',
-                    'Even better than your typical Mystical Robe (+20% Defense)',
-                    900, 0.2, 'body', ['mage', 'monk'], 'Robe', "en_myst_rob")
-en_myst_gar = Armor('Enhanced Mystical Garments',
-                    'Even better than your typical Mystical Garments (+15% Defense)',
-                    900, 0.15, 'legs', ['mage', 'monk'], 'Robe Pants', "en_myst_gar")
-
-# Armor -- Assassin + Ranger -- Mid
-std_cwl = Armor('Studded Cowl',
-                'A soft leather cap studded with steel pieces (+12% Defense)',
-                600, 0.12, 'head', ['assassin', 'ranger'], 'Cap', "std_cwl")
-std_bdy = Armor('Studded Body-armor',
-                'Soft leather body armor studded with steel pieces (+18% Defense)',
-                600, 0.18, 'body', ['assassin', 'ranger'], 'Shirt', "std_bdy")
-std_leg = Armor('Studded Leggings',
-                'Soft leather leggings studded with steel pieces (+12% Defense)',
-                600, 0.12, 'legs', ['assassin', 'ranger'], 'Pants', "std_leg")
-
-en_std_cwl = Armor('Enhanced Studded Cowl',
-                   'Even better than your typical Studded Hood (+17% Defense)',
-                   900, 0.17, 'head', ['assassin', 'ranger'], 'Cap', "en_std_cwl")
-en_std_bdy = Armor('Enhanced Studded Body-armor',
-                   'Even better than your typical Studded Bodyarmor (+22% Defense)',
-                   900, 0.22, 'body', ['assassin', 'ranger'], 'Shirt', "en_std_bdy")
-en_std_leg = Armor('Enhanced Studded Leggings',
-                   'Even better than your typical Studded Leggings (+17% Defense)',
-                   900, 0.17, 'legs', ['assassin', 'ranger'], 'Pants', "en_std_leg")
-
-
-# Armor -- Warrior + Paladin -- Pow
-# 90% Defense
-ori_hlm = Armor('Orichalcum Helmet',
-                'A strong helmet smelted from rare mountain copper  (+25% Defense)',
-                1200, 0.25, 'head', ['warrior', 'paladin'], 'Helmet', "ori_hlm")
-ori_cst = Armor('Orichalcum Chestplate',
-                'Strong chest armor smelted from rare mountain copper  (+35% Defense)',
-                1200, 0.35, 'body', ['warrior', 'paladin'], 'Shirt', "ori_cst")
-ori_leg = Armor('Orichalcum Greaves',
-                'Strong leg armor smelted from rare mountain copper (+25% Defense)',
-                1200, 0.25, 'legs', ['warrior', 'paladin'], 'Pants', "ori_leg")
+                 'Mysterious garments with strange symbols sewn into it [+9% Resistance].',
+                 600, 0.09, 'legs', ['mage', 'monk'], 'Robe Pants', "myst_gar")
 
 # Armor -- Mage + Monk -- Pow
-# 65% Defense
+# 36% Resistance
 elem_hat = Armor('Armored Cloth Hat',
-                 'A silk hat lined with chainmail in important parts (+20% Defense)',
-                 1200, 0.20, 'head', ['mage', 'monk'], 'Wizard Hat', "elem_hat")
+                 'A silk hat lined with chainmail in important parts [+12% Resistance].',
+                 1200, 0.12, 'head', ['mage', 'monk'], 'Wizard Hat', "elem_hat")
 elem_rob = Armor('Armored Cloth Robe',
-                 'A silk robe lined with chainmail in important parts (+25% Defense)',
-                 1200, 0.25, 'body', ['mage', 'monk'], 'Robe', "elem_rob")
+                 'A silk robe lined with chainmail in important parts [+12% Resistance].',
+                 1200, 0.12, 'body', ['mage', 'monk'], 'Robe', "elem_rob")
 elem_gar = Armor('Armored Cloth Garments',
-                 'Silk garments lined with chainmail in important parts (+20% Defense)',
-                 1200, 0.20, 'legs', ['mage', 'monk'], 'Robe Pants', "elem_gar")
+                 'Silk garments lined with chainmail in important parts [+12% Resistance].',
+                 1200, 0.12, 'legs', ['mage', 'monk'], 'Robe Pants', "elem_gar")
+
+# Armor -- Assassin + Ranger -- Weak
+# 24% Resistance
+lth_cap = Armor('Leather Cap',
+                'A simple leather cap providing equally simple protection [+8% Resistance].',
+                100, 0.08, 'head', ['assassin', 'ranger'], 'Cap', "lth_cap")
+lth_bdy = Armor('Leather Bodyarmor',
+                'Simple body armor providing equally simple protection [+8% Resistance].',
+                100, 0.08, 'body', ['assassin', 'ranger'], 'Shirt', "lth_bdy")
+lth_leg = Armor('Leather Leggings',
+                'Simple leggings providing equally simple protection [+8% Resistance].',
+                100, 0.08, 'legs', ['assassin', 'ranger'], 'Pants', "lth_leg")
+
+# Armor -- Assassin + Ranger -- Mid
+# 36% Resistance
+std_cwl = Armor('Studded Cowl',
+                'A soft leather cap studded with steel pieces [+12% Resistance].',
+                600, 0.12, 'head', ['assassin', 'ranger'], 'Cap', "std_cwl")
+std_bdy = Armor('Studded Body-armor',
+                'Soft leather body armor studded with steel pieces [+12% Resistance].',
+                600, 0.12, 'body', ['assassin', 'ranger'], 'Shirt', "std_bdy")
+std_leg = Armor('Studded Leggings',
+                'Soft leather leggings studded with steel pieces [+12% Resistance].',
+                600, 0.12, 'legs', ['assassin', 'ranger'], 'Pants', "std_leg")
 
 # Armor -- Assassin + Ranger -- Pow
-# 80% Defense
+# 48% Resistance
 drg_cwl = Armor('Dragonhide Cowl',
-                'A tough hood crafted from high-quality dragonskin (+25% Defense)',
-                1200, 0.25, 'head', ['assassin', 'ranger'], 'Cap', "drg_cwl")
+                'A tough hood crafted from high-quality dragonskin [+16% Resistance].',
+                1200, 0.16, 'head', ['assassin', 'ranger'], 'Cap', "drg_cwl")
 drg_bdy = Armor('Dragonhide Bodyarmor',
-                'Tough bodyarmor crafted from high-quality dragonskin (+30% Defense)',
-                1200, 0.3, 'body', ['assassin', 'ranger'], 'Shirt', "drg_bdy")
+                'Tough bodyarmor crafted from high-quality dragonskin [+16% Resistance].',
+                1200, 0.16, 'body', ['assassin', 'ranger'], 'Shirt', "drg_bdy")
 drg_leg = Armor('Dragonhide Leggings',
-                'Tough leggings crafted from high-quality dragonskin (+25% Defense)',
-                1200, 0.25, 'legs', ['assassin', 'ranger'], 'Pants', "drg_leg")
+                'Tough leggings crafted from high-quality dragonskin [+16% Resistance].',
+                1200, 0.16, 'legs', ['assassin', 'ranger'], 'Pants', "drg_leg")
+
+# Armor -- Bard -- Weak
+# 15% Resistance
+linen_beret = Armor('Linen Beret', """\
+A stylish hat made of linen. Looks great, doesn't do much to protect your head [+5% Resistance].""",
+                    100, 0.05, 'head', ['bard'], 'Hat', "linen_beret")
+linen_shirt = Armor('Linen Shirt', """\
+A classic shirt made of linen. Not really intended to be worn in battle [+5% Resistance].""",
+                    100, 0.05, 'body', ['bard'], 'Shirt', "linen_shirt")
+linen_trousers = Armor('Linen Trousers', """\
+Some good-looking pants made of linen. You're not gonna be deflecting many attacks 
+with these [+5% Resistance].""",
+                       100, 0.05, 'legs', ['bard'], 'Pants', "linen_trousers")
+
+# Armor -- Bard -- Mid
+# 21% Resistance
+wool_roundlet = Armor('Wool Roundlet', """\
+The perfect hat for someone who considers fanciness a priority [+7% Resistance].""",
+                      600, 0.07, 'head', ['bard'], "Hat", "wool_roundlet")
+wool_tunic = Armor('Wool Tunic', """\
+A more durable shirt complete with a fancy leather belt [+7% Resistance].""",
+                   600, 0.07, 'body', ['bard'], "Shirt", "wool_tunic")
+wool_britches = Armor('Wool Britches', """\
+Wool pants that balance classiness and comfort [+7% Resistance].""",
+                      600, 0.07, 'legs', ['bard'], "Pants", "wool_britches")
+
+# Armor -- Bard -- Pow
+# 27% Resistance
+velvet_cavalier = Armor('Velvet Cavalier', """\
+A hat fit for nobility. Complete with a large red pheasant feather [+9% Resistance].""",
+                        1200, 0.09, 'head', ['bard'], 'Hat', "velvet_cavalier")
+velvet_doublet = Armor('Velvet Doublet', """\
+A ludicrously-fancy shirt with red and gold trimmings, worn by only the rich 
+and powerful. And you. [+9% Resistance].""",
+                       1200, 0.09, 'body', ['bard'], 'Shirt', "velvet_doublet")
+velvet_kilt = Armor('Velvet Kilt', """\
+A fancy skirt that allows for a more full range of movement. Try not to use in
+gusty weather [+9% Resistance].""",
+                    1200, 0.09, 'body', ['bard'], 'kilt', "velvet_kilt")
+
 
 # Accessories
 # -- Elemental Accessories
@@ -1351,10 +1375,10 @@ dark_amulet = ElementAccessory('Umbral Amulet', 'An amulet that imbues its weare
 
 # Quest items
 message_joseph = Item('Message from Joseph', 'A neatly written message addressed to Philliard.',
-                      0, "message_joseph", True, "Misc", 'q_items')
+                      0, "message_joseph", True, "misc", 'q_items')
 
 message_philliard = Item('Message from Philliard', 'A neatly written message addressed to Joseph.',
-                         0, "message_philliard", True, "Misc", 'q_items')
+                         0, "message_philliard", True, "misc", 'q_items')
 
 # Gems & Valuables
 pearl_gem = Item('Pearl', 'A valuable pearl. This could probably be sold for quite a bit.',
@@ -1738,34 +1762,47 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                          en_hmr_of_mgt, ngt_bane, en_ngt_bane],  # Paladin Weapons
 
                         [brass_kncls, en_brass_kncls, bladed_gloves,
-                         en_bladed_gloves, lead_bg, en_lead_bg]],  # Monk Weapons
+                         en_bladed_gloves, lead_bg, en_lead_bg],  # Monk Weapons
 
-            'Armor': [[bnz_hlm, en_bnz_hlm, stl_hlm,
-                       en_stl_hlm, ori_hlm, ori_hlm],  # Warrior + Paladin Armor -- Head
+                        [kazoo, flute, snare_drum,
+                         trumpet, violin, bagpipes]],  # Bard Weapons
 
-                      [bnz_cst, en_bnz_cst, stl_cst,
-                       en_stl_cst, ori_cst, ori_cst],  # Warrior + Paladin Armor -- Body
+            'Armor': [[bnz_hlm, bnz_hlm, stl_hlm,
+                       stl_hlm, ori_hlm, ori_hlm],  # Warrior + Paladin Armor -- Head
 
-                      [bnz_leg, en_bnz_leg, stl_leg,
-                       en_stl_leg, ori_leg, ori_leg],  # Warrior + Paladin Armor -- Legs
+                      [bnz_cst, bnz_cst, stl_cst,
+                       stl_cst, ori_cst, ori_cst],  # Warrior + Paladin Armor -- Body
 
-                      [wiz_hat, en_wiz_hat, myst_hat,
-                       en_myst_hat, elem_hat, elem_hat],  # Mage + Monk Armor -- Head
+                      [bnz_leg, bnz_leg, stl_leg,
+                       stl_leg, ori_leg, ori_leg],  # Warrior + Paladin Armor -- Legs
 
-                      [wiz_rob, en_wiz_rob, myst_rob,
-                       en_myst_rob, elem_rob, elem_rob],  # Mage + Monk Armor -- Body
+                      [wiz_hat, wiz_hat, myst_hat,
+                       myst_hat, elem_hat, elem_hat],  # Mage + Monk Armor -- Head
 
-                      [wiz_gar, en_wiz_gar, myst_gar,
-                       en_myst_gar, elem_gar, elem_gar],  # Mage + Monk Armor -- Legs
+                      [wiz_rob, wiz_rob, myst_rob,
+                       myst_rob, elem_rob, elem_rob],  # Mage + Monk Armor -- Body
 
-                      [lth_cap, en_lth_cap, std_cwl,
-                       en_std_cwl, drg_cwl, drg_cwl],  # Assassin + Ranger Armor -- Head
+                      [wiz_gar, wiz_gar, myst_gar,
+                       myst_gar, elem_gar, elem_gar],  # Mage + Monk Armor -- Legs
 
-                      [lth_bdy, en_lth_bdy, std_bdy,
-                       en_std_bdy, drg_bdy, drg_bdy],  # Assassin + Ranger Armor -- Body
+                      [lth_cap, lth_cap, std_cwl,
+                       std_cwl, drg_cwl, drg_cwl],  # Assassin + Ranger Armor -- Head
 
-                      [lth_leg, en_lth_leg, std_leg,
-                       en_std_leg, drg_leg]],  # Assassin + Ranger Armor -- Legs
+                      [lth_bdy, lth_bdy, std_bdy,
+                       std_bdy, drg_bdy, drg_bdy],  # Assassin + Ranger Armor -- Body
+
+                      [lth_leg, lth_leg, std_leg,
+                       std_leg, drg_leg],  # Assassin + Ranger Armor -- Legs
+
+                      [linen_beret, linen_beret, wool_roundlet,
+                       wool_roundlet, velvet_cavalier, velvet_cavalier],  # Bard Armor -- Head
+
+                      [linen_shirt, linen_shirt, wool_tunic,
+                       wool_tunic, velvet_doublet, velvet_doublet],  # Bard Armor -- Body
+
+                      [linen_trousers, linen_trousers, wool_britches,
+                       wool_britches, velvet_kilt, velvet_kilt]],  # Bard Armor -- Legs
+
 
             'Accessories': [[water_amulet, water_amulet, water_amulet,
                              water_amulet, water_amulet, water_amulet],
@@ -1805,6 +1842,7 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
 
                       [wood_lckpck, copper_lckpck, iron_lckpck,
                        steel_lckpck, mythril_lckpck, mythril_lckpck],
+
                       [pocket_lab, pocket_lab, pocket_lab,
                        pocket_lab, pocket_lab, pocket_lab]]}
 
@@ -1821,21 +1859,21 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
              copper_lckpck, iron_lckpck, steel_lckpck, mythril_lckpck, shovel, pocket_lab, monster_book,
              fast_travel_atlas, s_potion, m_potion, l_potion, x_potion, s_elixir, m_elixir, l_elixir, x_elixir,
              s_rejuv, m_rejuv, l_rejuv, silence_potion, poison_potion, weakness_potion, blindness_potion,
-             paralyzation_potion, fists, wdn_sht, bnz_swd, en_bnz_swd, stl_spr, en_stl_spr, titan_axe, en_titan_axe,
+             paralyzation_potion, fists, iron_hoe, bnz_swd, en_bnz_swd, stl_spr, en_stl_spr, titan_axe, en_titan_axe,
              stn_dag, ser_knf, en_ser_knf, stiletto, en_stiletto, myth_sb, en_myth_sb, slg_sht, sht_bow, en_sht_bow,
              lng_bow, en_lng_bow, ash_cbow, en_ash_cbow, mag_twg, oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf,
              en_rnc_stf, rbr_mlt, holy_mace, en_holy_mace, hmr_of_mgt, en_hmr_of_mgt, ngt_bane, en_ngt_bane,
              brass_kncls, en_brass_kncls, bladed_gloves, en_bladed_gloves, lead_bg, en_lead_bg, straw_hat, cotton_shirt,
-             sunday_trousers, bnz_hlm, bnz_cst, bnz_leg, en_bnz_hlm, en_bnz_cst, en_bnz_leg, wiz_hat, wiz_rob, wiz_gar,
-             en_wiz_hat, en_wiz_rob, en_wiz_gar, lth_cap, lth_bdy, lth_leg, en_lth_cap, en_lth_bdy, en_lth_leg, stl_hlm,
-             stl_cst, stl_leg, en_stl_hlm, en_stl_cst, en_stl_leg, myst_hat, myst_rob, myst_gar, en_myst_hat,
-             en_myst_rob, en_myst_gar, std_cwl, std_bdy, std_leg, en_std_cwl, en_std_bdy, en_std_leg, ori_hlm, ori_cst,
-             ori_leg, elem_hat, elem_rob, elem_gar, drg_cwl, drg_bdy, drg_leg, water_amulet, fire_amulet, earth_amulet,
+             sunday_trousers, bnz_hlm, bnz_cst, bnz_leg, wiz_hat, wiz_rob, wiz_gar,  lth_cap, lth_bdy, lth_leg, stl_hlm,
+             stl_cst, stl_leg, myst_hat, myst_rob, myst_gar, std_cwl, std_bdy, std_leg, ori_hlm, ori_cst, ori_leg,
+             elem_hat, elem_rob, elem_gar, drg_cwl, drg_bdy, drg_leg, water_amulet, fire_amulet, earth_amulet,
              electric_amulet, wind_amulet, grass_amulet, ice_amulet, light_amulet, dark_amulet, no_head, no_body,
              no_legs, no_access, attract_potion_1, attract_potion_2, attract_potion_3, repel_potion_1, repel_potion_2,
              repel_potion_3, grenade_potion_1, grenade_potion_2, grenade_potion_3, missile_potion_1, missile_potion_2,
              missile_potion_3, greed_potion_1, greed_potion_2, greed_potion_3, temperance_potion_1, temperance_potion_2,
-             temperance_potion_3, gamecrash_potion]
+             temperance_potion_3, gamecrash_potion, garden_gloves, kazoo, flute, snare_drum, trumpet, violin, bagpipes,
+             linen_beret, linen_shirt, linen_trousers, wool_roundlet, wool_tunic, wool_britches, velvet_cavalier,
+             velvet_doublet, velvet_kilt]
 
 
 # Writes a list of all collected gems to a .json file. Used when saving the game.
@@ -1894,7 +1932,7 @@ equipped = {
     },
 
     'Chili': {
-        'weapon': _c(fists),
+        'weapon': _c(garden_gloves),
         'head': _c(straw_hat),
         'body': _c(cotton_shirt),
         'legs': _c(sunday_trousers),
@@ -1910,13 +1948,20 @@ equipped = {
     },
 
     'Adorine': {
-        'weapon': _c(wdn_sht),
+        'weapon': _c(iron_hoe),
         'head': _c(straw_hat),
         'body': _c(cotton_shirt),
         'legs': _c(sunday_trousers),
         'access': _c(no_access)
     },
+    'Ravioli': {
+        'weapon': _c(iron_hoe),
+        'head': _c(straw_hat),
+        'body': _c(cotton_shirt),
+        'legs': _c(sunday_trousers),
+        'access': _c(no_access)
 
+    },
     'Chyme': {
         'weapon': _c(rbr_mlt),
         'head': _c(straw_hat),

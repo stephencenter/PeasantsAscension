@@ -170,7 +170,8 @@ Input [#]: """)
                           '3': "ranger",
                           '4': "paladin",
                           '5': "monk",
-                          '6': "warrior"}[class_]
+                          '6': "warrior",
+                          '7': "bard"}[class_]
 
                 class_desc = {'mage': """\
     -Can use abilities that scale off Intelligence
@@ -582,8 +583,11 @@ Difficulty: {main.party_info['dif']}""")
             if items.equipped[inv_name]['weapon'].type_ == 'melee':
                 dam_dealt = deal_damage(self, self.target, "physical")
 
-            else:
+            elif items.equipped[inv_name]['weapon'].type_ == 'ranged':
                 dam_dealt = deal_damage(self, self.target, "piercing")
+
+            else:
+                dam_dealt = deal_damage(self, self.target, "magical")
 
             # Check for attack accuracy
             if random.randint(1, 512) in range(self.target.evad, 512):
@@ -1754,7 +1758,7 @@ def create_player():
         player.attk += 3
         player.spd -= 1
         player.evad -= 1
-        items.equipped['player']['weapon'] = copy.copy(items.wdn_sht)
+        items.equipped['player']['weapon'] = copy.copy(items.iron_hoe)
 
     elif player.class_ == "mage":
         player.max_hp += 1
@@ -1788,7 +1792,7 @@ def create_player():
         player.evad += 3
         player.spd += 3
         player.dfns -= 1
-        items.equipped['player']['weapon'] = copy.copy(items.fists)
+        items.equipped['player']['weapon'] = copy.copy(items.garden_gloves)
 
     elif player.class_ == "paladin":
         player.max_hp += 3

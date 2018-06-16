@@ -62,7 +62,7 @@ inhabitants of this town are known for being quite wise, and may provide you
 with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], [southford_h1], "southford")
 
 # Overshire City
-overshire_h1_c1 = Chest([items.en_lth_bdy, items.en_bnz_cst, items.en_wiz_rob], 2, "OC-H1-C1")
+overshire_h1_c1 = Chest([items.lth_bdy, items.bnz_cst, items.wiz_rob], 2, "OC-H1-C1")
 overshire_h1 = House("Joseph", [overshire_h1_c1])
 
 overshire_h2_c1 = Chest([50], 2, "OC-H2-C1")
@@ -293,9 +293,9 @@ vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.
 town_lantonum = Town("Lamtonum", """\
 Lantonum is a small town that has the best forge in all of Arcadia.
 Nearly 2/3s of all citizens of this town are experienced blacksmiths, and 90%
-of all ores and minerals mined in Chin'tor or Ambercreek are brought here. It
-is one of the wealthiest cities in all of the desert region due to its Mythril,
-Magestite, and Necrite bar exports.""", [npcs.matthew], [], "lantonum")
+of all ores and minerals mined in Pelamora are brought here. It is one of the 
+wealthiest cities in Pelamora due to its Mythril, Magestite, and Necrite bar 
+exports.""", [npcs.matthew], [], "lantonum")
 
 # =========================== #
 #        CELEMIA TOWNS        #
