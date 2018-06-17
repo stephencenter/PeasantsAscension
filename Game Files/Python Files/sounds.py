@@ -35,7 +35,7 @@ mixer.init()
 # Sword Slash -- Played when you attempt to physically attack an enemy
 sword_slash = Sound('../Sound FX/sword_slash.wav')
 
-# Magic Attack -- Played when you attempt to use a magical attack
+# Magical Attack -- Played when you attempt to use a magical attack
 magic_attack = Sound('../Sound FX/magic_attack.wav')
 
 # Magic Healing -- Played when you attempt to use a magical healing spell

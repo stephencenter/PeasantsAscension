@@ -19,6 +19,7 @@ import os
 import random
 import sys
 import multiprocessing
+import math
 from copy import copy as _c
 
 import pygame
@@ -981,7 +982,7 @@ weapon, or maybe it will make you level 100, or maybe it will instantly defeat
 an important boss coming up. Well you'd be wrong, it really does just crash the
 game. That's all this potion does, you wasted those mathematical ingredients on
 this useless potion. You could have sold those for money, unlike this potion 
-which has no sale value. Instead you make a potion whose only purpose is to
+which has no sale value. Instead you made a potion whose only purpose is to
 crash the game. You probably don't believe me, do you? You think I'm lying and 
 you're gonna drink this thing regardless of what I tell you. Well fine, but
 at least save the game before you do, and don't yell at me if you didn't and
@@ -1017,22 +1018,19 @@ bnz_swd = Weapon('Bronze Sword',
                  'A light yet sturdy sword smelted from bronze [+10% Damage].',
                  150, 0.1, 'melee', ['warrior'], 'Sword', "bnz_swd")
 en_bnz_swd = Weapon('Enhanced Bronze Sword',
-                    'Even better than your typical Bronze Sword [+25% Damage].',
-                    300, 0.25, 'melee', ['warrior'], 'Sword', "en_bnz_swd")
+                    'Even better than your typical Bronze Sword [+30% Damage].',
+                    300, 0.3, 'melee', ['warrior'], 'Sword', "en_bnz_swd")
 
 stl_spr = Weapon('Steel Spear',
-                 'A fair-sized spear crafted from well made steel [+40% Damage].',
-                 600, 0.4, 'melee', ['warrior'], 'Spear', "stl_spr")
+                 'A fair-sized spear crafted from well made steel [+50% Damage].',
+                 600, 0.5, 'melee', ['warrior'], 'Spear', "stl_spr")
 en_stl_spr = Weapon('Enhanced Steel Spear',
-                    'Even better than your typical Steel Spear [+60% Damage].',
-                    900, 0.6, 'melee', ['warrior'], 'Spear', "en_stl_spr")
+                    'Even better than your typical Steel Spear [+70% Damage].',
+                    900, 0.7, 'melee', ['warrior'], 'Spear', "en_stl_spr")
 
 titan_axe = Weapon('Titanium Battleaxe',
-                   'A heavy and powerful axe made of high quality Titanium [+80% Damage].',
-                   1200, 0.8, 'melee', ['warrior'], 'Axe', "titan_axe")
-en_titan_axe = Weapon('Enhanced Titanium Battleaxe',
-                      'Even better than your typical Titanium Battleaxe [+100% Damage].',
-                      2400, 1, 'melee', ['warrior'], 'Axe', "en_titan_axe")
+                   'A heavy and powerful axe made of high quality Titanium [+90% Damage].',
+                   1200, 0.9, 'melee', ['warrior'], 'Axe', "titan_axe")
 
 # Weapons -- Assassin
 stn_dag = Weapon('Stone Dagger', """\
@@ -1043,22 +1041,19 @@ ser_knf = Weapon('Serrated Knife',
                  'A durable knife made of iron, with one side made jagged [+10% Damage]',
                  150, 0.1, 'melee', ['assassin'], 'Dagger', "ser_knf")
 en_ser_knf = Weapon('Enhanced Serrated Knife',
-                    'Even better than your typical Serrated Knife [+25% Damage].',
-                    300, 0.25, 'melee', ['assassin'], 'Dagger', "en_ser_knf")
+                    'Even better than your typical Serrated Knife [+30% Damage].',
+                    300, 0.3, 'melee', ['assassin'], 'Dagger', "en_ser_knf")
 
 stiletto = Weapon('Stiletto',
-                  'A long, cross-shaped knife perfect for "removing" your enemies [+40% Damage].',
-                  600, 0.4, 'melee', ['assassin'], 'Stiletto', "stiletto")
+                  'A long, cross-shaped knife perfect for "removing" your enemies [+50% Damage].',
+                  600, 0.5, 'melee', ['assassin'], 'Stiletto', "stiletto")
 en_stiletto = Weapon('Enhanced Stiletto',
-                     'Even better than your typical Stiletto [+60% Damage].',
-                     900, 0.6, 'melee', ['assassin'], 'Stiletto', "en_stiletto")
+                     'Even better than your typical Stiletto [+70% Damage].',
+                     900, 0.7, 'melee', ['assassin'], 'Stiletto', "en_stiletto")
 
 myth_sb = Weapon('Mythril Shortblade',
-                 'A knife made of a rare and powerful material [+80% Damage].',
-                 1200, 0.8, 'melee', ['assassin'], 'Short Sword', "myth_sb")
-en_myth_sb = Weapon('Enhanced Mythril Shortblade',
-                    'Even better than your typical Mythril Shortblade [+100% Damage].',
-                    2400, 1, 'melee', ['assassin'], 'Short Sword', "en_myth_sb")
+                 'A knife made of a rare and powerful material [+90% Damage].',
+                 1200, 0.9, 'melee', ['assassin'], 'Short Sword', "myth_sb")
 
 # Weapons -- Ranger
 slg_sht = Weapon('Sling Shot', """\
@@ -1067,24 +1062,21 @@ A weapon that could scare even the mightiest of tin-cans [+5% Damage].""",
 
 sht_bow = Weapon('Short Bow',
                  "A bow of great craftsmanship. It's kinda small, though [+10% Damage].",
-                 150, 0.10, 'ranged', ['ranger'], 'Bow', "sht_bow")
+                 150, 0.1, 'ranged', ['ranger'], 'Bow', "sht_bow")
 en_sht_bow = Weapon('Enhanced Short Bow',
-                    "Even better than your typical Short Bow [+25% Damage].",
-                    300, 0.25, 'ranged', ['ranger'], 'Bow', "en_sht_bow")
+                    "Even better than your typical Short Bow [+30% Damage].",
+                    300, 0.3, 'ranged', ['ranger'], 'Bow', "en_sht_bow")
 
 lng_bow = Weapon('Long Bow',
-                 'A much more impressive bow capable of accuracy at long distances [+40% Damage].',
-                 600, 0.4, 'ranged', ['ranger'], 'Bow', "lng_bow")
+                 'A much more impressive bow capable of accuracy at long distances [+50% Damage].',
+                 600, 0.5, 'ranged', ['ranger'], 'Bow', "lng_bow")
 en_lng_bow = Weapon('Enhanced Long Bow',
-                    'Even better than your typical Long Bow [+60% Damage].',
-                    900, 0.6, 'ranged', ['ranger'], 'Bow', "en_lng_bow")
+                    'Even better than your typical Long Bow [+70% Damage].',
+                    900, 0.7, 'ranged', ['ranger'], 'Bow', "en_lng_bow")
 
 ash_cbow = Weapon('Ashen Crossbow',
-                  'A beautifully-crafted crossbow made from the wood of an ash tree. [+80% Damage].',
-                  1200, 0.8, 'ranged', ['ranger'], 'Crossbow', "ash_cbow")
-en_ash_cbow = Weapon('Enhanced Ashen Crossbow',
-                     'Even better than your typical Ashen Crossbow [+100% Damage].',
-                     2400, 1, 'ranged', ['ranger'], 'Crossbow', "en_ash_cbow")
+                  'A beautifully-crafted crossbow made from the wood of an ash tree. [+90% Damage].',
+                  1200, 0.9, 'ranged', ['ranger'], 'Crossbow', "ash_cbow")
 
 # Weapons -- Mage
 mag_twg = Weapon('Magical Twig', """\
@@ -1095,22 +1087,19 @@ oak_stf = Weapon('Oak Staff',
                  'A wooden staff imbued with weak magical abilities [+10% Damage].',
                  150, 0.1, 'ranged', ['mage'], 'Staff', "oak_stf")
 en_oak_stf = Weapon('Enhanced Oak Staff',
-                    'Even better than your typical Oak Staff [+15% Damage].',
-                    300, 0.15, 'ranged', ['mage'], 'Staff', "en_oak_stf")
+                    'Even better than your typical Oak Staff [+30% Damage].',
+                    300, 0.3, 'ranged', ['mage'], 'Staff', "en_oak_stf")
 
 arc_spb = Weapon('Arcane Spellbook',
-                 'An intermediate spellbook for combat purposes [+20% Damage].',
-                 600, 0.2, 'ranged', ['mage'], 'Book', "arc_spb")
+                 'An intermediate spellbook for combat purposes [+50% Damage].',
+                 600, 0.5, 'ranged', ['mage'], 'Book', "arc_spb")
 en_arc_spb = Weapon('Enhanced Arcane Spellbook',
-                    'Even better than your typical Arcane Spellbook [+30% Damage].',
-                    900, 0.3, 'ranged', ['mage'], 'Book', "en_arc_spb")
+                    'Even better than your typical Arcane Spellbook [+70% Damage].',
+                    900, 0.7, 'ranged', ['mage'], 'Book', "en_arc_spb")
 
 rnc_stf = Weapon('Runic Staff',
-                 'A powerful staff enchanted with ancient magic [+40% Damage].',
-                 1200, 0.4, 'ranged', ['mage'], 'Staff', "rnc_stf")
-en_rnc_stf = Weapon('Enhanced Runic Staff',
-                    'Even better than your typical Runic Staff [+50% Damage].',
-                    2400, 0.5, 'ranged', ['mage'], 'Staff', "en_rnc_stf")
+                 'A powerful staff enchanted with ancient magic [+90% Damage].',
+                 1200, 0.9, 'ranged', ['mage'], 'Staff', "rnc_stf")
 
 # Weapons -- Paladin
 rbr_mlt = Weapon('Rubber Mallet', """\
@@ -1121,22 +1110,19 @@ holy_mace = Weapon('Holy Mace',
                    'An well-made iron mace imbued with the power of the heavens [+10% Damage].',
                    150, 0.1, 'melee', ['paladin'], 'Mace', "holy_mace")
 en_holy_mace = Weapon('Enhanced Holy Mace',
-                      'Even better than your typical Holy Mace [+25% Damage].',
-                      300, 0.25, 'melee', ['paladin'], 'Mace', "en_holy_mace")
+                      'Even better than your typical Holy Mace [+30% Damage].',
+                      300, 0.3, 'melee', ['paladin'], 'Mace', "en_holy_mace")
 
 hmr_of_mgt = Weapon('Hammer of Might',
-                    'A hammer often used by holy warriors to smash their foes [+40% Damage].',
-                    600, 0.4, 'melee', ['paladin'], 'Hammer', "hmr_of_mgt")
+                    'A hammer often used by holy warriors to smash their foes [+50% Damage].',
+                    600, 0.5, 'melee', ['paladin'], 'Hammer', "hmr_of_mgt")
 en_hmr_of_mgt = Weapon('Enhanced Hammer of Might',
-                       'Even better than your typical Hammer of Might [+60% Damage].',
-                       900, 0.6, 'melee', ['paladin'], 'Hammer', "en_hmr_of_mgt")
+                       'Even better than your typical Hammer of Might [+70% Damage].',
+                       900, 0.7, 'melee', ['paladin'], 'Hammer', "en_hmr_of_mgt")
 
 ngt_bane = Weapon("Night's Bane",
-                  'A forbidden hammer used throughout history to crush unholy creatures [+80% Damage].',
-                  1200, 0.8, 'melee', ['paladin'], 'Hammer', "ngt_bane")
-en_ngt_bane = Weapon("Enhanced Night's Bane",
-                     "Even better than your typical Night's Bane [+100% Damage].",
-                     2400, 1, 'melee', ['paladin'], 'Hammer', "en_ngt_bane")
+                  'A forbidden hammer used throughout history to crush unholy creatures [+90% Damage].',
+                  1200, 0.9, 'melee', ['paladin'], 'Hammer', "ngt_bane")
 
 # Weapons -- Monk
 garden_gloves = Weapon("Gardening Gloves", """\
@@ -1147,22 +1133,19 @@ brass_kncls = Weapon('Brass Knuckles',
                      'A brass adornment for your knuckles providing extra punching power [+10% Damage].',
                      150, 0.1, 'melee', ['monk'], 'Knuckles', "brass_kncls")
 en_brass_kncls = Weapon('Enhanced Brass Knuckles',
-                        'Even better than your typical Brass Knuckles [+25% Damage].',
-                        300, 0.25, 'melee', ['monk'], 'Knuckles', "en_brass_kncls")
+                        'Even better than your typical Brass Knuckles [+30% Damage].',
+                        300, 0.30, 'melee', ['monk'], 'Knuckles', "en_brass_kncls")
 
 bladed_gloves = Weapon('Bladed Gloves',
-                       'Leather gloves with sturdy steel blades protruding from them [+40% Damage].',
-                       600, 0.4, 'melee', ['monk'], 'Gloves', "bladed_gloves")
+                       'Leather gloves with sturdy steel blades protruding from them [+50% Damage].',
+                       600, 0.5, 'melee', ['monk'], 'Gloves', "bladed_gloves")
 en_bladed_gloves = Weapon('Enhanced Bladed Gloves',
-                          'Even better than your typical Bladed Gloves [+60% Damage].',
-                          900, 0.6, 'melee', ['monk'], 'Gloves', "en_bladed_gloves")
+                          'Even better than your typical Bladed Gloves [+70% Damage].',
+                          900, 0.7, 'melee', ['monk'], 'Gloves', "en_bladed_gloves")
 
 lead_bg = Weapon('Lead-Weighted Mitts',
-                 'Weighted with 5 pounds of lead and tipped with steel blades [+80% Damage].',
-                 1200, 0.8, 'melee', ['monk'], 'Gloves', "lead_bg")
-en_lead_bg = Weapon('Enhanced Lead Mitts',
-                    'Even better than your typical Lead-Weighted Mitts [+100% Damage].',
-                    2400, 1, 'melee', ['monk'], 'Gloves', "en_lead_bg")
+                 'Weighted with 5 pounds of lead and tipped with steel blades [+90% Damage].',
+                 1200, 0.9, 'melee', ['monk'], 'Gloves', "lead_bg")
 
 # Weapons -- Bard
 kazoo = Weapon("Kazoo", """\
@@ -1746,23 +1729,23 @@ gs_stock = {'Potions': [[s_potion, s_potion, m_potion,
                         [weakness_potion, weakness_potion, weakness_potion,
                          weakness_potion, weakness_potion, weakness_potion]],  # Weakness Potion
 
-            'Weapons': [[bnz_swd, en_bnz_swd, stl_spr,
-                         en_stl_spr, titan_axe, en_titan_axe],  # Warrior Weapons
+            'Weapons': [[iron_hoe, bnz_swd, en_bnz_swd,
+                         stl_spr, en_stl_spr, titan_axe],  # Warrior Weapons
 
-                        [oak_stf, en_oak_stf, arc_spb,
-                         en_arc_spb, rnc_stf, en_rnc_stf],  # Mage Weapons
+                        [mag_twg, oak_stf, en_oak_stf,
+                         arc_spb, en_arc_spb, rnc_stf],  # Mage Weapons
 
-                        [ser_knf, en_ser_knf, stiletto,
-                         en_stiletto, myth_sb, en_myth_sb],  # Assassin Weapons
+                        [stn_dag, ser_knf, en_ser_knf,
+                         stiletto, en_stiletto, myth_sb],  # Assassin Weapons
 
-                        [sht_bow, en_sht_bow, lng_bow,
-                         en_lng_bow, ash_cbow, en_ash_cbow],  # Ranger Weapons
+                        [slg_sht, sht_bow, en_sht_bow,
+                         lng_bow, en_lng_bow, ash_cbow],  # Ranger Weapons
 
-                        [holy_mace, en_holy_mace, hmr_of_mgt,
-                         en_hmr_of_mgt, ngt_bane, en_ngt_bane],  # Paladin Weapons
+                        [rbr_mlt, holy_mace, en_holy_mace,
+                         hmr_of_mgt, en_hmr_of_mgt, ngt_bane],  # Paladin Weapons
 
-                        [brass_kncls, en_brass_kncls, bladed_gloves,
-                         en_bladed_gloves, lead_bg, en_lead_bg],  # Monk Weapons
+                        [garden_gloves, brass_kncls, en_brass_kncls,
+                         bladed_gloves, en_bladed_gloves, lead_bg],  # Monk Weapons
 
                         [kazoo, flute, snare_drum,
                          trumpet, violin, bagpipes]],  # Bard Weapons
@@ -1859,21 +1842,20 @@ all_items = [shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bon
              copper_lckpck, iron_lckpck, steel_lckpck, mythril_lckpck, shovel, pocket_lab, monster_book,
              fast_travel_atlas, s_potion, m_potion, l_potion, x_potion, s_elixir, m_elixir, l_elixir, x_elixir,
              s_rejuv, m_rejuv, l_rejuv, silence_potion, poison_potion, weakness_potion, blindness_potion,
-             paralyzation_potion, fists, iron_hoe, bnz_swd, en_bnz_swd, stl_spr, en_stl_spr, titan_axe, en_titan_axe,
-             stn_dag, ser_knf, en_ser_knf, stiletto, en_stiletto, myth_sb, en_myth_sb, slg_sht, sht_bow, en_sht_bow,
-             lng_bow, en_lng_bow, ash_cbow, en_ash_cbow, mag_twg, oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf,
-             en_rnc_stf, rbr_mlt, holy_mace, en_holy_mace, hmr_of_mgt, en_hmr_of_mgt, ngt_bane, en_ngt_bane,
-             brass_kncls, en_brass_kncls, bladed_gloves, en_bladed_gloves, lead_bg, en_lead_bg, straw_hat, cotton_shirt,
-             sunday_trousers, bnz_hlm, bnz_cst, bnz_leg, wiz_hat, wiz_rob, wiz_gar,  lth_cap, lth_bdy, lth_leg, stl_hlm,
-             stl_cst, stl_leg, myst_hat, myst_rob, myst_gar, std_cwl, std_bdy, std_leg, ori_hlm, ori_cst, ori_leg,
-             elem_hat, elem_rob, elem_gar, drg_cwl, drg_bdy, drg_leg, water_amulet, fire_amulet, earth_amulet,
-             electric_amulet, wind_amulet, grass_amulet, ice_amulet, light_amulet, dark_amulet, no_head, no_body,
-             no_legs, no_access, attract_potion_1, attract_potion_2, attract_potion_3, repel_potion_1, repel_potion_2,
-             repel_potion_3, grenade_potion_1, grenade_potion_2, grenade_potion_3, missile_potion_1, missile_potion_2,
-             missile_potion_3, greed_potion_1, greed_potion_2, greed_potion_3, temperance_potion_1, temperance_potion_2,
-             temperance_potion_3, gamecrash_potion, garden_gloves, kazoo, flute, snare_drum, trumpet, violin, bagpipes,
-             linen_beret, linen_shirt, linen_trousers, wool_roundlet, wool_tunic, wool_britches, velvet_cavalier,
-             velvet_doublet, velvet_kilt]
+             paralyzation_potion, fists, iron_hoe, bnz_swd, en_bnz_swd, stl_spr, en_stl_spr, titan_axe,
+             stn_dag, ser_knf, en_ser_knf, stiletto, en_stiletto, myth_sb, slg_sht, sht_bow, en_sht_bow,
+             lng_bow, en_lng_bow, ash_cbow, mag_twg, oak_stf, en_oak_stf, arc_spb, en_arc_spb, rnc_stf, rbr_mlt,
+             holy_mace, en_holy_mace, hmr_of_mgt, en_hmr_of_mgt, ngt_bane, brass_kncls, en_brass_kncls, bladed_gloves,
+             en_bladed_gloves, lead_bg, straw_hat, cotton_shirt, sunday_trousers, bnz_hlm, bnz_cst, bnz_leg, wiz_hat,
+             wiz_rob, wiz_gar, lth_cap, lth_bdy, lth_leg, stl_hlm, stl_cst, stl_leg, myst_hat, myst_rob, myst_gar,
+             std_cwl, std_bdy, std_leg, ori_hlm, ori_cst, ori_leg, elem_hat, elem_rob, elem_gar, drg_cwl, drg_bdy,
+             drg_leg, water_amulet, fire_amulet, earth_amulet, electric_amulet, wind_amulet, grass_amulet, ice_amulet,
+             light_amulet, dark_amulet, no_head, no_body, no_legs, no_access, attract_potion_1, attract_potion_2,
+             attract_potion_3, repel_potion_1, repel_potion_2, repel_potion_3, grenade_potion_1, grenade_potion_2,
+             grenade_potion_3, missile_potion_1, missile_potion_2, missile_potion_3, greed_potion_1, greed_potion_2,
+             greed_potion_3, temperance_potion_1, temperance_potion_2, temperance_potion_3, gamecrash_potion,
+             garden_gloves, kazoo, flute, snare_drum, trumpet, violin, bagpipes, linen_beret, linen_shirt,
+             linen_trousers, wool_roundlet, wool_tunic, wool_britches, velvet_cavalier, velvet_doublet, velvet_kilt]
 
 
 # Writes a list of all collected gems to a .json file. Used when saving the game.
@@ -1993,10 +1975,10 @@ def pick_category():
       [5] Tools
       [6] Quest Items
       [7] Misc. Items
-       |---->[I] Equipped Items
-       |---->[Q] Quests""")
+      [8] Equipped Items
+      [9] Quests""")
         while True:
-            cat = main.s_input('Input [#] or [L]etter (or type "exit"): ').lower()
+            cat = main.s_input('Input [#] (or type "exit"): ').lower()
 
             if cat in ['e', 'x', 'exit', 'b', 'back']:
                 return
@@ -2022,11 +2004,10 @@ def pick_category():
             elif cat == '7':
                 cat = 'misc'
                 vis_cat = 'Misc. Items'
-
-            elif cat == 'i':
+            elif cat == '8':
                 cat = 'equipped_items'
                 vis_cat = 'Equipped Items'
-            elif cat == 'q':
+            elif cat == '9':
                 cat = 'quests'
                 vis_cat = 'Quests'
 
@@ -2154,10 +2135,19 @@ def print_inventory(cat, vis_cat, selling):
 
         print(f'{vis_cat}:')
 
+        highest_charisma = max([pcu.attributes['cha'] for pcu in [units.player,
+                                                                  units.solou,
+                                                                  units.chili,
+                                                                  units.chyme,
+                                                                  units.adorine,
+                                                                  units.parsto]]) - 1
+
         for num, b in enumerate(sellable_inv):
-            fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
             sell_value = find_item_with_id(b[1]).value//5
-            print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {sell_value} GP each")
+            modified_value = math.ceil(max([sell_value*(1 + 0.01*highest_charisma), sell_value*2]))
+
+            fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
+            print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {modified_value} GP each")
 
         return [x[1] for x in sellable_inv]
 
@@ -2259,14 +2249,22 @@ def sell_item(item_id):
 
     print('-'*save_load.divider_size)
 
+    highest_charisma = max([pcu.attributes['cha'] for pcu in [units.player,
+                                                              units.solou,
+                                                              units.chili,
+                                                              units.chyme,
+                                                              units.adorine,
+                                                              units.parsto]]) - 1
+
+    modified_value = math.ceil(max([(item.value//5)*(1 + 0.01*highest_charisma), item.value*2]))
+
     while True:
-        sell_value = item.value//5
-        y_n = main.s_input(f'Sell the {item.name} for {sell_value} GP? | Y/N: ').lower()
+        y_n = main.s_input(f'Sell the {item.name} for {modified_value} GP? | Y/N: ').lower()
 
         if y_n.startswith('y'):
             remove_item(item.item_id)
-            main.party_info['gp'] += sell_value
-            print(f'The shopkeeper takes the {item.name} and gives you {sell_value} GP.')
+            main.party_info['gp'] += modified_value
+            print(f'The shopkeeper takes the {item.name} and gives you {modified_value} GP.')
             main.s_input('\nPress enter/return ')
 
             return

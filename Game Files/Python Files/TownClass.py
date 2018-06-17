@@ -16,6 +16,7 @@
 import copy
 import random
 import sys
+import math
 
 import pygame
 
@@ -308,12 +309,20 @@ class Town:
                 break
 
     def buy_choose_item(self, item_cat, stock):
+        highest_charisma = max([pcu.attributes['cha'] for pcu in [units.player,
+                                                                  units.solou,
+                                                                  units.chili,
+                                                                  units.chyme,
+                                                                  units.adorine,
+                                                                  units.parsto]]) - 1
+
         while True:
             padding = len(max([item.name for item in stock[item_cat]], key=len))
             print(f"{item_cat} (Your party has {main.party_info['gp']} GP): ")
 
             for num, item in enumerate(stock[item_cat]):
-                print(f"      [{num + 1}] {item.name} {(padding - len(item.name))*'-'}--> {item.value} GP")
+                modified_value = math.ceil(max([item.value/(1 + 0.01*highest_charisma), item.value*0.5]))
+                print(f"      [{num + 1}] {item.name} {(padding - len(item.name))*'-'}--> {modified_value} GP")
 
             while True:
                 chosen = main.s_input('Input [#] (or type "back"): ').lower()
@@ -340,16 +349,25 @@ class Town:
 
     @staticmethod
     def buy_yes_or_no(chosen):
+        highest_charisma = max([pcu.attributes['cha'] for pcu in [units.player,
+                                                                  units.solou,
+                                                                  units.chili,
+                                                                  units.chyme,
+                                                                  units.adorine,
+                                                                  units.parsto]]) - 1
+
+        modified_value = math.ceil(max([chosen.value/(1 + 0.01*highest_charisma), chosen.value*0.5]))
+
         while True:
-            y_n = main.s_input(f"Ya want this {chosen.name}? Will cost ya {chosen.value} GP. | Y/N: ").lower()
+            y_n = main.s_input(f"Ya want this {chosen.name}? Will cost ya {modified_value} GP. | Y/N: ").lower()
 
             if y_n.startswith('y'):
-                if main.party_info['gp'] >= chosen.value:
-                    main.party_info['gp'] -= chosen.value
+                if main.party_info['gp'] >= modified_value:
+                    main.party_info['gp'] -= modified_value
                     items.add_item(chosen.item_id)
 
                     print('-' * save_load.divider_size)
-                    print(f'You purchase the {chosen.name} for {chosen.value} GP.')
+                    print(f'You purchase the {chosen.name} for {modified_value} GP.')
                     main.s_input("\nPress enter/return ")
 
                 else:

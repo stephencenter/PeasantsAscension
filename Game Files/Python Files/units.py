@@ -54,12 +54,12 @@ class Unit:
         self.name = name          # Name
         self.hp = hp              # Health
         self.mp = mp              # Mana Points
-        self.attk = attk          # Attack
-        self.dfns = dfns          # Defense
+        self.attk = attk          # Physical Attack
+        self.dfns = dfns          # Physical Defense
         self.p_attk = p_attk      # Pierce Attack
         self.p_dfns = p_dfns      # Pierce Defense
-        self.m_attk = m_attk      # Magic Attack
-        self.m_dfns = m_dfns      # Magic Defense
+        self.m_attk = m_attk      # Magical Attack
+        self.m_dfns = m_dfns      # Magical Defense
         self.spd = spd            # Speed
         self.evad = evad          # Evasion
         self.lvl = 1              # Level
@@ -94,6 +94,7 @@ class PlayableCharacter(Unit):
                            'con': 1,  # Constitution, for Monks
                            'dex': 1,  # Dexterity, for Assassins
                            'per': 1,  # Perception, for Rangers
+                           'cha': 1,  # Charisma, for Bards
                            'fte': 1}  # Fate
 
         # This dictionary will contain numerous variables that interact with abilties in battle
@@ -156,12 +157,13 @@ class PlayableCharacter(Unit):
     def choose_class(self):
         while True:
             class_ = main.s_input(f"""{self.name}, which class would you like to train as?
-      [1] Mage: Master of the arcane arts capable of using all spells, but has low defense.
-      [2] Assassin: Deals damage quickly and has high speed and evasion. Can poison foes.
-      [3] Ranger: An evasive long-distance fighter who uses bows and deals pierce damage.
-      [4] Paladin: Heavy-armor user who excels at holy and healing magic and uses hammers.
-      [5] Monk: A master of unarmed combat. High evasion and capable of using buff spells.
-      [6] Warrior: High defense stats and attack. Can tank lots of hits with its high HP.
+      [1] Mage: Master of the arcane arts
+      [2] Assassin: Proficient in both stealth and murder
+      [3] Ranger: Fast and evasive, good with a bow
+      [4] Paladin: Holy knight whose healing prowess is unmatched
+      [5] Monk: Fighter whose fists are a worthy oppenent to any blade
+      [6] Warrior: Excellent soldier, good balance of offense and defense
+      [7] Bard: True team-player and master musician
 Input [#]: """)
 
             try:
@@ -170,65 +172,68 @@ Input [#]: """)
                           '3': "ranger",
                           '4': "paladin",
                           '5': "monk",
-                          '6': "warrior"}[class_]
+                          '6': "warrior",
+                          '7': "bard"}[class_]
 
                 class_desc = {'mage': """\
     -Can use abilities that scale off Intelligence
     -Capable of learning every spell
-    -Magic damage scales with equipped weapon
     -Deals Pierce Damage with Standard Attacks
     -Deals 50% damage with Standard Attacks
-    -High Magic Attack, Magic Defense, and MP
+    -High Magical Attack/Defense and MP
     -Average HP, Speed, and Evasion
-    -Low Pierce/Physical Attack and Pierce/Physical Defense""",
+    -Low Pierce Attack and Pierce/Physical Defense""",
 
                               'assassin': """\
     -Can use abilities that scale off Dexterity
-    -Physical damage scales with equipped weapon
     -Deals Physical Damage with Standard Attacks
     -Deals 75% damage with Magical Spells
-    -High Speed and Physical Attack
-    -Above-average Evasion
+    -High Speed, Physical Attack, and Evasion
     -Average HP, Pierce Defense, and Physical Defense
-    -Low Magic Defense, MP, and Magic Attack""",
+    -Low Magical Attack/Defense and MP""",
 
                               'ranger': """\
     -Can use abilities that scale off Perception
-    -Pierce Damage scales with equipped weapon
     -Deals Pierce Damage with Standard Attacks
     -Deals 75% damage with Magical Spells
-    -High Pierce Attack and Evasion
-    -Above-average Speed
+    -High Pierce Attack, Speed, and Evasion
     -Average MP, HP, and Pierce Defense
-    -Low Defense and Magic Attack""",
+    -Low HP, Pierce/Physcial Defense, and Magical Attack""",
 
                               'paladin': """\
     -Can use abilities that scale off Wisdom
     -Bonus healing from spells is 4*Wisdom instead of 2*Wisdom
     -Can learn all Healing spells and offensive Light spells
-    -Physical Damage scales with equipped weapon
     -Deals Physical Damage with Standard Attacks
-    -Above-average HP, Physical/Pierce/Magic defense, and Physical Attack
-    -Average Magic-attack and MP
-    -Low Speed and Evasion""",
+    -High Magical/Physical Defense
+    -Average MP, HP, and Pierce Defense
+    -Low Physical/Magical Attack, Speed, and Evasion""",
 
                               'monk': """\
     -Can use abilities that scale off Constitution
     -Capable of learning all Buff spells
-    -Physical damage scales with equipped weapon
     -Deals Physical damage with Standard Attacks
     -Deals 75% damage with Magical Spells
-    -Above-average Physical Attack, Speed, Evasion, and HP
+    -High Physical Attack, Speed, and Evasion
     -Average MP and Magical Attack
-    -Low Pierce Defense and Physical Defense""",
+    -Low Pierce/Physical Defense and HP""",
 
                               'warrior': """\
     -Can use abilities that scale off Strength
-    -Physical damage scales with equipped weapon
     -Deals Physical Damage with Standard Attacks
     -Deals 75% damage with Magical Spells
-    -High Pierce Defense, Physical Attack and Defense, and HP
-    -Low Magic Attack and Defense, Low Speed and Evasion, and Low MP"""}[class_]
+    -High Pierce/Physical Defense and Physical Attack
+    -Average HP
+    -Low Magical Attack/Defense, Speed, Evasion, and MP""",
+
+                              'bard': """\
+    -Can use abilities that scale of Charisma
+    -Deals Magical Damage with Standard Attacks
+    -Standard attacks cannot miss
+    -Deals 75% damage with Magical Spells
+    -High Magical Attack and Evasion
+    -Average MP, Speed, and Magical Defense
+    -Low HP and Physical/Pierce Defense"""}[class_]
 
             except KeyError:
                 continue
@@ -320,14 +325,24 @@ Input [#]: """)
                     self.max_mp += 2
 
                 elif self.class_ == 'paladin':
-                    self.p_dfns += 1
+                    self.p_dfns += 2
                     self.attk += 1
                     self.dfns += 3
                     self.m_attk += 1
                     self.m_dfns += 3
                     self.spd += 1
                     self.evad += 1
-                    self.max_hp += 3
+                    self.max_hp += 2
+                    self.max_mp += 2
+
+                elif self.class_ == 'bard':
+                    self.p_dfns += 1
+                    self.dfns += 1
+                    self.m_attk += 3
+                    self.m_dfns += 2
+                    self.spd += 2
+                    self.evad += 3
+                    self.max_hp += 1
                     self.max_mp += 2
 
                 self.exp -= self.req_xp
@@ -359,8 +374,9 @@ Input [#]: """)
       [4] CONSTITUTION, the attribute of MONKS
       [5] DEXTERITY, the attribute of ASSASSINS
       [6] PERCEPTION, the attribute of RANGERS
-      [7] FATE, the forgotten attribute
-      [8] DIFFICULTY, the forbidden attribute
+      [7] CHARISMA, the attribute of BARDS
+      [8] FATE, the forgotten attribute
+      [9] DIFFICULTY, the forbidden attribute
 Input [#]: """).lower()
 
             if skill and skill[0] in ['1', '2', '3', '4', '5', '6', '7', '8']:
@@ -369,8 +385,8 @@ Input [#]: """).lower()
                     vis_skill = 'INTELLIGENCE'
                     message = """\
 Increasing INTELLIGENCE will provide:
-    +1 Magic Attack
-    +1 Magic Defense
+    +1 Magical Attack
+    +1 Magical Defense
     +1 MP
     +Mage Ability Power"""
 
@@ -402,7 +418,7 @@ Increasing CONSTITUTION will provide:
     +1 HP
     +1 Physical Defense
     +1 Pierce Defense
-    +1 Magic Defense
+    +1 Magical Defense
     +Monk Ability Power"""
 
                 elif skill[0] == '5':
@@ -426,6 +442,16 @@ Increasing PERCEPTION will provide:
     +Ranger Ability Power"""
 
                 elif skill[0] == '7':
+                    act_skill = 'cha'
+                    vis_skill = 'CHARISMA'
+                    message = """\
+Increasing CHARISMA will provide:
+    +Items cost 1% less (caps at 50% original cost)
+    +Items sell for 1% more (caps at 200% original sell value)
+    +Only the highest CHARISMA in party contributes to these
+    +Bard Ability Power"""
+
+                elif skill[0] == '8':
                     act_skill = 'fte'
                     vis_skill = 'FATE'
                     message = """\
@@ -434,14 +460,14 @@ Increasing FATE will provide:
     +1 to a second random attribute (won't choose DIFFICULTY or FATE)
     +Knowledge that your destiny is predetermined and nothing matters"""
 
-                elif skill[0] == '8':
+                elif skill[0] == '9':
                     act_skill = "dif"
                     vis_skill = "DIFFICULTY"
                     message = """\
 Increasing DIFFICULTY will provide:
     +0.5% Enemy Physical Attack (Applies to entire party)
     +0.5% Enemy Pierce Attack (Applies to entire party)
-    +0.5% Enemy Magic Attack (Applies to entire party)
+    +0.5% Enemy Magical Attack (Applies to entire party)
     +More challenging experience"""
 
                 else:
@@ -523,6 +549,7 @@ Strength: {self.attributes['str']}
 Constitution: {self.attributes['con']}
 Dexterity: {self.attributes['dex']}
 Perception: {self.attributes['per']}
+Charisma: {self.attributes['cha']}
 Difficulty: {main.party_info['dif']}""")
 
         main.s_input('\nPress enter/return ')
@@ -1309,7 +1336,7 @@ class Monster(Unit):
 
                 return
 
-            # Magic Attack
+            # Magical Attack
             elif self.mp >= self.max_mp*0.15:
 
                 sounds.magic_attack.play()
@@ -1463,7 +1490,7 @@ master_slime = Boss('Master Slime',
                     35, 5,   # 35 HP and 5 MP
                     15, 10,  # 12 Attack, 5 Defense
                     6, 10,   # 6 Pierce Attack, 5 Pierce Defense
-                    8, 0,    # 8 Magic Attack, 0 Magic Defense
+                    8, 0,    # 8 Magical Attack, 0 Magical Defense
                     6, 6,    # 6 Speed, 6 Evasion
                     3,       # Level 3
                     ["s_vial", "s_vial", "s_vial"],  # Drops 3 slime vials
@@ -1479,7 +1506,7 @@ goblin_chieftain = Boss('Goblin Chieftain',
                         50, 10,  # 50 HP and 10 MP
                         20, 20,  # 20 Attack, 20 Defense
                         12, 15,  # 12 Pierce Attack, 15 Pierce Defense
-                        8, 12,   # 8 Magic Attack, 12 Magic Defense
+                        8, 12,   # 8 Magical Attack, 12 Magical Defense
                         15, 7,   # 15 Speed, 7 Evasion
                         5,       # Level 5
                         [],      # Drops no items
@@ -1500,7 +1527,7 @@ menacing_phantom = Boss('Menacing Phantom',
                         75, 50,  # 75 HP and 50 MP
                         10, 20,  # 10 Attack, 20 Defense
                         5, 20,   # 5 Pierce Attack, 20 Pierce Defense
-                        35, 25,  # 35 Magic Attack, 25 Magic Defense
+                        35, 25,  # 35 Magical Attack, 25 Magical Defense
                         20, 15,  # 20 Speed, 15 Evasion
                         8,       # Level 8
                         [],      # Drops no items
@@ -1526,7 +1553,7 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    100, 25,   # 100 Health, 25 Mana
                    45, 30,    # 45 Attack, 30 Defense
                    25, 15,    # 25 Pierce Attack, 15 Pierce Defense
-                   15, 25,    # 15 Magic Attack, 25 Magic Defense
+                   15, 25,    # 15 Magical Attack, 25 Magical Defense
                    35, 25,    # 35 Speed, 25 Evasion
                    12,        # Level 12
                    [],        # Drops no items
@@ -1547,7 +1574,7 @@ cursed_spectre = Boss('Cursed Spectre',
                       125, 75,             # 125 Health, 75 Mana
                       15, 30,              # 15 Attack, 30 Defense
                       20, 25,              # 20 Pierce Attack, 25 Pierce Defense
-                      50, 35,              # 50 Magic Attack, 35 Magic Defense
+                      50, 35,              # 50 Magical Attack, 35 Magical Defense
                       25, 20,              # 25 Speed, 20 Evasion
                       15,                  # Level 15
                       [],                  # Drops no items
@@ -1563,7 +1590,7 @@ giant_ent = Boss('Giant Ent',
                  125, 35,         # 125 Health, 75 Mana
                  35, 50,          # 35 Attack, 50 Defense
                  15, 50,          # 15 Pierce Attack, 50 Pierce Defense
-                 20, 15,          # 20 Magic Attack, 15 Magic Defense
+                 20, 15,          # 20 Magical Attack, 15 Magical Defense
                  15, 5,           # 15 Speed, 5 Evasion
                  15,              # Level 15
                  [],              # Drops no items
@@ -1811,6 +1838,16 @@ def create_player():
         magic.spellbook['player']['Healing'].append(magic.min_heal)
         magic.spellbook['player']['Damaging'].append(magic.purify)
         items.equipped['player']['weapon'] = copy.copy(items.rbr_mlt)
+
+    elif player.class_ == "bard":
+        player.max_mp += 3
+        player.m_dfns += 1
+        player.m_attk += 3
+        player.hp -= 1
+        player.dfns -= 1
+        player.p_dfns -= 1
+        items.equipped['player']['weapon'] = copy.copy(items.kazoo)
+        items.add_item("musicbox")
 
     player.hp = copy.copy(player.max_hp)
     player.mp = copy.copy(player.max_mp)

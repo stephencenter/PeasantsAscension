@@ -809,7 +809,8 @@ def use_ascend(user):
                     "paladin": ["wis", "Wisdom"],
                     "assassin": ["dex", "Dexterity"],
                     "monk": ["con", "Constitution"],
-                    "mage": ["int", "Intelligence"]}[user.class_]
+                    "mage": ["int", "Intelligence"],
+                    "bard": ["cha", "Charisma"]}[user.class_]
 
     increase = min((0.25 + 0.1*battle.turn_counter), 0.75)
     increase *= battle.temp_stats[user.name]['attributes'][primary_attr[0]]
@@ -854,6 +855,7 @@ a_abilities = {
     'assassin': [inject_poison, knockout_gas, disarming_blow, backstab],  # 1 2 3 4
     'ranger': [scout, roll, powershot, natures_call],
     'monk': [chakra_smash, shared_experience, aura_swap, breaking_vows],  # 1 2 3 4
+    'bard': [],
 
     'player': [ascend],
     'Solou': [infusion],

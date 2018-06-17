@@ -186,6 +186,9 @@ def game_loop():
             elif command.startswith('l'):
                 look_command()
 
+            elif command.startswith('r'):
+                recheck_command()
+
             elif command.startswith('c'):
                 title_screen.edit_settings()
 
@@ -341,6 +344,11 @@ def move_command(available_dirs, command):
             party_info['steps_without_battle'] += 1
 
 
+def recheck_command():
+    towns.search_towns()
+    units.check_bosses()
+
+
 def help_command():                       
     print('-'*save_load.divider_size)
     print("""Command List:
@@ -350,6 +358,7 @@ def help_command():
  [T]ool Menu - Allows you to quickly use tools without opening your inventory
  [M]agic - Allows you to use healing spells outside of battle
  [I]nventory - Displays your inventory and lets you equip/use items
+ [R]e-check - Searches the current tile for a town or boss
  [C]onfig - Opens the settings list and allows you to change them in-game
  [H]elp - Reopens this list of commands
 Type the letter in brackets while on the overworld to use the command""")
