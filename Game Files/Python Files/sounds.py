@@ -98,6 +98,45 @@ eerie_sound = Sound('../Sound FX/eerie_sound.wav')
 # Random encounter -- No current use
 random_enc = Sound('../Sound FX/random_encounter.wav')
 
+bard_sounds = {"snare_drum": [
+    Sound('../Sound FX/Bard Sounds/snare_1.wav'),
+    # Sound('../Sound FX/Bard Sounds/snare_2.wav'),
+    # Sound('../Sound FX/Bard Sounds/snare_3.wav'),
+    # Sound('../Sound FX/Bard Sounds/snare_4.wav'),
+    # Sound('../Sound FX/Bard Sounds/snare_5.wav')
+               ], "violin": [
+    Sound('../Sound FX/Bard Sounds/violin_1.wav'),
+    # Sound('../Sound FX/Bard Sounds/violin_2.wav'),
+    # Sound('../Sound FX/Bard Sounds/violin_3.wav'),
+    # Sound('../Sound FX/Bard Sounds/violin_4.wav'),
+    # Sound('../Sound FX/Bard Sounds/violin_5.wav')
+               ], "flute": [
+    Sound('../Sound FX/Bard Sounds/flute_1.wav'),
+    # Sound('../Sound FX/Bard Sounds/flute_2.wav'),
+    # Sound('../Sound FX/Bard Sounds/flute_3.wav'),
+    # Sound('../Sound FX/Bard Sounds/flute_4.wav'),
+    # Sound('../Sound FX/Bard Sounds/flute_5.wav')
+               ], "trumpet": [
+    Sound('../Sound FX/Bard Sounds/trumpet_1.wav'),
+    # Sound('../Sound FX/Bard Sounds/trumpet_2.wav'),
+    # Sound('../Sound FX/Bard Sounds/trumpet_3.wav'),
+    # Sound('../Sound FX/Bard Sounds/trumpet_4.wav'),
+    # Sound('../Sound FX/Bard Sounds/trumpet_5.wav')
+               ], "kazoo": [
+    Sound('../Sound FX/Bard Sounds/kazoo_1.wav'),
+    # Sound('../Sound FX/Bard Sounds/kazoo_2.wav'),
+    # Sound('../Sound FX/Bard Sounds/kazoo_3.wav'),
+    # Sound('../Sound FX/Bard Sounds/kazoo_4.wav'),
+    # Sound('../Sound FX/Bard Sounds/kazoo_5.wav')
+               ], "bagpipes": [
+    Sound('../Sound FX/Bard Sounds/bagpipes_1.wav'),
+    # Sound('../Sound FX/Bard Sounds/bagpipes_2.wav'),
+    # Sound('../Sound FX/Bard Sounds/bagpipes_3.wav'),
+    # Sound('../Sound FX/Bard Sounds/bagpipes_4.wav'),
+    # Sound('../Sound FX/Bard Sounds/bagpipes_5.wav')
+               ]
+}
+
 all_sounds = [sword_slash, magic_attack,
               magic_healing, enemy_hit,
               foot_steps, aim_weapon,
@@ -119,8 +158,12 @@ def play_music(song, num_plays=-1):
 
 
 def change_volume():
-    for x in all_sounds:
-        x.set_volume(save_load.sound_vol)
+    for sound1 in all_sounds:
+        sound1.set_volume(save_load.sound_vol)
+
+    for key in bard_sounds:
+        for sound2 in bard_sounds[key]:
+            sound2.set_volume(save_load.sound_vol)
 
 
 for item in copy.copy(globals()):

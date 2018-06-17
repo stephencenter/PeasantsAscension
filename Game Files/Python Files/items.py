@@ -1167,28 +1167,28 @@ en_lead_bg = Weapon('Enhanced Lead Mitts',
 # Weapons -- Bard
 kazoo = Weapon("Kazoo", """\
 A wooden kazoo that does more to annoy your enemies than damage them [+5% Damage].""",
-               10, 0.05, 'magic', ['bard'], 'kazoo', "kazoo")
+               10, 0.05, 'instrument', ['bard'], 'kazoo', "kazoo")
 
 flute = Weapon("Flute", """\
 A good-quality flute made out of wood and silver [+10% Damage].""",
-               150, 0.1, 'magic', ['bard'], 'flute', "flute")
+               150, 0.1, 'instrument', ['bard'], 'flute', "flute")
 
 snare_drum = Weapon("Snare Drum", """\
 A marching drum used to inspire courage in the hearts of your allies [+30% Damage].""",
-                    300, 0.3, 'magic', ['bard'], 'drum', "snare_drum")
+                    300, 0.3, 'instrument', ['bard'], 'drum', "snare_drum")
 
 trumpet = Weapon("Trumpet", """\
 A mighty brass trumpet that can be heard blaring from miles away [+50% Damage].""",
-                 600, 0.5, 'magic', ['bard'], 'trumpet', "trumpet")
+                 600, 0.5, 'instrument', ['bard'], 'trumpet', "trumpet")
 
 violin = Weapon("Violin", """\
 A beautiful violin that could make even the most stone-cold weep [+70% Damage].""",
-                1200, 0.7, 'magic', ['bard'], 'violin', "violin")
+                1200, 0.7, 'instrument', ['bard'], 'violin', "violin")
 
 bagpipes = Weapon("Bagpipes", """\
 A ridiculously loud and extravagent bagpipe made from plaid fabric. Your
 allies will probably hate you if you use this [+90% Damage].""",
-                  2400, 0.9, 'magic', ['bard'], 'bagpipes', "bagpipes")
+                  2400, 0.9, 'instrument', ['bard'], 'bagpipes', "bagpipes")
 
 # Starting Armor (All classes)
 straw_hat = Armor('Straw Hat', """\

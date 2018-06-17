@@ -170,8 +170,7 @@ Input [#]: """)
                           '3': "ranger",
                           '4': "paladin",
                           '5': "monk",
-                          '6': "warrior",
-                          '7': "bard"}[class_]
+                          '6': "warrior"}[class_]
 
                 class_desc = {'mage': """\
     -Can use abilities that scale off Intelligence
@@ -574,6 +573,10 @@ Difficulty: {main.party_info['dif']}""")
                 sounds.sword_slash.play()
                 print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon.name}...')
 
+            elif items.equipped[inv_name]['weapon'].type_ == 'instrument':
+                random.choice(sounds.bard_sounds[items.equipped[inv_name]['weapon'].item_id]).play()
+                print(f'{self.name} starts playing their {player_weapon.name} at the {self.target.name}...')
+
             else:
                 sounds.aim_weapon.play()
                 print(f'{self.name} aims carefully at the {self.target.name} using their {player_weapon.name}...')
@@ -589,8 +592,9 @@ Difficulty: {main.party_info['dif']}""")
             else:
                 dam_dealt = deal_damage(self, self.target, "magical")
 
-            # Check for attack accuracy
-            if random.randint(1, 512) in range(self.target.evad, 512):
+            # Check for attack accuracy. Note that the bard's instruments can't miss.
+            if (random.randint(1, 512) in range(self.target.evad, 512)) or \
+                    (items.equipped[inv_name]['weapon'].type_ == 'instrument'):
                 print(f"{self.name}'s attack connects with the {self.target.name}, dealing {dam_dealt} damage!")
 
                 sounds.enemy_hit.play()
