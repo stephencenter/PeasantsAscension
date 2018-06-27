@@ -40,23 +40,26 @@ else:
 
 
 class NPC:
-    def __init__(self, name, occupation, conversations, active=True):
+    def __init__(self, name, occupation, conversations, npc_id, active=True):
         self.name = name
         self.occupation = occupation
-        self.conversations = conversations
+        self.convos = conversations
         self.active = active
+        self.npc_id = npc_id
 
     def speak(self):
         # Print the NPC's dialogue to the player
         print(f"{self.name}, the {self.occupation}:")
-        for convo in [x for x in self.conversations if not isinstance(x, d.Quest) and x.active]:
+
+        convo_list = self.convos[main.party_info['current_town']]
+
+        for convo in [x for x in convo_list if not isinstance(x, d.Quest) and x.active]:
             for sentence in main.chop_by_79(convo.dialogue):
                 main.s_input(sentence)
 
             convo.after_talking()
-            print('-'*save_load.divider_size)
 
-        for convo in [x for x in self.conversations if isinstance(x, d.Quest) and x.active]:
+        for convo in [x for x in convo_list if isinstance(x, d.Quest) and x.active]:
             if isinstance(convo, d.Quest) and convo.finished:
                 convo.completion()
 
@@ -66,77 +69,193 @@ class NPC:
             if isinstance(convo, d.Quest) and not convo.started:
                 convo.give_quest()
 
+        print('-'*save_load.divider_size)
 
-npc_solou = NPC("Solou", "Page", [d.solou_convo_1, d.solou_quest_1])
 
-joseph = NPC('Joseph', "Mayor of Overshire", [d.joseph_convo_1, d.joseph_quest_1, d.joseph_convo_2, d.joseph_convo_3])
+npc_solou = NPC("Solou", "Page",
+                {
+                    "nearton": [
+                        d.solou_convo_1,
+                        d.solou_quest_1
+                    ]
+                }, "npc_solou")
 
-orius = NPC("Orius", "Mayor of Valice", [])
+joseph = NPC('Joseph', "Mayor of Overshire",
+             {
+                 "overshire_city": [
+                     d.joseph_convo_1,
+                     d.joseph_quest_1,
+                     d.joseph_convo_2,
+                     d.joseph_convo_3
+                 ],
+             }, "npc_joseph")
 
-azura = NPC('Azura', "Sorcerers' Guildmaster", [d.azura_convo_1, d.azura_convo_2, d.azura_convo_3])
+orius = NPC("Orius", "Mayor of Valice", [], "npc_orius")
 
-raidon = NPC('Raidon', "Village Shaman", [d.raidon_convo_1])
+azura = NPC('Azura', "Sorcerers' Guildmaster",
+            {
+                "parceon": [
+                    d.azura_convo_1,
+                    d.azura_convo_2,
+                    d.azura_convo_3
+                ],
+            }, "npc_azura")
 
-stewson = NPC('Stewson', "Captain of the Guard", [d.stewson_convo_1, d.stewson_convo_2,
-                                                  d.stewson_convo_3, d.stewson_quest_1])
+raidon = NPC('Raidon', "Village Shaman", {"ambercreek": [d.raidon_convo_1]}, "npc_raidon")
 
-seriph = NPC('Seriph', "Blacksmith", [d.seriph_convo_1, d.seriph_convo_2, d.seriph_convo_3])
+stewson = NPC('Stewson', "Captain of the Guard",
+              {
+                  "overshire_city": [
+                      d.stewson_convo_1,
+                      d.stewson_convo_2,
+                      d.stewson_convo_3,
+                      d.stewson_quest_1
+                  ],
+              }, "npc_stewson")
 
-rivesh = NPC('Rivesh', "Village Elder", [d.rivesh_convo_1, d.rivesh_convo_2, d.rivesh_convo_3,
-                                         d.rivesh_convo_4, d.rivesh_quest_1])
+seriph = NPC('Seriph', "Blacksmith",
+             {
+                 "fort_sigil": [
+                     d.seriph_convo_1,
+                     d.seriph_convo_2,
+                     d.seriph_convo_3
+                 ],
+             }, "npc_seriph")
 
-alfred = NPC('Alfred', "Cobbler", [d.alfred_convo_1, d.alfred_convo_2, d.alfred_quest_1,
-                                   d.alfred_convo_3, d.alfred_convo_4])
+rivesh = NPC('Rivesh', "Village Elder",
+             {
+                 "fort_sigil": [
+                     d.rivesh_convo_1,
+                     d.rivesh_convo_2,
+                     d.rivesh_convo_3,
+                     d.rivesh_convo_4,
+                     d.rivesh_quest_1
+                 ]
+             }, "npc_rivesh")
 
-kyle = NPC('Kyle', "Village Elder", [d.kyle_convo_1, d.kyle_convo_2, d.kyle_convo_3, d.kyle_convo_4])
+alfred = NPC('Alfred', "Cobbler",
+             {
+                 "nearton": [
+                    d.alfred_convo_1,
+                    d.alfred_convo_2,
+                    d.alfred_quest_1,
+                    d.alfred_convo_3,
+                    d.alfred_convo_4
+                 ]
+             }, "npc_alfred")
 
-krystin = NPC('Krystin', "Village Elder", [d.krystin_convo_1, d.krystin_convo_2, d.krystin_convo_3, d.krystin_convo_4])
+kyle = NPC('Kyle', "Village Elder",
+           {
+               "tripton": [
+                   d.kyle_convo_1,
+                   d.kyle_convo_2,
+                   d.kyle_convo_3,
+                   d.kyle_convo_4
+               ],
+           }, "npc_kyle")
 
-frederick = NPC('Frederick', "Scholar", [d.frederick_convo_1, d.frederick_convo_2, d.frederick_convo_3])
+krystin = NPC('Krystin', "Village Elder",
+              {
+                  "fallville": [
+                      d.krystin_convo_1,
+                      d.krystin_convo_2,
+                      d.krystin_convo_3,
+                      d.krystin_convo_4
+                  ]
+              }, "npc_krystin")
 
-alden = NPC('Alden', "Sage", [d.alden_quest_1, d.alden_convo_1, d.alden_convo_2, d.alden_convo_3])
+frederick = NPC('Frederick', "Scholar",
+                {
+                    "fallville": [
+                        d.frederick_convo_1,
+                        d.frederick_convo_2,
+                        d.frederick_convo_3
+                    ],
+                }, "npc_frederick")
 
-polmor = NPC('Polmor', "Engineer", [d.polmor_convo_1, d.polmor_quest_1, d.polmor_convo_2])
+alden = NPC('Alden', "Sage",
+            {
+                "tripton": [
+                    d.alden_quest_1,
+                    d.alden_convo_1,
+                    d.alden_convo_2,
+                    d.alden_convo_3
+                ]
+            }, "npc_alden")
 
-matthew = NPC('Matthew', "Interstellar Traveller", [d.matthew_convo_1, d.matthew_quest_1, d.matthew_convo_2,
-                                                    d.matthew_convo_3, d.matthew_convo_4, d.matthew_convo_5])
+polmor = NPC('Polmor', "Engineer",
+             {
+                 "whistumn": [
+                     d.polmor_convo_1,
+                     d.polmor_quest_1,
+                     d.polmor_convo_2
+                 ],
+             }, "npc_polmor")
 
-pime = NPC('Pime', "Vampire Shaman", [d.pime_convo_1, d.pime_convo_2, d.pime_quest_1, d.pime_convo_3, d.pime_convo_4])
+serena = NPC('Serena', "Scientist",
+             {
+                 "whistumn": [
+                     d.serena_convo_1,
+                     d.serena_convo_2,
+                     d.serena_convo_3
+                 ],
+             }, "npc_serena")
 
-philliard = NPC('Philliard', "Scribe", [d.philliard_convo_1])
+matthew = NPC('Matthew', "Matt",
+              {
+                  "lantonum": [
+                      d.matthew_convo_1,
+                      d.matthew_quest_1,
+                      d.matthew_convo_2,
+                      d.matthew_convo_3,
+                      d.matthew_convo_4,
+                      d.matthew_convo_5
+                  ]
+              }, "npc_matthew")
 
-sondalar = NPC('Sondalar', "Goods Peddler", [d.sondalar_convo_1])
+pime = NPC('Pime', "Vampire Shaman",
+           {
+               "sanguion": [
+                   d.pime_convo_1,
+                   d.pime_convo_2,
+                   d.pime_quest_1,
+                   d.pime_convo_3,
+                   d.pime_convo_4
+               ],
+           }, "npc_pime")
 
-saar = NPC("Saar", "Bard", [d.saar_convo_1])
+philliard = NPC('Philliard', "Scribe", {"nearton": [d.philliard_convo_1]}, "npc_philliard")
 
-wesley = NPC('Wesley', "Peasant", [d.wesley_convo_1])
+sondalar = NPC('Sondalar', "Goods Peddler", {"southford": [d.sondalar_convo_1]}, "npc_sondalar")
 
-lazaro = NPC('Lazaro', "Oracle", [d.lazaro_convo_1])
+saar = NPC("Saar", "Bard", {"nearton": [d.saar_convo_1]}, "npc_saar")
 
-typhen = NPC('Typhen', "Novice Cleric", [d.typhen_convo_1])
+wesley = NPC('Wesley', "Peasant", {"southford": [d.wesley_convo_1]}, "npc_wesley")
 
-jeffery = NPC('Jeffery', "Gossipping Serf", [d.jeffery_convo_1])
+lazaro = NPC('Lazaro', "Oracle", {"southford": [d.lazaro_convo_1]}, "npc_lazaro")
 
-harthos = NPC("Harthos", "Lumberjack", [d.harthos_convo_1])
+typhen = NPC('Typhen', "Novice Cleric", {"valice": [d.typhen_convo_1]}, "npc_typhen")
 
-ethos = NPC('Ethos', "Courier", [d.ethos_convo_1])
+jeffery = NPC('Jeffery', "Gossipping Serf", {"overshire_city": [d.jeffery_convo_1]}, "npc_jeffery")
 
-fly = NPC('Fly', "Duke of Celemia", [d.fly_convo_1])
+harthos = NPC("Harthos", "Lumberjack", {"overshire_city": [d.harthos_convo_1]}, "npc_harthos")
 
-stravi = NPC('Stravi', "Duchess of Celemia", [d.stravi_convo_1])
+ethos = NPC('Ethos', "Courier", {"valice": [d.ethos_convo_1]}, "npc_ethos")
 
-caesar = NPC('Caesar', "Fly's Pet", [d.caesar_convo_1])
+fly = NPC('Fly', "Duke of Celemia", {"new_ekanmar": [d.fly_convo_1]}, "npc_fly")
 
-sakura = NPC('Sakura', "Head of the Royal Guard", [d.sakura_convo_1])
+stravi = NPC('Stravi', "Duchess of Celemia", {"new_ekanmar": [d.stravi_convo_1]}, "npc_stravi")
 
-strathius = NPC("Strathius", "Druid", [d.strathius_convo_1])
+caesar = NPC('Caesar', "Fly's Pet", {"new_ekanmar": [d.caesar_convo_1]}, "npc_caesar")
 
-sugulat = NPC('Sugulat', "Duke of Chin'tor", [d.sugulat_convo_1])
+sakura = NPC('Sakura', "Head of the Royal Guard", {"principalia": [d.sakura_convo_1]}, "npc_sakrura")
 
-serena = NPC('Serena', "Scientist", [d.serena_convo_1, d.serena_convo_2, d.serena_convo_3])
+strathius = NPC("Strathius", "Druid", {"ravenstone": [d.strathius_convo_1]}, "npc_strathius")
 
-morrison = NPC('Morrison', "Engineer", [d.morrison_convo_1])
+sugulat = NPC('Sugulat', "Duke of Chin'tor",  {"ambercreek": [d.sugulat_convo_1]}, "npc_sugalat")
 
-ariver = NPC('Ariver', "Vampire", [d.ariver_convo_1])
+morrison = NPC('Morrison', "Engineer", {"cesura": [d.morrison_convo_1]}, "npc_morrison")
 
-fitzgerald = NPC("Fitzgerald the Drunk", "Raving Alcoholic", [d.fitz_convo_1])
+ariver = NPC('Ariver', "Vampire", {"sanguion": [d.ariver_convo_1]}, "npc_ariver")
+
+fitzgerald = NPC("Fitzgerald", "Raving Alcoholic", {"valenfall": [d.fitz_convo_1]}, "npc_fitzgerald")
