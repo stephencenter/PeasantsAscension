@@ -43,7 +43,7 @@ class Town:
         self.name = name  # The town's name (e.g. New York City)
         self.desc = desc  # A brief description of the town
 
-        self.people = people  # A list that contains the NPCs you can talk to
+        self.npcs = people  # A list that contains the NPCs you can talk to
         self.houses = houses  # A list that contains random buildings you can enter
         self.town_id = town_id
 
@@ -54,6 +54,7 @@ class Town:
 
         while True:
             main.party_info['gamestate'] = 'town'
+            main.party_info['current_town'] = self.town_id
             print("""What do you wish to do?
       [1] Town Description
       [2] Buildings
@@ -81,7 +82,7 @@ class Town:
                 elif choice == '3':
                     print('-'*save_load.divider_size)
 
-                    if [x for x in self.people if any([y.active for y in x.conversations])]:
+                    if [x for x in self.npcs if any([y.active for y in x.convos[main.party_info['current_town']]])]:
                         self.speak_to_npcs()
 
                     else:
@@ -387,7 +388,7 @@ class Town:
         while True:
             print('NPCs: ')
 
-            npc_list = [x for x in self.people if any([y.active for y in x.conversations])]
+            npc_list = [x for x in self.npcs if any([y.active for y in x.convos[main.party_info['current_town']]])]
 
             for x, npc in enumerate(npc_list):
                 print(f"      [{x + 1}] {npc.name}")

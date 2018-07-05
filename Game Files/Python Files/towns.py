@@ -93,14 +93,16 @@ towers, each with 2 crossbowmen and one archer at the top. Each tower is about
 100 yards from the cottage. In addition, there are numerous guards standing 
 watch all around the building.""", [npcs.sakura], [], "principalia")
 
-# Fort Sigil
-town_fort_sigil = Town("Fort Sigil", """\
-Fort Sigil small village in the Barrier Forest. As the name suggests, the
-town was built around an old fort, named Fort Sigil. Originally comprised of
-just a few tents meant to house soldiers, many of these soldiers eventually
-put down their arms and settled. Despite it's rich backstory and pleasant
-scenery, Fort Sigil doesn't get many visitors. Perhaps there's a reason why...""",
-                       [npcs.seriph, npcs.rivesh], [], "fort_sigil")
+# Sardooth
+town_sardooth = Town("Sardooth", """\
+Sardooth is a ghost town, without a single permanent inhabitant. This town
+was hit the hardest by the latest wave of monsters, causing it to turn from
+the bustling hub of commerce and culture to a barren wasteland within just 
+six months. Everyone who lived here was either killed or driven out by the 
+monsters, and the King's troops were powerless to stop it. The only thing of
+note here is the small camp on the outskirts that has a temporary merchant 
+stand and sleeping quarters. That, and "The Undershire", a massive cemetery
+to the northeast, which is rumored to be even more dangerous than here.""", [], [], "sardooth")
 
 # =========================== #
 #        DOWNPOUR TOWNS       #
@@ -113,7 +115,7 @@ located mere meters away from the new town's borders. Merchants in Tripton
 became very successful, as their superior bartering tactics allowed them to
 easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
-village leaders.""", [npcs.kyle], [], "tripton")
+village leaders.""", [npcs.kyle, npcs.alden], [], "tripton")
 
 # Fallville
 town_fallville = Town("Fallville", """\
@@ -177,6 +179,15 @@ after the Thexian Incursion. All of the residents of this town are soldiers or
 family members of soldiers, with the exception a few merchants. Rymn Outpost
 is named after Rymnes, the Divinic gods of defense.""", [], [], "rymn_outpost")
 
+# Fort Sigil
+town_fort_sigil = Town("Fort Sigil", """\
+Fort Sigil small village in the Barrier Forest. As the name suggests, the
+town was built around an old fort, named Fort Sigil. Originally comprised of
+just a few tents meant to house soldiers, many of these soldiers eventually
+put down their arms and settled. Despite it's rich backstory and pleasant
+scenery, Fort Sigil doesn't get many visitors. Perhaps there's a reason why...""",
+                       [npcs.seriph, npcs.rivesh], [], "fort_sigil")
+
 # Mardovian Caverns
 town_mardoviancaverns = Town("Mardovian Caverns", """""", [], [], "mardoviancaverns")
 
@@ -184,16 +195,7 @@ town_mardoviancaverns = Town("Mardovian Caverns", """""", [], [], "mardoviancave
 town_mtfalenkarth = Town("Dewfrost", """""", [], [], "mtfalenkarth")
 
 # Coran Outpost
-town_coran_outpost = Town("Coran Outpost", """""", [], [], "coranoutpost")
-
-
-# Sardooth
-town_sardooth = Town("Sardooth", """\
-Sardooth is a ghost town. There has not been a single permanent inhabitant of 
-this town for more than 75 years. It is completely run down, due to its 
-proximity to the ocean. The Arcadian oceans are extremely dangerous, with 
-tsunamis being extremely common. While this town may seem interesting and 
-historic, there is nothing of value here.""", [], [], "sardooth")
+town_coran_outpost = Town("Coran Outpost", """""", [], [], "coran_outpost")
 
 # =========================== #
 #       CAMBERLITE TOWNS      #
@@ -266,7 +268,7 @@ chit-chat.""", [], [], "hatchnuk")
 #         KOHRIN TOWNS        #
 # =========================== #
 # Cesura
-town_cesura = Town("Cesura", """""", [], [], "cesura")
+town_cesura = Town("Cesura", """""", [npcs.morrison], [], "cesura")
 
 # Trintooli
 town_trintooli = Town("Trintooli", """""", [], [], "trintooli")
@@ -320,9 +322,9 @@ them for a bit.""", [npcs.fly, npcs.stravi, npcs.caesar], [], "new_ekanmar")
 all_towns = [town_nearton, town_southford, town_ambercreek, town_capwild, town_valice,
              town_fallville, town_hatchnuk, town_rymn_outpost, town_lantonum, town_fort_sigil, town_sanguion,
              town_ravenstone, town_principalia, town_whistumn, town_new_ekanmar, town_overshire_city, town_sardooth,
-             town_tripton, town_valenfall, town_parceon, town_mardoviancaverns, town_mtfalenkarth, town_coran_outpost,
-             town_dewfrost, town_clayroost, town_simphet, town_cesura, town_trintooli, town_foqwhitte, town_don_kohrin
-             ]
+             town_tripton, town_valenfall, town_parceon, town_mardoviancaverns, town_mtfalenkarth, town_dewfrost,
+             town_clayroost, town_simphet, town_cesura, town_trintooli, town_foqwhitte, town_don_kohrin,
+             town_coran_outpost]
 all_houses = [house for sublist in [town.houses for town in all_towns] for house in sublist]
 all_chests = [chest for sublist in [house.chests for house in all_houses] for chest in sublist]
 
@@ -400,10 +402,16 @@ def deserialize_chests(path):
         find_chest_with_id(j_chest[0]).opened = j_chest[2]
 
 
-for item1 in all_chests:
-    if find_chest_with_id(item1.chest_id) != item1:
+for item1 in copy.copy(globals()):
+    if isinstance(globals()[item1], Town) and globals()[item1] not in all_towns:
+        print(f'{item1} not in all_towns!')
+
+for item2 in all_chests:
+    if find_chest_with_id(item2.chest_id) != item2:
         print(f"{item1.chest_id} doesn't have a unique chest_id!")
 
-for item2 in copy.copy(globals()):
-    if isinstance(globals()[item2], Town) and globals()[item2] not in all_towns:
-        print(f'{item2} not in all_sounds!')
+
+for item3 in all_towns:
+    for npc in item3.npcs:
+        if item3.town_id not in npc.convos:
+            print(f"{npc.npc_id} does not have any dialogue for {item3.town_id}!")

@@ -229,7 +229,7 @@ Input [#]: """)
                               'bard': """\
     -Can use abilities that scale of Charisma
     -Deals Magical Damage with Standard Attacks
-    -Standard attacks cannot miss
+    -Standard attacks never miss their target
     -Deals 75% damage with Magical Spells
     -High Magical Attack and Evasion
     -Average MP, Speed, and Magical Defense
@@ -370,7 +370,7 @@ Input [#]: """)
             skill = main.s_input("""Choose a skill to increase:
       [1] INTELLIGENCE, The attribute of MAGES
       [2] WIDSOM, the attribute of PALADINS
-      [3] STRENGTH,The attribute of WARRIORS
+      [3] STRENGTH, The attribute of WARRIORS
       [4] CONSTITUTION, the attribute of MONKS
       [5] DEXTERITY, the attribute of ASSASSINS
       [6] PERCEPTION, the attribute of RANGERS

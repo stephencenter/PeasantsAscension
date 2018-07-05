@@ -294,7 +294,7 @@ class Province:
 
 
 # =========================== #
-#       OVERSHIRE TOWNS       #
+#       OVERSHIRE CELLS       #
 # =========================== #
 
 # NEARTON
@@ -505,6 +505,73 @@ principalia_cell = Cell("Principalia", "forest", [principalia_tile,
                                                   principalia_sw],
                         principalia_tile, (4, 7), 2, "principalia_cell")
 
+
+# SARDOOTH
+sardooth_desc = """\
+Off in the distance you see Sardooth, a dark, dismal ghost town with nary a
+soul in sight. To the northeast lies the largest graveyard in the kingdom,
+the Overshire Graveyard."""
+sardooth_tile = Tile("Sardooth", "sardooth_tile", sardooth_desc,
+                     to_s="sardooth_s",
+                     to_w="sardooth_w",
+                     to_e="sardooth_e",
+                     to_n="sardooth_n",
+                     town_list=[towns.town_sardooth])
+sardooth_sw = Tile("Sardooth Outskirts", "sardooth_sw", sardooth_desc,
+                   to_e="sardooth_s",
+                   to_n="sardooth_w")
+sardooth_s = Tile("Sardooth Outskirts", "sardooth_s", sardooth_desc,
+                  to_w="sardooth_sw",
+                  to_e="sardooth_se",
+                  to_n="sardooth_tile")
+sardooth_se = Tile("Sardooth Outskirts", "sardooth_se", sardooth_desc,
+                   to_w="sardooth_s",
+                   to_n="sardooth_e",
+                   gem_list=[items.diamond_gem])
+sardooth_w = Tile("Sardooth Outskirts", "sardooth_w", sardooth_desc,
+                  to_s="sardooth_sw",
+                  to_e="sardooth_tile",
+                  to_n="sardooth_nw")
+sardooth_e = Tile("Sardooth Outskirts", "sardooth_e", sardooth_desc,
+                  to_w="sardooth_tile",
+                  to_s="sardooth_se",
+                  to_n="sardooth_ne")
+sardooth_nw = Tile("Sardooth Outskirts", "sardooth_nw", sardooth_desc,
+                   to_s="sardooth_w",
+                   to_e="sardooth_n")
+sardooth_n = Tile("Sardooth Outskirts", "sardooth_n", sardooth_desc,
+                  to_s="sardooth_tile",
+                  to_w="sardooth_nw",
+                  to_e="sardooth_ne")
+sardooth_ne = Tile("Sardooth Outskirts", "sardooth_ne", sardooth_desc,
+                   to_s="sardooth_e",
+                   to_w="sardooth_n")
+sardooth_cell = Cell("Sardooth", "forest", [sardooth_tile,
+                                            sardooth_w,
+                                            sardooth_ne,
+                                            sardooth_e,
+                                            sardooth_s,
+                                            sardooth_n,
+                                            sardooth_se,
+                                            sardooth_nw,
+                                            sardooth_sw],
+                     sardooth_tile, (7, 10), 2, "sardooth_cell")
+
+overshire_province = Province("Overshire", [nearton_cell,
+                                            southford_cell,
+                                            o_city_cell,
+                                            principalia_cell,
+                                            sardooth_cell],
+                              "overshire_prov")
+
+downpour_province = Province("Downpour", [], "downpour_prov")
+flute_province = Province("Flute", [], "flute_prov")
+deltora_province = Province("Deltora", [], "deltora_prov")
+parriway_province = Province("Parriway", [], "parriway_prov")
+
+# =========================== #
+#        CHIN'TOR CELLS       #
+# =========================== #
 # FORT SIGIL
 fort_sigil_desc = """"""
 
@@ -553,18 +620,7 @@ fort_sigil_cell = Cell("Fort Sigil", "forest", [fort_sigil_tile,
                                                 fort_sigil_sw],
                        fort_sigil_tile, (5, 8), 2, "fort_sigil_cell")
 
-overshire_province = Province("Overshire", [nearton_cell,
-                                            southford_cell,
-                                            o_city_cell,
-                                            principalia_cell,
-                                            fort_sigil_cell],
-                              "overshire_prov")
-
-downpour_province = Province("Downpour", [], "downpour_prov")
-flute_province = Province("Flute", [], "flute_prov")
-deltora_province = Province("Deltora", [], "deltora_prov")
-parriway_province = Province("Parriway", [], "parriway_prov")
-chintor_province = Province("Chin'tor", [], "chintor_prov")
+chintor_province = Province("Chin'tor", [fort_sigil_cell], "chintor_prov")
 camberlite_province = Province("Camberlite", [], "camberlite_prov")
 whitlock_province = Province("Whitlock", [], "whitlock_prov")
 kohrin_province = Province("Kohrin", [], "kohrin_prov")
