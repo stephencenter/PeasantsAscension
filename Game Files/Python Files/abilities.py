@@ -839,9 +839,118 @@ uses only refresh the buff duration.""", 3)
 # =========================== #
 #        BARD ABILITIES       #
 # =========================== #
-song_1 = Ability("", "", 0)
-song_2 = Ability("", "", 0)
-song_3 = Ability("", "", 0)
+
+class TheWaywardFellow(Ability):
+    def __init__(self, name, desc, ap_cost):
+        super().__init__(name, desc, ap_cost)
+
+    def before_ability(self, user):
+        pass
+
+    def use_ability(self, user):
+        pass
+
+
+the_wayward_fellow = TheWaywardFellow("The Wayward Fellow", """\
+Summons the elusive Wayward Fellow to assist your party. The Wayward Fellow
+lasts for the entire duration of the battle and cannot be targetted by any
+spell, attack, or ability. He has no spells or abilities and can only attack
+using his Bow. The Fellow has [10 + 0.10*Charisma] Speed and Pierce Attack.
+Replaying this song increases the Speed and Pierce Attack of the fellow by
+[5 + 0.10*Charisma], with no cap. The Wayward Fellow does not need to be
+controlled, he will automatically attack a random target each turn.
+""", 0)
+
+
+class TheRiddleOfTheSage(Ability):
+    def __init__(self, name, desc, ap_cost):
+        super().__init__(name, desc, ap_cost)
+
+    def before_ability(self, user):
+        pass
+
+    def use_ability(self, user):
+        pass
+
+
+the_riddle_of_the_sage = TheRiddleOfTheSage("The Riddle of the Sage", """\
+""", 0)
+
+
+class OdeToAFallenComrade(Ability):
+    def __init__(self, name, desc, ap_cost):
+        super().__init__(name, desc, ap_cost)
+
+    def before_ability(self, user):
+        pass
+
+    def use_ability(self, user):
+        pass
+
+
+fallen_comrade = OdeToAFallenComrade("Ode to a Fallen Comrade", """\
+""", 0)
+
+
+class TheStubbornBoar(Ability):
+    def __init__(self, name, desc, ap_cost):
+        super().__init__(name, desc, ap_cost)
+
+    def before_ability(self, user):
+        pass
+
+    def use_ability(self, user):
+        pass
+
+
+stubborn_boar = Ability("The Stubborn Boar", """\
+Sets all allies 
+""", 0)
+
+
+class TheWaywardFellow(Ability):
+    def __init__(self, name, desc, ap_cost):
+        super().__init__(name, desc, ap_cost)
+
+    def before_ability(self, user):
+        pass
+
+    def use_ability(self, user):
+        pass
+
+
+unlikely_hero = Ability("An Unlikely Hero", """\
+""", 0)
+
+
+class TheBalladOfLawrenceTungsten(Ability):
+    def __init__(self, name, desc, ap_cost):
+        super().__init__(name, desc, ap_cost)
+
+    def before_ability(self, user):
+        pass
+
+    def use_ability(self, user):
+        pass
+
+
+lawrence_tungsten = TheBalladOfLawrenceTungsten("The Ballad of Lawrence Tungsten", """\
+""", 0)
+
+
+class TournamentOfThieves(Ability):
+    def __init__(self, name, desc, ap_cost):
+        super().__init__(name, desc, ap_cost)
+
+    def before_ability(self, user):
+        pass
+
+    def use_ability(self, user):
+        pass
+
+
+tournament_of_thieves = TournamentOfThieves("The Tournament of Thieves", """\
+""", 0)
 
 
 class GrandFinale(Ability):
@@ -857,7 +966,7 @@ class GrandFinale(Ability):
 
 grand_finale = GrandFinale("Grand Finale", """\
 A satisfying and exciting closer to a bard performance!
-Deals ([5 + Charisma)*Songs Played) magical damgage to a single target, and
+Deals [(5 + Charisma)*Songs Played] magical damgage to a single target, and
 heals the user for the same amount. Only up to three songs are counted, and 
 they must have been played during the current battle. The order of the songs 
 do not matter, and they do not haven to be three different songs. Does 
@@ -928,6 +1037,12 @@ the chosen element, but the damage buff does not stack.""", 1)
 class TuneInstrument(Ability):
     def __init__(self, name, desc, ap_cost):
         super().__init__(name, desc, ap_cost)
+
+        # Normal    -> 1.00x Charisma
+        # Good      -> 1.25x Charisma
+        # Great     -> 1.50x Charisma
+        # Excellent -> 1.75x Charisma
+        # Perfect   -> 2.00x Charisma
 
     def before_ability(self, user):
         pass
