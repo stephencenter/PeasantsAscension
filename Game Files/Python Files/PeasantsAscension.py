@@ -150,6 +150,36 @@ def chop_by_79(string, num=79):
     return sentences
 
 
+def text_scroll(string, spacing=0.025):
+    # Causes each character in a string to appear one at a time with `spacing` time in between
+    # each one, as opposed to all at once.
+    string = ''.join([string, "\n"])
+
+    for num, char in enumerate(string):
+        # end='' prevents print() from printing a newline after each character
+        print(char, end='')
+
+        if char != ' ' and num + 1 != len(string):
+            smart_sleep(spacing)
+
+        sys.stdout.flush()  # Prevent "print" from waiting until the loop is completed to print() "char"
+
+
+def input_ts(string, spacing=0.025):
+        # Input mode prints all but the last character. The last character
+        # is instead passed as the argument for the "main.s_input()" function,
+        # the result of which is returned.
+
+        if not string.endswith(' '):
+            # If there isn't a space, then user main.s_input will be
+            # mashed together with the printed characters.
+
+            string = ''.join([string, ' '])
+
+        text_scroll(string[:-1], spacing)  # Select all but the last character
+        return s_input(string[-1])
+
+
 def game_loop():
     check_region()
     sounds.play_music(party_info['music'])

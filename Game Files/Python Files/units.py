@@ -229,11 +229,11 @@ Input [#]: """)
                               'bard': """\
     -Can use abilities that scale of Charisma
     -Deals Magical Damage with Standard Attacks
-    -Standard attacks never miss their target
     -Deals 75% damage with Magical Spells
-    -High Magical Attack and Evasion
+    -Has 6 Abilities instead of 4
+    -High Evasion
     -Average MP, Speed, and Magical Defense
-    -Low HP and Physical/Pierce Defense"""}[class_]
+    -Low HP, Magical Attack, and Physical/Pierce Defense"""}[class_]
 
             except KeyError:
                 continue
@@ -338,7 +338,7 @@ Input [#]: """)
                 elif self.class_ == 'bard':
                     self.p_dfns += 1
                     self.dfns += 1
-                    self.m_attk += 3
+                    self.m_attk += 1
                     self.m_dfns += 2
                     self.spd += 2
                     self.evad += 3
@@ -619,9 +619,8 @@ Difficulty: {main.party_info['dif']}""")
             else:
                 dam_dealt = deal_damage(self, self.target, "magical")
 
-            # Check for attack accuracy. Note that the bard's instruments can't miss.
-            if (random.randint(1, 512) in range(self.target.evad, 512)) or \
-                    (items.equipped[inv_name]['weapon'].type_ == 'instrument'):
+            # Check for attack accuracy.
+            if random.randint(1, 512) in range(self.target.evad, 512):
                 print(f"{self.name}'s attack connects with the {self.target.name}, dealing {dam_dealt} damage!")
 
                 sounds.enemy_hit.play()

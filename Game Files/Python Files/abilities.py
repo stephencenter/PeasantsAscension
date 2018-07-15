@@ -862,21 +862,6 @@ controlled, he will automatically attack a random target each turn.
 """, 0)
 
 
-class TheRiddleOfTheSage(Ability):
-    def __init__(self, name, desc, ap_cost):
-        super().__init__(name, desc, ap_cost)
-
-    def before_ability(self, user):
-        pass
-
-    def use_ability(self, user):
-        pass
-
-
-the_riddle_of_the_sage = TheRiddleOfTheSage("The Riddle of the Sage", """\
-""", 0)
-
-
 class OdeToAFallenComrade(Ability):
     def __init__(self, name, desc, ap_cost):
         super().__init__(name, desc, ap_cost)
@@ -903,12 +888,13 @@ class TheStubbornBoar(Ability):
         pass
 
 
-stubborn_boar = Ability("The Stubborn Boar", """\
-Sets all allies 
+stubborn_boar = Ability("Tale of the Stubborn Boar", """\
+Sets the target's defense stats to 0 for one turn, then increases them to
+[115 + Charisma]% of their original. Can be used on both enemies and allies.
 """, 0)
 
 
-class TheWaywardFellow(Ability):
+class AnUnlikelyHero(Ability):
     def __init__(self, name, desc, ap_cost):
         super().__init__(name, desc, ap_cost)
 
@@ -920,21 +906,6 @@ class TheWaywardFellow(Ability):
 
 
 unlikely_hero = Ability("An Unlikely Hero", """\
-""", 0)
-
-
-class TheBalladOfLawrenceTungsten(Ability):
-    def __init__(self, name, desc, ap_cost):
-        super().__init__(name, desc, ap_cost)
-
-    def before_ability(self, user):
-        pass
-
-    def use_ability(self, user):
-        pass
-
-
-lawrence_tungsten = TheBalladOfLawrenceTungsten("The Ballad of Lawrence Tungsten", """\
 """, 0)
 
 
