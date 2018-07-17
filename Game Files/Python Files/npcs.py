@@ -75,18 +75,18 @@ class NPC:
 npc_solou = NPC("Solou", "Page",
                 {
                     "nearton": [
-                        d.solou_convo_1,
-                        d.solou_quest_1
+                        d.solou_convo_a,
+                        d.solou_quest_a
                     ]
                 }, "npc_solou")
 
 joseph = NPC('Joseph', "Mayor of Overshire",
              {
                  "overshire_city": [
-                     d.joseph_convo_1,
-                     d.joseph_quest_1,
-                     d.joseph_convo_2,
-                     d.joseph_convo_3
+                     d.joseph_convo_a,
+                     d.joseph_quest_a,
+                     d.joseph_convo_b,
+                     d.joseph_convo_c
                  ],
              }, "npc_joseph")
 
@@ -95,167 +95,166 @@ orius = NPC("Orius", "Mayor of Valice", [], "npc_orius")
 azura = NPC('Azura', "Sorcerers' Guildmaster",
             {
                 "parceon": [
-                    d.azura_convo_1,
-                    d.azura_convo_2,
-                    d.azura_convo_3
+                    d.azura_convo_a,
+                    d.azura_convo_b,
+                    d.azura_convo_c
                 ],
             }, "npc_azura")
 
-raidon = NPC('Raidon', "Village Shaman", {"ambercreek": [d.raidon_convo_1]}, "npc_raidon")
+raidon = NPC('Raidon', "Village Shaman", {"ambercreek": [d.raidon_convo_a]}, "npc_raidon")
 
 stewson = NPC('Stewson', "Captain of the Guard",
               {
                   "overshire_city": [
-                      d.stewson_convo_1,
-                      d.stewson_convo_2,
-                      d.stewson_convo_3,
-                      d.stewson_quest_1
+                      d.stewson_convo_a,
+                      d.stewson_convo_b,
+                      d.stewson_convo_c,
+                      d.stewson_quest_a
                   ],
               }, "npc_stewson")
 
 seriph = NPC('Seriph', "Blacksmith",
              {
                  "fort_sigil": [
-                     d.seriph_convo_1,
-                     d.seriph_convo_2,
-                     d.seriph_convo_3
+                     d.seriph_convo_a,
+                     d.seriph_convo_b,
+                     d.seriph_convo_c
                  ],
              }, "npc_seriph")
 
 rivesh = NPC('Rivesh', "Village Elder",
              {
                  "fort_sigil": [
-                     d.rivesh_convo_1,
-                     d.rivesh_convo_2,
-                     d.rivesh_convo_3,
-                     d.rivesh_convo_4,
-                     d.rivesh_quest_1
+                     d.rivesh_convo_a,
+                     d.rivesh_convo_b,
+                     d.rivesh_convo_c,
+                     d.rivesh_convo_d,
+                     d.rivesh_quest_a
                  ]
              }, "npc_rivesh")
 
 alfred = NPC('Alfred', "Cobbler",
              {
                  "nearton": [
-                    d.alfred_convo_1,
-                    d.alfred_convo_2,
-                    d.alfred_quest_1,
-                    d.alfred_convo_3,
-                    d.alfred_convo_4
+                    d.alfred_convo_a,
+                    d.alfred_convo_b,
+                    d.alfred_quest_a,
+                    d.alfred_convo_c,
+                    d.alfred_convo_d
                  ]
              }, "npc_alfred")
 
 kyle = NPC('Kyle', "Village Elder",
            {
                "tripton": [
-                   d.kyle_convo_1,
-                   d.kyle_convo_2,
-                   d.kyle_convo_3,
-                   d.kyle_convo_4
+                   d.kyle_convo_a,
+                   d.kyle_convo_b,
+                   d.kyle_convo_c,
+                   d.kyle_convo_d
                ],
            }, "npc_kyle")
 
 krystin = NPC('Krystin', "Village Elder",
               {
                   "fallville": [
-                      d.krystin_convo_1,
-                      d.krystin_convo_2,
-                      d.krystin_convo_3,
-                      d.krystin_convo_4
+                      d.krystin_convo_a,
+                      d.krystin_convo_b,
+                      d.krystin_convo_c,
+                      d.krystin_convo_d
                   ]
               }, "npc_krystin")
 
 frederick = NPC('Frederick', "Scholar",
                 {
                     "fallville": [
-                        d.frederick_convo_1,
-                        d.frederick_convo_2,
-                        d.frederick_convo_3
+                        d.frederick_convo_a,
+                        d.frederick_convo_b,
+                        d.frederick_convo_c
                     ],
                 }, "npc_frederick")
 
 alden = NPC('Alden', "Sage",
             {
                 "tripton": [
-                    d.alden_quest_1,
-                    d.alden_convo_1,
-                    d.alden_convo_2,
-                    d.alden_convo_3
+                    d.alden_quest_a,
+                    d.alden_convo_a,
+                    d.alden_convo_b,
+                    d.alden_convo_c
                 ]
             }, "npc_alden")
 
 polmor = NPC('Polmor', "Engineer",
              {
                  "whistumn": [
-                     d.polmor_convo_1,
-                     d.polmor_quest_1,
-                     d.polmor_convo_2
+                     d.polmor_convo_a,
+                     d.polmor_quest_a,
+                     d.polmor_convo_b
                  ],
              }, "npc_polmor")
 
 serena = NPC('Serena', "Scientist",
              {
                  "whistumn": [
-                     d.serena_convo_1,
-                     d.serena_convo_2,
-                     d.serena_convo_3
+                     d.serena_convo_a,
+                     d.serena_convo_b,
+                     d.serena_convo_c
                  ],
              }, "npc_serena")
 
 matthew = NPC('Matthew', "Matt",
               {
                   "lantonum": [
-                      d.matthew_convo_1,
-                      d.matthew_quest_1,
-                      d.matthew_convo_2,
-                      d.matthew_convo_3,
-                      d.matthew_convo_4,
-                      d.matthew_convo_5
+                      d.matthew_convo_a,
+                      d.matthew_quest_a,
+                      d.matthew_convo_b,
+                      d.matthew_convo_c,
+                      d.matthew_convo_d,
+                      d.matthew_convo_e
                   ]
               }, "npc_matthew")
 
 pime = NPC('Pime', "Vampire Shaman",
            {
                "sanguion": [
-                   d.pime_convo_1,
-                   d.pime_convo_2,
-                   d.pime_quest_1,
-                   d.pime_convo_3,
-                   d.pime_convo_4
+                   d.pime_convo_a,
+                   d.pime_convo_b,
+                   d.pime_quest_a,
+                   d.pime_convo_c,
                ],
            }, "npc_pime")
 
-philliard = NPC('Philliard', "Scribe", {"nearton": [d.philliard_convo_1]}, "npc_philliard")
+philliard = NPC('Philliard', "Scribe", {"nearton": [d.philliard_convo_a]}, "npc_philliard")
 
-sondalar = NPC('Sondalar', "Goods Peddler", {"southford": [d.sondalar_convo_1]}, "npc_sondalar")
+sondalar = NPC('Sondalar', "Goods Peddler", {"southford": [d.sondalar_convo_a]}, "npc_sondalar")
 
-saar = NPC("Saar", "Bard", {"nearton": [d.saar_convo_1]}, "npc_saar")
+saar = NPC("Saar", "Bard", {"nearton": [d.saar_convo_a]}, "npc_saar")
 
-wesley = NPC('Wesley', "Peasant", {"southford": [d.wesley_convo_1]}, "npc_wesley")
+wesley = NPC('Wesley', "Peasant", {"southford": [d.wesley_convo_a]}, "npc_wesley")
 
-lazaro = NPC('Lazaro', "Oracle", {"southford": [d.lazaro_convo_1]}, "npc_lazaro")
+lazaro = NPC('Lazaro', "Oracle", {"southford": [d.lazaro_convo_a]}, "npc_lazaro")
 
-typhen = NPC('Typhen', "Novice Cleric", {"valice": [d.typhen_convo_1]}, "npc_typhen")
+typhen = NPC('Typhen', "Novice Cleric", {"valice": [d.typhen_convo_a]}, "npc_typhen")
 
-jeffery = NPC('Jeffery', "Gossipping Serf", {"overshire_city": [d.jeffery_convo_1]}, "npc_jeffery")
+jeffery = NPC('Jeffery', "Gossipping Serf", {"overshire_city": [d.jeffery_convo_a]}, "npc_jeffery")
 
-harthos = NPC("Harthos", "Lumberjack", {"overshire_city": [d.harthos_convo_1]}, "npc_harthos")
+harthos = NPC("Harthos", "Lumberjack", {"overshire_city": [d.harthos_convo_a]}, "npc_harthos")
 
-ethos = NPC('Ethos', "Courier", {"valice": [d.ethos_convo_1]}, "npc_ethos")
+ethos = NPC('Ethos', "Courier", {"valice": [d.ethos_convo_a]}, "npc_ethos")
 
-fly = NPC('Fly', "Duke of Celemia", {"new_ekanmar": [d.fly_convo_1]}, "npc_fly")
+fly = NPC('Fly', "Duke of Celemia", {"new_ekanmar": [d.fly_convo_a]}, "npc_fly")
 
-stravi = NPC('Stravi', "Duchess of Celemia", {"new_ekanmar": [d.stravi_convo_1]}, "npc_stravi")
+stravi = NPC('Stravi', "Duchess of Celemia", {"new_ekanmar": [d.stravi_convo_a]}, "npc_stravi")
 
-caesar = NPC('Caesar', "Fly's Pet", {"new_ekanmar": [d.caesar_convo_1]}, "npc_caesar")
+caesar = NPC('Caesar', "Fly's Pet", {"new_ekanmar": [d.caesar_convo_a]}, "npc_caesar")
 
-sakura = NPC('Sakura', "Head of the Royal Guard", {"principalia": [d.sakura_convo_1]}, "npc_sakrura")
+sakura = NPC('Sakura', "Head of the Royal Guard", {"principalia": [d.sakura_convo_a]}, "npc_sakrura")
 
-strathius = NPC("Strathius", "Druid", {"ravenstone": [d.strathius_convo_1]}, "npc_strathius")
+strathius = NPC("Strathius", "Druid", {"ravenstone": [d.strathius_convo_a]}, "npc_strathius")
 
-sugulat = NPC('Sugulat', "Duke of Chin'tor",  {"ambercreek": [d.sugulat_convo_1]}, "npc_sugalat")
+sugulat = NPC('Sugulat', "Duke of Chin'tor",  {"ambercreek": [d.sugulat_convo_a]}, "npc_sugalat")
 
-morrison = NPC('Morrison', "Engineer", {"cesura": [d.morrison_convo_1]}, "npc_morrison")
+morrison = NPC('Morrison', "Engineer", {"cesura": [d.morrison_convo_a]}, "npc_morrison")
 
-ariver = NPC('Ariver', "Vampire", {"sanguion": [d.ariver_convo_1]}, "npc_ariver")
+ariver = NPC('Ariver', "Vampire", {"sanguion": [d.ariver_convo_a]}, "npc_ariver")
 
-fitzgerald = NPC("Fitzgerald", "Raving Alcoholic", {"valenfall": [d.fitz_convo_1]}, "npc_fitzgerald")
+fitzgerald = NPC("Fitzgerald", "Raving Alcoholic", {"valenfall": [d.fitz_convo_a]}, "npc_fitzgerald")

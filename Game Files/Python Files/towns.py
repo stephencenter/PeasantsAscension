@@ -440,6 +440,20 @@ class Town:
                 break
 
 
+class MarketTown(Town):
+    def __init__(self, name, desc, people, town_id):
+        super().__init__(name, desc, people, town_id)
+    # MarketTowns are towns that have general stores, inns, houses, and people
+    pass
+
+
+class PeopleTown(Town):
+    def __init__(self, name, desc, people, town_id):
+        super().__init__(name, desc, people, town_id)
+    # PeopleTowns are towns that only have people in them, no stores, inns, or houses
+    pass
+
+
 class House:
     def __init__(self, owner, chests):
         self.owner = owner
@@ -611,7 +625,7 @@ class Chest:
 # =========================== #
 
 # Nearton
-class NeartonClass(Town):
+class NeartonClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -634,7 +648,7 @@ appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, n
 
 
 # Southford
-class SouthfordClass(Town):
+class SouthfordClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -651,7 +665,7 @@ with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], "southford")
 
 
 # Overshire City
-class OvershireCityClass(Town):
+class OvershireCityClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -676,7 +690,7 @@ welcome to do as you wish in the lower.""", [npcs.joseph, npcs.stewson, npcs.jef
 
 
 # Principalia
-class PrincipaliaClass(Town):
+class PrincipaliaClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -698,7 +712,7 @@ watch all around the building.""", [npcs.sakura], "principalia")
 
 
 # Sardooth
-class SardoothClass(Town):
+class SardoothClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -720,7 +734,7 @@ to the northeast, which is rumored to be even more dangerous than here.""", [], 
 #        DOWNPOUR TOWNS       #
 # =========================== #
 # Tripton
-class TriptonClass(Town):
+class TriptonClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -738,7 +752,7 @@ village leaders.""", [npcs.kyle, npcs.alden], "tripton")
 
 
 # Fallville
-class FallvilleClass(Town):
+class FallvilleClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -759,7 +773,7 @@ village leaders.""", [npcs.krystin, npcs.frederick], "fallville")
 #          FLUTE TOWNS        #
 # =========================== #
 # Valice
-class ValiceClass(Town):
+class ValiceClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -778,7 +792,7 @@ and also one of the poorest.""", [npcs.ethos, npcs.typhen], "valice")
 
 
 # Valenfall
-class ValenfallClass(Town):
+class ValenfallClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -803,7 +817,7 @@ be seen on every corner.
 #        PARRIWEY TOWNS       #
 # =========================== #
 # Parceon
-class ParceonClass(Town):
+class ParceonClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -822,7 +836,7 @@ the town.""", [npcs.azura], "parceon")
 #        CHIN'TOR TOWNS       #
 # =========================== #
 # Rymn Outpost
-class RymnOutpostClass(Town):
+class RymnOutpostClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -837,7 +851,7 @@ is named after Rymnes, the Divinic gods of defense.""", [], "rymn_outpost")
 
 
 # Fort Sigil
-class FortSigilClass(Town):
+class FortSigilClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -854,7 +868,7 @@ scenery, Fort Sigil doesn't get many visitors. Perhaps there's a reason why...""
 
 
 # Mardovian Caverns
-class MardovianCavernsClass(Town):
+class MardovianCavernsClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -866,7 +880,7 @@ town_mardoviancaverns = MardovianCavernsClass("Mardovian Caverns", """\
 
 
 # Mt. Falenkarth
-class MtFalenkarthClass(Town):
+class MtFalenkarthClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -878,7 +892,7 @@ town_mtfalenkarth = MtFalenkarthClass("Dewfrost", """\
 
 
 # Coran Outpost
-class CoranOutpostClass(Town):
+class CoranOutpostClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -893,7 +907,7 @@ town_coran_outpost = CoranOutpostClass("Coran Outpost", """\
 #       CAMBERLITE TOWNS      #
 # =========================== #
 # Dewfrost
-class DewfrostClass(Town):
+class DewfrostClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -905,7 +919,7 @@ town_dewfrost = DewfrostClass("Dewfrost", """\
 
 
 # Clayroost
-class ClayroostClass(Town):
+class ClayroostClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -917,7 +931,7 @@ town_clayroost = ClayroostClass("Clayroost", """\
 
 
 # Ravenstone
-class RavenstoneClass(Town):
+class RavenstoneClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -935,7 +949,7 @@ animals.""", [npcs.strathius], "ravenstone")
 
 
 # Ambercreek
-class AmbercreekClass(Town):
+class AmbercreekClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -951,7 +965,7 @@ portion of the town near a few smaller houses.""", [npcs.raidon, npcs.sugulat], 
 
 
 # Capwild
-class CapwildClass(Town):
+class CapwildClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -970,7 +984,7 @@ irrigation systems as well, further enhancing Capwild's farming capabilities."""
 #        WHITLOCK TOWNS       #
 # =========================== #
 # Simphet
-class SimphetClass(Town):
+class SimphetClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -981,7 +995,7 @@ town_simphet = SimphetClass("Simphet", """""", [], "simphet")
 
 
 # Whistumn
-class WhistumnClass(Town):
+class WhistumnClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -999,7 +1013,7 @@ on the steps of the general store.""", [npcs.polmor, npcs.serena], "whistumn")
 
 
 # Hatchnuk
-class HatchnukClass(Town):
+class HatchnukClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -1024,7 +1038,7 @@ chit-chat.""", [], "hatchnuk")
 #         KOHRIN TOWNS        #
 # =========================== #
 # Cesura
-class CesuraClass(Town):
+class CesuraClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -1035,7 +1049,7 @@ town_cesura = CesuraClass("Cesura", """""", [npcs.morrison], "cesura")
 
 
 # Trintooli
-class TrintooliClass(Town):
+class TrintooliClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -1046,7 +1060,7 @@ town_trintooli = TrintooliClass("Trintooli", """""", [], "trintooli")
 
 
 # Fogwhite
-class FogwhiteClass(Town):
+class FogwhiteClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -1057,7 +1071,7 @@ town_fogwhite = FogwhiteClass("Foqwhitte", """""", [], "fogwhite")
 
 
 # Don'kohrin
-class DonkohrinClass(Town):
+class DonkohrinClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -1071,7 +1085,7 @@ town_don_kohrin = DonkohrinClass("Don'kohrin", """""", [], "donkohrin")
 #        PELAMORA TOWNS       #
 # =========================== #
 # Sanguion
-class SanguionClass(Town):
+class SanguionClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -1087,7 +1101,7 @@ vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.
 
 
 # Lamtonum
-class LamtonumClass(Town):
+class LamtonumClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 
@@ -1106,7 +1120,7 @@ exports.""", [npcs.matthew], "lantonum")
 #        CELEMIA TOWNS        #
 # =========================== #
 # New Ekanmar
-class NewEkanmarClass(Town):
+class NewEkanmarClass(MarketTown):
     def __init__(self, name, desc, people, town_id):
         super().__init__(name, desc, people, town_id)
 

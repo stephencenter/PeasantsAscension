@@ -1480,9 +1480,9 @@ class Boss(Monster):
 
 # == MASTER SLIME == #
 def master_slime_ud():
-    dialogue.alfred_quest_1.finished = True
-    dialogue.alfred_convo_2.active = False
-    dialogue.alfred_convo_3.active = True
+    dialogue.alfred_quest_a.finished = True
+    dialogue.alfred_convo_b.active = False
+    dialogue.alfred_convo_c.active = True
 
 
 master_slime = Boss('Master Slime',
@@ -1518,8 +1518,8 @@ goblin_chieftain.battle_turn = goblin_chieftain.melee_ai
 # == MENACING PHANTOM == #
 def menacphan_ud():
     # Stands for "Menacing Phantom -- Upon Defeating"
-    dialogue.stewson_quest_1.finished = True
-    dialogue.stewson_convo_2.active = False
+    dialogue.stewson_quest_a.finished = True
+    dialogue.stewson_convo_b.active = False
 
 
 menacing_phantom = Boss('Menacing Phantom',
@@ -1540,12 +1540,12 @@ menacing_phantom.upon_defeating = menacphan_ud
 
 # == TERRIBLE TARANTULOID == #  (Adventure in Pixels)
 def terrtar_ud():
-    dialogue.krystin_convo_2.active = False
-    dialogue.krystin_convo_3.active = True
-    dialogue.kyle_convo_2.active = False
-    dialogue.kyle_convo_3.active = True
-    dialogue.alden_convo_1.active = False
-    dialogue.alden_convo_2.active = True
+    dialogue.krystin_convo_b.active = False
+    dialogue.krystin_convo_c.active = True
+    dialogue.kyle_convo_b.active = False
+    dialogue.kyle_convo_c.active = True
+    dialogue.alden_convo_a.active = False
+    dialogue.alden_convo_b.active = True
 
 
 terr_tarant = Boss('Terrible Tarantuloid',
@@ -1565,8 +1565,8 @@ terr_tarant.upon_defeating = terrtar_ud
 
 # == CURSED SPECTRE == #
 def cursed_spectre_ud():
-    dialogue.rivesh_convo_3.active = False
-    dialogue.rivesh_quest_1.finished = True
+    dialogue.rivesh_convo_c.active = False
+    dialogue.rivesh_quest_a.finished = True
 
 
 cursed_spectre = Boss('Cursed Spectre',
