@@ -220,7 +220,7 @@ def battle_system(is_boss=False):
             if 'dead' not in character.status_ail:
                 character.player_choice()
 
-                if num + 1 < len([x for x in enabled_pcus if x.status_ail != 'dead']):
+                if num + 1 < len([x for x in enabled_pcus if 'dead' not in x.status_ail]):
                     print('-'*save_load.divider_size)
 
         # Make sure each participant in the battle goes according to who's fastest

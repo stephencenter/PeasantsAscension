@@ -352,7 +352,7 @@ nearton_cell = Cell("Nearton", "forest", [nearton_tile,
                                           nearton_se,
                                           nearton_nw,
                                           nearton_sw],
-                    nearton_tile, (1, 4), 1, "nearton_cell")
+                    nearton_tile, (1, 3), 1, "nearton_cell")
 
 # SOUTHFORD
 southford_desc = """"""
@@ -404,7 +404,7 @@ southford_cell = Cell("Southford", "forest", [southford_tile,
                                               southford_se,
                                               southford_nw,
                                               southford_sw],
-                      southford_tile, (2, 5), 2, "southford_cell")
+                      southford_tile, (2, 4), 2, "southford_cell")
 
 # OVERSHIRE CITY
 o_city_desc = """"""

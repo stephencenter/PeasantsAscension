@@ -53,30 +53,38 @@ class NPC:
 
         convo_list = self.convos[main.party_info['current_town']]
 
-        for convo in [x for x in convo_list if not isinstance(x, d.Quest) and x.active]:
-            for sentence in main.chop_by_79(convo.dialogue):
-                main.s_input(sentence)
+        for convo in convo_list:
+            if isinstance(convo, d.Quest):
+                if convo.active and (convo.finished or not convo.started):
+                    if convo.finished:
+                        convo.completion()
+                        continue
 
-            convo.after_talking()
+                    for sentence in main.chop_by_79(convo.dialogue):
+                        main.s_input(sentence)
 
-        for convo in [x for x in convo_list if isinstance(x, d.Quest) and x.active]:
-            if isinstance(convo, d.Quest) and convo.finished:
-                convo.completion()
+                    if not convo.started:
+                        convo.give_quest()
 
-            for sentence in main.chop_by_79(convo.dialogue):
-                main.s_input(sentence)
+            else:
+                if convo.active:
+                    for sentence in main.chop_by_79(convo.dialogue):
+                        main.s_input(sentence)
 
-            if isinstance(convo, d.Quest) and not convo.started:
-                convo.give_quest()
+                    convo.after_talking()
 
-        print('-'*save_load.divider_size)
+        print("-"*save_load.divider_size)
 
 
 npc_solou = NPC("Solou", "Page",
                 {
                     "nearton": [
                         d.solou_convo_a,
-                        d.solou_quest_a
+                        d.solou_convo_b,
+                        d.solou_convo_c,
+                        d.solou_quest_a,
+                        d.solou_convo_d,
+                        d.solou_convo_e
                     ]
                 }, "npc_solou")
 
@@ -105,7 +113,7 @@ raidon = NPC('Raidon', "Village Shaman", {"ambercreek": [d.raidon_convo_a]}, "np
 
 stewson = NPC('Stewson', "Captain of the Guard",
               {
-                  "overshire_city": [
+                  "sardooth": [
                       d.stewson_convo_a,
                       d.stewson_convo_b,
                       d.stewson_convo_c,
@@ -138,8 +146,8 @@ alfred = NPC('Alfred', "Cobbler",
                  "nearton": [
                     d.alfred_convo_a,
                     d.alfred_convo_b,
-                    d.alfred_quest_a,
                     d.alfred_convo_c,
+                    d.alfred_quest_a,
                     d.alfred_convo_d
                  ]
              }, "npc_alfred")
@@ -225,29 +233,30 @@ pime = NPC('Pime', "Vampire Shaman",
 
 philliard = NPC('Philliard', "Scribe", {"nearton": [d.philliard_convo_a]}, "npc_philliard")
 
-sondalar = NPC('Sondalar', "Goods Peddler", {"southford": [d.sondalar_convo_a]}, "npc_sondalar")
+wesley = NPC('Wesley', "Peasant", {"nearton": [d.wesley_convo_a]}, "npc_wesley")
 
-saar = NPC("Saar", "Bard", {"nearton": [d.saar_convo_a]}, "npc_saar")
-
-wesley = NPC('Wesley', "Peasant", {"southford": [d.wesley_convo_a]}, "npc_wesley")
+saar = NPC("Saar", "Bard", {"southford": [d.saar_convo_a]}, "npc_saar")
 
 lazaro = NPC('Lazaro', "Oracle", {"southford": [d.lazaro_convo_a]}, "npc_lazaro")
 
-typhen = NPC('Typhen', "Novice Cleric", {"valice": [d.typhen_convo_a]}, "npc_typhen")
-
-jeffery = NPC('Jeffery', "Gossipping Serf", {"overshire_city": [d.jeffery_convo_a]}, "npc_jeffery")
+jeffery = NPC('Jeffery', "Traveler", {"overshire_city": [d.jeffery_convo_a]}, "npc_jeffery")
 
 harthos = NPC("Harthos", "Lumberjack", {"overshire_city": [d.harthos_convo_a]}, "npc_harthos")
 
+sondalar = NPC('Sondalar', "Goods Peddler", {"overshire_city": [d.sondalar_convo_a]}, "npc_sondalar")
+
+# TODO Rework Sakura into a quest giver
+sakura = NPC('Sakura', "Head of the Royal Guard", {"principalia": [d.sakura_convo_a]}, "npc_sakrura")
+
 ethos = NPC('Ethos', "Courier", {"valice": [d.ethos_convo_a]}, "npc_ethos")
+
+typhen = NPC('Typhen', "Novice Cleric", {"valice": [d.typhen_convo_a]}, "npc_typhen")
 
 fly = NPC('Fly', "Duke of Celemia", {"new_ekanmar": [d.fly_convo_a]}, "npc_fly")
 
 stravi = NPC('Stravi', "Duchess of Celemia", {"new_ekanmar": [d.stravi_convo_a]}, "npc_stravi")
 
 caesar = NPC('Caesar', "Fly's Pet", {"new_ekanmar": [d.caesar_convo_a]}, "npc_caesar")
-
-sakura = NPC('Sakura', "Head of the Royal Guard", {"principalia": [d.sakura_convo_a]}, "npc_sakrura")
 
 strathius = NPC("Strathius", "Druid", {"ravenstone": [d.strathius_convo_a]}, "npc_strathius")
 

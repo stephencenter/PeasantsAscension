@@ -266,7 +266,7 @@ Input [#]: """)
                 self.lvl += 1
                 print(f"{self.name} has advanced to level {self.lvl}!")
 
-                rem_points += 5
+                rem_points += 3
                 magic.new_spells(self)
 
                 if self.class_ == 'warrior':

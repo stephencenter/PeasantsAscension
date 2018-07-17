@@ -644,7 +644,7 @@ Nearton is a small village in in the Inner Forest. It is in this very town
 where numerous brave adventurers have begun their journey. Nearton is just 
 your standard run-of-the-mill village: it has a general store, an inn, and 
 a few small houses. An old man  is standing near one of the houses, and
-appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, npcs.saar, npcs.npc_solou], "nearton")
+appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, npcs.wesley, npcs.npc_solou], "nearton")
 
 
 # Southford
@@ -661,7 +661,7 @@ class SouthfordClass(MarketTown):
 town_southford = SouthfordClass("Southford", """\
 Southford is a fair-size town in the Southeast of the Inner Forest. The 
 inhabitants of this town are known for being quite wise, and may provide you 
-with helpful advice.""", [npcs.wesley, npcs.sondalar, npcs.lazaro], "southford")
+with helpful advice.""", [npcs.saar, npcs.lazaro], "southford")
 
 
 # Overshire City
@@ -686,7 +686,8 @@ separated into three sectors: the upper-class inner portion consisting of a
 castle surrounded by reinforced stone walls, a lower-class outer portion
 comprised of smalls buildings and huts, and a middle-class section situated in
 between. As an outsider, you are forbidden to enter the upper two, but are
-welcome to do as you wish in the lower.""", [npcs.joseph, npcs.stewson, npcs.jeffery, npcs.harthos], "overshire_city")
+welcome to do as you wish in the lower.""", [npcs.joseph, npcs.sondalar, npcs.jeffery, npcs.harthos],
+                                         "overshire_city")
 
 
 # Principalia
@@ -698,17 +699,16 @@ class PrincipaliaClass(MarketTown):
 
 
 town_principalia = PrincipaliaClass("Principalia", """\
-Principalia is an unbelievably large town, rivaling the likes of Overshire 
-and Valice. More interestingly, this is also the current home of 
-King Harconius II. The main attraction here is the Hytherior Building, a 
-medium-large cottage that the original King Harconius I had lived in centuries 
-ago. Every Monarch to date has decided to instead live in the Overshire Castle,
-with the exception of the current monarch, Harconius. Harconius II has changed 
-several things since his ancestor lived here, however. The cottage now has 
-access to running water,and the cottage is surrounded by a ring of 12 archer 
-towers, each with 2 crossbowmen and one archer at the top. Each tower is about
-100 yards from the cottage. In addition, there are numerous guards standing 
-watch all around the building.""", [npcs.sakura], "principalia")
+Hundreds of years ago, King Pyravia II ordered the expansion of this town
+from a small village with merely a dozen cottages to a sprawling city, lively
+and full of culture. Pyravia II was an interesting man with strange
+superstitions. He personally believed that the Kingdom's capital, Overshire City,
+had been cursed, and that the third month of every year was when the curse was
+at its strongest. Principalia was intended to be his home during that month,
+and since then it's been a tradition that every third month of the year the
+current King or Queen leaves Overshire to live here. Of course, when the King
+is here, the castle here is just as heavily guarded as the one back in
+Overshire, so one shouldn't expect to pay him a visit.""", [npcs.sakura], "principalia")
 
 
 # Sardooth
@@ -725,9 +725,8 @@ was hit the hardest by the latest wave of monsters, causing it to turn from
 the bustling hub of commerce and culture to a barren wasteland within just 
 six months. Everyone who lived here was either killed or driven out by the 
 monsters, and the King's troops were powerless to stop it. The only thing of
-note here is the small camp on the outskirts that has a temporary merchant 
-stand and sleeping quarters. That, and "The Undershire", a massive cemetery
-to the northeast, which is rumored to be even more dangerous than here.""", [], "sardooth")
+note is "The Undershire", a massive cemetery to the northeast, which is 
+rumored to be even more dangerous than here.""", [npcs.stewson], "sardooth")
 
 
 # =========================== #
@@ -864,7 +863,7 @@ town was built around an old fort, named Fort Sigil. Originally comprised of
 just a few tents meant to house soldiers, many of these soldiers eventually
 put down their arms and settled. Despite it's rich backstory and pleasant
 scenery, Fort Sigil doesn't get many visitors. Perhaps there's a reason why...""",
-                       [npcs.seriph, npcs.rivesh], "fort_sigil")
+                                 [npcs.seriph, npcs.rivesh], "fort_sigil")
 
 
 # Mardovian Caverns
@@ -1237,4 +1236,4 @@ for item2 in all_chests:
 for item3 in all_towns:
     for person in item3.people:
         if item3.town_id not in person.convos:
-            print(f"{npc.npc_id} does not have any dialogue for {item3.town_id}!")
+            print(f"{person.npc_id} does not have any dialogue for {item3.town_id}!")

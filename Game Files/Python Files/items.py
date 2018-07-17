@@ -371,7 +371,7 @@ class FastTravelAtlas(NonConsumable):
 
                         if main.party_info['has_teleported']:
                             print("-"*save_load.divider_size)
-                            print("Your party peers into the Fast Travel Atlas and begins to phase out of reality")
+                            print("Your party peers into the Fast Travel Atlas and begins to phase out of reality.")
                             print("Upon waking you're exactly where you wanted to be.")
                             main.s_input("\nPress enter/return ")
 
@@ -1892,7 +1892,7 @@ inventory = {'q_items': [],
              'consumables': [_c(s_potion), _c(s_elixir)],
              'weapons': [],
              'armor': [],
-             'tools': [_c(fast_travel_atlas), _c(musicbox)],
+             'tools': [],
              'access': [],
              'misc': []}
 
