@@ -503,7 +503,7 @@ class RiveshConvoD(Conversation):
 
 rivesh_convo_d = RiveshConvoD("""\
 Y-you defeated the evil spirit? Praise Guido's beard! We are free of this
-curse! You are forever in our gratitude, young hero!""", "rivesh_q1", False)
+curse! You are forever in our gratitude, young hero!""", "rivesh_c4", False)
 
 
 class RiveshConvoE(Conversation):
@@ -512,7 +512,7 @@ class RiveshConvoE(Conversation):
 
 
 rivesh_convo_e = RiveshConvoE("""\
-Thanks again, hero! We are forever indebted to you!""", "rivesh_c4", False)
+Thanks again, hero! We are forever indebted to you!""", "rivesh_c5", False)
 
 
 class RiveshQuestA(Quest):
@@ -1397,64 +1397,132 @@ be quite drunk. You also notice a distinct lack of any curtain nearby.*
 away from the raving drunk.*""", "fitz_c1", True)
 
 
-all_dialogue = [
-    solou_convo_a, solou_quest_a, solou_convo_b, solou_convo_c, solou_convo_d, solou_convo_e,
+all_dialogue = {
+    solou_convo_a.conv_id: solou_convo_a,
+    solou_quest_a.conv_id: solou_quest_a,
+    solou_convo_b.conv_id: solou_convo_b,
+    solou_convo_c.conv_id: solou_convo_c,
+    solou_convo_d.conv_id: solou_convo_d,
+    solou_convo_e.conv_id: solou_convo_e,
 
-    rivesh_convo_a, rivesh_convo_b, rivesh_convo_c, rivesh_convo_d, rivesh_convo_e, rivesh_quest_a,
+    rivesh_convo_a.conv_id: rivesh_convo_a,
+    rivesh_convo_b.conv_id: rivesh_convo_b,
+    rivesh_convo_c.conv_id: rivesh_convo_c,
+    rivesh_convo_d.conv_id: rivesh_convo_d,
+    rivesh_convo_e.conv_id: rivesh_convo_e,
+    rivesh_quest_a.conv_id: rivesh_quest_a,
 
-    alfred_convo_a, alfred_convo_b, alfred_convo_c, alfred_convo_d, alfred_quest_a,
+    alfred_convo_a.conv_id: alfred_convo_a,
+    alfred_convo_b.conv_id: alfred_convo_b,
+    alfred_convo_c.conv_id: alfred_convo_c,
+    alfred_convo_d.conv_id: alfred_convo_d,
+    alfred_quest_a.conv_id: alfred_quest_a,
 
-    stewson_convo_a, stewson_convo_b, stewson_convo_c, stewson_convo_d, stewson_quest_a,
+    stewson_convo_a.conv_id: stewson_convo_a,
+    stewson_convo_b.conv_id: stewson_convo_b,
+    stewson_convo_c.conv_id: stewson_convo_c,
+    stewson_convo_d.conv_id: stewson_convo_d,
+    stewson_quest_a.conv_id: stewson_quest_a,
 
-    kyle_convo_a, kyle_convo_b, kyle_convo_c, kyle_convo_d,
+    kyle_convo_a.conv_id: kyle_convo_a,
+    kyle_convo_b.conv_id: kyle_convo_b,
+    kyle_convo_c.conv_id: kyle_convo_c,
+    kyle_convo_d.conv_id: kyle_convo_d,
 
-    krystin_convo_a, krystin_convo_b, krystin_convo_c, krystin_convo_d,
+    krystin_convo_a.conv_id: krystin_convo_a,
+    krystin_convo_b.conv_id: krystin_convo_b,
+    krystin_convo_c.conv_id: krystin_convo_c,
+    krystin_convo_d.conv_id: krystin_convo_d,
 
-    frederick_convo_a, frederick_convo_b, frederick_convo_c,
+    frederick_convo_a.conv_id: frederick_convo_a,
+    frederick_convo_b.conv_id: frederick_convo_b,
+    frederick_convo_c.conv_id: frederick_convo_c,
 
-    joseph_convo_a, joseph_convo_b, joseph_convo_c, joseph_quest_a,
+    joseph_convo_a.conv_id: joseph_convo_a,
+    joseph_convo_b.conv_id: joseph_convo_b,
+    joseph_convo_c.conv_id: joseph_convo_c,
+    joseph_quest_a.conv_id: joseph_quest_a,
 
-    alden_quest_a, alden_convo_a, alden_convo_b, alden_convo_c,
+    alden_quest_a.conv_id: alden_quest_a,
+    alden_convo_a.conv_id: alden_convo_a,
+    alden_convo_b.conv_id: alden_convo_b,
+    alden_convo_c.conv_id: alden_convo_c,
 
-    azura_convo_a, azura_convo_b, azura_convo_c,
+    azura_convo_a.conv_id: azura_convo_a,
+    azura_convo_b.conv_id: azura_convo_b,
+    azura_convo_c.conv_id: azura_convo_c,
 
-    polmor_convo_a, polmor_convo_b, polmor_convo_c, polmor_quest_a,
-    serena_convo_a, serena_convo_b, serena_convo_c,
+    polmor_convo_a.conv_id: polmor_convo_a,
+    polmor_convo_b.conv_id: polmor_convo_b,
+    polmor_convo_c.conv_id: polmor_convo_c,
+    polmor_quest_a.conv_id: polmor_quest_a,
 
-    matthew_convo_a, matthew_quest_a, matthew_convo_b,
-    matthew_convo_c, matthew_convo_d, matthew_convo_e,
+    serena_convo_a.conv_id: serena_convo_a,
+    serena_convo_b.conv_id: serena_convo_b,
+    serena_convo_c.conv_id: serena_convo_c,
 
-    pime_convo_a, pime_quest_a, pime_convo_b, pime_convo_c,
+    matthew_convo_a.conv_id: matthew_convo_a,
+    matthew_quest_a.conv_id: matthew_quest_a,
+    matthew_convo_b.conv_id: matthew_convo_b,
+    matthew_convo_c.conv_id: matthew_convo_c,
+    matthew_convo_d.conv_id: matthew_convo_d,
+    matthew_convo_e.conv_id: matthew_convo_e,
 
-    lazaro_convo_a,
-    philliard_convo_a,
-    fly_convo_a,
-    stravi_convo_a,
-    sakura_convo_a,
-    sugulat_convo_a,
-    raidon_convo_a,
-    caesar_convo_a,
-    wesley_convo_a,
-    seriph_convo_a,
-    strathius_convo_a,
-    ariver_convo_a,
-    fitz_convo_a,
-    harthos_convo_a,
-    typhen_convo_a,
-    sondalar_convo_a,
-    morrison_convo_a,
-    ethos_convo_a,
-    jeffery_convo_a,
-    saar_convo_a,
-    seriph_convo_b,
-    seriph_convo_c
-]
+    pime_convo_a.conv_id: pime_convo_a,
+    pime_quest_a.conv_id: pime_quest_a,
+    pime_convo_b.conv_id: pime_convo_b,
+    pime_convo_c.conv_id: pime_convo_c,
+
+    lazaro_convo_a.conv_id: lazaro_convo_a,
+
+    philliard_convo_a.conv_id: philliard_convo_a,
+
+    fly_convo_a.conv_id: fly_convo_a,
+
+    stravi_convo_a.conv_id: stravi_convo_a,
+
+    sakura_convo_a.conv_id: sakura_convo_a,
+
+    sugulat_convo_a.conv_id: sugulat_convo_a,
+
+    raidon_convo_a.conv_id: raidon_convo_a,
+
+    caesar_convo_a.conv_id: caesar_convo_a,
+
+    wesley_convo_a.conv_id: wesley_convo_a,
+
+    seriph_convo_a.conv_id: seriph_convo_a,
+
+    strathius_convo_a.conv_id: strathius_convo_a,
+
+    ariver_convo_a.conv_id: ariver_convo_a,
+
+    fitz_convo_a.conv_id: fitz_convo_a,
+
+    harthos_convo_a.conv_id: harthos_convo_a,
+
+    typhen_convo_a.conv_id: typhen_convo_a,
+
+    sondalar_convo_a.conv_id: sondalar_convo_a,
+
+    morrison_convo_a.conv_id: morrison_convo_a,
+
+    ethos_convo_a.conv_id: ethos_convo_a,
+
+    jeffery_convo_a.conv_id: jeffery_convo_a,
+
+    saar_convo_a.conv_id: saar_convo_a,
+
+    seriph_convo_b.conv_id: seriph_convo_b,
+
+    seriph_convo_c.conv_id: seriph_convo_c
+}
 
 
 def set_active(conv_id, new_state):
-    for d in all_dialogue:
-        if d.conv_id == conv_id:
-            d.active = new_state
+    for key in all_dialogue:
+        if all_dialogue[key].conv_id == conv_id:
+            all_dialogue[key].active = new_state
 
             return
 
@@ -1464,7 +1532,7 @@ def set_active(conv_id, new_state):
 def serialize_dialogue(path):
     json_dialogue = {}
 
-    for c in all_dialogue:
+    for c in [all_dialogue[key] for key in all_dialogue]:
         if isinstance(c, Quest):
             json_dialogue[c.conv_id] = [c.active, c.started, c.finished]
 
@@ -1482,7 +1550,7 @@ def deserialize_dialogue(path):
         j_log = json.load(f)
 
     for key in j_log:
-        for c in all_dialogue[:]:
+        for c in [all_dialogue[key] for key in all_dialogue]:
             if key == c.conv_id:
                 if isinstance(c, Quest):
                     c.active, c.started, c.finished = j_log[key][0], j_log[key][1], j_log[key][2]
@@ -1491,5 +1559,5 @@ def deserialize_dialogue(path):
 
 
 for item1 in copy.copy(globals()):
-    if isinstance(globals()[item1], Conversation) and globals()[item1] not in all_dialogue:
+    if isinstance(globals()[item1], Conversation) and globals()[item1] not in [all_dialogue[x] for x in all_dialogue]:
         print(f"{item1} not in all_dialogue!")
