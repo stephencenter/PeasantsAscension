@@ -275,11 +275,9 @@ class Tile:
 
 class Cell:
     # A cell is a cluster of adjacent tiles accessible by teleportation via the world map
-    def __init__(self, name, biome, tiles, primary_tile, m_level, store_level, cell_id):
+    def __init__(self, name, biome, m_level, store_level, cell_id):
         self.name = name
         self.biome = biome
-        self.tiles = tiles
-        self.primary_tile = primary_tile  # Where you appear when you teleport to this cell
         self.m_level = m_level  # A tuple that specifies the level range enemies can be encountered at
         self.store_level = store_level  # An integer that specifies what level the stores in this cell are at
         self.cell_id = cell_id
@@ -298,264 +296,306 @@ class Province:
 # =========================== #
 
 # NEARTON
-nearton_desc = """\
-Nearton is surrounded by a large, natural moat. Past that, trees as far as the
-eyes can see."""
+class NeartonCell(Cell):
+    def __init__(self, name, biome, m_level, store_level, cell_id):
+        super().__init__(name, biome, m_level, store_level, cell_id)
 
-nearton_tile = Tile("Town of Nearton", "nearton_tile", nearton_desc + """\n
-The town of Nearton is mere minutes away from this point! Stopping by
-there might be a smart idea.""",
-                    town_list=[towns.town_nearton],
-                    to_n="I-BF-N",
-                    to_w="I-BF-W",
-                    to_e="I-BF-E",
-                    to_s="I-BF-S")
-nearton_sw = Tile("Nearton Outskirts", "I-BF-SW", nearton_desc,
-                  to_e="I-BF-S",
-                  to_n="I-BF-W")
-nearton_s = Tile("Nearton Outskirts", "I-BF-S", nearton_desc,
-                 to_n="nearton_tile",
-                 to_w="I-BF-SW",
-                 to_e="I-BF-SE",
-                 boss_list=[units.master_slime])
-nearton_se = Tile("Nearton Outskirts", "I-BF-SE", nearton_desc,
-                  to_w="I-BF-S",
-                  to_n="I-BF-E",
-                  gem_list=[items.agate_gem])
-nearton_w = Tile("Nearton Outskirts", "I-BF-W", nearton_desc,
-                 to_s="I-BF-SW",
-                 to_e="nearton_tile",
-                 to_n="I-BF-NW")
-nearton_e = Tile("Nearton Outskirts", "I-BF-E", nearton_desc,
-                 to_n="I-BF-NE",
-                 to_w="nearton_tile",
-                 to_s="I-BF-SE")
-nearton_nw = Tile("Nearton Outskirts", "I-BF-NW", nearton_desc,
-                  to_s="I-BF-W",
-                  to_e="I-BF-N",
-                  boss_list=[units.goblin_chieftain])
-nearton_n = Tile("Nearton Outskirts", "I-BF-N", nearton_desc,
-                 to_s="nearton_tile",
-                 to_e="I-BF-NE",
-                 to_w="I-BF-NW",
-                 gem_list=[items.amethyst_gem])
-nearton_ne = Tile("Nearton Outskirts", "I-BF-NE", nearton_desc,
-                  to_w="I-BF-N",
-                  to_s="I-BF-E")
+        nearton_desc = """\
+        Nearton is surrounded by a large, natural moat. Past that, trees as far as the
+        eyes can see."""
 
-nearton_cell = Cell("Nearton", "forest", [nearton_tile,
-                                          nearton_w,
-                                          nearton_ne,
-                                          nearton_e,
-                                          nearton_s,
-                                          nearton_n,
-                                          nearton_se,
-                                          nearton_nw,
-                                          nearton_sw],
-                    nearton_tile, (1, 3), 1, "nearton_cell")
+        nearton_tile = Tile("Town of Nearton", "nearton_tile", nearton_desc + """\n
+        The town of Nearton is mere minutes away from this point! Stopping by
+        there might be a smart idea.""",
+                            town_list=[towns.town_nearton],
+                            to_n="I-BF-N",
+                            to_w="I-BF-W",
+                            to_e="I-BF-E",
+                            to_s="I-BF-S")
+        nearton_sw = Tile("Nearton Outskirts", "I-BF-SW", nearton_desc,
+                          to_e="I-BF-S",
+                          to_n="I-BF-W")
+        nearton_s = Tile("Nearton Outskirts", "I-BF-S", nearton_desc,
+                         to_n="nearton_tile",
+                         to_w="I-BF-SW",
+                         to_e="I-BF-SE",
+                         boss_list=[units.master_slime])
+        nearton_se = Tile("Nearton Outskirts", "I-BF-SE", nearton_desc,
+                          to_w="I-BF-S",
+                          to_n="I-BF-E",
+                          gem_list=[items.agate_gem])
+        nearton_w = Tile("Nearton Outskirts", "I-BF-W", nearton_desc,
+                         to_s="I-BF-SW",
+                         to_e="nearton_tile",
+                         to_n="I-BF-NW")
+        nearton_e = Tile("Nearton Outskirts", "I-BF-E", nearton_desc,
+                         to_n="I-BF-NE",
+                         to_w="nearton_tile",
+                         to_s="I-BF-SE")
+        nearton_nw = Tile("Nearton Outskirts", "I-BF-NW", nearton_desc,
+                          to_s="I-BF-W",
+                          to_e="I-BF-N",
+                          boss_list=[units.goblin_chieftain])
+        nearton_n = Tile("Nearton Outskirts", "I-BF-N", nearton_desc,
+                         to_s="nearton_tile",
+                         to_e="I-BF-NE",
+                         to_w="I-BF-NW",
+                         gem_list=[items.amethyst_gem])
+        nearton_ne = Tile("Nearton Outskirts", "I-BF-NE", nearton_desc,
+                          to_w="I-BF-N",
+                          to_s="I-BF-E")
+
+        self.tiles = [nearton_tile,
+                      nearton_w,
+                      nearton_ne,
+                      nearton_e,
+                      nearton_s,
+                      nearton_n,
+                      nearton_se,
+                      nearton_nw,
+                      nearton_sw]
+        self.primary_tile = nearton_tile
+
+
+nearton_cell = NeartonCell("Nearton", "forest", (1, 3), 1, "nearton_cell")
+
 
 # SOUTHFORD
-southford_desc = """"""
+class SouthfordCell(Cell):
+    def __init__(self, name, biome, m_level, store_level, cell_id):
+        super().__init__(name, biome, m_level, store_level, cell_id)
 
-southford_tile = Tile("Town of Southford", "southford_tile", southford_desc + """\n
-The town of Southford is mere minutes away from this point! Stopping by
-there might be a smart idea.""",
-                      town_list=[towns.town_southford],
-                      to_s="BF-2A",
-                      to_w="BF-4A",
-                      to_e="BF-6A",
-                      to_n="BF-8A")
-southford_sw = Tile("Southford Outskirts", "BF-1A", southford_desc,
-                    to_e="BF-2A",
-                    to_n="BF-4A")
-southford_s = Tile("Southford Outskirts", "BF-2A", southford_desc,
-                   to_w="BF-1A",
-                   to_e="BF-3A",
-                   to_n="southford_tile")
-southford_se = Tile("Southford Outskirts", "BF-3A", southford_desc,
-                    to_w="BF-2A",
-                    to_n="BF-6A")
-southford_w = Tile("Southford Outskirts", "BF-4A", southford_desc,
-                   to_s="BF-1A",
-                   to_e="southford_tile",
-                   to_n="BF-7A",
-                   gem_list=[items.sapphire_gem])
-southford_e = Tile("Southford Outskirts", "BF-6A", southford_desc,
-                   to_s="BF-3A",
-                   to_w="southford_tile",
-                   to_n="BF-9A")
-southford_nw = Tile("Southford Outskirts", "BF-7A", southford_desc,
-                    to_s="BF-4A",
-                    to_e="BF-8A")
-southford_n = Tile("Southford Outskirts", "BF-8A", southford_desc,
-                   to_s="southford_tile",
-                   to_w="BF-7A",
-                   to_e="BF-9A")
-southford_ne = Tile("Southford Outskirts", "BF-9A", southford_desc,
-                    to_s="BF-6A",
-                    to_w="BF-8A")
+        southford_desc = """"""
 
-southford_cell = Cell("Southford", "forest", [southford_tile,
-                                              southford_w,
-                                              southford_ne,
-                                              southford_e,
-                                              southford_s,
-                                              southford_n,
-                                              southford_se,
-                                              southford_nw,
-                                              southford_sw],
-                      southford_tile, (2, 4), 2, "southford_cell")
+        southford_tile = Tile("Town of Southford", "southford_tile", southford_desc + """\n
+        The town of Southford is mere minutes away from this point! Stopping by
+        there might be a smart idea.""",
+                              town_list=[towns.town_southford],
+                              to_s="BF-2A",
+                              to_w="BF-4A",
+                              to_e="BF-6A",
+                              to_n="BF-8A")
+        southford_sw = Tile("Southford Outskirts", "BF-1A", southford_desc,
+                            to_e="BF-2A",
+                            to_n="BF-4A")
+        southford_s = Tile("Southford Outskirts", "BF-2A", southford_desc,
+                           to_w="BF-1A",
+                           to_e="BF-3A",
+                           to_n="southford_tile")
+        southford_se = Tile("Southford Outskirts", "BF-3A", southford_desc,
+                            to_w="BF-2A",
+                            to_n="BF-6A")
+        southford_w = Tile("Southford Outskirts", "BF-4A", southford_desc,
+                           to_s="BF-1A",
+                           to_e="southford_tile",
+                           to_n="BF-7A",
+                           gem_list=[items.sapphire_gem])
+        southford_e = Tile("Southford Outskirts", "BF-6A", southford_desc,
+                           to_s="BF-3A",
+                           to_w="southford_tile",
+                           to_n="BF-9A")
+        southford_nw = Tile("Southford Outskirts", "BF-7A", southford_desc,
+                            to_s="BF-4A",
+                            to_e="BF-8A")
+        southford_n = Tile("Southford Outskirts", "BF-8A", southford_desc,
+                           to_s="southford_tile",
+                           to_w="BF-7A",
+                           to_e="BF-9A")
+        southford_ne = Tile("Southford Outskirts", "BF-9A", southford_desc,
+                            to_s="BF-6A",
+                            to_w="BF-8A")
+
+        self.tiles = [southford_tile,
+                      southford_w,
+                      southford_ne,
+                      southford_e,
+                      southford_s,
+                      southford_n,
+                      southford_se,
+                      southford_nw,
+                      southford_sw]
+        self.primary_tile = southford_tile
+
+
+southford_cell = SouthfordCell("Southford", "forest", (2, 4), 2, "southford_cell")
+
 
 # OVERSHIRE CITY
-o_city_desc = """"""
+class OvershireCityCell(Cell):
+    def __init__(self, name, biome, m_level, store_level, cell_id):
+        super().__init__(name, biome, m_level, store_level, cell_id)
 
-o_city_tile = Tile("Overshire City", "o_city_tile", o_city_desc,
-                   to_s="o_city_s",
-                   to_w="o_city_w",
-                   to_e="o_city_e",
-                   to_n="o_city_n",
-                   town_list=[towns.town_overshire_city])
-o_city_sw = Tile("Overshire City Outskirts", "o_city_sw", o_city_desc,
-                 to_e="o_city_s",
-                 to_n="o_city_w")
-o_city_s = Tile("Overshire City Outskirts", "o_city_s", o_city_desc,
-                to_w="o_city_sw",
-                to_e="o_city_se",
-                to_n="o_city_tile",
-                gem_list=[items.citrine_gem])
-o_city_se = Tile("Overshire City Outskirts", "o_city_se", o_city_desc,
-                 to_w="o_city_s",
-                 to_n="o_city_e")
-o_city_w = Tile("Overshire City Outskirts", "o_city_w", o_city_desc,
-                to_s="o_city_sw",
-                to_e="o_city_tile",
-                to_n="o_city_nw")
-o_city_e = Tile("Overshire City Outskirts", "o_city_e", o_city_desc,
-                to_w="o_city_tile",
-                to_s="o_city_se",
-                to_n="o_city_ne")
-o_city_nw = Tile("Overshire City Outskirts", "o_city_nw", o_city_desc,
-                 to_s="o_city_w",
-                 to_e="o_city_n")
-o_city_n = Tile("Overshire City Outskirts", "o_city_n", o_city_desc,
-                to_s="o_city_tile",
-                to_w="o_city_nw",
-                to_e="o_city_ne")
-o_city_ne = Tile("Overshire City Outskirts", "o_city_ne", o_city_desc,
-                 to_s="o_city_e",
-                 to_w="o_city_n",
-                 gem_list=[items.garnet_gem])
-o_city_cell = Cell("Overshire City", "forest", [o_city_tile,
-                                                o_city_w,
-                                                o_city_ne,
-                                                o_city_e,
-                                                o_city_s,
-                                                o_city_n,
-                                                o_city_se,
-                                                o_city_nw,
-                                                o_city_sw],
-                   o_city_tile, (3, 6), 2, "o_city_cell")
+        o_city_desc = """"""
+
+        o_city_tile = Tile("Overshire City", "o_city_tile", o_city_desc,
+                           to_s="o_city_s",
+                           to_w="o_city_w",
+                           to_e="o_city_e",
+                           to_n="o_city_n",
+                           town_list=[towns.town_overshire_city])
+        o_city_sw = Tile("Overshire City Outskirts", "o_city_sw", o_city_desc,
+                         to_e="o_city_s",
+                         to_n="o_city_w")
+        o_city_s = Tile("Overshire City Outskirts", "o_city_s", o_city_desc,
+                        to_w="o_city_sw",
+                        to_e="o_city_se",
+                        to_n="o_city_tile",
+                        gem_list=[items.citrine_gem])
+        o_city_se = Tile("Overshire City Outskirts", "o_city_se", o_city_desc,
+                         to_w="o_city_s",
+                         to_n="o_city_e")
+        o_city_w = Tile("Overshire City Outskirts", "o_city_w", o_city_desc,
+                        to_s="o_city_sw",
+                        to_e="o_city_tile",
+                        to_n="o_city_nw")
+        o_city_e = Tile("Overshire City Outskirts", "o_city_e", o_city_desc,
+                        to_w="o_city_tile",
+                        to_s="o_city_se",
+                        to_n="o_city_ne")
+        o_city_nw = Tile("Overshire City Outskirts", "o_city_nw", o_city_desc,
+                         to_s="o_city_w",
+                         to_e="o_city_n")
+        o_city_n = Tile("Overshire City Outskirts", "o_city_n", o_city_desc,
+                        to_s="o_city_tile",
+                        to_w="o_city_nw",
+                        to_e="o_city_ne")
+        o_city_ne = Tile("Overshire City Outskirts", "o_city_ne", o_city_desc,
+                         to_s="o_city_e",
+                         to_w="o_city_n",
+                         gem_list=[items.garnet_gem])
+
+        self.tiles = [o_city_tile,
+                      o_city_w,
+                      o_city_ne,
+                      o_city_e,
+                      o_city_s,
+                      o_city_n,
+                      o_city_se,
+                      o_city_nw,
+                      o_city_sw]
+        self.primary_tile = o_city_tile
+
+
+o_city_cell = OvershireCityCell("Overshire City", "forest", (3, 6), 2, "o_city_cell")
+
 
 # PRINCIPALIA
-principalia_desc = """"""
+class PrincipaliaCell(Cell):
+    def __init__(self, name, biome, m_level, store_level, cell_id):
+        super().__init__(name, biome, m_level, store_level, cell_id)
 
-principalia_tile = Tile("City of Principalia", "principalia_tile", principalia_desc,
-                        to_s="principalia_s",
-                        to_w="principalia_w",
-                        to_e="principalia_e",
-                        to_n="principalia_n",
-                        town_list=[towns.town_principalia])
-principalia_sw = Tile("Principalia Outskirts", "principalia_sw", principalia_desc,
-                      to_e="principalia_s",
-                      to_n="principalia_w")
-principalia_s = Tile("Principalia Outskirts", "principalia_s", principalia_desc,
-                     to_w="principalia_sw",
-                     to_e="principalia_se",
-                     to_n="principalia_tile")
-principalia_se = Tile("Principalia Outskirts", "principalia_se", principalia_desc,
-                      to_w="principalia_s",
-                      to_n="principalia_e",
-                      gem_list=[items.diamond_gem])
-principalia_w = Tile("Principalia Outskirts", "principalia_w", principalia_desc,
-                     to_s="principalia_sw",
-                     to_e="principalia_tile",
-                     to_n="principalia_nw")
-principalia_e = Tile("Principalia Outskirts", "principalia_e", principalia_desc,
-                     to_w="principalia_tile",
-                     to_s="principalia_se",
-                     to_n="principalia_ne")
-principalia_nw = Tile("Principalia Outskirts", "principalia_nw", principalia_desc,
-                      to_s="principalia_w",
-                      to_e="principalia_n")
-principalia_n = Tile("Principalia Outskirts", "principalia_n", principalia_desc,
-                     to_s="principalia_tile",
-                     to_w="principalia_nw",
-                     to_e="principalia_ne")
-principalia_ne = Tile("Principalia Outskirts", "principalia_ne", principalia_desc,
-                      to_s="principalia_e",
-                      to_w="principalia_n")
-principalia_cell = Cell("Principalia", "forest", [principalia_tile,
-                                                  principalia_w,
-                                                  principalia_ne,
-                                                  principalia_e,
-                                                  principalia_s,
-                                                  principalia_n,
-                                                  principalia_se,
-                                                  principalia_nw,
-                                                  principalia_sw],
-                        principalia_tile, (4, 7), 2, "principalia_cell")
+        principalia_desc = """"""
+
+        principalia_tile = Tile("City of Principalia", "principalia_tile", principalia_desc,
+                                to_s="principalia_s",
+                                to_w="principalia_w",
+                                to_e="principalia_e",
+                                to_n="principalia_n",
+                                town_list=[towns.town_principalia])
+        principalia_sw = Tile("Principalia Outskirts", "principalia_sw", principalia_desc,
+                              to_e="principalia_s",
+                              to_n="principalia_w")
+        principalia_s = Tile("Principalia Outskirts", "principalia_s", principalia_desc,
+                             to_w="principalia_sw",
+                             to_e="principalia_se",
+                             to_n="principalia_tile")
+        principalia_se = Tile("Principalia Outskirts", "principalia_se", principalia_desc,
+                              to_w="principalia_s",
+                              to_n="principalia_e",
+                              gem_list=[items.diamond_gem])
+        principalia_w = Tile("Principalia Outskirts", "principalia_w", principalia_desc,
+                             to_s="principalia_sw",
+                             to_e="principalia_tile",
+                             to_n="principalia_nw")
+        principalia_e = Tile("Principalia Outskirts", "principalia_e", principalia_desc,
+                             to_w="principalia_tile",
+                             to_s="principalia_se",
+                             to_n="principalia_ne")
+        principalia_nw = Tile("Principalia Outskirts", "principalia_nw", principalia_desc,
+                              to_s="principalia_w",
+                              to_e="principalia_n")
+        principalia_n = Tile("Principalia Outskirts", "principalia_n", principalia_desc,
+                             to_s="principalia_tile",
+                             to_w="principalia_nw",
+                             to_e="principalia_ne")
+        principalia_ne = Tile("Principalia Outskirts", "principalia_ne", principalia_desc,
+                              to_s="principalia_e",
+                              to_w="principalia_n")
+
+        self.tiles = [principalia_tile,
+                      principalia_w,
+                      principalia_ne,
+                      principalia_e,
+                      principalia_s,
+                      principalia_n,
+                      principalia_se,
+                      principalia_nw,
+                      principalia_sw]
+        self.primary_tile = principalia_tile
+
+
+principalia_cell = PrincipaliaCell("Principalia", "forest", (4, 7), 2, "principalia_cell")
 
 
 # SARDOOTH
-sardooth_desc = """\
-Off in the distance you see Sardooth, a dark, dismal ghost town with nary a
-soul in sight. To the northeast lies the largest graveyard in the kingdom,
-the Overshire Graveyard."""
-sardooth_tile = Tile("Sardooth", "sardooth_tile", sardooth_desc,
-                     to_s="sardooth_s",
-                     to_w="sardooth_w",
-                     to_e="sardooth_e",
-                     to_n="sardooth_n",
-                     town_list=[towns.town_sardooth])
-sardooth_sw = Tile("Sardooth Outskirts", "sardooth_sw", sardooth_desc,
-                   to_e="sardooth_s",
-                   to_n="sardooth_w")
-sardooth_s = Tile("Sardooth Outskirts", "sardooth_s", sardooth_desc,
-                  to_w="sardooth_sw",
-                  to_e="sardooth_se",
-                  to_n="sardooth_tile")
-sardooth_se = Tile("Sardooth Outskirts", "sardooth_se", sardooth_desc,
-                   to_w="sardooth_s",
-                   to_n="sardooth_e",
-                   gem_list=[items.diamond_gem])
-sardooth_w = Tile("Sardooth Outskirts", "sardooth_w", sardooth_desc,
-                  to_s="sardooth_sw",
-                  to_e="sardooth_tile",
-                  to_n="sardooth_nw")
-sardooth_e = Tile("Sardooth Outskirts", "sardooth_e", sardooth_desc,
-                  to_w="sardooth_tile",
-                  to_s="sardooth_se",
-                  to_n="sardooth_ne")
-sardooth_nw = Tile("Sardooth Outskirts", "sardooth_nw", sardooth_desc,
-                   to_s="sardooth_w",
-                   to_e="sardooth_n")
-sardooth_n = Tile("Sardooth Outskirts", "sardooth_n", sardooth_desc,
-                  to_s="sardooth_tile",
-                  to_w="sardooth_nw",
-                  to_e="sardooth_ne")
-sardooth_ne = Tile("Sardooth Outskirts", "sardooth_ne", sardooth_desc,
-                   to_s="sardooth_e",
-                   to_w="sardooth_n")
-sardooth_cell = Cell("Sardooth", "forest", [sardooth_tile,
-                                            sardooth_w,
-                                            sardooth_ne,
-                                            sardooth_e,
-                                            sardooth_s,
-                                            sardooth_n,
-                                            sardooth_se,
-                                            sardooth_nw,
-                                            sardooth_sw],
-                     sardooth_tile, (7, 10), 2, "sardooth_cell")
+class SardoothCell(Cell):
+    def __init__(self, name, biome, m_level, store_level, cell_id):
+        super().__init__(name, biome, m_level, store_level, cell_id)
+
+        sardooth_desc = """\
+        Off in the distance you see Sardooth, a dark, dismal ghost town with nary a
+        soul in sight. To the northeast lies the largest graveyard in the kingdom,
+        the Overshire Graveyard."""
+
+        sardooth_tile = Tile("Sardooth", "sardooth_tile", sardooth_desc,
+                             to_s="sardooth_s",
+                             to_w="sardooth_w",
+                             to_e="sardooth_e",
+                             to_n="sardooth_n",
+                             town_list=[towns.town_sardooth])
+        sardooth_sw = Tile("Sardooth Outskirts", "sardooth_sw", sardooth_desc,
+                           to_e="sardooth_s",
+                           to_n="sardooth_w")
+        sardooth_s = Tile("Sardooth Outskirts", "sardooth_s", sardooth_desc,
+                          to_w="sardooth_sw",
+                          to_e="sardooth_se",
+                          to_n="sardooth_tile")
+        sardooth_se = Tile("Sardooth Outskirts", "sardooth_se", sardooth_desc,
+                           to_w="sardooth_s",
+                           to_n="sardooth_e",
+                           gem_list=[items.diamond_gem])
+        sardooth_w = Tile("Sardooth Outskirts", "sardooth_w", sardooth_desc,
+                          to_s="sardooth_sw",
+                          to_e="sardooth_tile",
+                          to_n="sardooth_nw")
+        sardooth_e = Tile("Sardooth Outskirts", "sardooth_e", sardooth_desc,
+                          to_w="sardooth_tile",
+                          to_s="sardooth_se",
+                          to_n="sardooth_ne")
+        sardooth_nw = Tile("Sardooth Outskirts", "sardooth_nw", sardooth_desc,
+                           to_s="sardooth_w",
+                           to_e="sardooth_n")
+        sardooth_n = Tile("Sardooth Outskirts", "sardooth_n", sardooth_desc,
+                          to_s="sardooth_tile",
+                          to_w="sardooth_nw",
+                          to_e="sardooth_ne")
+        sardooth_ne = Tile("Sardooth Outskirts", "sardooth_ne", sardooth_desc,
+                           to_s="sardooth_e",
+                           to_w="sardooth_n")
+
+        self.tiles = [sardooth_tile,
+                      sardooth_w,
+                      sardooth_ne,
+                      sardooth_e,
+                      sardooth_s,
+                      sardooth_n,
+                      sardooth_se,
+                      sardooth_nw,
+                      sardooth_sw]
+        self.primary_tile = sardooth_tile
+
+
+sardooth_cell = SardoothCell("Sardooth", "forest", (7, 10), 2, "sardooth_cell")
 
 overshire_province = Province("Overshire", [nearton_cell,
                                             southford_cell,
@@ -564,68 +604,134 @@ overshire_province = Province("Overshire", [nearton_cell,
                                             sardooth_cell],
                               "overshire_prov")
 
+
+# =========================== #
+#        DOWNPOUR CELLS       #
+# =========================== #
+
 downpour_province = Province("Downpour", [], "downpour_prov")
+
+
+# =========================== #
+#         FLUTE CELLS         #
+# =========================== #
 flute_province = Province("Flute", [], "flute_prov")
+
+
+# =========================== #
+#        DELTORA CELLS        #
+# =========================== #
 deltora_province = Province("Deltora", [], "deltora_prov")
+
+
+# =========================== #
+#        PARRIWAY CELLS       #
+# =========================== #
 parriway_province = Province("Parriway", [], "parriway_prov")
+
 
 # =========================== #
 #        CHIN'TOR CELLS       #
 # =========================== #
-# FORT SIGIL
-fort_sigil_desc = """"""
 
-fort_sigil_tile = Tile("Town of Fort Sigil", "fort_sigil_tile", fort_sigil_desc,
-                       to_s="fort_sigil_s",
-                       to_w="fort_sigil_w",
-                       to_e="fort_sigil_e",
-                       to_n="fort_sigil_n",
-                       town_list=[towns.town_fort_sigil])
-fort_sigil_sw = Tile("Fort Sigil Outskirts", "fort_sigil_sw", fort_sigil_desc,
-                     to_e="fort_sigil_s",
-                     to_n="fort_sigil_w")
-fort_sigil_s = Tile("Fort Sigil Outskirts", "fort_sigil_s", fort_sigil_desc,
-                    to_w="fort_sigil_sw",
-                    to_e="fort_sigil_se",
-                    to_n="fort_sigil_tile")
-fort_sigil_se = Tile("Fort Sigil Outskirts", "fort_sigil_se", fort_sigil_desc,
-                     to_w="fort_sigil_s",
-                     to_n="fort_sigil_e")
-fort_sigil_w = Tile("Fort Sigil Outskirts", "fort_sigil_w", fort_sigil_desc,
-                    to_s="fort_sigil_sw",
-                    to_e="fort_sigil_tile",
-                    to_n="fort_sigil_nw")
-fort_sigil_e = Tile("Fort Sigil Outskirts", "fort_sigil_e", fort_sigil_desc,
-                    to_w="fort_sigil_tile",
-                    to_s="fort_sigil_se",
-                    to_n="fort_sigil_ne")
-fort_sigil_nw = Tile("Fort Sigil Outskirts", "fort_sigil_nw", fort_sigil_desc,
-                     to_s="fort_sigil_w",
-                     to_e="fort_sigil_n")
-fort_sigil_n = Tile("Fort Sigil Outskirts", "fort_sigil_n", fort_sigil_desc,
-                    to_s="fort_sigil_tile",
-                    to_w="fort_sigil_nw",
-                    to_e="fort_sigil_ne")
-fort_sigil_ne = Tile("Fort Sigil Outskirts", "fort_sigil_ne", fort_sigil_desc,
-                     to_s="fort_sigil_e",
-                     to_w="fort_sigil_n")
-fort_sigil_cell = Cell("Fort Sigil", "forest", [fort_sigil_tile,
-                                                fort_sigil_w,
-                                                fort_sigil_ne,
-                                                fort_sigil_e,
-                                                fort_sigil_s,
-                                                fort_sigil_n,
-                                                fort_sigil_se,
-                                                fort_sigil_nw,
-                                                fort_sigil_sw],
-                       fort_sigil_tile, (5, 8), 2, "fort_sigil_cell")
+# FORT SIGIL
+class FortSigilCell(Cell):
+    def __init__(self, name, biome, m_level, store_level, cell_id):
+        super().__init__(name, biome, m_level, store_level, cell_id)
+
+        fort_sigil_desc = """"""
+
+        fort_sigil_tile = Tile("Town of Fort Sigil", "fort_sigil_tile", fort_sigil_desc,
+                               to_s="fort_sigil_s",
+                               to_w="fort_sigil_w",
+                               to_e="fort_sigil_e",
+                               to_n="fort_sigil_n",
+                               town_list=[towns.town_fort_sigil])
+        fort_sigil_sw = Tile("Fort Sigil Outskirts", "fort_sigil_sw", fort_sigil_desc,
+                             to_e="fort_sigil_s",
+                             to_n="fort_sigil_w")
+        fort_sigil_s = Tile("Fort Sigil Outskirts", "fort_sigil_s", fort_sigil_desc,
+                            to_w="fort_sigil_sw",
+                            to_e="fort_sigil_se",
+                            to_n="fort_sigil_tile")
+        fort_sigil_se = Tile("Fort Sigil Outskirts", "fort_sigil_se", fort_sigil_desc,
+                             to_w="fort_sigil_s",
+                             to_n="fort_sigil_e")
+        fort_sigil_w = Tile("Fort Sigil Outskirts", "fort_sigil_w", fort_sigil_desc,
+                            to_s="fort_sigil_sw",
+                            to_e="fort_sigil_tile",
+                            to_n="fort_sigil_nw")
+        fort_sigil_e = Tile("Fort Sigil Outskirts", "fort_sigil_e", fort_sigil_desc,
+                            to_w="fort_sigil_tile",
+                            to_s="fort_sigil_se",
+                            to_n="fort_sigil_ne")
+        fort_sigil_nw = Tile("Fort Sigil Outskirts", "fort_sigil_nw", fort_sigil_desc,
+                             to_s="fort_sigil_w",
+                             to_e="fort_sigil_n")
+        fort_sigil_n = Tile("Fort Sigil Outskirts", "fort_sigil_n", fort_sigil_desc,
+                            to_s="fort_sigil_tile",
+                            to_w="fort_sigil_nw",
+                            to_e="fort_sigil_ne")
+        fort_sigil_ne = Tile("Fort Sigil Outskirts", "fort_sigil_ne", fort_sigil_desc,
+                             to_s="fort_sigil_e",
+                             to_w="fort_sigil_n")
+
+        self.tiles = [fort_sigil_tile,
+                      fort_sigil_w,
+                      fort_sigil_ne,
+                      fort_sigil_e,
+                      fort_sigil_s,
+                      fort_sigil_n,
+                      fort_sigil_se,
+                      fort_sigil_nw,
+                      fort_sigil_sw]
+        self.primary_tile = fort_sigil_tile
+
+
+fort_sigil_cell = FortSigilCell("Fort Sigil", "forest", (5, 8), 2, "fort_sigil_cell")
 
 chintor_province = Province("Chin'tor", [fort_sigil_cell], "chintor_prov")
+
+
+# =========================== #
+#      CAMBERLITE CELLS       #
+# =========================== #
+
 camberlite_province = Province("Camberlite", [], "camberlite_prov")
+
+
+# =========================== #
+#        WHITLOCK CELLS       #
+# =========================== #
+
 whitlock_province = Province("Whitlock", [], "whitlock_prov")
+
+
+# =========================== #
+#         KOHRIN CELLS        #
+# =========================== #
+
 kohrin_province = Province("Kohrin", [], "kohrin_prov")
+
+
+# =========================== #
+#        PELAMORA CELLS       #
+# =========================== #
+
 pelamora_province = Province("Pelamora", [], "pelamora_prov")
+
+
+# =========================== #
+#        CELEMIA CELLS        #
+# =========================== #
+
 celemia_province = Province("Celemia", [], "celemia_prov")
+
+
+# =========================== #
+#         THEX CELLS          #
+# =========================== #
+
 thex_province = Province("Thex", [], "thex_prov")
 
 all_provinces = [overshire_province,

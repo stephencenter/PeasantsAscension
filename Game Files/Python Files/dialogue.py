@@ -1520,6 +1520,8 @@ all_dialogue = {
 
 
 def set_active(conv_id, new_state):
+    global all_dialogue
+
     for key in all_dialogue:
         if all_dialogue[key].conv_id == conv_id:
             all_dialogue[key].active = new_state
@@ -1553,9 +1555,10 @@ def deserialize_dialogue(path):
         for c in [all_dialogue[key] for key in all_dialogue]:
             if key == c.conv_id:
                 if isinstance(c, Quest):
-                    c.active, c.started, c.finished = j_log[key][0], j_log[key][1], j_log[key][2]
+                    all_dialogue[key].active, all_dialogue[key].started, all_dialogue[key].finished = \
+                        j_log[key][0], j_log[key][1], j_log[key][2]
                 else:
-                    c.active = j_log[key][0]
+                    all_dialogue[key].active = j_log[key][0]
 
 
 for item1 in copy.copy(globals()):

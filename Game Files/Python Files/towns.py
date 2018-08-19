@@ -1171,7 +1171,7 @@ def search_towns(enter=True):
         # If the player's current tile position is broken, relocate them to the main tile
         logging.exception(f"""Error gathering tile data on {time.strftime('%m/%d/%Y at %H:%M:%S')}: """)
 
-        main.party_info['current_tile'] = tiles.nearton_tile
+        main.party_info['current_tile'] = tiles.find_tile_with_id('nearton_tile')
         print("Error gathering tile data - relocated to nearton_tile.")
         main.s_input("\nPress enter/return ")
 

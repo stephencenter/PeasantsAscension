@@ -1034,25 +1034,25 @@ titan_axe = Weapon('Titanium Battleaxe',
 
 # Weapons -- Assassin
 stn_dag = Weapon('Stone Dagger', """\
-A stone knife that you made yourself! Used to shear sheep and cut meat [+5% Damage]""",
+A stone knife that you made yourself! Used to shear sheep and cut meat [+5% Damage].""",
                  10, 0.05, 'melee', ['assassin'], 'Dagger', "stn_dag")
 
-ser_knf = Weapon('Serrated Knife',
-                 'A durable knife made of iron, with one side made jagged [+10% Damage]',
+ser_knf = Weapon('Serrated Knife', """\
+A durable knife made of iron, with one side made jagged [+10% Damage].""",
                  150, 0.1, 'melee', ['assassin'], 'Dagger', "ser_knf")
-en_ser_knf = Weapon('Enhanced Serrated Knife',
-                    'Even better than your typical Serrated Knife [+30% Damage].',
+en_ser_knf = Weapon('Enhanced Serrated Knife', """\
+Even better than your typical Serrated Knife [+30% Damage].""",
                     300, 0.3, 'melee', ['assassin'], 'Dagger', "en_ser_knf")
 
-stiletto = Weapon('Stiletto',
-                  'A long, cross-shaped knife perfect for "removing" your enemies [+50% Damage].',
+stiletto = Weapon('Stiletto', """\
+A long, cross-shaped knife perfect for "removing" your enemies [+50% Damage].""",
                   600, 0.5, 'melee', ['assassin'], 'Stiletto', "stiletto")
-en_stiletto = Weapon('Enhanced Stiletto',
-                     'Even better than your typical Stiletto [+70% Damage].',
+en_stiletto = Weapon('Enhanced Stiletto', """\
+Even better than your typical Stiletto [+70% Damage].""",
                      900, 0.7, 'melee', ['assassin'], 'Stiletto', "en_stiletto")
 
-myth_sb = Weapon('Mythril Shortblade',
-                 'A knife made of a rare and powerful material [+90% Damage].',
+myth_sb = Weapon('Mythril Shortblade', """\
+A knife made of a rare and powerful material [+90% Damage].""",
                  1200, 0.9, 'melee', ['assassin'], 'Short Sword', "myth_sb")
 
 # Weapons -- Ranger
