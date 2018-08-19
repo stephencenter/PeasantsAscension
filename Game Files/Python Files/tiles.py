@@ -14,6 +14,7 @@
 # along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
+import random
 
 import pygame
 
@@ -273,6 +274,16 @@ class Tile:
             | S | X = Player Party\n"""
 
 
+class DungeonTile(Tile):
+    def __init__(self, name, tile_id, desc, x, y, distance):
+        super().__init__(name, tile_id, desc, None, None, None, None, None, None, [], [], [], False, False, False)
+
+        self.x = x
+        self.y = y
+        self.distance = distance
+        self.deadend = False
+
+
 class Cell:
     # A cell is a cluster of adjacent tiles accessible by teleportation via the world map
     def __init__(self, name, biome, m_level, store_level, cell_id):
@@ -281,6 +292,104 @@ class Cell:
         self.m_level = m_level  # A tuple that specifies the level range enemies can be encountered at
         self.store_level = store_level  # An integer that specifies what level the stores in this cell are at
         self.cell_id = cell_id
+
+
+class RandomizedDungeon:
+    def __init__(self, name, desc, biome, m_level, x_cap, y_cap, cell_id):
+        self.name = name
+        self.desc = desc
+        self.biome = biome
+        self.m_level = m_level
+        self.x_cap = x_cap
+        self.y_cap = y_cap
+        self.cell_id = cell_id
+
+        self.generate_dungeon()
+
+    def generate_dungeon(self):
+        self.primary_tile = DungeonTile(f"Inside {self.name}", f"{self.cell_id}1", self.desc, 0, 0, 0)
+        self.tiles = [self.primary_tile]
+
+        c_tile = self.primary_tile
+        while True:
+            direction = random.choice(["up", "left", "right", "down"])
+
+            if direction == "up" and \
+                    not self.tile_exists(c_tile.x, c_tile.y + 1) and \
+                    not c_tile.y + 1 > self.y_cap:
+
+                new_tile = DungeonTile(f"Inside {self.name}", f"{self.cell_id}{len(self.tiles) + 1}",
+                                       self.desc, c_tile.x, c_tile.y + 1, c_tile.distance + 1)
+
+                self.tiles.append(new_tile)
+                c_tile.to_n = new_tile.tile_id
+                new_tile.to_s = c_tile.tile_id
+
+                c_tile = new_tile
+
+            elif direction == "down" and \
+                    not self.tile_exists(c_tile.x, c_tile.y - 1) and \
+                    not c_tile.y - 1 < 0:
+
+                new_tile = DungeonTile(f"Inside {self.name}", f"{self.cell_id}{len(self.tiles) + 1}",
+                                       self.desc, c_tile.x, c_tile.y - 1, c_tile.distance + 1)
+
+                self.tiles.append(new_tile)
+                c_tile.to_s = new_tile.tile_id
+                new_tile.to_n = c_tile.tile_id
+                c_tile = new_tile
+
+            elif direction == "right" and \
+                    not self.tile_exists(c_tile.x + 1, c_tile.y) and \
+                    (self.x_cap > c_tile.x + 1 > -self.x_cap):
+
+                new_tile = DungeonTile(f"Inside {self.name}", f"{self.cell_id}{len(self.tiles) + 1}",
+                                       self.desc, c_tile.x + 1, c_tile.y, c_tile.distance + 1)
+
+                self.tiles.append(new_tile)
+                c_tile.to_e = new_tile.tile_id
+                new_tile.to_w = c_tile.tile_id
+                c_tile = new_tile
+
+            elif direction == "left" and \
+                    not self.tile_exists(c_tile.x - 1, c_tile.y) and \
+                    (self.x_cap > c_tile.x - 1 > -self.x_cap):
+
+                new_tile = DungeonTile(f"Inside {self.name}", f"{self.cell_id}{len(self.tiles) + 1}",
+                                       self.desc, c_tile.x - 1, c_tile.y, c_tile.distance + 1)
+
+                self.tiles.append(new_tile)
+                c_tile.to_w = new_tile.tile_id
+                new_tile.to_e = c_tile.tile_id
+                c_tile = new_tile
+
+            else:
+                if not self.has_free_adjacent_space(c_tile.x, c_tile.y):
+                    c_tile.deadend = True
+
+                    for n_tile in self.tiles:
+                        if self.has_free_adjacent_space(n_tile.x, n_tile.y):
+                            c_tile = n_tile
+
+                            break
+
+                    else:
+                        return
+
+    def tile_exists(self, x, y):
+        for tile in self.tiles:
+            if x == tile.x and y == tile.y:
+                return True
+
+        return False
+
+    def has_free_adjacent_space(self, x, y):
+        return not all([
+            (self.tile_exists(x - 1, y) or not (self.x_cap > x - 1 > -self.x_cap)),
+            (self.tile_exists(x + 1, y) or not (self.x_cap > x + 1 > -self.x_cap)),
+            (self.tile_exists(x, y + 1) or y + 1 > self.y_cap),
+            (self.tile_exists(x, y - 1) or y - 1 < 0)
+        ])
 
 
 class Province:
@@ -299,6 +408,8 @@ class Province:
 class NeartonCell(Cell):
     def __init__(self, name, biome, m_level, store_level, cell_id):
         super().__init__(name, biome, m_level, store_level, cell_id)
+        # I create a dedicated class for each cell so I can put all of the tile data inside it, keeping
+        # the file clean and easy to read
 
         nearton_desc = """\
         Nearton is surrounded by a large, natural moat. Past that, trees as far as the
@@ -597,11 +708,15 @@ class SardoothCell(Cell):
 
 sardooth_cell = SardoothCell("Sardooth", "forest", (7, 10), 2, "sardooth_cell")
 
+labyrinth_of_secrets = RandomizedDungeon("The Labyrinth of Unfathomable Secrets", "", "forest",
+                                         (1, 3), 5, 5, "secret_labyrinth")
+
 overshire_province = Province("Overshire", [nearton_cell,
                                             southford_cell,
                                             o_city_cell,
                                             principalia_cell,
-                                            sardooth_cell],
+                                            sardooth_cell,
+                                            labyrinth_of_secrets],
                               "overshire_prov")
 
 
@@ -834,9 +949,9 @@ def find_cell_with_tile_id(tile_id):
 
 # This loop checks to make sure that all set directions for each tile correspond to valid tiles.
 for item2 in all_tiles:
-    for direction in [item2.to_s, item2.to_n, item2.to_e, item2.to_w]:
-        if direction and not find_tile_with_id(direction):
-            print(f"{item2.tile_id} has an invalid direction ({direction})!")
+    for check_direction in [item2.to_s, item2.to_n, item2.to_e, item2.to_w]:
+        if check_direction and not find_tile_with_id(check_direction):
+            print(f"{item2.tile_id} has an invalid direction ({check_direction})!")
 
 # This loop checks to make sure all tile_id's are unique
 for item3 in all_tiles:
@@ -846,8 +961,8 @@ for item3 in all_tiles:
 # This optional loop checks to make sure no tiles are "adjacent to themselves"
 # e.g. North on tile_a leads to tile_a
 for item4 in all_tiles:
-    for direction in [item4.to_s, item4.to_n, item4.to_e, item4.to_w]:
-        if direction == item4.tile_id and not item4.allow_recursion:
+    for check_direction in [item4.to_s, item4.to_n, item4.to_e, item4.to_w]:
+        if check_direction == item4.tile_id and not item4.allow_recursion:
             print(f"{item4.tile_id} leads to itself - is this intended?")
 
 # This optional loop checks to make sure tiles are two-way passages
