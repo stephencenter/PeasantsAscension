@@ -72,7 +72,7 @@ class Unit:
 class PlayableCharacter(Unit):
     # A class for characters whose main.s_input can be directly controlled by the player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
-        Unit.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
         self.class_ = class_          # PCU's Class
         self.off_element = 'neutral'  # PCU's Element
@@ -897,7 +897,7 @@ class Monster(Unit):
     # All monsters use this class. Bosses use a sub-class called "Boss" which inherits from this.
 
     def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        Unit.__init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
         self.status = ''  # The status effect that will be applied to the player if RNGsus wills it
         self.is_poisoned = False
         self.is_defending = False
@@ -1054,181 +1054,6 @@ class Monster(Unit):
         self.max_hp = self.hp
         self.max_mp = self.mp
 
-    def monster_modifiers(self):
-        # Monsters with >40 level are called "Greater"
-        # Monsters with <10 level are called "Lesser"
-        # Goblins also randomly have a chance to be "Whipsering", which is an inside joke with a friend of mine
-        self.m_name = copy.copy(self.name)
-
-        if self.name == "Goblin" and random.randint(0, 50) == 42:
-            self.name = ''.join(["Whispering ", self.name])
-
-        elif self.lvl < 10:
-            self.name = ''.join(["Lesser ", self.name])
-
-        elif self.lvl > 40:
-            self.name = ''.join(["Greater ", self.name])
-
-        # Monsters are given one of 14 different "modifiers", which increase/decrease some of their stats
-        # This is to help spice up the game and make it less predictable
-        modifier = random.choice(['Slow', 'Fast',
-                                  'Nimble', 'Clumsy',
-                                  'Powerful', 'Ineffective',
-                                  'Armored', 'Broken',
-                                  'Mystic', 'Foolish',
-                                  'Strong', 'Weak',
-                                  'Observant', 'Obtuse'])
-
-        if modifier == "Slow":  # Very-low speed, below-average speed
-            self.spd /= 1.3
-            self.evad /= 1.1
-        elif modifier == "Fast":  # Very-high speed, above-average speed
-            self.spd *= 1.3
-            self.evad *= 1.1
-        elif modifier == "Nimble":  # Very-high evasion, above-average speed
-            self.evad *= 1.3
-            self.spd *= 1.1
-        elif modifier == 'Clumsy':  # Very-low evasion, below-average speed
-            self.evad /= 1.3
-            self.spd /= 1.1
-        elif modifier == 'Powerful':  # High attack stats
-            self.attk *= 1.2
-            self.m_attk *= 1.2
-            self.p_attk *= 1.2
-        elif modifier == 'Ineffective':  # Low attack stats
-            self.attk /= 1.2
-            self.m_attk /= 1.2
-            self.p_attk /= 1.2
-        elif modifier == 'Armored':  # High defense stats
-            self.dfns *= 1.2
-            self.m_dfns *= 1.2
-            self.p_dfns *= 1.2
-        elif modifier == 'Broken':  # Low defense stats
-            self.dfns /= 1.2
-            self.m_dfns /= 1.2
-            self.p_dfns /= 1.2
-        elif modifier == 'Observant':  # High ranged stats
-            self.p_attk *= 1.2
-            self.p_dfns *= 1.2
-        elif modifier == 'Obtuse':  # Low ranged stats
-            self.p_attk /= 1.2
-            self.p_dfns /= 1.2
-        elif modifier == 'Strong':  # High melee stats
-            self.attk *= 1.2
-            self.dfns *= 1.2
-        elif modifier == 'Weak':  # Low melee stats
-            self.attk /= 1.2
-            self.dfns /= 1.2
-        elif modifier == 'Mystic':  # High magic stats
-            self.m_attk *= 1.2
-            self.m_dfns *= 1.2
-            self.mp *= 1.2
-        elif modifier == 'Foolish':  # Low magic stats
-            self.m_attk /= 1.2
-            self.m_dfns /= 1.2
-
-    def monster_class_stats(self):
-        # A list of monster-types and what AI they are to have
-        magic_enemies = ['Naiad', "Will-o'the-wisp", 'Anubis', 'Oread', 'Necromancer', 'Wraith',
-                         'Alicorn', 'Flying Serpent', 'Imp', 'Corrupt Thaumaturge', 'Spriggan']
-
-        melee_enemies = ['Shell Mimic', 'Giant Crab', 'Bog Slime', 'Mummy', 'Sand Golem',
-                         'Moss Ogre', 'Vine Lizard', 'Troll', 'Ghoul', 'Griffin', 'Tengu',
-                         'Giant Worm', 'Zombie', 'Arctic Wolf', 'Minor Yeti', 'Sludge Rat',
-                         'Sea Serpent', 'Beetle', 'Calculator', 'Harpy']
-
-        ranged_enemies = ['Fire Ant', 'Naga', 'Ice Soldier', 'Frost Bat', 'Bat',
-                          'Skeleton', 'Squid', 'Rock Giant', 'Undead Archer', 'Goblin Archer']
-
-        # Assign the correct AI and stats to each kind of monster
-        if self.name in magic_enemies:
-            self.battle_turn = self.magic_ai
-
-            self.mp *= 1.5
-            self.mp = math.ceil(self.mp)
-            self.max_mp = copy.copy(self.mp)
-
-            self.attk *= 0.5
-            self.attk = math.ceil(self.attk)
-
-            self.p_attk *= 0.5
-            self.p_attk = math.ceil(self.p_attk)
-
-            self.m_attk *= 1.5
-            self.m_attk = math.ceil(self.m_attk)
-
-            self.dfns *= 0.65
-            self.dfns = math.ceil(self.dfns)
-
-            self.p_dfns *= 0.65
-            self.p_dfns = math.ceil(self.p_dfns)
-
-            self.m_dfns *= 1.5
-            self.m_dfns = math.ceil(self.m_dfns)
-
-            self.class_ = 'mage'
-
-        elif self.name in melee_enemies:
-            self.battle_turn = self.melee_ai
-
-            self.hp *= 1.2
-            self.hp = math.ceil(self.hp)
-            self.max_hp = copy.copy(self.hp)
-
-            self.attk *= 1.5
-            self.attk = math.ceil(self.attk)
-
-            self.p_attk *= 0.5
-            self.p_attk = math.ceil(self.p_attk)
-
-            self.m_attk *= 0.5
-            self.m_attk = math.ceil(self.m_attk)
-
-            self.dfns *= 1.5
-            self.dfns = math.ceil(self.dfns)
-
-            self.p_dfns *= 1.5
-            self.p_dfns = math.ceil(self.p_dfns)
-
-            self.m_dfns *= 0.5
-            self.m_dfns = math.ceil(self.m_dfns)
-
-            self.spd *= 0.5
-            self.spd = math.ceil(self.spd)
-
-            self.class_ = 'warrior'
-
-        elif self.name in ranged_enemies:
-            self.battle_turn = self.ranged_ai
-
-            self.hp *= 0.9
-            self.hp = math.ceil(self.hp)
-            self.max_hp = copy.copy(self.hp)
-
-            self.attk *= 0.8
-            self.attk = math.ceil(self.attk)
-
-            self.p_attk *= 1.5
-            self.p_attk = math.ceil(self.p_attk)
-
-            self.m_attk *= 0.8
-            self.m_attk = math.ceil(self.m_attk)
-
-            self.dfns *= 0.8
-            self.dfns = math.ceil(self.dfns)
-
-            self.p_dfns *= 1.2
-            self.p_dfns = math.ceil(self.p_dfns)
-
-            self.spd *= 1.5
-            self.spd = math.ceil(self.spd)
-
-            self.evad *= 1.5
-            self.evad = math.ceil(self.evad)
-
-            self.class_ = 'ranger'
-        # Set stats for melee-class monsters
-
     def monster_difficulty(self):
         self.attk += self.attk*0.0005*main.party_info['dif']
         self.m_attk += self.m_attk*0.0005*main.party_info['dif']
@@ -1256,7 +1081,7 @@ class Monster(Unit):
         print(f"-{self.name}'s Turn-")
 
         if not self.ability_vars['knockout_turns']:
-            print(ascii_art.monster_art[self.m_name] % f"The {self.name} is making a move!\n")
+            print(ascii_art.monster_art[self.name] % f"The {self.name} is making a move!\n")
 
         else:
             print(f"The {self.name} is asleep!")
@@ -1313,7 +1138,42 @@ class Monster(Unit):
         if self.ability_vars['taunted'][0] == battle.turn_counter:
             self.m_target = self.ability_vars['taunted'][1]
 
-    def magic_ai(self):
+    def battle_turn(self):
+        pass
+
+
+# =========================== #
+#       MAGIC MONSTERS        #
+# =========================== #
+
+
+class MagicMonster(Monster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.class_multiplier = {'hp': 1,      # HP
+                                 'mp': 1.5,      # MP
+                                 'attk': 0.5,    # Physical Attack
+                                 'dfns': 0.65,    # Physical Defense
+                                 'p_attk': 0.5,  # Pierce Attack
+                                 'p_dfns': 0.65,  # Pierce Defense
+                                 'm_attk': 1.5,  # Magical Attack
+                                 'm_dfns': 1.5,  # Magical Defense
+                                 'spd': 1,     # Speed
+                                 'evad': 1}    # Evasion
+
+        self.species_multiplier = {'hp': 1,      # HP
+                                   'mp': 1,      # MP
+                                   'attk': 1,    # Physical Attack
+                                   'dfns': 1,    # Physical Defense
+                                   'p_attk': 1,  # Pierce Attack
+                                   'p_dfns': 1,  # Pierce Defense
+                                   'm_attk': 1,  # Magical Attack
+                                   'm_dfns': 1,  # Magical Defense
+                                   'spd': 1,     # Speed
+                                   'evad': 1}    # Evasion
+
+    def battle_turn(self):
         # 16.67% chance for the enemy to give a status ailment
         if not self.ability_vars['taunted'][0] == battle.turn_counter or 'silenced' in self.status_ail:
             if random.randint(0, 7) == 0 and self.mp >= self.max_mp*0.1:
@@ -1377,7 +1237,102 @@ class Monster(Unit):
             sounds.attack_miss.play()
             print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
-    def ranged_ai(self):
+    def apply_multipliers(self):
+        self.hp *= (self.class_multiplier['hp']*self.species_multiplier['hp'])
+        self.mp *= (self.class_multiplier['mp']*self.species_multiplier['mp'])
+        self.attk *= (self.class_multiplier['attk']*self.species_multiplier['attk'])
+        self.dfns *= (self.class_multiplier['dfns']*self.species_multiplier['dfns'])
+        self.p_attk *= (self.class_multiplier['p_attk']*self.species_multiplier['p_attk'])
+        self.p_dfns *= (self.class_multiplier['p_dfns']*self.species_multiplier['p_dfns'])
+        self.m_attk *= (self.class_multiplier['m_attk']*self.species_multiplier['m_attk'])
+        self.m_dfns *= (self.class_multiplier['m_dfns']*self.species_multiplier['m_dfns'])
+        self.spd *= (self.class_multiplier['spd']*self.species_multiplier['spd'])
+        self.evad *= (self.class_multiplier['evad']*self.species_multiplier['evad'])
+
+
+class Oread(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class Willothewisp(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    pass
+
+
+class Naiad(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class Necromancer(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class CorruptThaumaturge(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class Imp(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class Spriggan(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class Alicorn(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class Wyvern(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+class Ghoul(MagicMonster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+
+# =========================== #
+#       RANGED MONSTERS       #
+# =========================== #
+
+
+class RangedMonster(Monster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.class_multiplier = {'hp': 0.9,      # HP
+                                 'mp': 1,      # MP
+                                 'attk': 0.8,    # Physical Attack
+                                 'dfns': 0.8,    # Physical Defense
+                                 'p_attk': 1.5,  # Pierce Attack
+                                 'p_dfns': 1.2,  # Pierce Defense
+                                 'm_attk': 0.8,  # Magical Attack
+                                 'm_dfns': 1,  # Magical Defense
+                                 'spd': 1.5,     # Speed
+                                 'evad': 1.5}    # Evasion
+
+        self.species_multiplier = {'hp': 1,      # HP
+                                   'mp': 1,      # MP
+                                   'attk': 1,    # Physical Attack
+                                   'dfns': 1,    # Physical Defense
+                                   'p_attk': 1,  # Pierce Attack
+                                   'p_dfns': 1,  # Pierce Defense
+                                   'm_attk': 1,  # Magical Attack
+                                   'm_dfns': 1,  # Magical Defense
+                                   'spd': 1,     # Speed
+                                   'evad': 1}    # Evasion
+
+    def battle_turn(self):
         # At the moment, Ranged monsters are only capable of attacking
         print(f'The {self.name} {self.attk_msg} {self.m_target.name}!')
         sounds.aim_weapon.play()
@@ -1396,7 +1351,98 @@ class Monster(Unit):
             sounds.attack_miss.play()
             print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
-    def melee_ai(self):
+    def apply_multipliers(self):
+        self.hp *= (self.class_multiplier['hp']*self.species_multiplier['hp'])
+        self.mp *= (self.class_multiplier['mp']*self.species_multiplier['mp'])
+        self.attk *= (self.class_multiplier['attk']*self.species_multiplier['attk'])
+        self.dfns *= (self.class_multiplier['dfns']*self.species_multiplier['dfns'])
+        self.p_attk *= (self.class_multiplier['p_attk']*self.species_multiplier['p_attk'])
+        self.p_dfns *= (self.class_multiplier['p_dfns']*self.species_multiplier['p_dfns'])
+        self.m_attk *= (self.class_multiplier['m_attk']*self.species_multiplier['m_attk'])
+        self.m_dfns *= (self.class_multiplier['m_dfns']*self.species_multiplier['m_dfns'])
+        self.spd *= (self.class_multiplier['spd']*self.species_multiplier['spd'])
+        self.evad *= (self.class_multiplier['evad']*self.species_multiplier['evad'])
+
+
+class FireAnt(RangedMonster):
+    pass
+
+
+class Naga(RangedMonster):
+    pass
+
+
+class IceSoldier(RangedMonster):
+    pass
+
+
+class FrostBat(RangedMonster):
+    pass
+
+
+class SparkBat(RangedMonster):
+    pass
+
+
+class SkeletonBoneslinger(RangedMonster):
+    pass
+
+
+class UndeadCrossbowman(RangedMonster):
+    pass
+
+
+class RockGiant(RangedMonster):
+    pass
+
+
+class GoblinArcher(RangedMonster):
+    pass
+
+
+class Squid(RangedMonster):
+    pass
+
+
+class VineLizard(RangedMonster):
+    pass
+
+
+class Tengu(RangedMonster):
+    pass
+
+# =========================== #
+#       MELEE MONSTERS        #
+# =========================== #
+
+
+class MeleeMonster(Monster):
+    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.class_multiplier = {'hp': 1.2,      # HP
+                                 'mp': 1,      # MP
+                                 'attk': 1.5,    # Physical Attack
+                                 'dfns': 1.5,    # Physical Defense
+                                 'p_attk': 0.5,  # Pierce Attack
+                                 'p_dfns': 1.5,  # Pierce Defense
+                                 'm_attk': 0.5,  # Magical Attack
+                                 'm_dfns': 0.5,  # Magical Defense
+                                 'spd': 0.65,     # Speed
+                                 'evad': 1}    # Evasion
+
+        self.species_multiplier = {'hp': 1,      # HP
+                                   'mp': 1,      # MP
+                                   'attk': 1,    # Physical Attack
+                                   'dfns': 1,    # Physical Defense
+                                   'p_attk': 1,  # Pierce Attack
+                                   'p_dfns': 1,  # Pierce Defense
+                                   'm_attk': 1,  # Magical Attack
+                                   'm_dfns': 1,  # Magical Defense
+                                   'spd': 1,     # Speed
+                                   'evad': 1}    # Evasion
+
+    def battle_turn(self):
         # Melee monsters have a 1 in 6 (16.667%) chance to defend
         if random.randint(0, 5) == 0 and not self.is_defending \
                 and not self.ability_vars['taunted'][0] == battle.turn_counter:
@@ -1436,12 +1482,104 @@ class Monster(Unit):
                 sounds.attack_miss.play()
                 print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
+    def apply_multipliers(self):
+        self.hp *= (self.class_multiplier['hp']*self.species_multiplier['hp'])
+        self.mp *= (self.class_multiplier['mp']*self.species_multiplier['mp'])
+        self.attk *= (self.class_multiplier['attk']*self.species_multiplier['attk'])
+        self.dfns *= (self.class_multiplier['dfns']*self.species_multiplier['dfns'])
+        self.p_attk *= (self.class_multiplier['p_attk']*self.species_multiplier['p_attk'])
+        self.p_dfns *= (self.class_multiplier['p_dfns']*self.species_multiplier['p_dfns'])
+        self.m_attk *= (self.class_multiplier['m_attk']*self.species_multiplier['m_attk'])
+        self.m_dfns *= (self.class_multiplier['m_dfns']*self.species_multiplier['m_dfns'])
+        self.spd *= (self.class_multiplier['spd']*self.species_multiplier['spd'])
+        self.evad *= (self.class_multiplier['evad']*self.species_multiplier['evad'])
+
+
+class GiantCrab(MeleeMonster):
+    pass
+
+
+class BogSlime(MeleeMonster):
+    pass
+
+
+class Mummy(MeleeMonster):
+    pass
+
+
+class SandGolem(MeleeMonster):
+    pass
+
+
+class MossOgre(MeleeMonster):
+    pass
+
+
+class Troll(MeleeMonster):
+    pass
+
+
+class Griffin(MeleeMonster):
+    pass
+
+
+class GiantWorm(MeleeMonster):
+    pass
+
+
+class Zombie(MeleeMonster):
+    pass
+
+
+class SnowWolf(MeleeMonster):
+    pass
+
+
+class LesserYeti(MeleeMonster):
+    pass
+
+
+class SludgeRat(MeleeMonster):
+    pass
+
+
+class SeaSerpent(MeleeMonster):
+    pass
+
+
+class Beetle(MeleeMonster):
+    pass
+
+
+class Harpy(MeleeMonster):
+    pass
+
+
+class Calculator(MeleeMonster):
+    pass
+
+
+class FallenKnight(MeleeMonster):
+    pass
+
+
+animal_group = [FireAnt, FrostBat, SparkBat, SludgeRat, Squid, GiantCrab, SnowWolf, Beetle, VineLizard, GiantWorm]
+
+monster_group = [Willothewisp, Naiad, Imp, Spriggan, Alicorn, Wyvern, BogSlime, SandGolem, Griffin, Harpy, SeaSerpent,
+                 Naga]
+
+humanoid_group = [Troll, MossOgre, LesserYeti, RockGiant, GoblinArcher, Oread, Tengu]
+
+undead_group = [Zombie, UndeadCrossbowman, Ghoul, Mummy, SkeletonBoneslinger]
+
+dungeon_group = [Calculator, Necromancer, CorruptThaumaturge, IceSoldier, FallenKnight]
+
 
 class Boss(Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                  lvl, b_items, gold, experience, attk_msg, boss_id, active=True, off_element='neutral',
                  def_element='neutral', lackies=None):
-        Monster.__init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
         self.off_element = off_element
         self.def_element = def_element
@@ -1452,7 +1590,6 @@ class Boss(Monster):
         self.gold = gold
         self.attk_msg = attk_msg
         self.lackies = lackies
-        self.m_name = copy.copy(self.name)
         self.boss_id = boss_id
 
     def max_stats(self):
@@ -1479,40 +1616,57 @@ class Boss(Monster):
 # =========================== #
 
 # == MASTER SLIME == #
-def master_slime_ud():
-    dialogue.alfred_quest_a.finished = True
-    dialogue.alfred_convo_b.active = False
-    dialogue.alfred_convo_c.active = True
+class MasterSlimeBoss(Boss):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                 lvl, b_items, gold, experience, attk_msg, boss_id, active=True, off_element='neutral',
+                 def_element='neutral', lackies=None):
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                         lvl, b_items, gold, experience, attk_msg, boss_id, active, off_element,
+                         def_element, lackies)
+
+        self.battle_turn = MeleeMonster.battle_turn
+
+    def upon_defeating(self):
+        dialogue.alfred_quest_a.finished = True
+        dialogue.alfred_convo_b.active = False
+        dialogue.alfred_convo_c.active = True
 
 
-master_slime = Boss('Master Slime',
-                    35, 5,   # 35 HP and 5 MP
-                    15, 10,  # 12 Attack, 5 Defense
-                    6, 10,   # 6 Pierce Attack, 5 Pierce Defense
-                    8, 0,    # 8 Magical Attack, 0 Magical Defense
-                    6, 6,    # 6 Speed, 6 Evasion
-                    3,       # Level 3
-                    ["s_vial", "s_vial", "s_vial"],  # Drops 3 slime vials
-                    25, 25,  # Gives 25 XP and 25 GP
-                    "jiggles ferociously and begins to attack", "master_slime",
-                    active=False)
+master_slime = MasterSlimeBoss('Master Slime',
+                               35, 5,   # 35 HP and 5 MP
+                               15, 10,  # 12 Attack, 5 Defense
+                               6, 10,   # 6 Pierce Attack, 5 Pierce Defense
+                               8, 0,    # 8 Magical Attack, 0 Magical Defense
+                               6, 6,    # 6 Speed, 6 Evasion
+                               3,       # Level 3
+                               ["s_vial", "s_vial", "s_vial"],  # Drops 3 slime vials
+                               25, 25,  # Gives 25 XP and 25 GP
+                               "jiggles ferociously and begins to attack", "master_slime",
+                               active=False)
 
-master_slime.battle_turn = master_slime.melee_ai
-master_slime.upon_defeating = master_slime_ud
 
 # == GOBLIN CHIEFTAIN == #
-goblin_chieftain = Boss('Goblin Chieftain',
-                        50, 10,  # 50 HP and 10 MP
-                        20, 20,  # 20 Attack, 20 Defense
-                        12, 15,  # 12 Pierce Attack, 15 Pierce Defense
-                        8, 12,   # 8 Magical Attack, 12 Magical Defense
-                        15, 7,   # 15 Speed, 7 Evasion
-                        5,       # Level 5
-                        [],      # Drops no items
-                        45, 45,  # Gives 45 XP and 45 GP
-                        "readies his great spear and begins to stab", "goblin_cheiftain")
+class GoblinChieftainBoss(Boss):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                 lvl, b_items, gold, experience, attk_msg, boss_id, active=True, off_element='neutral',
+                 def_element='neutral', lackies=None):
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                         lvl, b_items, gold, experience, attk_msg, boss_id, active, off_element,
+                         def_element, lackies)
 
-goblin_chieftain.battle_turn = goblin_chieftain.melee_ai
+        self.battle_turn = MeleeMonster.battle_turn
+
+
+goblin_chieftain = GoblinChieftainBoss('Goblin Chieftain',
+                                       50, 10,  # 50 HP and 10 MP
+                                       20, 20,  # 20 Attack, 20 Defense
+                                       12, 15,  # 12 Pierce Attack, 15 Pierce Defense
+                                       8, 12,   # 8 Magical Attack, 12 Magical Defense
+                                       15, 7,   # 15 Speed, 7 Evasion
+                                       5,       # Level 5
+                                       [],      # Drops no items
+                                       45, 45,  # Gives 45 XP and 45 GP
+                                       "readies his great spear and begins to stab", "goblin_cheiftain")
 
 
 # == MENACING PHANTOM == #
@@ -1534,7 +1688,7 @@ menacing_phantom = Boss('Menacing Phantom',
                         "calls upon its ethereal power and casts a hex on", "menacing_phantom",
                         off_element='dark', def_element='dark', active=False)
 
-menacing_phantom.battle_turn = menacing_phantom.magic_ai
+menacing_phantom.battle_turn = MagicMonster.battle_turn
 menacing_phantom.upon_defeating = menacphan_ud
 
 
@@ -1559,7 +1713,7 @@ terr_tarant = Boss('Terrible Tarantuloid',
                    150, 150,  # Gives 150 XP and 150 GP
                    "readies its venomous fangs and bites", "terrible_tarantuloid")
 
-terr_tarant.battle_turn = terr_tarant.melee_ai
+terr_tarant.battle_turn = MeleeMonster.battle_turn
 terr_tarant.upon_defeating = terrtar_ud
 
 
@@ -1581,7 +1735,7 @@ cursed_spectre = Boss('Cursed Spectre',
                       "calls upon its ethereal power and casts a hex on", "cursed_spectre",
                       off_element='dark', def_element='dark', active=False)
 
-cursed_spectre.battle_turn = cursed_spectre.magic_ai
+cursed_spectre.battle_turn = MagicMonster.battle_turn
 cursed_spectre.upon_defeating = cursed_spectre_ud
 
 # == GIANT ENT == #
@@ -1597,7 +1751,7 @@ giant_ent = Boss('Giant Ent',
                  "slowly lumbers over and whacks", "giant_ent",
                  off_element='grass', def_element='grass', active=True)
 
-giant_ent.battle_turn = giant_ent.melee_ai
+giant_ent.battle_turn = MeleeMonster.battle_turn
 
 boss_list = [goblin_chieftain, master_slime, menacing_phantom, terr_tarant, cursed_spectre, giant_ent]
 defeated_bosses = []  # Make sure you can only defeat the boss one time
@@ -1859,8 +2013,7 @@ def spawn_monster():
         globals()[unit_object] = Monster('', 10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
         globals()[unit_object].monster_generation()
         globals()[unit_object].monster_level()
-        globals()[unit_object].monster_class_stats()
-        globals()[unit_object].monster_modifiers()
+        globals()[unit_object].apply_modifiers()
         globals()[unit_object].monster_fix_stats()
 
 
@@ -2040,3 +2193,14 @@ chyme = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 monster = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 monster_2 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 monster_3 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+for subclass in Monster.__subclasses__():
+    if subclass == Boss:
+        continue
+
+    for subsubclass in subclass.__subclasses__():
+        if not any([subsubclass in animal_group,
+                    subsubclass in monster_group,
+                    subsubclass in undead_group,
+                    subsubclass in dungeon_group]):
+            print(f'{subsubclass.__name__} is not in a spawngroup!')

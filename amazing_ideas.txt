@@ -19,9 +19,6 @@ PEASANT-RPG GOALS
 
 [x] Rework magic so that it doesn't always go first in battle. This would be a much-needed nerf to mages.
 
-[x] Create a `colorize()` function using colorama
-	[x] instead of `Fore.RED + 'string' + Fore.RESET`, use `colorize(string, 'red')`
-
 [x] Rework Conversations and Quests to be cleaner and more functional
 
 [x] Fix the drop system at the end of battle to work better with the multi-monster battle system.
@@ -43,13 +40,6 @@ PEASANT-RPG GOALS
 [x] Fix resting - at the moment I'm pretty sure it doesn't even heal you
 
 [x] Automatic attack redirection if target unit dies before attack goes off
-
-[x] Clean up the coordinate inventory system
-
-[x] Make tiles have set coordinates
-	[x] Yes, I know this is sort of a step backwards, but there are just too many issues with the current system:
-		[x] There's a bug where sometimes (and I don't know why, how, or when) the coordiantes just get messed up. And even if that was fixed...
-		[x] If someone manually edits their coordiantes then their coordinates have like a 0% chance of ever being fixed
 		
 [x] Revamp the inventory to show one instance of each item, with quantity to the right
 
@@ -57,134 +47,50 @@ PEASANT-RPG GOALS
 
 [x] Support for multiple status effects, including mundane things like "Alive" or "Disarmed"
 
-[ ] Redo all item descriptions to be multi-line
+[x] Redo all item descriptions to be multi-line
 
-[ ] Fix the tool items:
-	[x] Fix the shovel
-	[x] Make the Divining Rod tell whether or not there are any gems near the player.
-	[ ] Fix the fast travel boots
-	[x] Remove the compass
-	[ ] Add new item: Monster Encyclopedia - Identical to the Rangers' old "Scout" ability, without the crit bonus.
-		Can only be used during battle.
-		
-[ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.
-
-[ ] Completely rework the world and the plot
-	[ ] Redo the world:
-		[ ] The whole "nation divided into regions, each comprised of a single biome" thing is really stupid. 
-			Instead, the world should be more natural, with caves and mountain ranges spread all across instead
-			of only in a single region.
-		[ ] Make the game world WAY smaller. There's simply not enough content that you can squeeze into a massive 60,000-tile game using
-			only text.
-		[ ] "Illusory Forest" - An expy of Zelda's Lost Woods, but with the SWENSEN mechanic from RuneScape
-		[ ] "The Overshire Graveyard" - A port of the graveyard from the coordinate-based Pythonius, this one could have some 
-			really cool features in it thanks to the new system
-		[ ] Caves
-			[ ] Would have their own unique enemies and music. 
-			[ ] The first cave (Barrier Cave) would separate the Central Forest from the rest of the continent, making entering it required to 
-				progress in the game.
-				[ ] Would function as a sort of  "natural barrier", or a "beef-gate", with higher-level enemies in it that disuade the player from 
-					entering before they are ready
-		[ ] Add a couple dozen houses and chests.
-		[ ] Rename a couple of the goofier towns and npcs
-		[ ] Personally, I think that the world would be better suited as an large nation-continent/island surrounded by
-			ocean on a planet called Arcadia, instead of a single nation in a continent on earth. It's really weird for a country to have
-			deserts, tundra, mountains, forests, etc... while simultaneously being just south of the equator and surrounded by other countries
-			with much more normal geography. 
-		[ ] The regions should be renamed (again...) to be more province-like
-		[ ] Thex is now a Harconian province instead of a separate nation
-		[ ] Retcon the whole "democratically elected leader" thing. It sounds good and is a good way to make your country likable but I feel
-			it's harder to work with in a fantasy setting without a concept of heirs and inheritence.
-		[ ] 12 Provinces:
-			[ ] Overshire
-			[ ] Celemia
-			[ ] Parriway
-			[ ] Thex
-			[ ] Camberlite
-			[ ] Kohrin
-			[ ] Pelamora
-			[ ] Flute
-			[ ] Deltora
-			[ ] Downpour
-			[ ] Chin'tor
-			[ ] Whitlock
-			
-	[ ] Redo the plot:
-		[ ] Beginning your adventure:
-			"""[Name] wakes up under a tree, a tree they fall to sleep under every night.
-			    They stare in awe at the beautiful scenery, despite having seen it every 
-			    day of their life. [Name] has lived in the island-nation of Harconia their
-			    entire life, as has every other inhabitant of the island. The oceans of 
-			    Arcadia are much too trecherous to navigate, and nobody has survived more 
-			    than a few minutes sailing across it. Despite having the entire island of
-				Harconia to explore, [Name] has never explored more than a few miles from
-				this tree. But today is different. [Name] feels like going on an adventure.
-				And so the adventure began."""
-				
-			[ ] Alternatively:
-				"""[Name] awakes under a tree in the Central Forest, a small forested area
-				in the province of Parriwey. Parriwey is just one of a dozen provinces in the
-				Island-Nation of Harconia, a large island that may be the only continent 
-				the world of Arcadia has to offer. Or perhaps there is more, no one knows.
-				The Arcadian oceans are much too dangerous to check. "Why are the oceans so
-				trecherous?" [Name] wonders. Sitting under this tree certainly isn't going to
-				give [Name] any answers. And so they set off on their adventure."""
-			 
-		[ ] Since the game takes place in a world where the oceans are FAR too trecherous to possibly explore, no other continents or islands
-			are known to exist. Because of this, the first people that somehow made it to Harconia and discovered it are known as the "Forefathers",
-			and the unknown place they came from is called "The Far-off Land".
-		[ ] The war with Thex is now a civil war (as Thex is now a Harconian Province instead of a separate country)
-		[ ] BIG TWIST: The princess isn't alive anymore. In fact, she's never been alive - King Harconius II has no heir. Princess Celeste
-			and her supposed death is simply a coverup to justify starting a civil war with Thex. King Harconius II is extremely paranoid - his wife
-			is pregnant with his daughter (to be named Celeste) and the King fears that Thex is plotting to assassinate him and his wife in
-			an attempt to ursurp the throne. In addition, the King was the one that put up the barrier around Thex, again, because he was paranoid.
-		[ ] When you discover this fact and confront the King about it, he denies it. When he sees you aren't falling for his lies, he orders his
-			Royal Guard to kill you. These guards, of course, were unaware of the King's trechery and viewed your party as heroes, and refuse to 
-			attack you. The King realizes he has to take matters into his own hands, casting lightning magic to kill his guards, and then finally
-			turning to you. The King turns to your party and the final boss battle begins.
-		[ ] Killing the King reveals that the Royal Family's Lightning/Storm magic has unknowingly caused the extremely dangerous and unnavigable oceans.
-			When he dies, his scepter falls to the floor, shattering into pieces. The castle begins crumbling, and after escaping along with everyone inside,
-			it is revealed that the a new era of exploration and prosperity begin.
-		[ ] Every few turns during the final boss, it will say "The 1st/2nd/3rd...etc part of the prophecy has been fulfilled in a far off land"
-
-[ ] Make it so Potions can be used on allies, and make items wait until the user's turn to actually go off
-		
-[ ] Add a second Accessory slot, called an "Action Slot"
-
-[ ] Alchemy
-	[ ] Buy an "Pocket Alchemy Lab" and use it to bring up the Alchemy menu
-	[ ] In this menu, all items in your inventory tagged as alchemy ingredients (i.e. miscellaneous items dropped by enemies)
+[x] Alchemy
+	[x] Buy an "Pocket Alchemy Lab" and use it to bring up the Alchemy menu
+	[x] In this menu, all items in your inventory tagged as alchemy ingredients (i.e. miscellaneous items dropped by enemies)
 	    will show up. Select any three of them to make a potion. 
-	[ ] Each ingredient has a specific "flavor", meaning that it can be used to make a certain kind of potion.
+	[x] Each ingredient has a specific "flavor", meaning that it can be used to make a certain kind of potion.
 	    When you select your ingredients, the game uses RNG to determine what kind of potion it should be.
 		Use three ingredients each with different flavors, and there's a 33.33% chance for the potion to end up as each flavor.
 		Use two ingredients of the same flavor, and one of a different flavor, and there's a 66.67% and 33.33% chance respectively.
 		etc.
-	[ ] These potions can be used to do various things. Some of them are mundane, doing things as simple as curing status ailments
+	[x] These potions can be used to do various things. Some of them are mundane, doing things as simple as curing status ailments
 		restoring HP/MP, or increasing stats in-battle. But others have cooler effects, such as allowing you to rename your character,
 		and enabling you to re-pick your class. 
+		
+[ ] Fix the tool items:
+	[x] Fix the shovel
+	[x] Fix the fast travel boots
+	[x] Remove the Divining Rod
+	[x] Remove the compass
+	[ ] Add new item: Monster Encyclopedia - Identical to the Rangers' old "Scout" ability, without the crit bonus.
+		Can only be used during battle.
+
+[ ] Randomly Generated Dungeons
+	[ ] Dungeons would be randomized mazes that are generated upon first entering them.
+	[ ] Each province would have one dungeon that can be entered at any time.
+	[ ] The dungeons are completely optional to beating the game and finishing every quest, 
+		although there will be a stat called "unique dungeons completed" that would probably have to be maxed out to be considered 100% completion
+	[ ] Each floor of the dungeon will have one item, randomized from a list of dungeon-exclusive items (as well as gold and alchemy ingredients)
+	[ ] Each floor will have one mini-boss, who upon killing will drop a key that lets you unlock the door to the next floor
+	[ ] The final floor will have a true boss that is much stronger than the minibosses and will unlock a stairway to the entrance when defeated.
+	[ ] If the player tries to enter the dungeon after completing it, then 
 	
-[ ] Try to rework quests:
-	[ ] Quests should have a dictionary full of flags that have to be set to true for the quest to progress.
-	    [ ] Make a function that automatically changes each NPCs available dialogue depending on the flags.
-		[ ] Each conversation would have a set of required flags. 
+[ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.
+
+[ ] Make it so Potions can be used on allies
+		
+[ ] Add a second Accessory slot, called an "Action Slot" 
 		
 [ ] Fix all of the quests that have been broken due to all the above changes
 		
 [ ] Rewrite the credits, lore, and backstory
 
 [ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.
-
-[ ] Make the party members less important (less dialogue, no quests attached to them)
-
-[ ] Before v1.0.0 is released, the game NEEDS at least this:
-	[ ] Every boss currently programmed placed somewhere on the map
-	[ ] At least 3 main-storyline quests
-	[ ] At least 3 sidequests
-	[ ] At LEAST 7-8 towns placed somewhere on the map
-	[ ] At LEAST all of the Central Forest tiles programmed, as well as possibly a bit of the shore at the edge of the
-		Central Forest and maybe all of Barrier Cave
-	[ ] At LEAST 3 party members obtainable
 		
 	
 -- 1.1 update plans -- 

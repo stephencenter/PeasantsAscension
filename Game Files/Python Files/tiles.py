@@ -295,23 +295,30 @@ class Cell:
 
 
 class RandomizedDungeon:
-    def __init__(self, name, desc, biome, m_level, x_cap, y_cap, cell_id):
+    def __init__(self, name, desc, biome, m_level, x_cap, y_cap, num_floors, cell_id):
         self.name = name
         self.desc = desc
         self.biome = biome
         self.m_level = m_level
         self.x_cap = x_cap
         self.y_cap = y_cap
+        self.num_floors = num_floors
         self.cell_id = cell_id
 
         self.generate_dungeon()
 
     def generate_dungeon(self):
+        # This is an algorithm that is used to generate random mazes, called "dungeons".
+        # First, generate a base tile at coordinates 0, 0, and add it to the list of tiles
         self.primary_tile = DungeonTile(f"Inside {self.name}", f"{self.cell_id}1", self.desc, 0, 0, 0)
         self.tiles = [self.primary_tile]
 
+        # Set this tile as the "current tile"
         c_tile = self.primary_tile
         while True:
+            # Randomly choose a direction to create a tile in. If there is already a tile in that spot,
+            # checked using the tile_exists() method, or if that spot would be outside the maze boundaries,
+            # then choose a different direction.
             direction = random.choice(["up", "left", "right", "down"])
 
             if direction == "up" and \
@@ -364,15 +371,22 @@ class RandomizedDungeon:
                 c_tile = new_tile
 
             else:
+                # If all directions are either out of bounds or have a tile located there already, then the algorithm
+                # has reached a 'dead-end'. We mark the tile as a dead end, because dead ends are where items and
+                # bosses can be found.
                 if not self.has_free_adjacent_space(c_tile.x, c_tile.y):
                     c_tile.deadend = True
 
                     for n_tile in self.tiles:
+                        # If the algorithm reaches a dead end, then it will search through the list of tiles
+                        # until it finds one that has an available space next to it.
                         if self.has_free_adjacent_space(n_tile.x, n_tile.y):
                             c_tile = n_tile
 
                             break
 
+                    # If no tile can be found with a free adjacent space next to it, then the maze generation is
+                    # complete. 
                     else:
                         return
 
@@ -709,7 +723,7 @@ class SardoothCell(Cell):
 sardooth_cell = SardoothCell("Sardooth", "forest", (7, 10), 2, "sardooth_cell")
 
 labyrinth_of_secrets = RandomizedDungeon("The Labyrinth of Unfathomable Secrets", "", "forest",
-                                         (1, 3), 5, 5, "secret_labyrinth")
+                                         (1, 3), 5, 5, 3, "secret_labyrinth")
 
 overshire_province = Province("Overshire", [nearton_cell,
                                             southford_cell,

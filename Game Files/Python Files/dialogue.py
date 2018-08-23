@@ -40,7 +40,7 @@ class Conversation:
 
 class Quest(Conversation):
     def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        Conversation.__init__(self, dialogue, conv_id, active)
+        super().__init__(dialogue, conv_id, active)
         self.name = name  # The name of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
         self.reward = reward  # A list [experience, gold] of your reward for the quest

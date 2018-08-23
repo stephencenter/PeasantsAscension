@@ -57,7 +57,7 @@ class Spell:
 class Healing(Spell):
     # Healing spells are spells that restore your HP during battle
     def __init__(self, name, desc, mana, req_lvl, health, thresh, class_, spell_id):
-        Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
+        super().__init__(name, desc, mana, req_lvl, class_, spell_id)
         self.health = health
         self.thresh = thresh
 
@@ -110,7 +110,7 @@ class Damaging(Spell):
     # Just like normal attacks, they have a chance to miss based on
     # the enemy's evade stat.
     def __init__(self, name, desc, mana, req_lvl, damage, off_element, class_, spell_id):
-        Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
+        super().__init__(name, desc, mana, req_lvl, class_, spell_id)
         self.damage = damage
         self.off_element = off_element
 
@@ -140,7 +140,7 @@ class Buff(Spell):
     # Buffs are spells that temporarily raise the player's stats during battle. They last until the battle
     # is over, at which point the player's stats will return to normal.
     def __init__(self, name, desc, mana, req_lvl, increase, stat, class_, spell_id):
-        Spell.__init__(self, name, desc, mana, req_lvl, class_, spell_id)
+        super().__init__(name, desc, mana, req_lvl, class_, spell_id)
         self.increase = increase
         self.stat = stat
 
