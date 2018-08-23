@@ -1649,50 +1649,6 @@ More like Algebra that sucks amiright? Could have useful alchemical
 applications. Has a "Mathematical" alchemical flavor. Combine with two other 
 ingredients in a Pocket Alchemy Lab to make a potion.""", 25, "mathematical", "textbook")
 
-# Each monster can drop two different items, with the exception of the Calculator which is an easter egg monster
-monster_drop_list = {'Shell Mimic': [shell_fragment, water_vial],
-                     'Giant Crab': [crab_claw, shell_fragment],
-                     'Naiad': [fairy_dust, water_vial],
-                     'Squid': [ink_sack, slime_vial],
-                     'Bog Slime': [slime_vial, water_vial],
-                     'Moss Ogre': [bone_bag, ripped_cloth],
-                     'Sludge Rat': [monster_skull, rodent_tail],
-                     'Spriggan': [living_bark, fairy_dust],
-                     'Vine Lizard': [serpent_scale, living_bark],
-                     'Goblin Archer': [ripped_cloth, eye_balls],
-                     'Beetle': [beetle_shell, antennae],
-                     'Corrupt Thaumaturge': [ripped_cloth, mysterious_runes],
-                     'Minor Yeti': [animal_fur, monster_fang],
-                     'Fire Ant': [antennae, burnt_ash],
-                     'Necromancer': [ripped_cloth, demonic_essence],
-                     'Wraith': [ectoplasm, demonic_essence],
-                     'Ghoul': [ectoplasm, demonic_essence],
-                     "Will-o'-the-wisp": [fairy_dust, burnt_ash],
-                     'Imp': [wing_piece, fairy_dust],
-                     'Bat': [monster_fang, wing_piece],
-                     'Skeleton': [bone_bag, demonic_essence],
-                     'Undead Archer': [chain_link, bone_bag],
-                     'Frost Bat': [monster_fang, wing_piece],
-                     'Alicorn': [unicorn_horn, angelic_essence],
-                     'Mummy': [burnt_ash, ripped_cloth],
-                     'Giant Worm': [monster_fang, slime_vial],
-                     'Griffin': [animal_fur, wing_piece],
-                     'Anubis': [animal_fur, burnt_ash],
-                     'Sea Serpent': [serpent_scale, serpent_tongue],
-                     'Flying Serpent': [serpent_scale, serpent_tongue],
-                     'Harpy': [wing_piece, feathers],
-                     'Troll': [monster_skull, eye_balls],
-                     'Sand Golem': [golem_rock, broken_crystal],
-                     'Naga': [serpent_scale, eye_balls],
-                     'Rock Giant': [golem_rock, broken_crystal],
-                     'Ice Soldier': [chain_link, blood_vial],
-                     'Arctic Wolf': [animal_fur, monster_fang],
-                     'Oread': [fairy_dust, eye_balls],
-                     'Tengu': [wing_piece, feathers],
-                     'Zombie': [monster_skull, blood_vial],
-                     'Calculator': [calculus_homework, graph_paper, protractor, ruler, textbook]
-                     }
-
 # A list of all ingredients, used to power the ingredient_bomb() cheat. Doesn't include the Mathematical potions.
 ingredient_list = [
     shell_fragment, crab_claw, fairy_dust, serpent_scale, ink_sack, bone_bag, monster_skull, living_bark,

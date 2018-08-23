@@ -50,8 +50,7 @@ battle_options = """Pick {0}'s Move:
 
 
 class Unit:
-    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad):
-        self.name = name          # Name
+    def __init__(self, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad):
         self.hp = hp              # Health
         self.mp = mp              # Mana Points
         self.attk = attk          # Physical Attack
@@ -68,15 +67,18 @@ class Unit:
         self.max_hp = copy.copy(self.hp)
         self.max_mp = copy.copy(self.mp)
 
+        self.name = ''
+        self.off_element = 'neutral'  # PCU's Element
+        self.def_element = 'neutral'  # PCU's Element
+
 
 class PlayableCharacter(Unit):
     # A class for characters whose main.s_input can be directly controlled by the player
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad, class_='', enabled=True):
-        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
+        super().__init__(hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
+        self.name = name
         self.class_ = class_          # PCU's Class
-        self.off_element = 'neutral'  # PCU's Element
-        self.def_element = 'neutral'  # PCU's Element
         self.enabled = enabled        # Whether the PCU has been recruited or not
         self.exp = 0                  # Experience
         self.req_xp = 3               # Required XP to level up
@@ -84,7 +86,7 @@ class PlayableCharacter(Unit):
         self.ap = 10                  # The number of "Action Points" that the user has remaining
         self.max_ap = 10              # The number of maximum Action Points the user can have at one time
 
-        self.target = Monster('', '', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
+        self.target = Monster('', '', '', '', '', '', '', '', '', '')  # The target of the PCU's current action
         self.c_ability = abilities.Ability('', '', '')  # The ability that the PCU is currently casting
         self.c_spell = magic.Spell('', '', '', '', '', '')  # The spell that the PCU is currently casting
 
@@ -896,19 +898,18 @@ Difficulty: {main.party_info['dif']}""")
 class Monster(Unit):
     # All monsters use this class. Bosses use a sub-class called "Boss" which inherits from this.
 
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
         self.status = ''  # The status effect that will be applied to the player if RNGsus wills it
         self.is_poisoned = False
         self.is_defending = False
         self.class_ = None
 
-        self.off_element = 'neutral'
-        self.def_element = 'neutral'
-
         self.gold = 0
         self.experience = 0
         self.items = []
+        self.drop_list = []
+        self.attk_msg = "attacks"
 
         # This dictionary contains numerous variables that interact with abilties in battle
         self.ability_vars = {
@@ -945,95 +946,9 @@ class Monster(Unit):
 
         self.mp -= self.max_mp*0.1
 
-    def monster_generation(self):
-        m_type = {'forest': ['Goblin Archer', 'Spriggan', 'Imp', 'Bat', 'Beetle'],
-
-                  'shore': ['Shell Mimic', 'Giant Crab', 'Naiad', 'Sea Serpent', 'Squid'],
-
-                  'tundra': ['Ice Soldier', 'Minor Yeti', 'Corrupt Thaumaturge', 'Arctic Wolf', 'Frost Bat'],
-
-                  'swamp': ['Bog Slime', 'Moss Ogre', "Will-o'-the-wisp", 'Vine Lizard', 'Sludge Rat'],
-
-                  'desert': ['Mummy', 'Sand Golem', 'Anubis', 'Fire Ant', 'Naga'],
-
-                  'mountain': ['Troll', 'Rock Giant', 'Oread', 'Tengu', 'Giant Worm'],
-
-                  'graveyard': ['Zombie', 'Undead Archer', 'Necromancer', 'Skeleton', 'Ghoul'],
-
-                  'sky': ['Alicorn', 'Griffin', 'Wraith', 'Harpy', 'Flying Serpent']
-                  }
-
-        if player.name.lower() in main.friend_names:
-            m_type['forest'].append("Calculator")
-
-        self.name = random.choice(m_type[main.party_info['biome']])
-
-        # Set the flavor text to match the attack style of various monsters
-        biting_monsters = ['Vine Lizard', 'Beetle', 'Zombie', 'Ghoul', 'Arctic Wolf', 'Sea Serpent', 'Shell Mimic']
-        charging_monsters = ['Giant Worm', 'Bog Slime']
-        slashing_monsters = ['Griffin', 'Tengu', 'Harpy', 'Sludge Rat', 'Giant Crab']
-        whacking_monsters = ['Troll', 'Rock Giant']
-        spitting_monsters = ['Frost Bat', 'Squid', 'Fire Ant', 'Bat']
-        arrow_monsters = ['Naga', 'Ice Soldier', 'Undead Archer', 'Goblin Archer', 'Skeleton']
-        fist_monsters = ['Moss Ogre', 'Minor Yeti', 'Sand Golem', 'Mummy']
-        magic_monsters = ['Imp', 'Naiad', "Will-o'the-wisp", 'Anubis', 'Oread', 'Necromancer', 'Wraith', 'Alicorn',
-                          'Flying Serpent', 'Corrupt Thaumaturge', 'Spriggan']
-        math_monsters = ['Calculator']
-
-        if self.name in biting_monsters:
-            self.attk_msg = "bears its fangs and tries to bite"
-        elif self.name in charging_monsters:
-            self.attk_msg = "puts all its weight into trying to charge"
-        elif self.name in slashing_monsters:
-            self.attk_msg = "reveals its claws and prepares to slash"
-        elif self.name in whacking_monsters:
-            self.attk_msg = "finds a nearby rock and prepares to use it to beat"
-        elif self.name in spitting_monsters:
-            self.attk_msg = "begins to spit a dangerous projectile at"
-        elif self.name in arrow_monsters:
-            self.attk_msg = "readies its bow to fire a volley of arrows at"
-        elif self.name in fist_monsters:
-            self.attk_msg = "prepares its fists to smash"
-        elif self.name in magic_monsters:
-            self.attk_msg = "draws from its magical essence to destroy"
-        elif self.name in math_monsters:
-            self.attk_msg = "begins calculating the hell out of"
-
-        if main.party_info['biome'] == 'forest':
-            self.def_element = 'electric'
-            self.off_element = 'electric'
-
-        elif main.party_info['biome'] == 'tundra':
-            self.def_element = 'ice'
-            self.off_element = 'ice'
-
-        elif main.party_info['biome'] == 'desert':
-            self.def_element = 'fire'
-            self.off_element = 'fire'
-
-        elif main.party_info['biome'] == 'mountain':
-            self.def_element = 'earth'
-            self.off_element = 'earth'
-
-        elif main.party_info['biome'] == 'shore':
-            self.def_element = 'water'
-            self.off_element = 'water'
-
-        elif main.party_info['biome'] == 'swamp':
-            self.def_element = 'grass'
-            self.off_element = 'grass'
-
-        elif main.party_info['biome'] == 'graveyard':
-            self.def_element = 'death'
-            self.off_element = 'death'
-
-        elif main.party_info['biome'] == 'sky':
-            self.def_element = 'wind'
-            self.off_element = 'wind'
-
-        # Give the monster a set of items to drop if RNGsus wills it
+    def get_drops(self):
         if random.randint(0, 4) == 0:  # 20% chance
-            self.items = [random.choice(items.monster_drop_list[self.name]).item_id]
+            self.items = [random.choice(self.drop_list).item_id]
 
     def monster_level(self):
         minlvl, maxlvl = tiles.find_cell_with_tile_id(main.party_info['current_tile'].tile_id).m_level
@@ -1148,8 +1063,8 @@ class Monster(Unit):
 
 
 class MagicMonster(Monster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
         self.class_multiplier = {'hp': 1,      # HP
                                  'mp': 1.5,      # MP
@@ -1251,64 +1166,82 @@ class MagicMonster(Monster):
 
 
 class Oread(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.fairy_dust, items.eye_balls]
 
 
 class Willothewisp(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.fairy_dust, items.burnt_ash]
 
 
 class Naiad(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.fairy_dust, items.water_vial]
 
 
 class Necromancer(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.ripped_cloth, items.demonic_essence]
 
 
 class CorruptThaumaturge(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.ripped_cloth, items.mysterious_runes]
 
 
 class Imp(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.wing_piece, items.fairy_dust]
 
 
 class Spriggan(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.living_bark, items.fairy_dust]
 
 
 class Alicorn(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.unicorn_horn, items.angelic_essence]
 
 
-class Wyvern(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+class Wraith(MagicMonster):
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.ectoplasm, items.demonic_essence]
 
 
-class Ghoul(MagicMonster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+class LostSoul(MagicMonster):
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.ectoplasm, items.demonic_essence]
 
 
 # =========================== #
 #       RANGED MONSTERS       #
 # =========================== #
 
-
 class RangedMonster(Monster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
         self.class_multiplier = {'hp': 0.9,      # HP
                                  'mp': 1,      # MP
@@ -1365,51 +1298,136 @@ class RangedMonster(Monster):
 
 
 class FireAnt(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Fire Ant"
+        self.off_element = 'fire'
+        self.def_element = 'fire'
+        self.attk_msg = "spits a firey glob of acid at"
+        self.drop_list = [items.antennae, items.burnt_ash]
 
 
-class Naga(RangedMonster):
-    pass
+class NagaBowwoman(RangedMonster):
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Naga Bow-woman"
+        self.off_element = 'neutral'
+        self.def_element = 'water'
+        self.attk_msg = "fires a volley of arrows at"
+        self.drop_list = [items.serpent_scale, items.eye_balls]
 
 
 class IceSoldier(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Ice Soldier"
+        self.off_element = 'ice'
+        self.def_element = 'ice'
+        self.attk_msg = 'fires a single hyper-cooled arrow at'
+        self.drop_list = [items.chain_link, items.blood_vial]
 
 
 class FrostBat(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Frost Bat"
+        self.off_element = 'ice'
+        self.def_element = 'ice'
+        self.attk_msg = 'spits a frozen glob of acid at'
+        self.drop_list = [items.monster_fang, items.wing_piece]
 
 
 class SparkBat(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Spark Bat"
+        self.off_element = 'electric'
+        self.def_element = 'electric'
+        self.attk_msg = 'spits an electrified glob of acid at'
+        self.drop_list = [items.monster_fang, items.wing_piece]
 
 
 class SkeletonBoneslinger(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Skeleton Boneslinger"
+        self.off_element = 'dark'
+        self.def_element = 'dark'
+        self.attk_msg = 'grabs a nearby bone and slings it at'
+        self.drop_list = [items.bone_bag, items.demonic_essence]
 
 
 class UndeadCrossbowman(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Undead Crossbowman"
+        self.off_element = 'dark'
+        self.def_element = 'dark'
+        self.attk_msg = 'fires a bone-tipped crossbow bolt at'
+        self.drop_list = [items.chain_link, items.bone_bag]
 
 
 class RockGiant(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Rock Giant"
+        self.off_element = "earth"
+        self.def_element = "earth"
+        self.attk_msg = "hurls a giant boulder at"
+        self.drop_list = [items.golem_rock, items.broken_crystal]
 
 
 class GoblinArcher(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Goblin Archer"
+        self.off_element = 'neutral'
+        self.def_element = 'neutral'
+        self.attk_msg = "fires an arrow at"
+        self.drop_list = [items.ripped_cloth, items.eye_balls]
 
 
-class Squid(RangedMonster):
-    pass
+class GiantLandSquid(RangedMonster):
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Giant Land-Squid"
+        self.off_element = "water"
+        self.def_element = "water"
+        self.attk_msg = "shoots a black, inky substance at"
+        self.drop_list = [items.ink_sack, items.slime_vial]
 
 
 class VineLizard(RangedMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Vine Lizard"
+        self.off_element = "grass"
+        self.def_element = "grass"
+        self.attk_msg = "spits an acidic string of vines at"
+        self.drop_list = [items.serpent_scale, items.living_bark]
 
 
-class Tengu(RangedMonster):
-    pass
+class TenguRanger(RangedMonster):
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Tengu Ranger"
+        self.off_element = "earth"
+        self.def_element = "earth"
+        self.attk_msg = "catapults a stone throwing knife towards"
+        self.drop_list = [items.wing_piece, items.feathers]
+
 
 # =========================== #
 #       MELEE MONSTERS        #
@@ -1417,8 +1435,8 @@ class Tengu(RangedMonster):
 
 
 class MeleeMonster(Monster):
-    def __init__(self, name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
-        super().__init__(name, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
         self.class_multiplier = {'hp': 1.2,      # HP
                                  'mp': 1,      # MP
@@ -1496,101 +1514,151 @@ class MeleeMonster(Monster):
 
 
 class GiantCrab(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.crab_claw, items.shell_fragment]
 
 
 class BogSlime(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.slime_vial, items.water_vial]
 
 
 class Mummy(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.burnt_ash, items.ripped_cloth]
 
 
 class SandGolem(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.golem_rock, items.broken_crystal]
 
 
 class MossOgre(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.bone_bag, items.ripped_cloth]
 
 
 class Troll(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.monster_skull, items.eye_balls]
 
 
 class Griffin(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.animal_fur, items.wing_piece]
 
 
 class GiantWorm(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.monster_fang, items.slime_vial]
 
 
 class Zombie(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.monster_skull, items.blood_vial]
 
 
 class SnowWolf(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.animal_fur, items.monster_fang]
 
 
 class LesserYeti(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.animal_fur, items.monster_fang]
 
 
 class SludgeRat(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.monster_skull, items.rodent_tail]
 
 
 class SeaSerpent(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.serpent_scale, items.serpent_tongue]
 
 
 class Beetle(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.beetle_shell, items.antennae]
 
 
 class Harpy(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
-
-class Calculator(MeleeMonster):
-    pass
+        self.drop_list = [items.wing_piece, items.feathers]
 
 
 class FallenKnight(MeleeMonster):
-    pass
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.drop_list = [items.chain_link, items.blood_vial]
 
 
-animal_group = [FireAnt, FrostBat, SparkBat, SludgeRat, Squid, GiantCrab, SnowWolf, Beetle, VineLizard, GiantWorm]
+class Calculator(MeleeMonster):
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
-monster_group = [Willothewisp, Alicorn, Wyvern, BogSlime, SandGolem, Griffin, Harpy, SeaSerpent,
-                 Naga]
+        self.drop_list = [items.calculus_homework, items.graph_paper, items.protractor, items.ruler, items.textbook]
 
-humanoid_group = [Troll, MossOgre, LesserYeti, RockGiant, GoblinArcher, Oread, Tengu, Naiad, Imp, Spriggan]
 
-undead_group = [Zombie, UndeadCrossbowman, Ghoul, Mummy, SkeletonBoneslinger]
+animal_group = [FireAnt, FrostBat, SparkBat, SludgeRat, GiantLandSquid, GiantCrab, SnowWolf, Beetle, VineLizard,
+                GiantWorm]
+
+monster_group = [Willothewisp, Alicorn, Wraith, BogSlime, SandGolem, Griffin, Harpy, SeaSerpent, NagaBowwoman]
+
+humanoid_group = [Troll, MossOgre, LesserYeti, RockGiant, GoblinArcher, Oread, TenguRanger, Naiad, Imp, Spriggan]
+
+undead_group = [Zombie, UndeadCrossbowman, LostSoul, Mummy, SkeletonBoneslinger]
 
 dungeon_group = [Calculator, Necromancer, CorruptThaumaturge, IceSoldier, FallenKnight]
 
 
 class Boss(Monster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
-                 lvl, b_items, gold, experience, attk_msg, boss_id, active=True, off_element='neutral',
-                 def_element='neutral', lackies=None):
-        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
+                 lvl, b_items, gold, experience, attk_msg, boss_id):
+        super().__init__(hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad)
 
-        self.off_element = off_element
-        self.def_element = def_element
+        self.name = name
         self.items = b_items
-        self.active = active
         self.lvl = lvl
         self.experience = experience
         self.gold = gold
         self.attk_msg = attk_msg
-        self.lackies = lackies
         self.boss_id = boss_id
+
+        self.lackies = None
+        self.active = False
 
     def max_stats(self):
         self.hp = copy.copy(self.max_hp)
@@ -1618,13 +1686,16 @@ class Boss(Monster):
 # == MASTER SLIME == #
 class MasterSlimeBoss(Boss):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
-                 lvl, b_items, gold, experience, attk_msg, boss_id, active=True, off_element='neutral',
-                 def_element='neutral', lackies=None):
+                 lvl, b_items, gold, experience, attk_msg, boss_id):
+
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
-                         lvl, b_items, gold, experience, attk_msg, boss_id, active, off_element,
-                         def_element, lackies)
+                         lvl, b_items, gold, experience, attk_msg, boss_id)
 
         self.battle_turn = MeleeMonster.battle_turn
+        self.active = False
+        self.off_element = 'neutral'
+        self.def_element = 'neutral'
+        self.lackies = None
 
     def upon_defeating(self):
         dialogue.alfred_quest_a.finished = True
@@ -1641,20 +1712,21 @@ master_slime = MasterSlimeBoss('Master Slime',
                                3,       # Level 3
                                ["s_vial", "s_vial", "s_vial"],  # Drops 3 slime vials
                                25, 25,  # Gives 25 XP and 25 GP
-                               "jiggles ferociously and begins to attack", "master_slime",
-                               active=False)
+                               "jiggles ferociously and begins to attack", "master_slime")
 
 
 # == GOBLIN CHIEFTAIN == #
 class GoblinChieftainBoss(Boss):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
-                 lvl, b_items, gold, experience, attk_msg, boss_id, active=True, off_element='neutral',
-                 def_element='neutral', lackies=None):
+                 lvl, b_items, gold, experience, attk_msg, boss_id):
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
-                         lvl, b_items, gold, experience, attk_msg, boss_id, active, off_element,
-                         def_element, lackies)
+                         lvl, b_items, gold, experience, attk_msg, boss_id)
 
         self.battle_turn = MeleeMonster.battle_turn
+        self.active = True
+        self.off_element = 'neutral'
+        self.def_element = 'neutral'
+        self.lackies = None
 
 
 goblin_chieftain = GoblinChieftainBoss('Goblin Chieftain',
@@ -1670,88 +1742,124 @@ goblin_chieftain = GoblinChieftainBoss('Goblin Chieftain',
 
 
 # == MENACING PHANTOM == #
-def menacphan_ud():
-    # Stands for "Menacing Phantom -- Upon Defeating"
-    dialogue.stewson_quest_a.finished = True
-    dialogue.stewson_convo_b.active = False
+class MenacingPhantomBoss(Boss):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                 lvl, b_items, gold, experience, attk_msg, boss_id):
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                         lvl, b_items, gold, experience, attk_msg, boss_id)
+
+        self.battle_turn = MagicMonster.battle_turn
+        self.lackies = None
+        self.off_element = 'dark'
+        self.def_element = 'dark'
+        self.active = False
+
+    def upon_defeating(self):
+        # Stands for "Menacing Phantom -- Upon Defeating"
+        dialogue.stewson_quest_a.finished = True
+        dialogue.stewson_convo_b.active = False
 
 
-menacing_phantom = Boss('Menacing Phantom',
-                        75, 50,  # 75 HP and 50 MP
-                        10, 20,  # 10 Attack, 20 Defense
-                        5, 20,   # 5 Pierce Attack, 20 Pierce Defense
-                        35, 25,  # 35 Magical Attack, 25 Magical Defense
-                        20, 15,  # 20 Speed, 15 Evasion
-                        8,       # Level 8
-                        [],      # Drops no items
-                        75, 75,  # Gives 75 XP and 75 GP
-                        "calls upon its ethereal power and casts a hex on", "menacing_phantom",
-                        off_element='dark', def_element='dark', active=False)
-
-menacing_phantom.battle_turn = MagicMonster.battle_turn
-menacing_phantom.upon_defeating = menacphan_ud
+menacing_phantom = MenacingPhantomBoss('Menacing Phantom',
+                                       75, 50,  # 75 HP and 50 MP
+                                       10, 20,  # 10 Attack, 20 Defense
+                                       5, 20,   # 5 Pierce Attack, 20 Pierce Defense
+                                       35, 25,  # 35 Magical Attack, 25 Magical Defense
+                                       20, 15,  # 20 Speed, 15 Evasion
+                                       8,       # Level 8
+                                       [],      # Drops no items
+                                       75, 75,  # Gives 75 XP and 75 GP
+                                       "calls upon its ethereal power and casts a hex on", "menacing_phantom")
 
 
 # == TERRIBLE TARANTULOID == #  (Adventure in Pixels)
-def terrtar_ud():
-    dialogue.krystin_convo_b.active = False
-    dialogue.krystin_convo_c.active = True
-    dialogue.kyle_convo_b.active = False
-    dialogue.kyle_convo_c.active = True
-    dialogue.alden_convo_a.active = False
-    dialogue.alden_convo_b.active = True
+class TerribleTarantuloidBoss(Boss):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                 lvl, b_items, gold, experience, attk_msg, boss_id):
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                         lvl, b_items, gold, experience, attk_msg, boss_id)
+
+        self.battle_turn = MeleeMonster.battle_turn
+        self.active = False
+        self.off_element = 'neutral'
+        self.def_element = 'neutral'
+        self.lackies = None
+
+    def upon_defeating(self):
+        dialogue.krystin_convo_b.active = False
+        dialogue.krystin_convo_c.active = True
+        dialogue.kyle_convo_b.active = False
+        dialogue.kyle_convo_c.active = True
+        dialogue.alden_convo_a.active = False
+        dialogue.alden_convo_b.active = True
 
 
-terr_tarant = Boss('Terrible Tarantuloid',
-                   100, 25,   # 100 Health, 25 Mana
-                   45, 30,    # 45 Attack, 30 Defense
-                   25, 15,    # 25 Pierce Attack, 15 Pierce Defense
-                   15, 25,    # 15 Magical Attack, 25 Magical Defense
-                   35, 25,    # 35 Speed, 25 Evasion
-                   12,        # Level 12
-                   [],        # Drops no items
-                   150, 150,  # Gives 150 XP and 150 GP
-                   "readies its venomous fangs and bites", "terrible_tarantuloid")
-
-terr_tarant.battle_turn = MeleeMonster.battle_turn
-terr_tarant.upon_defeating = terrtar_ud
+terr_tarant = TerribleTarantuloidBoss('Terrible Tarantuloid',
+                                      100, 25,   # 100 Health, 25 Mana
+                                      45, 30,    # 45 Attack, 30 Defense
+                                      25, 15,    # 25 Pierce Attack, 15 Pierce Defense
+                                      15, 25,    # 15 Magical Attack, 25 Magical Defense
+                                      35, 25,    # 35 Speed, 25 Evasion
+                                      12,        # Level 12
+                                      [],        # Drops no items
+                                      150, 150,  # Gives 150 XP and 150 GP
+                                      "readies its venomous fangs and bites", "terrible_tarantuloid")
 
 
 # == CURSED SPECTRE == #
-def cursed_spectre_ud():
-    dialogue.rivesh_convo_c.active = False
-    dialogue.rivesh_quest_a.finished = True
+class CursedSpectreBoss(Boss):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                 lvl, b_items, gold, experience, attk_msg, boss_id):
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                         lvl, b_items, gold, experience, attk_msg, boss_id)
+
+        self.battle_turn = MagicMonster.battle_turn
+        self.lackies = None
+        self.off_element = 'dark'
+        self.def_element = 'dark'
+        self.active = False
+
+    def upon_defeating(self):
+        dialogue.rivesh_convo_c.active = False
+        dialogue.rivesh_quest_a.finished = True
 
 
-cursed_spectre = Boss('Cursed Spectre',
-                      125, 75,             # 125 Health, 75 Mana
-                      15, 30,              # 15 Attack, 30 Defense
-                      20, 25,              # 20 Pierce Attack, 25 Pierce Defense
-                      50, 35,              # 50 Magical Attack, 35 Magical Defense
-                      25, 20,              # 25 Speed, 20 Evasion
-                      15,                  # Level 15
-                      [],                  # Drops no items
-                      250, 250,            # Gives 250 XP and 250 GP
-                      "calls upon its ethereal power and casts a hex on", "cursed_spectre",
-                      off_element='dark', def_element='dark', active=False)
+cursed_spectre = CursedSpectreBoss('Cursed Spectre',
+                                   125, 75,             # 125 Health, 75 Mana
+                                   15, 30,              # 15 Attack, 30 Defense
+                                   20, 25,              # 20 Pierce Attack, 25 Pierce Defense
+                                   50, 35,              # 50 Magical Attack, 35 Magical Defense
+                                   25, 20,              # 25 Speed, 20 Evasion
+                                   15,                  # Level 15
+                                   [],                  # Drops no items
+                                   250, 250,            # Gives 250 XP and 250 GP
+                                   "calls upon its ethereal power and casts a hex on", "cursed_spectre")
 
-cursed_spectre.battle_turn = MagicMonster.battle_turn
-cursed_spectre.upon_defeating = cursed_spectre_ud
 
 # == GIANT ENT == #
-giant_ent = Boss('Giant Ent',
-                 125, 35,         # 125 Health, 75 Mana
-                 35, 50,          # 35 Attack, 50 Defense
-                 15, 50,          # 15 Pierce Attack, 50 Pierce Defense
-                 20, 15,          # 20 Magical Attack, 15 Magical Defense
-                 15, 5,           # 15 Speed, 5 Evasion
-                 15,              # Level 15
-                 [],              # Drops no items
-                 250, 250,        # Gives 250 XP and 250 GP
-                 "slowly lumbers over and whacks", "giant_ent",
-                 off_element='grass', def_element='grass', active=True)
+class GiantEntBoss(Boss):
+    def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                 lvl, b_items, gold, experience, attk_msg, boss_id):
+        super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
+                         lvl, b_items, gold, experience, attk_msg, boss_id)
 
-giant_ent.battle_turn = MeleeMonster.battle_turn
+        self.battle_turn = MeleeMonster.battle_turn
+        self.active = False
+        self.off_element = 'grass'
+        self.def_element = 'grass'
+        self.lackies = None
+
+
+giant_ent = GiantEntBoss('Giant Ent',
+                         125, 35,         # 125 Health, 75 Mana
+                         35, 50,          # 35 Attack, 50 Defense
+                         15, 50,          # 15 Pierce Attack, 50 Pierce Defense
+                         20, 15,          # 20 Magical Attack, 15 Magical Defense
+                         15, 5,           # 15 Speed, 5 Evasion
+                         15,              # Level 15
+                         [],              # Drops no items
+                         250, 250,        # Gives 250 XP and 250 GP
+                         "slowly lumbers over and whacks", "giant_ent")
 
 boss_list = [goblin_chieftain, master_slime, menacing_phantom, terr_tarant, cursed_spectre, giant_ent]
 defeated_bosses = []  # Make sure you can only defeat the boss one time
@@ -2010,7 +2118,7 @@ def create_player():
 
 def spawn_monster():
     for unit_object in ['monster', 'monster_2', 'monster_3']:
-        globals()[unit_object] = Monster('', 10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
+        globals()[unit_object] = Monster(10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
         globals()[unit_object].monster_generation()
         globals()[unit_object].monster_level()
         globals()[unit_object].apply_modifiers()
@@ -2190,9 +2298,9 @@ adorine = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 storm = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 parsto = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 chyme = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
-monster = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-monster_2 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-monster_3 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+monster = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+monster_2 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+monster_3 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 for subclass in Monster.__subclasses__():
     if subclass == Boss:

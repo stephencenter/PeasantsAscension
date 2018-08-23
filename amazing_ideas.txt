@@ -87,45 +87,36 @@ PEASANT-RPG GOALS
 	[x] Fix the shovel
 	[x] Fix the fast travel boots
 	[x] Remove the Divining Rod
+	[x] Add a music box that plays music from your computer
 	[x] Remove the compass
 	[ ] Add new item: Monster Encyclopedia - Identical to the Rangers' old "Scout" ability, without the crit bonus.
 		Can only be used during battle.
-
-	
-[ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.
 
 [ ] Make it so Potions can be used on allies
 		
 [ ] Add a second Accessory slot, called an "Action Slot" 
 		
 [ ] Fix all of the quests that have been broken due to all the above changes
-		
+
 [ ] Rewrite the credits, lore, and backstory
 
 [ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.
 		
 	
--- 1.1 update plans -- 
+-- Potential Ideas -- 
 [ ] Add races (Elves, Dwarves, Gnomes, etc)
 	[ ] These races would have a slight effect on the players stats
 	[ ] Also add a PlayableCharacter.generate_lore() method that generates 2-3 pseudo-random paragraphs based on the player's class and race.
 		The lore would be stored in a player_object.lore attribute, and would be viewable from the [P]arty section of the menu.
 
-[ ] Add a neat weather system.
-	[ ] Weather has a 5% chance of occuring each time you enter a tile, and
-		a 33% chance of stopping when you enter a tile. Tiles that are adjacent to other tiles that already have weather on them will instead have a 
-		75% chance to have weather occur. Additionally, tiles that have had a specific whether pattern on it for more than 10 steps will go on "cooldown",
-		and be unable to be affected by that whether pattern again for 5 steps. This will (hopefully) result in rare but large "weather islands" occuring.
-	[ ] The weather would probably have no gameplay effects, but there could possibly be ascendant abilities that utilize it 
-	[ ] Weather ideas
-		[ ] Rain (all regions but the desert and tundra) 
-		[ ] Snow (the tundra) 
-		[ ] Wind (all regions)
-		[ ] Sandstorms (desert only)
-		
+[ ] Randomly generated overworld cells
+	[ ] Would NOT be a maze, should ideally not be difficult to explore
+	
 [ ] Random Events in towns:
 	[ ] Angry Mobs
 	[ ] Monster Attacks
 	
 [ ] Passive abilities
 	[ ] Each class would have one of them. Their affects would occur in every battle without requiring additional input.
+	
+[ ] Boss descriptions - A paragraph of text that "sets the scene" for boss battles. Eerie music plays during this time.

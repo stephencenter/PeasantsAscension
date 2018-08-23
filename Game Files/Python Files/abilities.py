@@ -644,21 +644,22 @@ class NaturesCall(Ability):
         pass
 
     def use_ability(self, user):
-        animal_dict = {
-            "Mouse": 1,
-            "Chipmunk": 5,
-            "Weasel": 10,
-            "Snake": 15,
-            "Mongoose": 20,
-            "Fox": 25,
-            "Badger": 30,
-            "Eagle": 35,
-            "Coyote": 40,
-            "Moose": 45,
-            "Bear": 50,
-            "Goose": 75,
-            "Pack of Wolves": 100
-        }
+        # animal_dict = {
+        #     "Mouse": 1,
+        #     "Chipmunk": 5,
+        #     "Weasel": 10,
+        #     "Snake": 15,
+        #     "Mongoose": 20,
+        #     "Fox": 25,
+        #     "Badger": 30,
+        #     "Eagle": 35,
+        #     "Coyote": 40,
+        #     "Moose": 45,
+        #     "Bear": 50,
+        #     "Goose": 75,
+        #     "Pack of Wolves": 100
+        # }
+        pass
 
 
 natures_call = NaturesCall("Nature's Call", """\
