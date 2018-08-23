@@ -1565,10 +1565,10 @@ class FallenKnight(MeleeMonster):
 
 animal_group = [FireAnt, FrostBat, SparkBat, SludgeRat, Squid, GiantCrab, SnowWolf, Beetle, VineLizard, GiantWorm]
 
-monster_group = [Willothewisp, Naiad, Imp, Spriggan, Alicorn, Wyvern, BogSlime, SandGolem, Griffin, Harpy, SeaSerpent,
+monster_group = [Willothewisp, Alicorn, Wyvern, BogSlime, SandGolem, Griffin, Harpy, SeaSerpent,
                  Naga]
 
-humanoid_group = [Troll, MossOgre, LesserYeti, RockGiant, GoblinArcher, Oread, Tengu]
+humanoid_group = [Troll, MossOgre, LesserYeti, RockGiant, GoblinArcher, Oread, Tengu, Naiad, Imp, Spriggan]
 
 undead_group = [Zombie, UndeadCrossbowman, Ghoul, Mummy, SkeletonBoneslinger]
 
@@ -2202,5 +2202,6 @@ for subclass in Monster.__subclasses__():
         if not any([subsubclass in animal_group,
                     subsubclass in monster_group,
                     subsubclass in undead_group,
-                    subsubclass in dungeon_group]):
+                    subsubclass in dungeon_group,
+                    subsubclass in humanoid_group]):
             print(f'{subsubclass.__name__} is not in a spawngroup!')
