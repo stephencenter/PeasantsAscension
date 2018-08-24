@@ -73,7 +73,7 @@ PEASANT-RPG GOALS
 	[x] Add new item: Monster Encyclopedia - Identical to the Rangers' old "Scout" ability, without the crit bonus.
 		Can only be used during battle.
 		
-[ ] Enemy Revamp
+[x] Enemy Revamp
 	[x] Give each type of enemy their own unique stats, elements, drops, attack messages, etc.
 	[x] Rework monster spawning to not be based off biome
 	[x] Make it so if you encounter an enemy on the overworld, you have a % chance to "sneak up" on them based on your perception, 
