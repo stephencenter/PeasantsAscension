@@ -286,23 +286,25 @@ class DungeonTile(Tile):
 
 class Cell:
     # A cell is a cluster of adjacent tiles accessible by teleportation via the world map
-    def __init__(self, name, biome, m_level, store_level, cell_id):
+    def __init__(self, name, m_level, store_level, music, enemy_groups, cell_id):
         self.name = name
-        self.biome = biome
+        self.music = music
+        self.enemy_groups = enemy_groups
         self.m_level = m_level  # A tuple that specifies the level range enemies can be encountered at
         self.store_level = store_level  # An integer that specifies what level the stores in this cell are at
         self.cell_id = cell_id
 
 
 class RandomizedDungeon:
-    def __init__(self, name, desc, biome, m_level, x_cap, y_cap, num_floors, cell_id):
+    def __init__(self, name, desc, m_level, x_cap, y_cap, num_floors, music, enemy_groups, cell_id):
         self.name = name
         self.desc = desc
-        self.biome = biome
         self.m_level = m_level
         self.x_cap = x_cap
         self.y_cap = y_cap
         self.num_floors = num_floors
+        self.music = music
+        self.enemy_groups = enemy_groups
         self.cell_id = cell_id
 
         self.generate_dungeon()
@@ -420,8 +422,8 @@ class Province:
 
 # NEARTON
 class NeartonCell(Cell):
-    def __init__(self, name, biome, m_level, store_level, cell_id):
-        super().__init__(name, biome, m_level, store_level, cell_id)
+    def __init__(self, name, m_level, store_level, music, enemy_groups, cell_id):
+        super().__init__(name, m_level, store_level, music, enemy_groups, cell_id)
         # I create a dedicated class for each cell so I can put all of the tile data inside it, keeping
         # the file clean and easy to read
 
@@ -482,13 +484,14 @@ class NeartonCell(Cell):
         self.primary_tile = nearton_tile
 
 
-nearton_cell = NeartonCell("Nearton", "forest", (1, 3), 1, "nearton_cell")
+nearton_cell = NeartonCell("Nearton", (1, 3), 1, "../Music/Through the Forest.ogg",
+                           [units.animal_group, units.monster_group], "nearton_cell")
 
 
 # SOUTHFORD
 class SouthfordCell(Cell):
-    def __init__(self, name, biome, m_level, store_level, cell_id):
-        super().__init__(name, biome, m_level, store_level, cell_id)
+    def __init__(self, name, m_level, store_level, music, enemy_groups, cell_id):
+        super().__init__(name, m_level, store_level, music, enemy_groups, cell_id)
 
         southford_desc = """"""
 
@@ -542,13 +545,14 @@ class SouthfordCell(Cell):
         self.primary_tile = southford_tile
 
 
-southford_cell = SouthfordCell("Southford", "forest", (2, 4), 2, "southford_cell")
+southford_cell = SouthfordCell("Southford", (2, 4), 2, '../Music/Through the Forest.ogg',
+                               [units.animal_group, units.monster_group], "southford_cell")
 
 
 # OVERSHIRE CITY
 class OvershireCityCell(Cell):
-    def __init__(self, name, biome, m_level, store_level, cell_id):
-        super().__init__(name, biome, m_level, store_level, cell_id)
+    def __init__(self, name, m_level, store_level, music, enemy_groups, cell_id):
+        super().__init__(name, m_level, store_level, music, enemy_groups, cell_id)
 
         o_city_desc = """"""
 
@@ -601,13 +605,14 @@ class OvershireCityCell(Cell):
         self.primary_tile = o_city_tile
 
 
-o_city_cell = OvershireCityCell("Overshire City", "forest", (3, 6), 2, "o_city_cell")
+o_city_cell = OvershireCityCell("Overshire City", (3, 6), 2, '../Music/Through the Forest.ogg',
+                                [units.animal_group, units.monster_group], "o_city_cell")
 
 
 # PRINCIPALIA
 class PrincipaliaCell(Cell):
-    def __init__(self, name, biome, m_level, store_level, cell_id):
-        super().__init__(name, biome, m_level, store_level, cell_id)
+    def __init__(self, name, m_level, store_level, music, enemy_groups, cell_id):
+        super().__init__(name, m_level, store_level, music, enemy_groups, cell_id)
 
         principalia_desc = """"""
 
@@ -659,13 +664,14 @@ class PrincipaliaCell(Cell):
         self.primary_tile = principalia_tile
 
 
-principalia_cell = PrincipaliaCell("Principalia", "forest", (4, 7), 2, "principalia_cell")
+principalia_cell = PrincipaliaCell("Principalia", (4, 7), 2, '../Music/Through the Forest.ogg',
+                                   [units.animal_group, units.monster_group], "principalia_cell")
 
 
 # SARDOOTH
 class SardoothCell(Cell):
-    def __init__(self, name, biome, m_level, store_level, cell_id):
-        super().__init__(name, biome, m_level, store_level, cell_id)
+    def __init__(self, name, m_level, store_level, music, enemy_groups, cell_id):
+        super().__init__(name, m_level, store_level, music, enemy_groups, cell_id)
 
         sardooth_desc = """\
         Off in the distance you see Sardooth, a dark, dismal ghost town with nary a
@@ -720,10 +726,12 @@ class SardoothCell(Cell):
         self.primary_tile = sardooth_tile
 
 
-sardooth_cell = SardoothCell("Sardooth", "forest", (7, 10), 2, "sardooth_cell")
+sardooth_cell = SardoothCell("Sardooth", (7, 10), 2, '../Music/song17_02.ogg',
+                             [units.undead_group, units.monster_group], "sardooth_cell")
 
-labyrinth_of_secrets = RandomizedDungeon("The Labyrinth of Unfathomable Secrets", "", "forest",
-                                         (1, 3), 5, 5, 3, "secret_labyrinth")
+labyrinth_of_secrets = RandomizedDungeon("The Labyrinth of Unfathomable Secrets", "",
+                                         (1, 3), 5, 5, 3, '../Music/Eight_Bit_Dungeon_Monster_Stomp.ogg',
+                                         [units.dungeon_group, units.humanoid_group], "secret_labyrinth")
 
 overshire_province = Province("Overshire", [nearton_cell,
                                             southford_cell,
@@ -765,8 +773,8 @@ parriway_province = Province("Parriway", [], "parriway_prov")
 
 # FORT SIGIL
 class FortSigilCell(Cell):
-    def __init__(self, name, biome, m_level, store_level, cell_id):
-        super().__init__(name, biome, m_level, store_level, cell_id)
+    def __init__(self, name, m_level, store_level, music, enemy_groups, cell_id):
+        super().__init__(name, m_level, store_level, music, enemy_groups, cell_id)
 
         fort_sigil_desc = """"""
 
@@ -817,7 +825,8 @@ class FortSigilCell(Cell):
         self.primary_tile = fort_sigil_tile
 
 
-fort_sigil_cell = FortSigilCell("Fort Sigil", "forest", (5, 8), 2, "fort_sigil_cell")
+fort_sigil_cell = FortSigilCell("Fort Sigil", (5, 8), 2, '../Music/Through the Forest.ogg',
+                                [units.animal_group, units.monster_group], "fort_sigil_cell")
 
 chintor_province = Province("Chin'tor", [fort_sigil_cell], "chintor_prov")
 
@@ -878,8 +887,8 @@ all_provinces = [overshire_province,
 all_cells = [cell for sublist in [prov.cells for prov in all_provinces] for cell in sublist]
 all_tiles = [tile for sublist in [cell.tiles for cell in all_cells] for tile in sublist]
 
-# valid_provinces and valid_biomes are lists of strings that are allowed to be used as biome/proivince names
-# This is to prevent errors such as typos and whatnot, as there's no reason to use any other biome/proivince names
+# valid_provinces is lists of strings that are allowed to be used as proivince names
+# This is to prevent errors such as typos and whatnot, as there's no reason to use any other proivince names
 valid_provinces = ["Overshire",
                    "Thex",
                    "Celemia",
@@ -892,18 +901,6 @@ valid_provinces = ["Overshire",
                    "Chin'tor",
                    "Whitlock",
                    "Downpour"]
-
-valid_biomes = ["sky",
-                "graveyard",
-                "cave",
-                "underworld",
-                "castle",
-                "desert",
-                "forest",
-                "shore",
-                "swamp",
-                "mountain",
-                "tundra"]
 
 
 def find_tile_with_id(tile_id):
@@ -1013,10 +1010,6 @@ for item6 in all_tiles:
         print(f"{item6.tile_id} has non-euclidean passages - is this intended?")
 
 
-for item7 in all_cells:
-    if item7.biome not in valid_biomes:
-        print(f"{item7} has an invalid biome!")
-
-for item8 in all_provinces:
-    if item8.name not in valid_provinces:
-        print(f"{item8} has an invalid province!")
+for item7 in all_provinces:
+    if item7.name not in valid_provinces:
+        print(f"{item7} has an invalid province!")

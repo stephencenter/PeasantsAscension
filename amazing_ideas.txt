@@ -63,7 +63,16 @@ PEASANT-RPG GOALS
 	[x] These potions can be used to do various things. Some of them are mundane, doing things as simple as curing status ailments
 		restoring HP/MP, or increasing stats in-battle. But others have cooler effects, such as allowing you to rename your character,
 		and enabling you to re-pick your class. 
-
+		
+[x] Fix the tool items:
+	[x] Fix the shovel
+	[x] Fix the fast travel boots
+	[x] Remove the Divining Rod
+	[x] Add a music box that plays music from your computer
+	[x] Remove the compass
+	[x] Add new item: Monster Encyclopedia - Identical to the Rangers' old "Scout" ability, without the crit bonus.
+		Can only be used during battle.
+		
 [ ] Enemy Revamp
 	[ ] Give each type of enemy their own unique stats, elements, drops, attack messages, etc.
 	[ ] Rework monster spawning to not be based off biome
@@ -85,19 +94,8 @@ PEASANT-RPG GOALS
 	[ ] Each floor will have one mini-boss, who upon killing will drop a key that lets you unlock the door to the next floor
 	[ ] The final floor will have a true boss that is much stronger than the minibosses and will unlock a stairway to the entrance when defeated.
 
-[ ] Fix the tool items:
-	[x] Fix the shovel
-	[x] Fix the fast travel boots
-	[x] Remove the Divining Rod
-	[x] Add a music box that plays music from your computer
-	[x] Remove the compass
-	[ ] Add new item: Monster Encyclopedia - Identical to the Rangers' old "Scout" ability, without the crit bonus.
-		Can only be used during battle.
-
 [ ] Make it so Potions can be used on allies
-		
-[ ] Add a second Accessory slot, called an "Action Slot" 
-		
+
 [ ] Fix all of the quests that have been broken due to all the above changes
 
 [ ] Rewrite the credits, lore, and back-story

@@ -395,9 +395,11 @@ class FastTravelAtlas(NonConsumable):
 
                         main.party_info['has_teleported'] = True
                         main.party_info['prov'] = prov.name
-                        main.party_info['biome'] = chosen.biome
                         main.party_info['current_tile'] = chosen.primary_tile
-                        main.check_region()
+
+                        if main.party_info['music'] != chosen.music:
+                            main.party_info['music'] = chosen.music
+                            sounds.play_music(main.party_info['music'])
 
                         return
 
@@ -1426,10 +1428,7 @@ many recent abductions and murders. Most of the pages appear to be missing.""", 
 
 monster_book = MonsterEncyclopedia('Monster Encyclopedia', """\
 A book containing information on monsters. When used in battle, this will 
-identify the stats and weaknesses of an enemy. When used outside of battle,
-this will let you check what biome monsters are found in, what items they drop,
-and how many of them you've killed. Out-of-battle use only works for enemies
-you've encountered.""", 200, "monster_book")
+identify the stats and weaknesses of an enemy. Has no use outside of battle.""", 200, "monster_book")
 
 pocket_lab = PocketAlchemyLab('Pocket Alchemy Lab', """\
 A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to

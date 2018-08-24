@@ -69,8 +69,7 @@ pygame.mixer.pre_init(frequency=44100)
 pygame.mixer.init()
 
 # A dictionary containing generic information about the player's party
-party_info = {'biome': 'forest',
-              'music': '../Music/Through the Forest.ogg',
+party_info = {'music': '../Music/Through the Forest.ogg',
               'prov': "Overshire",
               'current_tile': tiles.find_tile_with_id('nearton_tile'),
               'current_town': '',
@@ -181,7 +180,7 @@ def input_ts(string, spacing=0.025):
 
 
 def game_loop():
-    check_region()
+    party_info['music'] = tiles.find_cell_with_tile_id(party_info['current_tile'].tile_id).music
     sounds.play_music(party_info['music'])
 
     while True:
@@ -230,72 +229,6 @@ def game_loop():
                 continue
 
             available_dirs = game_ui()
-
-
-def check_region():
-    # Check the location of the player and change the music to match
-    # Also alerts the player when they change biomes/provinces
-    global party_info
-
-    new_province = tiles.find_prov_with_tile_id(party_info['current_tile'].tile_id).name
-    new_biome = tiles.find_cell_with_tile_id(party_info['current_tile'].tile_id).biome
-
-    if new_biome == 'sky':
-        music = '../Music/Island of Peace.ogg'
-
-    elif new_biome == 'graveyard':
-        music = '../Music/song21_02.ogg'
-
-    elif new_biome == 'forest':
-        music = '../Music/Through the Forest.ogg'
-
-    elif new_biome == 'mountain':
-        music = '../Music/Mountain.ogg'
-
-    elif new_biome == 'tundra':
-        music = '../Music/Arpanauts.ogg'
-
-    elif new_biome == 'desert':
-        music = '../Music/Come and Find Me.ogg'
-
-    elif new_biome == 'swamp':
-        music = '../Music/Digital Native.ogg'
-
-    elif new_biome == 'shore':
-        music = "../Music/We're all under the stars.ogg"
-
-    elif new_biome == 'castle':
-        music = "../Music/Castle.ogg"
-        pass
-
-    else:
-        logging.debug(f'No music for biome "{new_biome}" on {time.strftime("%m/%d/%Y at %H:%M:%S")}')
-        music = '../Music/Through the Forest.ogg'
-
-    if party_info['prov'] != new_province or party_info['biome'] != new_biome:
-
-        if party_info['biome'] != new_biome:
-            print(f"Looks like your party's entering a {new_biome.title()}.")
-
-            party_info['biome'] = new_biome
-            party_info['music'] = music
-
-            # Play that funky music
-            sounds.play_music(music)
-
-            if not towns.search_towns(enter=False):
-                print('-'*save_load.divider_size)
-
-        if party_info['prov'] != new_province:
-            print('-'*save_load.divider_size)
-            print(f"You have left {party_info['prov']} and are now entering {new_province}.")
-            party_info['prov'] = new_province
-
-        s_input("\nPress enter/return ")
-
-        return True
-
-    return False
 
 
 def game_ui():
@@ -349,7 +282,7 @@ def move_command(available_dirs, command):
     party_info['current_tile'] = tiles.find_tile_with_id([a[1] for a in available_dirs if a[0] == command][0])
 
     # If none of these fucntions return True, then a battle can occur.
-    if not any([check_region(), units.check_bosses(), towns.search_towns(enter=False)]):
+    if not any([units.check_bosses(), towns.search_towns(enter=False)]):
 
         # There is a 1 in 4 chance for a battle to occur (25%)
         # However, a battle cannot occur if the number of steps since the last battle is less than three,
