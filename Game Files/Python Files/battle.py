@@ -153,7 +153,7 @@ def battle_system(is_boss=False):
     if is_boss:
         m_list = ([units.monster] + units.monster.lackies) if units.monster.lackies else [units.monster]
 
-        print(ascii_art.monster_art[units.monster.name] % '')
+        print(units.monster.ascii_art % '')
 
         if len(m_list) > 2:
             print(f'The legendary {units.monster.name} and its lackys have awoken!')
@@ -177,7 +177,7 @@ def battle_system(is_boss=False):
             if random.randint(0, 1):
                 m_list.append(units.monster_3)
 
-        print(ascii_art.monster_art[units.monster.name] % '')
+        print(units.monster.ascii_art % '')
 
         if len(m_list) == 3:
             print(f'A {units.monster.name} and 2 other monsters suddenly appeared out of nowhere!')

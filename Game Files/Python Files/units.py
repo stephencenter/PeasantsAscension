@@ -19,6 +19,7 @@ import math
 import random
 import re
 import sys
+import itertools
 
 import pygame
 
@@ -910,6 +911,7 @@ class Monster(Unit):
         self.items = []
         self.drop_list = []
         self.attk_msg = "attacks"
+        self.ascii_art = ''
 
         # This dictionary contains numerous variables that interact with abilties in battle
         self.ability_vars = {
@@ -996,7 +998,7 @@ class Monster(Unit):
         print(f"-{self.name}'s Turn-")
 
         if not self.ability_vars['knockout_turns']:
-            print(ascii_art.monster_art[self.name] % f"The {self.name} is making a move!\n")
+            print(monster.ascii_art % f"The {self.name} is making a move!\n")
 
         else:
             print(f"The {self.name} is asleep!")
@@ -1169,70 +1171,166 @@ class Oread(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Oread"
+        self.off_element = "earth"
+        self.def_element = "earth"
+        self.attk_msg = "casts a basic earth spell on"
         self.drop_list = [items.fairy_dust, items.eye_balls]
+        self.ascii_art = """
+   O
+/}-|-{\\
+  / \\
+        %s"""
 
 
 class Willothewisp(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Will-o'-the-wisp"
+        self.off_element = "fire"
+        self.def_element = "fire"
+        self.attk_msg = "casts a basic fire spell on"
         self.drop_list = [items.fairy_dust, items.burnt_ash]
+        self.ascii_art = """
+  )\^^/(
+ / o  o \\
+|        |
+ \______/
+        %s"""
 
 
 class Naiad(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Naiad"
+        self.off_element = "water"
+        self.def_element = "water"
+        self.attk_msg = "casts a basic water spell on"
         self.drop_list = [items.fairy_dust, items.water_vial]
+        self.ascii_art = """
+   O
+/}-|-{\\
+  / \\
+        %s"""
 
 
 class Necromancer(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Necromancer"
+        self.off_element = "dark"
+        self.def_element = "dark"
+        self.attk_msg = "casts a basic dark spell on"
         self.drop_list = [items.ripped_cloth, items.demonic_essence]
+        self.ascii_art = """
+ _^_
+  O
+`-|-
+ / \\
+        %s"""
 
 
 class CorruptThaumaturge(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Corrupt Thaumaturge"
+        self.off_element = "ice"
+        self.def_element = "ice"
+        self.attk_msg = "casts a basic ice spell on"
         self.drop_list = [items.ripped_cloth, items.mysterious_runes]
+        self.ascii_art = """
+ _^_
+  O
+`-|-
+ / \\
+        %s"""
 
 
 class Imp(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Imp"
+        self.off_element = "fire"
+        self.def_element = "neutral"
+        self.attk_msg = "casts a basic fire spell on"
         self.drop_list = [items.wing_piece, items.fairy_dust]
+        self.ascii_art = """
+ 'o'
+ -|-
+ / \\
+        %s"""
 
 
 class Spriggan(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Spriggan"
+        self.off_element = "grass"
+        self.def_element = "grass"
+        self.attk_msg = "casts a basic grass spell on"
         self.drop_list = [items.living_bark, items.fairy_dust]
+        self.ascii_art = """
+ }o{
+3-|-E
+ / \\
+        %s"""
 
 
 class Alicorn(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Alicorn"
+        self.off_element = "light"
+        self.def_element = "light"
+        self.attk_msg = "casts a basic light spell on"
         self.drop_list = [items.unicorn_horn, items.angelic_essence]
+        self.ascii_art = """
+         ,
+  ~~\\ ">
+ [===]'
+/    |
+        %s"""
 
 
-class Wraith(MagicMonster):
+class WindWraith(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Wind Wraith"
+        self.off_element = "wind"
+        self.def_element = "wind"
+        self.attk_msg = "casts a basic wind spell on"
         self.drop_list = [items.ectoplasm, items.demonic_essence]
+        self.ascii_art = """
+ (O)
+~/ \\~
+ | |
+  V
+        %s"""
 
 
-class LostSoul(MagicMonster):
+class LightningGhost(MagicMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Lightning Ghost"
+        self.off_element = "electric"
+        self.def_element = "electric"
+        self.attk_msg = "casts a basic electric spell on"
         self.drop_list = [items.ectoplasm, items.demonic_essence]
+        self.ascii_art = """
+ (O)
+~/ \\~
+ | |
+  V
+        %s"""
 
 
 # =========================== #
@@ -1306,6 +1404,10 @@ class FireAnt(RangedMonster):
         self.def_element = 'fire'
         self.attk_msg = "spits a firey glob of acid at"
         self.drop_list = [items.antennae, items.burnt_ash]
+        self.ascii_art = """
+O0o"
+'\''
+        %s"""
 
 
 class NagaBowwoman(RangedMonster):
@@ -1317,6 +1419,12 @@ class NagaBowwoman(RangedMonster):
         self.def_element = 'water'
         self.attk_msg = "fires a volley of arrows at"
         self.drop_list = [items.serpent_scale, items.serpent_tongue]
+        self.ascii_art = """
+       o  \\
+      -|--|
+\\   ___/ /
+ \\_/
+        %s"""
 
 
 class IceSoldier(RangedMonster):
@@ -1328,6 +1436,12 @@ class IceSoldier(RangedMonster):
         self.def_element = 'ice'
         self.attk_msg = 'fires a single hyper-cooled arrow at'
         self.drop_list = [items.chain_link, items.blood_vial]
+        self.ascii_art = """
+  O   \\
+--|--*|
+  |   /
+ / \\
+        %s"""
 
 
 class FrostBat(RangedMonster):
@@ -1339,6 +1453,10 @@ class FrostBat(RangedMonster):
         self.def_element = 'ice'
         self.attk_msg = 'spits a frozen glob of acid at'
         self.drop_list = [items.monster_fang, items.wing_piece]
+        self.ascii_art = """
+/}-''-{\\
+  ^  ^
+        %s"""
 
 
 class SparkBat(RangedMonster):
@@ -1350,6 +1468,10 @@ class SparkBat(RangedMonster):
         self.def_element = 'electric'
         self.attk_msg = 'spits an electrified glob of acid at'
         self.drop_list = [items.monster_fang, items.wing_piece]
+        self.ascii_art = """
+/}-''-{\\
+  ^  ^
+        %s"""
 
 
 class SkeletonBoneslinger(RangedMonster):
@@ -1361,6 +1483,12 @@ class SkeletonBoneslinger(RangedMonster):
         self.def_element = 'dark'
         self.attk_msg = 'grabs a nearby bone and slings it at'
         self.drop_list = [items.bone_bag, items.demonic_essence]
+        self.ascii_art = """
+   O    v
+--{|}--*|
+   |    ^
+  / \\
+        %s"""
 
 
 class UndeadCrossbowman(RangedMonster):
@@ -1372,6 +1500,12 @@ class UndeadCrossbowman(RangedMonster):
         self.def_element = 'dark'
         self.attk_msg = 'fires a bone-tipped crossbow bolt at'
         self.drop_list = [items.chain_link, items.bone_bag]
+        self.ascii_art = """
+  O  __
+--|--*|>
+  |  
+ / \\
+        %s"""
 
 
 class RockGiant(RangedMonster):
@@ -1383,6 +1517,12 @@ class RockGiant(RangedMonster):
         self.def_element = "earth"
         self.attk_msg = "hurls a giant boulder at"
         self.drop_list = [items.golem_rock, items.broken_crystal]
+        self.ascii_art = """
+    O
+*--|-|--*
+   |_|
+  _/ \\_
+        %s"""
 
 
 class GoblinArcher(RangedMonster):
@@ -1394,6 +1534,11 @@ class GoblinArcher(RangedMonster):
         self.def_element = 'neutral'
         self.attk_msg = "fires an arrow at"
         self.drop_list = [items.ripped_cloth, items.eye_balls]
+        self.ascii_art = """
+  o  \\
+--|--|
+ / \\ /
+        %s"""
 
 
 class GiantLandSquid(RangedMonster):
@@ -1405,6 +1550,12 @@ class GiantLandSquid(RangedMonster):
         self.def_element = "water"
         self.attk_msg = "shoots a black, inky substance at"
         self.drop_list = [items.ink_sack, items.slime_vial]
+        self.ascii_art = """
+ \\[**]/
+  |()|
+ / || \\
+/  ||  \\
+        %s"""
 
 
 class VineLizard(RangedMonster):
@@ -1416,6 +1567,9 @@ class VineLizard(RangedMonster):
         self.def_element = "grass"
         self.attk_msg = "spits an acidic string of vines at"
         self.drop_list = [items.serpent_scale, items.living_bark]
+        self.ascii_art = """
+~-:=:>
+        %s"""
 
 
 class TenguRanger(RangedMonster):
@@ -1425,8 +1579,13 @@ class TenguRanger(RangedMonster):
         self.name = "Tengu Ranger"
         self.off_element = "earth"
         self.def_element = "earth"
-        self.attk_msg = "catapults a stone throwing knife towards"
+        self.attk_msg = "catapults a stone javelin towards"
         self.drop_list = [items.wing_piece, items.feathers]
+        self.ascii_art = """
+  'O>    ,
+/}-|-{\\./
+  / \\  /
+        %s"""
 
 
 # =========================== #
@@ -1522,6 +1681,12 @@ class GiantCrab(MeleeMonster):
         self.def_element = "water"
         self.attk_msg = "snaps its massive claws at"
         self.drop_list = [items.crab_claw, items.shell_fragment]
+        self.ascii_art = """
+{}     {}
+ \\_o-o_/
+   \\ /
+   ^ ^
+        %s"""
 
 
 class BogSlime(MeleeMonster):
@@ -1533,6 +1698,10 @@ class BogSlime(MeleeMonster):
         self.def_element = "grass"
         self.attk_msg = "jiggles menacingly at"
         self.drop_list = [items.slime_vial, items.water_vial]
+        self.ascii_art = """
+ /----\\
+/______\\
+        %s"""
 
 
 class Mummy(MeleeMonster):
@@ -1544,6 +1713,12 @@ class Mummy(MeleeMonster):
         self.def_element = "dark"
         self.attk_msg = "meanders over and grabs"
         self.drop_list = [items.burnt_ash, items.ripped_cloth]
+        self.ascii_art = """
+~o
+ |==
+ |
+ |\\
+        %s"""
 
 
 class SandGolem(MeleeMonster):
@@ -1555,6 +1730,12 @@ class SandGolem(MeleeMonster):
         self.def_element = "rock"
         self.attk_msg = "begins to pile sand on"
         self.drop_list = [items.golem_rock, items.broken_crystal]
+        self.ascii_art = """
+    O
+*--|-|--*
+   |_|
+  _/ \\_
+        %s"""
 
 
 class MossOgre(MeleeMonster):
@@ -1566,6 +1747,12 @@ class MossOgre(MeleeMonster):
         self.def_element = "grass"
         self.attk_msg = "swings a tree trunk like a club at"
         self.drop_list = [items.bone_bag, items.monster_skull]
+        self.ascii_art = """
+    O
+*--|-|--*
+   |_|
+  _/ \\_
+        %s"""
 
 
 class Troll(MeleeMonster):
@@ -1577,6 +1764,11 @@ class Troll(MeleeMonster):
         self.def_element = "neutral"
         self.attk_msg = "swings its mighty battleaxe at"
         self.drop_list = [items.monster_skull, items.eye_balls]
+        self.ascii_art = """
+ O
+-|-!
+/ \\
+        %s"""
 
 
 class Griffin(MeleeMonster):
@@ -1588,6 +1780,11 @@ class Griffin(MeleeMonster):
         self.def_element = "wind"
         self.attk_msg = "swipes with its ferocious claws at"
         self.drop_list = [items.animal_fur, items.wing_piece]
+        self.ascii_art = """
+  ~~\\ ">
+ [===]'
+/    |
+        %s"""
 
 
 class GiantWorm(MeleeMonster):
@@ -1599,6 +1796,10 @@ class GiantWorm(MeleeMonster):
         self.def_element = "earth"
         self.attk_msg = "burrows into the ground and starts charging towards"
         self.drop_list = [items.monster_fang, items.slime_vial]
+        self.ascii_art = """
+\\   ___/
+ \\_/
+        %s"""
 
 
 class Zombie(MeleeMonster):
@@ -1610,6 +1811,12 @@ class Zombie(MeleeMonster):
         self.def_element = "dark"
         self.attk_msg = "charges and tries to bite"
         self.drop_list = [items.monster_skull, items.blood_vial]
+        self.ascii_art = """
+ o
+ |==
+ |
+ |\\
+        %s"""
 
 
 class SnowWolf(MeleeMonster):
@@ -1621,6 +1828,11 @@ class SnowWolf(MeleeMonster):
         self.def_element = "ice"
         self.attk_msg = "claws and bites at"
         self.drop_list = [items.animal_fur, items.monster_fang]
+        self.ascii_art = """
+    ^-,
+~/--/
+ `  `
+        %s"""
 
 
 class LesserYeti(MeleeMonster):
@@ -1632,6 +1844,12 @@ class LesserYeti(MeleeMonster):
         self.def_element = "ice"
         self.attk_msg = "begins to maul"
         self.drop_list = [items.animal_fur, items.monster_fang]
+        self.ascii_art = """
+    O
+*--|-|--*
+   |_|
+  _/ \\_
+        %s"""
 
 
 class SludgeRat(MeleeMonster):
@@ -1643,6 +1861,10 @@ class SludgeRat(MeleeMonster):
         self.def_element = "neutral"
         self.attk_msg = "ferociously chomps at"
         self.drop_list = [items.monster_skull, items.rodent_tail]
+        self.ascii_art = """
+~-[--]>
+  *  *
+        %s"""
 
 
 class SeaSerpent(MeleeMonster):
@@ -1654,6 +1876,10 @@ class SeaSerpent(MeleeMonster):
         self.def_element = "water"
         self.attk_msg = "charges head-first into"
         self.drop_list = [items.serpent_scale, items.serpent_tongue]
+        self.ascii_art = """
+\\   ___/^*
+ \\_/
+        %s"""
 
 
 class Beetle(MeleeMonster):
@@ -1665,6 +1891,11 @@ class Beetle(MeleeMonster):
         self.def_element = "grass"
         self.attk_msg = "charges horn-first into"
         self.drop_list = [items.beetle_shell, items.antennae]
+        self.ascii_art = """
+ ______
+/______\C
+ ''''''
+        %s"""
 
 
 class Harpy(MeleeMonster):
@@ -1676,6 +1907,11 @@ class Harpy(MeleeMonster):
         self.def_element = "wind"
         self.attk_msg = "dives claws-first towards"
         self.drop_list = [items.wing_piece, items.feathers]
+        self.ascii_art = """
+   O
+/}-|-{\\
+  / \\
+        %s"""
 
 
 class FallenKnight(MeleeMonster):
@@ -1687,6 +1923,11 @@ class FallenKnight(MeleeMonster):
         self.def_element = "dark"
         self.attk_msg = "thrusts its heavenly spear towards"
         self.drop_list = [items.chain_link, items.blood_vial]
+        self.ascii_art = """
+, (v)
+|--|-
+| / \\
+        %s"""
 
 
 class DevoutProtector(MeleeMonster):
@@ -1698,6 +1939,12 @@ class DevoutProtector(MeleeMonster):
         self.def_element = "light"
         self.attk_msg = "swings its holy hammer towards"
         self.drop_list = [items.angelic_essence, items.mysterious_runes]
+        self.ascii_art = """
+
+ O [=]
+-|--|
+/ \\
+        %s"""
 
 
 class Calculator(MeleeMonster):
@@ -1709,16 +1956,21 @@ class Calculator(MeleeMonster):
         self.def_element = "neutral"
         self.attk_msg = "casts its mathemagical spell on"
         self.drop_list = [items.calculus_homework, items.graph_paper, items.protractor, items.ruler, items.textbook]
+        self.ascii_art = """
+ ..
+[==]
+[==]
+        %s"""
 
 
 animal_group = [FireAnt, FrostBat, SparkBat, SludgeRat, GiantLandSquid, GiantCrab, SnowWolf, Beetle, VineLizard,
                 GiantWorm]
 
-monster_group = [Willothewisp, Alicorn, Wraith, BogSlime, SandGolem, Griffin, Harpy, SeaSerpent, NagaBowwoman]
+monster_group = [Willothewisp, Alicorn, WindWraith, BogSlime, SandGolem, Griffin, Harpy, SeaSerpent, NagaBowwoman]
 
 humanoid_group = [Troll, MossOgre, LesserYeti, RockGiant, GoblinArcher, Oread, TenguRanger, Naiad, Imp, Spriggan]
 
-undead_group = [Zombie, UndeadCrossbowman, LostSoul, Mummy, SkeletonBoneslinger]
+undead_group = [Zombie, UndeadCrossbowman, LightningGhost, Mummy, SkeletonBoneslinger]
 
 dungeon_group = [Calculator, Necromancer, CorruptThaumaturge, IceSoldier, FallenKnight, DevoutProtector]
 
@@ -1763,23 +2015,30 @@ class Boss(Monster):
 # =========================== #
 
 # == MASTER SLIME == #
-class MasterSlimeBoss(Boss):
+class MasterSlimeBoss(Boss, MeleeMonster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                  lvl, b_items, gold, experience, attk_msg, boss_id):
 
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                          lvl, b_items, gold, experience, attk_msg, boss_id)
 
-        self.battle_turn = MeleeMonster.battle_turn
         self.active = False
         self.off_element = 'neutral'
         self.def_element = 'neutral'
         self.lackies = None
+        self.ascii_art = """
+   M
+ /---\\
+/_____\\
+        %s"""
 
     def upon_defeating(self):
         dialogue.alfred_quest_a.finished = True
         dialogue.alfred_convo_b.active = False
         dialogue.alfred_convo_c.active = True
+
+    def battle_turn(self):
+        MeleeMonster.battle_turn(self)
 
 
 master_slime = MasterSlimeBoss('Master Slime',
@@ -1795,17 +2054,24 @@ master_slime = MasterSlimeBoss('Master Slime',
 
 
 # == GOBLIN CHIEFTAIN == #
-class GoblinChieftainBoss(Boss):
+class GoblinChieftainBoss(Boss, MeleeMonster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                  lvl, b_items, gold, experience, attk_msg, boss_id):
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                          lvl, b_items, gold, experience, attk_msg, boss_id)
 
-        self.battle_turn = MeleeMonster.battle_turn
         self.active = True
         self.off_element = 'neutral'
         self.def_element = 'neutral'
         self.lackies = None
+        self.ascii_art = """
+ , `o`
+ |--|-
+ | / \\
+        %s"""
+
+    def battle_turn(self):
+        MeleeMonster.battle_turn(self)
 
 
 goblin_chieftain = GoblinChieftainBoss('Goblin Chieftain',
@@ -1821,22 +2087,30 @@ goblin_chieftain = GoblinChieftainBoss('Goblin Chieftain',
 
 
 # == MENACING PHANTOM == #
-class MenacingPhantomBoss(Boss):
+class MenacingPhantomBoss(Boss, MagicMonster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                  lvl, b_items, gold, experience, attk_msg, boss_id):
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                          lvl, b_items, gold, experience, attk_msg, boss_id)
 
-        self.battle_turn = MagicMonster.battle_turn
         self.lackies = None
         self.off_element = 'dark'
         self.def_element = 'dark'
         self.active = False
+        self.ascii_art = """
+ (O)
+~/ \\~
+ | |
+  V
+        %s"""
 
     def upon_defeating(self):
         # Stands for "Menacing Phantom -- Upon Defeating"
         dialogue.stewson_quest_a.finished = True
         dialogue.stewson_convo_b.active = False
+
+    def battle_turn(self):
+        MagicMonster.battle_turn(self)
 
 
 menacing_phantom = MenacingPhantomBoss('Menacing Phantom',
@@ -1852,17 +2126,23 @@ menacing_phantom = MenacingPhantomBoss('Menacing Phantom',
 
 
 # == TERRIBLE TARANTULOID == #  (Adventure in Pixels)
-class TerribleTarantuloidBoss(Boss):
+class TerribleTarantuloidBoss(Boss, MeleeMonster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                  lvl, b_items, gold, experience, attk_msg, boss_id):
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                          lvl, b_items, gold, experience, attk_msg, boss_id)
 
-        self.battle_turn = MeleeMonster.battle_turn
         self.active = False
         self.off_element = 'neutral'
         self.def_element = 'neutral'
         self.lackies = None
+        self.ascii_art = """
+|   |
+ \\o/
+--0--
+--0--
+ / \\
+        %s"""
 
     def upon_defeating(self):
         dialogue.krystin_convo_b.active = False
@@ -1871,6 +2151,9 @@ class TerribleTarantuloidBoss(Boss):
         dialogue.kyle_convo_c.active = True
         dialogue.alden_convo_a.active = False
         dialogue.alden_convo_b.active = True
+
+    def battle_turn(self):
+        MeleeMonster.battle_turn(self)
 
 
 terr_tarant = TerribleTarantuloidBoss('Terrible Tarantuloid',
@@ -1886,21 +2169,29 @@ terr_tarant = TerribleTarantuloidBoss('Terrible Tarantuloid',
 
 
 # == CURSED SPECTRE == #
-class CursedSpectreBoss(Boss):
+class CursedSpectreBoss(Boss, MagicMonster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                  lvl, b_items, gold, experience, attk_msg, boss_id):
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                          lvl, b_items, gold, experience, attk_msg, boss_id)
 
-        self.battle_turn = MagicMonster.battle_turn
         self.lackies = None
         self.off_element = 'dark'
         self.def_element = 'dark'
         self.active = False
+        self.ascii_art = """
+ (O)
+~/ \\~
+ | |
+  V
+        %s"""
 
     def upon_defeating(self):
         dialogue.rivesh_convo_c.active = False
         dialogue.rivesh_quest_a.finished = True
+
+    def battle_turn(self):
+        MagicMonster.battle_turn(self)
 
 
 cursed_spectre = CursedSpectreBoss('Cursed Spectre',
@@ -1916,17 +2207,25 @@ cursed_spectre = CursedSpectreBoss('Cursed Spectre',
 
 
 # == GIANT ENT == #
-class GiantEntBoss(Boss):
+class GiantEntBoss(Boss, MeleeMonster):
     def __init__(self, name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                  lvl, b_items, gold, experience, attk_msg, boss_id):
         super().__init__(name, hp, mp, attk, dfns, m_attk, m_dfns, p_attk, p_dfns, spd, evad,
                          lvl, b_items, gold, experience, attk_msg, boss_id)
 
-        self.battle_turn = MeleeMonster.battle_turn
         self.active = False
         self.off_element = 'grass'
         self.def_element = 'grass'
         self.lackies = None
+        self.ascii_art = """
+\\\\\\''///
+  |oo|
+  |~~|
+  /vv\\
+"""
+
+    def battle_turn(self):
+        MeleeMonster.battle_turn(self)
 
 
 giant_ent = GiantEntBoss('Giant Ent',
@@ -2196,11 +2495,13 @@ def create_player():
 
 
 def spawn_monster():
+    monster_groups = tiles.find_cell_with_tile_id(main.party_info['current_tile'].tile_id).enemy_groups
+    monster_groups = list(itertools.chain.from_iterable(monster_groups))
+
     for unit_object in ['monster', 'monster_2', 'monster_3']:
-        globals()[unit_object] = Monster(10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
-        globals()[unit_object].monster_generation()
+        globals()[unit_object] = random.choice(monster_groups)(10, 5, 3, 2, 3, 2, 3, 2, 3, 2)
         globals()[unit_object].monster_level()
-        globals()[unit_object].apply_modifiers()
+        globals()[unit_object].apply_multipliers()
         globals()[unit_object].monster_fix_stats()
 
 
@@ -2380,4 +2681,6 @@ chyme = PlayableCharacter('', '', '', '', '', '', '', '', '', '', '')
 monster = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 monster_2 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 monster_3 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+
 
