@@ -74,9 +74,9 @@ PEASANT-RPG GOALS
 		Can only be used during battle.
 		
 [ ] Enemy Revamp
-	[ ] Give each type of enemy their own unique stats, elements, drops, attack messages, etc.
-	[ ] Rework monster spawning to not be based off biome
-	[ ] Make it so if you encounter an enemy on the overworld, you have a % chance to "sneak up" on them based on your perception, 
+	[x] Give each type of enemy their own unique stats, elements, drops, attack messages, etc.
+	[x] Rework monster spawning to not be based off biome
+	[x] Make it so if you encounter an enemy on the overworld, you have a % chance to "sneak up" on them based on your perception, 
 		giving you a choice on whether to attack or ignore the enemy.
 
 [ ] Add more combat options:	

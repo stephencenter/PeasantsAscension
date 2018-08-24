@@ -77,7 +77,7 @@ party_info = {'music': '../Music/Through the Forest.ogg',
               'gp': 20,
               'visited_towns': [],
               'steps_without_battle': 0,
-              'do_monster_spawns': True,
+              'do_spawns': True,
               'scout_list': [],
               'dif': 0,
               'map_pow': 1,
@@ -297,12 +297,34 @@ def move_command(available_dirs, command):
 
         # Certain tiles can have battling disabled on them
         if is_battle and tiles.find_cell_with_tile_id(party_info['current_tile'].tile_id) != -1 \
-                and party_info['do_monster_spawns']:
+                and party_info['do_spawns']:
 
             print('-' * save_load.divider_size)
             units.spawn_monster()
-            battle.battle_system()
             party_info['steps_without_battle'] = 0
+
+            highest_perception = max([pcu.attributes['per'] for pcu in [units.player,
+                                                                        units.solou,
+                                                                        units.chili,
+                                                                        units.chyme,
+                                                                        units.adorine,
+                                                                        units.parsto]])
+
+            if highest_perception > random.randint(0, 100):
+                print(f"You see a {units.monster.name} - it has not detected you yet.")
+
+                while True:
+                    y_n = s_input("Fight it?").lower()
+
+                    if y_n.startswith("y"):
+                        print('-' * save_load.divider_size)
+                        battle.battle_system()
+
+                    elif y_n.startswith("n"):
+                        break
+
+            else:
+                battle.battle_system()
 
         else:
             party_info['steps_without_battle'] += 1
