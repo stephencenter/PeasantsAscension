@@ -1316,7 +1316,7 @@ class NagaBowwoman(RangedMonster):
         self.off_element = 'neutral'
         self.def_element = 'water'
         self.attk_msg = "fires a volley of arrows at"
-        self.drop_list = [items.serpent_scale, items.eye_balls]
+        self.drop_list = [items.serpent_scale, items.serpent_tongue]
 
 
 class IceSoldier(RangedMonster):
@@ -1517,6 +1517,10 @@ class GiantCrab(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Giant Crab"
+        self.off_element = "water"
+        self.def_element = "water"
+        self.attk_msg = "snaps its massive claws at"
         self.drop_list = [items.crab_claw, items.shell_fragment]
 
 
@@ -1524,6 +1528,10 @@ class BogSlime(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Bog Slime"
+        self.off_element = "grass"
+        self.def_element = "grass"
+        self.attk_msg = "jiggles menacingly at"
         self.drop_list = [items.slime_vial, items.water_vial]
 
 
@@ -1531,6 +1539,10 @@ class Mummy(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Mummy"
+        self.off_element = "fire"
+        self.def_element = "dark"
+        self.attk_msg = "meanders over and grabs"
         self.drop_list = [items.burnt_ash, items.ripped_cloth]
 
 
@@ -1538,6 +1550,10 @@ class SandGolem(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Sand Golem"
+        self.off_element = "rock"
+        self.def_element = "rock"
+        self.attk_msg = "begins to pile sand on"
         self.drop_list = [items.golem_rock, items.broken_crystal]
 
 
@@ -1545,13 +1561,21 @@ class MossOgre(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
-        self.drop_list = [items.bone_bag, items.ripped_cloth]
+        self.name = "Moss Ogre"
+        self.off_element = "grass"
+        self.def_element = "grass"
+        self.attk_msg = "swings a tree trunk like a club at"
+        self.drop_list = [items.bone_bag, items.monster_skull]
 
 
 class Troll(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Troll"
+        self.off_element = "neutral"
+        self.def_element = "neutral"
+        self.attk_msg = "swings its mighty battleaxe at"
         self.drop_list = [items.monster_skull, items.eye_balls]
 
 
@@ -1559,6 +1583,10 @@ class Griffin(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Griffin"
+        self.off_element = "wind"
+        self.def_element = "wind"
+        self.attk_msg = "swipes with its ferocious claws at"
         self.drop_list = [items.animal_fur, items.wing_piece]
 
 
@@ -1566,6 +1594,10 @@ class GiantWorm(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Giant Worm"
+        self.off_element = "earth"
+        self.def_element = "earth"
+        self.attk_msg = "burrows into the ground and starts charging towards"
         self.drop_list = [items.monster_fang, items.slime_vial]
 
 
@@ -1573,6 +1605,10 @@ class Zombie(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Zombie"
+        self.off_element = "dark"
+        self.def_element = "dark"
+        self.attk_msg = "charges and tries to bite"
         self.drop_list = [items.monster_skull, items.blood_vial]
 
 
@@ -1580,6 +1616,10 @@ class SnowWolf(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Snow Wolf"
+        self.off_element = "ice"
+        self.def_element = "ice"
+        self.attk_msg = "claws and bites at"
         self.drop_list = [items.animal_fur, items.monster_fang]
 
 
@@ -1587,6 +1627,10 @@ class LesserYeti(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Lesser Yeti"
+        self.off_element = "ice"
+        self.def_element = "ice"
+        self.attk_msg = "begins to maul"
         self.drop_list = [items.animal_fur, items.monster_fang]
 
 
@@ -1594,6 +1638,10 @@ class SludgeRat(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Sludge Rat"
+        self.off_element = "neutral"
+        self.def_element = "neutral"
+        self.attk_msg = "ferociously chomps at"
         self.drop_list = [items.monster_skull, items.rodent_tail]
 
 
@@ -1601,6 +1649,10 @@ class SeaSerpent(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Sea Serpent"
+        self.off_element = "water"
+        self.def_element = "water"
+        self.attk_msg = "charges head-first into"
         self.drop_list = [items.serpent_scale, items.serpent_tongue]
 
 
@@ -1608,6 +1660,10 @@ class Beetle(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Beetle"
+        self.off_element = "earth"
+        self.def_element = "grass"
+        self.attk_msg = "charges horn-first into"
         self.drop_list = [items.beetle_shell, items.antennae]
 
 
@@ -1615,6 +1671,10 @@ class Harpy(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Harpy"
+        self.off_element = "wind"
+        self.def_element = "wind"
+        self.attk_msg = "dives claws-first towards"
         self.drop_list = [items.wing_piece, items.feathers]
 
 
@@ -1622,13 +1682,32 @@ class FallenKnight(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Fallen Knight"
+        self.off_element = "light"
+        self.def_element = "dark"
+        self.attk_msg = "thrusts its heavenly spear towards"
         self.drop_list = [items.chain_link, items.blood_vial]
+
+
+class DevoutProtector(MeleeMonster):
+    def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
+        super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
+
+        self.name = "Devout Protector"
+        self.off_element = "light"
+        self.def_element = "light"
+        self.attk_msg = "swings its holy hammer towards"
+        self.drop_list = [items.angelic_essence, items.mysterious_runes]
 
 
 class Calculator(MeleeMonster):
     def __init__(self, hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad):
         super().__init__(hp, mp, attk, dfns, p_attk, p_dfns, m_attk, m_dfns, spd, evad)
 
+        self.name = "Calculator"
+        self.off_element = "neutral"
+        self.def_element = "neutral"
+        self.attk_msg = "casts its mathemagical spell on"
         self.drop_list = [items.calculus_homework, items.graph_paper, items.protractor, items.ruler, items.textbook]
 
 
@@ -1641,7 +1720,7 @@ humanoid_group = [Troll, MossOgre, LesserYeti, RockGiant, GoblinArcher, Oread, T
 
 undead_group = [Zombie, UndeadCrossbowman, LostSoul, Mummy, SkeletonBoneslinger]
 
-dungeon_group = [Calculator, Necromancer, CorruptThaumaturge, IceSoldier, FallenKnight]
+dungeon_group = [Calculator, Necromancer, CorruptThaumaturge, IceSoldier, FallenKnight, DevoutProtector]
 
 
 class Boss(Monster):
@@ -2302,14 +2381,3 @@ monster = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 monster_2 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 monster_3 = Monster(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-for subclass in Monster.__subclasses__():
-    if subclass == Boss:
-        continue
-
-    for subsubclass in subclass.__subclasses__():
-        if not any([subsubclass in animal_group,
-                    subsubclass in monster_group,
-                    subsubclass in undead_group,
-                    subsubclass in dungeon_group,
-                    subsubclass in humanoid_group]):
-            print(f'{subsubclass.__name__} is not in a spawngroup!')

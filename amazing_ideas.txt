@@ -3,7 +3,7 @@ PEASANT-RPG GOALS
 -- v1.0.0 update plans -- 
 [x] Add several new monster items
 
-[x] Rewrite the monster attack function by seperating the damage formula from the AI
+[x] Rewrite the monster attack function by separating the damage formula from the AI
 
 [x] Make a standardized "Unit" class that the Monster and PlayableCharacter classes will inherit from
 
@@ -13,7 +13,7 @@ PEASANT-RPG GOALS
 
 [x] Rework monster leveling to be specific to each tile instead of based off a scaling distance formula
 
-[x] Rework a lot of the code to be more modular, so that the game can function as a Game Engine
+[x] Rework a lot of the code to be more modular, so that the game engine could be used by other people
 
 [x] Rework the battle system so that it supports multiple enemies.
 
@@ -37,13 +37,15 @@ PEASANT-RPG GOALS
 	
 [x] Rename NPCClass to npcs, rename npcs to dialogue. Move all NPC stuff to npcs, move all dialogue stuff to dialogue.
 
-[x] Fix resting - at the moment I'm pretty sure it doesn't even heal you
+[x] Remove resting and location ascii art
+	[x] I really disliked these two mechanics. Resting was overpowered and honestly unnecessary with the availability of healing spells and potions,
+		and location ascii art was too over-the-top and didn't really look that good.
 
 [x] Automatic attack redirection if target unit dies before attack goes off
 		
 [x] Revamp the inventory to show one instance of each item, with quantity to the right
 
-[x] Make settings changable in-game
+[x] Make settings changeable in-game
 
 [x] Support for multiple status effects, including mundane things like "Alive" or "Disarmed"
 
@@ -98,7 +100,7 @@ PEASANT-RPG GOALS
 		
 [ ] Fix all of the quests that have been broken due to all the above changes
 
-[ ] Rewrite the credits, lore, and backstory
+[ ] Rewrite the credits, lore, and back-story
 
 [ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.
 		
