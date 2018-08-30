@@ -39,10 +39,11 @@ class Conversation:
 
 
 class Quest(Conversation):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
         super().__init__(dialogue, conv_id, active)
         self.name = name  # The name of the quest
         self.q_giver = q_giver  # The name of the person who gave you the quest
+        self.accept_msg = accept_msg  # The text that's displayed if you accept the quest
         self.reward = reward  # A list [experience, gold] of your reward for the quest
         self.started = False  # is True if the quest has been started, false otherwise
         self.finished = False  # is True if the quest is complete, false otherwise
@@ -56,7 +57,7 @@ class Quest(Conversation):
 
             if accept.startswith('y'):
                 print('-'*save_load.divider_size)
-                print(f'{self.q_giver}: "Terrific! Thank you for your help!"')
+                print(f'{self.q_giver}: "{self.accept_msg}"')
                 main.s_input("\nPress enter/return ")
                 self.started = True
                 self.upon_starting()
@@ -150,18 +151,18 @@ important anyway.""", "solou_c3", True)
 
 
 class SolouQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        set_active("solou_c1", False)
-        set_active("solou_c2", False)
-        set_active("solou_c3", False)
-        set_active("solou_c4", True)
-        set_active("solou_c5", True)
+        set_active(solou_convo_a, False)
+        set_active(solou_convo_b, False)
+        set_active(solou_convo_c, False)
+        set_active(solou_convo_d, True)
+        set_active(solou_convo_e, True)
 
 
-solou_quest_a = SolouQuestA("A Courier's Resignation [MAIN QUEST]", """\
+solou_quest_a = SolouQuestA("A Courier's Resignation [MAIN QUEST]", "Solou", """\
 Ahem... "Dear Joseph, Mayor of Overshire: Hello Joseph, I have terrible news.
 This news is urgent, and it's important that you do not tell anyone else about
 this unless it is absolutely necessary. My newborn daughter has been kidnapped.
@@ -178,7 +179,8 @@ to discuss plans on how to deal with this. Please be there. Thank you, Signed
 King Harconius II." That's... what it said. Oh no, this is REALLY bad. The King
 had a daughter? And she's been kidnapped? And Thex is responsible?! It says 
 that it was to be delivered to Joseph, the Mayor of Overshire City. We 
-absolutely have to deliver this letter RIGHT NOW. """, "Solou", [50, 50], "solou_q1", True)
+absolutely have to deliver this letter RIGHT NOW.""",
+                            "Okay cool, let's go deliver this thing.", [50, 50], "solou_q1", True)
 
 
 class SolouConvoD(Conversation):
@@ -186,7 +188,7 @@ class SolouConvoD(Conversation):
         super().__init__(dialogue, conv_id, active)
 
     def after_talking(self):
-        self.active = False
+        set_active(solou_convo_d, False)
 
         items.add_item("fast_map")
         print("-"*save_load.divider_size)
@@ -235,9 +237,7 @@ class JosephConvoB(Conversation):
         super().__init__(dialogue, conv_id, active)
 
     def after_talking(self):
-        global joseph_convo_b
-
-        joseph_convo_b.active = False
+        set_active(joseph_convo_b, False)
         solou_quest_a.completion()
 
 
@@ -259,18 +259,15 @@ I do. Parceon is located at 24\u00b0N, 28\u00b0E in case you forgot.""", "joseph
 
 
 class JosephQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        global joseph_convo_c
-        global joseph_convo_a
-
-        joseph_convo_a.active = False
-        joseph_convo_c.active = True
+        set_active(joseph_convo_a, False)
+        set_active(joseph_convo_c, True)
 
 
-joseph_quest_a = JosephQuestA("To Parceon! [MAIN QUEST]", """\
+joseph_quest_a = JosephQuestA("To Parceon! [MAIN QUEST]", "Joseph", """\
 Ah, Solou! Long time no see! I see you've taken up adventuring.
 It must be nice to finally put that spellbook of yours to use!
 *Solou and Joseph chat for a while. As mayor of Overshire, Joseph
@@ -279,7 +276,8 @@ are questing to save his daughter? Well, I happen to know of a person
 whose information would prove invaluable to you. Her name is Azura, and
 she is the head of the Sorcerer's guild. She has been studying tomes and
 has supposedly come up with a possible solution. She lives in a town
-called Parceon, located at 24\u00b0N, 28\u00b0E.""", "Joseph", [75, 75], "joseph_q1", False)
+called Parceon, located at 24\u00b0N, 28\u00b0E.""",
+                              "Thank you, good luck with your quest.", [75, 75], "joseph_q1", False)
 
 
 # -- Name: Orius -- Town: Valice
@@ -301,12 +299,11 @@ class AzuraConvoB(Conversation):
         super().__init__(dialogue, conv_id, active)
 
     def after_talking(self):
-        global azura_convo_c
-
         print('You write down the coordinates of Ambercreek.')
         main.s_input("\nPress enter/return ")
-        self.active = False
-        azura_convo_c.active = True
+
+        set_active(azura_convo_b, False)
+        set_active(azura_convo_c, True)
 
 
 azura_convo_b = AzuraConvoB("""\
@@ -366,33 +363,29 @@ and failed countless times to defeat that wretched ghost!""", "stewson_c1", True
 
 
 class StewsonQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        global stewson_convo_a
-        global stewson_convo_b
         units.menacing_phantom.active = True
-        stewson_convo_a.active = False
-        stewson_convo_b.active = True
+        set_active(stewson_convo_a, False)
+        set_active(stewson_convo_b, True)
 
     def upon_completing(self):
-        global stewson_convo_c
-        global rivesh_convo_b
-        global rivesh_quest_a
+        set_active(stewson_convo_c, True)
+        set_active(rivesh_convo_b, False)
+        set_active(rivesh_quest_a, True)
 
-        stewson_convo_c.active = True
-        rivesh_convo_b.active = False
-        rivesh_quest_a.active = True
         print('-' * save_load.divider_size)
         print('You now have experience defeating ghosts!')
         main.s_input("\nPress enter/return ")
 
 
-stewson_quest_a = StewsonQuestA('The Shadowy Spirit', """\
+stewson_quest_a = StewsonQuestA('The Shadowy Spirit', 'Stewson', """\
 I wish someone would do something about this terrible ghost... Hey! You're a
 strong adventurer, perhaps you could defeat this phantom? It's at position.
-8\u00b0N, -12\u00b0W.""", 'Stewson', [50, 75], "stewson_q1", True)
+8\u00b0N, -12\u00b0W.""", "Oh, thank you for being so courageous! Good luck defeating the ghost!",
+                                [50, 75], "stewson_q1", True)
 
 
 class StewsonConvoB(Conversation):
@@ -516,38 +509,29 @@ Thanks again, hero! We are forever indebted to you!""", "rivesh_c5", False)
 
 
 class RiveshQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        global rivesh_convo_a
-        global rivesh_convo_b
-        global rivesh_convo_c
-        global seriph_convo_a
-        global seriph_convo_b
-
-        rivesh_convo_a.active = False
-        rivesh_convo_b.active = False
-        rivesh_convo_c.active = True
-        seriph_convo_a.active = False
-        seriph_convo_b.active = True
         units.cursed_spectre.active = True
+        set_active(rivesh_convo_a, False)
+        set_active(rivesh_convo_b, False)
+        set_active(rivesh_convo_c, True)
+        set_active(seriph_convo_a, False)
+        set_active(seriph_convo_b, True)
 
     def upon_completing(self):
-        global rivesh_convo_d
-        global seriph_convo_b
-        global seriph_convo_c
-
-        rivesh_convo_d.active = True
-        seriph_convo_b.active = False
-        seriph_convo_c.active = True
+        set_active(rivesh_convo_d, True)
+        set_active(seriph_convo_b, False)
+        set_active(seriph_convo_c, True)
 
 
-rivesh_quest_a = RiveshQuestA("The Curse of Fort Sigil", """\
+rivesh_quest_a = RiveshQuestA("The Curse of Fort Sigil", "Rivesh", """\
 Hey... I don't suppose that you have any experience with fighting ghosts,
 do you? Wait, what's that? You defeated the Phantom that was haunting the
 Overshire Graveyard!? Well in that case, we may just have a chance!
-Please help us, oh please!""", "Rivesh", [200, 200], "rivesh_q1", False)
+Please help us, oh please!""", "I knew His Divinity would send someone to save us! Thank you hero!",
+                              [200, 200], "rivesh_q1", False)
 
 
 # ---------------------------------------------------------------------------- #
@@ -569,8 +553,8 @@ can't count on them to stop it. I'd be careful around there if I were you.""", "
 
 
 class AlfredQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
         units.master_slime.active = True
@@ -582,9 +566,10 @@ class AlfredQuestA(Quest):
         set_active("alfred_c4", True)
 
 
-alfred_quest_a = AlfredQuestA('A Slimy Specimen', """\
+alfred_quest_a = AlfredQuestA('A Slimy Specimen', 'Alfred', """\
 ...Actually, now that I think about it, do you think you could possibly
-dispose of this vile creature? It's located just south of here.""", 'Alfred', [30, 50], "alfred_q1", True)
+dispose of this vile creature? It's located just south of here.""",
+                              "Great, I'm glad we'll finally be free of this monster!", [30, 50], "alfred_q1", True)
 
 
 class AlfredConvoB(Conversation):
@@ -643,18 +628,14 @@ class KyleConvoC(Conversation):
         super().__init__(dialogue, conv_id, active)
 
     def after_talking(self):
-        # Stands for "Kyle Phrase 3: After Talking"
-        global kyle_convo_c
-        global kyle_convo_d
         global alden_quest_a
-        global alden_convo_b
 
-        kyle_convo_c.active = False
-        kyle_convo_d.active = True
+        set_active(kyle_convo_c, False)
+        set_active(kyle_convo_d, True)
 
         if krystin_convo_d.active:
             alden_quest_a.finished = True
-            alden_convo_b.active = False
+            set_active(alden_convo_b, False)
 
 
 kyle_convo_c = KyleConvoC("""\
@@ -698,17 +679,14 @@ class KrystinConvoC(Conversation):
         super().__init__(dialogue, conv_id, active)
 
     def after_talking(self):
-        # Stands for "Krystin Phrase 3: After Talking"
-        global krystin_convo_d
         global alden_quest_a
-        global alden_convo_b
 
-        self.active = False
-        krystin_convo_d.active = True
+        set_active(krystin_convo_c, False)
+        set_active(krystin_convo_d, True)
 
         if kyle_convo_d.active:
             alden_quest_a.finished = True
-            alden_convo_b.active = False
+            set_active(alden_convo_b, False)
 
 
 krystin_convo_c = KrystinConvoC("""\
@@ -760,33 +738,24 @@ Thank heavens, the mighty beast has fallen.""", "frederick_c3", False)
 
 # -- Name: Alden -- Town: Small Cottage
 class AldenQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        global alden_convo_a
-        global krystin_convo_a
-        global kyle_convo_a
-        global krystin_convo_b
-        global kyle_convo_b
-        global frederick_convo_a
-        global frederick_convo_b
-
-        alden_convo_a.active = True
-        kyle_convo_a.active = False
-        kyle_convo_b.active = True
-        krystin_convo_a.active = False
-        krystin_convo_b.active = True
-        frederick_convo_a.active = False
-        frederick_convo_b.active = True
         units.terr_tarant.active = True
+        set_active(alden_convo_a, True)
+        set_active(kyle_convo_a, False)
+        set_active(kyle_convo_b, True)
+        set_active(krystin_convo_a, False)
+        set_active(krystin_convo_b, True)
+        set_active(frederick_convo_a, False)
+        set_active(frederick_convo_b, True)
 
     def upon_completing(self):
-        global alden_convo_c
-        alden_convo_c.active = True
+        set_active(alden_convo_c, True)
 
 
-alden_quest_a = AldenQuestA("Stop the Strife", """\
+alden_quest_a = AldenQuestA("Stop the Strife", 'Alden', """\
 Greetings, adventurer. I'm sure that you have heard of the conflict going on
 between the villages of Fallville and Tripton. I have an idea on how to settle
 this foul feud, but alas, I cannot perform it due to my old and fragile
@@ -796,7 +765,8 @@ Fallville and Tripton from a terrible monster. This is a monster I will be
 summoning, of course. Afterwards, spread word in the two towns that an
 anonymous warrior from the opposite town defeated it! This should bring an end
 to their constant bickering. I will summon the monster at coordinates
--23\u00b0S, -11\u00b0W.""",  'Alden', [175, 200], "alden_q1", True)
+-23\u00b0S, -11\u00b0W.""", "Thank you. Hopefully this feud will finally come to an end.",
+                            [175, 200], "alden_q1", True)
 
 
 class AldenConvoA(Conversation):
@@ -899,39 +869,31 @@ can do.""", "polmor_c3", False)
 
 
 class PolmorQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        global serena_convo_b
-        global serena_convo_a
-        global polmor_convo_b
-        global polmor_convo_a
-
-        serena_convo_a.active = False
-        serena_convo_b.active = True
-        polmor_convo_a.active = False
-        polmor_convo_b.active = True
+        set_active(serena_convo_a, False)
+        set_active(serena_convo_b, True)
+        set_active(polmor_convo_a, False)
+        set_active(polmor_convo_b, True)
 
     def upon_completing(self):
-        global serena_convo_b
-        global serena_convo_c
-        global polmor_convo_b
-
-        serena_convo_c.active = True
-        serena_convo_b.active = False
-        polmor_convo_b.active = False
+        set_active(serena_convo_c, True)
+        set_active(serena_convo_b, False)
+        set_active(polmor_convo_b, False)
 
         print('-'*save_load.divider_size)
         print('Serena and Polmor will now heal you for free if you visit them!')
 
 
-polmor_quest_a = Quest("Fight Against the Blight", """\
+polmor_quest_a = Quest("Fight Against the Blight", "Polmor", """\
 Wait a minute... I am so stupid! According to my calculations, you are the
 legendary adventurer of Nearton! Yes, it must be you , adventurer, help our
 daughter! The only way to get the ingredients is to defeat several monsters
 and collect their remains. Specifically, I need one Fairy Dust, one Serpent
-Scale, and one Monster Fang. You're the only one who can save her!""", "Polmor", [450, 450], "polmor_q1", True)
+Scale, and one Monster Fang. You're the only one who can save her!""",
+                       "Thank you so much! I'm glad people like you exist!", [450, 450], "polmor_q1", True)
 
 
 # -- Name: Serena -- Town: Whistumn
@@ -978,8 +940,7 @@ class MatthewConvoA(Conversation):
         super().__init__(dialogue, conv_id, active)
 
     def after_talking(self):
-        global matthew_convo_a
-        matthew_convo_a.active = False
+        set_active(matthew_convo_a, False)
 
 
 matthew_convo_a = MatthewConvoA("""\
@@ -991,22 +952,18 @@ bar.*""", "matt_c1", True)
 
 
 class MatthewQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        global matthew_convo_a
-        global matthew_convo_b
-
-        matthew_convo_a.active = False
-        matthew_convo_b.active = True
+        set_active(matthew_convo_a, False)
+        set_active(matthew_convo_b, True)
 
     def upon_completing(self):
-        global matthew_convo_e
-        matthew_convo_e.active = True
+        set_active(matthew_convo_e, True)
 
 
-matthew_quest_a = MatthewQuestA('iSounds Good', """\
+matthew_quest_a = MatthewQuestA('iSounds Good', "Matthew", """\
 Dangit, that happens all the time! Those idiots keep calling my iSound MP3
 player a witch - this is the fifth one I've gone through this week! The
 company that makes them only sells them in Elysium, as nobody in Harconia
@@ -1015,7 +972,8 @@ tell you want: If you go to Cesura, the train town near the border of Harconia
 and Elysium, and buy me a new iSound, I will reward you greatly. Remember:
 iSounds have watermelons on the back. If you get one with a grapefruit, then
 you're just paying a lot of money for a cheap knockoff brand. And definitely
-stay away from papaya phones. Can you do that for me?""", "Matthew", [1250, 1250], "matt_q1", True)
+stay away from papaya phones. Can you do that for me?""",
+                                "Okay thanks man. I really need this iSound.", [1250, 1250], "matt_q1", True)
 
 
 class MatthewConvoB(Conversation):
@@ -1050,10 +1008,9 @@ class MatthewConvoD(Conversation):
 
     def after_talking(self):
         global matthew_quest_a
-        global matthew_convo_d
 
         matthew_quest_a.finished = True
-        matthew_convo_d.active = False
+        set_active(matthew_convo_d, False)
 
 
 matthew_convo_d = MatthewConvoD("""\
@@ -1075,10 +1032,8 @@ class PimeConvoA(Conversation):
         super().__init__(dialogue, conv_id, active)
 
     def pime_c1_at(self):
-        global pime_quest_a
-
         self.active = False
-        pime_quest_a.active = True
+        set_active(pime_quest_a, True)
 
 
 pime_convo_a = PimeConvoA("""\
@@ -1097,27 +1052,24 @@ anywhere near enough manpower to put a stop to it! What are we to do?!""", "pime
 
 
 class PimeQuestA(Quest):
-    def __init__(self, name, dialogue, q_giver, reward, conv_id, active):
-        super().__init__(name, dialogue, q_giver, reward, conv_id, active)
+    def __init__(self, name, q_giver, dialogue, accept_msg, reward, conv_id, active):
+        super().__init__(name, q_giver, dialogue, accept_msg, reward, conv_id, active)
 
     def upon_starting(self):
-        global pime_convo_a
-        global pime_convo_b
-
-        pime_convo_a.active = False
-        pime_convo_b.active = True
+        set_active(pime_convo_a, False)
+        set_active(pime_convo_b, True)
         # units.anti_blood_squad.active = True
 
     def upon_completing(self):
-        global pime_convo_c
-        pime_convo_c.active = True
+        set_active(pime_convo_c, True)
 
 
-pime_quest_a = PimeQuestA("The Hated Hunter", """\
+pime_quest_a = PimeQuestA("The Hated Hunter", "Pime", """\
 Hey - you look like quite the seasoned adventurer. Maybe you could help
 us! I hope this isn't too much to ask, but could you possibly defeat
 these hunters? They're causing us so much pain, we need someone to get rid of 
-him.""", "Pime", [1000, 1000], "pime_q1", True)
+him.""", "Thank you, hopefully these guys will leave us alone if you teach them a lesson.",
+                          [1000, 1000], "pime_q1", True)
 
 
 class PimeConvoB(Conversation):
@@ -1519,16 +1471,16 @@ all_dialogue = {
 }
 
 
-def set_active(conv_id, new_state):
+def set_active(conv_obj, new_state):
     global all_dialogue
 
     for key in all_dialogue:
-        if all_dialogue[key].conv_id == conv_id:
+        if all_dialogue[key].conv_id == conv_obj.conv_id:
             all_dialogue[key].active = new_state
 
             return
 
-    raise Exception(f"{conv_id} is not a valid Conversation ID!")
+    raise Exception(f"{conv_obj} is not a valid Conversation!")
 
 
 def serialize_dialogue(path):

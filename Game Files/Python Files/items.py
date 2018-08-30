@@ -30,6 +30,7 @@ import save_load
 import sounds
 import tiles
 import units
+import towns
 
 if __name__ == "__main__":
     sys.exit()
@@ -401,6 +402,7 @@ class FastTravelAtlas(NonConsumable):
                             main.party_info['music'] = chosen.music
                             sounds.play_music(main.party_info['music'])
 
+                        towns.search_towns()
                         return
 
                     if y_n.startswith('n'):

@@ -60,9 +60,7 @@ PEASANT-RPG GOALS
 		Use three ingredients each with different flavors, and there's a 33.33% chance for the potion to end up as each flavor.
 		Use two ingredients of the same flavor, and one of a different flavor, and there's a 66.67% and 33.33% chance respectively.
 		etc.
-	[x] These potions can be used to do various things. Some of them are mundane, doing things as simple as curing status ailments
-		restoring HP/MP, or increasing stats in-battle. But others have cooler effects, such as allowing you to rename your character,
-		and enabling you to re-pick your class. 
+	[x] These potions have unique effects only obtainable through alchemy
 		
 [x] Fix the tool items:
 	[x] Fix the shovel
@@ -78,6 +76,8 @@ PEASANT-RPG GOALS
 	[x] Rework monster spawning to not be based off biome
 	[x] Make it so if you encounter an enemy on the overworld, you have a % chance to "sneak up" on them based on your perception, 
 		giving you a choice on whether to attack or ignore the enemy.
+		
+[x] Custom dialogue for accepting/turning down a quest
 
 [ ] Add more combat options:	
 	[ ] Kick
@@ -86,13 +86,15 @@ PEASANT-RPG GOALS
 	[ ] Pass/Wait
 	
 [ ] Randomly Generated Dungeons
-	[ ] Dungeons would be randomized mazes that are generated upon first entering them.
-	[ ] Each province would have one dungeon that can be entered at any time.
+	[X] Dungeons would be randomized mazes that are generated upon entering them.
+	[X] Each province would have one dungeon that can be entered at any time.
 	[ ] The dungeons are completely optional to beating the game and finishing every quest, 
 		although there will be a stat called "unique dungeons completed" that would probably have to be maxed out to be considered 100% completion
 	[ ] Each floor of the dungeon will have one item, randomized from a list of dungeon-exclusive items (as well as gold and alchemy ingredients)
 	[ ] Each floor will have one mini-boss, who upon killing will drop a key that lets you unlock the door to the next floor
 	[ ] The final floor will have a true boss that is much stronger than the minibosses and will unlock a stairway to the entrance when defeated.
+
+[ ] Make a tool that auto-creates 3x3 cells, as well as houses for towns
 
 [ ] Make it so Potions can be used on allies
 
@@ -100,8 +102,7 @@ PEASANT-RPG GOALS
 
 [ ] Rewrite the credits, lore, and back-story
 
-[ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.
-		
+[ ] Add back in the Anti-Blood Squad, now that multi-monster battles are a thing.		
 	
 -- Potential Ideas -- 
 [ ] Add races (Elves, Dwarves, Gnomes, etc)
