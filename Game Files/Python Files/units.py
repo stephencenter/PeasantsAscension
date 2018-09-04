@@ -205,7 +205,6 @@ Input [#]: """)
 
                               'paladin': """\
     -Can use abilities that scale off Wisdom
-    -Bonus healing from spells is 4*Wisdom instead of 2*Wisdom
     -Can learn all Healing spells and offensive Light spells
     -Deals Physical Damage with Standard Attacks
     -High Magical/Physical Defense

@@ -392,7 +392,6 @@ class FastTravelAtlas(NonConsumable):
                             print("CRASH! Your senses re-emerge you've landed on your back... Oh, you're exactly where")
                             print("you teleported to!")
                             main.s_input("\nPress enter/return ")
-                            print("-"*save_load.divider_size)
 
                         main.party_info['has_teleported'] = True
                         main.party_info['prov'] = prov.name

@@ -79,11 +79,38 @@ PEASANT-RPG GOALS
 		
 [x] Custom dialogue for accepting/turning down a quest
 
+[ ] Custom music for towns
+
 [ ] Add more combat options:	
 	[ ] Kick
+		[ ] Is an alternative to the attack option, with a few changes
+			[ ] Kicking does [10 + Strength] damage, ignoring the players attack stat
+			[ ] Kicking ALWAYS does physical damage, even if the player's class normal attacks do magic/pierce damage
+			[ ] Kicking makes the user go last, because kicking requires the player to get closer
+			[ ] Can be augmented by an accessory called the "Steal Toe Boots"
+				[ ] Triple the damage done by kicks [3*(10 + Strength)]
+				[ ] Lowers the accuracy of kicks by 10%
+				[ ] Lowers the speed of the user (all actions, not just kicks) by 10%
 	[ ] Throw items
+		[ ] Does [5 + Dexterity] damage, ignoring the player's attack stat
+		[ ] There are special throwable items such as Throwing Knives, Rocks, and Darts have specific damage values [Damage + Dexterity]
+		[ ] Throwing deals pierce damage
+		[ ] Can be augmented by an accessory called "The Throw Akimbo"
+			[ ] Allows the player to throw two items
 	[ ] Defend
+		[ ] Doubles the player's defense stats for 1 turning
 	[ ] Pass/Wait
+		[ ] The player does nothing - no attacks, no stat increases, etc.
+		[ ] +2 AP regen on wait turn instead of +1
+
+[ ] Additional class-independent use for attributes
+	[ ] INT - ???
+	[ ] CON - ???
+	[ ] WIS - Bonus Healing Power
+	[ ] STR - Bonus Kick Power
+	[ ] DEX - Bonus Throw Power
+	[ ] CHA - Better deals at shops
+	[ ] PER - Ignore enemy battles
 	
 [ ] Randomly Generated Dungeons
 	[X] Dungeons would be randomized mazes that are generated upon entering them.

@@ -37,10 +37,12 @@ else:
 
 
 class Town:
-    def __init__(self, name, desc, people, town_id):
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
         self.name = name  # The town's name (e.g. New York City)
         self.desc = desc  # A brief description of the town
         self.people = people  # A list that contains the NPCs you can talk to
+        self.town_music = town_music  # Music that plays when inside a town
+        self.store_music = store_music  # Music that plays when talking to an NPC or visiting an inn/store
         self.town_id = town_id  # A unique identifier for each town
 
         self.houses = []
@@ -119,7 +121,7 @@ class Town:
                 selected = main.s_input('Where do you want to go? | Input [L]etter (or type "exit"): ').lower()
 
                 if any(map(selected.startswith, buildings)):
-                    sounds.play_music('../Music/Mayhem in the Village.ogg')
+                    sounds.play_music(self.store_music)
 
                     if selected.startswith('u'):
                         self.town_houses()
@@ -132,7 +134,7 @@ class Town:
 
                     print('-'*save_load.divider_size)
 
-                    sounds.play_music('../Music/Chickens (going peck peck peck).ogg')
+                    sounds.play_music(self.town_music)
 
                     break
 
@@ -209,56 +211,7 @@ class Town:
 
             elif chosen.startswith('s'):
                 print('-'*save_load.divider_size)
-                spam = True
-                while spam:
-                    print("""Sellable Categories:
-      [1] Armor
-      [2] Consumables
-      [3] Weapons
-      [4] Accessories
-      [5] Tools
-      [6] Misc. Items""")
-                    while True:
-                        cat = main.s_input('Input [#] (or type "back"): ').lower()
-
-                        if cat in ['e', 'x', 'exit', 'b', 'back']:
-                            print('-'*save_load.divider_size)
-                            spam = False
-                            break
-                        elif cat == '1':
-                            cat = 'armor'
-                            vis_cat = 'Armor'
-                        elif cat == '2':
-                            cat = 'consumables'
-                            vis_cat = 'Consumables'
-                        elif cat == '3':
-                            cat = 'weapons'
-                            vis_cat = 'Weapons'
-                        elif cat == '4':
-                            cat = 'access'
-                            vis_cat = 'Accessories'
-                        elif cat == '5':
-                            cat = 'tools'
-                            vis_cat = 'Tools'
-                        elif cat == '6':
-                            cat = 'misc'
-                            vis_cat = 'Misc. Items'
-                        else:
-                            continue
-
-                        if items.inventory[cat] and any([not i.imp for i in items.inventory[cat]]):
-                            items.pick_item(cat, vis_cat, selling=True)
-                            print('-'*save_load.divider_size)
-
-                            break
-
-                        else:
-                            print('-'*save_load.divider_size)
-                            print(f"You don't have any sellable items in the {vis_cat} category.")
-                            main.s_input("\nPress enter/return")
-                            print('-'*save_load.divider_size)
-
-                            break
+                self.sell_choose_cat()
 
             elif chosen in ['e', 'x', 'exit', 'b', 'back']:
                 return
@@ -382,6 +335,59 @@ class Town:
 
                 return
 
+    @staticmethod
+    def sell_choose_cat():
+        while True:
+            print("""Sellable Categories:
+      [1] Armor
+      [2] Consumables
+      [3] Weapons
+      [4] Accessories
+      [5] Tools
+      [6] Misc. Items""")
+            while True:
+                cat = main.s_input('Input [#] (or type "back"): ').lower()
+
+                if cat == '1':
+                    cat = 'armor'
+                    vis_cat = 'Armor'
+                elif cat == '2':
+                    cat = 'consumables'
+                    vis_cat = 'Consumables'
+                elif cat == '3':
+                    cat = 'weapons'
+                    vis_cat = 'Weapons'
+                elif cat == '4':
+                    cat = 'access'
+                    vis_cat = 'Accessories'
+                elif cat == '5':
+                    cat = 'tools'
+                    vis_cat = 'Tools'
+                elif cat == '6':
+                    cat = 'misc'
+                    vis_cat = 'Misc. Items'
+
+                elif cat in ['e', 'x', 'exit', 'b', 'back']:
+                    print('-' * save_load.divider_size)
+                    return
+
+                else:
+                    continue
+
+                if items.inventory[cat] and any([not i.imp for i in items.inventory[cat]]):
+                    items.pick_item(cat, vis_cat, selling=True)
+                    print('-' * save_load.divider_size)
+
+                    break
+
+                else:
+                    print('-' * save_load.divider_size)
+                    print(f"You don't have any sellable items in the {vis_cat} category.")
+                    main.s_input("\nPress enter/return")
+                    print('-' * save_load.divider_size)
+
+                    break
+
     def speak_to_npcs(self):
         while True:
             print('NPCs: ')
@@ -403,13 +409,13 @@ class Town:
 
                     continue
 
-                sounds.play_music('../Music/Mayhem in the Village.ogg')
+                sounds.play_music(self.store_music)
 
                 print('-'*save_load.divider_size)
 
                 character.speak()
 
-                sounds.play_music('../Music/Chickens (going peck peck peck).ogg')
+                sounds.play_music(self.town_music)
 
                 break
 
@@ -441,15 +447,15 @@ class Town:
 
 
 class MarketTown(Town):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
     # MarketTowns are towns that have general stores, inns, houses, and people
     pass
 
 
 class PeopleTown(Town):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
     # PeopleTowns are towns that only have people in them, no stores, inns, or houses
     pass
 
@@ -626,8 +632,8 @@ class Chest:
 
 # Nearton
 class NeartonClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         nearton_h1_c1 = Chest([20], 1, "N-H1-C1")
         nearton_h1_c2 = Chest([10, items.s_rejuv], 1, "N-H1-C2")
@@ -644,13 +650,17 @@ Nearton is a small village in in the Inner Forest. It is in this very town
 where numerous brave adventurers have begun their journey. Nearton is just 
 your standard run-of-the-mill village: it has a general store, an inn, and 
 a few small houses. An old man  is standing near one of the houses, and
-appears to be very troubled about something.""", [npcs.philliard, npcs.alfred, npcs.wesley, npcs.npc_solou], "nearton")
+appears to be very troubled about something.""",
+                            [npcs.philliard, npcs.alfred, npcs.wesley, npcs.npc_solou],
+                            '../Music/Mayhem in the Village.ogg',
+                            '../Music/Chickens (going peck peck peck).ogg',
+                            "nearton")
 
 
 # Southford
 class SouthfordClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         southford_h1_c1 = Chest([35], 2, "S-H1-C1")
         southford_h1 = House("Lazaro", [southford_h1_c1])
@@ -661,13 +671,16 @@ class SouthfordClass(MarketTown):
 town_southford = SouthfordClass("Southford", """\
 Southford is a fair-size town in the Southeast of the Inner Forest. The 
 inhabitants of this town are known for being quite wise, and may provide you 
-with helpful advice.""", [npcs.saar, npcs.lazaro], "southford")
+with helpful advice.""", [npcs.saar, npcs.lazaro],
+                                '../Music/Mayhem in the Village.ogg',
+                                '../Music/Chickens (going peck peck peck).ogg',
+                                "southford")
 
 
 # Overshire City
 class OvershireCityClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         overshire_h1_c1 = Chest([items.lth_bdy, items.bnz_cst, items.wiz_rob], 2, "OC-H1-C1")
         overshire_h1 = House("Joseph", [overshire_h1_c1])
@@ -686,14 +699,17 @@ separated into three sectors: the upper-class inner portion consisting of a
 castle surrounded by reinforced stone walls, a lower-class outer portion
 comprised of smalls buildings and huts, and a middle-class section situated in
 between. As an outsider, you are forbidden to enter the upper two, but are
-welcome to do as you wish in the lower.""", [npcs.joseph, npcs.sondalar, npcs.jeffery, npcs.harthos],
+welcome to do as you wish in the lower.""",
+                                         [npcs.joseph, npcs.sondalar, npcs.jeffery, npcs.harthos],
+                                         '../Music/Mayhem in the Village.ogg',
+                                         '../Music/Chickens (going peck peck peck).ogg',
                                          "overshire_city")
 
 
 # Principalia
 class PrincipaliaClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -708,13 +724,16 @@ at its strongest. Principalia was intended to be his home during that month,
 and since then it's been a tradition that every third month of the year the
 current King or Queen leaves Overshire to live here. Of course, when the King
 is here, the castle here is just as heavily guarded as the one back in
-Overshire, so one shouldn't expect to pay him a visit.""", [npcs.sakura], "principalia")
+Overshire, so one shouldn't expect to pay him a visit.""", [npcs.sakura],
+                                    '../Music/Mayhem in the Village.ogg',
+                                    '../Music/Chickens (going peck peck peck).ogg',
+                                    "principalia")
 
 
 # Sardooth
 class SardoothClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -726,7 +745,11 @@ the bustling hub of commerce and culture to a barren wasteland within just
 six months. Everyone who lived here was either killed or driven out by the 
 monsters, and the King's troops were powerless to stop it. The only thing of
 note is "The Undershire", a massive cemetery to the northeast, which is 
-rumored to be even more dangerous than here.""", [npcs.stewson], "sardooth")
+rumored to be even more dangerous than here.""",
+                              [npcs.stewson],
+                              '../Music/Mayhem in the Village.ogg',
+                              '../Music/Chickens (going peck peck peck).ogg',
+                              "sardooth")
 
 
 # =========================== #
@@ -734,8 +757,8 @@ rumored to be even more dangerous than here.""", [npcs.stewson], "sardooth")
 # =========================== #
 # Tripton
 class TriptonClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -747,13 +770,16 @@ located mere meters away from the new town's borders. Merchants in Tripton
 became very successful, as their superior bartering tactics allowed them to
 easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
-village leaders.""", [npcs.kyle, npcs.alden], "tripton")
+village leaders.""", [npcs.kyle, npcs.alden],
+                            '../Music/Mayhem in the Village.ogg',
+                            '../Music/Chickens (going peck peck peck).ogg',
+                            "tripton")
 
 
 # Fallville
 class FallvilleClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -765,7 +791,10 @@ located mere meters away from the new town's borders. Merchants in Tripton
 became very successful, as their superior bartering tactics allowed them to
 easily steal business from Fallvillian merchants. This has led to a bitter,
 and sometimes violent, rivalry between the two towns, particularly between the
-village leaders.""", [npcs.krystin, npcs.frederick], "fallville")
+village leaders.""", [npcs.krystin, npcs.frederick],
+                            '../Music/Mayhem in the Village.ogg',
+                            '../Music/Chickens (going peck peck peck).ogg',
+                            "fallville")
 
 
 # =========================== #
@@ -773,8 +802,8 @@ village leaders.""", [npcs.krystin, npcs.frederick], "fallville")
 # =========================== #
 # Valice
 class ValiceClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -787,25 +816,34 @@ discovered to be lying beneath the surface of Valice, the town grew
 tremendously in both size and wealth. This wealth did not last, as the gems 
 quickly became rarer and rarer and are now nowhere to be seen. This, 
 unfortunately, means that Valice is both one of the biggest towns in Overshire,
-and also one of the poorest.""", [npcs.ethos, npcs.typhen], "valice")
+and also one of the poorest.""",
+                          [npcs.ethos, npcs.typhen],
+                          '../Music/Mayhem in the Village.ogg',
+                          '../Music/Chickens (going peck peck peck).ogg',
+                          "valice")
 
 
 # Valenfall
 class ValenfallClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
 town_valenfall = ValenfallClass("Valenfall", """\
-Valenfall is a city in the Aether. Not much is known about this ancient city. 
-It's inhabitants claim that it was lifted up from the mainland several millenia ago
-by his Divinity. The gods supposedly used Valenfall as the cornerstone,
-constructing all of the surrounding land of Aethus around it. Valenfall is
-deeply intertwined with nature, and monuments depicting the nature deities can
-be seen on every corner.
-""", [npcs.fitzgerald], "valenfall")
+Valenfall is an ancient city, belived to have been created by the forefathers
+of modern Harconia. The city used to be situated on a large, floating island
+known as the Aether, before it came crashing down. Towns located below the
+Aether were forced to evacuate to save themselves from the impending impact.
+Strangely, all of the Aether, including Valenfall, was devoid of any life.
+Citizens of the now-destroyed towns decided to take over the empty town of
+Valenfall which managed to survive falling to Harconia. It is unknonwn how
+the Aether floated in the air or why it stopped.""",
+                                [npcs.fitzgerald],
+                                '../Music/Mayhem in the Village.ogg',
+                                '../Music/Chickens (going peck peck peck).ogg',
+                                "valenfall")
 
 # =========================== #
 #        DELTORA TOWNS        #
@@ -817,8 +855,8 @@ be seen on every corner.
 # =========================== #
 # Parceon
 class ParceonClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -828,7 +866,9 @@ Parceon is a highly populated town renown for it's rich magical background.
 Parceon is home to the famous Sorcerers' Guild, a group of unbelievably
 skilled and wise mages who work together to establish and enforce magical law.
 The head of the guild, Azura, lives in a large tower in the southwest side of
-the town.""", [npcs.azura], "parceon")
+the town.""", [npcs.azura], '../Music/Mayhem in the Village.ogg',
+                            '../Music/Chickens (going peck peck peck).ogg',
+                            "parceon")
 
 
 # =========================== #
@@ -836,8 +876,8 @@ the town.""", [npcs.azura], "parceon")
 # =========================== #
 # Rymn Outpost
 class RymnOutpostClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -846,13 +886,16 @@ town_rymn_outpost = RymnOutpostClass("Rymn Outpost", """\
 Rymn Outpost is one of the several small villages established
 after the Thexian Incursion. All of the residents of this town are soldiers or
 family members of soldiers, with the exception a few merchants. Rymn Outpost
-is named after Rymnes, the Divinic gods of defense.""", [], "rymn_outpost")
+is named after Rymnes, the Divinic gods of defense.""", [],
+                                     '../Music/Mayhem in the Village.ogg',
+                                     '../Music/Chickens (going peck peck peck).ogg',
+                                     "rymn_outpost")
 
 
 # Fort Sigil
 class FortSigilClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -863,43 +906,46 @@ town was built around an old fort, named Fort Sigil. Originally comprised of
 just a few tents meant to house soldiers, many of these soldiers eventually
 put down their arms and settled. Despite it's rich backstory and pleasant
 scenery, Fort Sigil doesn't get many visitors. Perhaps there's a reason why...""",
-                                 [npcs.seriph, npcs.rivesh], "fort_sigil")
+                                 [npcs.seriph, npcs.rivesh],
+                                 '../Music/Mayhem in the Village.ogg',
+                                 '../Music/Chickens (going peck peck peck).ogg',
+                                 "fort_sigil")
 
 
 # Mardovian Caverns
 class MardovianCavernsClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
 town_mardoviancaverns = MardovianCavernsClass("Mardovian Caverns", """\
-""", [], "mardoviancaverns")
+""", [], '../Music/Mayhem in the Village.ogg', '../Music/Chickens (going peck peck peck).ogg', "mardoviancaverns")
 
 
 # Mt. Falenkarth
 class MtFalenkarthClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
 town_mtfalenkarth = MtFalenkarthClass("Dewfrost", """\
-""", [], "mtfalenkarth")
+""", [], '../Music/Mayhem in the Village.ogg', '../Music/Chickens (going peck peck peck).ogg', "mtfalenkarth")
 
 
 # Coran Outpost
 class CoranOutpostClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
 town_coran_outpost = CoranOutpostClass("Coran Outpost", """\
-""", [], "coran_outpost")
+""", [], '../Music/Mayhem in the Village.ogg', '../Music/Chickens (going peck peck peck).ogg', "coran_outpost")
 
 
 # =========================== #
@@ -907,32 +953,32 @@ town_coran_outpost = CoranOutpostClass("Coran Outpost", """\
 # =========================== #
 # Dewfrost
 class DewfrostClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
 town_dewfrost = DewfrostClass("Dewfrost", """\
-""", [], "dewfrost")
+""", [], '../Music/Mayhem in the Village.ogg', '../Music/Chickens (going peck peck peck).ogg', "dewfrost")
 
 
 # Clayroost
 class ClayroostClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
 town_clayroost = ClayroostClass("Clayroost", """\
-""", [], "clayroost")
+""", [], '../Music/Mayhem in the Village.ogg', '../Music/Chickens (going peck peck peck).ogg', "clayroost")
 
 
 # Ravenstone
 class RavenstoneClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -944,13 +990,16 @@ Druids and other nature-magicians. Ravenstone is also the home of the Druids'
 section of the Sorcerers' Guild. Vegetation grows on almost every building and 
 statue in the town. When the population of the town is calculated, animals are 
 counted as people. More than 35% of the population are various species of 
-animals.""", [npcs.strathius], "ravenstone")
+animals.""", [npcs.strathius],
+             '../Music/Mayhem in the Village.ogg',
+             '../Music/Chickens (going peck peck peck).ogg',
+             "ravenstone")
 
 
 # Ambercreek
 class AmbercreekClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -960,13 +1009,16 @@ Ambercreek is a large mining town located in the Chin'tor. The Chin'toric
 embassy can be found in the middle of this town surrounded by large stone walls
 and a few guard-towers. Sugulat, the Lord of Chin'tor, can often be found mining
 on the outskirts of town. A very troubled-looking old man is in the southwest 
-portion of the town near a few smaller houses.""", [npcs.raidon, npcs.sugulat], "ambercreek")
+portion of the town near a few smaller houses.""", [npcs.raidon, npcs.sugulat],
+                                  '../Music/Mayhem in the Village.ogg',
+                                  '../Music/Chickens (going peck peck peck).ogg',
+                                  "ambercreek")
 
 
 # Capwild
 class CapwildClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -976,7 +1028,10 @@ Capwild is a medium sized town situated in the Terrius Mt. Range.
 Capwild is a supplier of grains and herbs for the entire region, and makes
 extensive use of terrace farming to make up for the lack of arable land.
 Further investigation reveals that water mages have created self-sustaining
-irrigation systems as well, further enhancing Capwild's farming capabilities.""", [], "capwild")
+irrigation systems as well, further enhancing Capwild's farming capabilities.""", [],
+                            '../Music/Mayhem in the Village.ogg',
+                            '../Music/Chickens (going peck peck peck).ogg',
+                            "capwild")
 
 
 # =========================== #
@@ -984,19 +1039,22 @@ irrigation systems as well, further enhancing Capwild's farming capabilities."""
 # =========================== #
 # Simphet
 class SimphetClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
-town_simphet = SimphetClass("Simphet", """""", [], "simphet")
+town_simphet = SimphetClass("Simphet", """""", [],
+                            '../Music/Mayhem in the Village.ogg',
+                            '../Music/Chickens (going peck peck peck).ogg',
+                            "simphet")
 
 
 # Whistumn
 class WhistumnClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -1008,13 +1066,16 @@ are known for their skepticism and reasoning. Many of them are scientists and ar
 skilled mathematicians and engineers. This town has an ongoing rivalry with
 the town of Parceon because of their magical background, but this appears
 to be mostly one-sided. A saddened-looking woman and her husband are sitting
-on the steps of the general store.""", [npcs.polmor, npcs.serena], "whistumn")
+on the steps of the general store.""", [npcs.polmor, npcs.serena],
+                              '../Music/Mayhem in the Village.ogg',
+                              '../Music/Chickens (going peck peck peck).ogg',
+                              "whistumn")
 
 
 # Hatchnuk
 class HatchnukClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -1030,7 +1091,10 @@ to be walking out in the open doing business together. As a result, there are no
 buildings that you are able to enter, and no people to talk to. The only people 
 who are around to speak to are the guards, but their plague-doctor-esque
 apparel and stern looks make it clear that they are not in the mood for 
-chit-chat.""", [], "hatchnuk")
+chit-chat.""", [],
+                            '../Music/Mayhem in the Village.ogg',
+                            '../Music/Chickens (going peck peck peck).ogg',
+                            "hatchnuk")
 
 
 # =========================== #
@@ -1038,46 +1102,58 @@ chit-chat.""", [], "hatchnuk")
 # =========================== #
 # Cesura
 class CesuraClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
-town_cesura = CesuraClass("Cesura", """""", [npcs.morrison], "cesura")
+town_cesura = CesuraClass("Cesura", """""", [npcs.morrison],
+                          '../Music/Mayhem in the Village.ogg',
+                          '../Music/Chickens (going peck peck peck).ogg',
+                          "cesura")
 
 
 # Trintooli
 class TrintooliClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
-town_trintooli = TrintooliClass("Trintooli", """""", [], "trintooli")
+town_trintooli = TrintooliClass("Trintooli", """""", [],
+                                '../Music/Mayhem in the Village.ogg',
+                                '../Music/Chickens (going peck peck peck).ogg',
+                                "trintooli")
 
 
 # Fogwhite
 class FogwhiteClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
-town_fogwhite = FogwhiteClass("Foqwhitte", """""", [], "fogwhite")
+town_fogwhite = FogwhiteClass("Foqwhitte", """""", [],
+                              '../Music/Mayhem in the Village.ogg',
+                              '../Music/Chickens (going peck peck peck).ogg',
+                              "fogwhite")
 
 
 # Don'kohrin
 class DonkohrinClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
-town_don_kohrin = DonkohrinClass("Don'kohrin", """""", [], "donkohrin")
+town_don_kohrin = DonkohrinClass("Don'kohrin", """""", [],
+                                 '../Music/Mayhem in the Village.ogg',
+                                 '../Music/Chickens (going peck peck peck).ogg',
+                                 "donkohrin")
 
 
 # =========================== #
@@ -1085,8 +1161,8 @@ town_don_kohrin = DonkohrinClass("Don'kohrin", """""", [], "donkohrin")
 # =========================== #
 # Sanguion
 class SanguionClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -1096,23 +1172,28 @@ Sanguion is a safe-haven for vampires. Vampires are feared throughout
 Harconia, so this fairly unknown town is the only place they can go without
 being persecuted. The vampires in this town are peaceful, and actually refuse
 to drink the blood of intelligent lifeforms. Beware, though, as not all
-vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.ariver], "sanguion")
+vampires are as friendly as the ones who inhabit Sanguion.""", [npcs.pime, npcs.ariver],
+                              '../Music/Mayhem in the Village.ogg',
+                              '../Music/Chickens (going peck peck peck).ogg',
+                              "sanguion")
 
 
 # Lamtonum
 class LamtonumClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
 
 town_lantonum = LamtonumClass("Lamtonum", """\
-Lantonum is a small town that has the best forge in all of Arcadia.
+Lantonum is a small town that has the best forge in all of Harconia.
 Nearly 2/3s of all citizens of this town are experienced blacksmiths, and 90%
 of all ores and minerals mined in Pelamora are brought here. It is one of the 
 wealthiest cities in Pelamora due to its Mythril, Magestite, and Necrite bar 
-exports.""", [npcs.matthew], "lantonum")
+exports.""", [npcs.matthew], '../Music/Mayhem in the Village.ogg',
+                             '../Music/Chickens (going peck peck peck).ogg',
+                             "lantonum")
 
 
 # =========================== #
@@ -1120,8 +1201,8 @@ exports.""", [npcs.matthew], "lantonum")
 # =========================== #
 # New Ekanmar
 class NewEkanmarClass(MarketTown):
-    def __init__(self, name, desc, people, town_id):
-        super().__init__(name, desc, people, town_id)
+    def __init__(self, name, desc, people, town_music, store_music, town_id):
+        super().__init__(name, desc, people, town_music, store_music, town_id)
 
         self.houses = []
 
@@ -1134,7 +1215,10 @@ a large number of them defected to the Harconian side and stayed. After the
 war, the citizens gave up their weapons and became a peaceful town. The vast
 majority of the inhabitants of this town are, naturally, Flyscors. It seems
 that the Flyscorian Royal Family is visiting here - perhaps you can talk with
-them for a bit.""", [npcs.fly, npcs.stravi, npcs.caesar], "new_ekanmar")
+them for a bit.""", [npcs.fly, npcs.stravi, npcs.caesar],
+                                   '../Music/Mayhem in the Village.ogg',
+                                   '../Music/Chickens (going peck peck peck).ogg',
+                                   "new_ekanmar")
 
 # =========================== #
 #          THEX TOWNS         #
@@ -1183,7 +1267,7 @@ def search_towns(enter=True):
                 y_n = main.s_input(f'The town of {town.name} is nearby. Give it a visit? | Y/N: ').lower()
 
                 if y_n.startswith('y'):
-                    sounds.play_music('../Music/Chickens (going peck peck peck).ogg')
+                    sounds.play_music(town.town_music)
 
                     main.party_info['prev_town'] = main.party_info['current_tile']
 

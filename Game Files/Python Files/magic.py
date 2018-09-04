@@ -68,21 +68,12 @@ class Healing(Spell):
         # Healing spells will always restore a minimum of target.hp*thresh.
         # e.g. A spell that heals 20 HP but has a 20% threshold will restore 20 HP for someone
         # with 45 max HP, but will restore 32 HP for someone with 160 max HP.
-        # In addition to this, the target restores an additional 2*User-wisdom, unless they are a
-        # Paladin in which case it it 4*User-wisdom.
+        # In addition to this, the target restores an additional 1 HP for every point of wisdom the user has
         if self.health < target.hp*self.thresh:
-            if user.class_ == 'paladin':
-                total_heal = target.hp*self.thresh + 2*user.attributes['wis']
-
-            else:
-                total_heal = target.hp*self.thresh + user.attributes['wis']
+            total_heal = target.hp*self.thresh + user.attributes['wis']
 
         else:
-            if user.class_ == 'paladin':
-                total_heal = self.health + 2*user.attributes['wis']
-
-            else:
-                total_heal = self.health + user.attributes['wis']
+            total_heal = self.health + user.attributes['wis']
 
         target.hp += total_heal
         target.hp = math.ceil(target.hp)
@@ -420,24 +411,24 @@ unholy_rend = Damaging('Unholy Rend', "Annihilate holy creatures with a sunderin
 # Every character starts with this spell
 pit_heal = Healing('Novice Healing', """\
 Restore a small amount of an ally's HP using holy magic. Heals 10 HP or 5% of
-the target's max HP, whichever is greater (5% Healing Power)""",
+the target's max HP, whichever is greater [5% Healing Power].""",
                    2, 1, 10, 0.05, [], "healing_1")
 
 # The Paladin also starts with this spell
 min_heal = Healing('Adept Healing', """\
 Restore a moderate amount of an ally's HP using holy magic. Heals 25 HP or 20%
-of the target's max HP, whichever is greater (20% Healing Power)""",
+of the target's max HP, whichever is greater [20% Healing Power].""",
                    5, 3, 25, 0.2, [], "healing_2")
 
 # This tier and up can only be learned by Paladins and Mages
 adv_heal = Healing('Advanced Healing', """\
 Restore a large amount of an ally's HP using holy magic. Heals 70 HP or 50%
-of the target's max HP, whichever is greater (50% Healing Power)""",
+of the target's max HP, whichever is greater [50% Healing Power].""",
                    10, 15, 70, 0.5, ('paladin', 'mage'), "healing_3")
 
 div_heal = Healing('Divine Healing', """\
 Restore a very large amount of an ally's HP using holy magic. Heals 125 HP or
-75% of the target's max HP, whichever is greater (75% Healing Power)""",
+75% of the target's max HP, whichever is greater [75% Healing Power].""",
                    25, 28, 125, 0.75, ('paladin', 'mage'), "healing_4")
 
 # -- Buffs -- #

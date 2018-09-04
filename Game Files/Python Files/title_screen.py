@@ -61,15 +61,15 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]
         if choice.startswith('p'):
             return
 
-        if choice.startswith("s"):
+        if choice.startswith("s") and not main.do_debug:
             edit_settings()
             print(title_logo)
 
-        if choice.startswith('c'):
+        if choice.startswith('c') and not main.do_debug:
             show_credits()
             print(title_logo)
 
-        if choice.startswith('l'):
+        if choice.startswith('l') and not main.do_debug:
             show_history()
             print(title_logo)
 

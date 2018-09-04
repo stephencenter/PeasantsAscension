@@ -65,8 +65,6 @@ class Quest(Conversation):
                 return
 
             elif accept.startswith('n'):
-                print('-'*save_load.divider_size)
-
                 return
 
     def completion(self):
@@ -558,12 +556,12 @@ class AlfredQuestA(Quest):
 
     def upon_starting(self):
         units.master_slime.active = True
-        set_active("alfred_c1", False)
-        set_active("alfred_c2", True)
+        set_active(alfred_convo_a, False)
+        set_active(alfred_convo_b, True)
 
     def upon_completing(self):
-        set_active("alfred_c3", False)
-        set_active("alfred_c4", True)
+        set_active(alfred_convo_c, False)
+        set_active(alfred_convo_d, True)
 
 
 alfred_quest_a = AlfredQuestA('A Slimy Specimen', 'Alfred', """\
