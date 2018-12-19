@@ -2,14 +2,7 @@ Thumbs.db
 .idea/workspace.xml
 error_log.out
 Game Files/__pycache__/
-Game Files/Scripts/__pycache__/
-Game Files/Classes/__pycache__/
-Game Files/Content/__pycache__/
-Game Files/Content/Save Files/
-Game Files/Content/Music
 Game Files/build/
-PeasantRPG Wrapper
-Game Files/Content/loud_stuff/
 Game Files/Save Files/
 Game Files/Music/
 Game Files/Python Files/__pycache__/
@@ -17,7 +10,6 @@ Game Files/Python Files/build/
 settings.cfg
 build/
 dist/
-/.idea
 /.idea
 /.tmp.drivedownload/
 /Game Files/settings.cfg
@@ -27,9 +19,6 @@ dist/
 /Game Files/Classes/obj/
 /Game Files/Data/obj/
 /Game Files/Methods/obj/
-/Game Files/Peasant's Ascension/bin/
-/Game Files/Peasant's Ascension/obj/
-/Game Files/.vs/Peasant's Ascension/v15/Server/sqlite3/db.lock
-/Game Files/PeasantsAscension/.vs/PeasantsAscension/v15/Server/sqlite3/db.lock
-/Game Files/PeasantsAscension/obj/Debug/
-/Game Files/PeasantsAscension/.vs
+/Game Files/PeasantsAscension/.vs/
+/Game Files/PeasantsAscension/obj/
+/Game Files/.vs/
