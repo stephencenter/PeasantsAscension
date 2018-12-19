@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F9A07A74-B6BB-49B1-848A-99070C7D1579}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <ProjectGuid>{3EF5ADD5-F84E-4C8A-8495-21A9C2818FB0}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <RootNamespace>PeasantsAscension</RootNamespace>
     <AssemblyName>PeasantsAscension</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -46,12 +48,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Classes\Classes.csproj">
-      <Project>{A2025DA0-5A05-4B54-AE27-B7DBFF6C4208}</Project>
+      <Project>{a2025da0-5a05-4b54-ae27-b7dbff6c4208}</Project>
       <Name>Classes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Methods\Methods.csproj">
-      <Project>{11E9A420-9B52-4240-9000-E1D5F50C251B}</Project>
+      <Project>{11e9a420-9b52-4240-9000-e1d5f50c251b}</Project>
       <Name>Methods</Name>
     </ProjectReference>
   </ItemGroup>

@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Ability.cs" />
     <Compile Include="Dialogue.cs" />
-    <Compile Include="Item Classes\Item.cs" />
+    <Compile Include="Items\Item.cs" />
     <Compile Include="Units\Boss.cs" />
     <Compile Include="Units\Monster.cs" />
     <Compile Include="NPC.cs" />

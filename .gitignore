@@ -16,9 +16,11 @@ dist/
 /Game Files/Test Music
 /Game Files/alchemy system.txt
 /Game Files/Sound FX/Bard Sounds Copy/
-/Game Files/Classes/obj/
-/Game Files/Data/obj/
-/Game Files/Methods/obj/
 /Game Files/PeasantsAscension/.vs/
 /Game Files/PeasantsAscension/obj/
+/Game Files/PeasantsAscension/bin/
+/Game Files/Classes/obj/
+/Game Files/Classes/bin/
+/Game Files/Methods/obj/
+/Game Files/Methods/bin/
 /Game Files/.vs/

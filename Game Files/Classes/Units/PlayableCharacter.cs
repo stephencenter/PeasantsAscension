@@ -69,6 +69,7 @@ namespace Classes.Units
             Speed = 6;
             Evasion = 3;
             Level = 1;
+            Active = true;
         }
 
         public void SetTempStats()
@@ -120,7 +121,7 @@ namespace Classes.Units
         {
             var pcu_list = new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
 
-            foreach (PlayableCharacter pcu in pcu_list)
+            foreach (PlayableCharacter pcu in pcu_list.ToList())
             {
                 if (!pcu.Active)
                 {

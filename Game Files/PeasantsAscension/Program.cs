@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PeasantsAscension
 {
-    public class Program
+    class Program
     {
-        void Main()
+        static void Main(string[] args)
         {
             ProgramUI the_game = new ProgramUI();
             the_game.Run();

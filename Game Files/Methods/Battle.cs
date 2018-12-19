@@ -27,7 +27,7 @@ namespace Methods
                 {
                     monster_list.Add(monster_gen.GenerateMonster());
                 }
-            } 
+            }
 
             if (monster_list.Count == 1)
             {
@@ -50,12 +50,13 @@ namespace Methods
 
             active_pcus.ForEach(x => x.SetTempStats());
 
-            //    # Record the player's non-hp/mp stats (e.g. defense)
-            //    # So they can go back to normal after the battle
-            //    set_temp_stats()
-            //    main.party_info['gamestate'] = 'battle'
+            // While all active party members are alive, continue the battle
 
-            //    # While all active party members are alive, continue the battle
+            while (monster_list.Any(x => x.HP > 0) && active_pcus.Any(x => x.HP > 0))
+            {
+                turn_counter++;
+            }
+
             //    while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
             //        turn_counter += 1
 
@@ -332,4 +333,5 @@ namespace Methods
             //    print('-'*save_load.divider_size)
 
         }
+    }
 }

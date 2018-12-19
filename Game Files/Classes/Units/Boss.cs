@@ -7,7 +7,7 @@ using Classes.Units;
 
 namespace Classes.Units
 {
-    public class Boss : Monster
-    {
-    }
+    //public class Boss : Monster
+    //{
+    //}
 }
