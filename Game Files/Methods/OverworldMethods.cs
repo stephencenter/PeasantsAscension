@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Methods
 {
-    class TitlescreenMethods
+    class OverworldMethods
     {
     }
 }

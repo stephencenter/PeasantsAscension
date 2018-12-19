@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Classes.Units;
 
 namespace Classes
 {
-    class PlayerClass
+    public class MonsterClass : UnitClass
     {
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Methods
+namespace Data
 {
-    class TitlescreenMethods
+    class PartyData
     {
     }
 }

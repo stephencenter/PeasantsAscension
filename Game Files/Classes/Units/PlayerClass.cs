@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Classes.Units;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Methods
+namespace Classes
 {
-    class TitlescreenMethods
+    public class PlayerClass : UnitClass
     {
     }
 }
