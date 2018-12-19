@@ -1,13 +1,12 @@
-﻿using Classes.Units;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Classes
+namespace Methods
 {
-    public class PlayerClass : UnitClass
+    public class SaveLoad
     {
     }
 }

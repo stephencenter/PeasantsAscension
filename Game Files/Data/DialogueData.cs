@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data
 {
-    class DialogueData
+    public class DialogueData
     {
     }
 }

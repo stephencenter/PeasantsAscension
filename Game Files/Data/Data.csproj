@@ -54,5 +54,11 @@
     <Compile Include="TileData.cs" />
     <Compile Include="TownData.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Classes\Classes.csproj">
+      <Project>{A2025DA0-5A05-4B54-AE27-B7DBFF6C4208}</Project>
+      <Name>Classes</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

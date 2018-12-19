@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Classes.Units;
 
-namespace Classes.Units
+namespace Classes.Items
 {
-    public class BossClass : MonsterClass
+    public class Item
     {
+
     }
 }

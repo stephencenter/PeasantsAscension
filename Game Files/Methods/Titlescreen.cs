@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Classes
+namespace Methods
 {
-    class SoundClass
+    public class Titlescreen
     {
     }
 }

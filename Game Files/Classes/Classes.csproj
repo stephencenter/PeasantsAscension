@@ -41,19 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbilityClass.cs" />
-    <Compile Include="DialogueClass.cs" />
-    <Compile Include="Item Classes\ItemClass.cs" />
-    <Compile Include="Units\BossClass.cs" />
-    <Compile Include="Units\MonsterClass.cs" />
-    <Compile Include="NPCClass.cs" />
-    <Compile Include="Units\PlayerClass.cs" />
+    <Compile Include="Ability.cs" />
+    <Compile Include="Dialogue.cs" />
+    <Compile Include="Item Classes\Item.cs" />
+    <Compile Include="Units\Boss.cs" />
+    <Compile Include="Units\Monster.cs" />
+    <Compile Include="NPC.cs" />
+    <Compile Include="Units\PlayableCharacter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundClass.cs" />
-    <Compile Include="SpellClass.cs" />
-    <Compile Include="TileClass.cs" />
-    <Compile Include="TownClass.cs" />
-    <Compile Include="Units\UnitClass.cs" />
+    <Compile Include="Sound.cs" />
+    <Compile Include="Spell.cs" />
+    <Compile Include="Tile.cs" />
+    <Compile Include="Town.cs" />
+    <Compile Include="Units\Unit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

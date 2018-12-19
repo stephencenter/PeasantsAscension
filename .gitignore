@@ -30,3 +30,6 @@ dist/
 /Game Files/Peasant's Ascension/bin/
 /Game Files/Peasant's Ascension/obj/
 /Game Files/.vs/Peasant's Ascension/v15/Server/sqlite3/db.lock
+/Game Files/PeasantsAscension/.vs/PeasantsAscension/v15/Server/sqlite3/db.lock
+/Game Files/PeasantsAscension/obj/Debug/
+/Game Files/PeasantsAscension/.vs

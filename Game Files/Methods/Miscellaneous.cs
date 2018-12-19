@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Methods
 {
-    public class SaveloadMethods
+    public class Miscellaneous
     {
     }
 }

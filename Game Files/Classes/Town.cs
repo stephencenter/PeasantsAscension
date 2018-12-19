@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Classes
 {
-    class TownClass
+    public class Town
     {
     }
 }

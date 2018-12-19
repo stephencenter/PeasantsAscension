@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Classes
 {
-    class TileClass
+    public class NPC
     {
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Classes
 {
-    class SpellClass
+    public class Ability
     {
     }
 }
