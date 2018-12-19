@@ -8,8 +8,6 @@ namespace Methods
 {
     public class Battle
     {
-        string vowels = "AEIOU";
-        //vowels = 'AEIOU'
         //m_list = []
         //enabled_pcus = []
         //turn_counter = 0

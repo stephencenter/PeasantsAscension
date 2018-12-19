@@ -49,6 +49,5 @@ namespace Classes.Units
             Evasion = 3;
             Level = 1;
         }
-
     }
 }
