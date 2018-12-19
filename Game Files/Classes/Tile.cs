@@ -14,23 +14,11 @@ namespace Classes
         protected DirectionInfo ToSouth { get; set; }
         protected DirectionInfo ToWest { get; set; }
         protected DirectionInfo ToEast { get; set; }
-
-        public Tile(string name, string desc, DirectionInfo to_north, DirectionInfo to_south, DirectionInfo to_east, DirectionInfo to_west)
-        {
-            Name = Name;
-            string Description = desc;
-            DirectionInfo ToNorth = to_north;
-            DirectionInfo ToSouth = to_south;
-            DirectionInfo ToWest = to_west;
-            DirectionInfo ToEast = to_east;
-        }
     }
 
     public class DirectionInfo
     {
-        public bool accessible { get; set; }
-        public string explanation { get; set; }
+        public bool Accessible { get; set; }
+        public string Explanation { get; set; }
     } 
-
-    public class 
 }

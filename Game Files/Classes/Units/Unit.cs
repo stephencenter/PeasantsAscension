@@ -22,7 +22,7 @@ namespace Classes.Units
             {Element.dark, new List<Element> {Element.dark, Element.light } }
         };
 
-        public enum Status { silence = 1, poison, weakness, blindness, paralyzation, alive }
+        public enum Status { silence = 1, poison, weakness, blindness, paralyzation, alive, dead }
         public List<Status> Statuses = new List<Status> { Status.alive };
 
         public string Name { get; set; }

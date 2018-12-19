@@ -8,7 +8,7 @@ namespace PeasantsAscension
 {
     public class Program
     {
-        static void Main()
+        void Main()
         {
             ProgramUI the_game = new ProgramUI();
             the_game.Run();

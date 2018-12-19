@@ -49,5 +49,15 @@ namespace Classes.Units
             Evasion = 3;
             Level = 1;
         }
+
+        
+    }
+
+    public class MonsterGenerator
+    {
+        public Monster GenerateMonster()
+        {
+            return new Monster("Whispering Goblin");
+        }
     }
 }
