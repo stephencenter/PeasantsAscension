@@ -1,4 +1,4 @@
-﻿using Classes.Units;
+﻿using Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace Methods
 
         public void BattleSystem()
         {
-            List<Monster> monster_list = new List<Monster>() { monster_gen.GenerateMonster() };
-            List<PlayableCharacter> active_pcus = pcu_storage.GetActivePCUs();
+            List<Unit> monster_list = new List<Unit>() { monster_gen.GenerateMonster() };
+            List<Unit> active_pcus = pcu_storage.GetActivePCUs();
             int turn_counter = 0;
 
             if (rng.Next(0, 100) > 75)
@@ -55,6 +55,13 @@ namespace Methods
             while (monster_list.Any(x => x.HP > 0) && active_pcus.Any(x => x.HP > 0))
             {
                 turn_counter++;
+
+                List<Unit> speed_list = active_pcus.Concat(monster_list).OrderByDescending(x => x.Speed).ToList();
+
+                foreach (Unit unit in speed_list)
+                {
+
+                }
             }
 
             //    while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
