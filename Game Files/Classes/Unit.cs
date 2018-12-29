@@ -125,6 +125,21 @@ namespace Classes
             TempStats["evasion"] = Evasion;
         }
 
+        public bool IsAlive()
+        {
+            return !Statuses.Contains(Unit.Status.dead);
+        }
+
+        public bool IsPCU()
+        {
+            return Type == UnitType.player;
+        }
+
+        public bool IsMonster()
+        {
+            return Type == UnitType.monster;
+        }
+
         public Unit(string name, UnitType unittype)
         {
             Type = unittype;
