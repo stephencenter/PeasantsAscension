@@ -171,6 +171,22 @@ namespace Scripts
             }
         }
 
+        public string GetStatusName(Status status)
+        {
+            Dictionary<Status, string> StatusNameMap = new Dictionary<Status, string>()
+            {
+                {Status.silence, "Silence"},
+                {Status.poison, "Poison"},
+                {Status.weakness, "Weakness"},
+                {Status.blindness, "Blindness"},
+                {Status.paralyzation, "Paralyzation" },
+                {Status.alive, "Alive"},
+                {Status.dead, "Dead"},
+            };
+
+            return StatusNameMap[status];
+        }
+
         public Unit(string name, UnitType unittype)
         {
             Type = unittype;

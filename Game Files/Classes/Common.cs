@@ -17,7 +17,7 @@ namespace Scripts
 
         public void DisplayDivider()
         {
-            Console.WriteLine('-' * settings.GetDividerSize());
+            Console.WriteLine(new String('-', settings.GetDividerSize());
         }
 
         public void PressEnterReturn()

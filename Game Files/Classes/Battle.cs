@@ -328,6 +328,28 @@ namespace Scripts
             //            item.use_item(user)
             //            return True
         }
+        
+        public void DisplayTeamStats(List<Unit> unit_list)
+        {
+            int player_pad1 = unit_list.Select(x => x.Name.Length).Max();
+            int player_pad2 = unit_list.Select(x => $"{x.HP}/{x.MaxHP} HP".Length).Max();
+            int player_pad3 = unit_list.Select(x => $"{x.MP}/{x.MaxMP} MP".Length).Max();
+
+            foreach (Unit unit in unit_list)
+            {
+                string pad1 = new string(' ', (player_pad1 - unit.Name.Length));
+                string pad2 = new string(' ', (player_pad2 - $"{unit.HP}/{unit.MaxHP} HP".Length));
+                string pad3 = new string(' ', (player_pad3 - $"{unit.MP}/{unit.MaxMP} MP".Length));
+
+                string status_list = "";
+                foreach (Unit.Status status in unit.Statuses)
+                {
+                    status_list = String.Join("", new List<string>() { status_list, unit.GetStatusName(status), ", " });
+                }
+
+                Console.WriteLine($"  {unit.Name}{pad1} | {unit.HP}/{unit.MaxHP} HP {pad2}| {unit.MP}/{unit.MaxMP} MP {pad3}| LVL: {unit.Level} | STATUS: {status_list}");
+            }
+        }
 
         public void DisplayBattleStats(List<Unit> active_pcus, List<Unit> monster_list)
         {
@@ -335,43 +357,15 @@ namespace Scripts
                 unit.FixAllStats();
             }
 
-            //def bat_stats() :
-            //    units.fix_stats()
-            //    print('-'*save_load.divider_size)
+            c_methods.DisplayDivider();
 
-            //    # Player Stats
-            //player_pad1 = max([len(x.name) for x in enabled_pcus])
-            //    player_pad2 = len(max([f'{unit.hp}/{unit.max_hp} HP' for unit in enabled_pcus], key= len))
-            //    player_pad3 = len(max([f'{unit.mp}/{unit.max_mp} MP' for unit in enabled_pcus], key= len))
+            Console.WriteLine("Your party: ");
+            DisplayTeamStats(active_pcus);
 
-            //    print("Your party: ")
-            //    for pcu in enabled_pcus:
-            //        print("  {0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-            //              pcu.name, pcu.hp,
-            //              pcu.max_hp, pcu.mp,
-            //              pcu.max_mp, pcu.lvl,
-            //              ', '.join([x.title() for x in pcu.status_ail]),
-            //              pad1= ' ' * (player_pad1 - len(pcu.name)),
-            //              pad2= ' ' * (player_pad2 - len(f'{pcu.hp}/{pcu.max_hp} HP')),
-            //              pad3= ' ' * (player_pad3 - len(f'{pcu.mp}/{pcu.max_mp} MP'))))
+            Console.WriteLine("Enemy team: ");
+            DisplayTeamStats(monster_list);
 
-            //    # Monster Stats
-            //    monster_pad1 = max([len(x.name) for x in m_list])
-            //    monster_pad2 = len(max([f'{unit.hp}/{unit.max_hp} HP' for unit in m_list], key= len))
-            //    monster_pad3 = len(max([f'{unit.mp}/{unit.max_mp} MP' for unit in m_list], key= len))
-
-            //    print("\nEnemy Team: ")
-            //    for each_monster in m_list:
-            //        print("  {0}{pad1} | {1}/{2} HP {pad2}| {3}/{4} MP {pad3}| LVL: {5} | STATUS: {6}".format(
-            //              each_monster.name, each_monster.hp,
-            //              each_monster.max_hp, each_monster.mp,
-            //              each_monster.max_mp, each_monster.lvl,
-            //              ', '.join([x.title() for x in each_monster.status_ail]),
-            //              pad1= ' ' * (monster_pad1 - len(each_monster.name)),
-            //              pad2= ' ' * (monster_pad2 - len(f'{each_monster.hp}/{each_monster.max_hp} HP')),
-            //              pad3= ' ' * (monster_pad3 - len(f'{each_monster.mp}/{each_monster.max_mp} MP'))))
-
-            //    print('-'*save_load.divider_size)
+            c_methods.DisplayDivider();
         }
     }
 }
