@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Methods
+﻿namespace Methods
 {
     public class SaveLoad
     {
+        protected int divider_size = 25;
+
+        public int GetDividerSize()
+        {
+            return divider_size;
+        }
     }
 }

@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Methods
 {
@@ -17,76 +15,6 @@ namespace Methods
 
         public void BattleSystem()
         {
-            /* Python Code
-            while any([mstr.hp > 0 for mstr in m_list]) and any([char.hp > 0 for char in enabled_pcus]):
-                turn_counter += 1
-
-                # A list of the battle participants sorted by speed. Updates once per turn.
-                speed_list = sorted(m_list + enabled_pcus,
-                                    key = lambda x: 0.5 * x.spd if "paralyzed" in x.status_ail else x.spd,
-                                    reverse = True)
-
-                # Display HP, MP, Levels, and Statuses for all battle participants
-                bat_stats()
-
-                for num, character in enumerate(enabled_pcus) :
-                    # If any of your party members are at less than 20% health, play a small jingle
-                    if 0 < character.hp <= 0.20 * character.max_hp:
-                        print(f"Warning: {character.name}'s HP is low, heal as soon as possible!\n")
-                        sounds.health_low.play()
-                        main.smart_sleep(1)
-
-                        # Let each awake and alive character choose their move
-                        if 'dead' not in character.status_ail:
-                            character.player_choice()
-
-                            if num + 1 < len([x for x in enabled_pcus if 'dead' not in x.status_ail]) :
-                                print('-' * save_load.divider_size)
-
-                # Make sure each participant in the battle goes according to who's fastest
-                for char in speed_list:
-                    if 'dead' not in char.status_ail:
-                        if all(x.hp <= 0 for x in m_list):
-                            break
-
-                        print('-' * save_load.divider_size)
-
-                        if ((isinstance(char, units.PlayableCharacter) and char.battle_turn() == 'Ran') or
-                                (isinstance(char, units.Monster) and char.base_turn() == 'Ran')):
-                            return
-
-                        if any(x.hp > 0 for x in enabled_pcus) :
-                            if any(x.hp > 0 for x in m_list) and 'dead' not in char.status_ail:
-                                main.s_input('\nPress enter/return ')
-
-                            elif all(x.hp <= 0 for x in m_list):
-                                break
-
-                        else:
-                            break
-
-                    # Check if any characters died on the participants turn
-                    for char_2 in speed_list:
-                        if isinstance(char_2, units.PlayableCharacter) and char_2.hp <= 0 and 'dead' not in char_2.status_ail:
-                            char_2.hp = 0
-                            char_2.status_ail = ['dead']
-                            sounds.ally_death.play()
-
-                            print('-' * save_load.divider_size)
-                            print(f"{char_2.name} has fallen to the monsters!")
-                            main.s_input("\nPress enter/return ")
-
-                        if isinstance(char_2, units.Monster) and char_2.hp <= 0 and 'dead' not in char_2.status_ail:
-                            char_2.hp = 0
-                            char_2.status_ail = ['dead']
-                            sounds.enemy_death.play()
-
-                            print('-' * save_load.divider_size)
-                            print(f"The {char_2.name} was defeated by your party!")
-                            main.s_input("\nPress enter/return ")
-
-                after_battle(is_boss)*/
-
             List<Unit> monster_list = new List<Unit>() { monster_gen.GenerateMonster() };
             List<Unit> active_pcus = pcu_storage.GetActivePCUs();
             int turn_counter = 0;
@@ -154,7 +82,7 @@ namespace Methods
 
                         if (counter + 1 < active_pcus.Where(x => x.IsAlive()).Count())
                         {
-                            Console.WriteLine('-' * 25);
+                            c_methods.DisplayDivider();
                         }
                     }
                 }
@@ -169,7 +97,7 @@ namespace Methods
                             break;
                         }
 
-                        Console.WriteLine('-' * 25);
+                        c_methods.DisplayDivider();
 
                         // Leave the battle if the player runs away
                         if ((unit.IsPCU && unit.PCUExecuteMove() == "ran") || (unit.IsMonster && unit.MonsterExecuteMove() == "ran"))
@@ -181,7 +109,7 @@ namespace Methods
                         {
                             if (monster_list.Any(x => x.HP > 0) && unit.IsAlive())
                             {
-                                c_methods.Input("\nPress enter/return ");
+                                c_methods.PressEnterReturn();
                             }
 
                             else if (monster_list.All(x => x.HP <= 0))
@@ -196,17 +124,29 @@ namespace Methods
                         }
                     }
 
+                    // If any unit died on this turn, set their health to 0 and set their status as 'dead'
                     foreach (Unit other_unit in speed_list)
                     {
                         if (other_unit.IsPCU() && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<Unit.Status> { Unit.Status.dead };
+                            // sounds.ally_death.play()
+
+                            c_methods.DisplayDivider();
+                            Console.WriteLine($"{other_unit.Name} has fallen to the monsters!");
+                            c_methods.PressEnterReturn();
                         }
 
                         else if (other_unit.IsMonster() && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
+                            other_unit.HP = 0;
+                            other_unit.Statuses = new List<Unit.Status> { Unit.Status.dead };
+                            // sounds.enemy_death.play()
 
+                            c_methods.DisplayDivider();
+                            Console.WriteLine($"{other_unit.Name} was defeated by your party!");
+                            c_methods.PressEnterReturn();
                         }
                     }
                 }
