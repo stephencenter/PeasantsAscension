@@ -53,10 +53,10 @@ namespace Scripts
         public int RequiredXP { get; set; }
         public int AP { get; set; }
         public int MaxAP { get; set; }
-        public int CurrentTarget { get; set; }
-        public int CurrentMove { get; set; }
-        public int CurrentAbility { get; set; }
-        public int CurrentSpell { get; set; }
+        public char CurrentMove { get; set; }
+        public Unit CurrentTarget { get; set; }
+        public Ability CurrentAbility { get; set; }
+        public Spell CurrentSpell { get; set; }
 
         public Dictionary<string, int> Attributes = new Dictionary<string, int>()
         {
@@ -185,6 +185,156 @@ namespace Scripts
             };
 
             return StatusNameMap[status];
+        }
+
+        public void PlayerChoice()
+        {
+            PrintBattleOptions();
+
+            while (true)
+            {
+                string c_move = c_methods.Input("Input [#]: ");
+
+                try
+                {
+                    CurrentMove = String.Join("", c_move.Where(x => char.IsDigit(x)))[0];
+                }
+
+                catch (IndexOutOfRangeException)
+                {
+                    continue;
+                }
+
+                // Attack
+                if (CurrentMove == '1')
+                {
+                    ChooseTarget($"Who should {Name} attack?");
+                    return;
+                }
+
+                // Magic
+                else if (CurrentMove == '2')
+                {
+                    /*
+                    print('-' * save_load.divider_size)
+
+                    # Silence is a status ailment that prevents using spells
+                        if 'silenced' in self.status_ail:
+                        sounds.debuff.play()
+                        print(f"{self.name} can't use spells when silenced!")
+                        main.s_input("\nPress enter/return ")
+                        print(battle_options.format(self.name))
+
+                        continue
+
+                    if not magic.pick_cat(self):
+                        print(battle_options.format(self.name))
+
+                        continue
+
+                    return */
+                }
+
+                // Ability
+                else if (CurrentMove == '3')
+                {
+                    /* 
+                    do_loop = True
+                    while do_loop:
+                        print('-'*save_load.divider_size)
+                        print(f"{self.name}'s Abilities | {self.ap}/{self.max_ap} AP remaining")
+
+                        # List of all abilities usable by the PCU's class
+                        all_abilities = abilities.a_abilities[self.class_] + abilities.a_abilities['player' if self == player else self.name]
+
+                        # This is used to make sure that the AP costs of each ability line up. Purely asthetic.
+                        padding = len(max(all_abilities, key = lambda x: x.name).name)
+
+                        # Print out the list of abilities the player's class can uses
+                        for num, ability in enumerate(all_abilities) :
+                            real_pad = padding - len(ability.name)
+                            print(f"      [{num + 1}] {ability.name} {'-'*real_pad}--> {ability.ap_cost} AP")
+
+                        while True:
+                            chosen = main.s_input('Input [#] (or type "back"): ').lower()
+                            try:
+                                self.c_ability = all_abilities[int(chosen) - 1]
+
+                            except(IndexError, ValueError):
+                                if chosen in ['e', 'x', 'exit', 'b', 'back']:
+                                    print('-'*save_load.divider_size)
+                                    print(battle_options.format(self.name))
+                                    do_loop = False
+                                    break
+
+                                continue
+
+                            # Abilities cost AP to cast, just like spells cost MP.
+                            if self.ap<self.c_ability.ap_cost:
+                                print('-' * save_load.divider_size)
+                                print(f"{self.name} doesn't have enough AP to cast {self.c_ability.name}!")
+                                main.s_input("\nPress enter/return ")
+                                break
+
+                            # Ascend is an ability that is more powerful the later in the battle you use it.
+                            # To balance this it's only usable once per battle.
+                            elif self.c_ability == abilities.ascend and self.ability_vars['ascend_used']:
+                                print('-' * save_load.divider_size)
+                                print("Ascend can only be used once per battle.")
+                                main.s_input("\nPress enter/return ")
+                                break
+
+                            self.ap -= self.c_ability.ap_cost
+                            self.c_ability.before_ability(self)
+
+                            return */
+                }
+
+                // Use Items
+                else if (CurrentMove == '4')
+                {
+                    /*
+                    print('-'*save_load.divider_size)
+
+                    # You can only use consumable items during battle
+                    if not items.inventory['consumables']:
+                        print('Your party has no consumables!')
+                        main.s_input("\nPress enter/return ")
+                        print('-'*save_load.divider_size)
+                        print(battle_options.format(self.name))
+
+                        continue
+
+                    # Mute is a status ailment that prevents using items
+                    if 'muted' in self.status_ail:
+                        sounds.debuff.play()
+                        print(f"{self.name} can't use items when muted!")
+                        main.s_input("\nPress enter/return ")
+                        print('-'*save_load.divider_size)
+                        print(battle_options.format(self.name))
+
+                        continue
+
+                    if not battle.battle_inventory(self):
+                        print(battle_options.format(self.name))
+
+                        continue
+
+                    main.s_input('\nPress enter/return ')
+                    return */
+                }
+
+                // Run
+                else if (CurrentMove == '5')
+                {
+                    return;
+                }
+            }
+        }
+
+        public void PrintBattleOptions()
+        {
+            Console.WriteLine("Pick {0}'s Move:\n      [1]Standard Attack\n      [2] Use Magic\n      [3] Use Abilities\n      [4] Use Items\n      [5] Run");
         }
 
         public Unit(string name, UnitType unittype)
