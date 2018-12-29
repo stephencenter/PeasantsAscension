@@ -1,6 +1,6 @@
-﻿using Methods;
+﻿using Scripts;
 
-namespace PeasantsAscension
+namespace Main
 {
     public class ProgramUI
     {

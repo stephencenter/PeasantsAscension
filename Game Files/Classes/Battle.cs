@@ -1,10 +1,9 @@
-﻿using Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Methods
+namespace Scripts
 {
     public class Battle
     {
@@ -63,7 +62,7 @@ namespace Methods
                 List<Unit> speed_list = active_pcus.Concat(monster_list).OrderByDescending(x => x.Speed).ToList();
                 
                 // Display the stats for every battle participant
-                DisplayBattleStats();
+                DisplayBattleStats(active_pcus, monster_list);
 
                 // Iterate through each active players
                 int counter = 0;
@@ -330,8 +329,12 @@ namespace Methods
             //            return True
         }
 
-        public void DisplayBattleStats()
+        public void DisplayBattleStats(List<Unit> active_pcus, List<Unit> monster_list)
         {
+            foreach (Unit unit in active_pcus.Concat(monster_list)) {
+                unit.FixAllStats();
+            }
+
             //def bat_stats() :
             //    units.fix_stats()
             //    print('-'*save_load.divider_size)

@@ -1,4 +1,4 @@
-﻿namespace Classes
+﻿namespace Scripts
 {
     public class Tile
     {

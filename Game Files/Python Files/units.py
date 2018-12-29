@@ -2520,7 +2520,7 @@ def fix_stats():
     global adorine
     global monster
 
-    # Make an abbreviation for battle.temp_stats so a later part doesn't have to be muilti-line
+    # Make an abbreviation for battle.temp_stats so a later part doesn't have to be multi-line
     bts = battle.temp_stats
 
     for x in [player, solou, chili, chyme, parsto, storm, adorine]:

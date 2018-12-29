@@ -1,4 +1,4 @@
-﻿namespace PeasantsAscension
+﻿namespace Main
 {
     class Program
     {

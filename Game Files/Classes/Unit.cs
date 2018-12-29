@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Classes.Items;
+using Scripts.Items;
 
-namespace Classes
+namespace Scripts
 {
     public class Unit
     {
+        readonly Common c_methods = new Common();
+
         // General Unit Properties
         public enum Element { fire = 1, water, electric, earth, wind, grass, ice, light, dark, none }
         public Dictionary<Element, List<Element>> ElementChart = new Dictionary<Element, List<Element>>
@@ -140,6 +143,34 @@ namespace Classes
             return Type == UnitType.monster;
         }
 
+        public void FixAllStats()
+        {
+            // Makes sure that that no-one ever has stats that would cause the game to malfunction.
+            // e.g. no negative HP/MP/AP, no HP/MP/AP above max, etc.
+            // This function also acts as a hard-cap for evasion, which is limited to a max of 256
+            // (50% dodge chance). This is to prevent people from min-maxing their evasion to cheese
+            // their way through the game, and also prevents monsters from being invincible.
+
+            HP = c_methods.Clamp(HP, MaxHP, 0);
+            MP = c_methods.Clamp(MP, MaxMP, 0);
+            AP = c_methods.Clamp(AP, MaxAP, 0);
+
+            Evasion = Math.Min(256, Evasion);
+            Statuses = Statuses.Distinct().ToList();
+
+            TempStats["evasion"] = Math.Min(AbilityFlags["rolling"] ? 512 : 256, TempStats["evasion"]);
+
+            if (HP > 0 && !IsAlive())
+            {
+                Statuses = new List<Unit.Status>() { Unit.Status.alive };
+            }
+
+            if (!IsAlive())
+            {
+                Statuses = new List<Unit.Status>() { Unit.Status.dead };
+            }
+        }
+
         public Unit(string name, UnitType unittype)
         {
             Type = unittype;
@@ -195,6 +226,7 @@ namespace Classes
         public Unit storm = new Unit("Storm", Unit.UnitType.player);
         public Unit parsto = new Unit("Parsto", Unit.UnitType.player);
         public Unit adorine = new Unit("Adorine", Unit.UnitType.player);
+        readonly Common c_methods = new Common();
 
 
         public List<Unit> GetAllPCUs()
@@ -235,6 +267,8 @@ namespace Classes
 
     public class MonsterGenerator
     {
+        readonly Common c_methods = new Common();
+
         public Unit GenerateMonster()
         {
             return new Unit("Whispering Goblin", Unit.UnitType.monster);

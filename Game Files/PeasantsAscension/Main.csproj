@@ -51,13 +51,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Classes\Classes.csproj">
+    <ProjectReference Include="..\Classes\Scripts.csproj">
       <Project>{a2025da0-5a05-4b54-ae27-b7dbff6c4208}</Project>
-      <Name>Classes</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Methods\Methods.csproj">
-      <Project>{11e9a420-9b52-4240-9000-e1d5f50c251b}</Project>
-      <Name>Methods</Name>
+      <Name>Scripts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

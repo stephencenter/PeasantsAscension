@@ -1,4 +1,4 @@
-﻿namespace Classes.Items
+﻿namespace Scripts.Items
 {
     public class Item
     {

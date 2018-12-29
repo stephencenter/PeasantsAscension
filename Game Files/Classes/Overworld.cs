@@ -1,6 +1,6 @@
 ﻿namespace Scripts
 {
-    public class Ability
+    public class Overworld
     {
 
     }

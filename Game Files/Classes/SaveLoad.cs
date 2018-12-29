@@ -1,4 +1,4 @@
-﻿namespace Methods
+﻿namespace Scripts
 {
     public class SaveLoad
     {

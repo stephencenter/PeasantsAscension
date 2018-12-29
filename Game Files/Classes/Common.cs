@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace Methods
+namespace Scripts
 {
     public class Common
     {
@@ -73,6 +71,11 @@ namespace Methods
         {
             TextScrollWrite(the_string, spacing);
             return Input(the_string[the_string.Length - 1].ToString());
+        }
+
+        public int Clamp(int value, int max, int min)
+        {
+            return Math.Max(min, Math.Min(max, value));
         }
     }
 }
