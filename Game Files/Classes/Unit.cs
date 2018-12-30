@@ -7,12 +7,13 @@ namespace Scripts
 {
     public class Unit
     {
+        // Method 
         readonly Common c_methods = new Common();
         readonly AbilityManager ability_manager = new AbilityManager();
         protected SpellManager spell_manager = new SpellManager();
 
         // General Unit Properties
-        public enum Element { fire = 1, water, electric, earth, wind, grass, ice, light, dark, none }
+        public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, none }
         public Dictionary<Element, List<Element>> ElementChart = new Dictionary<Element, List<Element>>
         {
             {Element.fire, new List<Element> {Element.water, Element.ice } },
@@ -25,11 +26,15 @@ namespace Scripts
             {Element.light, new List<Element> {Element.light, Element.dark } },
             {Element.dark, new List<Element> {Element.dark, Element.light } }
         };
+        public Element off_element = Element.none;
+        public Element def_element = Element.none;
 
-        public enum Status { silence = 1, poison, weakness, blindness, paralyzation, alive, dead }
+        public enum Status { silence, poison, weakness, blindness, paralyzation, alive, dead }
         public List<Status> Statuses = new List<Status> { Status.alive };
 
+        public enum UnitType { player, monster, boss }
         public UnitType Type { get; set; }
+
         public string Name { get; set; }
         public int HP { get; set; }
         public int MaxHP { get; set; }
@@ -45,11 +50,10 @@ namespace Scripts
         public int Evasion { get; set; }
         public int Level { get; set; }
 
-        public Element off_element = Element.none;
-        public Element def_element = Element.none;
-
         // Player Attributes
+        public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard }
         public CharacterClass PClass { get; set; }
+
         public bool Active { get; set; }
         public int CurrentXP { get; set; }
         public int RequiredXP { get; set; }
@@ -91,10 +95,11 @@ namespace Scripts
             { "evasion", 0 }
         };
 
-        public enum CharacterClass { warrior = 1, ranger, mage, assassin, paladin, monk, bard }
 
         // Monster Attributes
+        public enum MonsterClass { melee, ranged, magic }
         public MonsterClass MClass { get; set; }
+
         public Status StatusOnAttack { get; set; }
         public bool IsDefending { get; set; }
         public int DroppedGold { get; set; }
@@ -103,7 +108,6 @@ namespace Scripts
         public string AttackMessage { get; set; }
         public string AsciiArt { get; set; }
 
-        public enum MonsterClass { melee = 1, ranged, magic }
 
         public Dictionary<string, dynamic> MonsterAbilityFlags = new Dictionary<string, dynamic>()
         {
@@ -117,7 +121,6 @@ namespace Scripts
             {"disarmed", false}
         };
 
-    public enum UnitType { player=1, monster, boss}
        
         public void SetTempStats()
         {
@@ -349,6 +352,16 @@ namespace Scripts
             Console.WriteLine("Pick {0}'s Move:\n      [1]Standard Attack\n      [2] Use Magic\n      [3] Use Abilities\n      [4] Use Items\n      [5] Run");
         }
 
+        public string PCUExecuteMove()
+        {
+            return "run";
+        }
+
+        public string MonsterExecuteMove()
+        {
+            return "run";
+        }
+
         public Unit(string name, UnitType unittype)
         {
             Type = unittype;
@@ -389,7 +402,7 @@ namespace Scripts
 
                 if (unittype == UnitType.boss)
                 {
-
+                    
                 }
             }
         }

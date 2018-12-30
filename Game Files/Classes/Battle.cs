@@ -99,7 +99,7 @@ namespace Scripts
                         c_methods.DisplayDivider();
 
                         // Leave the battle if the player runs away
-                        if ((unit.IsPCU && unit.PCUExecuteMove() == "ran") || (unit.IsMonster && unit.MonsterExecuteMove() == "ran"))
+                        if ((unit.IsPCU() && unit.PCUExecuteMove() == "ran") || (unit.IsMonster() && unit.MonsterExecuteMove() == "ran"))
                         {
                             return;
                         }
