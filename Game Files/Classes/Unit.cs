@@ -258,7 +258,7 @@ namespace Scripts
                         Console.WriteLine($"{Name}'s Abilities | {AP}/{MaxAP} AP remaining");
 
                         // List of all abilities usable by the PCU's class
-                        List<Ability> a_list = ability_manager.AbilityList[PClass];
+                        List<dynamic> a_list = ability_manager.GetAbilityList()[PClass];
 
                         // This is used to make sure that the AP costs of each ability line up. Purely asthetic.
                         int padding = a_list.Select(x => x.Name.Length).Max();
@@ -266,8 +266,8 @@ namespace Scripts
                         int counter = 0;
                         foreach (Ability ability in a_list)
                         {
-                            int true_pad = padding - ability.Name.Length;
-                            Console.WriteLine($"      [{counter + 1}] {ability.Name} {new String('-', true_pad)}--> {ability.APCost} AP");
+                            int true_pad = padding - ability.AbilityName.Length;
+                            Console.WriteLine($"      [{counter + 1}] {ability.AbilityName} {new String('-', true_pad)}--> {ability.APCost} AP");
                         }
 
                         while (true)
@@ -298,7 +298,7 @@ namespace Scripts
                             if (AP < CurrentAbility.APCost)
                             {
                                 c_methods.PrintDivider();
-                                Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.Name}!");
+                                Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.AbilityName}!");
                                 c_methods.PressEnterReturn();
 
                                 break;
@@ -530,13 +530,13 @@ namespace Scripts
 
     public class PCUStorage
     {
-        public Unit player = new Unit("", Unit.UnitType.player);
-        public Unit solou = new Unit("Solou", Unit.UnitType.player);
-        public Unit chili = new Unit("Chili", Unit.UnitType.player);
-        public Unit chyme = new Unit("Chyme", Unit.UnitType.player);
-        public Unit storm = new Unit("Storm", Unit.UnitType.player);
-        public Unit parsto = new Unit("Parsto", Unit.UnitType.player);
-        public Unit adorine = new Unit("Adorine", Unit.UnitType.player);
+        readonly Unit player = new Unit("", Unit.UnitType.player);
+        readonly Unit solou = new Unit("Solou", Unit.UnitType.player);
+        readonly Unit chili = new Unit("Chili", Unit.UnitType.player);
+        readonly Unit chyme = new Unit("Chyme", Unit.UnitType.player);
+        readonly Unit storm = new Unit("Storm", Unit.UnitType.player);
+        readonly Unit parsto = new Unit("Parsto", Unit.UnitType.player);
+        readonly Unit adorine = new Unit("Adorine", Unit.UnitType.player);
         readonly Common c_methods = new Common();
 
         // Returns ALL PCUs, alive, dead, active, and inactive

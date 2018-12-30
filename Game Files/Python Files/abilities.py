@@ -811,7 +811,7 @@ class Judgement(Ability):
             sounds.poison_damage.play()
 
 
-judgement = Judgement("Judgement", """\
+judgement = Judgement("Judgment", """\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the
 target's defensive element is Darkness, then the 7 turns will be lowered by
 [15 + Wisdom]%, with a minimum of 2 turns. When cast on bosses, the turn count
