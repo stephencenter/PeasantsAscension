@@ -1,43 +1,31 @@
-  ____                            _       _
- |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
- | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
- |  __/  __/ (_| \__ \ (_| | | | | |_\__ \
- |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
-         _                           _
-        / \   ___  ___ ___ _ __  ___(_) ___  _ __
-       / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \
-      / ___ \\__ \ (_|  __/ | | \__ \ | (_) | | | |
-     /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-Peasants' Ascension -- Programmed by TheFrozenMawile using Python
+  ____                            _   _        
+ |  _ \ ___  __ _ ___  __ _ _ __ | |_( )___    
+ | |_) / _ \/ _` / __|/ _` | '_ \| __|// __|   
+ |  __/  __/ (_| \__ \ (_| | | | | |_  \__ \   
+ |_| _ \___|\__,_|___/\__,_|_| |_|\__| |___/   
+    / \   ___  ___ ___ _ __  ___(_) ___  _ __  
+   / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \ 
+  / ___ \\__ \ (_|  __/ | | \__ \ | (_) | | | |
+ /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
+
+Peasant's Ascension -- Programmed by Stephen Center
  -- v1.0.0 Beta
 ----------------------------------------------------
-Legal Stuff:
+Peasant's Ascension is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    Peasants' Ascension is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+Peasant's Ascension is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    Peasants' Ascension is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Peasants' Ascension.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License
+along with Peasant's Ascension.  If not, see <http://www.gnu.org/licenses/>.
 ----------------------------------------------------
 Downloads for both the standalone and source-code versions of this game
-are available at <http://reddit.com/r/PeasantsAscension/>. We also have 
-articles about programming, technology, and video games, so check it
-out if you enjoy those things! ;)
-----------------------------------------------------
-How do I install this game?
-
-    If you downloaded the standalone version (the one without the word
-    "source" in its file-name) then there is no installation required!
-    If you downloaded the source-code version, then running the game will
-    require Python 3.6 to be installed, as well as the corresponding 
-	version of Pygame. 
+are available at <http://reddit.com/r/PeasantsAscension/> (Full releases only)
 ----------------------------------------------------
 How to play:
 
@@ -49,7 +37,7 @@ How to play:
         
     PLAYING THE GAME:
     
-        Peasants' Ascension is very simple. After creating a character,
+        Peasant's Ascension is very simple. After creating a character,
         you are placed on the world map with minimal equipment. 
         To use a command, type in the command and then hit 
         Enter (Windows) or Return (Mac OS X) to send it. 
@@ -80,16 +68,13 @@ What is the "Adventure Name"?
 ----------------------------------------------------
 What to do if the game crashes:
 
-    Due to how the Windows Command Prompt and Python work, errors
-    raised through the console immediately close the game, preventing
-    the error message from being read. To counteract this, the game
-    automatically logs the error in a file named "error_log.out". If 
-    you encounter an error, the message will be located there, and the 
-    file can be sent to me (stephenbcenter@gmail.com) so I can fix the
-    problem. Don't worry, the only information located in the file is
-    a generic error message and nothing else. (If you want to verify 
-    this, you can open the file using a program like TextWrangler, Notepad++, 
-    or Sublime Text.) I appreciate your help!
+    If the game crashes, the error will be logged in a file named 
+    "error_log.out". If you encounter an error, the message will be 
+    located there, and the file can be sent to me (stephenbcenter@gmail.com) 
+    so I can fix the problem. The only information located in the file is
+    an error message and nothing else. (If you want to verify this, you can
+    open the file using a program like TextWrangler, Notepad++, or Sublime 
+    Text.) I appreciate your help!
 ----------------------------------------------------
 How to change the settings:
 
@@ -97,7 +82,7 @@ How to change the settings:
     located in the Game Files directory. It also defaults to playing all
     music/sound-effects at full volume. These can both be changed by 
     editing a set of variables in a file called "settings.cfg", located in
-    the "Peasants' Ascension" folder. This file can be opened using a program like
+    the "Peasant's Ascension" folder. This file can be opened using a program like
     TextWrangler, Notepad++, or Sublime Text. Instructions on changing these
     are located in the file.
 ----------------------------------------------------
