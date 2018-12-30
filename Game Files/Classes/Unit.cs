@@ -8,6 +8,8 @@ namespace Scripts
     public class Unit
     {
         readonly Common c_methods = new Common();
+        readonly AbilityManager ability_manager = new AbilityManager();
+        protected SpellManager spell_manager = new SpellManager();
 
         // General Unit Properties
         public enum Element { fire = 1, water, electric, earth, wind, grass, ice, light, dark, none }
@@ -70,7 +72,7 @@ namespace Scripts
             { "fte", 1 }
         };
 
-        public Dictionary<string, bool> AbilityFlags = new Dictionary<string, bool>()
+        public Dictionary<string, dynamic> PlayerAbilityFlags = new Dictionary<string, dynamic>()
         {
             {"ascend_used", false },
             {"berserk", false },
@@ -103,18 +105,19 @@ namespace Scripts
 
         public enum MonsterClass { melee = 1, ranged, magic }
 
-        // TO-DO!! Get this working in C#
-        //self.ability_vars = {
-        //    'poison_pow': 0,
-        //    'poison_dex': 0,
-        //    'disarmed': False,
-        //    'knockout_turns': 0,
-        //    'judgement_day': 0,
-        //    'taunted': [0, None],
-        //    'drained': False
-        //}
-        
-        public enum UnitType { player=1, monster, boss}
+        public Dictionary<string, dynamic> MonsterAbilityFlags = new Dictionary<string, dynamic>()
+        {
+            {"poison_pow", 0},
+            {"poison_dex", 0},
+            {"knockout_turns", 0},
+            {"judgement_day", 0},
+            {"taunted_turn", 0},
+            {"taunted_user", null},
+            {"drained", false},
+            {"disarmed", false}
+        };
+
+    public enum UnitType { player=1, monster, boss}
        
         public void SetTempStats()
         {
@@ -158,7 +161,7 @@ namespace Scripts
             Evasion = Math.Min(256, Evasion);
             Statuses = Statuses.Distinct().ToList();
 
-            TempStats["evasion"] = Math.Min(AbilityFlags["rolling"] ? 512 : 256, TempStats["evasion"]);
+            TempStats["evasion"] = Math.Min(PlayerAbilityFlags["rolling"] ? 512 : 256, TempStats["evasion"]);
 
             if (HP > 0 && !IsAlive())
             {
@@ -215,79 +218,88 @@ namespace Scripts
                 // Magic
                 else if (CurrentMove == '2')
                 {
-                    /*
-                    print('-' * save_load.divider_size)
+                    c_methods.DisplayDivider();
 
-                    # Silence is a status ailment that prevents using spells
-                        if 'silenced' in self.status_ail:
-                        sounds.debuff.play()
-                        print(f"{self.name} can't use spells when silenced!")
-                        main.s_input("\nPress enter/return ")
-                        print(battle_options.format(self.name))
+                    // Silence is a status ailment that prevents using spells
+                    if (Statuses.Contains(Status.silence))
+                    {
+                        // sounds.debuff.play()
+                        Console.WriteLine($"{Name} can't use spells when silenced!");
+                        c_methods.PressEnterReturn();
+                        PrintBattleOptions();
 
-                        continue
+                        continue;
+                    }
 
-                    if not magic.pick_cat(self):
-                        print(battle_options.format(self.name))
+                    if (!magic_manager.PickSpellCategory())
+                    {
+                        PrintBattleOptions();
 
-                        continue
-
-                    return */
+                        continue;
+                    }
                 }
 
                 // Ability
                 else if (CurrentMove == '3')
                 {
-                    /* 
-                    do_loop = True
-                    while do_loop:
-                        print('-'*save_load.divider_size)
-                        print(f"{self.name}'s Abilities | {self.ap}/{self.max_ap} AP remaining")
+                    while (true)
+                    {
+                        c_methods.DisplayDivider();
+                        Console.WriteLine($"{Name}'s Abilities | {AP}/{MaxAP} AP remaining");
 
-                        # List of all abilities usable by the PCU's class
-                        all_abilities = abilities.a_abilities[self.class_] + abilities.a_abilities['player' if self == player else self.name]
+                        // List of all abilities usable by the PCU's class
+                        List<Ability> a_list = ability_manager.AbilityList[PClass];
 
-                        # This is used to make sure that the AP costs of each ability line up. Purely asthetic.
-                        padding = len(max(all_abilities, key = lambda x: x.name).name)
+                        // This is used to make sure that the AP costs of each ability line up. Purely asthetic.
+                        int padding = a_list.Select(x => x.Name.Length).Max();
 
-                        # Print out the list of abilities the player's class can uses
-                        for num, ability in enumerate(all_abilities) :
-                            real_pad = padding - len(ability.name)
-                            print(f"      [{num + 1}] {ability.name} {'-'*real_pad}--> {ability.ap_cost} AP")
+                        int counter = 0;
+                        foreach (Ability ability in a_list)
+                        {
+                            int true_pad = padding - ability.Name.Length;
+                            Console.WriteLine($"      [{counter + 1}] {ability.Name} {new String('-', true_pad)}--> {ability.APCost} AP");
+                        }
 
-                        while True:
-                            chosen = main.s_input('Input [#] (or type "back"): ').lower()
-                            try:
-                                self.c_ability = all_abilities[int(chosen) - 1]
+                        while (true)
+                        {
+                            string chosen_ability = c_methods.Input("Input [#] or type 'back'): ");
 
-                            except(IndexError, ValueError):
-                                if chosen in ['e', 'x', 'exit', 'b', 'back']:
-                                    print('-'*save_load.divider_size)
-                                    print(battle_options.format(self.name))
-                                    do_loop = False
-                                    break
+                            try
+                            {
+                                CurrentAbility = a_list[int.Parse(chosen_ability) - 1];
+                            }
 
-                                continue
+                            catch (Exception ex)
+                            {
+                                if (ex is ArgumentException || ex is IndexOutOfRangeException)
+                                {
+                                    if (c_methods.IsExitString(chosen_ability)) {
+                                        c_methods.DisplayDivider();
+                                        PrintBattleOptions();
 
-                            # Abilities cost AP to cast, just like spells cost MP.
-                            if self.ap<self.c_ability.ap_cost:
-                                print('-' * save_load.divider_size)
-                                print(f"{self.name} doesn't have enough AP to cast {self.c_ability.name}!")
-                                main.s_input("\nPress enter/return ")
-                                break
+                                        return;
+                                    }
 
-                            # Ascend is an ability that is more powerful the later in the battle you use it.
-                            # To balance this it's only usable once per battle.
-                            elif self.c_ability == abilities.ascend and self.ability_vars['ascend_used']:
-                                print('-' * save_load.divider_size)
-                                print("Ascend can only be used once per battle.")
-                                main.s_input("\nPress enter/return ")
-                                break
+                                    continue;
+                                }
+                            }
 
-                            self.ap -= self.c_ability.ap_cost
-                            self.c_ability.before_ability(self)
+                            // Abilities cost AP to cast, just like spells cost MP.
+                            if (AP < CurrentAbility.APCost)
+                            {
+                                c_methods.DisplayDivider();
+                                Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.Name}!");
+                                c_methods.PressEnterReturn();
 
-                            return */
+                                break;
+                            }
+
+                            AP -= CurrentAbility.APCost;
+                            CurrentAbility.BeforeAbility();
+
+                            return;
+                        }
+                    }
                 }
 
                 // Use Items

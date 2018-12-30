@@ -17,7 +17,7 @@ namespace Scripts
 
         public void DisplayDivider()
         {
-            Console.WriteLine(new String('-', settings.GetDividerSize());
+            Console.WriteLine(new String('-', settings.GetDividerSize()));
         }
 
         public void PressEnterReturn()
@@ -76,6 +76,18 @@ namespace Scripts
         public int Clamp(int value, int max, int min)
         {
             return Math.Max(min, Math.Min(max, value));
+        }
+
+        public bool IsExitString(string the_string)
+        {
+            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel"};
+
+            if (ValidExitStrings.Contains(the_string))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
