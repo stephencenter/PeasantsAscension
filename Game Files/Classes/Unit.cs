@@ -10,6 +10,7 @@ namespace Scripts
         // Method 
         readonly Common c_methods = new Common();
         readonly AbilityManager ability_manager = new AbilityManager();
+        readonly PCUStorage pcu_storage = new PCUStorage();
         protected SpellManager spell_manager = new SpellManager();
 
         // General Unit Properties
@@ -193,7 +194,7 @@ namespace Scripts
             return StatusNameMap[status];
         }
 
-        public void PlayerChoice()
+        public void PlayerChoice(List<Unit> monster_list)
         {
             PrintBattleOptions();
 
@@ -214,14 +215,19 @@ namespace Scripts
                 // Attack
                 if (CurrentMove == '1')
                 {
-                    ChooseTarget($"Who should {Name} attack?");
+                    if (!ChooseTarget(monster_list, $"Who should {Name} attack?", false, true, false, false))
+                    {
+                        PrintBattleOptions();
+                        continue;
+                    }
+
                     return;
                 }
 
                 // Magic
                 else if (CurrentMove == '2')
                 {
-                    c_methods.DisplayDivider();
+                    c_methods.PrintDivider();
 
                     // Silence is a status ailment that prevents using spells
                     if (Statuses.Contains(Status.silence))
@@ -234,12 +240,13 @@ namespace Scripts
                         continue;
                     }
 
-                    if (!magic_manager.PickSpellCategory())
+                    if (!spell_manager.PickSpellCategory())
                     {
                         PrintBattleOptions();
-
                         continue;
                     }
+
+                    return;
                 }
 
                 // Ability
@@ -247,7 +254,7 @@ namespace Scripts
                 {
                     while (true)
                     {
-                        c_methods.DisplayDivider();
+                        c_methods.PrintDivider();
                         Console.WriteLine($"{Name}'s Abilities | {AP}/{MaxAP} AP remaining");
 
                         // List of all abilities usable by the PCU's class
@@ -277,7 +284,7 @@ namespace Scripts
                                 if (ex is ArgumentException || ex is IndexOutOfRangeException)
                                 {
                                     if (c_methods.IsExitString(chosen_ability)) {
-                                        c_methods.DisplayDivider();
+                                        c_methods.PrintDivider();
                                         PrintBattleOptions();
 
                                         return;
@@ -290,7 +297,7 @@ namespace Scripts
                             // Abilities cost AP to cast, just like spells cost MP.
                             if (AP < CurrentAbility.APCost)
                             {
-                                c_methods.DisplayDivider();
+                                c_methods.PrintDivider();
                                 Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.Name}!");
                                 c_methods.PressEnterReturn();
 
@@ -362,6 +369,119 @@ namespace Scripts
             return "run";
         }
 
+        public bool ChooseTarget(List<Unit> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
+        {
+            // A list of PCUs that are valid for targetting (could be unused if target_allies is false)
+            List<Unit> pcu_list;
+
+            if (allow_inactive)
+            {
+                if (allow_dead)
+                {
+                    // YES to dead PCUs, YES to inactive PCUs
+                    pcu_list = pcu_storage.GetAllPCUs();
+                }
+
+                else
+                {
+                    // NO to dead PCUs, YES to inactive PCUs
+                    pcu_list = pcu_storage.GetAlivePCUs();
+                }
+            }
+
+            else
+            {
+                if (allow_dead)
+                {
+                    // YES to dead PCUs, NO to inactive PCUs
+                    pcu_list = pcu_storage.GetActivePCUs();
+                }
+
+                else
+                {
+                    // NO to dead PCUs, NO to inactive PCUs
+                    pcu_list = pcu_storage.GetAliveActivePCUs();
+                }
+            }
+
+            // The full list of valid targets, including both monsters and allies if applicable
+            List<Unit> valid_targets;
+
+            // Do this if both allies and enemies are valid targets (e.g. some abilities and spells)
+            if (target_allies && target_enemies)
+            {
+                valid_targets = pcu_list.Concat(monster_list.Where(x => x.IsAlive())).ToList();
+            }
+
+            // Do this if the player is allowed to target allies but not enemies (e.g. items, some spells/abilities)
+            else if (target_allies && !target_enemies)
+            {
+                if (pcu_list.Count == 1)
+                {
+                    CurrentTarget = pcu_list[0];
+                    return true;
+                }
+
+                valid_targets = pcu_list;
+            }
+
+            // Do this if the player is allowed to target enemies but not allies (e.g. attacks, some spells/abilities)
+            else if (!target_allies && target_enemies)
+            {
+                if (monster_list.Where(x => x.IsAlive()).Count() == 1)
+                {
+                    CurrentTarget = monster_list.Where(x => x.IsAlive()).ToList()[0];
+                    return true;
+                }
+
+                valid_targets = monster_list.Where(x => x.IsAlive()).ToList();
+            }
+
+            else
+            {
+                throw new Exception("Exception in 'choose_target': at least one of 'target_allies' or 'target_enemies' must be true");
+            }
+
+            c_methods.PrintDivider();
+            Console.WriteLine(action_desc);
+
+            int counter = 0;
+            foreach (Unit unit in valid_targets)
+            {
+                /* Looks like this: 
+                 *       [1] Target A
+                 *       [2] Target B
+                 *       [3] Target C
+                 * Input [#] (or type "back"): 
+                 */
+                Console.WriteLine($"      [{counter + 1} {unit.Name}");
+            }
+
+            while (true)
+            {
+                string chosen = c_methods.Input("Input [#]: ");
+
+                try
+                {
+                    CurrentTarget = valid_targets[int.Parse(chosen) - 1];
+                }
+
+                catch (Exception ex) {
+                    if (ex is ArgumentException || ex is IndexOutOfRangeException)
+                    {
+                        if (c_methods.IsExitString(chosen))
+                        {
+                            return false;
+                        }
+
+                        continue;
+                    }
+                }
+
+                return true;
+            }
+        }
+
         public Unit(string name, UnitType unittype)
         {
             Type = unittype;
@@ -419,38 +539,38 @@ namespace Scripts
         public Unit adorine = new Unit("Adorine", Unit.UnitType.player);
         readonly Common c_methods = new Common();
 
-
+        // Returns ALL PCUs, alive, dead, active, and inactive
         public List<Unit> GetAllPCUs()
         {
             return new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
         }
 
+        // Returns all PCUs that are alive, regardless of whether they're active or not
         public List<Unit> GetAlivePCUs()
         {
             var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
 
-            foreach (Unit pcu in pcu_list)
-            {
-                if (pcu.Statuses.Contains(Unit.Status.dead))
-                {
-                    pcu_list.Remove(pcu);
-                }
-            }
+            pcu_list = pcu_list.Where(x => x.IsAlive()).ToList();
 
             return pcu_list;
         }
 
+        // Returns all PCUs that are active, regardless of whether they're alive or not
         public List<Unit> GetActivePCUs()
         {
             var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
 
-            foreach (Unit pcu in pcu_list.ToList())
-            {
-                if (!pcu.Active)
-                {
-                    pcu_list.Remove(pcu);
-                }
-            }
+            pcu_list = pcu_list.Where(x => x.Active).ToList();
+
+            return pcu_list;
+        }
+
+        // Returns all PCUs that are both alive and active
+        public List<Unit> GetAliveActivePCUs()
+        {
+            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+
+            pcu_list = pcu_list.Where(x => x.Active && x.IsAlive()).ToList();
 
             return pcu_list;
         }

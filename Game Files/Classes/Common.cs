@@ -15,7 +15,7 @@ namespace Scripts
             return Console.ReadLine();
         }
 
-        public void DisplayDivider()
+        public void PrintDivider()
         {
             Console.WriteLine(new String('-', settings.GetDividerSize()));
         }
@@ -51,6 +51,23 @@ namespace Scripts
             return sentences;
         }
 
+        public bool IsExitString(string the_string)
+        {
+            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel"};
+
+            if (ValidExitStrings.Contains(the_string.ToLower()))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public int Clamp(int value, int max, int min)
+        {
+            return Math.Max(min, Math.Min(max, value));
+        }
+
         public void TextScrollWrite(string the_string, int spacing = 25)
         {
             the_string = String.Join("", new List<string>() { the_string, "\n" });
@@ -71,23 +88,6 @@ namespace Scripts
         {
             TextScrollWrite(the_string, spacing);
             return Input(the_string[the_string.Length - 1].ToString());
-        }
-
-        public int Clamp(int value, int max, int min)
-        {
-            return Math.Max(min, Math.Min(max, value));
-        }
-
-        public bool IsExitString(string the_string)
-        {
-            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel"};
-
-            if (ValidExitStrings.Contains(the_string))
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }

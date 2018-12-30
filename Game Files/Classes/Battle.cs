@@ -77,11 +77,11 @@ namespace Scripts
 
                     if (character.IsAlive())
                     {
-                        character.PlayerChoice();
+                        character.PlayerChoice(monster_list);
 
                         if (counter + 1 < active_pcus.Where(x => x.IsAlive()).Count())
                         {
-                            c_methods.DisplayDivider();
+                            c_methods.PrintDivider();
                         }
                     }
                 }
@@ -96,7 +96,7 @@ namespace Scripts
                             break;
                         }
 
-                        c_methods.DisplayDivider();
+                        c_methods.PrintDivider();
 
                         // Leave the battle if the player runs away
                         if ((unit.IsPCU() && unit.PCUExecuteMove() == "ran") || (unit.IsMonster() && unit.MonsterExecuteMove() == "ran"))
@@ -132,7 +132,7 @@ namespace Scripts
                             other_unit.Statuses = new List<Unit.Status> { Unit.Status.dead };
                             // sounds.ally_death.play()
 
-                            c_methods.DisplayDivider();
+                            c_methods.PrintDivider();
                             Console.WriteLine($"{other_unit.Name} has fallen to the monsters!");
                             c_methods.PressEnterReturn();
                         }
@@ -143,7 +143,7 @@ namespace Scripts
                             other_unit.Statuses = new List<Unit.Status> { Unit.Status.dead };
                             // sounds.enemy_death.play()
 
-                            c_methods.DisplayDivider();
+                            c_methods.PrintDivider();
                             Console.WriteLine($"{other_unit.Name} was defeated by your party!");
                             c_methods.PressEnterReturn();
                         }
@@ -357,7 +357,7 @@ namespace Scripts
                 unit.FixAllStats();
             }
 
-            c_methods.DisplayDivider();
+            c_methods.PrintDivider();
 
             Console.WriteLine("Your party: ");
             DisplayTeamStats(active_pcus);
@@ -365,7 +365,7 @@ namespace Scripts
             Console.WriteLine("Enemy team: ");
             DisplayTeamStats(monster_list);
 
-            c_methods.DisplayDivider();
+            c_methods.PrintDivider();
         }
     }
 }
