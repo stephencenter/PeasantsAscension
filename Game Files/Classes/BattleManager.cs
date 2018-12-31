@@ -5,11 +5,12 @@ using System.Threading;
 
 namespace Scripts
 {
-    public class Battle
+    public class BattleManager
     {
         readonly Random rng = new Random();
         readonly MonsterGenerator monster_gen = new MonsterGenerator();
-        readonly Common c_methods = new Common();
+        readonly CommonMethods c_methods = new CommonMethods();
+        readonly CEnums c_enums = new CEnums();
         protected PCUStorage pcu_storage = new PCUStorage();
 
         public void BattleSystem()
@@ -99,7 +100,7 @@ namespace Scripts
                         c_methods.PrintDivider();
 
                         // Leave the battle if the player runs away
-                        if ((unit.IsPCU() && unit.PCUExecuteMove() == "ran") || (unit.IsMonster() && unit.MonsterExecuteMove() == "ran"))
+                        if ((unit.IsPCU() && unit.PCUExecuteMove(monster_list) == "ran") || (unit.IsMonster() && unit.MonsterExecuteMove() == "ran"))
                         {
                             return;
                         }
@@ -129,7 +130,7 @@ namespace Scripts
                         if (other_unit.IsPCU() && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
                             other_unit.HP = 0;
-                            other_unit.Statuses = new List<Unit.Status> { Unit.Status.dead };
+                            other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
                             // sounds.ally_death.play()
 
                             c_methods.PrintDivider();
@@ -140,7 +141,7 @@ namespace Scripts
                         else if (other_unit.IsMonster() && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
                             other_unit.HP = 0;
-                            other_unit.Statuses = new List<Unit.Status> { Unit.Status.dead };
+                            other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
                             // sounds.enemy_death.play()
 
                             c_methods.PrintDivider();
@@ -342,9 +343,17 @@ namespace Scripts
                 string pad3 = new string(' ', (player_pad3 - $"{unit.MP}/{unit.MaxMP} MP".Length));
 
                 string status_list = "";
-                foreach (Unit.Status status in unit.Statuses)
+                foreach (CEnums.Status status in unit.Statuses)
                 {
-                    status_list = String.Join("", new List<string>() { status_list, unit.GetStatusName(status), ", " });
+                    if (status_list == "")
+                    {
+                        status_list = c_enums.StatusToString(status);
+                    }
+
+                    else
+                    {
+                        status_list = string.Join(", ", new List<string>() { status_list, c_enums.StatusToString(status) });
+                    }
                 }
 
                 Console.WriteLine($"  {unit.Name}{pad1} | {unit.HP}/{unit.MaxHP} HP {pad2}| {unit.MP}/{unit.MaxMP} MP {pad3}| LVL: {unit.Level} | STATUS: {status_list}");
@@ -353,7 +362,8 @@ namespace Scripts
 
         public void DisplayBattleStats(List<Unit> active_pcus, List<Unit> monster_list)
         {
-            foreach (Unit unit in active_pcus.Concat(monster_list)) {
+            foreach (Unit unit in active_pcus.Concat(monster_list))
+            {
                 unit.FixAllStats();
             }
 

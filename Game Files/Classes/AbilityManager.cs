@@ -4,10 +4,10 @@ namespace Scripts
 {
     public class AbilityManager
     {
-        readonly Dictionary<Unit.CharacterClass, List<dynamic>> ability_list = new Dictionary<Unit.CharacterClass, List<dynamic>>()
+        public Dictionary<CEnums.CharacterClass, List<dynamic>> ability_list = new Dictionary<CEnums.CharacterClass, List<dynamic>>()
         {
-            {
-                Unit.CharacterClass.warrior, new List<dynamic>()
+            { // 1 2 4 finished
+                CEnums.CharacterClass.warrior, new List<dynamic>()
                 {
                     // Warrior abilities - Text should not pass this line --> |
                     new TauntAbility("Taunt", @"\
@@ -33,10 +33,10 @@ their might on destroying a target enemy.Increases speed and physical attack
 by[15 + Strength] %, and reduces all three armor stats by the half the value.
 Repeat casts only affect these stats by 10 / 5 % each, with no attribute bonus.", 2),
                 }
-            }, // 1 2 4 finished
+            },
 
-            {
-                Unit.CharacterClass.monk, new List<dynamic>()
+            { // 1 2 3 4 finished
+                CEnums.CharacterClass.monk, new List<dynamic>()
                 {
                     // Monk abilities - Text should not pass this line -----> |
                     new ChakraSmashAbility("Chakra Smash", @"\
@@ -66,10 +66,10 @@ for every 1 % of HP the user is missing.If the user's current HP is below
 25%, this ability will lifesteal for [10 + Constitution]% of the damage
 dealt.", 5)
                 }       
-            },  // 1 2 3 4 finished
+            },
             
-            {
-                Unit.CharacterClass.assassin, new List<dynamic>()
+            { // 1 2 3 4 finished
+                CEnums.CharacterClass.assassin, new List<dynamic>()
                 {
                     // Assassin abilities - Text should not pass this line -> |
                     new InjectPoisonAbility("Inject Poison", @"\
@@ -98,10 +98,10 @@ target is asleep, Backstab will lifesteal for 10% of the damage dealt. If the
 target is disarmed, Backstab will lower the target's physical defense by 10%.
 All three effects can happen with a single Backstab.", 2)
                 }
-            },  // 1 2 3 4 finished
+            },
 
-            {
-                Unit.CharacterClass.mage, new List<dynamic>()
+            { // 1 2 finished
+                CEnums.CharacterClass.mage, new List<dynamic>()
                 {
                     // Mage abilities - Text should not pass this line -----> |
                     new SkillSyphonAbility("Skill Syphon", @"\
@@ -129,10 +129,10 @@ Depletes the target's current MP by [5 + Intelligence]% of their maximum
 MP, while restoring the same amount to the user.Always drains/restores a
 minimum of 5 MP.", 2)
                 }
-            },  // 1 2 finished
+            },
             
-            {
-                Unit.CharacterClass.ranger, new List<dynamic>()
+            { // None finished
+                CEnums.CharacterClass.ranger, new List<dynamic>()
                 {
                     // Ranger abilities - Text should not pass this line ---> |
                     new RollAbility("Roll", @"\
@@ -156,10 +156,10 @@ The user calls upon nature, requesting help from the most powerful of animal
 allies!Deals a base damage dependent on what animal arrives, plus
 [100 + Perception] % additional damage.", 2)
                 }
-            }, // None finished
+            },
 
-            {
-                Unit.CharacterClass.paladin, new List<dynamic>()
+            { // 1 2 3 finished
+                CEnums.CharacterClass.paladin, new List<dynamic>()
                 {
                     // Paladin abilities - Text should not pass this line --> |
                     new TipTheScalesAbility("Tip the Scales", @"\
@@ -190,10 +190,10 @@ Light and causing all healing spells casted on them to heal for an additional
 [15 + Wisdom] %.Lasts 2 turns.Does not stack with multiple uses - repeat
 uses only refresh the buff duration.", 3)
                 }
-            },  // 1 2 3 finished
+            },
 
-            {
-                Unit.CharacterClass.bard, new List<dynamic>()
+            { // None finished
+                CEnums.CharacterClass.bard, new List<dynamic>()
                 {
                     // Bard abilities - Text should not pass this line -----> |
                     new WaywardFellowAbility("The Wayward Fellow", @"\
@@ -206,17 +206,23 @@ Replaying this song increases the Speed and Pierce Attack of the fellow by
 controlled, he will automatically attack a random target each turn.", 0),
 
                     new FallenComradeAbility("Ode to a Fallen Comrade", @"\
-", 0),
+1 A X
+2 B Y
+3 C Z", 0),
 
                     new StubbornBoarAbility("Tale of the Stubborn Boar", @"\
 Sets the target's defense stats to 0 for one turn, then increases them to
 [115 + Charisma] % of their original. Can be used on both enemies and allies.", 0),
 
                     new UnlikelyHeroAbility("An Unlikely Hero", @"\
-", 0),
+1 A X
+2 B Y
+3 C Z", 0),
 
                     new TournamentAbility("The Tournament of Thieves", @"\
-", 0),
+1 A X
+2 B Y
+3 C Z", 0),
 
                     new GrandFinaleAbility("Grand Finale", @"\
 A satisfying and exciting closer to a bard performance!
@@ -226,10 +232,10 @@ they must have been played during the current battle.The order of the songs
 do not matter, and they do not haven to be three different songs.Does
 nothing if no songs have been played yet.", 3)
                 }
-            } // None finished
+            }
         };
 
-        public Dictionary<Unit.CharacterClass, List<dynamic>> GetAbilityList()
+        public Dictionary<CEnums.CharacterClass, List<dynamic>> GetAbilityList()
         {
             return ability_list;
         }

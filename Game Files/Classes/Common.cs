@@ -5,10 +5,8 @@ using System.Threading;
 
 namespace Scripts
 {
-    public class Common
+    public class CommonMethods
     {
-        readonly SaveLoad settings = new SaveLoad();
-
         public string Input(string prompt)
         {
             Console.Write(prompt);
@@ -17,7 +15,10 @@ namespace Scripts
 
         public void PrintDivider()
         {
-            Console.WriteLine(new String('-', settings.GetDividerSize()));
+            // Initialize the settings manager
+            SaveLoad settings_manager = new SaveLoad();
+
+            Console.WriteLine(new string('-', settings_manager.GetDividerSize()));
         }
 
         public void PressEnterReturn()
@@ -40,7 +41,7 @@ namespace Scripts
 
                 current_sentence += $"{word} ";
 
-                current_sentence = String.Join("", new List<string>() { current_sentence, word, " " });
+                current_sentence = string.Join("", new List<string>() { current_sentence, word, " " });
             }
 
             if (current_sentence != "")
@@ -70,7 +71,7 @@ namespace Scripts
 
         public void TextScrollWrite(string the_string, int spacing = 25)
         {
-            the_string = String.Join("", new List<string>() { the_string, "\n" });
+            the_string = string.Join("", new List<string>() { the_string, "\n" });
 
             int counter = 0;
             foreach (char character in the_string)
@@ -88,6 +89,31 @@ namespace Scripts
         {
             TextScrollWrite(the_string, spacing);
             return Input(the_string[the_string.Length - 1].ToString());
+        }
+    }
+
+    public class CEnums
+    {
+        public enum UnitType { player, monster, boss }
+        public enum Status { silence, poison, weakness, blindness, paralyzation, alive, dead }
+        public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, none }
+        public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard }
+        public enum MonsterClass { melee, ranged, magic }
+
+        public string StatusToString(Status status)
+        {
+            Dictionary<Status, string> StatusNameMap = new Dictionary<Status, string>()
+            {
+                {Status.silence, "Silence"},
+                {Status.poison, "Poison"},
+                {Status.weakness, "Weakness"},
+                {Status.blindness, "Blindness"},
+                {Status.paralyzation, "Paralyzation" },
+                {Status.alive, "Alive"},
+                {Status.dead, "Dead"},
+            };
+
+            return StatusNameMap[status];
         }
     }
 }

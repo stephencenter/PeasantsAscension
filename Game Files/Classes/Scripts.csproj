@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbilityManager.cs" />
-    <Compile Include="Battle.cs" />
+    <Compile Include="BattleManager.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Dialogue.cs" />
     <Compile Include="Inventory.cs" />
