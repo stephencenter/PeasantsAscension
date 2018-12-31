@@ -76,6 +76,7 @@ namespace Scripts
             { "speed", 0 },
             { "evasion", 0 }
         };
+
         public Dictionary<string, dynamic> PlayerAbilityFlags = new Dictionary<string, dynamic>()
         {
             {"ascend_used", false },
@@ -130,7 +131,12 @@ namespace Scripts
 
         public bool IsMonster()
         {
-            return Type == CEnums.UnitType.monster;
+            return (Type == CEnums.UnitType.monster || Type == CEnums.UnitType.boss);
+        }
+
+        public bool IsBoss()
+        {
+            return Type == CEnums.UnitType.boss;
         }
 
         public void FixAllStats()
@@ -162,22 +168,6 @@ namespace Scripts
             {
                 Statuses = new List<CEnums.Status>() { CEnums.Status.dead };
             }
-        }
-
-        public string GetStatusName(CEnums.Status status)
-        {
-            Dictionary<CEnums.Status, string> StatusNameMap = new Dictionary<CEnums.Status, string>()
-            {
-                {CEnums.Status.silence, "Silence"},
-                {CEnums.Status.poison, "Poison"},
-                {CEnums.Status.weakness, "Weakness"},
-                {CEnums.Status.blindness, "Blindness"},
-                {CEnums.Status.paralyzation, "Paralyzation" },
-                {CEnums.Status.alive, "Alive"},
-                {CEnums.Status.dead, "Dead"},
-            };
-
-            return StatusNameMap[status];
         }
 
         public void PrintBattleOptions()
@@ -358,7 +348,7 @@ namespace Scripts
 
             // If the player's target is an enemy, and the target died before the player's turn began,
             // then the attack automatically redirects to a random living enemy.
-            if (CurrentTarget.Type == CEnums.UnitType.monster && !CurrentTarget.IsAlive())
+            if (CurrentTarget != null && CurrentTarget.IsMonster() && !CurrentTarget.IsAlive())
             {
                 CurrentTarget = monster_list[rng.Next(monster_list.Count)];
             }
@@ -541,13 +531,7 @@ namespace Scripts
             int counter = 0;
             foreach (Unit unit in valid_targets)
             {
-                /* Looks like this: 
-                 *       [1] Target A
-                 *       [2] Target B
-                 *       [3] Target C
-                 * Input [#] (or type "back"): 
-                 */
-            Console.WriteLine($"      [{counter + 1} {unit.Name}");
+                Console.WriteLine($"      [{counter + 1} {unit.Name}");
             }
 
             while (true)
@@ -575,9 +559,14 @@ namespace Scripts
             }
         }
 
-        public Unit(string name, CEnums.UnitType unittype)
+        public Unit(CEnums.UnitType unit_type, string name)
         {
-            Type = unittype;
+            if (unit_type != CEnums.UnitType.monster)
+            {
+                throw new Exception("Can't create a non-monster with this constructor");
+            }
+
+            Type = CEnums.UnitType.monster;
             Name = name;
             HP = 20;
             MaxHP = 20;
@@ -593,43 +582,57 @@ namespace Scripts
             Evasion = 3;
             Level = 1;
 
-            if (unittype == CEnums.UnitType.player)
+            DroppedItems = new List<Item>();
+            MClass = CEnums.MonsterClass.melee;
+            StatusOnAttack = CEnums.Status.paralyzation;
+            IsDefending = false;
+            DroppedGold = 5;
+            DroppedXP = 5;
+            AttackMessage = "attacks";
+            AsciiArt = "";
+        }
+
+        public Unit(CEnums.UnitType unit_type, string name, string pcu_id, bool active)
+        {
+            if (unit_type != CEnums.UnitType.player)
             {
-                Active = true;
-                CurrentXP = 0;
-                RequiredXP = 3;
-                AP = 10;
-                MaxAP = 10;
+                throw new Exception("Can't create a non-player with this constructor");
             }
 
-            else if (unittype == CEnums.UnitType.monster || unittype == CEnums.UnitType.boss)
-            {
-                DroppedItems = new List<Item>();
-                MClass = CEnums.MonsterClass.melee;
-                StatusOnAttack = CEnums.Status.paralyzation;
-                IsDefending = false;
-                DroppedGold = 5;
-                DroppedXP = 5;
-                AttackMessage = "attacks";
-                AsciiArt = "";
+            Type = CEnums.UnitType.player;
+            Name = name;
+            HP = 20;
+            MaxHP = 20;
+            MP = 5;
+            MaxMP = 5;
+            Attack = 8;
+            Defense = 5;
+            PAttack = 8;
+            PDefense = 5;
+            MAttack = 8;
+            MDefense = 5;
+            Speed = 6;
+            Evasion = 3;
+            Level = 1;
 
-                if (unittype == CEnums.UnitType.boss)
-                {
-                    
-                }
-            }
+            PCUID = pcu_id;
+            Active = active;
+            CurrentXP = 0;
+            RequiredXP = 3;
+            AP = 10;
+            MaxAP = 10;
         }
     }
 
     public class PCUStorage
     {
-        readonly Unit player = new Unit("John", CEnums.UnitType.player);
-        readonly Unit solou = new Unit("Solou", CEnums.UnitType.player);
-        readonly Unit chili = new Unit("Chili", CEnums.UnitType.player);
-        readonly Unit chyme = new Unit("Chyme", CEnums.UnitType.player);
-        readonly Unit storm = new Unit("Storm", CEnums.UnitType.player);
-        readonly Unit parsto = new Unit("Parsto", CEnums.UnitType.player);
-        readonly Unit adorine = new Unit("Adorine", CEnums.UnitType.player);
+        readonly Unit player = new Unit(CEnums.UnitType.player, "John", "_player", true);
+        readonly Unit solou = new Unit(CEnums.UnitType.player, "Solou", "_solou", true);
+        readonly Unit chili = new Unit(CEnums.UnitType.player, "Chili", "_chili", true);
+        readonly Unit chyme = new Unit(CEnums.UnitType.player, "Chyme", "_chyme", false);
+        readonly Unit storm = new Unit(CEnums.UnitType.player, "Storm", "_storm", false);
+        readonly Unit parsto = new Unit(CEnums.UnitType.player, "Parsto", "_parsto", false);
+        readonly Unit adorine = new Unit(CEnums.UnitType.player, "Adorine", "_adorine", false);
         readonly CommonMethods c_methods = new CommonMethods();
 
         // Returns ALL PCUs, alive, dead, active, and inactive
@@ -672,7 +675,7 @@ namespace Scripts
 
         public Unit GenerateMonster()
         {
-            return new Unit("Whispering Goblin", CEnums.UnitType.monster);
+            return new Unit(CEnums.UnitType.monster, "Whispering Goblin");
         }
     }
 
