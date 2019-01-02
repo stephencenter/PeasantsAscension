@@ -23,14 +23,14 @@ one to increase by[(5 + Strength) / Number of allies].Always increases defense
 by at least 5.Stacks with multiple uses.", 3),
 
                     new GreatCleaveAbility("Great Cleave", @"\
-The user deals a 1.25x critical strike to an enemy unit.If this attack
+The user deals a 1.25x critical strike to an enemy unit. If this attack
 results in that unit's death, the user gets to target a random additional unit
 for a second attack that deals[150 + Strength]% damage.", 2),
 
                     new BerserkersRageAbility("Berserker's Rage", @"\
 The user goes into a frenzy, discarding their defensive training and focusing
-their might on destroying a target enemy.Increases speed and physical attack
-by[15 + Strength] %, and reduces all three armor stats by the half the value.
+their might on destroying a target enemy. Increases speed and physical attack
+by [15 + Strength]%, and reduces all three armor stats by the half the value.
 Repeat casts only affect these stats by 10 / 5 % each, with no attribute bonus.", 2),
                 }
             },
@@ -62,7 +62,7 @@ is. The evasion bonus stacks with multiple uses. Evasion has a cap of 256.", 3),
                     new BreakingVowsAbility("Breaking Vows", @"\
 The user realigns their chakras, converting their own pain into an offensive
 weapon.Deals 5 damage, with an additional 1% of the target's maximum HP added
-for every 1 % of HP the user is missing.If the user's current HP is below
+for every 1% of HP the user is missing. If the user's current HP is below
 25%, this ability will lifesteal for [10 + Constitution]% of the damage
 dealt.", 5)
                 }       
@@ -73,27 +73,27 @@ dealt.", 5)
                 {
                     // Assassin abilities - Text should not pass this line -> |
                     new InjectPoisonAbility("Inject Poison", @"\
-Injects a poison into a target enemy that deals[2 + Dexterity] magical
-damage per turn.Stacks with multiple uses, with each stack increasing damage
-dealt per turn by 2 % of the target's maximum HP.", 2),
+Injects a poison into a target enemy that deals [2 + Dexterity] magical
+damage per turn. Stacks with multiple uses, with each stack increasing damage
+dealt per turn by 2% of the target's maximum HP.", 2),
 
                     new KnockoutGasAbility("Knockout Gas", @"\
 The user sneaks behind a target enemy and applies knockout gas to them,
-putting them to sleep.The sleep lasts for [Dexterity / 25] turns, with
+putting them to sleep. The sleep lasts for [4% of Dexterity] turns, with
 a minimum of 2 turns and a maximum of 8. The target has a 10% chance of randomly
-waking up each turn.Bosses have a 25% chance.Does not stack with multiple
+waking up each turn. Bosses have a 25% chance. Does not stack with multiple
 uses - repeat uses only refresh the sleep duration.", 2),
 
                     new DisarmingBlowAbility("Disarming Blow", @"\
 The user knocks the weapon out of a target enemy's hands, taking it for
-themselves.Deals 10 physical damage, and lowers the target's physical attack 
-by[5 + Dexterity]%. The attack-reduction has half the effect on bosses.The
+themselves. Deals 10 physical damage, and lowers the target's physical attack 
+by[5 + Dexterity]%. The attack-reduction has half the effect on bosses. The
 user has a 25% chance to steal the weapon, immediately trading it in for an
 amount of GP equal to the target's level, with a minimum of 5 GP.", 2),
 
                     new BackstabAbility("Backstab", @"\
 The user sneaks up on their opponent and deals a [125 + Dexterity]% critical
-strike. If the target is poisoned, Backstab will deal 1.5x base damage.If the
+strike. If the target is poisoned, Backstab will deal 1.5x base damage. If the
 target is asleep, Backstab will lifesteal for 10% of the damage dealt. If the
 target is disarmed, Backstab will lower the target's physical defense by 10%.
 All three effects can happen with a single Backstab.", 2)
@@ -109,24 +109,24 @@ The user channels their power to literally drain the skill from a target enemy.
 Reduces the target's 3 Attack Stats, 3 Armor Stats, Speed and Evasion by 
 [1 + Intelligence] each, and increases the respective stat by the same
 for the user. Stat loss/gain is capped at 20% the target's original stat value.
-Will always drain at least 1 of each stat.Will only affect the user's stats if
-casted on bosses.Can only be used once per enemy per battle.", 5),
+Will always drain at least 1 of each stat. Will only affect the user's stats if
+casted on bosses. Can only be used once per enemy per battle.", 5),
 
                     new PolymorphAbility("Polymorph", @"\
 The user turns a target enemy into a harmless frog for 1 turn, silencing them
-and reducing their attack stats, speed, and evasion to 0.If multiple enemies
-are alive on the field, this spell has a[25 + Intelligence] % chance of
-affecting a random second target, and a[5 + Intelligence] % chance of
+and reducing their attack stats, speed, and evasion to 0. If multiple enemies
+are alive on the field, this spell has a [25 + Intelligence]% chance of
+affecting a random second target, and a [5 + Intelligence]% chance of
 affecting a third.", 3),
 
                     new SpellShieldAbility("Spell Shield", @"\
 Places a protective barrier around your party that increases magical defense by
-[20 + Intelligence] for 3 turns.Does not stack with multiple uses - repeat uses
+[20 + Intelligence] for 3 turns. Does not stack with multiple uses - repeat uses
 only refresh the buff duration.", 5),
 
                     new ManaDrainAbility("Mana Drain", @"\
 Depletes the target's current MP by [5 + Intelligence]% of their maximum
-MP, while restoring the same amount to the user.Always drains/restores a
+MP, while restoring the same amount to the user. Always drains/restores a
 minimum of 5 MP.", 2)
                 }
             },
@@ -136,25 +136,25 @@ minimum of 5 MP.", 2)
                 {
                     // Ranger abilities - Text should not pass this line ---> |
                     new RollAbility("Roll", @"\
-The user does a quick tuck - and - roll, disorienting the enemy team and dodging all
-attacks for one turn.Also increases their speed by[25 + Perception].
+The user does a quick tuck-and-roll, disorienting the enemy team and dodging all
+attacks for one turn. Also increases their speed by [25 + Perception].
 The speed bonus stacks with multiple uses.", 3),
 
                     new ScoutAbility("Scout", @"\
-Scouts a target enemy, identifying its weak point.For 1 turn, all pierce
-attacks(Mages and Rangers) on the target will be critical strikes,
-dealing[150 + Perception] % damage.Also prevents the attacks from missing.", 1),
+Scouts a target enemy, identifying its weak point. For 1 turn, all pierce
+attacks (Mages and Rangers) on the target will be critical strikes,
+dealing [150 + Perception]% damage. Also prevents the attacks from missing.", 1),
 
                     new PowershotAbility("Powershot", @"\
 The user channels the power of the wind, firing an single absurdly powerful
-arrow.Deals[175 + Perception] % attack damage to the chosen target, and
-[50 + Perception] % attack damage to all other enemy targets.The user is
+arrow. Deals [175 + Perception]% attack damage to the chosen target, and
+[50 + Perception]% attack damage to all other enemy targets. The user is
 completely disabled for 1 turn after using this ability.", 2),
 
                     new NaturesCallAbility("Nature's Call", @"\
 The user calls upon nature, requesting help from the most powerful of animal
-allies!Deals a base damage dependent on what animal arrives, plus
-[100 + Perception] % additional damage.", 2)
+allies. Deals a base damage dependent on what animal arrives, plus
+[100 + Perception]% additional damage.", 2)
                 }
             },
 
@@ -164,7 +164,7 @@ allies!Deals a base damage dependent on what animal arrives, plus
                     // Paladin abilities - Text should not pass this line --> |
                     new TipTheScalesAbility("Tip the Scales", @"\
 The user tips the scales in their favor, healing allies and damaging enemies.
-Has a 'power value' of [5 % Max HP + Wisdom].If casted on an ally, this will
+Has a 'power value' of [5% Max HP + Wisdom]. If casted on an ally, this will
 deal the power value in magical damage to all enemy units, while healing the
 ally for the total damage dealt.If casted on an enemy, this will restore HP
 equal to the power value for each ally unit, while damaging the enemy for the
@@ -180,14 +180,14 @@ effect does not work on Bosses.", 2),
                     new JudgmentAbility("Judgment", @"\
 Applies a DOOM to the target, guaranteeing their death in 7 turns. If the
 target's defensive element is Darkness, then the 7 turns will be lowered by
-[15 + Wisdom] %, with a minimum of 2 turns.When cast on bosses, the turn count
-is always 10 turns.Re - casting this spell has no effect, unless re - casting 
+[15 + Wisdom]%, with a minimum of 2 turns. When cast on bosses, the turn count
+is always 10 turns. Re-casting this spell has no effect, unless re-casting 
 it would cause the timer to be lower.", 4),
 
                     new CanonizeAbility("Canonize", @"\
 Declares the target ally a holy figure, converting their defensive element to
 Light and causing all healing spells casted on them to heal for an additional
-[15 + Wisdom] %.Lasts 2 turns.Does not stack with multiple uses - repeat
+[15 + Wisdom]%. Lasts 2 turns. Does not stack with multiple uses - repeat
 uses only refresh the buff duration.", 3)
                 }
             },
@@ -197,12 +197,12 @@ uses only refresh the buff duration.", 3)
                 {
                     // Bard abilities - Text should not pass this line -----> |
                     new WaywardFellowAbility("The Wayward Fellow", @"\
-Summons the elusive Wayward Fellow to assist your party.The Wayward Fellow
+Summons the elusive Wayward Fellow to assist your party. The Wayward Fellow
 lasts for the entire duration of the battle and cannot be targetted by any
 spell, attack, or ability. He has no spells or abilities and can only attack
-using his Bow. The Fellow has [10 + 0.10 * Charisma] Speed and Pierce Attack.
+using his Bow. The Fellow has [10 + 0.10*Charisma] Speed and Pierce Attack.
 Replaying this song increases the Speed and Pierce Attack of the fellow by
-[5 + 0.10*Charisma], with no cap.The Wayward Fellow does not need to be
+[5 + 0.10*Charisma], with no cap. The Wayward Fellow does not need to be
 controlled, he will automatically attack a random target each turn.", 0),
 
                     new FallenComradeAbility("Ode to a Fallen Comrade", @"\
@@ -212,7 +212,7 @@ controlled, he will automatically attack a random target each turn.", 0),
 
                     new StubbornBoarAbility("Tale of the Stubborn Boar", @"\
 Sets the target's defense stats to 0 for one turn, then increases them to
-[115 + Charisma] % of their original. Can be used on both enemies and allies.", 0),
+[115 + Charisma]% of their original. Can be used on both enemies and allies.", 0),
 
                     new UnlikelyHeroAbility("An Unlikely Hero", @"\
 1 A X
@@ -225,11 +225,11 @@ Sets the target's defense stats to 0 for one turn, then increases them to
 3 C Z", 0),
 
                     new GrandFinaleAbility("Grand Finale", @"\
-A satisfying and exciting closer to a bard performance!
-Deals[(5 + Charisma) * Songs Played] magical damgage to a single target, and
-heals the user for the same amount.Only up to three songs are counted, and
-they must have been played during the current battle.The order of the songs 
-do not matter, and they do not haven to be three different songs.Does
+A satisfying and exciting closer to a bard performance! Deals 
+[(5 + Charisma)*Songs Played] magical damgage to a single target, and
+heals the user for the same amount. Only up to three songs are counted, and
+they must have been played during the current battle. The order of the songs 
+do not matter, and they do not haven to be three different songs. Does
 nothing if no songs have been played yet.", 3)
                 }
             }
