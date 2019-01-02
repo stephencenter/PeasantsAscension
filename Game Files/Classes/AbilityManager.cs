@@ -13,25 +13,25 @@ namespace Scripts
                     new TauntAbility("Taunt", @"\
 The user taunts the enemy team, forcing all enemies to attack him for 1 turn.
 The enemies can only use standard attacks while taunted, and cannot cast
-spells or defend.Does not go into effect until the current turn is finished.
-Provides a bonus[10 + Strength] Physical Defense during this turn, and half
+spells or defend. Does not go into effect until the current turn is finished.
+Provides a bonus [10 + Strength] Physical Defense during this turn, and half
 values for Magical and Pierce Defense.", 2),
 
                     new RollCallAbility("Roll Call", @"\
-The user rally's their allies to fight, causing the physical defense of each
-one to increase by[(5 + Strength) / Number of allies].Always increases defense
-by at least 5.Stacks with multiple uses.", 3),
+The user rallies their allies to fight, causing the physical defense of each
+one to increase by [(5 + Strength) / Number of allies]. Always increases defense
+by at least 5. Stacks with multiple uses.", 3),
 
                     new GreatCleaveAbility("Great Cleave", @"\
 The user deals a 1.25x critical strike to an enemy unit. If this attack
 results in that unit's death, the user gets to target a random additional unit
-for a second attack that deals[150 + Strength]% damage.", 2),
+for a second attack that deals [150 + Strength]% damage.", 2),
 
                     new BerserkersRageAbility("Berserker's Rage", @"\
 The user goes into a frenzy, discarding their defensive training and focusing
 their might on destroying a target enemy. Increases speed and physical attack
 by [15 + Strength]%, and reduces all three armor stats by the half the value.
-Repeat casts only affect these stats by 10 / 5 % each, with no attribute bonus.", 2),
+Repeat casts only affect these stats by 10/5% each, with no attribute bonus.", 2),
                 }
             },
 
@@ -49,7 +49,7 @@ uses.", 3),
 The user disregards any sense of good judgment they had, throwing themself
 wrecklessly at a target enemy. Deals [25 + Constitution]% of the target's
 current HP in magical damage, while also damaging the user for half the value.
-The self - damage is non - lethal, meaning that the user cannot die from it.", 3),
+The self-damage is non-lethal, meaning that the user cannot die from it.", 3),
 
                     new AuraSwapAbility("Aura Swap", @"\
 The user swaps the HP values of the highest-hp enemy and the lowest-hp ally.
@@ -61,7 +61,7 @@ is. The evasion bonus stacks with multiple uses. Evasion has a cap of 256.", 3),
 
                     new BreakingVowsAbility("Breaking Vows", @"\
 The user realigns their chakras, converting their own pain into an offensive
-weapon.Deals 5 damage, with an additional 1% of the target's maximum HP added
+weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
 for every 1% of HP the user is missing. If the user's current HP is below
 25%, this ability will lifesteal for [10 + Constitution]% of the damage
 dealt.", 5)
