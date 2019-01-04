@@ -1,29 +1,7 @@
-Thumbs.db
-.idea/workspace.xml
-error_log.out
-Game Files/__pycache__/
-Game Files/build/
+Game Files/.vs/
 Game Files/Save Files/
 Game Files/Music/
-Game Files/Python Files/__pycache__/
-Game Files/Python Files/build/
-settings.cfg
-build/
-dist/
-/.idea
-/.tmp.drivedownload/
-/Game Files/settings.cfg
-/Game Files/Test Music
-/Game Files/alchemy system.txt
-/Game Files/Sound FX/Bard Sounds Copy/
-/Game Files/PeasantsAscension/.vs/
-/Game Files/PeasantsAscension/obj/
-/Game Files/PeasantsAscension/bin/
-/Game Files/Classes/obj/
-/Game Files/Classes/bin/
-/Game Files/Methods/obj/
-/Game Files/Methods/bin/
-/Game Files/.vs/
-/Game Files/Scripts/bin
-/Game Files/Main/obj/
-/Game Files/Scripts/obj
+Game Files/Main/obj/
+Game Files/Main/bin/
+Game Files/Scripts/obj/
+Game Files/Scripts/bin/
