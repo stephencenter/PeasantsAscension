@@ -88,10 +88,10 @@ How to change the settings:
 ----------------------------------------------------
 Credits:
 
-    Programmed by TheFrozenMawile
-    Ideas & Bug-testing by Starkiller106024, Apollo Kalar, and Vexal
+    Programmed by Stephen Center
+    Ideas & Bug-testing by Starkiller, Apollo, and Vexal
     Music by Eric Skiff, Ben Landis, and some others
-    Sound FX by TheFrozenMawile and Apollo Kalar
+    Sound FX by Stephen Center and Apollo
     
     Full credits can be found in Credits.txt
 ----------------------------------------------------
