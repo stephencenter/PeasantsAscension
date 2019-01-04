@@ -105,7 +105,7 @@ namespace Scripts
             {"drained", false},
             {"disarmed", false}
         };
-       
+
         // Unit methods
         public void SetTempStats()
         {
@@ -170,6 +170,7 @@ namespace Scripts
             }
         }
 
+        // Player methods
         public void PrintBattleOptions()
         {
             Console.WriteLine($"Pick {Name}'s Move:\n      [1] Standard Attack\n      [2] Use Magic\n      [3] Use Abilities\n      [4] Use Items\n      [5] Run");
@@ -443,11 +444,6 @@ namespace Scripts
             return */
         }
 
-        public string MonsterExecuteMove()
-        {
-            return "run";
-        }
-
         public bool ChooseTarget(List<Unit> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
         {
             // Initialize important method helpers
@@ -543,7 +539,8 @@ namespace Scripts
                     CurrentTarget = valid_targets[int.Parse(chosen) - 1];
                 }
 
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     if (ex is ArgumentException || ex is IndexOutOfRangeException)
                     {
                         if (c_methods.IsExitString(chosen))
@@ -559,8 +556,16 @@ namespace Scripts
             }
         }
 
+        // Monster methods
+        public string MonsterExecuteMove()
+        {
+            return "run";
+        }
+
+        // Constructors
         public Unit(CEnums.UnitType unit_type, string name)
         {
+            // Create a monster
             if (unit_type != CEnums.UnitType.monster)
             {
                 throw new Exception("Can't create a non-monster with this constructor");
@@ -594,6 +599,7 @@ namespace Scripts
 
         public Unit(CEnums.UnitType unit_type, string name, string pcu_id, bool active)
         {
+            // Create a pcu
             if (unit_type != CEnums.UnitType.player)
             {
                 throw new Exception("Can't create a non-player with this constructor");

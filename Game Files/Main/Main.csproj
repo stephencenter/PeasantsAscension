@@ -51,7 +51,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Classes\Scripts.csproj">
+    <ProjectReference Include="..\Scripts\Scripts.csproj">
       <Project>{a2025da0-5a05-4b54-ae27-b7dbff6c4208}</Project>
       <Name>Scripts</Name>
     </ProjectReference>
