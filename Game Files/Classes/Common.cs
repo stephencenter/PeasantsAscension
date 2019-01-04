@@ -100,9 +100,9 @@ namespace Scripts
         public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard }
         public enum MonsterClass { melee, ranged, magic }
 
-        public string StatusToString(Status status)
+        public string EnumToString(Enum the_enum)
         {
-            Dictionary<Status, string> StatusNameMap = new Dictionary<Status, string>()
+            Dictionary<Enum, string> StatusNameMap = new Dictionary<Enum, string>()
             {
                 {Status.silence, "Silence"},
                 {Status.poison, "Poison"},
@@ -111,9 +111,36 @@ namespace Scripts
                 {Status.paralyzation, "Paralyzation" },
                 {Status.alive, "Alive"},
                 {Status.dead, "Dead"},
+
+                {UnitType.player, "Player" },
+                {UnitType.monster, "Monster" },
+                {UnitType.boss, "Boss" },
+
+                {Element.fire, "Fire"},
+                {Element.water, "Water"},
+                {Element.electric, "Electric"},
+                {Element.earth, "Earth"},
+                {Element.wind, "Wind"},
+                {Element.grass, "Grass"},
+                {Element.ice, "Ice"},
+                {Element.light, "Light"},
+                {Element.dark, "Dark"},
+                {Element.none, "None"},
+
+                {CharacterClass.warrior, "Warrior" },
+                {CharacterClass.ranger, "Ranger"},
+                {CharacterClass.mage, "Mage"},
+                {CharacterClass.assassin, "Assassin"},
+                {CharacterClass.paladin, "Paladin"},
+                {CharacterClass.monk, "Monk"},
+                {CharacterClass.bard, "Bard"},
+
+                {MonsterClass.melee, "Melee" },
+                {MonsterClass.ranged, "Ranged" },
+                {MonsterClass.magic, "Magic" }
             };
 
-            return StatusNameMap[status];
+            return StatusNameMap[the_enum];
         }
     }
 }
