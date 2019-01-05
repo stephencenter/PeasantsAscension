@@ -1381,6 +1381,7 @@ class RangedMonster(Monster):
             sounds.attack_miss.play()
             print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!")
 
+
     def apply_multipliers(self):
         self.hp *= (self.class_multiplier['hp']*self.species_multiplier['hp'])
         self.mp *= (self.class_multiplier['mp']*self.species_multiplier['mp'])
