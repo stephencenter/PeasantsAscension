@@ -8,26 +8,26 @@ namespace Scripts
     public class BattleManager
     {
         readonly Random rng = new Random();
-        readonly MonsterGenerator monster_gen = new MonsterGenerator();
-        readonly CommonMethods c_methods = new CommonMethods();
         readonly CEnums c_enums = new CEnums();
-        protected PCUStorage pcu_storage = new PCUStorage();
+        readonly CommonMethods c_methods = new CommonMethods();
+        readonly SoundManager sound_manager = new SoundManager();
+        protected UnitManager unit_manager = new UnitManager();
 
         public void BattleSystem()
         {
-            List<Unit> monster_list = new List<Unit>() { monster_gen.GenerateMonster() };
-            List<Unit> active_pcus = pcu_storage.GetActivePCUs();
+            List<Unit> monster_list = new List<Unit>() { unit_manager.GenerateMonster() };
+            List<Unit> active_pcus = unit_manager.GetActivePCUs();
             int turn_counter = 0;
 
             // 25% chance to add a second monster
             if (rng.Next(0, 100) > 75)
             {
-                monster_list.Add(monster_gen.GenerateMonster());
+                monster_list.Add(unit_manager.GenerateMonster());
 
                 // 25% chance to add a third monster if a second monster was already added (6.25% chance for three monsters)
                 if (rng.Next(0, 100) > 75)
                 {
-                    monster_list.Add(monster_gen.GenerateMonster());
+                    monster_list.Add(unit_manager.GenerateMonster());
                 }
             }
 
@@ -48,7 +48,7 @@ namespace Scripts
 
             // sounds.play_music('../Music/Ruari 8-bit Battle.ogg')
 
-            // main.smart_sleep(1)
+            Thread.Sleep(1);
 
             // Create a temporary copy of all of the player's stats. These copies are what will be modified in-battle by 
             // spells, abilities, etc. so that they will return to normal after battle (although they in fact were never 
@@ -61,7 +61,7 @@ namespace Scripts
                 turn_counter++;
 
                 List<Unit> speed_list = active_pcus.Concat(monster_list).OrderByDescending(x => x.Speed).ToList();
-                
+
                 // Display the stats for every battle participant
                 DisplayBattleStats(active_pcus, monster_list);
 
@@ -72,7 +72,7 @@ namespace Scripts
                     if (0 < character.HP && character.HP <= character.MaxHP * 0.20)
                     {
                         Console.WriteLine($"Warning: {character.Name}'s HP is low, heal as soon as possible!");
-                        // TO-DO!! sounds.health_low.play()
+                        sound_manager.health_low.Play();
                         Thread.Sleep(1000);
                     }
 
@@ -131,7 +131,7 @@ namespace Scripts
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
-                            // sounds.ally_death.play()
+                            sound_manager.ally_death.Play();
 
                             c_methods.PrintDivider();
                             Console.WriteLine($"{other_unit.Name} has fallen to the monsters!");
@@ -142,7 +142,7 @@ namespace Scripts
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
-                            // sounds.enemy_death.play()
+                            sound_manager.enemy_death.Play();
 
                             c_methods.PrintDivider();
                             Console.WriteLine($"{other_unit.Name} was defeated by your party!");
@@ -294,8 +294,9 @@ namespace Scripts
             //        return False
         }
 
-        public void BattleInventory()
+        public bool BattleInventory(Unit user)
         {
+            return true;
             //def battle_inventory(user):
             //    # The player can use items from the Consumables category of their inventory during battles.
             //    while True:
@@ -329,7 +330,7 @@ namespace Scripts
             //            item.use_item(user)
             //            return True
         }
-        
+
         public void DisplayTeamStats(List<Unit> unit_list)
         {
             int player_pad1 = unit_list.Select(x => x.Name.Length).Max();
@@ -347,12 +348,12 @@ namespace Scripts
                 {
                     if (status_list == "")
                     {
-                        status_list = c_enums.StatusToString(status);
+                        status_list = c_enums.EnumToString(status);
                     }
 
                     else
                     {
-                        status_list = string.Join(", ", new List<string>() { status_list, c_enums.StatusToString(status) });
+                        status_list = string.Join(", ", new List<string>() { status_list, c_enums.EnumToString(status) });
                     }
                 }
 

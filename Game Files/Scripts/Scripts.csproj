@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A2025DA0-5A05-4B54-AE27-B7DBFF6C4208}</ProjectGuid>
+    <ProjectGuid>{7E2E1CAE-97AC-4BAD-AA2E-953853B0ADCA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Classes</RootNamespace>
-    <AssemblyName>Classes</AssemblyName>
+    <RootNamespace>Scripts</RootNamespace>
+    <AssemblyName>Scripts</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -43,20 +43,19 @@
   <ItemGroup>
     <Compile Include="AbilityManager.cs" />
     <Compile Include="BattleManager.cs" />
+    <Compile Include="CommandManager.cs" />
     <Compile Include="Common.cs" />
-    <Compile Include="Dialogue.cs" />
-    <Compile Include="Inventory.cs" />
-    <Compile Include="Items\Item.cs" />
-    <Compile Include="NPC.cs" />
-    <Compile Include="Overworld.cs" />
+    <Compile Include="DialogueManager.cs" />
+    <Compile Include="InventoryManager.cs" />
+    <Compile Include="ItemManager.cs" />
+    <Compile Include="NPCManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveLoad.cs" />
-    <Compile Include="Sound.cs" />
+    <Compile Include="SavefileManager.cs" />
+    <Compile Include="SoundManager.cs" />
     <Compile Include="SpellManager.cs" />
-    <Compile Include="Tile.cs" />
-    <Compile Include="Titlescreen.cs" />
-    <Compile Include="Town.cs" />
-    <Compile Include="Unit.cs" />
+    <Compile Include="TileManager.cs" />
+    <Compile Include="TownManager.cs" />
+    <Compile Include="UnitManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

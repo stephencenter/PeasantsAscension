@@ -65,9 +65,9 @@ weapon. Deals 5 damage, with an additional 1% of the target's maximum HP added
 for every 1% of HP the user is missing. If the user's current HP is below
 25%, this ability will lifesteal for [10 + Constitution]% of the damage
 dealt.", 5)
-                }       
+                }
             },
-            
+
             { // 1 2 3 4 finished
                 CEnums.CharacterClass.assassin, new List<dynamic>()
                 {
@@ -130,7 +130,7 @@ MP, while restoring the same amount to the user. Always drains/restores a
 minimum of 5 MP.", 2)
                 }
             },
-            
+
             { // None finished
                 CEnums.CharacterClass.ranger, new List<dynamic>()
                 {
@@ -299,7 +299,7 @@ nothing if no songs have been played yet.", 3)
 
         public TauntAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
-            
+
         }
     }
 
@@ -478,7 +478,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class BreakingVowsAbility : Ability {
+    public class BreakingVowsAbility : Ability
+    {
         /* 
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} cast Breaking Vows on?")
@@ -510,7 +511,8 @@ nothing if no songs have been played yet.", 3)
      *      ASSASSIN ABILITIES     *
      * =========================== */
 
-    public class InjectPoisonAbility : Ability {
+    public class InjectPoisonAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} inject poison into?")
@@ -535,7 +537,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class KnockoutGasAbility : Ability {
+    public class KnockoutGasAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} cast Knockout Gas on?")
@@ -559,7 +562,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class DisarmingBlowAbility : Ability {
+    public class DisarmingBlowAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} disarm?")
@@ -603,7 +607,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class BackstabAbility : Ability {
+    public class BackstabAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} Backstab?")
@@ -644,7 +649,8 @@ nothing if no songs have been played yet.", 3)
      *        MAGE ABILITIES       *
      * =========================== */
 
-    public class SkillSyphonAbility : Ability {
+    public class SkillSyphonAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} cast Skill Syphon on?")
@@ -689,7 +695,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class PolymorphAbility : Ability {
+    public class PolymorphAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -703,7 +710,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class SpellShieldAbility : Ability {
+    public class SpellShieldAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -717,7 +725,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class ManaDrainAbility : Ability {
+    public class ManaDrainAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} cast Mana Drain on?")
@@ -748,7 +757,8 @@ nothing if no songs have been played yet.", 3)
      *       RANGER ABILITIES      *
      * =========================== */
 
-    public class RollAbility : Ability {
+    public class RollAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -762,7 +772,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class ScoutAbility : Ability {
+    public class ScoutAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} scout?")
@@ -776,7 +787,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class PowershotAbility : Ability {
+    public class PowershotAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -790,7 +802,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class NaturesCallAbility : Ability {
+    public class NaturesCallAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -822,7 +835,8 @@ nothing if no songs have been played yet.", 3)
      *      PALADIN ABILITIES      *
      * =========================== */
 
-    public class TipTheScalesAbility : Ability {
+    public class TipTheScalesAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} cast Tip the Scales on?", ally=True)
@@ -870,7 +884,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class UnholyBindsAbility : Ability {
+    public class UnholyBindsAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} cast Unholy Binds on?", ally=True, enemy=True)
@@ -915,7 +930,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class JudgmentAbility : Ability {
+    public class JudgmentAbility : Ability
+    {
         /*
         def before_ability(self, user):
             user.choose_target(f"Who should {user.name} cast Judgment on?")
@@ -952,7 +968,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class CanonizeAbility : Ability {
+    public class CanonizeAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -970,7 +987,8 @@ nothing if no songs have been played yet.", 3)
      *        BARD ABILITIES       *
      * =========================== */
 
-    public class WaywardFellowAbility : Ability {
+    public class WaywardFellowAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -984,7 +1002,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class FallenComradeAbility : Ability {
+    public class FallenComradeAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -998,7 +1017,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class StubbornBoarAbility : Ability {
+    public class StubbornBoarAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -1012,7 +1032,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class UnlikelyHeroAbility : Ability {
+    public class UnlikelyHeroAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -1026,7 +1047,8 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class TournamentAbility : Ability {
+    public class TournamentAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
@@ -1040,14 +1062,15 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class GrandFinaleAbility : Ability {
+    public class GrandFinaleAbility : Ability
+    {
         /*
         def before_ability(self, user):
             pass
 
         def use_ability(self, user) :
             pass */
-            
+
         public GrandFinaleAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
 
@@ -1137,6 +1160,5 @@ nothing if no songs have been played yet.", 3)
     when casting abilities, up to 2x.Flaard's tuning level is not reset after 
     battle.", 0) */
 }
- 
- 
- 
+
+

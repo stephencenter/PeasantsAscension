@@ -20,6 +20,7 @@ namespace Main
 
                     available_dirs = game_ui()
 
+
                     while True:
                         party_info['gamestate'] = 'overworld'
                         command = s_input('Input Command (type "help" to view command list): ').lower()
@@ -60,6 +61,11 @@ namespace Main
                             continue
 
                         available_dirs = game_ui() */
+        }
+
+        private void DisplayTitlescreen()
+        {
+
         }
     }
 }

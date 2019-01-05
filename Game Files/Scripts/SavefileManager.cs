@@ -1,6 +1,6 @@
 ﻿namespace Scripts
 {
-    public class SaveLoad
+    public class SavefileManager
     {
         protected int divider_size = 25;
 

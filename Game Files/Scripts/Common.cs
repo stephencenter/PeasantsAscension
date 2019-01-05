@@ -16,7 +16,7 @@ namespace Scripts
         public void PrintDivider()
         {
             // Initialize the settings manager
-            SaveLoad settings_manager = new SaveLoad();
+            SavefileManager settings_manager = new SavefileManager();
 
             Console.WriteLine(new string('-', settings_manager.GetDividerSize()));
         }
@@ -54,7 +54,7 @@ namespace Scripts
 
         public bool IsExitString(string the_string)
         {
-            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel"};
+            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel" };
 
             if (ValidExitStrings.Contains(the_string.ToLower()))
             {
@@ -95,10 +95,12 @@ namespace Scripts
     public class CEnums
     {
         public enum UnitType { player, monster, boss }
-        public enum Status { silence, poison, weakness, blindness, paralyzation, alive, dead }
+        public enum Status { silence, poison, weakness, blindness, paralyzation, muted, alive, dead }
         public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, none }
         public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard }
         public enum MonsterClass { melee, ranged, magic }
+        public enum EquipmentType { head, body, legs, weapon, accessory }
+        public enum WeaponType { melee, ranged, instrument }
 
         public string EnumToString(Enum the_enum)
         {
@@ -109,6 +111,7 @@ namespace Scripts
                 {Status.weakness, "Weakness"},
                 {Status.blindness, "Blindness"},
                 {Status.paralyzation, "Paralyzation" },
+                {Status.muted, "Muted"},
                 {Status.alive, "Alive"},
                 {Status.dead, "Dead"},
 

@@ -1,6 +1,6 @@
 ﻿namespace Scripts
 {
-    public class Tile
+    public class TileManager
     {
         protected string Name { get; set; }
         protected string Description { get; set; }
@@ -14,5 +14,5 @@
     {
         public bool Accessible { get; set; }
         public string Explanation { get; set; }
-    } 
+    }
 }

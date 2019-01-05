@@ -1,10 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Scripts.Items;
+using System.Threading;
 
 namespace Scripts
 {
+    public class UnitManager
+    {
+        readonly Unit player = new Unit(CEnums.UnitType.player, "John", "_player", true);
+        readonly Unit solou = new Unit(CEnums.UnitType.player, "Solou", "_solou", true);
+        readonly Unit chili = new Unit(CEnums.UnitType.player, "Chili", "_chili", true);
+        readonly Unit chyme = new Unit(CEnums.UnitType.player, "Chyme", "_chyme", false);
+        readonly Unit storm = new Unit(CEnums.UnitType.player, "Storm", "_storm", false);
+        readonly Unit parsto = new Unit(CEnums.UnitType.player, "Parsto", "_parsto", false);
+        readonly Unit adorine = new Unit(CEnums.UnitType.player, "Adorine", "_adorine", false);
+        readonly CommonMethods c_methods = new CommonMethods();
+
+        // Returns ALL PCUs, alive, dead, active, and inactive
+        public List<Unit> GetAllPCUs()
+        {
+            return new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+        }
+
+        // Returns all PCUs that are alive, regardless of whether they're active or not
+        public List<Unit> GetAlivePCUs()
+        {
+            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+            pcu_list = pcu_list.Where(x => x.IsAlive()).ToList();
+
+            return pcu_list;
+        }
+
+        // Returns all PCUs that are active, regardless of whether they're alive or not
+        public List<Unit> GetActivePCUs()
+        {
+            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+            pcu_list = pcu_list.Where(x => x.Active).ToList();
+
+            return pcu_list;
+        }
+
+        // Returns all PCUs that are both alive and active
+        public List<Unit> GetAliveActivePCUs()
+        {
+            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+            pcu_list = pcu_list.Where(x => x.Active && x.IsAlive()).ToList();
+
+            return pcu_list;
+        }
+
+        public Unit GenerateMonster()
+        {
+            return new Unit(CEnums.UnitType.monster, "Whispering Goblin");
+        }
+    }
+
     public class Unit
     {
         // General Unit Properties
@@ -90,7 +140,7 @@ namespace Scripts
         public bool IsDefending { get; set; }
         public int DroppedGold { get; set; }
         public int DroppedXP { get; set; }
-        public List<Item> DroppedItems { get; set; }
+        public List<ItemManager> DroppedItems { get; set; }
         public string AttackMessage { get; set; }
         public string AsciiArt { get; set; }
 
@@ -121,7 +171,7 @@ namespace Scripts
 
         public bool IsAlive()
         {
-            return !Statuses.Contains(CEnums.Status.dead);
+            return !HasStatus(CEnums.Status.dead);
         }
 
         public bool IsPCU()
@@ -137,6 +187,11 @@ namespace Scripts
         public bool IsBoss()
         {
             return Type == CEnums.UnitType.boss;
+        }
+
+        public bool HasStatus(CEnums.Status status)
+        {
+            return Statuses.Contains(status);
         }
 
         public void FixAllStats()
@@ -182,6 +237,9 @@ namespace Scripts
             CommonMethods c_methods = new CommonMethods();
             SpellManager spell_manager = new SpellManager();
             AbilityManager ability_manager = new AbilityManager();
+            InventoryManager inv_manager = new InventoryManager();
+            SoundManager sound_manager = new SoundManager();
+            BattleManager battle_manager = new BattleManager();
 
             PrintBattleOptions();
 
@@ -217,9 +275,9 @@ namespace Scripts
                     c_methods.PrintDivider();
 
                     // Silence is a status ailment that prevents using spells
-                    if (Statuses.Contains(CEnums.Status.silence))
+                    if (HasStatus(CEnums.Status.silence))
                     {
-                        // sounds.debuff.play()
+                        sound_manager.debuff.Play();
                         Console.WriteLine($"{Name} can't use spells when silenced!");
                         c_methods.PressEnterReturn();
                         PrintBattleOptions();
@@ -270,7 +328,8 @@ namespace Scripts
                             {
                                 if (ex is ArgumentException || ex is IndexOutOfRangeException)
                                 {
-                                    if (c_methods.IsExitString(chosen_ability)) {
+                                    if (c_methods.IsExitString(chosen_ability))
+                                    {
                                         c_methods.PrintDivider();
                                         PrintBattleOptions();
 
@@ -302,35 +361,42 @@ namespace Scripts
                 // Use Items
                 else if (CurrentMove == '4')
                 {
-                    /*
-                    print('-'*save_load.divider_size)
+                    c_methods.PrintDivider();
 
-                    # You can only use consumable items during battle
-                    if not items.inventory['consumables']:
-                        print('Your party has no consumables!')
-                        main.s_input("\nPress enter/return ")
-                        print('-'*save_load.divider_size)
-                        print(battle_options.format(self.name))
+                    var x = new List<int>();
+                    if (!inv_manager.GetInventory()["consumables"].Any())
+                    {
+                        sound_manager.debuff.Play();
+                        Console.WriteLine("Your party has no consumables!");
 
-                        continue
+                        c_methods.PressEnterReturn();
+                        c_methods.PrintDivider();
+                        PrintBattleOptions();
 
-                    # Mute is a status ailment that prevents using items
-                    if 'muted' in self.status_ail:
-                        sounds.debuff.play()
-                        print(f"{self.name} can't use items when muted!")
-                        main.s_input("\nPress enter/return ")
-                        print('-'*save_load.divider_size)
-                        print(battle_options.format(self.name))
+                        continue;
+                    }
 
-                        continue
+                    if (HasStatus(CEnums.Status.muted))
+                    {
+                        sound_manager.debuff.Play();
+                        Console.WriteLine($"{Name} can't use items when muted!");
 
-                    if not battle.battle_inventory(self):
-                        print(battle_options.format(self.name))
+                        c_methods.PressEnterReturn();
+                        c_methods.PrintDivider();
+                        PrintBattleOptions();
 
-                        continue
+                        continue;
+                    }
 
-                    main.s_input('\nPress enter/return ')
-                    return */
+                    if (!battle_manager.BattleInventory(this))
+                    {
+                        PrintBattleOptions();
+
+                        continue;
+                    }
+
+                    c_methods.PressEnterReturn();
+                    return;
                 }
 
                 // Run
@@ -343,19 +409,6 @@ namespace Scripts
 
         public string PCUExecuteMove(List<Unit> monster_list)
         {
-            Random rng = new Random();
-
-            // sounds.item_pickup.stop()
-
-            // If the player's target is an enemy, and the target died before the player's turn began,
-            // then the attack automatically redirects to a random living enemy.
-            if (CurrentTarget != null && CurrentTarget.IsMonster() && !CurrentTarget.IsAlive())
-            {
-                CurrentTarget = monster_list[rng.Next(monster_list.Count)];
-            }
-
-            return "run";
-
             /*
             if isinstance(self.target, Monster) and 'dead' in self.target.status_ail:
                 self.target = random.choice([x for x in battle.m_list if 'dead' not in x.status_ail])
@@ -380,8 +433,58 @@ namespace Scripts
                 print(f'{self.name} took poison damage! (-{poison_damage} HP)')
 
                 if self.hp <= 0:
-                    return
+                    return */
 
+            Random rng = new Random();
+            InventoryManager inv_manager = new InventoryManager();
+
+            // sounds.item_pickup.stop()
+
+            // If the player's target is an enemy, and the target died before the player's turn began,
+            // then the attack automatically redirects to a random living enemy.
+            if (CurrentTarget != null && CurrentTarget.IsMonster() && !CurrentTarget.IsAlive())
+            {
+                CurrentTarget = monster_list[rng.Next(monster_list.Count)];
+            }
+
+            Weapon player_weapon = inv_manager.GetEquipped(PCUID)["weapon"];
+
+            Console.WriteLine($"-{Name}'s Turn-");
+
+            // PCUs regenerate 1 Action Point per turn, unless they used an ability that turn
+            if (CurrentMove != '3')
+            {
+                AP++;
+            }
+
+            if (HasStatus(CEnums.Status.poison))
+            {
+                Thread.Sleep(750);
+
+                // sounds.poison_damage.play()
+
+                int poison_damage = HP / 5;
+                HP -= poison_damage;
+
+                Console.WriteLine($"{Name} took {poison_damage} damage from poison!");
+
+                if (HP <= 0)
+                {
+                    return "";
+                }
+            }
+
+            foreach (CEnums.Status status in Statuses)
+            {
+                if (status != CEnums.Status.alive && rng.Next(0, 5) == 0)
+                {
+                    // sounds.buff_spell.play()
+                }
+            }
+
+            return "run";
+        
+            /*
             for x in self.status_ail:
                 if x != "alive" and random.randint(0, 3) == 3:
                     sounds.buff_spell.play()
@@ -448,7 +551,7 @@ namespace Scripts
         {
             // Initialize important method helpers
             CommonMethods c_methods = new CommonMethods();
-            PCUStorage pcu_storage = new PCUStorage();
+            UnitManager unit_manager = new UnitManager();
 
             // A list of PCUs that are valid for targetting (could be unused if target_allies is false)
             List<Unit> pcu_list;
@@ -458,13 +561,13 @@ namespace Scripts
                 if (allow_dead)
                 {
                     // YES to dead PCUs, YES to inactive PCUs
-                    pcu_list = pcu_storage.GetAllPCUs();
+                    pcu_list = unit_manager.GetAllPCUs();
                 }
 
                 else
                 {
                     // NO to dead PCUs, YES to inactive PCUs
-                    pcu_list = pcu_storage.GetAlivePCUs();
+                    pcu_list = unit_manager.GetAlivePCUs();
                 }
             }
 
@@ -473,13 +576,13 @@ namespace Scripts
                 if (allow_dead)
                 {
                     // YES to dead PCUs, NO to inactive PCUs
-                    pcu_list = pcu_storage.GetActivePCUs();
+                    pcu_list = unit_manager.GetActivePCUs();
                 }
 
                 else
                 {
                     // NO to dead PCUs, NO to inactive PCUs
-                    pcu_list = pcu_storage.GetAliveActivePCUs();
+                    pcu_list = unit_manager.GetAliveActivePCUs();
                 }
             }
 
@@ -587,7 +690,7 @@ namespace Scripts
             Evasion = 3;
             Level = 1;
 
-            DroppedItems = new List<Item>();
+            DroppedItems = new List<ItemManager>();
             MClass = CEnums.MonsterClass.melee;
             StatusOnAttack = CEnums.Status.paralyzation;
             IsDefending = false;
@@ -630,69 +733,14 @@ namespace Scripts
         }
     }
 
-    public class PCUStorage
-    {
-        readonly Unit player = new Unit(CEnums.UnitType.player, "John", "_player", true);
-        readonly Unit solou = new Unit(CEnums.UnitType.player, "Solou", "_solou", true);
-        readonly Unit chili = new Unit(CEnums.UnitType.player, "Chili", "_chili", true);
-        readonly Unit chyme = new Unit(CEnums.UnitType.player, "Chyme", "_chyme", false);
-        readonly Unit storm = new Unit(CEnums.UnitType.player, "Storm", "_storm", false);
-        readonly Unit parsto = new Unit(CEnums.UnitType.player, "Parsto", "_parsto", false);
-        readonly Unit adorine = new Unit(CEnums.UnitType.player, "Adorine", "_adorine", false);
-        readonly CommonMethods c_methods = new CommonMethods();
-
-        // Returns ALL PCUs, alive, dead, active, and inactive
-        public List<Unit> GetAllPCUs()
-        {
-            return new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
-        }
-
-        // Returns all PCUs that are alive, regardless of whether they're active or not
-        public List<Unit> GetAlivePCUs()
-        {
-            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
-            pcu_list = pcu_list.Where(x => x.IsAlive()).ToList();
-
-            return pcu_list;
-        }
-
-        // Returns all PCUs that are active, regardless of whether they're alive or not
-        public List<Unit> GetActivePCUs()
-        {
-            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
-            pcu_list = pcu_list.Where(x => x.Active).ToList();
-
-            return pcu_list;
-        }
-
-        // Returns all PCUs that are both alive and active
-        public List<Unit> GetAliveActivePCUs()
-        {
-            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
-            pcu_list = pcu_list.Where(x => x.Active && x.IsAlive()).ToList();
-
-            return pcu_list;
-        }
-    }
-
-    public class MonsterGenerator
-    {
-        readonly CommonMethods c_methods = new CommonMethods();
-
-        public Unit GenerateMonster()
-        {
-            return new Unit(CEnums.UnitType.monster, "Whispering Goblin");
-        }
-    }
-
     public class PartyInfo
     {
         public GameState Gamestate { get; set; }
         public Mode MusicboxMode { get; set; }
-        public List<Town> VisitedTowns { get; set; }
-        public Tile CurrentTile { get; set; }
-        public Tile RespawnTile { get; set; }
-        public Town CurrentTown { get; set; }
+        public List<TownManager> VisitedTowns { get; set; }
+        public TileManager CurrentTile { get; set; }
+        public TileManager RespawnTile { get; set; }
+        public TownManager CurrentTown { get; set; }
         public int GP { get; set; }
         public int StepsWithoutBattle { get; set; }
         public int Difficulty { get; set; }
@@ -712,10 +760,10 @@ namespace Scripts
         {
             Gamestate = GameState.overworld;
             MusicboxMode = Mode.AtoZ;
-            VisitedTowns = new List<Town>();
-            CurrentTile = new Tile();
-            RespawnTile = new Tile();
-            CurrentTown = new Town();
+            VisitedTowns = new List<TownManager>();
+            CurrentTile = new TileManager();
+            RespawnTile = new TileManager();
+            CurrentTown = new TownManager();
             GP = 20;
             StepsWithoutBattle = 0;
             Difficulty = 0;

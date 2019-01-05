@@ -1,6 +1,6 @@
 ﻿namespace Scripts
 {
-    public class Inventory
+    public class TownManager
     {
 
     }

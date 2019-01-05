@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3EF5ADD5-F84E-4C8A-8495-21A9C2818FB0}</ProjectGuid>
+    <ProjectGuid>{441EFED5-0CB6-40F9-AE39-5B14B9BBE71C}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PeasantsAscension</RootNamespace>
-    <AssemblyName>PeasantsAscension</AssemblyName>
+    <RootNamespace>Main</RootNamespace>
+    <AssemblyName>Main</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Scripts\Scripts.csproj">
-      <Project>{a2025da0-5a05-4b54-ae27-b7dbff6c4208}</Project>
+      <Project>{7e2e1cae-97ac-4bad-aa2e-953853b0adca}</Project>
       <Name>Scripts</Name>
     </ProjectReference>
   </ItemGroup>

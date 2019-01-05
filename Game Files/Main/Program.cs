@@ -1,4 +1,5 @@
-﻿namespace Main
+﻿
+namespace Main
 {
     class Program
     {
