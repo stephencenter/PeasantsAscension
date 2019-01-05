@@ -71,18 +71,18 @@ namespace Scripts
             int p_defense;
             int m_defense;
 
-            int weapon_dmg;
+            double weapon_power;
             double armor_resist;
 
             int final_damage;
 
             if (attacker.IsPCU())
             {
-                weapon_dmg = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.weapon].Power;
+                weapon_power = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.weapon].Power;
 
                 attack = attacker.TempStats["attack"];
-                p_attack = attacker.TempStats["p_attk"];
-                m_attack = attacker.TempStats["m_attk"];
+                p_attack = attacker.TempStats["p_attack"];
+                m_attack = attacker.TempStats["m_attack"];
             }
 
             else
@@ -91,7 +91,7 @@ namespace Scripts
                 p_attack = attacker.PAttack;
                 m_attack = attacker.MAttack;
 
-                weapon_dmg = 0;
+                weapon_power = 0;
             }
 
             if (target.IsPCU())
@@ -117,7 +117,7 @@ namespace Scripts
 
             if (damage_type == CEnums.DamageType.physical)
             {
-                final_damage = (int)((attack - defense / 2) * (1 + armor_resist) * (1 + weapon_dmg));
+                final_damage = (int)((attack - defense / 2) * (1 + armor_resist) * (1 + weapon_power));
 
                 // Weakeness reduces physical damage by 1/2
                 if (attacker.HasStatus(CEnums.Status.weakness))
@@ -135,7 +135,7 @@ namespace Scripts
 
             else if (damage_type == CEnums.DamageType.physical)
             {
-                final_damage = (int)((p_attack - p_defense / 2) * (1 + armor_resist) * (1 + weapon_dmg));
+                final_damage = (int)((p_attack - p_defense / 2) * (1 + armor_resist) * (1 + weapon_power));
 
                 // Blindness reduces piercing damage by 1/2
                 if (attacker.HasStatus(CEnums.Status.blindness))
@@ -179,15 +179,41 @@ namespace Scripts
 
         public int ApplyElementalChart(Unit attacker, Unit target, int damage)
         {
+            // Fire > Ice > Grass > Wind > Electricity > Earth > Water > Fire
+            // Light > Dark and Dark > Light, Dark and Light resist themselves
+            // Neutral element is neutral both offensively and defensively
+            // All other interactions are neutral
+            CEnums c_enums = new CEnums();
 
+            CEnums.Element attacker_element = attacker.off_element;
+            CEnums.Element target_element = target.def_element;
+
+            // If either the attacker or the target is neutral element, then damage will not be modified
+            if (attacker_element == CEnums.Element.neutral || target_element == CEnums.Element.neutral)
+            {
+                return damage;
+            }      
+
+            // If the target is weak to the attackers element, then the attack will deal 1.5x damage
+            if (c_enums.ElementChart[attacker_element][1] == target_element)
+            {
+                return (int)(damage * 1.5);
+            }
+
+            else if (c_enums.ElementChart[attacker_element][0] == target_element)
+            {
+                return (int)(damage / 1.5);
+            }
+
+            return damage;
         }
     }
 
     public class Unit
     {
         // General Unit Properties
-        public CEnums.Element off_element = CEnums.Element.none;
-        public CEnums.Element def_element = CEnums.Element.none;
+        public CEnums.Element off_element = CEnums.Element.neutral;
+        public CEnums.Element def_element = CEnums.Element.neutral;
         public CEnums.UnitType Type { get; set; }
         public List<CEnums.Status> Statuses = new List<CEnums.Status> { CEnums.Status.alive, CEnums.Status.blindness };
 
@@ -341,7 +367,9 @@ namespace Scripts
             }
         }
 
-        // Player methods
+        /* =========================== *
+         *        PLAYER METHODS       *
+         * =========================== */
         public void PrintBattleOptions()
         {
             Console.WriteLine($"Pick {Name}'s Move:\n      [1] Standard Attack\n      [2] Use Magic\n      [3] Use Abilities\n      [4] Use Items\n      [5] Run");
@@ -356,6 +384,7 @@ namespace Scripts
             InventoryManager inv_manager = new InventoryManager();
             SoundManager sound_manager = new SoundManager();
             BattleManager battle_manager = new BattleManager();
+            ItemManager item_manager = new ItemManager();
 
             PrintBattleOptions();
 
@@ -745,7 +774,7 @@ namespace Scripts
             int counter = 0;
             foreach (Unit unit in valid_targets)
             {
-                Console.WriteLine($"      [{counter + 1} {unit.Name}");
+                Console.WriteLine($"      [{counter + 1}] {unit.Name}");
             }
 
             while (true)
@@ -774,13 +803,71 @@ namespace Scripts
             }
         }
 
-        // Monster methods
+        /* =========================== *
+         *        MONSTER METHODS      *
+         * =========================== */
         public string MonsterExecuteMove()
         {
-            return "run";
+            SoundManager sound_manager = new SoundManager();
+
+            // Base Turn
+            sound_manager.item_pickup.stop()
+            self.get_target()
+
+            print(f"-{self.name}'s Turn-")
+
+            if not self.ability_vars['knockout_turns']:
+                print(monster.ascii_art % f"The {self.name} is making a move!\n")
+
+            else:
+                print(f"The {self.name} is asleep!")
+
+            if not self.ability_vars['knockout_turns']:
+                self.battle_turn()
+
+            MonsterDoAbilities();
         }
 
-        // Constructors
+        public string MonsterDoAbilities()
+        {
+            /*
+            def do_abilities(self):
+            if self.ability_vars['knockout_turns']:
+                self.ability_vars['knockout_turns'] -= 1
+
+                if not self.ability_vars['knockout_turns']:
+                    main.smart_sleep(0.5)
+                    sounds.buff_spell.play()
+                    self.status_ail = [x for x in self.status_ail if x != "asleep"]
+                    print(f"The {self.name} woke up!")
+
+                else:
+                    chance = 25 if isinstance(self, Boss) else 10
+
+                    if random.randint(0, 100) < chance:
+                        main.smart_sleep(0.5)
+                        sounds.buff_spell.play()
+                        self.ability_vars['knockout_turns'] = 0
+                        self.status_ail = [x for x in self.status_ail if x != "asleep"]
+                        print(f"The {self.name} woke up early!")
+
+            if 'poisoned' in self.status_ail:
+                main.smart_sleep(0.5)
+                damage = math.ceil(self.ability_vars['poison_pow'] * self.max_hp + self.ability_vars['poison_dex'])
+                self.hp -= damage
+                print(f"The {self.name} took {damage} damage from poison!")
+                sounds.poison_damage.play()
+
+            if self.ability_vars['judgement_day'] == battle.turn_counter:
+                main.smart_sleep(0.5)
+                print(f"{self.name}'s judgement day has arrived. The darkness devours it...")
+                sounds.poison_damage.play()
+                self.hp = 0 */
+        }
+
+        /* =========================== *
+         *         CONSTRUCTORS        *
+         * =========================== */
         public Unit(CEnums.UnitType unit_type, string name)
         {
             // Create a monster

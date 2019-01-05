@@ -16,82 +16,82 @@ namespace Scripts
             { "misc",  new List<dynamic>() { } }
         };
 
-        private Dictionary<string, Dictionary<CEnums.EquipmentType, dynamic>> equipped = new Dictionary<string, Dictionary<CEnums.EquipmentType, dynamic>>()
+        private Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
         {
              {
-                "_player", new Dictionary<CEnums.EquipmentType, dynamic>()
+                "_player", new Dictionary<CEnums.EquipmentType, string>()
                  {
-                     { CEnums.EquipmentType.weapon, null },
-                     { CEnums.EquipmentType.head, null },
-                     { CEnums.EquipmentType.body, null },
-                     { CEnums.EquipmentType.legs, null },
-                     { CEnums.EquipmentType.accessory, null }
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.head, "no_head" },
+                     { CEnums.EquipmentType.body, "no_body" },
+                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
 
              {
-                "_solou", new Dictionary<CEnums.EquipmentType, dynamic>()
+                "_solou", new Dictionary<CEnums.EquipmentType, string>()
                  {
-                     { CEnums.EquipmentType.weapon, null },
-                     { CEnums.EquipmentType.head, null },
-                     { CEnums.EquipmentType.body, null },
-                     { CEnums.EquipmentType.legs, null },
-                     { CEnums.EquipmentType.accessory, null }
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.head, "no_head" },
+                     { CEnums.EquipmentType.body, "no_body" },
+                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
 
              {
-                "_chili", new Dictionary<CEnums.EquipmentType, dynamic>()
+                "_chili", new Dictionary<CEnums.EquipmentType, string>()
                  {
-                     { CEnums.EquipmentType.weapon, null },
-                     { CEnums.EquipmentType.head, null },
-                     { CEnums.EquipmentType.body, null },
-                     { CEnums.EquipmentType.legs, null },
-                     { CEnums.EquipmentType.accessory, null }
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.head, "no_head" },
+                     { CEnums.EquipmentType.body, "no_body" },
+                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
 
              {
-                "_chyme", new Dictionary<CEnums.EquipmentType, dynamic>()
+                "_chyme", new Dictionary<CEnums.EquipmentType, string>()
                  {
-                     { CEnums.EquipmentType.weapon, null },
-                     { CEnums.EquipmentType.head, null },
-                     { CEnums.EquipmentType.body, null },
-                     { CEnums.EquipmentType.legs, null },
-                     { CEnums.EquipmentType.accessory, null }
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.head, "no_head" },
+                     { CEnums.EquipmentType.body, "no_body" },
+                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
 
              {
-                "_storm", new Dictionary<CEnums.EquipmentType, dynamic>()
+                "_storm", new Dictionary<CEnums.EquipmentType, string>()
                  {
-                     { CEnums.EquipmentType.weapon, null },
-                     { CEnums.EquipmentType.head, null },
-                     { CEnums.EquipmentType.body, null },
-                     { CEnums.EquipmentType.legs, null },
-                     { CEnums.EquipmentType.accessory, null }
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.head, "no_head" },
+                     { CEnums.EquipmentType.body, "no_body" },
+                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
 
              {
-                "_parsto", new Dictionary<CEnums.EquipmentType, dynamic>()
+                "_parsto", new Dictionary<CEnums.EquipmentType, string>()
                  {
-                     { CEnums.EquipmentType.weapon, null },
-                     { CEnums.EquipmentType.head, null },
-                     { CEnums.EquipmentType.body, null },
-                     { CEnums.EquipmentType.legs, null },
-                     { CEnums.EquipmentType.accessory, null }
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.head, "no_head" },
+                     { CEnums.EquipmentType.body, "no_body" },
+                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
 
              {
-                "_adorine", new Dictionary<CEnums.EquipmentType, dynamic>()
+                "_adorine", new Dictionary<CEnums.EquipmentType, string>()
                  {
-                     { CEnums.EquipmentType.weapon, null },
-                     { CEnums.EquipmentType.head, null },
-                     { CEnums.EquipmentType.body, null },
-                     { CEnums.EquipmentType.legs, null },
-                     { CEnums.EquipmentType.accessory, null }
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.head, "no_head" },
+                     { CEnums.EquipmentType.body, "no_body" },
+                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
         };
@@ -103,22 +103,33 @@ namespace Scripts
 
         public Dictionary<CEnums.EquipmentType, dynamic> GetEquipment(string pcu_id)
         {
-            return equipped[pcu_id];
+            // The equipment dictionary only stores ItemIDs, not actual items. So we have to convert
+            // them into real items before we return the dictionary
+            Dictionary<CEnums.EquipmentType, dynamic> real_equipped = new Dictionary<CEnums.EquipmentType, dynamic>()
+            {
+                { CEnums.EquipmentType.weapon, FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.weapon]) },
+                { CEnums.EquipmentType.head, FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.head]) },
+                { CEnums.EquipmentType.body, FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.body]) },
+                { CEnums.EquipmentType.legs, FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.legs]) },
+                { CEnums.EquipmentType.accessory, FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.accessory]) }
+            };
+
+            return real_equipped;
         }
 
-        public void AddItemToInventory(int item_id)
+        public void AddItemToInventory(string item_id)
         {
             var new_item = FindItemWithID(item_id);
             GetInventory()[new_item.Category].Add(new_item);
         }
 
-        public void RemoveItemFromInventory(int item_id)
+        public void RemoveItemFromInventory(string item_id)
         {
             var deleted_item = GetInventory()[FindItemWithID(item_id).Category].Single(x => x.ItemID == item_id);
             GetInventory()[FindItemWithID(item_id).Category].Remove(deleted_item);
         }
 
-        public Item FindItemWithID(int item_id)
+        public Item FindItemWithID(string item_id)
         {
             ItemManager item_manager = new ItemManager();
             return item_manager.GetItemList().Single(x => x.ItemID == item_id);

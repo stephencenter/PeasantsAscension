@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Scripts
 {
@@ -7,6 +8,28 @@ namespace Scripts
         readonly List<dynamic> item_list = new List<dynamic>()
         {
 
+            /* =========================== *
+             *           WEAPONS           *
+             * =========================== */
+            new Weapon("Fists", "The oldest weapon known to man [+0 % Damage].",
+                0, 0, CEnums.WeaponType.melee, CEnums.CharacterClass.any, CEnums.Element.neutral, "fists", "weapon_fists"),
+            
+            /* =========================== *
+             *            ARMOR            *
+             * =========================== */
+            new Armor("None", "You should probably get some head armor [+0% Damage Resistance].",
+                0, 0, CEnums.EquipmentType.head, new List<CEnums.CharacterClass>() {CEnums.CharacterClass.any}, CEnums.Element.neutral, "misc", "no_head"),
+
+            new Armor("None", "You should probably get some body armor [+0% Damage Resistance].",
+                0, 0, CEnums.EquipmentType.body, new List<CEnums.CharacterClass>() {CEnums.CharacterClass.any}, CEnums.Element.neutral, "misc", "no_body"),
+
+            new Armor("None", "You should probably get some leg armor [+0% Damage Resistance].",
+                0, 0, CEnums.EquipmentType.legs, new List<CEnums.CharacterClass>() {CEnums.CharacterClass.any}, CEnums.Element.neutral, "misc", "no_legs"),
+            
+            /* =========================== *
+             *         ACCESSORIES         *
+             * =========================== */
+            new Accessory("None", "You should probably get an accessory [No Effects].", 0, "misc", "no_access")
         };
 
         public List<dynamic> GetItemList()
@@ -52,7 +75,7 @@ namespace Scripts
         }
     }
 
-    class HealthManaPotion : Item {
+    public class HealthManaPotion : Item {
         // Items that restore your HP, MP, or both
         public int Health { get; set; }
         public int Mana { get; set; }
@@ -148,24 +171,23 @@ namespace Scripts
         def use_item(self, user):
             raise Exception("I told you this would crash the game.") */
 
-
-    class Weapon : Item {
+    public class Weapon : Item {
         // Items that increase your damage by a percentage.
-        public int Power { get; set; }
+        public double Power { get; set; }
         public CEnums.WeaponType WeaponType { get; set; }
         public CEnums.CharacterClass PClass { get; set; }
         public CEnums.Element Element { get; set; }
         public CEnums.EquipmentType EquipType { get; set; }
 
-        public Weapon(string name, string desc, int value, string ascart, int power, 
-            CEnums.WeaponType w_type, CEnums.CharacterClass p_class, CEnums.Element element, CEnums.EquipmentType e_type, string item_id) :
-            base(name, desc, value, false, ascart, "weapons", item_id)
+        public Weapon(string name, string desc, int value, double power, CEnums.WeaponType w_type, 
+                      CEnums.CharacterClass p_class, CEnums.Element element, string ascart, string item_id) :
+                          base(name, desc, value, false, ascart, "weapons", item_id)
         {
             Power = power;
             WeaponType = w_type;
             PClass = p_class;
             Element = element;
-            EquipType = e_type;
+            EquipType = CEnums.EquipmentType.weapon;
         }
 
         /*
@@ -199,24 +221,40 @@ namespace Scripts
                 main.s_input("\nPress enter/return ") */
     }
 
-    /*
-    class Armor : Item {
+    public class Armor : Item {
         // Items that give the player a percent increase in defense when hit.
-        def __init__(self, name, desc, value, defense, part, class_, ascart, item_id, cat= 'armor'):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.defense = defense
-            self.part = part
-            self.class_ = class_
+        public double Resist { get; set; }
+        public CEnums.WeaponType WeaponType { get; set; }
+        public List<CEnums.CharacterClass> ValidClasses { get; set; }
+        public CEnums.Element Element { get; set; }
+        public CEnums.EquipmentType EquipType { get; set; }
 
-            if self.class_:
-                classes = ' and '.join([f"{x.title()}s" for x in self.class_])
-                self.class_req = f"\nOnly equippable by {classes}."
+        public Armor(string name, string desc, int value, double resist, CEnums.EquipmentType equip_type,
+                     List<CEnums.CharacterClass> v_classes, CEnums.Element element, string ascart, string item_id) :
+                         base(name, desc, value, false, ascart, "weapons", item_id)
+        {
+            Resist = resist;
+            ValidClasses = v_classes;
+            Element = element;
+            EquipType = equip_type;
 
-            else:
-                self.class_req = "\nEquippable by any class."
+            CEnums c_enums = new CEnums();
+            string class_requirement;
 
-            self.desc = f"{desc} {self.class_req}"
+            if (ValidClasses.Contains(CEnums.CharacterClass.any))
+            {
+                class_requirement = "\nEquippable by any class.";
+            }
 
+            else {
+                string classes = string.Join(" and ", ValidClasses.Select(x => c_enums.EnumToString(x)));
+                class_requirement = $"\nOnly equippable by {classes}.";
+            }
+
+            desc = $"{desc} {class_requirement}";
+        }
+
+        /*
         def use_item(self, user):
             if user.class_ in self.class_ or not self.class_:
                 equip_item(self.item_id, user)
@@ -226,16 +264,21 @@ namespace Scripts
             else:
                 print(f"This {self.name} is f{self.class_req[3:]}.")
 
-                main.s_input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ") */
+    }
 
+    public class Accessory : Item
+    {
+        public CEnums.EquipmentType EquipType { get; set; }
 
-    class Accessory : Item {
-        def __init__(self, name, desc, value, item_id, ascart= 'Amulet', cat= 'access'):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.part = 'access'
+        public Accessory(string name, string desc, int value, string ascart, string item_id) : base(name, desc, value, false, ascart, "accessories", item_id)
+        {
+            EquipType = CEnums.EquipmentType.accessory;
+        }
+    }
 
-
-    class ElementAccessory : Accessory:
+    /*
+    class ElementAccessory : Accessory {
         // Gives the player an element used when taking damage
         def __init__(self, name, desc, value, def_element, item_id, ascart= 'Amulet', cat= 'access'):
             super().__init__(name, desc, value, item_id, ascart, cat)

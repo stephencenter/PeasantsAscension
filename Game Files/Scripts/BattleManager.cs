@@ -145,7 +145,7 @@ namespace Scripts
                             sound_manager.enemy_death.Play();
 
                             c_methods.PrintDivider();
-                            Console.WriteLine($"{other_unit.Name} was defeated by your party!");
+                            Console.WriteLine($"The {other_unit.Name} was defeated by your party!");
                             c_methods.PressEnterReturn();
                         }
                     }

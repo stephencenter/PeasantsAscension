@@ -96,13 +96,15 @@ namespace Scripts
     {
         public enum UnitType { player, monster, boss }
         public enum Status { silence, poison, weakness, blindness, paralyzation, muted, alive, dead }
-        public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, none }
-        public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard }
+        public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, neutral }
+        public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard, any }
         public enum MonsterClass { melee, ranged, magic }
         public enum EquipmentType { head, body, legs, weapon, accessory }
         public enum WeaponType { melee, ranged, instrument }
         public enum DamageType { physical, piercing, magical }
 
+        // element_matchup[key][0] is the element that key is weak to
+        // element_matchup[key][1] is the element that key is resistant to
         public Dictionary<Element, List<Element>> ElementChart = new Dictionary<Element, List<Element>>
         {
             {Element.fire, new List<Element> { Element.water, Element.ice } },
@@ -112,8 +114,8 @@ namespace Scripts
             {Element.wind, new List<Element> { Element.grass, Element.earth } },
             {Element.grass, new List<Element> { Element.ice, Element.wind } },
             {Element.ice, new List<Element> { Element.fire, Element.grass } },
-            {Element.light, new List<Element> { Element.light, Element.dark } },
-            {Element.dark, new List<Element> { Element.dark, Element.light } }
+            {Element.light, new List<Element> { Element.dark, Element.light } },
+            {Element.dark, new List<Element> { Element.light, Element.dark } }
         };
 
         public string EnumToString(Enum the_enum)
@@ -142,7 +144,7 @@ namespace Scripts
                 {Element.ice, "Ice"},
                 {Element.light, "Light"},
                 {Element.dark, "Dark"},
-                {Element.none, "None"},
+                {Element.neutral, "Neutral"},
 
                 {CharacterClass.warrior, "Warrior" },
                 {CharacterClass.ranger, "Ranger"},
