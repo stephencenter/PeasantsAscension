@@ -291,7 +291,7 @@ namespace Scripts
             {"poison_pow", 0},
             {"poison_dex", 0},
             {"knockout_turns", 0},
-            {"judgement_day", 0},
+            {"judgment_day", 0},
             {"taunted_turn", 0},
             {"taunted_user", null},
             {"drained", false},
@@ -405,7 +405,7 @@ namespace Scripts
                 // Attack
                 if (CurrentMove == '1')
                 {
-                    if (!ChooseTarget(monster_list, $"Who should {Name} attack?", false, true, false, false))
+                    if (!PlayerGetTarget(monster_list, $"Who should {Name} attack?", false, true, false, false))
                     {
                         PrintBattleOptions();
                         continue;
@@ -552,7 +552,7 @@ namespace Scripts
             }
         }
 
-        public string PCUExecuteMove(List<Unit> monster_list)
+        public string PlayerExecuteMove(List<Unit> monster_list)
         {
             Random rng = new Random();
             CEnums c_enums = new CEnums();
@@ -599,7 +599,9 @@ namespace Scripts
 
             foreach (CEnums.Status status in Statuses)
             {
-                if (status != CEnums.Status.alive && rng.Next(0, 5) == 0)
+                // There is a 12.5% chance each turn per status ailment to be relived of that status ailment
+                // Only one status can be cleared per turn
+                if (status != CEnums.Status.alive && rng.Next(0, 8) == 0)
                 {
                     sound_manager.buff_spell.Play();
                     Statuses.Remove(status);
@@ -691,7 +693,7 @@ namespace Scripts
             return "";
         }
 
-        public bool ChooseTarget(List<Unit> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
+        public bool PlayerGetTarget(List<Unit> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
         {
             // Initialize important method helpers
             CommonMethods c_methods = new CommonMethods();
@@ -806,29 +808,59 @@ namespace Scripts
         /* =========================== *
          *        MONSTER METHODS      *
          * =========================== */
-        public string MonsterExecuteMove()
+        public void MonsterExecuteMove()
         {
             SoundManager sound_manager = new SoundManager();
 
             // Base Turn
-            sound_manager.item_pickup.stop()
-            self.get_target()
+            sound_manager.item_pickup.Stop();
+            MonsterGetTarget();
 
-            print(f"-{self.name}'s Turn-")
+            Console.WriteLine($"-{Name}'s Turn-");
 
-            if not self.ability_vars['knockout_turns']:
-                print(monster.ascii_art % f"The {self.name} is making a move!\n")
+            if (!(MonsterAbilityFlags["knockout_turns"] > 0))
+            {
+                Console.WriteLine($"The {Name} is making a move!\n");
 
-            else:
-                print(f"The {self.name} is asleep!")
+                if (MClass == CEnums.MonsterClass.melee)
+                {
+                    MonsterMeleeAI();
+                }
 
-            if not self.ability_vars['knockout_turns']:
-                self.battle_turn()
+                else if (MClass == CEnums.MonsterClass.ranged)
+                {
+                    MonsterRangedAI();
+                }
+
+                else if (MClass == CEnums.MonsterClass.magic)
+                {
+                    MonsterMagicAI();
+                }
+            }
+
+            else
+            {
+                Console.WriteLine($"The {Name} is asleep!");
+            }
 
             MonsterDoAbilities();
         }
 
-        public string MonsterDoAbilities()
+        public void MonsterGetTarget()
+        {
+            Random rng = new Random();
+            UnitManager unit_manager = new UnitManager();
+            BattleManager battle_manager = new BattleManager();
+
+            CurrentTarget = unit_manager.GetAliveActivePCUs()[rng.Next(unit_manager.GetAliveActivePCUs().Count)];
+
+            if (MonsterAbilityFlags["taunted_turn"] == battle_manager.turn_counter)
+            {
+                CurrentTarget = MonsterAbilityFlags["taunted_user"];
+            }
+        }
+
+        public void MonsterDoAbilities()
         {
             /*
             def do_abilities(self):
@@ -858,11 +890,143 @@ namespace Scripts
                 print(f"The {self.name} took {damage} damage from poison!")
                 sounds.poison_damage.play()
 
-            if self.ability_vars['judgement_day'] == battle.turn_counter:
+            if self.ability_vars['judgment_day'] == battle.turn_counter:
                 main.smart_sleep(0.5)
-                print(f"{self.name}'s judgement day has arrived. The darkness devours it...")
+                print(f"{self.name}'s judgment day has arrived. The darkness devours it...")
                 sounds.poison_damage.play()
                 self.hp = 0 */
+        }
+
+        public void MonsterMeleeAI()
+        {
+            /*
+            // Melee monsters have a 1 in 6 (16.667%) chance to defend
+            if random.randint(0, 5) == 0 and not self.is_defending \
+                    and not self.ability_vars['taunted'][0] == battle.turn_counter:
+                self.is_defending = True
+                print(f"The {self.name} is preparing itself for enemy attacks...")
+                main.smart_sleep(0.75)
+
+                self.dfns *= 2
+                self.m_dfns *= 2
+                self.p_dfns *= 2
+
+                print(f"The {self.name}'s defense stats increased by 2x for one turn!")
+                sounds.buff_spell.play()
+
+            // Set defense back to normal if the monster defended last turn
+            elif self.is_defending:
+                print(f"The {self.name} stops defending, returning its defense stats to normal.")
+                self.is_defending = False
+                self.dfns /= 2
+                self.m_dfns /= 2
+                self.p_dfns /= 2
+
+            // If the monster doesn't defend, then it will attack!
+            if not self.is_defending:
+                sounds.sword_slash.play()
+                print(f'The {self.name} {self.attk_msg} {self.m_target.name}!')
+                main.smart_sleep(0.75)
+
+                dam_dealt = deal_damage(self, self.m_target, "physical")
+                if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
+                    sounds.enemy_hit.play()
+                    print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+
+                    self.m_target.hp -= dam_dealt
+
+                else:
+                    sounds.attack_miss.play()
+                    print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!") */
+        }
+
+        public void MonsterRangedAI()
+        {
+            /*
+            // At the moment, Ranged monsters are only capable of attacking
+            print(f'The {self.name} {self.attk_msg} {self.m_target.name}!')
+            sounds.aim_weapon.play()
+
+            main.smart_sleep(0.75)
+
+            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
+                dam_dealt = deal_damage(self, self.m_target, 'piercing')
+
+                print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+
+                self.m_target.hp -= dam_dealt
+                sounds.enemy_hit.play()
+
+            else:
+                sounds.attack_miss.play()
+                print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!") */
+        }
+
+        public void MonsterMagicAI()
+        {
+            /*
+            // 16.67% chance for the enemy to give a status ailment
+            if not self.ability_vars['taunted'][0] == battle.turn_counter or 'silenced' in self.status_ail:
+                if random.randint(0, 7) == 0 and self.mp >= self.max_mp*0.1:
+                    self.give_status(self.m_target)
+
+                    return
+
+                // Magic heal
+                elif self.hp <= self.max_hp/5 and self.mp >= self.max_mp*0.2:
+                    print(f'The {self.name} is casting a healing spell on itself...')
+                    main.smart_sleep(0.75)
+
+                    healing_power = math.ceil(max([self.hp*0.2, 5]))
+                    self.hp += min([self.hp*0.2, 5])
+                    self.mp -= self.max_mp*0.2
+
+                    print(f'The {self.name} heals itself for {healing_power} HP!')
+                    sounds.magic_healing.play()
+
+                    return
+
+                // Magical Attack
+                elif self.mp >= self.max_mp*0.15:
+
+                    sounds.magic_attack.play()
+
+                    print(f'The {self.name} is preparing to cast a spell on {self.m_target.name}!')
+                    main.smart_sleep(0.75)
+
+                    dam_dealt = deal_damage(self, self.m_target, "magical")
+
+                    if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
+                        sounds.enemy_hit.play()
+                        print(f"The {self.name}'s spell deals {dam_dealt} damage to {self.m_target.name}!")
+
+                        self.m_target.hp -= dam_dealt
+
+                    else:
+                        sounds.attack_miss.play()
+                        print(f"The {self.name}'s spell narrowly misses {self.m_target.name}!")
+
+                    self.mp -= self.max_mp*0.15
+
+                    return
+
+            // Non-magical Attack (Pierce Damage). Only happens if taunted, silenced, or if out of mana.
+            sounds.aim_weapon.play()
+            print(f'The {self.name} {self.attk_msg} {self.m_target.name}')
+
+            main.smart_sleep(0.75)
+
+            dam_dealt = deal_damage(self, self.m_target, "piercing")
+
+            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
+                sounds.enemy_hit.play()
+                print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+
+                self.m_target.hp -= dam_dealt
+
+            else:
+                sounds.attack_miss.play()
+                print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!") */
         }
 
         /* =========================== *
@@ -937,64 +1101,30 @@ namespace Scripts
 
     public class PartyInfo
     {
-        public GameState Gamestate { get; set; }
-        public Mode MusicboxMode { get; set; }
-        public List<TownManager> VisitedTowns { get; set; }
-        public TileManager CurrentTile { get; set; }
-        public TileManager RespawnTile { get; set; }
-        public TownManager CurrentTown { get; set; }
-        public int GP { get; set; }
-        public int StepsWithoutBattle { get; set; }
-        public int Difficulty { get; set; }
-        public int AtlasStrength { get; set; }
-        public string Music { get; set; }
-        public string CurrentProvince { get; set; }
-        public string MusicboxFolder { get; set; }
-        public bool MusicboxIsPlaying { get; set; }
+        public CEnums.GameState Gamestate = CEnums.GameState.overworld;
+        public CEnums.MusicboxMode MusicboxMode = CEnums.MusicboxMode.AtoZ;
+        public List<TownManager> VisitedTowns = new List<TownManager>();
+        public TileManager CurrentTile = new TileManager();
+        public TileManager RespawnTile = new TileManager();
+        public TownManager CurrentTown = new TownManager();
+        public int GP = 20;
+        public int StepsWithoutBattle = 0;
+        public int Difficulty = 0;
+        public int AtlasStrength = 1;
+        public string Music = "../../../Music/Through the Forest.ogg";
+        public string CurrentProvince = "Overshire";
+        public string MusicboxFolder = "";
+        public bool MusicboxIsPlaying = false;
         public bool DoSpawns { get; set; }
 
-        public List<string> FriendNames = new List<string>();
-
-        public enum GameState { overworld = 1, battle, town }
-        public enum Mode { AtoZ = 1, ZtoA, shuffle }
-
-        public PartyInfo()
+        public List<string> FriendNames = new List<string>()
         {
-            Gamestate = GameState.overworld;
-            MusicboxMode = Mode.AtoZ;
-            VisitedTowns = new List<TownManager>();
-            CurrentTile = new TileManager();
-            RespawnTile = new TileManager();
-            CurrentTown = new TownManager();
-            GP = 20;
-            StepsWithoutBattle = 0;
-            Difficulty = 0;
-            AtlasStrength = 1;
-            Music = "../Music/Through the Forest.ogg";
-            CurrentProvince = "Overshire";
-            MusicboxFolder = "";
-            MusicboxIsPlaying = false;
-            DoSpawns = true;
-
-            FriendNames = new List<string>()
-            {
-                "apollo kalar", "apollokalar", "apollo_kalar",
-                "flygon jones", "flygonjones", "flygon_jones",
-                "starkiller106024", "starkiller", "star killer",
-                "atomic vexal", "vexal", "wave vex",
-                "therichpig", "therichpig64", "spaghettipig64", "spaghettipig",
-                "theeethersplash", "the aether splash", "aethersplash", "aether splash"
-            };
-        }
-    }
-
-    public class PartyInfoStorage
-    {
-        public PartyInfo party_info = new PartyInfo();
-
-        public PartyInfo GetPartyInfo()
-        {
-            return party_info;
-        }
+            "apollo kalar", "apollokalar", "apollo_kalar",
+            "flygon jones", "flygonjones", "flygon_jones",
+            "starkiller106024", "starkiller", "star killer",
+            "atomic vexal", "vexal", "wave vex",
+            "therichpig", "therichpig64", "spaghettipig64", "spaghettipig", "pastahog", "pastahog64",
+            "theaethersplash", "the aether splash", "aethersplash", "aether splash"
+        };
     }
 }

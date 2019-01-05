@@ -102,6 +102,8 @@ namespace Scripts
         public enum EquipmentType { head, body, legs, weapon, accessory }
         public enum WeaponType { melee, ranged, instrument }
         public enum DamageType { physical, piercing, magical }
+        public enum GameState { overworld = 1, battle, town }
+        public enum MusicboxMode { AtoZ = 1, ZtoA, shuffle }
 
         // element_matchup[key][0] is the element that key is weak to
         // element_matchup[key][1] is the element that key is resistant to

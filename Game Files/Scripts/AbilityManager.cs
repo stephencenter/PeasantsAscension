@@ -272,7 +272,7 @@ nothing if no songs have been played yet.", 3)
      *      WARRIOR ABILITIES      *
      * =========================== */
 
-    public class TauntAbility : Ability
+    class TauntAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -303,7 +303,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class RollCallAbility : Ability
+    class RollCallAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -328,7 +328,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class GreatCleaveAbility : Ability
+    class GreatCleaveAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -343,7 +343,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class BerserkersRageAbility : Ability
+    class BerserkersRageAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -381,7 +381,7 @@ nothing if no songs have been played yet.", 3)
      * =========================== */
 
 
-    public class ChakraSmashAbility : Ability
+    class ChakraSmashAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -413,7 +413,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class SharedExperienceAbility : Ability
+    class SharedExperienceAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -428,7 +428,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class AuraSwapAbility : Ability
+    class AuraSwapAbility : Ability
     {
         /* 
         def before_ability(self, user):
@@ -478,7 +478,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class BreakingVowsAbility : Ability
+    class BreakingVowsAbility : Ability
     {
         /* 
         def before_ability(self, user):
@@ -511,7 +511,7 @@ nothing if no songs have been played yet.", 3)
      *      ASSASSIN ABILITIES     *
      * =========================== */
 
-    public class InjectPoisonAbility : Ability
+    class InjectPoisonAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -537,7 +537,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class KnockoutGasAbility : Ability
+    class KnockoutGasAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -562,7 +562,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class DisarmingBlowAbility : Ability
+    class DisarmingBlowAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -607,7 +607,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class BackstabAbility : Ability
+    class BackstabAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -649,7 +649,7 @@ nothing if no songs have been played yet.", 3)
      *        MAGE ABILITIES       *
      * =========================== */
 
-    public class SkillSyphonAbility : Ability
+    class SkillSyphonAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -695,7 +695,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class PolymorphAbility : Ability
+    class PolymorphAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -710,7 +710,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class SpellShieldAbility : Ability
+    class SpellShieldAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -725,7 +725,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class ManaDrainAbility : Ability
+    class ManaDrainAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -757,7 +757,7 @@ nothing if no songs have been played yet.", 3)
      *       RANGER ABILITIES      *
      * =========================== */
 
-    public class RollAbility : Ability
+    class RollAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -772,7 +772,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class ScoutAbility : Ability
+    class ScoutAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -787,7 +787,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class PowershotAbility : Ability
+    class PowershotAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -802,7 +802,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class NaturesCallAbility : Ability
+    class NaturesCallAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -835,7 +835,7 @@ nothing if no songs have been played yet.", 3)
      *      PALADIN ABILITIES      *
      * =========================== */
 
-    public class TipTheScalesAbility : Ability
+    class TipTheScalesAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -884,7 +884,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class UnholyBindsAbility : Ability
+    class UnholyBindsAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -930,7 +930,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class JudgmentAbility : Ability
+    class JudgmentAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -968,7 +968,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class CanonizeAbility : Ability
+    class CanonizeAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -987,7 +987,7 @@ nothing if no songs have been played yet.", 3)
      *        BARD ABILITIES       *
      * =========================== */
 
-    public class WaywardFellowAbility : Ability
+    class WaywardFellowAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -1002,7 +1002,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class FallenComradeAbility : Ability
+    class FallenComradeAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -1017,7 +1017,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class StubbornBoarAbility : Ability
+    class StubbornBoarAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -1032,7 +1032,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class UnlikelyHeroAbility : Ability
+    class UnlikelyHeroAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -1047,7 +1047,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class TournamentAbility : Ability
+    class TournamentAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -1062,7 +1062,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class GrandFinaleAbility : Ability
+    class GrandFinaleAbility : Ability
     {
         /*
         def before_ability(self, user):
@@ -1083,7 +1083,7 @@ nothing if no songs have been played yet.", 3)
     // Unique to each party member and do not scale with attributes
 
     /*
-    public class AscendAbility : Ability {
+    class AscendAbility : Ability {
         def __init__(self, name, desc, ap_cost):
             super().__init__(name, desc, ap_cost)
 
@@ -1118,7 +1118,7 @@ nothing if no songs have been played yet.", 3)
     Can only be used once per battle, and therefore does not stack with multiple
     uses.", 2)
 
-    public class InfusionAbility : Ability {
+    class InfusionAbility : Ability {
         def __init__(self, name, desc, ap_cost):
             super().__init__(name, desc, ap_cost)
 
@@ -1135,7 +1135,7 @@ nothing if no songs have been played yet.", 3)
     to be selected and raising the damage buff to 20 %.Can be re - casted to change
     the chosen element, but the damage buff does not stack.", 1)
 
-    public class TuneInstrumentAbility : Ability {
+    class TuneInstrumentAbility : Ability {
         def __init__(self, name, desc, ap_cost):
             super().__init__(name, desc, ap_cost)
 

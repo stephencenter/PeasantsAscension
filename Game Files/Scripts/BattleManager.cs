@@ -12,12 +12,13 @@ namespace Scripts
         readonly CommonMethods c_methods = new CommonMethods();
         readonly SoundManager sound_manager = new SoundManager();
         protected UnitManager unit_manager = new UnitManager();
+        public int turn_counter;
 
         public void BattleSystem()
         {
             List<Unit> monster_list = new List<Unit>() { unit_manager.GenerateMonster() };
             List<Unit> active_pcus = unit_manager.GetActivePCUs();
-            int turn_counter = 0;
+            turn_counter = 0;
 
             // 25% chance to add a second monster
             if (rng.Next(0, 100) > 75)
@@ -100,9 +101,14 @@ namespace Scripts
                         c_methods.PrintDivider();
 
                         // Leave the battle if the player runs away
-                        if ((unit.IsPCU() && unit.PCUExecuteMove(monster_list) == "ran") || (unit.IsMonster() && unit.MonsterExecuteMove() == "ran"))
+                        if (unit.IsPCU() && unit.PlayerExecuteMove(monster_list) == "ran")
                         {
                             return;
+                        }
+
+                        else if (unit.IsMonster())
+                        {
+                            unit.MonsterExecuteMove();
                         }
 
                         if (active_pcus.Any(x => x.HP > 0))
