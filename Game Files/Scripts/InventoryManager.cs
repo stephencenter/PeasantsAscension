@@ -5,7 +5,7 @@ namespace Scripts
 {
     class InventoryManager
     {
-        public Dictionary<string, List<dynamic>> inventory = new Dictionary<string, List<dynamic>>()
+        private Dictionary<string, List<dynamic>> inventory = new Dictionary<string, List<dynamic>>()
         {
             { "q_items", new List<dynamic>() { } },
             { "consumables",  new List<dynamic>() { } },
@@ -16,15 +16,84 @@ namespace Scripts
             { "misc",  new List<dynamic>() { } }
         };
 
-        public Dictionary<string, Dictionary<string, dynamic>> equipped = new Dictionary<string, Dictionary<string, dynamic>>()
+        private Dictionary<string, Dictionary<CEnums.EquipmentType, dynamic>> equipped = new Dictionary<string, Dictionary<CEnums.EquipmentType, dynamic>>()
         {
-             {"_player", new Dictionary<string, dynamic>() { {"weapon", null }, {"head", null }, {"body", null }, {"legs", null }, {"accessory", null } } },
-             {"_solou", new Dictionary<string, dynamic>() { {"weapon", null }, {"head", null }, {"body", null }, {"legs", null }, {"accessory", null } } },
-             {"_chili", new Dictionary<string, dynamic>() { {"weapon", null }, {"head", null }, {"body", null }, {"legs", null }, {"accessory", null } } },
-             {"_chyme", new Dictionary<string, dynamic>() { {"weapon", null }, {"head", null }, {"body", null }, {"legs", null }, {"accessory", null } } },
-             {"_storm", new Dictionary<string, dynamic>() { {"weapon", null }, {"head", null }, {"body", null }, {"legs", null }, {"accessory", null } } },
-             {"_parsto", new Dictionary<string, dynamic>() { {"weapon", null }, {"head", null }, {"body", null }, {"legs", null }, {"accessory", null } } },
-             {"_adorine",  new Dictionary<string, dynamic>() { {"weapon", null }, {"head", null }, {"body", null }, {"legs", null }, {"accessory", null } } },
+             {
+                "_player", new Dictionary<CEnums.EquipmentType, dynamic>()
+                 {
+                     { CEnums.EquipmentType.weapon, null },
+                     { CEnums.EquipmentType.head, null },
+                     { CEnums.EquipmentType.body, null },
+                     { CEnums.EquipmentType.legs, null },
+                     { CEnums.EquipmentType.accessory, null }
+                 }
+             },
+
+             {
+                "_solou", new Dictionary<CEnums.EquipmentType, dynamic>()
+                 {
+                     { CEnums.EquipmentType.weapon, null },
+                     { CEnums.EquipmentType.head, null },
+                     { CEnums.EquipmentType.body, null },
+                     { CEnums.EquipmentType.legs, null },
+                     { CEnums.EquipmentType.accessory, null }
+                 }
+             },
+
+             {
+                "_chili", new Dictionary<CEnums.EquipmentType, dynamic>()
+                 {
+                     { CEnums.EquipmentType.weapon, null },
+                     { CEnums.EquipmentType.head, null },
+                     { CEnums.EquipmentType.body, null },
+                     { CEnums.EquipmentType.legs, null },
+                     { CEnums.EquipmentType.accessory, null }
+                 }
+             },
+
+             {
+                "_chyme", new Dictionary<CEnums.EquipmentType, dynamic>()
+                 {
+                     { CEnums.EquipmentType.weapon, null },
+                     { CEnums.EquipmentType.head, null },
+                     { CEnums.EquipmentType.body, null },
+                     { CEnums.EquipmentType.legs, null },
+                     { CEnums.EquipmentType.accessory, null }
+                 }
+             },
+
+             {
+                "_storm", new Dictionary<CEnums.EquipmentType, dynamic>()
+                 {
+                     { CEnums.EquipmentType.weapon, null },
+                     { CEnums.EquipmentType.head, null },
+                     { CEnums.EquipmentType.body, null },
+                     { CEnums.EquipmentType.legs, null },
+                     { CEnums.EquipmentType.accessory, null }
+                 }
+             },
+
+             {
+                "_parsto", new Dictionary<CEnums.EquipmentType, dynamic>()
+                 {
+                     { CEnums.EquipmentType.weapon, null },
+                     { CEnums.EquipmentType.head, null },
+                     { CEnums.EquipmentType.body, null },
+                     { CEnums.EquipmentType.legs, null },
+                     { CEnums.EquipmentType.accessory, null }
+                 }
+             },
+
+             {
+                "_adorine", new Dictionary<CEnums.EquipmentType, dynamic>()
+                 {
+                     { CEnums.EquipmentType.weapon, null },
+                     { CEnums.EquipmentType.head, null },
+                     { CEnums.EquipmentType.body, null },
+                     { CEnums.EquipmentType.legs, null },
+                     { CEnums.EquipmentType.accessory, null }
+                 }
+             },
         };
 
         public Dictionary<string, List<dynamic>> GetInventory()
@@ -32,7 +101,7 @@ namespace Scripts
             return inventory;
         }
 
-        public Dictionary<string, dynamic> GetEquipped(string pcu_id)
+        public Dictionary<CEnums.EquipmentType, dynamic> GetEquipment(string pcu_id)
         {
             return equipped[pcu_id];
         }

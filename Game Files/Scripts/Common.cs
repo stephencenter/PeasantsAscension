@@ -101,16 +101,30 @@ namespace Scripts
         public enum MonsterClass { melee, ranged, magic }
         public enum EquipmentType { head, body, legs, weapon, accessory }
         public enum WeaponType { melee, ranged, instrument }
+        public enum DamageType { physical, piercing, magical }
+
+        public Dictionary<Element, List<Element>> ElementChart = new Dictionary<Element, List<Element>>
+        {
+            {Element.fire, new List<Element> { Element.water, Element.ice } },
+            {Element.water, new List<Element> { Element.electric, Element.fire } },
+            {Element.electric, new List<Element> { Element.earth, Element.water } },
+            {Element.earth, new List<Element> { Element.wind, Element.electric } },
+            {Element.wind, new List<Element> { Element.grass, Element.earth } },
+            {Element.grass, new List<Element> { Element.ice, Element.wind } },
+            {Element.ice, new List<Element> { Element.fire, Element.grass } },
+            {Element.light, new List<Element> { Element.light, Element.dark } },
+            {Element.dark, new List<Element> { Element.dark, Element.light } }
+        };
 
         public string EnumToString(Enum the_enum)
         {
             Dictionary<Enum, string> StatusNameMap = new Dictionary<Enum, string>()
             {
-                {Status.silence, "Silence"},
-                {Status.poison, "Poison"},
-                {Status.weakness, "Weakness"},
-                {Status.blindness, "Blindness"},
-                {Status.paralyzation, "Paralyzation" },
+                {Status.silence, "Silenced"},
+                {Status.poison, "Poisoned"},
+                {Status.weakness, "Weakened"},
+                {Status.blindness, "Blindned"},
+                {Status.paralyzation, "Paralyzed" },
                 {Status.muted, "Muted"},
                 {Status.alive, "Alive"},
                 {Status.dead, "Dead"},
@@ -138,12 +152,42 @@ namespace Scripts
                 {CharacterClass.monk, "Monk"},
                 {CharacterClass.bard, "Bard"},
 
-                {MonsterClass.melee, "Melee" },
-                {MonsterClass.ranged, "Ranged" },
-                {MonsterClass.magic, "Magic" }
+                {MonsterClass.melee, "Melee"},
+                {MonsterClass.ranged, "Ranged"},
+                {MonsterClass.magic, "Magic"},
+
+                {EquipmentType.head, "Head"},
+                {EquipmentType.body, "Body"},
+                {EquipmentType.legs, "Legs"},
+                {EquipmentType.weapon, "Weapon"},
+                {EquipmentType.accessory, "Accessory"},
+
+                {WeaponType.melee, "Melee"},
+                {WeaponType.ranged, "Ranged"},
+                {WeaponType.instrument, "Instrument"},
+
+                {DamageType.physical, "Physical"},
+                {DamageType.magical, "Magical"},
+                {DamageType.piercing, "Piercing"}
             };
 
             return StatusNameMap[the_enum];
+        }
+
+        public DamageType CharacterClassToDamageType(CharacterClass p_class)
+        {
+            Dictionary<CharacterClass, DamageType> damage_type_map = new Dictionary<CharacterClass, DamageType>()
+            {
+                {CharacterClass.warrior, DamageType.physical},
+                {CharacterClass.assassin, DamageType.physical},
+                {CharacterClass.monk, DamageType.physical},
+                {CharacterClass.paladin, DamageType.physical},
+                {CharacterClass.mage, DamageType.piercing},
+                {CharacterClass.bard, DamageType.piercing},
+                {CharacterClass.ranger, DamageType.piercing}
+            };
+
+            return damage_type_map[p_class];
         }
     }
 }

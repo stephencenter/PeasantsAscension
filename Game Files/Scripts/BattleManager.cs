@@ -255,8 +255,9 @@ namespace Scripts
                         continue */
         }
 
-        public void RunAway()
+        public bool RunAway(Unit runner)
         {
+            return true;
             //def run_away(runner):
             //    print(ascii_art.player_art[runner.class_.title()] % f"{runner.name} is making a move!\n")
             //    print(f'Your party starts to run away from the {units.monster.name}...')

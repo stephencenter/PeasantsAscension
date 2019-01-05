@@ -10,6 +10,9 @@
 
     public class Spell
     {
+        public void UseMagic(Unit user, bool is_battle)
+        {
 
+        }
     }
 }

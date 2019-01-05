@@ -250,12 +250,12 @@ nothing if no songs have been played yet.", 3)
         public string AbilityDesc { get; set; }
         public int APCost { get; set; }
 
-        public void BeforeAbility()
+        public void BeforeAbility(Unit user)
         {
 
         }
 
-        public void UseAbility()
+        public void UseAbility(Unit user)
         {
 
         }

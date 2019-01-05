@@ -53,23 +53,139 @@ namespace Scripts
         {
             return new Unit(CEnums.UnitType.monster, "Whispering Goblin");
         }
+
+        public int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, int spell_power = 0, bool do_criticals = true)
+        {
+            // Attacker - the Unit that is attacking
+            // Target - the Unit that is being attacked
+            // Damage Type - the type of damage being dealt (magical, physical, or piercing)
+            InventoryManager inv_manager = new InventoryManager();
+            SoundManager sound_manager = new SoundManager();
+            Random rng = new Random();
+
+            int attack;
+            int p_attack;
+            int m_attack;
+
+            int defense;
+            int p_defense;
+            int m_defense;
+
+            int weapon_dmg;
+            double armor_resist;
+
+            int final_damage;
+
+            if (attacker.IsPCU())
+            {
+                weapon_dmg = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.weapon].Power;
+
+                attack = attacker.TempStats["attack"];
+                p_attack = attacker.TempStats["p_attk"];
+                m_attack = attacker.TempStats["m_attk"];
+            }
+
+            else
+            {
+                attack = attacker.Attack;
+                p_attack = attacker.PAttack;
+                m_attack = attacker.MAttack;
+
+                weapon_dmg = 0;
+            }
+
+            if (target.IsPCU())
+            {
+                int a = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.head];
+                int b = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.body];
+                int c = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.legs];
+                armor_resist = a + b + c;
+
+                defense = target.TempStats["defense"];
+                p_defense = target.TempStats["p_defense"];
+                m_defense = target.TempStats["m_defense"];
+            }
+
+            else
+            {
+                defense = target.Defense;
+                p_defense = target.PDefense;
+                m_defense = target.PAttack;
+
+                armor_resist = 0;
+            }
+
+            if (damage_type == CEnums.DamageType.physical)
+            {
+                final_damage = (int)((attack - defense / 2) * (1 + armor_resist) * (1 + weapon_dmg));
+
+                // Weakeness reduces physical damage by 1/2
+                if (attacker.HasStatus(CEnums.Status.weakness))
+                {
+                    final_damage /= 2;
+                    Console.WriteLine($"{attacker.Name}'s weakness reduces their attack damage by half!");
+                }
+
+                // Mages deal half damage with non-magical attacks
+                if (attacker.PClass == CEnums.CharacterClass.mage)
+                {
+                    final_damage /= 2;
+                }
+            }
+
+            else if (damage_type == CEnums.DamageType.physical)
+            {
+                final_damage = (int)((p_attack - p_defense / 2) * (1 + armor_resist) * (1 + weapon_dmg));
+
+                // Blindness reduces piercing damage by 1/2
+                if (attacker.HasStatus(CEnums.Status.blindness))
+                {
+                    final_damage /= 2;
+                    Console.WriteLine($"{attacker.Name}'s blindness reduces their attack damage by half!");
+                }
+
+                // Mages deal half damage with non-magical attacks
+                if (attacker.PClass == CEnums.CharacterClass.mage)
+                {
+                    final_damage /= 2;
+                }
+            }
+
+            else
+            {
+                final_damage = (int)((m_attack - m_defense / 2) * (1 + armor_resist) * (1 + spell_power));
+
+                // Classes that aren't mages or paladins deal 0.75x damage with magical attacks
+                if (attacker.PClass == CEnums.CharacterClass.mage || attacker.PClass == CEnums.CharacterClass.paladin)
+                {
+                    final_damage = (int) (final_damage*0.75);
+                }
+            }
+
+            if (rng.Next(0, 100) < 15 && do_criticals)
+            {
+                final_damage = (int)(final_damage*1.5);
+                sound_manager.critical_hit.Play();
+                Console.WriteLine("It's a critical hit! 1.5x damage!");
+
+                Thread.Sleep(500);
+            }
+
+            final_damage = ApplyElementalChart(attacker, target, final_damage);
+            final_damage = c_methods.Clamp(final_damage, 999, 1);
+
+            return final_damage;
+        }
+
+        public int ApplyElementalChart(Unit attacker, Unit target, int damage)
+        {
+
+        }
     }
 
     public class Unit
     {
         // General Unit Properties
-        public Dictionary<CEnums.Element, List<CEnums.Element>> ElementChart = new Dictionary<CEnums.Element, List<CEnums.Element>>
-        {
-            {CEnums.Element.fire, new List<CEnums.Element> { CEnums.Element.water, CEnums.Element.ice } },
-            {CEnums.Element.water, new List<CEnums.Element> { CEnums.Element.electric, CEnums.Element.fire } },
-            {CEnums.Element.electric, new List<CEnums.Element> { CEnums.Element.earth, CEnums.Element.water } },
-            {CEnums.Element.earth, new List<CEnums.Element> { CEnums.Element.wind, CEnums.Element.electric } },
-            {CEnums.Element.wind, new List<CEnums.Element> { CEnums.Element.grass, CEnums.Element.earth } },
-            {CEnums.Element.grass, new List<CEnums.Element> { CEnums.Element.ice, CEnums.Element.wind } },
-            {CEnums.Element.ice, new List<CEnums.Element> { CEnums.Element.fire, CEnums.Element.grass } },
-            {CEnums.Element.light, new List<CEnums.Element> { CEnums.Element.light, CEnums.Element.dark } },
-            {CEnums.Element.dark, new List<CEnums.Element> { CEnums.Element.dark, CEnums.Element.light } }
-        };
         public CEnums.Element off_element = CEnums.Element.none;
         public CEnums.Element def_element = CEnums.Element.none;
         public CEnums.UnitType Type { get; set; }
@@ -351,7 +467,7 @@ namespace Scripts
                             }
 
                             AP -= CurrentAbility.APCost;
-                            CurrentAbility.BeforeAbility();
+                            CurrentAbility.BeforeAbility(this);
 
                             return;
                         }
@@ -409,34 +525,12 @@ namespace Scripts
 
         public string PCUExecuteMove(List<Unit> monster_list)
         {
-            /*
-            if isinstance(self.target, Monster) and 'dead' in self.target.status_ail:
-                self.target = random.choice([x for x in battle.m_list if 'dead' not in x.status_ail])
-
-            inv_name = self.name if self != player else 'player'
-            player_weapon = items.equipped[inv_name]['weapon']
-
-            print(f"-{self.name}'s Turn-")
-
-            # PCUs regain 1 Action Point per turn. This regeneration is paused on turns where
-            # the player uses an ability.
-            if self.move != '3':
-                self.ap += 1
-
-            # Check to see if the PCU is poisoned
-            if 'poisoned' in self.status_ail and monster.hp > 0:
-                main.smart_sleep(0.75)
-                sounds.poison_damage.play()
-                poison_damage = math.floor(self.hp/5)
-                self.hp -= poison_damage
-
-                print(f'{self.name} took poison damage! (-{poison_damage} HP)')
-
-                if self.hp <= 0:
-                    return */
-
             Random rng = new Random();
+            CEnums c_enums = new CEnums();
             InventoryManager inv_manager = new InventoryManager();
+            SoundManager sound_manager = new SoundManager();
+            BattleManager battle_manager = new BattleManager();
+            UnitManager unit_manager = new UnitManager();
 
             // sounds.item_pickup.stop()
 
@@ -447,7 +541,7 @@ namespace Scripts
                 CurrentTarget = monster_list[rng.Next(monster_list.Count)];
             }
 
-            Weapon player_weapon = inv_manager.GetEquipped(PCUID)["weapon"];
+            Weapon player_weapon = inv_manager.GetEquipment(PCUID)[CEnums.EquipmentType.weapon];
 
             Console.WriteLine($"-{Name}'s Turn-");
 
@@ -478,73 +572,94 @@ namespace Scripts
             {
                 if (status != CEnums.Status.alive && rng.Next(0, 5) == 0)
                 {
-                    // sounds.buff_spell.play()
+                    sound_manager.buff_spell.Play();
+                    Statuses.Remove(status);
+                    Console.WriteLine($"{Name} is no longer {c_enums.EnumToString(status)}!");
+                    Thread.Sleep(500);
+
+                    break;
                 }
             }
 
-            return "run";
-        
-            /*
-            for x in self.status_ail:
-                if x != "alive" and random.randint(0, 3) == 3:
-                    sounds.buff_spell.play()
-                    self.status_ail = [y for y in self.status_ail if y != x]
-                    print(f"{self.name} is no longer {x}!")
-                    main.smart_sleep(0.5)
-                    break
+            // Basic Attack
+            if (CurrentMove == '1')
+            {
+                // TO-DO: Ascii art
+                Console.WriteLine($"{Name} is making a move!\n");
 
-            # Basic Attack
-            if self.move == '1':
-                print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
+                if (player_weapon.WeaponType == CEnums.WeaponType.melee)
+                {
+                    sound_manager.sword_slash.Play();
+                    Console.WriteLine($"{Name} fiercely attacks the {CurrentTarget.Name} using their {player_weapon.Name}...");
+                }
 
-                if items.equipped[inv_name]['weapon'].type_ == 'melee':
-                    sounds.sword_slash.play()
-                    print(f'{self.name} fiercely attacks the {self.target.name} using their {player_weapon.name}...')
+                else if (player_weapon.WeaponType == CEnums.WeaponType.instrument)
+                {
+                    sound_manager.bard_sounds[player_weapon.ItemID].Play();
+                    Console.WriteLine($"{Name} starts playing their {player_weapon.Name} at the {CurrentTarget.Name}...");
+                }
 
-                elif items.equipped[inv_name]['weapon'].type_ == 'instrument':
-                    random.choice(sounds.bard_sounds[items.equipped[inv_name]['weapon'].item_id]).play()
-                    print(f'{self.name} starts playing their {player_weapon.name} at the {self.target.name}...')
+                else
+                {
+                    sound_manager.aim_weapon.Play();
+                    Console.WriteLine($"{Name} aims carefully at the {CurrentTarget.Name} using their {player_weapon.Name}...");
+                }
 
-                else:
-                    sounds.aim_weapon.play()
-                    print(f'{self.name} aims carefully at the {self.target.name} using their {player_weapon.name}...')
+                Thread.Sleep(750);
 
-                main.smart_sleep(0.75)
+                int attack_damage;
+                if (c_enums.CharacterClassToDamageType(PClass) == CEnums.DamageType.physical)
+                {
+                    attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
+                }
 
-                if items.equipped[inv_name]['weapon'].type_ == 'melee':
-                    dam_dealt = deal_damage(self, self.target, "physical")
+                else if (c_enums.CharacterClassToDamageType(PClass) == CEnums.DamageType.piercing)
+                {
+                    attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
+                }
 
-                elif items.equipped[inv_name]['weapon'].type_ == 'ranged':
-                    dam_dealt = deal_damage(self, self.target, "piercing")
+                else
+                {
+                    attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.magical);
+                }
 
-                else:
-                    dam_dealt = deal_damage(self, self.target, "magical")
+                if (CurrentTarget.Evasion < rng.Next(0, 512))
+                {
+                    Console.WriteLine($"{Name}'s attack connects with the {CurrentTarget.Name}, dealing {attack_damage} damage!");
+                    sound_manager.enemy_hit.Play();
+                    CurrentTarget.HP -= attack_damage;
+                }
 
-                # Check for attack accuracy.
-                if random.randint(1, 512) in range(self.target.evad, 512):
-                    print(f"{self.name}'s attack connects with the {self.target.name}, dealing {dam_dealt} damage!")
+                else
+                {
+                    Console.WriteLine($"The {CurrentTarget.Name} narrowly avoids {Name}'s attack!");
+                    sound_manager.attack_miss.Play();
+                }
+            }
 
-                    sounds.enemy_hit.play()
-                    self.target.hp -= dam_dealt
+            // Use Magic
+            else if (CurrentMove == '2')
+            {
+                CurrentSpell.UseMagic(this, true);
+            }
 
-                else:
-                    print(f"The {self.target.name} narrowly avoids {self.name}'s attack!")
-                    sounds.attack_miss.play()
+            // Use Ability
+            else if (CurrentMove == '3')
+            {
+                // TO-DO: Ascii art
+                Console.WriteLine($"{Name} is making a move!\n");
+                CurrentAbility.UseAbility(this);
 
-            if self.move == '2':
-                self.c_spell.use_magic(self, True)
+            }
+            
+            // Run away
+            else if (CurrentMove == '5' && battle_manager.RunAway(this))
+            {
+                // sounds.play_music(main.party_info['music'])
+                return "ran";
+            }
 
-            elif self.move == '3':
-                print(ascii_art.player_art[self.class_.title()] % f"{self.name} is making a move!\n")
-                self.c_ability.use_ability(self)
-
-            # Run away!
-            elif self.move == '5' and battle.run_away(self):
-                sounds.play_music(main.party_info['music'])
-
-                return 'Ran'
-
-            return */
+            return "";
         }
 
         public bool ChooseTarget(List<Unit> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
