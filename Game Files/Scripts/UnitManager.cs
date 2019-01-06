@@ -96,9 +96,9 @@ namespace Scripts
 
             if (target.IsPCU())
             {
-                int a = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.head];
-                int b = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.body];
-                int c = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.legs];
+                double a = inv_manager.GetEquipment(target.PCUID)[CEnums.EquipmentType.head].Resist;
+                double b = inv_manager.GetEquipment(target.PCUID)[CEnums.EquipmentType.body].Resist;
+                double c = inv_manager.GetEquipment(target.PCUID)[CEnums.EquipmentType.legs].Resist;
                 armor_resist = a + b + c;
 
                 defense = target.TempStats["defense"];
@@ -561,7 +561,7 @@ namespace Scripts
             BattleManager battle_manager = new BattleManager();
             UnitManager unit_manager = new UnitManager();
 
-            // sounds.item_pickup.stop()
+            sound_manager.item_pickup.Stop();
 
             // If the player's target is an enemy, and the target died before the player's turn began,
             // then the attack automatically redirects to a random living enemy.
@@ -584,7 +584,7 @@ namespace Scripts
             {
                 Thread.Sleep(750);
 
-                // sounds.poison_damage.play()
+                sound_manager.poison_damage.Play();
 
                 int poison_damage = HP / 5;
                 HP -= poison_damage;
@@ -808,13 +808,13 @@ namespace Scripts
         /* =========================== *
          *        MONSTER METHODS      *
          * =========================== */
-        public void MonsterExecuteMove()
+        public void MonsterExecuteMove(int turn_count)
         {
             SoundManager sound_manager = new SoundManager();
 
             // Base Turn
             sound_manager.item_pickup.Stop();
-            MonsterGetTarget();
+            MonsterGetTarget(turn_count);
 
             Console.WriteLine($"-{Name}'s Turn-");
 
@@ -846,7 +846,7 @@ namespace Scripts
             MonsterDoAbilities();
         }
 
-        public void MonsterGetTarget()
+        public void MonsterGetTarget(int turn_count)
         {
             Random rng = new Random();
             UnitManager unit_manager = new UnitManager();
@@ -854,7 +854,7 @@ namespace Scripts
 
             CurrentTarget = unit_manager.GetAliveActivePCUs()[rng.Next(unit_manager.GetAliveActivePCUs().Count)];
 
-            if (MonsterAbilityFlags["taunted_turn"] == battle_manager.turn_counter)
+            if (MonsterAbilityFlags["taunted_turn"] == turn_count)
             {
                 CurrentTarget = MonsterAbilityFlags["taunted_user"];
             }
@@ -899,45 +899,53 @@ namespace Scripts
 
         public void MonsterMeleeAI()
         {
-            /*
+            Random rng = new Random();
+            BattleManager battle_manager = new BattleManager();
+            SoundManager sound_manager = new SoundManager();
+            UnitManager unit_manager = new UnitManager();
+
             // Melee monsters have a 1 in 6 (16.667%) chance to defend
-            if random.randint(0, 5) == 0 and not self.is_defending \
-                    and not self.ability_vars['taunted'][0] == battle.turn_counter:
-                self.is_defending = True
-                print(f"The {self.name} is preparing itself for enemy attacks...")
-                main.smart_sleep(0.75)
+            if (rng.Next(0, 5) == 0 && !IsDefending && !(MonsterAbilityFlags["taunted_turn"] == battle_manager.turn_counter))
+            {
+                IsDefending = true;
+                Console.WriteLine($"The {Name} is preparing itself for enemy attacks...");
+                Thread.Sleep(750);
 
-                self.dfns *= 2
-                self.m_dfns *= 2
-                self.p_dfns *= 2
+                Defense *= 2;
+                MDefense *= 2;
+                PDefense *= 2;
 
-                print(f"The {self.name}'s defense stats increased by 2x for one turn!")
-                sounds.buff_spell.play()
+                Console.WriteLine($"The {Name}'s defense stats increased by 2x for one turn!");
+                sound_manager.buff_spell.Play();
+                return;
+            }
 
-            // Set defense back to normal if the monster defended last turn
-            elif self.is_defending:
-                print(f"The {self.name} stops defending, returning its defense stats to normal.")
-                self.is_defending = False
-                self.dfns /= 2
-                self.m_dfns /= 2
-                self.p_dfns /= 2
+            else if (IsDefending) 
+            {
+                Console.WriteLine($"The {Name} stops defending, returning its defense stats to normal.");
+                IsDefending = false;
+                Defense /= 2;
+                MDefense /= 2;
+                PDefense /= 2;
+            }
 
-            // If the monster doesn't defend, then it will attack!
-            if not self.is_defending:
-                sounds.sword_slash.play()
-                print(f'The {self.name} {self.attk_msg} {self.m_target.name}!')
-                main.smart_sleep(0.75)
+            sound_manager.sword_slash.Play();
+            Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
+            Thread.Sleep(750);
 
-                dam_dealt = deal_damage(self, self.m_target, "physical")
-                if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
-                    sounds.enemy_hit.play()
-                    print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+            int attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
 
-                    self.m_target.hp -= dam_dealt
+            if (CurrentTarget.Evasion < rng.Next(0, 512))
+            {
+                sound_manager.enemy_hit.Play();
+                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget}!");
+            }
 
-                else:
-                    sounds.attack_miss.play()
-                    print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!") */
+            else
+            {
+                sound_manager.attack_miss.Play();
+                Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
+            }
         }
 
         public void MonsterRangedAI()

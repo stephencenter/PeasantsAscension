@@ -20,13 +20,13 @@ namespace Scripts
             List<Unit> active_pcus = unit_manager.GetActivePCUs();
             turn_counter = 0;
 
-            // 25% chance to add a second monster
-            if (rng.Next(0, 100) > 75)
+            // 33% chance to add a second monster
+            if (rng.Next(0, 100) > 66)
             {
                 monster_list.Add(unit_manager.GenerateMonster());
 
-                // 25% chance to add a third monster if a second monster was already added (6.25% chance for three monsters)
-                if (rng.Next(0, 100) > 75)
+                // 33% chance to add a third monster if a second monster was already added
+                if (rng.Next(0, 100) > 66)
                 {
                     monster_list.Add(unit_manager.GenerateMonster());
                 }
@@ -93,7 +93,7 @@ namespace Scripts
                 {
                     if (unit.IsAlive())
                     {
-                        if (monster_list.Any(x => x.HP <= 0))
+                        if (monster_list.All(x => x.HP <= 0))
                         {
                             break;
                         }
@@ -108,7 +108,7 @@ namespace Scripts
 
                         else if (unit.IsMonster())
                         {
-                            unit.MonsterExecuteMove();
+                            unit.MonsterExecuteMove(turn_counter);
                         }
 
                         if (active_pcus.Any(x => x.HP > 0))
