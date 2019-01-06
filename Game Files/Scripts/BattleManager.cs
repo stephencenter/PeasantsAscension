@@ -7,15 +7,15 @@ namespace Scripts
 {
     public class BattleManager
     {
-        readonly Random rng = new Random();
-        readonly CEnums c_enums = new CEnums();
-        readonly CommonMethods c_methods = new CommonMethods();
-        readonly SoundManager sound_manager = new SoundManager();
-        protected UnitManager unit_manager = new UnitManager();
         public int turn_counter;
 
         public void BattleSystem()
         {
+            UnitManager unit_manager = new UnitManager();
+            SoundManager sound_manager = new SoundManager();
+            CommonMethods c_methods = new CommonMethods();
+            Random rng = new Random();
+
             List<Unit> monster_list = new List<Unit>() { unit_manager.GenerateMonster() };
             List<Unit> active_pcus = unit_manager.GetActivePCUs();
             turn_counter = 0;
@@ -67,7 +67,6 @@ namespace Scripts
                 DisplayBattleStats(active_pcus, monster_list);
 
                 // Iterate through each active players
-                int counter = 0;
                 foreach (Unit character in active_pcus)
                 {
                     if (0 < character.HP && character.HP <= character.MaxHP * 0.20)
@@ -81,7 +80,7 @@ namespace Scripts
                     {
                         character.PlayerChoice(monster_list);
 
-                        if (counter + 1 < active_pcus.Where(x => x.IsAlive()).Count())
+                        if (character != active_pcus[active_pcus.Count - 1])
                         {
                             c_methods.PrintDivider();
                         }
@@ -261,44 +260,61 @@ namespace Scripts
                         continue */
         }
 
-        public bool RunAway(Unit runner)
+        public bool RunAway(Unit runner, List<Unit> monster_list)
         {
-            return true;
-            //def run_away(runner):
-            //    print(ascii_art.player_art[runner.class_.title()] % f"{runner.name} is making a move!\n")
-            //    print(f'Your party starts to run away from the {units.monster.name}...')
-            //    sounds.foot_steps.play()
+            SoundManager sound_manager = new SoundManager();
+            CommonMethods c_methods = new CommonMethods();
+            Random rng = new Random();
 
-            //    main.smart_sleep(0.75)
+            Console.WriteLine($"{runner.Name} is making a move!\n");
+            Console.WriteLine($"Your party tries to make a run for it...");
+            Thread.Sleep(750);
 
-            //    if 'paralyzed' in runner.status_ail:
-            //        # 20% chance of success
-            //        chance = 20
+            int chance;
 
-            //    elif bool (runner.spd > sorted(m_list, key= lambda x: x.spd, reverse= True)[0].spd) != \
-            //            bool (runner.evad > sorted(m_list, key= lambda x: x.evad, reverse= True)[0].spd):
-            //        # 60% chance of success
-            //        chance = 60
+            // Running has a 30% chance of success if the runner is paralyzed, regardless of 
+            if (runner.HasStatus(CEnums.Status.paralyzation))
+            {
+                chance = 30;
+            }
 
-            //    elif runner.spd > sorted(m_list, key= lambda x: x.spd, reverse= True)[0].spd and \
-            //            runner.evad > sorted(m_list, key= lambda x: x.evad, reverse= True)[0].spd:
-            //        # 80% chance of success
-            //        chance = 80
+            // Running has a 70% chance of success if the runner:
+            //     1. Has a higher speed than the fastest monster, but a lower evasion than the most evasive monster
+            //     2. Has a higher evasion than the most evasive monster, but a lower speed than the fastest monster
+            else if ((runner.Speed > monster_list.Select(x => x.Speed).Max()) != (runner.Evasion > monster_list.Select(x => x.Evasion).Max()))
+            {
+                chance = 70;
+            }
 
-            //    else:
-            //        # 40% chance of success
-            //        chance = 40
+            // Running has an 90% chance of success if the runner is both:
+            //    1. Faster than the fastest monster
+            //    2. More evasive than the most evasive monster
+            else if ((runner.Speed > monster_list.Select(x => x.Speed).Max()) && (runner.Evasion > monster_list.Select(x => x.Evasion).Max()))
+            {
+                chance = 90;
+            }
 
-            //    if random.randint(0, 100) <= chance:
-            //        sounds.buff_spell.play()
-            //        print(f'Your party manages to escape from the {units.monster.name}!')
-            //        main.s_input("\nPress enter/return ")
-            //        return True
+            // In all other scenarios, running has a 50% chance to succeed
+            else
+            {
+                chance = 50;
+            }
 
-            //    else:
-            //        sounds.debuff.play()
-            //        print("Your party's attempt to escape failed!")
-            //        return False
+            if (rng.Next(0, 100) < chance)
+            {
+                sound_manager.buff_spell.Play();
+                Console.WriteLine("Your party managed to escape!");
+                c_methods.PressEnterReturn();
+
+                return true;
+            }
+
+            else
+            {
+                sound_manager.debuff.Play();
+                Console.WriteLine("Your party's escape attempt failed!");
+                return false;
+            }
         }
 
         public bool BattleInventory(Unit user)
@@ -340,6 +356,8 @@ namespace Scripts
 
         public void DisplayTeamStats(List<Unit> unit_list)
         {
+            CEnums c_enums = new CEnums();
+
             int player_pad1 = unit_list.Select(x => x.Name.Length).Max();
             int player_pad2 = unit_list.Select(x => $"{x.HP}/{x.MaxHP} HP".Length).Max();
             int player_pad3 = unit_list.Select(x => $"{x.MP}/{x.MaxMP} MP".Length).Max();
@@ -370,6 +388,8 @@ namespace Scripts
 
         public void DisplayBattleStats(List<Unit> active_pcus, List<Unit> monster_list)
         {
+            CommonMethods c_methods = new CommonMethods();
+
             foreach (Unit unit in active_pcus.Concat(monster_list))
             {
                 unit.FixAllStats();

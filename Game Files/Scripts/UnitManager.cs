@@ -684,7 +684,7 @@ namespace Scripts
             }
             
             // Run away
-            else if (CurrentMove == '5' && battle_manager.RunAway(this))
+            else if (CurrentMove == '5' && battle_manager.RunAway(this, monster_list))
             {
                 // sounds.play_music(main.party_info['music'])
                 return "ran";
