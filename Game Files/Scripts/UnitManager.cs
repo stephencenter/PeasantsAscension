@@ -211,7 +211,9 @@ namespace Scripts
 
     public class Unit
     {
-        // General Unit Properties
+        /* =========================== *
+         *      GENERAL PROPERTIES     *
+         * =========================== */
         public CEnums.Element off_element = CEnums.Element.neutral;
         public CEnums.Element def_element = CEnums.Element.neutral;
         public CEnums.UnitType Type { get; set; }
@@ -232,7 +234,9 @@ namespace Scripts
         public int Evasion { get; set; }
         public int Level { get; set; }
 
-        // Player Attributes
+        /* =========================== *
+         *      PLAYER PROPERTIES      *
+         * =========================== */
         public string PCUID { get; set; }
         public CEnums.CharacterClass PClass { get; set; }
         public bool Active { get; set; }
@@ -276,7 +280,9 @@ namespace Scripts
             {"rolling", false }
         };
 
-        // Monster Attributes
+        /* =========================== *
+         *      MONSTER PROPERTIES     *
+         * =========================== */
         public CEnums.MonsterClass MClass { get; set; }
         public CEnums.Status StatusOnAttack { get; set; }
         public bool IsDefending { get; set; }
@@ -298,7 +304,9 @@ namespace Scripts
             {"disarmed", false}
         };
 
-        // Unit methods
+        /* =========================== *
+         *        GENERAL METHODS      *
+         * =========================== */
         public void SetTempStats()
         {
             TempStats["attack"] = Attack;
