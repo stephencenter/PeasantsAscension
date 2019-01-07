@@ -1,6 +1,6 @@
 ﻿namespace Scripts
 {
-    class CommandManager
+    public static class CommandManager
     {
 
     }

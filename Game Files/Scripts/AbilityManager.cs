@@ -2,9 +2,9 @@
 
 namespace Scripts
 {
-    public class AbilityManager
+    public static class AbilityManager
     {
-        public Dictionary<CEnums.CharacterClass, List<dynamic>> ability_list = new Dictionary<CEnums.CharacterClass, List<dynamic>>()
+        public static Dictionary<CEnums.CharacterClass, List<dynamic>> ability_list = new Dictionary<CEnums.CharacterClass, List<dynamic>>()
         {
             { // 1 2 4 finished
                 CEnums.CharacterClass.warrior, new List<dynamic>()
@@ -235,7 +235,7 @@ nothing if no songs have been played yet.", 3)
             }
         };
 
-        public Dictionary<CEnums.CharacterClass, List<dynamic>> GetAbilityList()
+        public static Dictionary<CEnums.CharacterClass, List<dynamic>> GetAbilityList()
         {
             return ability_list;
         }

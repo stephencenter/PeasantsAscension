@@ -1,6 +1,11 @@
 ﻿namespace Scripts
 {
-    public class TownManager
+    public static class TownManager
+    {
+
+    }
+
+    public class Town
     {
 
     }

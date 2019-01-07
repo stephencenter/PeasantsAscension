@@ -5,30 +5,27 @@ using System.Threading;
 
 namespace Scripts
 {
-    public class BattleManager
+    public static class BattleManager
     {
-        public int turn_counter;
+        public static int turn_counter;
 
-        public void BattleSystem()
+        public static void BattleSystem()
         {
-            UnitManager unit_manager = new UnitManager();
-            SoundManager sound_manager = new SoundManager();
-            CommonMethods c_methods = new CommonMethods();
             Random rng = new Random();
 
-            List<Unit> monster_list = new List<Unit>() { unit_manager.GenerateMonster() };
-            List<Unit> active_pcus = unit_manager.GetActivePCUs();
+            List<Unit> monster_list = new List<Unit>() { UnitManager.GenerateMonster() };
+            List<Unit> active_pcus = UnitManager.GetActivePCUs();
             turn_counter = 0;
 
             // 33% chance to add a second monster
             if (rng.Next(0, 100) > 66)
             {
-                monster_list.Add(unit_manager.GenerateMonster());
+                monster_list.Add(UnitManager.GenerateMonster());
 
                 // 33% chance to add a third monster if a second monster was already added
                 if (rng.Next(0, 100) > 66)
                 {
-                    monster_list.Add(unit_manager.GenerateMonster());
+                    monster_list.Add(UnitManager.GenerateMonster());
                 }
             }
 
@@ -72,7 +69,7 @@ namespace Scripts
                     if (0 < character.HP && character.HP <= character.MaxHP * 0.20)
                     {
                         Console.WriteLine($"Warning: {character.Name}'s HP is low, heal as soon as possible!");
-                        sound_manager.health_low.Play();
+                        SoundManager.health_low.Play();
                         Thread.Sleep(1000);
                     }
 
@@ -82,7 +79,7 @@ namespace Scripts
 
                         if (character != active_pcus[active_pcus.Count - 1])
                         {
-                            c_methods.PrintDivider();
+                            CMethods.PrintDivider();
                         }
                     }
                 }
@@ -97,7 +94,7 @@ namespace Scripts
                             break;
                         }
 
-                        c_methods.PrintDivider();
+                        CMethods.PrintDivider();
 
                         // Leave the battle if the player runs away
                         if (unit.IsPCU() && unit.PlayerExecuteMove(monster_list) == "ran")
@@ -114,7 +111,7 @@ namespace Scripts
                         {
                             if (monster_list.Any(x => x.HP > 0) && unit.IsAlive())
                             {
-                                c_methods.PressEnterReturn();
+                                CMethods.PressEnterReturn();
                             }
 
                             else if (monster_list.All(x => x.HP <= 0))
@@ -136,22 +133,22 @@ namespace Scripts
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
-                            sound_manager.ally_death.Play();
+                            SoundManager.ally_death.Play();
 
-                            c_methods.PrintDivider();
+                            CMethods.PrintDivider();
                             Console.WriteLine($"{other_unit.Name} has fallen to the monsters!");
-                            c_methods.PressEnterReturn();
+                            CMethods.PressEnterReturn();
                         }
 
                         else if (other_unit.IsMonster() && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
-                            sound_manager.enemy_death.Play();
+                            SoundManager.enemy_death.Play();
 
-                            c_methods.PrintDivider();
+                            CMethods.PrintDivider();
                             Console.WriteLine($"The {other_unit.Name} was defeated by your party!");
-                            c_methods.PressEnterReturn();
+                            CMethods.PressEnterReturn();
                         }
                     }
                 }
@@ -161,7 +158,7 @@ namespace Scripts
             AfterBattle();
         }
 
-        public void AfterBattle()
+        public static void AfterBattle()
         {
             /* Python Code
             def after_battle(is_boss) :
@@ -260,10 +257,8 @@ namespace Scripts
                         continue */
         }
 
-        public bool RunAway(Unit runner, List<Unit> monster_list)
+        public static bool RunAway(Unit runner, List<Unit> monster_list)
         {
-            SoundManager sound_manager = new SoundManager();
-            CommonMethods c_methods = new CommonMethods();
             Random rng = new Random();
 
             Console.WriteLine($"{runner.Name} is making a move!\n");
@@ -302,22 +297,22 @@ namespace Scripts
 
             if (rng.Next(0, 100) < chance)
             {
-                sound_manager.buff_spell.Play();
+                SoundManager.buff_spell.Play();
                 Console.WriteLine("Your party managed to escape!");
-                c_methods.PressEnterReturn();
+                CMethods.PressEnterReturn();
 
                 return true;
             }
 
             else
             {
-                sound_manager.debuff.Play();
+                SoundManager.debuff.Play();
                 Console.WriteLine("Your party's escape attempt failed!");
                 return false;
             }
         }
 
-        public bool BattleInventory(Unit user)
+        public static bool BattleInventory(Unit user)
         {
             return true;
             //def battle_inventory(user):
@@ -354,10 +349,8 @@ namespace Scripts
             //            return True
         }
 
-        public void DisplayTeamStats(List<Unit> unit_list)
+        public static void DisplayTeamStats(List<Unit> unit_list)
         {
-            CEnums c_enums = new CEnums();
-
             int player_pad1 = unit_list.Select(x => x.Name.Length).Max();
             int player_pad2 = unit_list.Select(x => $"{x.HP}/{x.MaxHP} HP".Length).Max();
             int player_pad3 = unit_list.Select(x => $"{x.MP}/{x.MaxMP} MP".Length).Max();
@@ -373,12 +366,12 @@ namespace Scripts
                 {
                     if (status_list == "")
                     {
-                        status_list = c_enums.EnumToString(status);
+                        status_list = CEnums.EnumToString(status);
                     }
 
                     else
                     {
-                        status_list = string.Join(", ", new List<string>() { status_list, c_enums.EnumToString(status) });
+                        status_list = string.Join(", ", new List<string>() { status_list, CEnums.EnumToString(status) });
                     }
                 }
 
@@ -386,16 +379,15 @@ namespace Scripts
             }
         }
 
-        public void DisplayBattleStats(List<Unit> active_pcus, List<Unit> monster_list)
+        public static void DisplayBattleStats(List<Unit> active_pcus, List<Unit> monster_list)
         {
-            CommonMethods c_methods = new CommonMethods();
 
             foreach (Unit unit in active_pcus.Concat(monster_list))
             {
                 unit.FixAllStats();
             }
 
-            c_methods.PrintDivider();
+            CMethods.PrintDivider();
 
             Console.WriteLine("Your party: ");
             DisplayTeamStats(active_pcus);
@@ -403,7 +395,7 @@ namespace Scripts
             Console.WriteLine("Enemy team: ");
             DisplayTeamStats(monster_list);
 
-            c_methods.PrintDivider();
+            CMethods.PrintDivider();
         }
     }
 }

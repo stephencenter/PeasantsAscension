@@ -6,8 +6,7 @@ namespace Main
     {
         public void Run()
         {
-            BattleManager battle_manager = new BattleManager();
-            battle_manager.BattleSystem();
+            BattleManager.BattleSystem();
 
             /* Python Code
             def game_loop():

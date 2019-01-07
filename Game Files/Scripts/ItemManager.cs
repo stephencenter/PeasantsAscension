@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Scripts
 {
-    public class ItemManager
+    public static class ItemManager
     {
-        readonly List<dynamic> item_list = new List<dynamic>()
+        private static readonly List<dynamic> item_list = new List<dynamic>()
         {
 
             /* =========================== *
@@ -32,9 +32,14 @@ namespace Scripts
             new Accessory("None", "You should probably get an accessory [No Effects].", 0, "misc", "no_access")
         };
 
-        public List<dynamic> GetItemList()
+        public static List<dynamic> GetItemList()
         {
             return item_list;
+        }
+
+        public static Item FindItemWithID(string item_id)
+        {
+            return GetItemList().Single(x => x.ItemID == item_id);
         }
     }
 
@@ -238,7 +243,6 @@ namespace Scripts
             Element = element;
             EquipType = equip_type;
 
-            CEnums c_enums = new CEnums();
             string class_requirement;
 
             if (ValidClasses.Contains(CEnums.CharacterClass.any))
@@ -247,7 +251,7 @@ namespace Scripts
             }
 
             else {
-                string classes = string.Join(" and ", ValidClasses.Select(x => c_enums.EnumToString(x)));
+                string classes = string.Join(" and ", ValidClasses.Select(x => CEnums.EnumToString(x)));
                 class_requirement = $"\nOnly equippable by {classes}.";
             }
 

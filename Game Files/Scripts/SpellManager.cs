@@ -1,8 +1,8 @@
 ﻿namespace Scripts
 {
-    public class SpellManager
+    public static class SpellManager
     {
-        public bool PickSpellCategory()
+        public static bool PickSpellCategory()
         {
             return true;
         }

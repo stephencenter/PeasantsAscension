@@ -5,25 +5,24 @@ using System.Threading;
 
 namespace Scripts
 {
-    public class UnitManager
+    public static class UnitManager
     {
-        readonly Unit player = new Unit(CEnums.UnitType.player, "John", "_player", true);
-        readonly Unit solou = new Unit(CEnums.UnitType.player, "Solou", "_solou", true);
-        readonly Unit chili = new Unit(CEnums.UnitType.player, "Chili", "_chili", true);
-        readonly Unit chyme = new Unit(CEnums.UnitType.player, "Chyme", "_chyme", false);
-        readonly Unit storm = new Unit(CEnums.UnitType.player, "Storm", "_storm", false);
-        readonly Unit parsto = new Unit(CEnums.UnitType.player, "Parsto", "_parsto", false);
-        readonly Unit adorine = new Unit(CEnums.UnitType.player, "Adorine", "_adorine", false);
-        readonly CommonMethods c_methods = new CommonMethods();
+        public static Unit player = new Unit(CEnums.UnitType.player, "John", "_player", true);
+        public static Unit solou = new Unit(CEnums.UnitType.player, "Solou", "_solou", true);
+        public static Unit chili = new Unit(CEnums.UnitType.player, "Chili", "_chili", true);
+        public static Unit chyme = new Unit(CEnums.UnitType.player, "Chyme", "_chyme", false);
+        public static Unit storm = new Unit(CEnums.UnitType.player, "Storm", "_storm", false);
+        public static Unit parsto = new Unit(CEnums.UnitType.player, "Parsto", "_parsto", false);
+        public static Unit adorine = new Unit(CEnums.UnitType.player, "Adorine", "_adorine", false);
 
         // Returns ALL PCUs, alive, dead, active, and inactive
-        public List<Unit> GetAllPCUs()
+        public static List<Unit> GetAllPCUs()
         {
             return new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
         }
 
         // Returns all PCUs that are alive, regardless of whether they're active or not
-        public List<Unit> GetAlivePCUs()
+        public static List<Unit> GetAlivePCUs()
         {
             var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
             pcu_list = pcu_list.Where(x => x.IsAlive()).ToList();
@@ -32,7 +31,7 @@ namespace Scripts
         }
 
         // Returns all PCUs that are active, regardless of whether they're alive or not
-        public List<Unit> GetActivePCUs()
+        public static List<Unit> GetActivePCUs()
         {
             var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
             pcu_list = pcu_list.Where(x => x.Active).ToList();
@@ -41,7 +40,7 @@ namespace Scripts
         }
 
         // Returns all PCUs that are both alive and active
-        public List<Unit> GetAliveActivePCUs()
+        public static List<Unit> GetAliveActivePCUs()
         {
             var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
             pcu_list = pcu_list.Where(x => x.Active && x.IsAlive()).ToList();
@@ -49,18 +48,16 @@ namespace Scripts
             return pcu_list;
         }
 
-        public Unit GenerateMonster()
+        public static Unit GenerateMonster()
         {
             return new Unit(CEnums.UnitType.monster, "Whispering Goblin");
         }
 
-        public int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, int spell_power = 0, bool do_criticals = true)
+        public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, int spell_power = 0, bool do_criticals = true)
         {
             // Attacker - the Unit that is attacking
             // Target - the Unit that is being attacked
             // Damage Type - the type of damage being dealt (magical, physical, or piercing)
-            InventoryManager inv_manager = new InventoryManager();
-            SoundManager sound_manager = new SoundManager();
             Random rng = new Random();
 
             int attack;
@@ -78,7 +75,7 @@ namespace Scripts
 
             if (attacker.IsPCU())
             {
-                weapon_power = inv_manager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.weapon].Power;
+                weapon_power = InventoryManager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.weapon].Power;
 
                 attack = attacker.TempStats["attack"];
                 p_attack = attacker.TempStats["p_attack"];
@@ -96,9 +93,9 @@ namespace Scripts
 
             if (target.IsPCU())
             {
-                double a = inv_manager.GetEquipment(target.PCUID)[CEnums.EquipmentType.head].Resist;
-                double b = inv_manager.GetEquipment(target.PCUID)[CEnums.EquipmentType.body].Resist;
-                double c = inv_manager.GetEquipment(target.PCUID)[CEnums.EquipmentType.legs].Resist;
+                double a = InventoryManager.GetEquipment(target.PCUID)[CEnums.EquipmentType.head].Resist;
+                double b = InventoryManager.GetEquipment(target.PCUID)[CEnums.EquipmentType.body].Resist;
+                double c = InventoryManager.GetEquipment(target.PCUID)[CEnums.EquipmentType.legs].Resist;
                 armor_resist = a + b + c;
 
                 defense = target.TempStats["defense"];
@@ -165,25 +162,24 @@ namespace Scripts
             if (rng.Next(0, 100) < 15 && do_criticals)
             {
                 final_damage = (int)(final_damage*1.5);
-                sound_manager.critical_hit.Play();
+                SoundManager.critical_hit.Play();
                 Console.WriteLine("It's a critical hit! 1.5x damage!");
 
                 Thread.Sleep(500);
             }
 
             final_damage = ApplyElementalChart(attacker, target, final_damage);
-            final_damage = c_methods.Clamp(final_damage, 999, 1);
+            final_damage = CMethods.Clamp(final_damage, 999, 1);
 
             return final_damage;
         }
 
-        public int ApplyElementalChart(Unit attacker, Unit target, int damage)
+        public static int ApplyElementalChart(Unit attacker, Unit target, int damage)
         {
             // Fire > Ice > Grass > Wind > Electricity > Earth > Water > Fire
             // Light > Dark and Dark > Light, Dark and Light resist themselves
             // Neutral element is neutral both offensively and defensively
             // All other interactions are neutral
-            CEnums c_enums = new CEnums();
 
             CEnums.Element attacker_element = attacker.off_element;
             CEnums.Element target_element = target.def_element;
@@ -195,18 +191,47 @@ namespace Scripts
             }      
 
             // If the target is weak to the attackers element, then the attack will deal 1.5x damage
-            if (c_enums.ElementChart[attacker_element][1] == target_element)
+            if (CEnums.ElementChart[attacker_element][1] == target_element)
             {
                 return (int)(damage * 1.5);
             }
 
-            else if (c_enums.ElementChart[attacker_element][0] == target_element)
+            else if (CEnums.ElementChart[attacker_element][0] == target_element)
             {
                 return (int)(damage / 1.5);
             }
 
             return damage;
         }
+    }
+
+    public static class PartyInfo
+    {
+        public static CEnums.GameState Gamestate = CEnums.GameState.overworld;
+        public static CEnums.MusicboxMode MusicboxMode = CEnums.MusicboxMode.AtoZ;
+        public static List<Town> VisitedTowns = new List<Town>();
+        public static Town CurrentTown = new Town();
+        public static Tile CurrentTile = new Tile();
+        public static Tile RespawnTile = new Tile();
+        public static int GP = 20;
+        public static int StepsWithoutBattle = 0;
+        public static int Difficulty = 0;
+        public static int AtlasStrength = 1;
+        public static string Music = "../../../Music/Through the Forest.ogg";
+        public static string CurrentProvince = "Overshire";
+        public static string MusicboxFolder = "";
+        public static bool MusicboxIsPlaying = false;
+        public static bool DoSpawns { get; set; }
+
+        public static List<string> FriendNames = new List<string>()
+        {
+            "apollo kalar", "apollokalar", "apollo_kalar",
+            "flygon jones", "flygonjones", "flygon_jones",
+            "starkiller106024", "starkiller", "star killer",
+            "atomic vexal", "vexal", "wave vex",
+            "therichpig", "therichpig64", "spaghettipig64", "spaghettipig", "pastahog", "pastahog64",
+            "theaethersplash", "the aether splash", "aethersplash", "aether splash"
+        };
     }
 
     public class Unit
@@ -288,7 +313,7 @@ namespace Scripts
         public bool IsDefending { get; set; }
         public int DroppedGold { get; set; }
         public int DroppedXP { get; set; }
-        public List<ItemManager> DroppedItems { get; set; }
+        public List<Item> DroppedItems { get; set; }
         public string AttackMessage { get; set; }
         public string AsciiArt { get; set; }
 
@@ -353,11 +378,10 @@ namespace Scripts
             // their way through the game, and also prevents monsters from being invincible.
 
             // Initialize the Common Methods manager
-            CommonMethods c_methods = new CommonMethods();
 
-            HP = c_methods.Clamp(HP, MaxHP, 0);
-            MP = c_methods.Clamp(MP, MaxMP, 0);
-            AP = c_methods.Clamp(AP, MaxAP, 0);
+            HP = CMethods.Clamp(HP, MaxHP, 0);
+            MP = CMethods.Clamp(MP, MaxMP, 0);
+            AP = CMethods.Clamp(AP, MaxAP, 0);
 
             Evasion = Math.Min(256, Evasion);
             Statuses = Statuses.Distinct().ToList();
@@ -385,20 +409,11 @@ namespace Scripts
 
         public void PlayerChoice(List<Unit> monster_list)
         {
-            // Initialize some important method helpers
-            CommonMethods c_methods = new CommonMethods();
-            SpellManager spell_manager = new SpellManager();
-            AbilityManager ability_manager = new AbilityManager();
-            InventoryManager inv_manager = new InventoryManager();
-            SoundManager sound_manager = new SoundManager();
-            BattleManager battle_manager = new BattleManager();
-            ItemManager item_manager = new ItemManager();
-
             PrintBattleOptions();
 
             while (true)
             {
-                string c_move = c_methods.Input("Input [#]: ");
+                string c_move = CMethods.Input("Input [#]: ");
 
                 try
                 {
@@ -425,20 +440,20 @@ namespace Scripts
                 // Magic
                 else if (CurrentMove == '2')
                 {
-                    c_methods.PrintDivider();
+                    CMethods.PrintDivider();
 
                     // Silence is a status ailment that prevents using spells
                     if (HasStatus(CEnums.Status.silence))
                     {
-                        sound_manager.debuff.Play();
+                        SoundManager.debuff.Play();
                         Console.WriteLine($"{Name} can't use spells when silenced!");
-                        c_methods.PressEnterReturn();
+                        CMethods.PressEnterReturn();
                         PrintBattleOptions();
 
                         continue;
                     }
 
-                    if (!spell_manager.PickSpellCategory())
+                    if (!SpellManager.PickSpellCategory())
                     {
                         PrintBattleOptions();
                         continue;
@@ -452,11 +467,11 @@ namespace Scripts
                 {
                     while (true)
                     {
-                        c_methods.PrintDivider();
+                        CMethods.PrintDivider();
                         Console.WriteLine($"{Name}'s Abilities | {AP}/{MaxAP} AP remaining");
 
                         // List of all abilities usable by the PCU's class
-                        List<dynamic> a_list = ability_manager.GetAbilityList()[PClass];
+                        List<dynamic> a_list = AbilityManager.GetAbilityList()[PClass];
 
                         // This is used to make sure that the AP costs of each ability line up. Purely asthetic.
                         int padding = a_list.Select(x => x.AbilityName.Length).Max();
@@ -470,7 +485,7 @@ namespace Scripts
 
                         while (true)
                         {
-                            string chosen_ability = c_methods.Input("Input [#] or type 'back'): ");
+                            string chosen_ability = CMethods.Input("Input [#] or type 'back'): ");
 
                             try
                             {
@@ -481,9 +496,9 @@ namespace Scripts
                             {
                                 if (ex is ArgumentException || ex is IndexOutOfRangeException)
                                 {
-                                    if (c_methods.IsExitString(chosen_ability))
+                                    if (CMethods.IsExitString(chosen_ability))
                                     {
-                                        c_methods.PrintDivider();
+                                        CMethods.PrintDivider();
                                         PrintBattleOptions();
 
                                         return;
@@ -496,9 +511,9 @@ namespace Scripts
                             // Abilities cost AP to cast, just like spells cost MP.
                             if (AP < CurrentAbility.APCost)
                             {
-                                c_methods.PrintDivider();
+                                CMethods.PrintDivider();
                                 Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.AbilityName}!");
-                                c_methods.PressEnterReturn();
+                                CMethods.PressEnterReturn();
 
                                 break;
                             }
@@ -514,16 +529,16 @@ namespace Scripts
                 // Use Items
                 else if (CurrentMove == '4')
                 {
-                    c_methods.PrintDivider();
+                    CMethods.PrintDivider();
 
                     var x = new List<int>();
-                    if (!inv_manager.GetInventory()["consumables"].Any())
+                    if (!InventoryManager.GetInventory()["consumables"].Any())
                     {
-                        sound_manager.debuff.Play();
+                        SoundManager.debuff.Play();
                         Console.WriteLine("Your party has no consumables!");
 
-                        c_methods.PressEnterReturn();
-                        c_methods.PrintDivider();
+                        CMethods.PressEnterReturn();
+                        CMethods.PrintDivider();
                         PrintBattleOptions();
 
                         continue;
@@ -531,24 +546,24 @@ namespace Scripts
 
                     if (HasStatus(CEnums.Status.muted))
                     {
-                        sound_manager.debuff.Play();
+                        SoundManager.debuff.Play();
                         Console.WriteLine($"{Name} can't use items when muted!");
 
-                        c_methods.PressEnterReturn();
-                        c_methods.PrintDivider();
+                        CMethods.PressEnterReturn();
+                        CMethods.PrintDivider();
                         PrintBattleOptions();
 
                         continue;
                     }
 
-                    if (!battle_manager.BattleInventory(this))
+                    if (!BattleManager.BattleInventory(this))
                     {
                         PrintBattleOptions();
 
                         continue;
                     }
 
-                    c_methods.PressEnterReturn();
+                    CMethods.PressEnterReturn();
                     return;
                 }
 
@@ -563,13 +578,8 @@ namespace Scripts
         public string PlayerExecuteMove(List<Unit> monster_list)
         {
             Random rng = new Random();
-            CEnums c_enums = new CEnums();
-            InventoryManager inv_manager = new InventoryManager();
-            SoundManager sound_manager = new SoundManager();
-            BattleManager battle_manager = new BattleManager();
-            UnitManager unit_manager = new UnitManager();
 
-            sound_manager.item_pickup.Stop();
+            SoundManager.item_pickup.Stop();
 
             // If the player's target is an enemy, and the target died before the player's turn began,
             // then the attack automatically redirects to a random living enemy.
@@ -578,7 +588,7 @@ namespace Scripts
                 CurrentTarget = monster_list[rng.Next(monster_list.Count)];
             }
 
-            Weapon player_weapon = inv_manager.GetEquipment(PCUID)[CEnums.EquipmentType.weapon];
+            Weapon player_weapon = InventoryManager.GetEquipment(PCUID)[CEnums.EquipmentType.weapon];
 
             Console.WriteLine($"-{Name}'s Turn-");
 
@@ -592,7 +602,7 @@ namespace Scripts
             {
                 Thread.Sleep(750);
 
-                sound_manager.poison_damage.Play();
+                SoundManager.poison_damage.Play();
 
                 int poison_damage = HP / 5;
                 HP -= poison_damage;
@@ -611,9 +621,9 @@ namespace Scripts
                 // Only one status can be cleared per turn
                 if (status != CEnums.Status.alive && rng.Next(0, 8) == 0)
                 {
-                    sound_manager.buff_spell.Play();
+                    SoundManager.buff_spell.Play();
                     Statuses.Remove(status);
-                    Console.WriteLine($"{Name} is no longer {c_enums.EnumToString(status)}!");
+                    Console.WriteLine($"{Name} is no longer {CEnums.EnumToString(status)}!");
                     Thread.Sleep(500);
 
                     break;
@@ -628,51 +638,51 @@ namespace Scripts
 
                 if (player_weapon.WeaponType == CEnums.WeaponType.melee)
                 {
-                    sound_manager.sword_slash.Play();
+                    SoundManager.sword_slash.Play();
                     Console.WriteLine($"{Name} fiercely attacks the {CurrentTarget.Name} using their {player_weapon.Name}...");
                 }
 
                 else if (player_weapon.WeaponType == CEnums.WeaponType.instrument)
                 {
-                    sound_manager.bard_sounds[player_weapon.ItemID].Play();
+                    SoundManager.bard_sounds[player_weapon.ItemID].Play();
                     Console.WriteLine($"{Name} starts playing their {player_weapon.Name} at the {CurrentTarget.Name}...");
                 }
 
                 else
                 {
-                    sound_manager.aim_weapon.Play();
+                    SoundManager.aim_weapon.Play();
                     Console.WriteLine($"{Name} aims carefully at the {CurrentTarget.Name} using their {player_weapon.Name}...");
                 }
 
                 Thread.Sleep(750);
 
                 int attack_damage;
-                if (c_enums.CharacterClassToDamageType(PClass) == CEnums.DamageType.physical)
+                if (CEnums.CharacterClassToDamageType(PClass) == CEnums.DamageType.physical)
                 {
-                    attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
+                    attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
                 }
 
-                else if (c_enums.CharacterClassToDamageType(PClass) == CEnums.DamageType.piercing)
+                else if (CEnums.CharacterClassToDamageType(PClass) == CEnums.DamageType.piercing)
                 {
-                    attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
+                    attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
                 }
 
                 else
                 {
-                    attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.magical);
+                    attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.magical);
                 }
 
                 if (CurrentTarget.Evasion < rng.Next(0, 512))
                 {
                     Console.WriteLine($"{Name}'s attack connects with the {CurrentTarget.Name}, dealing {attack_damage} damage!");
-                    sound_manager.enemy_hit.Play();
+                    SoundManager.enemy_hit.Play();
                     CurrentTarget.HP -= attack_damage;
                 }
 
                 else
                 {
                     Console.WriteLine($"The {CurrentTarget.Name} narrowly avoids {Name}'s attack!");
-                    sound_manager.attack_miss.Play();
+                    SoundManager.attack_miss.Play();
                 }
             }
 
@@ -692,7 +702,7 @@ namespace Scripts
             }
             
             // Run away
-            else if (CurrentMove == '5' && battle_manager.RunAway(this, monster_list))
+            else if (CurrentMove == '5' && BattleManager.RunAway(this, monster_list))
             {
                 // sounds.play_music(main.party_info['music'])
                 return "ran";
@@ -703,10 +713,6 @@ namespace Scripts
 
         public bool PlayerGetTarget(List<Unit> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
         {
-            // Initialize important method helpers
-            CommonMethods c_methods = new CommonMethods();
-            UnitManager unit_manager = new UnitManager();
-
             // A list of PCUs that are valid for targetting (could be unused if target_allies is false)
             List<Unit> pcu_list;
 
@@ -715,13 +721,13 @@ namespace Scripts
                 if (allow_dead)
                 {
                     // YES to dead PCUs, YES to inactive PCUs
-                    pcu_list = unit_manager.GetAllPCUs();
+                    pcu_list = UnitManager.GetAllPCUs();
                 }
 
                 else
                 {
                     // NO to dead PCUs, YES to inactive PCUs
-                    pcu_list = unit_manager.GetAlivePCUs();
+                    pcu_list = UnitManager.GetAlivePCUs();
                 }
             }
 
@@ -730,13 +736,13 @@ namespace Scripts
                 if (allow_dead)
                 {
                     // YES to dead PCUs, NO to inactive PCUs
-                    pcu_list = unit_manager.GetActivePCUs();
+                    pcu_list = UnitManager.GetActivePCUs();
                 }
 
                 else
                 {
                     // NO to dead PCUs, NO to inactive PCUs
-                    pcu_list = unit_manager.GetAliveActivePCUs();
+                    pcu_list = UnitManager.GetAliveActivePCUs();
                 }
             }
 
@@ -778,7 +784,7 @@ namespace Scripts
                 throw new Exception("Exception in 'choose_target': at least one of 'target_allies' or 'target_enemies' must be true");
             }
 
-            c_methods.PrintDivider();
+            CMethods.PrintDivider();
             Console.WriteLine(action_desc);
 
             int counter = 0;
@@ -789,7 +795,7 @@ namespace Scripts
 
             while (true)
             {
-                string chosen = c_methods.Input("Input [#]: ");
+                string chosen = CMethods.Input("Input [#]: ");
 
                 try
                 {
@@ -800,7 +806,7 @@ namespace Scripts
                 {
                     if (ex is ArgumentException || ex is IndexOutOfRangeException)
                     {
-                        if (c_methods.IsExitString(chosen))
+                        if (CMethods.IsExitString(chosen))
                         {
                             return false;
                         }
@@ -818,10 +824,8 @@ namespace Scripts
          * =========================== */
         public void MonsterExecuteMove(int turn_count)
         {
-            SoundManager sound_manager = new SoundManager();
-
             // Base Turn
-            sound_manager.item_pickup.Stop();
+            SoundManager.item_pickup.Stop();
             MonsterGetTarget(turn_count);
 
             Console.WriteLine($"-{Name}'s Turn-");
@@ -857,10 +861,8 @@ namespace Scripts
         public void MonsterGetTarget(int turn_count)
         {
             Random rng = new Random();
-            UnitManager unit_manager = new UnitManager();
-            BattleManager battle_manager = new BattleManager();
 
-            CurrentTarget = unit_manager.GetAliveActivePCUs()[rng.Next(unit_manager.GetAliveActivePCUs().Count)];
+            CurrentTarget = UnitManager.GetAliveActivePCUs()[rng.Next(UnitManager.GetAliveActivePCUs().Count)];
 
             if (MonsterAbilityFlags["taunted_turn"] == turn_count)
             {
@@ -908,12 +910,9 @@ namespace Scripts
         public void MonsterMeleeAI()
         {
             Random rng = new Random();
-            BattleManager battle_manager = new BattleManager();
-            SoundManager sound_manager = new SoundManager();
-            UnitManager unit_manager = new UnitManager();
 
             // Melee monsters have a 1 in 6 (16.667%) chance to defend
-            if (rng.Next(0, 5) == 0 && !IsDefending && !(MonsterAbilityFlags["taunted_turn"] == battle_manager.turn_counter))
+            if (rng.Next(0, 5) == 0 && !IsDefending && !(MonsterAbilityFlags["taunted_turn"] == BattleManager.turn_counter))
             {
                 IsDefending = true;
                 Console.WriteLine($"The {Name} is preparing itself for enemy attacks...");
@@ -924,7 +923,7 @@ namespace Scripts
                 PDefense *= 2;
 
                 Console.WriteLine($"The {Name}'s defense stats increased by 2x for one turn!");
-                sound_manager.buff_spell.Play();
+                SoundManager.buff_spell.Play();
                 return;
             }
 
@@ -937,21 +936,21 @@ namespace Scripts
                 PDefense /= 2;
             }
 
-            sound_manager.sword_slash.Play();
+            SoundManager.sword_slash.Play();
             Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
             Thread.Sleep(750);
 
-            int attack_damage = unit_manager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
+            int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
 
             if (CurrentTarget.Evasion < rng.Next(0, 512))
             {
-                sound_manager.enemy_hit.Play();
+                SoundManager.enemy_hit.Play();
                 Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget}!");
             }
 
             else
             {
-                sound_manager.attack_miss.Play();
+                SoundManager.attack_miss.Play();
                 Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
             }
         }
@@ -1072,7 +1071,7 @@ namespace Scripts
             Evasion = 3;
             Level = 1;
 
-            DroppedItems = new List<ItemManager>();
+            DroppedItems = new List<Item>();
             MClass = CEnums.MonsterClass.melee;
             StatusOnAttack = CEnums.Status.paralyzation;
             IsDefending = false;
@@ -1113,34 +1112,5 @@ namespace Scripts
             AP = 10;
             MaxAP = 10;
         }
-    }
-
-    public class PartyInfo
-    {
-        public CEnums.GameState Gamestate = CEnums.GameState.overworld;
-        public CEnums.MusicboxMode MusicboxMode = CEnums.MusicboxMode.AtoZ;
-        public List<TownManager> VisitedTowns = new List<TownManager>();
-        public TileManager CurrentTile = new TileManager();
-        public TileManager RespawnTile = new TileManager();
-        public TownManager CurrentTown = new TownManager();
-        public int GP = 20;
-        public int StepsWithoutBattle = 0;
-        public int Difficulty = 0;
-        public int AtlasStrength = 1;
-        public string Music = "../../../Music/Through the Forest.ogg";
-        public string CurrentProvince = "Overshire";
-        public string MusicboxFolder = "";
-        public bool MusicboxIsPlaying = false;
-        public bool DoSpawns { get; set; }
-
-        public List<string> FriendNames = new List<string>()
-        {
-            "apollo kalar", "apollokalar", "apollo_kalar",
-            "flygon jones", "flygonjones", "flygon_jones",
-            "starkiller106024", "starkiller", "star killer",
-            "atomic vexal", "vexal", "wave vex",
-            "therichpig", "therichpig64", "spaghettipig64", "spaghettipig", "pastahog", "pastahog64",
-            "theaethersplash", "the aether splash", "aethersplash", "aether splash"
-        };
     }
 }

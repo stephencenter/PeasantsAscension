@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Scripts
 {
-    class NPCManager
+    public static class NPCManager
     {
     }
 }

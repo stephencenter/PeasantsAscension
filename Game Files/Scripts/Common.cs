@@ -5,28 +5,38 @@ using System.Threading;
 
 namespace Scripts
 {
-    public class CommonMethods
+    public static class CMethods
     {
-        public string Input(string prompt)
+        public static readonly bool debugging = false;
+
+        public static string Input(string prompt)
         {
             Console.Write(prompt);
-            return Console.ReadLine();
+
+            if (debugging)
+            {
+                Random rng = new Random();
+                string char_list = "abcdefghijklmnopqrstuvwxyz1234567890";
+                return char_list[rng.Next(char_list.Count())].ToString();
+            }
+
+            else
+            {
+                return Console.ReadLine();
+            }
         }
 
-        public void PrintDivider()
+        public static void PrintDivider()
         {
-            // Initialize the settings manager
-            SavefileManager settings_manager = new SavefileManager();
-
-            Console.WriteLine(new string('-', settings_manager.GetDividerSize()));
+            Console.WriteLine(new string('-', SavefileManager.divider_size));
         }
 
-        public void PressEnterReturn()
+        public static void PressEnterReturn()
         {
             Input("\nPress enter/return ");
         }
 
-        public List<string> SplitBy79(string the_string, int num = 79)
+        public static List<string> SplitBy79(string the_string, int num = 79)
         {
             List<string> sentences = new List<string>();
             string current_sentence = "";
@@ -52,7 +62,7 @@ namespace Scripts
             return sentences;
         }
 
-        public bool IsExitString(string the_string)
+        public static bool IsExitString(string the_string)
         {
             List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel" };
 
@@ -64,12 +74,12 @@ namespace Scripts
             return false;
         }
 
-        public int Clamp(int value, int max, int min)
+        public static int Clamp(int value, int max, int min)
         {
             return Math.Max(min, Math.Min(max, value));
         }
 
-        public void TextScrollWrite(string the_string, int spacing = 25)
+        public static void TextScrollWrite(string the_string, int spacing = 25)
         {
             the_string = string.Join("", new List<string>() { the_string, "\n" });
 
@@ -85,14 +95,14 @@ namespace Scripts
             }
         }
 
-        public string TextScrollInput(string the_string, int spacing = 25)
+        public static string TextScrollInput(string the_string, int spacing = 25)
         {
             TextScrollWrite(the_string, spacing);
             return Input(the_string[the_string.Length - 1].ToString());
         }
     }
 
-    public class CEnums
+    public static class CEnums
     {
         public enum UnitType { player, monster, boss }
         public enum Status { silence, poison, weakness, blindness, paralyzation, muted, alive, dead }
@@ -107,7 +117,7 @@ namespace Scripts
 
         // element_matchup[key][0] is the element that key is weak to
         // element_matchup[key][1] is the element that key is resistant to
-        public Dictionary<Element, List<Element>> ElementChart = new Dictionary<Element, List<Element>>
+        public static Dictionary<Element, List<Element>> ElementChart = new Dictionary<Element, List<Element>>
         {
             {Element.fire, new List<Element> { Element.water, Element.ice } },
             {Element.water, new List<Element> { Element.electric, Element.fire } },
@@ -120,7 +130,7 @@ namespace Scripts
             {Element.dark, new List<Element> { Element.light, Element.dark } }
         };
 
-        public string EnumToString(Enum the_enum)
+        public static string EnumToString(Enum the_enum)
         {
             Dictionary<Enum, string> StatusNameMap = new Dictionary<Enum, string>()
             {
@@ -178,7 +188,7 @@ namespace Scripts
             return StatusNameMap[the_enum];
         }
 
-        public DamageType CharacterClassToDamageType(CharacterClass p_class)
+        public static DamageType CharacterClassToDamageType(CharacterClass p_class)
         {
             Dictionary<CharacterClass, DamageType> damage_type_map = new Dictionary<CharacterClass, DamageType>()
             {

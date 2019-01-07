@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Scripts
 {
-    public class TileManager
+    public static class TileManager
     {
 
     }

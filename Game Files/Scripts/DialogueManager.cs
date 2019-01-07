@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Scripts
 {
-    class DialogueManager
+    public static class DialogueManager
     {
     }
 }
