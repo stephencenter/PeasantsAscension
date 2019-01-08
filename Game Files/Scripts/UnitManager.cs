@@ -7,50 +7,50 @@ namespace Scripts
 {
     public static class UnitManager
     {
-        public static Unit player = new Unit(CEnums.UnitType.player, "John", "_player", true);
-        public static Unit solou = new Unit(CEnums.UnitType.player, "Solou", "_solou", true);
-        public static Unit chili = new Unit(CEnums.UnitType.player, "Chili", "_chili", true);
-        public static Unit chyme = new Unit(CEnums.UnitType.player, "Chyme", "_chyme", false);
-        public static Unit storm = new Unit(CEnums.UnitType.player, "Storm", "_storm", false);
-        public static Unit parsto = new Unit(CEnums.UnitType.player, "Parsto", "_parsto", false);
-        public static Unit adorine = new Unit(CEnums.UnitType.player, "Adorine", "_adorine", false);
+        public static PlayableCharacter player = new PlayableCharacter("John", "_player", true);
+        public static PlayableCharacter solou = new PlayableCharacter("Solou", "_solou", true);
+        public static PlayableCharacter chili = new PlayableCharacter("Chili", "_chili", true);
+        public static PlayableCharacter chyme = new PlayableCharacter("Chyme", "_chyme", false);
+        public static PlayableCharacter storm = new PlayableCharacter("Storm", "_storm", false);
+        public static PlayableCharacter parsto = new PlayableCharacter("Parsto", "_parsto", false);
+        public static PlayableCharacter adorine = new PlayableCharacter("Adorine", "_adorine", false);
 
         // Returns ALL PCUs, alive, dead, active, and inactive
-        public static List<Unit> GetAllPCUs()
+        public static List<PlayableCharacter> GetAllPCUs()
         {
-            return new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+            return new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
         }
 
         // Returns all PCUs that are alive, regardless of whether they're active or not
-        public static List<Unit> GetAlivePCUs()
+        public static List<PlayableCharacter> GetAlivePCUs()
         {
-            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+            var pcu_list = new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
             pcu_list = pcu_list.Where(x => x.IsAlive()).ToList();
 
             return pcu_list;
         }
 
         // Returns all PCUs that are active, regardless of whether they're alive or not
-        public static List<Unit> GetActivePCUs()
+        public static List<PlayableCharacter> GetActivePCUs()
         {
-            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+            var pcu_list = new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
             pcu_list = pcu_list.Where(x => x.Active).ToList();
 
             return pcu_list;
         }
 
         // Returns all PCUs that are both alive and active
-        public static List<Unit> GetAliveActivePCUs()
+        public static List<PlayableCharacter> GetAliveActivePCUs()
         {
-            var pcu_list = new List<Unit>() { player, solou, chili, chyme, storm, parsto, adorine };
+            var pcu_list = new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
             pcu_list = pcu_list.Where(x => x.Active && x.IsAlive()).ToList();
 
             return pcu_list;
         }
 
-        public static Unit GenerateMonster()
+        public static Monster GenerateMonster()
         {
-            return new Unit(CEnums.UnitType.monster, "Whispering Goblin");
+            return new Monster("Whispering Goblin");
         }
 
         public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, int spell_power = 0, bool do_criticals = true)
@@ -73,9 +73,9 @@ namespace Scripts
 
             int final_damage;
 
-            if (attacker.IsPCU())
+            if (attacker is PlayableCharacter)
             {
-                weapon_power = InventoryManager.GetEquipment(attacker.PCUID)[CEnums.EquipmentType.weapon].Power;
+                weapon_power = InventoryManager.GetEquipment(attacker.UnitID)[CEnums.EquipmentType.weapon].Power;
 
                 attack = attacker.TempStats["attack"];
                 p_attack = attacker.TempStats["p_attack"];
@@ -91,11 +91,11 @@ namespace Scripts
                 weapon_power = 0;
             }
 
-            if (target.IsPCU())
+            if (target is PlayableCharacter)
             {
-                double a = InventoryManager.GetEquipment(target.PCUID)[CEnums.EquipmentType.head].Resist;
-                double b = InventoryManager.GetEquipment(target.PCUID)[CEnums.EquipmentType.body].Resist;
-                double c = InventoryManager.GetEquipment(target.PCUID)[CEnums.EquipmentType.legs].Resist;
+                double a = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.head].Resist;
+                double b = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.body].Resist;
+                double c = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.legs].Resist;
                 armor_resist = a + b + c;
 
                 defense = target.TempStats["defense"];
@@ -122,12 +122,6 @@ namespace Scripts
                     final_damage /= 2;
                     Console.WriteLine($"{attacker.Name}'s weakness reduces their attack damage by half!");
                 }
-
-                // Mages deal half damage with non-magical attacks
-                if (attacker.PClass == CEnums.CharacterClass.mage)
-                {
-                    final_damage /= 2;
-                }
             }
 
             else if (damage_type == CEnums.DamageType.physical)
@@ -140,28 +134,16 @@ namespace Scripts
                     final_damage /= 2;
                     Console.WriteLine($"{attacker.Name}'s blindness reduces their attack damage by half!");
                 }
-
-                // Mages deal half damage with non-magical attacks
-                if (attacker.PClass == CEnums.CharacterClass.mage)
-                {
-                    final_damage /= 2;
-                }
             }
 
             else
             {
                 final_damage = (int)((m_attack - m_defense / 2) * (1 + armor_resist) * (1 + spell_power));
-
-                // Classes that aren't mages or paladins deal 0.75x damage with magical attacks
-                if (attacker.PClass == CEnums.CharacterClass.mage || attacker.PClass == CEnums.CharacterClass.paladin)
-                {
-                    final_damage = (int) (final_damage*0.75);
-                }
             }
 
             if (rng.Next(0, 100) < 15 && do_criticals)
             {
-                final_damage = (int)(final_damage*1.5);
+                final_damage = (int)(final_damage * 1.5);
                 SoundManager.critical_hit.Play();
                 Console.WriteLine("It's a critical hit! 1.5x damage!");
 
@@ -188,7 +170,7 @@ namespace Scripts
             if (attacker_element == CEnums.Element.neutral || target_element == CEnums.Element.neutral)
             {
                 return damage;
-            }      
+            }
 
             // If the target is weak to the attackers element, then the attack will deal 1.5x damage
             if (CEnums.ElementChart[attacker_element][1] == target_element)
@@ -239,9 +221,9 @@ namespace Scripts
         /* =========================== *
          *      GENERAL PROPERTIES     *
          * =========================== */
+        public string UnitID { get; set; }
         public CEnums.Element off_element = CEnums.Element.neutral;
         public CEnums.Element def_element = CEnums.Element.neutral;
-        public CEnums.UnitType Type { get; set; }
         public List<CEnums.Status> Statuses = new List<CEnums.Status> { CEnums.Status.alive, CEnums.Status.blindness };
 
         public string Name { get; set; }
@@ -249,6 +231,8 @@ namespace Scripts
         public int MaxHP { get; set; }
         public int MP { get; set; }
         public int MaxMP { get; set; }
+        public int AP { get; set; }
+        public int MaxAP { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
         public int PAttack { get; set; }
@@ -258,33 +242,6 @@ namespace Scripts
         public int Speed { get; set; }
         public int Evasion { get; set; }
         public int Level { get; set; }
-
-        /* =========================== *
-         *      PLAYER PROPERTIES      *
-         * =========================== */
-        public string PCUID { get; set; }
-        public CEnums.CharacterClass PClass { get; set; }
-        public bool Active { get; set; }
-        public int CurrentXP { get; set; }
-        public int RequiredXP { get; set; }
-        public int AP { get; set; }
-        public int MaxAP { get; set; }
-        public char CurrentMove { get; set; }
-        public Unit CurrentTarget { get; set; }
-        public Ability CurrentAbility { get; set; }
-        public Spell CurrentSpell { get; set; }
-
-        public Dictionary<string, int> Attributes = new Dictionary<string, int>()
-        {
-            { "int", 1 },
-            { "wis", 1 },
-            { "str", 1 },
-            { "con", 1 },
-            { "dex", 1 },
-            { "per", 1 },
-            { "cha", 1 },
-            { "fte", 1 }
-        };
 
         public Dictionary<string, int> TempStats = new Dictionary<string, int>()
         {
@@ -298,40 +255,14 @@ namespace Scripts
             { "evasion", 0 }
         };
 
-        public Dictionary<string, dynamic> PlayerAbilityFlags = new Dictionary<string, dynamic>()
-        {
-            {"ascend_used", false },
-            {"berserk", false },
-            {"rolling", false }
-        };
-
         /* =========================== *
-         *      MONSTER PROPERTIES     *
+         *           METHODS           *
          * =========================== */
-        public CEnums.MonsterClass MClass { get; set; }
-        public CEnums.Status StatusOnAttack { get; set; }
-        public bool IsDefending { get; set; }
-        public int DroppedGold { get; set; }
-        public int DroppedXP { get; set; }
-        public List<Item> DroppedItems { get; set; }
-        public string AttackMessage { get; set; }
-        public string AsciiArt { get; set; }
-
-        public Dictionary<string, dynamic> MonsterAbilityFlags = new Dictionary<string, dynamic>()
+        public bool IsAlive()
         {
-            {"poison_pow", 0},
-            {"poison_dex", 0},
-            {"knockout_turns", 0},
-            {"judgment_day", 0},
-            {"taunted_turn", 0},
-            {"taunted_user", null},
-            {"drained", false},
-            {"disarmed", false}
-        };
+            return !HasStatus(CEnums.Status.dead);
+        }
 
-        /* =========================== *
-         *        GENERAL METHODS      *
-         * =========================== */
         public void SetTempStats()
         {
             TempStats["attack"] = Attack;
@@ -342,26 +273,6 @@ namespace Scripts
             TempStats["m_defense"] = MDefense;
             TempStats["speed"] = Speed;
             TempStats["evasion"] = Evasion;
-        }
-
-        public bool IsAlive()
-        {
-            return !HasStatus(CEnums.Status.dead);
-        }
-
-        public bool IsPCU()
-        {
-            return Type == CEnums.UnitType.player;
-        }
-
-        public bool IsMonster()
-        {
-            return (Type == CEnums.UnitType.monster || Type == CEnums.UnitType.boss);
-        }
-
-        public bool IsBoss()
-        {
-            return Type == CEnums.UnitType.boss;
         }
 
         public bool HasStatus(CEnums.Status status)
@@ -386,8 +297,6 @@ namespace Scripts
             Evasion = Math.Min(256, Evasion);
             Statuses = Statuses.Distinct().ToList();
 
-            TempStats["evasion"] = Math.Min(PlayerAbilityFlags["rolling"] ? 512 : 256, TempStats["evasion"]);
-
             if (HP > 0 && !IsAlive())
             {
                 Statuses = new List<CEnums.Status>() { CEnums.Status.alive };
@@ -400,6 +309,62 @@ namespace Scripts
         }
 
         /* =========================== *
+         *          CONSTRUCTOR        *
+         * =========================== */
+        public Unit(string name)
+        {
+            Name = name;
+            HP = 20;
+            MaxHP = 20;
+            MP = 5;
+            MaxMP = 5;
+            AP = 10;
+            MaxAP = 10;
+            Attack = 8;
+            Defense = 5;
+            PAttack = 8;
+            PDefense = 5;
+            MAttack = 8;
+            MDefense = 5;
+            Speed = 6;
+            Evasion = 3;
+            Level = 1;
+
+        }
+    }
+
+    public class PlayableCharacter : Unit
+    {
+        public CEnums.CharacterClass PClass { get; set; }
+        public bool Active { get; set; }
+        public int CurrentXP { get; set; }
+        public int RequiredXP { get; set; }
+        public char CurrentMove { get; set; }
+        public Unit CurrentTarget { get; set; }
+        public Ability CurrentAbility { get; set; }
+        public Spell CurrentSpell { get; set; }
+
+        public Dictionary<string, int> Attributes = new Dictionary<string, int>()
+        {
+            { "int", 1 },
+            { "wis", 1 },
+            { "str", 1 },
+            { "con", 1 },
+            { "dex", 1 },
+            { "per", 1 },
+            { "cha", 1 },
+            { "fte", 1 }
+        };
+
+
+        public Dictionary<string, dynamic> PlayerAbilityFlags = new Dictionary<string, dynamic>()
+        {
+            {"ascend_used", false },
+            {"berserk", false },
+            {"rolling", false }
+        };
+
+        /* =========================== *
          *        PLAYER METHODS       *
          * =========================== */
         public void PrintBattleOptions()
@@ -407,7 +372,7 @@ namespace Scripts
             Console.WriteLine($"Pick {Name}'s Move:\n      [1] Standard Attack\n      [2] Use Magic\n      [3] Use Abilities\n      [4] Use Items\n      [5] Run");
         }
 
-        public void PlayerChoice(List<Unit> monster_list)
+        public void PlayerChoice(List<Monster> monster_list)
         {
             PrintBattleOptions();
 
@@ -481,6 +446,7 @@ namespace Scripts
                         {
                             int true_pad = padding - ability.AbilityName.Length;
                             Console.WriteLine($"      [{counter + 1}] {ability.AbilityName} {new string('-', true_pad)}--> {ability.APCost} AP");
+                            counter++;
                         }
 
                         while (true)
@@ -494,7 +460,7 @@ namespace Scripts
 
                             catch (Exception ex)
                             {
-                                if (ex is ArgumentException || ex is IndexOutOfRangeException)
+                                if (ex is FormatException || ex is ArgumentOutOfRangeException)
                                 {
                                     if (CMethods.IsExitString(chosen_ability))
                                     {
@@ -575,7 +541,7 @@ namespace Scripts
             }
         }
 
-        public string PlayerExecuteMove(List<Unit> monster_list)
+        public string PlayerExecuteMove(List<Monster> monster_list)
         {
             Random rng = new Random();
 
@@ -583,12 +549,12 @@ namespace Scripts
 
             // If the player's target is an enemy, and the target died before the player's turn began,
             // then the attack automatically redirects to a random living enemy.
-            if (CurrentTarget != null && CurrentTarget.IsMonster() && !CurrentTarget.IsAlive())
+            if (CurrentTarget != null && CurrentTarget is Monster && !CurrentTarget.IsAlive())
             {
                 CurrentTarget = monster_list[rng.Next(monster_list.Count)];
             }
 
-            Weapon player_weapon = InventoryManager.GetEquipment(PCUID)[CEnums.EquipmentType.weapon];
+            Weapon player_weapon = InventoryManager.GetEquipment(UnitID)[CEnums.EquipmentType.weapon];
 
             Console.WriteLine($"-{Name}'s Turn-");
 
@@ -700,7 +666,7 @@ namespace Scripts
                 CurrentAbility.UseAbility(this);
 
             }
-            
+
             // Run away
             else if (CurrentMove == '5' && BattleManager.RunAway(this, monster_list))
             {
@@ -711,10 +677,10 @@ namespace Scripts
             return "";
         }
 
-        public bool PlayerGetTarget(List<Unit> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
+        public bool PlayerGetTarget(List<Monster> monster_list, string action_desc, bool target_allies, bool target_enemies, bool allow_dead, bool allow_inactive)
         {
             // A list of PCUs that are valid for targetting (could be unused if target_allies is false)
-            List<Unit> pcu_list;
+            List<PlayableCharacter> pcu_list;
 
             if (allow_inactive)
             {
@@ -747,12 +713,13 @@ namespace Scripts
             }
 
             // The full list of valid targets, including both monsters and allies if applicable
-            List<Unit> valid_targets;
+            List<dynamic> valid_targets = new List<dynamic>(); 
 
             // Do this if both allies and enemies are valid targets (e.g. some abilities and spells)
             if (target_allies && target_enemies)
             {
-                valid_targets = pcu_list.Concat(monster_list.Where(x => x.IsAlive())).ToList();
+                pcu_list.ForEach(x => valid_targets.Add(x));
+                monster_list.Where(x => x.IsAlive()).ToList().ForEach(x => valid_targets.Add(x));
             }
 
             // Do this if the player is allowed to target allies but not enemies (e.g. items, some spells/abilities)
@@ -764,7 +731,7 @@ namespace Scripts
                     return true;
                 }
 
-                valid_targets = pcu_list;
+                pcu_list.ForEach(x => valid_targets.Add(x));
             }
 
             // Do this if the player is allowed to target enemies but not allies (e.g. attacks, some spells/abilities)
@@ -776,7 +743,7 @@ namespace Scripts
                     return true;
                 }
 
-                valid_targets = monster_list.Where(x => x.IsAlive()).ToList();
+                monster_list.Where(x => x.IsAlive()).ToList().ForEach(x => valid_targets.Add(x));
             }
 
             else
@@ -820,13 +787,50 @@ namespace Scripts
         }
 
         /* =========================== *
+         *          CONSTRUCTOR        *
+         * =========================== */
+        public PlayableCharacter(string name, string unit_id, bool active) : base(name)
+        {
+            UnitID = unit_id;
+            Active = active;
+            CurrentXP = 0;
+            RequiredXP = 3;
+        }
+    }
+
+    public class Monster : Unit
+    {
+        public CEnums.MonsterClass MClass { get; set; }
+        public CEnums.Status StatusOnAttack { get; set; }
+        public bool IsDefending { get; set; }
+        public int DroppedGold { get; set; }
+        public int DroppedXP { get; set; }
+        public List<Item> DroppedItems { get; set; }
+        public string AttackMessage { get; set; }
+        public string AsciiArt { get; set; }
+
+        public Unit CurrentTarget { get; set; }
+
+        public Dictionary<string, dynamic> MonsterAbilityFlags = new Dictionary<string, dynamic>()
+        {
+            {"poison_pow", 0},
+            {"poison_dex", 0},
+            {"knockout_turns", 0},
+            {"judgment_day", 0},
+            {"taunted_turn", 0},
+            {"taunted_user", null},
+            {"drained", false},
+            {"disarmed", false}
+        };
+
+        /* =========================== *
          *        MONSTER METHODS      *
          * =========================== */
-        public void MonsterExecuteMove(int turn_count)
+        public void MonsterExecuteMove()
         {
             // Base Turn
             SoundManager.item_pickup.Stop();
-            MonsterGetTarget(turn_count);
+            MonsterGetTarget();
 
             Console.WriteLine($"-{Name}'s Turn-");
 
@@ -858,13 +862,13 @@ namespace Scripts
             MonsterDoAbilities();
         }
 
-        public void MonsterGetTarget(int turn_count)
+        public void MonsterGetTarget()
         {
             Random rng = new Random();
 
             CurrentTarget = UnitManager.GetAliveActivePCUs()[rng.Next(UnitManager.GetAliveActivePCUs().Count)];
 
-            if (MonsterAbilityFlags["taunted_turn"] == turn_count)
+            if (MonsterAbilityFlags["taunted_turn"] == BattleManager.turn_counter)
             {
                 CurrentTarget = MonsterAbilityFlags["taunted_user"];
             }
@@ -872,39 +876,55 @@ namespace Scripts
 
         public void MonsterDoAbilities()
         {
-            /*
-            def do_abilities(self):
-            if self.ability_vars['knockout_turns']:
-                self.ability_vars['knockout_turns'] -= 1
+            Random rng = new Random();
 
-                if not self.ability_vars['knockout_turns']:
-                    main.smart_sleep(0.5)
-                    sounds.buff_spell.play()
-                    self.status_ail = [x for x in self.status_ail if x != "asleep"]
-                    print(f"The {self.name} woke up!")
+            // Sleep prevents the unit from acting
+            if (MonsterAbilityFlags["knockout_turns"] > 0)
+            {
+                // Number of turns remaining for knockout gas goes down by 1 each turn
+                MonsterAbilityFlags["knockout_turns"]--;
 
-                else:
-                    chance = 25 if isinstance(self, Boss) else 10
+                // If decrementing knockout_turns caused it to equal 0, then wake up
+                if (MonsterAbilityFlags["knockout_turns"] == 0)
+                {
+                    Thread.Sleep(500);
+                    SoundManager.buff_spell.Play();
+                    Statuses.Remove(CEnums.Status.sleep);
+                    Console.WriteLine($"The {Name} woke up!");
+                }
+                
+                else
+                {
+                    int chance = 10;
 
-                    if random.randint(0, 100) < chance:
-                        main.smart_sleep(0.5)
-                        sounds.buff_spell.play()
-                        self.ability_vars['knockout_turns'] = 0
-                        self.status_ail = [x for x in self.status_ail if x != "asleep"]
-                        print(f"The {self.name} woke up early!")
+                    if (rng.Next(0, 100) < chance)
+                    {
+                        Thread.Sleep(500);
+                        SoundManager.buff_spell.Play();
+                        Statuses.Remove(CEnums.Status.sleep);
+                        Console.WriteLine($"The {Name} woke up early!");
+                    }
+                }
+            }
 
-            if 'poisoned' in self.status_ail:
-                main.smart_sleep(0.5)
-                damage = math.ceil(self.ability_vars['poison_pow'] * self.max_hp + self.ability_vars['poison_dex'])
-                self.hp -= damage
-                print(f"The {self.name} took {damage} damage from poison!")
-                sounds.poison_damage.play()
+            // Poison deals damage per turn
+            if (HasStatus(CEnums.Status.poison))
+            {
+                int poison_damage = MonsterAbilityFlags["poison_pow"] * MaxHP + MonsterAbilityFlags["poison_dex"];
+                HP -= poison_damage;
+                SoundManager.poison_damage.Play();
+                Console.WriteLine($"The {Name} took {poison_damage} from poison!");
+            }
 
-            if self.ability_vars['judgment_day'] == battle.turn_counter:
-                main.smart_sleep(0.5)
-                print(f"{self.name}'s judgment day has arrived. The darkness devours it...")
-                sounds.poison_damage.play()
-                self.hp = 0 */
+            // Judgment day instantly kills the unit if the wait timer expires
+            if (MonsterAbilityFlags["judgment_day"] == BattleManager.turn_counter)
+            {
+                Thread.Sleep(500);
+                Console.WriteLine($"{Name}'s judgment day has arrived. The darkness devours it...");
+                HP = 0;
+            }
+
+
         }
 
         public void MonsterMeleeAI()
@@ -927,7 +947,7 @@ namespace Scripts
                 return;
             }
 
-            else if (IsDefending) 
+            else if (IsDefending)
             {
                 Console.WriteLine($"The {Name} stops defending, returning its defense stats to normal.");
                 IsDefending = false;
@@ -945,7 +965,7 @@ namespace Scripts
             if (CurrentTarget.Evasion < rng.Next(0, 512))
             {
                 SoundManager.enemy_hit.Play();
-                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget}!");
+                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
             }
 
             else
@@ -1045,32 +1065,11 @@ namespace Scripts
         }
 
         /* =========================== *
-         *         CONSTRUCTORS        *
+         *          CONSTRUCTOR        *
          * =========================== */
-        public Unit(CEnums.UnitType unit_type, string name)
+        public Monster(string name) : base(name)
         {
-            // Create a monster
-            if (unit_type != CEnums.UnitType.monster)
-            {
-                throw new Exception("Can't create a non-monster with this constructor");
-            }
-
-            Type = CEnums.UnitType.monster;
-            Name = name;
-            HP = 20;
-            MaxHP = 20;
-            MP = 5;
-            MaxMP = 5;
-            Attack = 8;
-            Defense = 5;
-            PAttack = 8;
-            PDefense = 5;
-            MAttack = 8;
-            MDefense = 5;
-            Speed = 6;
-            Evasion = 3;
-            Level = 1;
-
+            UnitID = Guid.NewGuid().ToString();
             DroppedItems = new List<Item>();
             MClass = CEnums.MonsterClass.melee;
             StatusOnAttack = CEnums.Status.paralyzation;
@@ -1079,38 +1078,6 @@ namespace Scripts
             DroppedXP = 5;
             AttackMessage = "attacks";
             AsciiArt = "";
-        }
-
-        public Unit(CEnums.UnitType unit_type, string name, string pcu_id, bool active)
-        {
-            // Create a pcu
-            if (unit_type != CEnums.UnitType.player)
-            {
-                throw new Exception("Can't create a non-player with this constructor");
-            }
-
-            Type = CEnums.UnitType.player;
-            Name = name;
-            HP = 20;
-            MaxHP = 20;
-            MP = 5;
-            MaxMP = 5;
-            Attack = 8;
-            Defense = 5;
-            PAttack = 8;
-            PDefense = 5;
-            MAttack = 8;
-            MDefense = 5;
-            Speed = 6;
-            Evasion = 3;
-            Level = 1;
-
-            PCUID = pcu_id;
-            Active = active;
-            CurrentXP = 0;
-            RequiredXP = 3;
-            AP = 10;
-            MaxAP = 10;
         }
     }
 }

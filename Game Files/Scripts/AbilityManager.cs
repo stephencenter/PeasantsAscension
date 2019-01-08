@@ -74,15 +74,16 @@ dealt.", 5)
                     // Assassin abilities - Text should not pass this line -> |
                     new InjectPoisonAbility("Inject Poison", @"\
 Injects a poison into a target enemy that deals [2 + Dexterity] magical
-damage per turn. Stacks with multiple uses, with each stack increasing damage
-dealt per turn by 2% of the target's maximum HP.", 2),
+damage per turn, capped at 10% the target's maximum HP. Stacks with multiple 
+uses, with each stack increasing damage dealt per turn by 2% of the target's 
+maximum HP.", 2),
 
                     new KnockoutGasAbility("Knockout Gas", @"\
 The user sneaks behind a target enemy and applies knockout gas to them,
 putting them to sleep. The sleep lasts for [4% of Dexterity] turns, with
-a minimum of 2 turns and a maximum of 8. The target has a 10% chance of randomly
-waking up each turn. Bosses have a 25% chance. Does not stack with multiple
-uses - repeat uses only refresh the sleep duration.", 2),
+a minimum of 2 turns and a maximum of 8. The target has a 10% chance of 
+randomly waking up each turn. Does not stack with multiple uses - repeat uses 
+only refresh the sleep duration.", 2),
 
                     new DisarmingBlowAbility("Disarming Blow", @"\
 The user knocks the weapon out of a target enemy's hands, taking it for

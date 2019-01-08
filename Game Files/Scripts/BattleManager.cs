@@ -13,8 +13,8 @@ namespace Scripts
         {
             Random rng = new Random();
 
-            List<Unit> monster_list = new List<Unit>() { UnitManager.GenerateMonster() };
-            List<Unit> active_pcus = UnitManager.GetActivePCUs();
+            List<Monster> monster_list = new List<Monster>() { UnitManager.GenerateMonster() };
+            List<PlayableCharacter> active_pcus = UnitManager.GetActivePCUs();
             turn_counter = 0;
 
             // 33% chance to add a second monster
@@ -58,13 +58,15 @@ namespace Scripts
             {
                 turn_counter++;
 
-                List<Unit> speed_list = active_pcus.Concat(monster_list).OrderByDescending(x => x.Speed).ToList();
+                List<dynamic> speed_list = new List<dynamic>();
+                active_pcus.ForEach(x => speed_list.Add(x));
+                monster_list.ForEach(x => speed_list.Add(x));
 
                 // Display the stats for every battle participant
                 DisplayBattleStats(active_pcus, monster_list);
 
                 // Iterate through each active players
-                foreach (Unit character in active_pcus)
+                foreach (PlayableCharacter character in active_pcus)
                 {
                     if (0 < character.HP && character.HP <= character.MaxHP * 0.20)
                     {
@@ -85,7 +87,7 @@ namespace Scripts
                 }
 
                 // Iterate through each unit in the battle from fastest to slowest
-                foreach (Unit unit in speed_list)
+                foreach (dynamic unit in speed_list)
                 {
                     if (unit.IsAlive())
                     {
@@ -97,14 +99,14 @@ namespace Scripts
                         CMethods.PrintDivider();
 
                         // Leave the battle if the player runs away
-                        if (unit.IsPCU() && unit.PlayerExecuteMove(monster_list) == "ran")
+                        if (unit is PlayableCharacter && unit.PlayerExecuteMove(monster_list) == "ran")
                         {
                             return;
                         }
 
-                        else if (unit.IsMonster())
+                        else if (unit is Monster)
                         {
-                            unit.MonsterExecuteMove(turn_counter);
+                            unit.MonsterExecuteMove();
                         }
 
                         if (active_pcus.Any(x => x.HP > 0))
@@ -127,9 +129,9 @@ namespace Scripts
                     }
 
                     // If any unit died on this turn, set their health to 0 and set their status as 'dead'
-                    foreach (Unit other_unit in speed_list)
+                    foreach (dynamic other_unit in speed_list)
                     {
-                        if (other_unit.IsPCU() && other_unit.HP <= 0 && other_unit.IsAlive())
+                        if (other_unit is PlayableCharacter && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
@@ -140,7 +142,7 @@ namespace Scripts
                             CMethods.PressEnterReturn();
                         }
 
-                        else if (other_unit.IsMonster() && other_unit.HP <= 0 && other_unit.IsAlive())
+                        else if (other_unit is Monster && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
@@ -257,7 +259,7 @@ namespace Scripts
                         continue */
         }
 
-        public static bool RunAway(Unit runner, List<Unit> monster_list)
+        public static bool RunAway(Unit runner, List<Monster> monster_list)
         {
             Random rng = new Random();
 
@@ -379,10 +381,14 @@ namespace Scripts
             }
         }
 
-        public static void DisplayBattleStats(List<Unit> active_pcus, List<Unit> monster_list)
+        public static void DisplayBattleStats(List<PlayableCharacter> active_pcus, List<Monster> monster_list)
         {
+            foreach (PlayableCharacter unit in active_pcus)
+            {
+                unit.FixAllStats();
+            }
 
-            foreach (Unit unit in active_pcus.Concat(monster_list))
+            foreach(Monster unit in monster_list)
             {
                 unit.FixAllStats();
             }
@@ -390,10 +396,10 @@ namespace Scripts
             CMethods.PrintDivider();
 
             Console.WriteLine("Your party: ");
-            DisplayTeamStats(active_pcus);
+            DisplayTeamStats(active_pcus.Select(x => (Unit)x).ToList());
 
             Console.WriteLine("Enemy team: ");
-            DisplayTeamStats(monster_list);
+            DisplayTeamStats(monster_list.Select(x => (Unit)x).ToList());
 
             CMethods.PrintDivider();
         }
