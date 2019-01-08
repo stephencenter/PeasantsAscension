@@ -367,6 +367,474 @@ namespace Scripts
         /* =========================== *
          *        PLAYER METHODS       *
          * =========================== */
+        public void PlayerChooseName()
+        {
+            /*
+            while True:
+                # Ask the player for their name, and remove any non alphanumeric/dash characters from it
+                # Also remove beginning/ending whitespace, and repeated spaces
+                choice1 = main.s_input('What is your name, young adventurer? | Input Name: ')
+                choice2 = ' '.join(re.sub('[^\w\-_ ]', '', choice1).split())
+
+                # If your original choice contained characters, but the filtered version didn't,
+                # this message will pop up.
+                if choice1 and not choice2:
+                    print("I'm sorry, I didn't quite catch that.")
+                    main.s_input('\nPress enter/return ')
+                    print('-'*save_load.divider_size)
+                    continue
+
+                # You can't name yourself nothing. Sorry but that's the rules.
+                if not(choice1 or choice2) :
+                    continue
+
+                self.name = choice2
+
+                while True:
+                    if self.name.lower() == 'y':
+                        print("""Your name's "y", eh? Must be in a hurry.""")
+                        main.s_input('\nPress enter/return ')
+                        print('-' * save_load.divider_size)
+
+                    elif self.name.lower() in main.friend_names:
+                        print(f"Ah, {self.name}! My dear friend, it is great to see you again!")
+                        main.s_input('\nPress enter/return ')
+                        print('-' * save_load.divider_size)
+
+                    elif self.name.lower() == "frisk":
+                        print("Frisk? Sorry, no hard mode for you in this game.")
+                        main.s_input('\nPress enter/return ')
+                        print('-' * save_load.divider_size)
+
+                    else:
+                        y_n = main.s_input(f'So, your name is "{self.name}?" | Y/N: ').lower()
+
+                        if y_n.startswith('n'):
+                            print('-'*save_load.divider_size)
+                            self.name = ''
+                            break
+
+                        elif not y_n.startswith('y'):
+                            continue
+
+                        print('-'*save_load.divider_size)
+
+                    return */
+        }
+        
+        public void PlayerChooseClass()
+        {
+            /*
+            while True:
+                class_ = main.s_input(f"""{self.name}, which class would you like to train as?
+          [1] Mage: Master of the arcane arts
+          [2] Assassin: Proficient in both stealth and murder
+          [3] Ranger: Fast and evasive, good with a bow
+          [4] Paladin: Holy knight whose healing prowess is unmatched
+          [5] Monk: Fighter whose fists are a worthy oppenent to any blade
+          [6] Warrior: Excellent soldier, good balance of offense and defense
+          [7] Bard: True team-player and master musician
+    Input[#]: """)
+
+                try:
+                    class_ = {'1': "mage",
+                              '2': "assassin",
+                              '3': "ranger",
+                              '4': "paladin",
+                              '5': "monk",
+                              '6': "warrior",
+                              '7': "bard"}
+        [class_]
+
+        class_desc = {'mage': """\
+        -Can use abilities that scale off Intelligence
+        -Capable of learning every spell
+        -Deals Pierce Damage with Standard Attacks
+        -Deals 50% damage with Standard Attacks
+        -High Magical Attack/Defense and MP
+        -Average HP, Speed, and Evasion
+        -Low Pierce Attack and Pierce/Physical Defense""",
+
+                                  'assassin': """\
+        -Can use abilities that scale off Dexterity
+        -Deals Physical Damage with Standard Attacks
+        -Deals 75% damage with Magical Spells
+        -High Speed, Physical Attack, and Evasion
+        -Average HP, Pierce Defense, and Physical Defense
+        -Low Magical Attack/Defense and MP""",
+
+                                  'ranger': """\
+        -Can use abilities that scale off Perception
+        -Deals Pierce Damage with Standard Attacks
+        -Deals 75% damage with Magical Spells
+        -High Pierce Attack, Speed, and Evasion
+        -Average MP, HP, and Pierce Defense
+        -Low HP, Pierce/Physcial Defense, and Magical Attack""",
+
+                                  'paladin': """\
+        -Can use abilities that scale off Wisdom
+        -Can learn all Healing spells and offensive Light spells
+        -Deals Physical Damage with Standard Attacks
+        -High Magical/Physical Defense
+        -Average MP, HP, and Pierce Defense
+        -Low Physical/Magical Attack, Speed, and Evasion""",
+
+                                  'monk': """\
+        -Can use abilities that scale off Constitution
+        -Capable of learning all Buff spells
+        -Deals Physical damage with Standard Attacks
+        -Deals 75% damage with Magical Spells
+        -High Physical Attack, Speed, and Evasion
+        -Average MP and Magical Attack
+        -Low Pierce/Physical Defense and HP""",
+
+                                  'warrior': """\
+        -Can use abilities that scale off Strength
+        -Deals Physical Damage with Standard Attacks
+        -Deals 75% damage with Magical Spells
+        -High Pierce/Physical Defense and Physical Attack
+        -Average HP
+        -Low Magical Attack/Defense, Speed, Evasion, and MP""",
+
+                                  'bard': """\
+        -Can use abilities that scale of Charisma
+        -Deals Magical Damage with Standard Attacks
+        -Deals 75% damage with Magical Spells
+        -Has 6 Abilities instead of 4
+        -High Evasion
+        -Average MP, Speed, and Magical Defense
+        -Low HP, Magical Attack, and Physical/Pierce Defense"""}[class_]
+
+                except KeyError:
+                    continue
+
+                print('-'*save_load.divider_size)
+                print(f"Information about {class_.title()}s: ")
+                print(class_desc)
+                print('-'*save_load.divider_size)
+
+                while True:
+                    y_n = main.s_input(f'You wish to be of the {class_.title()} class? | Y/N: ').lower()
+
+                    if y_n.startswith('y'):
+                        print('-'*save_load.divider_size)
+                        self.class_ = class_
+
+                        return
+
+                    elif y_n.startswith('n'):
+                        print()
+                        break */
+        }
+        
+        public void PlayerLevelUp()
+        {
+            /*
+            if self.exp >= self.req_xp:
+            sounds.play_music('../Music/Adventures in Pixels.ogg')
+
+            rem_points = 0  # Remaining Skill Points
+            while self.exp >= self.req_xp:
+                print('-'*save_load.divider_size)
+                self.lvl += 1
+                print(f"{self.name} has advanced to level {self.lvl}!")
+
+                rem_points += 3
+                magic.new_spells(self)
+
+                if self.class_ == 'warrior':
+                    self.attk += 3
+                    self.dfns += 3
+                    self.m_attk += 1
+                    self.m_dfns += 1
+                    self.p_dfns += 3
+                    self.spd += 1
+                    self.evad += 1
+                    self.max_hp += 2
+                    self.max_mp += 1
+
+                elif self.class_ == 'mage':
+                    self.p_dfns += 1
+                    self.p_attk += 2
+                    self.m_attk += 3
+                    self.m_dfns += 3
+                    self.dfns += 1
+                    self.spd += 1
+                    self.evad += 1
+                    self.max_hp += 1
+                    self.max_mp += 3
+
+                elif self.class_ == 'assassin':
+                    self.p_dfns += 2
+                    self.attk += 3
+                    self.dfns += 1
+                    self.m_attk += 1
+                    self.m_dfns += 1
+                    self.spd += 3
+                    self.evad += 3
+                    self.max_hp += 1
+                    self.max_mp += 1
+
+                elif self.class_ == 'ranger':
+                    self.p_attk += 3
+                    self.p_dfns += 1
+                    self.m_attk += 1
+                    self.m_dfns += 1
+                    self.dfns += 1
+                    self.spd += 3
+                    self.evad += 3
+                    self.max_hp += 1
+                    self.max_mp += 2
+
+                elif self.class_ == 'monk':
+                    self.p_dfns += 1
+                    self.attk += 3
+                    self.dfns += 1
+                    self.m_attk += 1
+                    self.m_dfns += 1
+                    self.spd += 3
+                    self.evad += 3
+                    self.max_hp += 1
+                    self.max_mp += 2
+
+                elif self.class_ == 'paladin':
+                    self.p_dfns += 2
+                    self.attk += 1
+                    self.dfns += 3
+                    self.m_attk += 1
+                    self.m_dfns += 3
+                    self.spd += 1
+                    self.evad += 1
+                    self.max_hp += 2
+                    self.max_mp += 2
+
+                elif self.class_ == 'bard':
+                    self.p_dfns += 1
+                    self.dfns += 1
+                    self.m_attk += 1
+                    self.m_dfns += 2
+                    self.spd += 2
+                    self.evad += 3
+                    self.max_hp += 1
+                    self.max_mp += 2
+
+                self.exp -= self.req_xp
+                self.req_xp = math.ceil((math.pow(self.lvl * 2, 2) - self.lvl))
+
+                fix_stats()
+
+            # The player restores all their health and mana when they level up
+            self.hp = copy.copy(self.max_hp)
+            self.mp = copy.copy(self.max_mp)
+            self.status_ail = ['alive']
+
+            print('-'*save_load.divider_size)
+            self.skill_points(rem_points)
+            print('-'*save_load.divider_size)
+
+            save_load.save_game()
+
+            return */
+        }
+        
+        public void PlayerAllocateSkillPoints()
+        {
+            /*
+            while rem_points > 0:
+            print(f"{self.name} has {rem_points} skill point{'s' if rem_points > 1 else ''} left to spend.")
+
+            skill = main.s_input("""Choose a skill to increase:
+      [1] INTELLIGENCE, The attribute of MAGES
+      [2] WIDSOM, the attribute of PALADINS
+      [3] STRENGTH, The attribute of WARRIORS
+      [4] CONSTITUTION, the attribute of MONKS
+      [5] DEXTERITY, the attribute of ASSASSINS
+      [6] PERCEPTION, the attribute of RANGERS
+      [7] CHARISMA, the attribute of BARDS
+      [8] FATE, the forgotten attribute
+      [9] DIFFICULTY, the forbidden attribute
+Input[#]: """).lower()
+
+            if skill and skill[0] in ['1', '2', '3', '4', '5', '6', '7', '8']:
+                if skill[0] == '1':
+                    act_skill = 'int'
+                    vis_skill = 'INTELLIGENCE'
+                    message = """\
+Increasing INTELLIGENCE will provide:
+    +1 Magical Attack
+    +1 Magical Defense
+    +1 MP
+    +Mage Ability Power"""
+
+                elif skill[0] == '2':
+                    act_skill = 'wis'
+                    vis_skill = 'WISDOM'
+                    message = """\
+Increasing WISDOM will provide:
+    +1 Heal from healing spells(Non-paladins)
+    +2 Heal from healing spells(Paladins)
+    +2 MP
+    +Paladin Ability Power"""
+
+                elif skill[0] == '3':
+                    act_skill = 'str'
+                    vis_skill = 'STRENGTH'
+                    message = """\
+Increasing STRENGTH will provide:
+    +1 Physical Attack
+    +1 Physical Defense
+    +1 Pierce Defense
+    +Warrior Ability Power"""
+
+                elif skill[0] == '4':
+                    act_skill = 'con'
+                    vis_skill = 'CONSTITUTION'
+                    message = """\
+Increasing CONSTITUTION will provide:
+    +1 HP
+    +1 Physical Defense
+    +1 Pierce Defense
+    +1 Magical Defense
+    +Monk Ability Power"""
+
+                elif skill[0] == '5':
+                    act_skill = 'dex'
+                    vis_skill = 'DEXTERITY'
+                    message = """\
+Increasing DEXTERITY will provide:
+    +1 Physical Attack
+    +1 Speed
+    +1 Evasion
+    +Assassin Ability Power"""
+
+                elif skill[0] == '6':
+                    act_skill = 'per'
+                    vis_skill = 'PERCEPTION'
+                    message = """\
+Increasing PERCEPTION will provide:
+    +1 Pierce Attack
+    +1 Pierce Defense
+    +1 Evasion
+    +Ranger Ability Power"""
+
+                elif skill[0] == '7':
+                    act_skill = 'cha'
+                    vis_skill = 'CHARISMA'
+                    message = """\
+Increasing CHARISMA will provide:
+    +Items cost 1% less(caps at 50% original cost)
+    +Items sell for 1% more(caps at 200% original sell value)
+    +Only the highest CHARISMA in party contributes to these
+    +Bard Ability Power"""
+
+                elif skill[0] == '8':
+                    act_skill = 'fte'
+                    vis_skill = 'FATE'
+                    message = """\
+Increasing FATE will provide:
+    +1 to a random attribute(won't choose DIFFICULTY or FATE)
+    +1 to a second random attribute (won't choose DIFFICULTY or FATE)
+    +Knowledge that your destiny is predetermined and nothing matters"""
+
+                elif skill[0] == '9':
+                    act_skill = "dif"
+                    vis_skill = "DIFFICULTY"
+                    message = """\
+Increasing DIFFICULTY will provide:
+    +0.5% Enemy Physical Attack (Applies to entire party)
+    +0.5% Enemy Pierce Attack(Applies to entire party)
+    +0.5% Enemy Magical Attack(Applies to entire party)
+    +More challenging experience"""
+
+                else:
+                    continue
+
+                print('-'*save_load.divider_size)
+
+                if act_skill == 'dif':
+                    print(f"Current {vis_skill}: {main.party_info['dif']}")
+
+                else:
+                    print(f"Current {vis_skill}: {self.attributes[act_skill]}")
+
+                print(message)
+                print('-'*save_load.divider_size)
+
+                while True:
+                    y_n = main.s_input(f"Increase {self.name}'s {vis_skill}? | Y/N: ").lower()
+
+                    if y_n.startswith('n'):
+                        print('-'*save_load.divider_size)
+                        break
+
+                    elif y_n.startswith('y'):
+                        self.increase_attribute(act_skill)
+
+                    else:
+                        continue
+
+                    if act_skill == 'dif':
+                        print('-'*save_load.divider_size)
+                        print("Difficulty increased!")
+                        print("The enemies of your world have grown in power!")
+
+                    if act_skill != 'fte':
+                        print('-'*save_load.divider_size)
+                        print(f"{self.name}'s {vis_skill} has increased!")
+
+                    # Decrement remaining points
+    rem_points -= 1
+
+                    print('-'*save_load.divider_size) if rem_points else ''
+
+                    break
+
+        print(f'\n{self.name} is out of skill points.') */
+        }
+
+        public void PlayerViewStats()
+        {
+            /*
+            fix_stats()
+
+            m_w = { 'fire': 'water',
+                   'water': 'electric',
+                   'electric': 'earth',
+                   'earth': 'wind',
+                   'wind': 'grass',
+                   'grass': 'ice',
+                   'ice': 'fire',
+                   'neutral': 'neutral',
+                   'light': 'dark',
+                   'dark': 'light'}
+    [self.def_element]
+
+            print(f"""-{self.name}'s Stats-
+    Level { self.lvl} {self.class_.title()
+        }
+        Statuses: {', '.join([x.title() for x in self.status_ail])}
+    XP: {self.exp}/{self.req_xp} / GP: {main.party_info['gp']}
+
+    HP: {self.hp}/{self.max_hp} / MP: {self.mp}/{self.max_mp} / AP: {self.ap}/{self.max_ap}
+    Physical: {self.attk} Attack / {self.dfns} Defense
+    Magical: {self.m_attk} Attack / {self.m_dfns} Defense
+    Piercing: {self.p_attk} Attack / {self.p_dfns} Defense
+    Speed: {self.spd}
+    Evasion: {self.evad}
+    Elements: Attacks are { self.off_element.title()} / Defense is {self.def_element.title()} / \
+    Weak to { m_w.title()}
+
+    Intelligence: {self.attributes['int']} 
+    Wisdom: {self.attributes['wis']}
+    Strength: {self.attributes['str']}
+    Constitution: {self.attributes['con']}
+    Dexterity: {self.attributes['dex']}
+    Perception: {self.attributes['per']}
+    Charisma: {self.attributes['cha']}
+    Difficulty: {main.party_info['dif']}""") 
+            main.s_input('\nPress enter/return ')*/
+        }
+
         public void PrintBattleOptions()
         {
             Console.WriteLine($"Pick {Name}'s Move:\n      [1] Standard Attack\n      [2] Use Magic\n      [3] Use Abilities\n      [4] Use Items\n      [5] Run");
@@ -789,7 +1257,7 @@ namespace Scripts
         /* =========================== *
          *          CONSTRUCTOR        *
          * =========================== */
-        public PlayableCharacter(string name, string unit_id, bool active) : base(name)
+            public PlayableCharacter(string name, string unit_id, bool active) : base(name)
         {
             UnitID = unit_id;
             Active = active;
@@ -826,6 +1294,72 @@ namespace Scripts
         /* =========================== *
          *        MONSTER METHODS      *
          * =========================== */
+        
+        public void GiveStatus()
+        {
+            /*
+            # Attempt to give the target a status ailment
+            status = random.choice([x for x in ['poisoned',
+                                                'silenced',
+                                                'weakened',
+                                                'blinded',
+                                                'paralyzed',
+                                                'muted'] if x not in target.status_ail])
+
+            print(f'The {self.name} is attempting to make {self.m_target.name} {status}...')
+            sounds.aim_weapon.play()
+            main.smart_sleep(0.75)
+
+            # There's a 50% chance that the status spell will work
+                if random.randint(0, 1) == 1:
+                sounds.buff_spell.play()
+                print(f'{self.m_target.name} is now {status}!')
+                target.status_ail.append(status)
+
+            else:
+                sounds.debuff.play()
+                print(f'The {self.name} failed to make {self.m_target.name} {status}!')
+
+            self.mp -= self.max_mp * 0.1 */
+        }
+    
+        public void GetDrops()
+        {
+            /*
+            if random.randint(0, 4) == 0:  # 20% chance
+            self.items = [random.choice(self.drop_list).item_id] */
+        }
+
+        public void MonsterLevelUp()
+        {
+            /* 
+            minlvl, maxlvl = tiles.find_cell_with_tile_id(main.party_info['current_tile'].tile_id).m_level
+            self.lvl = random.randrange(minlvl, maxlvl)
+
+            for x in range(1, self.lvl):
+                self.hp += 5
+                self.mp += 3
+                self.attk += 3
+                self.dfns += 3
+                self.p_attk += 3
+                self.p_dfns += 3
+                self.m_attk += 3
+                self.m_dfns += 3
+                self.spd += 3
+                self.evad += 2
+
+            self.max_hp = self.hp
+            self.max_mp = self.mp */
+        }
+
+        public void MonsterSetDifficulty()
+        {
+            /*
+            self.attk += self.attk * 0.0005 * main.party_info['dif']
+            self.m_attk += self.m_attk * 0.0005 * main.party_info['dif']
+            self.p_attk += self.p_attk * 0.0005 * main.party_info['dif'] */
+        }
+        
         public void MonsterExecuteMove()
         {
             // Base Turn
@@ -962,10 +1496,11 @@ namespace Scripts
 
             int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
 
-            if (CurrentTarget.Evasion < rng.Next(0, 512))
+            if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
             {
                 SoundManager.enemy_hit.Play();
                 Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
+                CurrentTarget.HP -= attack_damage;
             }
 
             else
@@ -977,28 +1512,41 @@ namespace Scripts
 
         public void MonsterRangedAI()
         {
-            /*
-            // At the moment, Ranged monsters are only capable of attacking
-            print(f'The {self.name} {self.attk_msg} {self.m_target.name}!')
-            sounds.aim_weapon.play()
+            Random rng = new Random();
+            Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
+            SoundManager.aim_weapon.Play();
 
-            main.smart_sleep(0.75)
+            Thread.Sleep(750);
 
-            if random.randint(1, 512) in range(battle.temp_stats[self.m_target.name]['evad'], 512):
-                dam_dealt = deal_damage(self, self.m_target, 'piercing')
+            int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
 
-                print(f"The {self.name}'s attack deals {dam_dealt} damage to {self.m_target.name}!")
+            if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
+            {
+                SoundManager.enemy_hit.Play();
+                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
+                CurrentTarget.HP -= attack_damage;
+            }
 
-                self.m_target.hp -= dam_dealt
-                sounds.enemy_hit.play()
-
-            else:
-                sounds.attack_miss.play()
-                print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!") */
+            else
+            {
+                SoundManager.attack_miss.Play();
+                Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
+            }
         }
 
         public void MonsterMagicAI()
         {
+            Random rng = new Random();
+
+            // If the monster is neither taunted nor silenced, it will use a spell
+            if (!(MonsterAbilityFlags["taunted_turn"] == BattleManager.turn_counter) || HasStatus(CEnums.Status.silence))
+            {
+                if (rng.Next(0, 7) == 0 && MP > MaxMP*0.1)
+                {
+                    GiveStatus();
+                }
+            }
+            // Magic monsters have a 1 in 6 (16.667%) chance to give the target a status ailment
             /*
             // 16.67% chance for the enemy to give a status ailment
             if not self.ability_vars['taunted'][0] == battle.turn_counter or 'silenced' in self.status_ail:
