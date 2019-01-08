@@ -216,7 +216,7 @@ namespace Scripts
         };
     }
 
-    public class Unit
+    public abstract class Unit
     {
         /* =========================== *
          *      GENERAL PROPERTIES     *

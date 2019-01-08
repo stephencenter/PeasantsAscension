@@ -242,7 +242,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    public class Ability
+    public abstract class Ability
     {
         // Abilites are similar to magic, except they are tied to classes and are level-independent. They also
         // cost Action Points to use instead of Mana, and tend to have much more specific functions.
@@ -251,15 +251,8 @@ nothing if no songs have been played yet.", 3)
         public string AbilityDesc { get; set; }
         public int APCost { get; set; }
 
-        public void BeforeAbility(Unit user)
-        {
-
-        }
-
-        public void UseAbility(Unit user)
-        {
-
-        }
+        public abstract void BeforeAbility(Unit user);
+        public abstract void UseAbility(Unit user);
 
         public Ability(string name, string desc, int ap_cost)
         {
@@ -275,11 +268,14 @@ nothing if no songs have been played yet.", 3)
 
     class TauntAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
+        }
+
+        public override void UseAbility(Unit user)
+        {
+            /*
             for x in battle.m_list:
                 x.ability_vars['taunted'] = [battle.turn_counter + 1, user]
                 x.status_ail.append("Taunted")
@@ -297,6 +293,7 @@ nothing if no songs have been played yet.", 3)
 
             print(f"{user.name} taunts the enemy team!")
             print(f"{user.name} gains {phys}/{other}/{other} physical/magical/pierce defense!") */
+        }
 
         public TauntAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -306,11 +303,14 @@ nothing if no songs have been played yet.", 3)
 
     class RollCallAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
+        }
+
+        public override void UseAbility(Unit user)
+        {
+            /*
             sounds.ability_cast.play()
             print(f"{user.name} begins to motivate their allies with a Roll Call...")
             main.smart_sleep(0.75)
@@ -322,6 +322,7 @@ nothing if no songs have been played yet.", 3)
 
             print(f"All allies physical defense increased by {increase}!")
             sounds.buff_spell.play() */
+        }
 
         public RollCallAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -331,12 +332,16 @@ nothing if no songs have been played yet.", 3)
 
     class GreatCleaveAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Great Cleave on?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Great Cleave on?") */
+        }
 
-        def use_ability(self, user):
-            pass */
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public GreatCleaveAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -346,11 +351,14 @@ nothing if no songs have been played yet.", 3)
 
     class BerserkersRageAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
+        }
+
+        public override void UseAbility(Unit user)
+        {
+            /*
             if user.ability_vars['berserk']:
                 values = 0.10
 
@@ -370,6 +378,7 @@ nothing if no songs have been played yet.", 3)
             battle.temp_stats[user.name]['m_dfns'] -= math.ceil(battle.temp_stats[user.name]['spd']* values/2)
             battle.temp_stats[user.name]['p_dfns'] -= math.ceil(battle.temp_stats[user.name]['spd']* values/2)
             user.ability_vars['berserk'] = True */
+        }
 
         public BerserkersRageAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -384,11 +393,15 @@ nothing if no songs have been played yet.", 3)
 
     class ChakraSmashAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Chakra Smash on?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Chakra Smash on?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             # A 2x crit that lowers the target's armor
             print(f"{user.name} is preparing a Chakra Smash...")
             sounds.sword_slash.play()
@@ -407,6 +420,7 @@ nothing if no songs have been played yet.", 3)
             sounds.enemy_hit.play()
 
             return True */
+        }
 
         public ChakraSmashAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -416,12 +430,15 @@ nothing if no songs have been played yet.", 3)
 
     class SharedExperienceAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public SharedExperienceAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -431,11 +448,14 @@ nothing if no songs have been played yet.", 3)
 
     class AuraSwapAbility : Ability
     {
-        /* 
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
+        }
+
+        public override void UseAbility(Unit user)
+        {
+            /* 
             c_enemy = max(battle.m_list, key= lambda x: x.hp)
             c_ally = min([x for x in battle.enabled_pcus if 'dead' not in x.status_ail], key= lambda x: x.hp)
 
@@ -460,7 +480,7 @@ nothing if no songs have been played yet.", 3)
                 units.fix_stats()
 
                 evad = max(math.floor((c_ally.hp - c_enemy.hp)/5)* (5 + battle.temp_stats[user.name]['attributes']['str']),
-                           5)
+                            5)
                 battle.temp_stats[user.name]['evad'] += evad
 
                 print(f"{c_ally.name}'s HP rose from {beginning[1]} to {c_ally.hp}!")
@@ -472,6 +492,7 @@ nothing if no songs have been played yet.", 3)
                     print(f"{c_enemy.name}'s HP dropped from {beginning[0]} to {c_enemy.hp}!")
 
                 print(f"{user.name}'s evasion increased by {evad}!") */
+        }
 
         public AuraSwapAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -481,11 +502,15 @@ nothing if no songs have been played yet.", 3)
 
     class BreakingVowsAbility : Ability
     {
-        /* 
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Breaking Vows on?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Breaking Vows on?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /* 
             hp_missing = (user.max_hp - user.hp)/(user.max_hp*100)
             damage = 5 + math.ceil(hp_missing* user.target.max_hp)
             lifesteal = 0 if hp_missing <= 75 else max((0.1 + user.attributes['con']/100)* damage, 1)
@@ -501,6 +526,7 @@ nothing if no songs have been played yet.", 3)
 
             if lifesteal:
                 print(f"{user.target.name} lifesteals for {lifesteal} HP!") */
+        }
 
         public BreakingVowsAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -514,11 +540,15 @@ nothing if no songs have been played yet.", 3)
 
     class InjectPoisonAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} inject poison into?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} inject poison into?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             user.target.status_ail.append('poisoned')
             user.target.ability_vars['poison_pow'] += 0.02
             user.target.ability_vars['poison_dex'] = 2 + battle.temp_stats[user.name]['attributes']['dex']
@@ -531,6 +561,7 @@ nothing if no songs have been played yet.", 3)
 
             print(f"{user.name} injects the poison into the {user.target.name}!")
             sounds.poison_damage.play() */
+        }
 
         public InjectPoisonAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -540,11 +571,15 @@ nothing if no songs have been played yet.", 3)
 
     class KnockoutGasAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Knockout Gas on?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Knockout Gas on?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             print(f"{user.name} is preparing some Knockout Gas for {user.target.name}...")
             sounds.ability_cast.play()
             main.smart_sleep(0.75)
@@ -556,6 +591,7 @@ nothing if no songs have been played yet.", 3)
 
             print(f"{user.target.name} was put to sleep for {k_dur} turns!")
             sounds.poison_damage.play() */
+        }
 
         public KnockoutGasAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -565,11 +601,15 @@ nothing if no songs have been played yet.", 3)
 
     class DisarmingBlowAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} disarm?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} disarm?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             sounds.ability_cast.play()
             print(f"{user.name} is preparing to disarm the {user.target.name}")
             main.smart_sleep(0.75)
@@ -601,6 +641,7 @@ nothing if no songs have been played yet.", 3)
                 sounds.unlock_chest.play()
                 print(f"{user.name} stealthily retrieves the weapon and pawns it off for {max(user.target.lvl, 5)} GP!")
                 main.party_info['gp'] += max(user.target.lvl, 5) */
+        }
 
         public DisarmingBlowAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -610,11 +651,15 @@ nothing if no songs have been played yet.", 3)
 
     class BackstabAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} Backstab?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} Backstab?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             print(f"{user.name} is preparing to Backstab {user.target.name}...")
             sounds.sword_slash.play()
             main.smart_sleep(0.75)
@@ -639,6 +684,7 @@ nothing if no songs have been played yet.", 3)
             sounds.enemy_hit.play()
             user.target.hp -= base_damage
             print(f"{user.name}'s Backstab deals {base_damage} to the {user.target.name}!") */
+        }
 
         public BackstabAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -652,11 +698,15 @@ nothing if no songs have been played yet.", 3)
 
     class SkillSyphonAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Skill Syphon on?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Skill Syphon on?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             print(f"{user.name} is preparing to cast Skill Syphon...")
             sounds.ability_cast.play()
             main.smart_sleep(0.75)
@@ -689,6 +739,7 @@ nothing if no songs have been played yet.", 3)
 
                 else:
                     print(f"{user.target.name} stats decreased by {total}!") */
+        }
 
         public SkillSyphonAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -698,12 +749,15 @@ nothing if no songs have been played yet.", 3)
 
     class PolymorphAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public PolymorphAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -713,12 +767,15 @@ nothing if no songs have been played yet.", 3)
 
     class SpellShieldAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public SpellShieldAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -728,11 +785,15 @@ nothing if no songs have been played yet.", 3)
 
     class ManaDrainAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Mana Drain on?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Mana Drain on?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             print(f"{user.name} is preparing to cast Mana Drain...")
             sounds.ability_cast.play()
             main.smart_sleep(0.75)
@@ -747,6 +808,7 @@ nothing if no songs have been played yet.", 3)
             sounds.buff_spell.play()
             print(f"The {user.target.name} lost {drain} MP!")
             print(f"{user.name} gained {drain} MP!") */
+        }
 
         public ManaDrainAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -760,12 +822,15 @@ nothing if no songs have been played yet.", 3)
 
     class RollAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public RollAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -775,12 +840,15 @@ nothing if no songs have been played yet.", 3)
 
     class ScoutAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} scout?")
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user):
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public ScoutAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -790,12 +858,15 @@ nothing if no songs have been played yet.", 3)
 
     class PowershotAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public PowershotAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -805,11 +876,14 @@ nothing if no songs have been played yet.", 3)
 
     class NaturesCallAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
+        }
+
+        public override void UseAbility(Unit user)
+        {
+            /*
             animal_dict = {
                 "Mouse": 1,
                 "Chipmunk": 5,
@@ -825,6 +899,7 @@ nothing if no songs have been played yet.", 3)
                 "Goose": 75,
                 "Pack of Wolves": 100
             } */
+        }
 
         public NaturesCallAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -838,11 +913,15 @@ nothing if no songs have been played yet.", 3)
 
     class TipTheScalesAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Tip the Scales on?", ally=True)
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Tip the Scales on?", ally = True) */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             print(f"{user.name} is preparing to cast Tip the Scales...")
             sounds.ability_cast.play()
             main.smart_sleep(0.75)
@@ -878,6 +957,7 @@ nothing if no songs have been played yet.", 3)
                 user.target.hp -= total
                 print(f"Tip the Scales deals {total} damage to the {user.target.name}!")
                 sounds.enemy_hit.play() */
+        }
 
         public TipTheScalesAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -887,11 +967,15 @@ nothing if no songs have been played yet.", 3)
 
     class UnholyBindsAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Unholy Binds on?", ally=True, enemy=True)
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Unholy Binds on?", ally=True, enemy=True) */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             if isinstance(user.target, units.PlayableCharacter) :
                 print(f"{user.name} is preparing to cast Unholy Binds on {user.target.name}...")
 
@@ -908,7 +992,7 @@ nothing if no songs have been played yet.", 3)
                     not isinstance(user.target, units.Boss),
                     not isinstance(user.target, units.PlayableCharacter)]) :
                 user.target.status_ail = ['dead']
-        user.target.hp = 0
+                user.target.hp = 0
 
                 sounds.enemy_death.play()
 
@@ -924,6 +1008,7 @@ nothing if no songs have been played yet.", 3)
 
             else:
                 print(f"The {user.target.name} had their defensive element set to Darkness!") */
+        }
 
         public UnholyBindsAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -933,11 +1018,15 @@ nothing if no songs have been played yet.", 3)
 
     class JudgmentAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            user.choose_target(f"Who should {user.name} cast Judgment on?")
+        public override void BeforeAbility(Unit user)
+        {
+            /*
+            user.choose_target(f"Who should {user.name} cast Judgment on?") */
+        }
 
-        def use_ability(self, user):
+        public override void UseAbility(Unit user)
+        {
+            /*
             if isinstance(user.target, units.Boss) :
                 rem_turns = 10
 
@@ -962,6 +1051,7 @@ nothing if no songs have been played yet.", 3)
                 user.target.ability_vars['judgment_day'] = judgment_day
                 user.target.status_ail.append("Doomed")
                 sounds.poison_damage.play() */
+        }
 
         public JudgmentAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -971,12 +1061,15 @@ nothing if no songs have been played yet.", 3)
 
     class CanonizeAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public CanonizeAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -990,12 +1083,15 @@ nothing if no songs have been played yet.", 3)
 
     class WaywardFellowAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public WaywardFellowAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -1005,12 +1101,15 @@ nothing if no songs have been played yet.", 3)
 
     class FallenComradeAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public FallenComradeAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -1020,12 +1119,15 @@ nothing if no songs have been played yet.", 3)
 
     class StubbornBoarAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public StubbornBoarAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -1035,12 +1137,15 @@ nothing if no songs have been played yet.", 3)
 
     class UnlikelyHeroAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public UnlikelyHeroAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -1050,12 +1155,15 @@ nothing if no songs have been played yet.", 3)
 
     class TournamentAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public TournamentAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {
@@ -1065,12 +1173,15 @@ nothing if no songs have been played yet.", 3)
 
     class GrandFinaleAbility : Ability
     {
-        /*
-        def before_ability(self, user):
-            pass
+        public override void BeforeAbility(Unit user)
+        {
 
-        def use_ability(self, user) :
-            pass */
+        }
+
+        public override void UseAbility(Unit user)
+        {
+
+        }
 
         public GrandFinaleAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
         {

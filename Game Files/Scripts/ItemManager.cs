@@ -43,7 +43,7 @@ namespace Scripts
         }
     }
 
-    public class Item
+    public abstract class Item
     {
         // The basic item class. Items are stored in the "inventory" dictionary. All
         // item-subclasses inherit from this class.
