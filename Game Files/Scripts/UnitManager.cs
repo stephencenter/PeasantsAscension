@@ -1273,7 +1273,8 @@ Increasing DIFFICULTY will provide:
         public bool IsDefending { get; set; }
         public int DroppedGold { get; set; }
         public int DroppedXP { get; set; }
-        public List<Item> DroppedItems { get; set; }
+        public Item DroppedItem { get; set; }
+        public List<Item> DropList { get; set; }
         public string AttackMessage { get; set; }
         public string AsciiArt { get; set; }
 
@@ -1325,39 +1326,45 @@ Increasing DIFFICULTY will provide:
     
         public void GetDrops()
         {
-            /*
-            if random.randint(0, 4) == 0:  # 20% chance
-            self.items = [random.choice(self.drop_list).item_id] */
+            Random rng = new Random();
+            
+            if (rng.Next(0, 4) == 0)
+            {
+                DroppedItem = DropList[rng.Next(DropList.Count)];
+            }
         }
 
         public void MonsterLevelUp()
         {
-            /* 
-            minlvl, maxlvl = tiles.find_cell_with_tile_id(main.party_info['current_tile'].tile_id).m_level
-            self.lvl = random.randrange(minlvl, maxlvl)
+            Random rng = new Random();
+            int minlvl = TileManager.FindCellWithTileID(PartyInfo.CurrentTile.TileID).MinMonsterLevel;
+            int maxlvl = TileManager.FindCellWithTileID(PartyInfo.CurrentTile.TileID).MaxMonsterLevel;
 
-            for x in range(1, self.lvl):
-                self.hp += 5
-                self.mp += 3
-                self.attk += 3
-                self.dfns += 3
-                self.p_attk += 3
-                self.p_dfns += 3
-                self.m_attk += 3
-                self.m_dfns += 3
-                self.spd += 3
-                self.evad += 2
+            Level = rng.Next(minlvl, maxlvl);
 
-            self.max_hp = self.hp
-            self.max_mp = self.mp */
+            for (int i = 0; i < Level; i++)
+            {
+                HP += 5;
+                MP += 3;
+                Attack += 3;
+                Defense += 3;
+                PAttack += 3;
+                PDefense += 3;
+                MAttack += 3;
+                MDefense += 3;
+                Speed += 3;
+                Evasion += 2;
+            }
+
+            MaxHP = HP;
+            MaxMP = MP;
         }
 
         public void MonsterSetDifficulty()
         {
-            /*
-            self.attk += self.attk * 0.0005 * main.party_info['dif']
-            self.m_attk += self.m_attk * 0.0005 * main.party_info['dif']
-            self.p_attk += self.p_attk * 0.0005 * main.party_info['dif'] */
+            Attack += (int)(Attack * 0.0005 * PartyInfo.Difficulty);
+            MAttack += (int)(MAttack * 0.0005 * PartyInfo.Difficulty);
+            PAttack += (int)(PAttack * 0.0005 * PartyInfo.Difficulty);
         }
         
         public void MonsterExecuteMove()
