@@ -1295,33 +1295,38 @@ Increasing DIFFICULTY will provide:
         /* =========================== *
          *        MONSTER METHODS      *
          * =========================== */
-        
         public void GiveStatus()
         {
-            /*
-            # Attempt to give the target a status ailment
-            status = random.choice([x for x in ['poisoned',
-                                                'silenced',
-                                                'weakened',
-                                                'blinded',
-                                                'paralyzed',
-                                                'muted'] if x not in target.status_ail])
+            Random rng = new Random();
+            Array StatusArray = Enum.GetValues(typeof(CEnums.Status));
+            CEnums.Status chosen_status = (CEnums.Status)StatusArray.GetValue(rng.Next(StatusArray.Length));
 
-            print(f'The {self.name} is attempting to make {self.m_target.name} {status}...')
-            sounds.aim_weapon.play()
-            main.smart_sleep(0.75)
+            Console.WriteLine($"The {Name} is attempting to make {CurrentTarget.Name} {CEnums.EnumToString(chosen_status)}!");
+            Thread.Sleep(750);
 
-            # There's a 50% chance that the status spell will work
-                if random.randint(0, 1) == 1:
-                sounds.buff_spell.play()
-                print(f'{self.m_target.name} is now {status}!')
-                target.status_ail.append(status)
+            if (rng.Next(0, 2) == 0)
+            {
+                if (CurrentTarget.HasStatus(chosen_status))
+                {
+                    SoundManager.debuff.Play();
+                    Console.WriteLine($"...But {CurrentTarget.Name} is already {CEnums.EnumToString(chosen_status)}!");
+                }
 
-            else:
-                sounds.debuff.play()
-                print(f'The {self.name} failed to make {self.m_target.name} {status}!')
+                else
+                {
+                    CurrentTarget.Statuses.Add(chosen_status);
+                    SoundManager.buff_spell.Play();
+                    Console.WriteLine($"{CurrentTarget.Name} is now {CEnums.EnumToString(chosen_status)}!");
+                }
+            }
 
-            self.mp -= self.max_mp * 0.1 */
+            else
+            {
+                SoundManager.debuff.Play();
+                Console.WriteLine($"...But {CurrentTarget.Name}'s attempt failed!");
+            }
+
+            MP -= (int)(MaxMP * 0.1);
         }
     
         public void GetDrops()
@@ -1625,7 +1630,6 @@ Increasing DIFFICULTY will provide:
         public Monster(string name) : base(name)
         {
             UnitID = Guid.NewGuid().ToString();
-            DroppedItems = new List<Item>();
             MClass = CEnums.MonsterClass.melee;
             StatusOnAttack = CEnums.Status.paralyzation;
             IsDefending = false;
