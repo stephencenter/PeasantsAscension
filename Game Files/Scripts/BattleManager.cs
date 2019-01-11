@@ -9,7 +9,7 @@ namespace Scripts
     {
         public static int turn_counter;
 
-        public static void BattleSystem()
+        public static void BattleSystem(bool is_bossfight)
         {
             Random rng = new Random();
 
@@ -29,22 +29,31 @@ namespace Scripts
                 }
             }
 
-            if (monster_list.Count == 1)
+            if (is_bossfight)
             {
-                Console.WriteLine($"A {monster_list[0].Name} suddenly appeared out of nowhere!");
+                Console.WriteLine($"The legendary {monster_list[0].Name} has awoken!");
+                // sounds.play_music("../../../Music/Terrible Tarantuloid.ogg")
             }
 
-            else if (monster_list.Count == 2)
+            else
             {
-                Console.WriteLine($"A {monster_list[0].Name} and 1 other monster suddenly appeared out of nowhere!");
-            }
+                if (monster_list.Count == 1)
+                {
+                    Console.WriteLine($"A {monster_list[0].Name} suddenly appeared out of nowhere!");
+                }
 
-            else if (monster_list.Count > 2)
-            {
-                Console.WriteLine($"A {monster_list[0].Name} and {monster_list.Count - 1} other monsters suddenly appeared out of nowhere!"); ;
-            }
+                else if (monster_list.Count == 2)
+                {
+                    Console.WriteLine($"A {monster_list[0].Name} and 1 other monster suddenly appeared out of nowhere!");
+                }
 
-            // sounds.play_music('../Music/Ruari 8-bit Battle.ogg')
+                else if (monster_list.Count > 2)
+                {
+                    Console.WriteLine($"A {monster_list[0].Name} and {monster_list.Count - 1} other monsters suddenly appeared out of nowhere!"); ;
+                }
+
+                // sounds.play_music('../Music/Ruari 8-bit Battle.ogg')
+            }
 
             Thread.Sleep(1);
 
@@ -157,106 +166,126 @@ namespace Scripts
             }
 
             // Determine the results of the battle and react accordingly
-            AfterBattle();
+            AfterBattle(active_pcus, monster_list, is_bossfight);
         }
 
-        public static void AfterBattle()
+        public static void AfterBattle(List<PlayableCharacter> active_pcus, List<Monster> monster_list, bool is_bossfight)
         {
-            /* Python Code
-            def after_battle(is_boss) :
-                # Assess the results of the battle
-                print('-'*save_load.divider_size)
+            CMethods.PrintDivider();
 
-                for unit in enabled_pcus + m_list:
-                    if unit.hp <= 0 and 'dead' not in unit.status_ail:
-                        unit.hp = 0
-                        unit.status_ail = ['dead']
+            foreach(PlayableCharacter pcu in active_pcus)
+            {
+                pcu.FixAllStats();
+            }
 
-                while True:
-                    # If the monster wins...
-                    if any(['dead' not in m.status_ail for m in m_list]) and all(['dead' in x.status_ail for x in enabled_pcus]):
-                        sounds.play_music('../Music/Power-Up.ogg')
+            foreach(Monster monster in monster_list)
+            {
+                monster.FixAllStats();
+            }
 
-                        print(f'Despite your best efforts, the {units.monster.name} has killed your party.')
-                        print('-'*save_load.divider_size)
+            if (active_pcus.Any(x => x.IsAlive()))
+            {
+                // sounds.play_music("../../../Music/Python_RM.ogg")
+                if (is_bossfight)
+                {
+                    Console.WriteLine($"The mighty {monster_list[0].Name} has been slain!");
+                    PartyInfo.DefeatedBosses.Add(monster_list[0].UnitID);
+                    monster_list[0].UponDefeating();
+                }
 
-                        auto_yes = False
-                        while True:
-                            if auto_yes:
-                                y_n = 'y'
+                else
+                {
+                    Console.WriteLine($"The {monster_list[0].Name} falls to the ground dead as a stone.");
+                }
 
-                            else:
-                                y_n = main.s_input('Do you wish to continue playing? | Y/N: ').lower()
+                int gold_drops = 0;
+                monster_list.ForEach(x => gold_drops += new List<int>() { 1, x.DroppedGold, (int)(1.8 * x.Level) }.Max());
 
-                            if y_n.startswith('y'):
-                                # If you die, you return to the last town visited or 0'N, 0'W if you haven't been to a town yet.
+                int expr_drops = 0;
+                monster_list.ForEach(x => expr_drops += new List<int>() { 1, x.DroppedXP, (int)(Math.Pow(1.3, x.Level)) }.Max());
 
-                                main.party_info['current_tile'] = main.party_info['prev_town']
-                                units.heal_pcus(1)
+                Dictionary<string, string> item_drops = new Dictionary<string, string>();
+                foreach (Monster monster in monster_list)
+                {
+                    if (monster.DroppedItem != null || monster.GetDrops())
+                    {
+                        item_drops.Add(monster.Name, monster.DroppedItem);
+                    }
+                }
 
-                                sounds.play_music(main.party_info['music'])
+                PartyInfo.GP += gold_drops;
+                CMethods.Input($"Your party got {gold_drops} GP!");
 
-                                return
+                foreach (PlayableCharacter pcu in active_pcus)
+                {
+                    pcu.CurrentXP += expr_drops;
+                    CMethods.Input($"{pcu.Name} gained {expr_drops} XP!");
+                }
 
-                            elif y_n.startswith('n'):
-                                while True:
-                                    y_n = main.s_input('Are you sure you want to quit and lose unsaved progress? |  Y/N: ').lower()
+                foreach (KeyValuePair<string, string> drop in item_drops)
+                {
+                    CMethods.Input($"The {drop.Key} dropped a {ItemManager.FindItemWithID(drop.Value).Name}!");
+                    InventoryManager.AddItemToInventory(drop.Value);
+                }
 
-                                    if y_n.startswith('n') or main.do_debug:
-                                        auto_yes = True
+                foreach (PlayableCharacter pcu in active_pcus)
+                {
+                    pcu.PlayerLevelUp();
+                }
 
-                                        break
+                // sounds.play_music(main.party_info['music'])
+            }
 
-                                    elif y_n.startswith('y'):
-                                        pygame.quit()
-                                        sys.exit()
+            else
+            {
+                // sounds.play_music("../../../Music/Power-Up.ogg")
+                Console.WriteLine($"Despite your best efforts, the {monster_list[0].Name} has killed your party.");
+                CMethods.PrintDivider();
 
-                    # If the player wins...
-                    elif all(['dead' in m.status_ail for m in m_list]) and any(['dead' not in x.status_ail for x in enabled_pcus]):
-                        sounds.play_music('../Music/Python_RM.ogg')
+                bool auto_yes = false;
+                while (true)
+                {
+                    string y_n;
 
-                        if is_boss:
-                            print(f'The almighty {units.monster.name} has been slain!')
-                            units.defeated_bosses.append(units.monster.boss_id)
-                            units.monster.upon_defeating()
+                    if (auto_yes)
+                    {
+                        y_n = "y";
+                    }
 
-                        else:
-                            print(f'The {units.monster.name} falls to the ground, dead as a stone.')
+                    else
+                    {
+                        y_n = CMethods.Input("Do you wish to continue playing? | Yes or No: ");
+                    }
 
-                        # Formulas for item, gold, and experience drops
-                        gold_drops = math.ceil(sum([max(1, x.gold, 2.5 * x.lvl) for x in m_list]))
-                        expr_drops = math.ceil(sum([max(1, y.experience, 1.5 * *y.lvl) / 2 for y in m_list]))
-                        item_drops = []
+                    if (CMethods.IsYesString(y_n))
+                    {
+                        PartyInfo.CurrentTile = PartyInfo.RespawnTile;
+                        UnitManager.HealAllPCUs(1, true, true, true);
+                        //sounds.play_music(main.party_info['music'])
 
-                        for monster in m_list:
-                            for item in monster.items:
-                                item_drops.append((monster.name, item))
+                        return;
+                    }
 
-                        main.party_info['gp'] += gold_drops
-                        main.s_input(f'Your party has gained {gold_drops} GP! ')
+                    else if (CMethods.IsNoString(y_n))
+                    {
+                        while (true)
+                        {
+                            string y_n2 = CMethods.Input("Are you sure you want to quit and lose unsaved progress? |  Y/N: ");
 
-                        # Each party member gets their own XP
-                        for character in enabled_pcus:
-                            character.exp += expr_drops
-                            main.s_input(f'{character.name} gained {expr_drops} XP! ')
+                            if (CMethods.IsYesString(y_n2))
+                            {
+                                auto_yes = true;
+                                break;
+                            }
 
-                        # Each monster can drop their own item
-                        for drop in item_drops:
-                            main.s_input(f"The {drop[0]} dropped a {items.find_item_with_id(drop[1]).name}! ")
-                            items.add_item(drop[1])
-
-                        for character in enabled_pcus:
-                            character.level_up()
-
-                        sounds.play_music(main.party_info['music'])
-
-                        return
-
-                    else:
-                        units.player.hp = 1
-                        units.player.status_ail = ['alive']
-
-                        continue */
+                            else if (CMethods.IsNoString(y_n2))
+                            {
+                                System.Environment.Exit(0);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static bool RunAway(Unit runner, List<Monster> monster_list)

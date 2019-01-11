@@ -151,7 +151,7 @@ namespace Scripts
             }
 
             final_damage = ApplyElementalChart(attacker, target, final_damage);
-            final_damage = CMethods.Clamp(final_damage, 999, 1);
+            final_damage = CMethods.Clamp(final_damage, 1, 999);
 
             return final_damage;
         }
@@ -185,12 +185,36 @@ namespace Scripts
 
             return damage;
         }
+
+        public static void HealAllPCUs(double heal_percentage, bool restore_hp, bool restore_mp, bool restore_ap)
+        {
+            foreach(PlayableCharacter pcu in GetAllPCUs())
+            {
+                if (restore_hp)
+                {
+                    pcu.HP = (int)(pcu.MaxHP * heal_percentage);
+                }
+
+                if (restore_mp)
+                {
+                    pcu.MP = (int)(pcu.MaxMP * heal_percentage);
+                }
+
+                if (restore_ap)
+                {
+                    pcu.AP = (int)(pcu.MaxAP * heal_percentage);
+                }
+
+                pcu.FixAllStats();
+            }
+        }
     }
 
     public static class PartyInfo
     {
         public static CEnums.GameState Gamestate = CEnums.GameState.overworld;
         public static CEnums.MusicboxMode MusicboxMode = CEnums.MusicboxMode.AtoZ;
+        public static List<string> DefeatedBosses = new List<string>();
         public static List<Town> VisitedTowns = new List<Town>();
         public static Town CurrentTown = new Town();
         public static Tile CurrentTile = new Tile();
@@ -203,7 +227,7 @@ namespace Scripts
         public static string CurrentProvince = "Overshire";
         public static string MusicboxFolder = "";
         public static bool MusicboxIsPlaying = false;
-        public static bool DoSpawns { get; set; }
+        public static bool DoSpawns = true;
 
         public static List<string> FriendNames = new List<string>()
         {
@@ -290,18 +314,28 @@ namespace Scripts
 
             // Initialize the Common Methods manager
 
-            HP = CMethods.Clamp(HP, MaxHP, 0);
-            MP = CMethods.Clamp(MP, MaxMP, 0);
-            AP = CMethods.Clamp(AP, MaxAP, 0);
+            HP = CMethods.Clamp(HP, 0, MaxHP);
+            MP = CMethods.Clamp(MP, 0, MaxMP);
+            AP = CMethods.Clamp(AP, 0, MaxAP);
 
-            Evasion = Math.Min(256, Evasion);
+            Attack = Math.Max(1, Attack);
+            PAttack = Math.Max(1, PAttack);
+            MAttack = Math.Max(1, MAttack);
+
+            Defense = Math.Max(1, Defense);
+            PDefense = Math.Max(1, PDefense);
+            MDefense = Math.Max(1, MDefense);
+
+            Speed = Math.Max(1, Speed);
+            Evasion = CMethods.Clamp(Evasion, 1, 256);
+
             Statuses = Statuses.Distinct().ToList();
 
             if (HP > 0 && !IsAlive())
             {
                 Statuses = new List<CEnums.Status>() { CEnums.Status.alive };
             }
-
+             
             if (!IsAlive())
             {
                 Statuses = new List<CEnums.Status>() { CEnums.Status.dead };
@@ -1271,10 +1305,12 @@ Increasing DIFFICULTY will provide:
         public CEnums.MonsterClass MClass { get; set; }
         public CEnums.Status StatusOnAttack { get; set; }
         public bool IsDefending { get; set; }
+
+        public List<string> DropList { get; set; }
+        public string DroppedItem { get; set; }
         public int DroppedGold { get; set; }
         public int DroppedXP { get; set; }
-        public Item DroppedItem { get; set; }
-        public List<Item> DropList { get; set; }
+
         public string AttackMessage { get; set; }
         public string AsciiArt { get; set; }
 
@@ -1329,14 +1365,17 @@ Increasing DIFFICULTY will provide:
             MP -= (int)(MaxMP * 0.1);
         }
     
-        public void GetDrops()
+        public bool GetDrops()
         {
             Random rng = new Random();
             
             if (rng.Next(0, 4) == 0)
             {
                 DroppedItem = DropList[rng.Next(DropList.Count)];
+                return true;
             }
+
+            return false;
         }
 
         public void MonsterLevelUp()
@@ -1624,6 +1663,11 @@ Increasing DIFFICULTY will provide:
                 print(f"The {self.name}'s attack narrowly misses {self.m_target.name}!") */
         }
 
+        public void UponDefeating()
+        {
+
+        }
+
         /* =========================== *
          *          CONSTRUCTOR        *
          * =========================== */
@@ -1633,10 +1677,11 @@ Increasing DIFFICULTY will provide:
             MClass = CEnums.MonsterClass.melee;
             StatusOnAttack = CEnums.Status.paralyzation;
             IsDefending = false;
-            DroppedGold = 5;
-            DroppedXP = 5;
             AttackMessage = "attacks";
             AsciiArt = "";
+            DroppedGold = 0;
+            DroppedXP = 0;
+            DroppedItem = null;
         }
     }
 }

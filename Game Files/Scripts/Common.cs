@@ -22,7 +22,14 @@ namespace Scripts
 
             else
             {
-                return Console.ReadLine();
+                string x = Console.ReadLine();
+
+                if (SavefileManager.do_blips)
+                {
+                    SoundManager.item_pickup.Play();
+                }
+
+                return x;
             }
         }
 
@@ -62,20 +69,10 @@ namespace Scripts
             return sentences;
         }
 
-        public static bool IsExitString(string the_string)
+        public static int Clamp(int value, int min, int max)
         {
-            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel" };
-
-            if (ValidExitStrings.Contains(the_string.ToLower()))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static int Clamp(int value, int max, int min)
-        {
+            // If value < min, returns min, if value > max, returns max. Otherwise, returns value
+            // Used to impose both an upper and lower bound on Stats - for example, Evasion must be between 1 and 256.
             return Math.Max(min, Math.Min(max, value));
         }
 
@@ -99,6 +96,24 @@ namespace Scripts
         {
             TextScrollWrite(the_string, spacing);
             return Input(the_string[the_string.Length - 1].ToString());
+        }
+
+        public static bool IsExitString(string the_string)
+        {
+            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel" };
+            return ValidExitStrings.Contains(the_string.ToLower());
+        }
+
+        public static bool IsYesString(string the_string)
+        {
+            List<string> ValidYesStrings = new List<string>() { "y", "ye", "yes", "yup", "yeah", "ya", "yeh", "yah", "yea" };
+            return ValidYesStrings.Contains(the_string.ToLower());
+        }
+
+        public static bool IsNoString(string the_string)
+        {
+            List<string> ValidNoStrings = new List<string>() { "n", "no", "nope", "nah", "nuh uh", "nay", "negative" };
+            return ValidNoStrings.Contains(the_string.ToLower());
         }
     }
 
