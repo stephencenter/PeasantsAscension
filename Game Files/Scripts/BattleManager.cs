@@ -55,7 +55,7 @@ namespace Scripts
                 // sounds.play_music('../Music/Ruari 8-bit Battle.ogg')
             }
 
-            Thread.Sleep(1);
+            CMethods.SmartSleep(1000);
 
             // Create a temporary copy of all of the player's stats. These copies are what will be modified in-battle by 
             // spells, abilities, etc. so that they will return to normal after battle (although they in fact were never 
@@ -81,7 +81,7 @@ namespace Scripts
                     {
                         Console.WriteLine($"Warning: {character.Name}'s HP is low, heal as soon as possible!");
                         SoundManager.health_low.Play();
-                        Thread.Sleep(1000);
+                        CMethods.SmartSleep(1000);
                     }
 
                     if (character.IsAlive())
@@ -184,108 +184,108 @@ namespace Scripts
             }
 
             if (active_pcus.Any(x => x.IsAlive()))
-            {
-                // sounds.play_music("../../../Music/Python_RM.ogg")
-                if (is_bossfight)
                 {
-                    Console.WriteLine($"The mighty {monster_list[0].Name} has been slain!");
-                    PartyInfo.DefeatedBosses.Add(monster_list[0].UnitID);
-                    monster_list[0].UponDefeating();
-                }
-
-                else
-                {
-                    Console.WriteLine($"The {monster_list[0].Name} falls to the ground dead as a stone.");
-                }
-
-                int gold_drops = 0;
-                monster_list.ForEach(x => gold_drops += new List<int>() { 1, x.DroppedGold, (int)(1.8 * x.Level) }.Max());
-
-                int expr_drops = 0;
-                monster_list.ForEach(x => expr_drops += new List<int>() { 1, x.DroppedXP, (int)(Math.Pow(1.3, x.Level)) }.Max());
-
-                Dictionary<string, string> item_drops = new Dictionary<string, string>();
-                foreach (Monster monster in monster_list)
-                {
-                    if (monster.DroppedItem != null || monster.GetDrops())
+                    // sounds.play_music("../../../Music/Python_RM.ogg")
+                    if (is_bossfight)
                     {
-                        item_drops.Add(monster.Name, monster.DroppedItem);
-                    }
-                }
-
-                PartyInfo.GP += gold_drops;
-                CMethods.Input($"Your party got {gold_drops} GP!");
-
-                foreach (PlayableCharacter pcu in active_pcus)
-                {
-                    pcu.CurrentXP += expr_drops;
-                    CMethods.Input($"{pcu.Name} gained {expr_drops} XP!");
-                }
-
-                foreach (KeyValuePair<string, string> drop in item_drops)
-                {
-                    CMethods.Input($"The {drop.Key} dropped a {ItemManager.FindItemWithID(drop.Value).Name}!");
-                    InventoryManager.AddItemToInventory(drop.Value);
-                }
-
-                foreach (PlayableCharacter pcu in active_pcus)
-                {
-                    pcu.PlayerLevelUp();
-                }
-
-                // sounds.play_music(main.party_info['music'])
-            }
-
-            else
-            {
-                // sounds.play_music("../../../Music/Power-Up.ogg")
-                Console.WriteLine($"Despite your best efforts, the {monster_list[0].Name} has killed your party.");
-                CMethods.PrintDivider();
-
-                bool auto_yes = false;
-                while (true)
-                {
-                    string y_n;
-
-                    if (auto_yes)
-                    {
-                        y_n = "y";
+                        Console.WriteLine($"The mighty {monster_list[0].Name} has been slain!");
+                        PartyInfo.DefeatedBosses.Add(monster_list[0].UnitID);
+                        monster_list[0].UponDefeating();
                     }
 
                     else
                     {
-                        y_n = CMethods.Input("Do you wish to continue playing? | Yes or No: ");
+                        Console.WriteLine($"The {monster_list[0].Name} falls to the ground dead as a stone.");
                     }
 
-                    if (CMethods.IsYesString(y_n))
-                    {
-                        PartyInfo.CurrentTile = PartyInfo.RespawnTile;
-                        UnitManager.HealAllPCUs(1, true, true, true);
-                        //sounds.play_music(main.party_info['music'])
+                    int gold_drops = 0;
+                    monster_list.ForEach(x => gold_drops += new List<int>() { 1, x.DroppedGold, (int)(1.8 * x.Level) }.Max());
 
-                        return;
-                    }
+                    int expr_drops = 0;
+                    monster_list.ForEach(x => expr_drops += new List<int>() { 1, x.DroppedXP, (int)(Math.Pow(1.3, x.Level)) }.Max());
 
-                    else if (CMethods.IsNoString(y_n))
+                    Dictionary<string, string> item_drops = new Dictionary<string, string>();
+                    foreach (Monster monster in monster_list)
                     {
-                        while (true)
+                        if (monster.DroppedItem != null || monster.GetDrops())
                         {
-                            string y_n2 = CMethods.Input("Are you sure you want to quit and lose unsaved progress? |  Y/N: ");
+                            item_drops.Add(monster.Name, monster.DroppedItem);
+                        }
+                    }
 
-                            if (CMethods.IsYesString(y_n2))
-                            {
-                                auto_yes = true;
-                                break;
-                            }
+                    PartyInfo.GP += gold_drops;
+                    CMethods.Input($"Your party got {gold_drops} GP!");
 
-                            else if (CMethods.IsNoString(y_n2))
+                    foreach (PlayableCharacter pcu in active_pcus)
+                    {
+                        pcu.CurrentXP += expr_drops;
+                        CMethods.Input($"{pcu.Name} gained {expr_drops} XP!");
+                    }
+
+                    foreach (KeyValuePair<string, string> drop in item_drops)
+                    {
+                        CMethods.Input($"The {drop.Key} dropped a {ItemManager.FindItemWithID(drop.Value).Name}!");
+                        InventoryManager.AddItemToInventory(drop.Value);
+                    }
+
+                    foreach (PlayableCharacter pcu in active_pcus)
+                    {
+                        pcu.PlayerLevelUp();
+                    }
+
+                    // sounds.play_music(main.party_info['music'])
+                }
+
+                else
+                {
+                    // sounds.play_music("../../../Music/Power-Up.ogg")
+                    Console.WriteLine($"Despite your best efforts, the {monster_list[0].Name} has killed your party.");
+                    CMethods.PrintDivider();
+
+                    bool auto_yes = false;
+                    while (true)
+                    {
+                        string y_n;
+
+                        if (auto_yes)
+                        {
+                            y_n = "y";
+                        }
+
+                        else
+                        {
+                            y_n = CMethods.Input("Do you wish to continue playing? | Yes or No: ");
+                        }
+
+                        if (CMethods.IsYesString(y_n))
+                        {
+                            PartyInfo.CurrentTile = PartyInfo.RespawnTile;
+                            UnitManager.HealAllPCUs(1, true, true, true);
+                            //sounds.play_music(main.party_info['music'])
+
+                            return;
+                        }
+
+                        else if (CMethods.IsNoString(y_n))
+                        {
+                            while (true)
                             {
-                                System.Environment.Exit(0);
+                                string y_n2 = CMethods.Input("Are you sure you want to quit and lose unsaved progress? |  Y/N: ");
+
+                                if (CMethods.IsYesString(y_n2))
+                                {
+                                    auto_yes = true;
+                                    break;
+                                }
+
+                                else if (CMethods.IsNoString(y_n2))
+                                {
+                                    System.Environment.Exit(0);
+                                }
                             }
                         }
                     }
                 }
-            }
         }
 
         public static bool RunAway(Unit runner, List<Monster> monster_list)
@@ -294,7 +294,7 @@ namespace Scripts
 
             Console.WriteLine($"{runner.Name} is making a move!\n");
             Console.WriteLine($"Your party tries to make a run for it...");
-            Thread.Sleep(750);
+            CMethods.SmartSleep(750);
 
             int chance;
 

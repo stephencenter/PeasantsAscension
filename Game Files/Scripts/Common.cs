@@ -7,6 +7,9 @@ namespace Scripts
 {
     public static class CMethods
     {
+        // When this is set to true, all Inputs() will auto-return a random 
+        // character instead of requesting user input. Also reduces the
+        // duration of all SmartSleep() methods to 0.1 seconds. 
         public static readonly bool debugging = false;
 
         public static string Input(string prompt)
@@ -15,9 +18,9 @@ namespace Scripts
 
             if (debugging)
             {
-                Random rng = new Random();
-                string char_list = "abcdefghijklmnopqrstuvwxyz1234567890";
-                return char_list[rng.Next(char_list.Count())].ToString();
+                string chosen = GetRandomFromIterable("abcdefghijklmnopqrstuvwxyz1234567890").ToString();
+                Console.WriteLine(chosen);
+                return chosen;
             }
 
             else
@@ -87,7 +90,7 @@ namespace Scripts
 
                 if (character != ' ' && counter + 1 != the_string.Count())
                 {
-                    Thread.Sleep(spacing);
+                    SmartSleep(spacing);
                 }
             }
         }
@@ -114,6 +117,30 @@ namespace Scripts
         {
             List<string> ValidNoStrings = new List<string>() { "n", "no", "nope", "nah", "nuh uh", "nay", "negative" };
             return ValidNoStrings.Contains(the_string.ToLower());
+        }
+
+        public static T GetRandomFromIterable<T>(IEnumerable<T> iterable)
+        {
+            Random rng = new Random();
+            return iterable.ToList()[rng.Next(iterable.Count())];
+        }
+
+        public static void SmartSleep(int milliseconds)
+        {
+            // Reduce the duration of the sleep to 0.1 seconds if debugging is set to true
+            if (debugging)
+            {
+                Thread.Sleep(100);
+            }
+
+            else
+            {
+                Thread.Sleep(milliseconds);
+            }
+
+            // Clear the Key Buffer so that all inputs made during the Thread.Sleep() will be ignored
+            while (Console.KeyAvailable)
+                Console.ReadKey(true);
         }
     }
 

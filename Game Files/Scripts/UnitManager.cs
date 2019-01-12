@@ -147,7 +147,7 @@ namespace Scripts
                 SoundManager.critical_hit.Play();
                 Console.WriteLine("It's a critical hit! 1.5x damage!");
 
-                Thread.Sleep(500);
+                CMethods.SmartSleep(500);
             }
 
             final_damage = ApplyElementalChart(attacker, target, final_damage);
@@ -363,7 +363,6 @@ namespace Scripts
             Speed = 6;
             Evasion = 3;
             Level = 1;
-
         }
     }
 
@@ -1051,9 +1050,9 @@ Increasing DIFFICULTY will provide:
 
             // If the player's target is an enemy, and the target died before the player's turn began,
             // then the attack automatically redirects to a random living enemy.
-            if (CurrentTarget != null && CurrentTarget is Monster && !CurrentTarget.IsAlive())
+            if (CurrentTarget is Monster && !CurrentTarget.IsAlive())
             {
-                CurrentTarget = monster_list[rng.Next(monster_list.Count)];
+                CurrentTarget = CMethods.GetRandomFromIterable(monster_list);
             }
 
             Weapon player_weapon = InventoryManager.GetEquipment(UnitID)[CEnums.EquipmentType.weapon];
@@ -1068,7 +1067,7 @@ Increasing DIFFICULTY will provide:
 
             if (HasStatus(CEnums.Status.poison))
             {
-                Thread.Sleep(750);
+                CMethods.SmartSleep(750);
 
                 SoundManager.poison_damage.Play();
 
@@ -1092,7 +1091,7 @@ Increasing DIFFICULTY will provide:
                     SoundManager.buff_spell.Play();
                     Statuses.Remove(status);
                     Console.WriteLine($"{Name} is no longer {CEnums.EnumToString(status)}!");
-                    Thread.Sleep(500);
+                    CMethods.SmartSleep(500);
 
                     break;
                 }
@@ -1122,7 +1121,7 @@ Increasing DIFFICULTY will provide:
                     Console.WriteLine($"{Name} aims carefully at the {CurrentTarget.Name} using their {player_weapon.Name}...");
                 }
 
-                Thread.Sleep(750);
+                CMethods.SmartSleep(750);
 
                 int attack_damage;
                 if (CEnums.CharacterClassToDamageType(PClass) == CEnums.DamageType.physical)
@@ -1157,7 +1156,7 @@ Increasing DIFFICULTY will provide:
             // Use Magic
             else if (CurrentMove == '2')
             {
-                CurrentSpell.UseMagic(this, true);
+                // CurrentSpell.UseMagic(this, true);
             }
 
             // Use Ability
@@ -1166,7 +1165,6 @@ Increasing DIFFICULTY will provide:
                 // TO-DO: Ascii art
                 Console.WriteLine($"{Name} is making a move!\n");
                 CurrentAbility.UseAbility(this);
-
             }
 
             // Run away
@@ -1338,7 +1336,7 @@ Increasing DIFFICULTY will provide:
             CEnums.Status chosen_status = (CEnums.Status)StatusArray.GetValue(rng.Next(StatusArray.Length));
 
             Console.WriteLine($"The {Name} is attempting to make {CurrentTarget.Name} {CEnums.EnumToString(chosen_status)}!");
-            Thread.Sleep(750);
+            CMethods.SmartSleep(750);
 
             if (rng.Next(0, 2) == 0)
             {
@@ -1371,7 +1369,7 @@ Increasing DIFFICULTY will provide:
             
             if (rng.Next(0, 4) == 0)
             {
-                DroppedItem = DropList[rng.Next(DropList.Count)];
+                DroppedItem = CMethods.GetRandomFromIterable(DropList);
                 return true;
             }
 
@@ -1451,7 +1449,7 @@ Increasing DIFFICULTY will provide:
         {
             Random rng = new Random();
 
-            CurrentTarget = UnitManager.GetAliveActivePCUs()[rng.Next(UnitManager.GetAliveActivePCUs().Count)];
+            CurrentTarget = CMethods.GetRandomFromIterable(UnitManager.GetAliveActivePCUs());
 
             if (MonsterAbilityFlags["taunted_turn"] == BattleManager.turn_counter)
             {
@@ -1472,7 +1470,7 @@ Increasing DIFFICULTY will provide:
                 // If decrementing knockout_turns caused it to equal 0, then wake up
                 if (MonsterAbilityFlags["knockout_turns"] == 0)
                 {
-                    Thread.Sleep(500);
+                    CMethods.SmartSleep(500);
                     SoundManager.buff_spell.Play();
                     Statuses.Remove(CEnums.Status.sleep);
                     Console.WriteLine($"The {Name} woke up!");
@@ -1484,7 +1482,7 @@ Increasing DIFFICULTY will provide:
 
                     if (rng.Next(0, 100) < chance)
                     {
-                        Thread.Sleep(500);
+                        CMethods.SmartSleep(500);
                         SoundManager.buff_spell.Play();
                         Statuses.Remove(CEnums.Status.sleep);
                         Console.WriteLine($"The {Name} woke up early!");
@@ -1504,7 +1502,7 @@ Increasing DIFFICULTY will provide:
             // Judgment day instantly kills the unit if the wait timer expires
             if (MonsterAbilityFlags["judgment_day"] == BattleManager.turn_counter)
             {
-                Thread.Sleep(500);
+                CMethods.SmartSleep(500);
                 Console.WriteLine($"{Name}'s judgment day has arrived. The darkness devours it...");
                 HP = 0;
             }
@@ -1521,7 +1519,7 @@ Increasing DIFFICULTY will provide:
             {
                 IsDefending = true;
                 Console.WriteLine($"The {Name} is preparing itself for enemy attacks...");
-                Thread.Sleep(750);
+                CMethods.SmartSleep(750);
 
                 Defense *= 2;
                 MDefense *= 2;
@@ -1543,7 +1541,7 @@ Increasing DIFFICULTY will provide:
 
             SoundManager.sword_slash.Play();
             Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
-            Thread.Sleep(750);
+            CMethods.SmartSleep(750);
 
             int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.physical);
 
@@ -1567,7 +1565,7 @@ Increasing DIFFICULTY will provide:
             Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
             SoundManager.aim_weapon.Play();
 
-            Thread.Sleep(750);
+            CMethods.SmartSleep(750);
 
             int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
 
