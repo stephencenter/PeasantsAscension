@@ -12,7 +12,7 @@ namespace Scripts
         // duration of all SmartSleep() methods to 0.1 seconds. 
         public static readonly bool debugging = false;
 
-        public static string Input(string prompt)
+        public static string Input(string prompt, bool local_do_blips = true)
         {
             Console.Write(prompt);
 
@@ -25,14 +25,7 @@ namespace Scripts
 
             else
             {
-                string x = Console.ReadLine();
-
-                if (SavefileManager.do_blips)
-                {
-                    SoundManager.item_pickup.Play();
-                }
-
-                return x;
+                return Console.ReadLine();
             }
         }
 
@@ -64,7 +57,7 @@ namespace Scripts
                 current_sentence = string.Join("", new List<string>() { current_sentence, word, " " });
             }
 
-            if (current_sentence != "")
+            if (string.IsNullOrEmpty(current_sentence))
             {
                 sentences.Add(current_sentence);
             }
@@ -140,7 +133,9 @@ namespace Scripts
 
             // Clear the Key Buffer so that all inputs made during the Thread.Sleep() will be ignored
             while (Console.KeyAvailable)
+            {
                 Console.ReadKey(true);
+            }
         }
     }
 

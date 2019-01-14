@@ -8,8 +8,8 @@ namespace Scripts
     public static class UnitManager
     {
         public static PlayableCharacter player = new PlayableCharacter("John", "_player", true);
-        public static PlayableCharacter solou = new PlayableCharacter("Solou", "_solou", true);
-        public static PlayableCharacter chili = new PlayableCharacter("Chili", "_chili", true);
+        public static PlayableCharacter solou = new PlayableCharacter("Solou", "_solou", false);
+        public static PlayableCharacter chili = new PlayableCharacter("Chili", "_chili", false);
         public static PlayableCharacter chyme = new PlayableCharacter("Chyme", "_chyme", false);
         public static PlayableCharacter storm = new PlayableCharacter("Storm", "_storm", false);
         public static PlayableCharacter parsto = new PlayableCharacter("Parsto", "_parsto", false);
@@ -284,7 +284,12 @@ namespace Scripts
          * =========================== */
         public bool IsAlive()
         {
-            return !HasStatus(CEnums.Status.dead);
+            return HasStatus(CEnums.Status.alive);
+        }
+
+        public bool IsDead()
+        {
+            return HasStatus(CEnums.Status.dead);
         }
 
         public void SetTempStats()
@@ -336,33 +341,10 @@ namespace Scripts
                 Statuses = new List<CEnums.Status>() { CEnums.Status.alive };
             }
              
-            if (!IsAlive())
+            if (HP == 0 && !IsDead())
             {
                 Statuses = new List<CEnums.Status>() { CEnums.Status.dead };
             }
-        }
-
-        /* =========================== *
-         *          CONSTRUCTOR        *
-         * =========================== */
-        public Unit(string name)
-        {
-            Name = name;
-            HP = 20;
-            MaxHP = 20;
-            MP = 5;
-            MaxMP = 5;
-            AP = 10;
-            MaxAP = 10;
-            Attack = 8;
-            Defense = 5;
-            PAttack = 8;
-            PDefense = 5;
-            MAttack = 8;
-            MDefense = 5;
-            Speed = 6;
-            Evasion = 3;
-            Level = 1;
         }
     }
 
@@ -388,7 +370,6 @@ namespace Scripts
             { "cha", 1 },
             { "fte", 1 }
         };
-
 
         public Dictionary<string, dynamic> PlayerAbilityFlags = new Dictionary<string, dynamic>()
         {
@@ -1289,8 +1270,25 @@ Increasing DIFFICULTY will provide:
         /* =========================== *
          *          CONSTRUCTOR        *
          * =========================== */
-            public PlayableCharacter(string name, string unit_id, bool active) : base(name)
+        public PlayableCharacter(string name, string unit_id, bool active) : base()
         {
+            Name = name;
+            HP = 20;
+            MaxHP = 20;
+            MP = 5;
+            MaxMP = 5;
+            AP = 10;
+            MaxAP = 10;
+            Attack = 8;
+            Defense = 5;
+            PAttack = 8;
+            PDefense = 5;
+            MAttack = 8;
+            MDefense = 5;
+            Speed = 6;
+            Evasion = 3;
+            Level = 1;
+
             UnitID = unit_id;
             Active = active;
             CurrentXP = 0;
@@ -1669,8 +1667,25 @@ Increasing DIFFICULTY will provide:
         /* =========================== *
          *          CONSTRUCTOR        *
          * =========================== */
-        public Monster(string name) : base(name)
+        public Monster(string name) : base()
         {
+            Name = name;
+            HP = 20;
+            MaxHP = 20;
+            MP = 5;
+            MaxMP = 5;
+            AP = 10;
+            MaxAP = 10;
+            Attack = 8;
+            Defense = 5;
+            PAttack = 8;
+            PDefense = 5;
+            MAttack = 8;
+            MDefense = 5;
+            Speed = 6;
+            Evasion = 3;
+            Level = 1;
+
             UnitID = Guid.NewGuid().ToString();
             MClass = CEnums.MonsterClass.melee;
             StatusOnAttack = CEnums.Status.paralyzation;

@@ -4,7 +4,7 @@ namespace Scripts
 {
     public static class AbilityManager
     {
-        public static Dictionary<CEnums.CharacterClass, List<dynamic>> ability_list = new Dictionary<CEnums.CharacterClass, List<dynamic>>()
+        private readonly static Dictionary<CEnums.CharacterClass, List<dynamic>> ability_list = new Dictionary<CEnums.CharacterClass, List<dynamic>>()
         {
             { // 1 2 4 finished
                 CEnums.CharacterClass.warrior, new List<dynamic>()
@@ -265,7 +265,6 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *      WARRIOR ABILITIES      *
      * =========================== */
-
     class TauntAbility : Ability
     {
         public override void BeforeAbility(Unit user)
@@ -389,8 +388,6 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *        MONK ABILITIES       *
      * =========================== */
-
-
     class ChakraSmashAbility : Ability
     {
         public override void BeforeAbility(Unit user)
@@ -537,7 +534,6 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *      ASSASSIN ABILITIES     *
      * =========================== */
-
     class InjectPoisonAbility : Ability
     {
         public override void BeforeAbility(Unit user)
@@ -695,7 +691,6 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *        MAGE ABILITIES       *
      * =========================== */
-
     class SkillSyphonAbility : Ability
     {
         public override void BeforeAbility(Unit user)
@@ -819,7 +814,6 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *       RANGER ABILITIES      *
      * =========================== */
-
     class RollAbility : Ability
     {
         public override void BeforeAbility(Unit user)
@@ -910,7 +904,6 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *      PALADIN ABILITIES      *
      * =========================== */
-
     class TipTheScalesAbility : Ability
     {
         public override void BeforeAbility(Unit user)
@@ -1080,7 +1073,6 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *        BARD ABILITIES       *
      * =========================== */
-
     class WaywardFellowAbility : Ability
     {
         public override void BeforeAbility(Unit user)
