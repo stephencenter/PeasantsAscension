@@ -7,13 +7,14 @@ namespace Scripts
 {
     public static class UnitManager
     {
-        public static PlayableCharacter player = new PlayableCharacter("John", "_player", true);
-        public static PlayableCharacter solou = new PlayableCharacter("Solou", "_solou", false);
-        public static PlayableCharacter chili = new PlayableCharacter("Chili", "_chili", false);
-        public static PlayableCharacter chyme = new PlayableCharacter("Chyme", "_chyme", false);
-        public static PlayableCharacter storm = new PlayableCharacter("Storm", "_storm", false);
-        public static PlayableCharacter parsto = new PlayableCharacter("Parsto", "_parsto", false);
-        public static PlayableCharacter adorine = new PlayableCharacter("Adorine", "_adorine", false);
+        public static PlayableCharacter player = new PlayableCharacter("John", CEnums.CharacterClass.warrior, "_player", true);
+        public static PlayableCharacter solou = new PlayableCharacter("Solou", CEnums.CharacterClass.mage, "_solou", true);
+        public static PlayableCharacter chili = new PlayableCharacter("Chili", CEnums.CharacterClass.ranger, "_chili", true);
+        public static PlayableCharacter chyme = new PlayableCharacter("Chyme", CEnums.CharacterClass.monk, "_chyme", false);
+        public static PlayableCharacter storm = new PlayableCharacter("Storm", CEnums.CharacterClass.assassin, "_storm", false);
+        public static PlayableCharacter parsto = new PlayableCharacter("Parsto", CEnums.CharacterClass.paladin, "_parsto", false);
+        public static PlayableCharacter adorine = new PlayableCharacter("Adorine", CEnums.CharacterClass.warrior, "_adorine", false);
+        public static PlayableCharacter kaltoh = new PlayableCharacter("Kaltoh", CEnums.CharacterClass.bard, "_kaltoh", false);
 
         // Returns ALL PCUs, alive, dead, active, and inactive
         public static List<PlayableCharacter> GetAllPCUs()
@@ -248,7 +249,7 @@ namespace Scripts
         public string UnitID { get; set; }
         public CEnums.Element off_element = CEnums.Element.neutral;
         public CEnums.Element def_element = CEnums.Element.neutral;
-        public List<CEnums.Status> Statuses = new List<CEnums.Status> { CEnums.Status.alive, CEnums.Status.blindness };
+        public List<CEnums.Status> Statuses = new List<CEnums.Status> { CEnums.Status.alive };
 
         public string Name { get; set; }
         public int HP { get; set; }
@@ -912,68 +913,12 @@ Increasing DIFFICULTY will provide:
                 // Ability
                 else if (CurrentMove == '3')
                 {
-                    while (true)
+                    if (PlayerChooseAbility())
                     {
-                        CMethods.PrintDivider();
-                        Console.WriteLine($"{Name}'s Abilities | {AP}/{MaxAP} AP remaining");
-
-                        // List of all abilities usable by the PCU's class
-                        List<dynamic> a_list = AbilityManager.GetAbilityList()[PClass];
-
-                        // This is used to make sure that the AP costs of each ability line up. Purely asthetic.
-                        int padding = a_list.Select(x => x.AbilityName.Length).Max();
-
-                        int counter = 0;
-                        foreach (Ability ability in a_list)
-                        {
-                            int true_pad = padding - ability.AbilityName.Length;
-                            Console.WriteLine($"      [{counter + 1}] {ability.AbilityName} {new string('-', true_pad)}--> {ability.APCost} AP");
-                            counter++;
-                        }
-
-                        while (true)
-                        {
-                            string chosen_ability = CMethods.Input("Input [#] or type 'back'): ");
-
-                            try
-                            {
-                                CurrentAbility = a_list[int.Parse(chosen_ability) - 1];
-                            }
-
-                            catch (Exception ex)
-                            {
-                                if (ex is FormatException || ex is ArgumentOutOfRangeException)
-                                {
-                                    if (CMethods.IsExitString(chosen_ability))
-                                    {
-                                        CMethods.PrintDivider();
-                                        PrintBattleOptions();
-
-                                        return;
-                                    }
-
-                                    continue;
-                                }
-                            }
-
-                            // Abilities cost AP to cast, just like spells cost MP.
-                            if (AP < CurrentAbility.APCost)
-                            {
-                                CMethods.PrintDivider();
-                                Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.AbilityName}!");
-                                CMethods.PressEnterReturn();
-
-                                break;
-                            }
-
-                            AP -= CurrentAbility.APCost;
-                            CurrentAbility.BeforeAbility(this);
-
-                            return;
-                        }
+                        return;
                     }
                 }
-
+                 
                 // Use Items
                 else if (CurrentMove == '4')
                 {
@@ -1267,10 +1212,74 @@ Increasing DIFFICULTY will provide:
             }
         }
 
+        public bool PlayerChooseAbility()
+        {
+            while (true)
+            {
+                CMethods.PrintDivider();
+                Console.WriteLine($"{Name}'s Abilities | {AP}/{MaxAP} AP remaining");
+
+                // List of all abilities usable by the PCU's class
+                List<dynamic> a_list = AbilityManager.GetAbilityList()[PClass];
+
+                // This is used to make sure that the AP costs of each ability line up. Purely asthetic.
+                int padding = a_list.Select(x => x.AbilityName.Length).Max();
+
+                int counter = 0;
+                foreach (Ability ability in a_list)
+                {
+                    int true_pad = padding - ability.AbilityName.Length;
+                    Console.WriteLine($"      [{counter + 1}] {ability.AbilityName} {new string('-', true_pad)}--> {ability.APCost} AP");
+                    counter++;
+                }
+
+                while (true)
+                {
+                    string chosen_ability = CMethods.Input("Input [#] or type 'back'): ");
+
+                    try
+                    {
+                        CurrentAbility = a_list[int.Parse(chosen_ability) - 1];
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (ex is FormatException || ex is ArgumentOutOfRangeException)
+                        {
+                            if (CMethods.IsExitString(chosen_ability))
+                            {
+                                CMethods.PrintDivider();
+                                PrintBattleOptions();
+
+                                return false;
+                            }
+
+                            continue;
+                        }
+                    }
+
+                    // Abilities cost AP to cast, just like spells cost MP.
+                    if (AP < CurrentAbility.APCost)
+                    {
+                        CMethods.PrintDivider();
+                        Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.AbilityName}!");
+                        CMethods.PressEnterReturn();
+
+                        break;
+                    }
+
+                    AP -= CurrentAbility.APCost;
+                    CurrentAbility.BeforeAbility(this);
+
+                    return true;
+                }
+            }
+        }
+
         /* =========================== *
          *          CONSTRUCTOR        *
          * =========================== */
-        public PlayableCharacter(string name, string unit_id, bool active) : base()
+        public PlayableCharacter(string name, CEnums.CharacterClass p_class, string unit_id, bool active) : base()
         {
             Name = name;
             HP = 20;
@@ -1289,10 +1298,11 @@ Increasing DIFFICULTY will provide:
             Evasion = 3;
             Level = 1;
 
-            UnitID = unit_id;
-            Active = active;
             CurrentXP = 0;
             RequiredXP = 3;
+            PClass = p_class;
+            UnitID = unit_id;
+            Active = active;
         }
     }
 

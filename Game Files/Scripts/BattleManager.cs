@@ -75,24 +75,21 @@ namespace Scripts
                 DisplayBattleStats(active_pcus, monster_list);
 
                 // Iterate through each active players
-                foreach (PlayableCharacter character in active_pcus)
+                foreach (PlayableCharacter character in UnitManager.GetAliveActivePCUs())
                 {
                     if (0 < character.HP && character.HP <= character.MaxHP * 0.20)
                     {
                         Console.WriteLine($"Warning: {character.Name}'s HP is low, heal as soon as possible!");
                         SoundManager.health_low.Play();
-                        CMethods.SmartSleep(1000);
+                        CMethods.SmartSleep(1333);
                     }
 
-                    if (character.IsAlive())
+                    character.PlayerChoice(monster_list);
+
+                    if (character != UnitManager.GetAliveActivePCUs().Last())
                     {
-                        character.PlayerChoice(monster_list);
-
-                        if (character != active_pcus[active_pcus.Count - 1])
-                        {
-                            CMethods.PrintDivider();
-                        }
-                    }
+                        CMethods.PrintDivider();
+                    } 
                 }
 
                 // Iterate through each unit in the battle from fastest to slowest
