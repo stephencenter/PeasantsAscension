@@ -18,12 +18,12 @@ namespace Scripts
             turn_counter = 0;
 
             // 33% chance to add a second monster
-            if (rng.Next(0, 100) > 66)
+            if (rng.Next(0, 100) > 0)
             {
                 monster_list.Add(UnitManager.GenerateMonster());
 
                 // 33% chance to add a third monster if a second monster was already added
-                if (rng.Next(0, 100) > 66)
+                if (rng.Next(0, 100) > 100)
                 {
                     monster_list.Add(UnitManager.GenerateMonster());
                 }
@@ -102,35 +102,25 @@ namespace Scripts
                             break;
                         }
 
+                        if (active_pcus.All(x => x.HP <= 0))
+                        {
+                            break;
+                        }
+
                         CMethods.PrintDivider();
 
                         // Leave the battle if the player runs away
-                        if (unit is PlayableCharacter && unit.PlayerExecuteMove(monster_list) == "ran")
+                        if (unit is PlayableCharacter)
                         {
-                            return;
+                            if (unit.PlayerExecuteMove(monster_list) == "ran")
+                            {
+                                return;
+                            }
                         }
 
                         else if (unit is Monster)
                         {
                             unit.MonsterExecuteMove();
-                        }
-
-                        if (active_pcus.Any(x => x.HP > 0))
-                        {
-                            if (monster_list.Any(x => x.HP > 0) && unit.IsAlive())
-                            {
-                                CMethods.PressEnterReturn();
-                            }
-
-                            else if (monster_list.All(x => x.HP <= 0))
-                            {
-                                break;
-                            }
-                        }
-
-                        else
-                        {
-                            break;
                         }
                     }
 
@@ -139,25 +129,28 @@ namespace Scripts
                     {
                         if (other_unit is PlayableCharacter && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
-                            other_unit.HP = 0;
+                            other_unit.HP =  0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
+                            CMethods.SmartSleep(250);
                             SoundManager.ally_death.Play();
 
-                            CMethods.PrintDivider();
-                            Console.WriteLine($"{other_unit.Name} has fallen to the monsters!");
-                            CMethods.PressEnterReturn();
+                            Console.WriteLine($"\n{other_unit.Name} has fallen to the monsters!");
                         }
 
                         else if (other_unit is Monster && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
                             other_unit.HP = 0;
                             other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
+                            CMethods.SmartSleep(250);
                             SoundManager.enemy_death.Play();
-
-                            CMethods.PrintDivider();
-                            Console.WriteLine($"The {other_unit.Name} was defeated by your party!");
-                            CMethods.PressEnterReturn();
+                            
+                            Console.WriteLine($"\nThe {other_unit.Name} was defeated by your party!");
                         }
+                    }
+
+                    if (monster_list.Any(x => x.HP > 0) && unit.HP > 0)
+                    {
+                        CMethods.PressEnterReturn();
                     }
                 }
             }
