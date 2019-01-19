@@ -29,9 +29,17 @@ namespace Scripts
             }
         }
 
-        public static void PrintDivider()
+        public static void PrintDivider(int length = 0)
         {
-            Console.WriteLine(new string('-', SavefileManager.divider_size));
+            if (length != 0)
+            {
+                Console.WriteLine(new string('-', length));
+            }
+
+            else
+            {
+                Console.WriteLine(new string('-', SavefileManager.divider_size));
+            }
         }
 
         public static void PressEnterReturn()

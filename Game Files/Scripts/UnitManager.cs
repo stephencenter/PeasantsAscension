@@ -1184,6 +1184,7 @@ Increasing DIFFICULTY will provide:
             foreach (Unit unit in valid_targets)
             {
                 Console.WriteLine($"      [{counter + 1}] {unit.Name}");
+                counter++;
             }
 
             while (true)
@@ -1197,14 +1198,20 @@ Increasing DIFFICULTY will provide:
 
                 catch (Exception ex)
                 {
-                    if (ex is ArgumentException || ex is IndexOutOfRangeException)
+                    if (ex is FormatException || ex is ArgumentOutOfRangeException)
                     {
                         if (CMethods.IsExitString(chosen))
                         {
+                            CMethods.PrintDivider();
                             return false;
                         }
 
                         continue;
+                    }
+
+                    else
+                    {
+                        throw ex;
                     }
                 }
 
@@ -1255,6 +1262,11 @@ Increasing DIFFICULTY will provide:
                             }
 
                             continue;
+                        }
+
+                        else
+                        {
+                            throw ex;
                         }
                     }
 
