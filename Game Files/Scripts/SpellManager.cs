@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace Scripts
 {
@@ -222,159 +223,188 @@ of battle.",
     6, 17, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "p_attk", "aim_2"),
         };
 
-        public static bool PickSpellCategory(PlayableCharacter user, bool is_battle)
+        public static List<Spell> GetSpellbook(CEnums.SpellCategory spell_category)
         {
-            /*
-            inv_name = user.name if user != units.player else 'player'
+            if (spell_category == CEnums.SpellCategory.attack)
+            {
+                return attack_spellbook.Select(x => x as Spell).ToList();
+            }
 
-            while True:
-                do_continue = False
-                print(f"{user.name}'s spellbook:
-              [1] Damaging Spells
-              [2] Buff Spells
-              [3] Healing Spells")
+            else if (spell_category == CEnums.SpellCategory.healing)
+            {
+                return healing_spellbook.Select(x => x as Spell).ToList();
+            }
 
-                if spellbook[inv_name]['Previous Spell']:
-                    print(f"      [4] Re-cast {spellbook[inv_name]['Previous Spell'][0].name}")
-
-                spam = True
-                while spam:
-                    cat = main.s_input('Input [#] (or type "exit"): ).lower()
-
-                    if cat == '1':
-                        cat = 'Damaging'
-
-                    elif cat == '2':
-                        cat = 'Buffs'
-
-                    elif cat == '3':
-                        cat = 'Healing'
-
-                    elif cat == '4' and spellbook[inv_name]['Previous Spell']:
-                        spell = spellbook[inv_name]['Previous Spell'][0]
-                        user.c_spell = spell
-
-                        if isinstance(spell, Healing) or isinstance(spell, Buff) or not is_battle:
-                            user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally= True, enemy= False)
-
-                        else:
-                            user.choose_target(f"Who should {user.name} cast {spell.name} on?")
-
-                        return True
-
-                    else:
-                        if cat in ['e', 'x', 'exit', 'b', 'back']:
-                            print('-'*save_load.divider_size)
-                            return False
-
-                        else:
-                            continue
-
-                    if do_continue:
-                        continue
-
-                    if not spellbook[inv_name][cat]:
-                        print('-'*save_load.divider_size)
-                        print(f'You do not yet have any spells in the {cat} category.)
-                        print('-'*save_load.divider_size)
-                        continue
-
-                    if pick_spell(cat, user, is_battle) :
-                        return True
-
-                    break */
+            else
+            {
+                return buff_spellbook.Select(x => x as Spell).ToList();
+            }
         }
 
-        public static bool PickSpell(CEnums.SpellCategory category, PlayableCharacter user, bool is_battle)
+        public static bool PickSpellCategory(PlayableCharacter user, List<Monster> monster_list, bool is_battle)
         {
-            /*
-            inv_name = user.name if user != units.player else 'player'
+            while (true)
+            {
+                Console.WriteLine($"{user.Name}'s Spellbook:");
+                Console.WriteLine("      [1] Attack Spells");
+                Console.WriteLine("      [2] Healing Spells");
+                Console.WriteLine("      [3] Buff Spells");
 
-            print("-'*save_load.divider_size)
-            while True:
-                padding = len(max([spell.name for spell in spellbook[inv_name][cat]], key= len))
-                print(f"{user.name}'s {cat} Spells | {user.mp}/{user.max_mp} MP remaining")
+                if (user.CurrentSpell != null)
+                {
+                    Console.WriteLine($"      [4] Re-cast {user.CurrentSpell.SpellName}");
+                }
 
-                // Print the player's spell inventory
-                for x, y in enumerate(spellbook[inv_name][cat]) :
-                    print(f"      [{x + 1}] {y.name} --{'-'*(padding - len(y.name))}> {y.mana} MP")
+                while (true)
+                {
+                    string category = CMethods.Input("Input [#] (or type 'back'): ");
+                    CEnums.SpellCategory true_category;
 
-                while True:
-                    spell = main.s_input("Input [#] (or type "back"): ).lower()
+                    if (CMethods.IsExitString(category))
+                    {
+                        CMethods.PrintDivider();
+                        return false;
+                    }
 
-                    try:
-                        spell = spellbook[inv_name][cat][int(spell) - 1]
+                    else if (category == "1")
+                    {
+                        true_category = CEnums.SpellCategory.attack;
+                    }
 
-                    except(IndexError, ValueError):
-                        if spell in ['e', 'x', 'exit', 'b', 'back']:
-                            print("-'*save_load.divider_size)
+                    else if (category == "2")
+                    {
+                        true_category = CEnums.SpellCategory.healing;
+                    }
 
-                            return False
+                    else if (category == "3")
+                    {
+                        true_category = CEnums.SpellCategory.buff;
+                    }
 
-                        continue
+                    else if (category == "4" && user.CurrentSpell != null)
+                    {
+                        if (user.CurrentSpell is HealingSpell || user.CurrentSpell is BuffSpell)
+                        {
+                            user.PlayerGetTarget(monster_list, $"Who should {user.Name} cast {user.CurrentSpell.SpellName} on?", true, false, false, false);
+                        }
+
+                        else
+                        {
+                            user.PlayerGetTarget(monster_list, $"Who should {user.Name} cast {user.CurrentSpell.SpellName} on?", false, true, false, false);
+                        }
+
+                        return true;
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (PickSpell(true_category, user, monster_list, is_battle))
+                    {
+                        return true;
+                    }
+
+                    break;
+                }   
+            }
+        }
+
+        public static bool PickSpell(CEnums.SpellCategory category, PlayableCharacter user, List<Monster> monster_list, bool is_battle)
+        {
+            List<Spell> chosen_spellbook = GetSpellbook(category).Where(x => x.RequiredLevel <= user.Level).ToList();
+            int padding;
+
+            CMethods.PrintDivider();
+            while (true)
+            {
+                padding = chosen_spellbook.Max(x => x.SpellName.Length);
+                Console.WriteLine($"{user.Name}'s {CEnums.EnumToString(category)} Spells | {user.MP}/{user.MaxMP} MP remaining");
+
+                int counter = 1;
+                foreach (Spell spell in chosen_spellbook)
+                {
+                    Console.WriteLine($"      [{counter}] {spell.SpellName} --{new string('-', padding - spell.SpellName.Length)}> MP");
+                }
+
+                while (true)
+                {
+                    string chosen_spell = CMethods.Input("Input [#] (or type 'back'): ");
+
+                    try
+                    {
+                        user.CurrentSpell = chosen_spellbook[int.Parse(chosen_spell) - 1];
+                    }
+
+                    catch (Exception ex)
+                    {
+                        if (ex is FormatException || ex is ArgumentOutOfRangeException)
+                        {
+                            if (CMethods.IsExitString(chosen_spell))
+                            {
+                                CMethods.PrintDivider();
+
+                                return false;
+                            }
+
+                            continue;
+                        }
+
+                        else
+                        {
+                            throw ex;
+                        }
+                    }
 
                     // Of course, you can't cast spells without the required amount of MP
-                    if spell.mana > user.mp:
-                        print("-'*save_load.divider_size)
-                        print(f"{user.name} doesn't have enough MP to cast {spell.name}!")
-                        main.s_input("\nPress enter/return ")
+                    if (user.CurrentSpell.ManaCost > user.MP)
+                    {
+                        CMethods.PrintDivider();
+                        Console.WriteLine($"{user.Name} doesn't have enough MP to cast {user.CurrentSpell.SpellName}!");
+                        CMethods.PressEnterReturn();
 
-                        break
+                        break;
+                    }
 
-                    spellbook[inv_name]['Previous Spell'] = [spell]
+                    if (is_battle)
+                    {
+                        if (user.CurrentSpell is HealingSpell || user.CurrentSpell is BuffSpell)
+                        {
+                            if (user.PlayerGetTarget(monster_list, $"Who should {user.Name} cast {user.CurrentSpell.SpellName} on?", true, false, false, false))
+                            {
+                                return true;
+                            }
+                            
+                            else
+                            {
+                                break;
+                            }
+                        }
 
-                    if is_battle:
-                        user.c_spell = spell
+                        else
+                        {
+                            if (user.PlayerGetTarget(monster_list, $"Who should {user.Name} cast {user.CurrentSpell.SpellName} on?", false, true, false, false)) 
+                            {
+                                return true;
+                            }
+                            
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
 
-                        if isinstance(spell, Healing) or isinstance(spell, Buff):
-                            user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
+                    else
+                    {
+                        user.PlayerGetTarget(monster_list, $"Who should {user.Name} cast {user.CurrentSpell.SpellName} on?", true, false, false, false);
+                        user.CurrentSpell.UseMagic(user, is_battle);
 
-                            return True
-
-                        else:
-                            user.choose_target(f"Who should {user.name} cast {spell.name} on?")
-
-                            return True
-
-                    else:
-                        user.choose_target(f"Who should {user.name} cast {spell.name} on?", ally=True, enemy=False)
-                        spell.use_magic(user, is_battle)
-
-                        break */
-        }
-
-        public static void GiveCharacterNewSpells(PlayableCharacter pcu)
-        {
-            /*
-            // Teach the player new spells as they level up, or low-level spells not previously in the game.
-            for spell in all_spells:
-                if isinstance(spell, Damaging) :
-                    cat = 'Damaging'
-                elif isinstance(spell, Healing) or spell.name == 'Relieve Affliction':
-                    cat = 'Healing'
-                elif isinstance(spell, Buff):
-                    cat = 'Buffs'
-                else:
-                    continue
-
-                // Only give the character spells that they are a high enough level for
-                if character.lvl >= spell.req_lvl:
-                    for x in spellbook[character.name if character != units.player else 'player'][cat]:
-                        if x.name == spell.name:
-                            break
-
-                    else:
-                        // Almost all spells can be learned by mages, but only a few can be learned by other classes
-                        if (character.class_ not in spell.class_) and spell.class_:
-                            continue
-
-                        if not save_load.do_blip:
-                            sounds.item_pickup.play()
-
-                        spellbook[character.name if character != units.player else 'player'][cat].append(spell)
-
-                        main.s_input(f'{character.name} has learned "{spell.name}", a new {cat} spell!) */
-
+                        break;
+                    }
+                }
+            }                    
         }
     }
 

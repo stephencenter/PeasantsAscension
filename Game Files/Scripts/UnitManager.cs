@@ -852,7 +852,12 @@ Increasing DIFFICULTY will provide:
 
         public void PrintBattleOptions()
         {
-            Console.WriteLine($"Pick {Name}'s Move:\n      [1] Standard Attack\n      [2] Use Magic\n      [3] Use Abilities\n      [4] Use Items\n      [5] Run");
+            Console.WriteLine($"Pick {Name}'s Move:");
+            Console.WriteLine("      [1] Standard Attack");
+            Console.WriteLine("      [2] Use Magic");
+            Console.WriteLine("      [3] Use Abilities");
+            Console.WriteLine("      [4] Use Items");
+            Console.WriteLine("      [5] Run");
         }
 
         public void PlayerChoice(List<Monster> monster_list)
@@ -865,7 +870,7 @@ Increasing DIFFICULTY will provide:
 
                 try
                 {
-                    CurrentMove = string.Join("", c_move)[0];
+                    CurrentMove = c_move[0];
                 }
 
                 catch (IndexOutOfRangeException)
@@ -901,7 +906,7 @@ Increasing DIFFICULTY will provide:
                         continue;
                     }
 
-                    if (!SpellManager.PickSpellCategory())
+                    if (!SpellManager.PickSpellCategory(this, monster_list, true))
                     {
                         PrintBattleOptions();
                         continue;
@@ -1189,7 +1194,7 @@ Increasing DIFFICULTY will provide:
 
             while (true)
             {
-                string chosen = CMethods.Input("Input [#]: ");
+                string chosen = CMethods.Input("Input [#] (or type 'back'): ");
 
                 try
                 {

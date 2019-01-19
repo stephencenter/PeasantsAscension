@@ -12,7 +12,7 @@ namespace Scripts
         // duration of all SmartSleep() methods to 0.1 seconds. 
         public static readonly bool debugging = false;
 
-        public static string Input(string prompt, bool local_do_blips = true)
+        public static string Input(string prompt = "", bool local_do_blips = true)
         {
             Console.Write(prompt);
 
