@@ -139,6 +139,7 @@ namespace Scripts
 
             else
             {
+                // Spell damage is affected by Spell Power (which is specific to the spell) rather than weapon power
                 final_damage = (int)((m_attack - m_defense / 2) * (1 + armor_resist) * (1 + spell_power));
             }
 
@@ -1087,7 +1088,7 @@ Increasing DIFFICULTY will provide:
             // Use Magic
             else if (CurrentMove == '2')
             {
-                // CurrentSpell.UseMagic(this, true);
+                CurrentSpell.UseMagic(this, true);
             }
 
             // Use Ability
