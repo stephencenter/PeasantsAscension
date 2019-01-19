@@ -158,7 +158,8 @@ namespace Scripts
         public enum DamageType { physical, piercing, magical }
         public enum GameState { overworld, battle, town }
         public enum MusicboxMode { AtoZ, ZtoA, shuffle }
-        public enum Province { Overshire, Thex, Celemia, Pelamora, Parriway, Camberlite, Kohrin, Deltora, Flute, Chintor, Whitlock, Downpour }
+        public enum SpellCategory { buff, attack, healing }
+        public enum InventoryCategory { }
 
         // element_matchup[key][0] is the element that key is weak to
         // element_matchup[key][1] is the element that key is resistant to
@@ -229,6 +230,10 @@ namespace Scripts
                 { MusicboxMode.AtoZ, "A-to-Z" },
                 { MusicboxMode.ZtoA, "Z-to-A" },
                 { MusicboxMode.shuffle, "Shuffle" },
+
+                { SpellCategory.buff, "Buff" },
+                { SpellCategory.attack, "Attack" },
+                { SpellCategory.healing, "Healing" }
             };
 
             return StatusNameMap[the_enum];

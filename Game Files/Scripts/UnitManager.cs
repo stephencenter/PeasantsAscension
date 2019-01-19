@@ -54,7 +54,7 @@ namespace Scripts
             return new Monster("Whispering Goblin");
         }
 
-        public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, int spell_power = 0, bool do_criticals = true)
+        public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, double spell_power = 0, bool do_criticals = true)
         {
             // Attacker - the Unit that is attacking
             // Target - the Unit that is being attacked
@@ -164,8 +164,8 @@ namespace Scripts
             // Neutral element is neutral both offensively and defensively
             // All other interactions are neutral
 
-            CEnums.Element attacker_element = attacker.off_element;
-            CEnums.Element target_element = target.def_element;
+            CEnums.Element attacker_element = attacker.OffensiveElement;
+            CEnums.Element target_element = target.DefensiveElement;
 
             // If either the attacker or the target is neutral element, then damage will not be modified
             if (attacker_element == CEnums.Element.neutral || target_element == CEnums.Element.neutral)
@@ -247,8 +247,8 @@ namespace Scripts
          *      GENERAL PROPERTIES     *
          * =========================== */
         public string UnitID { get; set; }
-        public CEnums.Element off_element = CEnums.Element.neutral;
-        public CEnums.Element def_element = CEnums.Element.neutral;
+        public CEnums.Element OffensiveElement = CEnums.Element.neutral;
+        public CEnums.Element DefensiveElement = CEnums.Element.neutral;
         public List<CEnums.Status> Statuses = new List<CEnums.Status> { CEnums.Status.alive };
 
         public string Name { get; set; }
@@ -865,7 +865,7 @@ Increasing DIFFICULTY will provide:
 
                 try
                 {
-                    CurrentMove = string.Join("", c_move.Where(x => char.IsDigit(x)))[0];
+                    CurrentMove = string.Join("", c_move)[0];
                 }
 
                 catch (IndexOutOfRangeException)
