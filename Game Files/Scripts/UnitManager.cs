@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Scripts
 {
@@ -19,39 +18,72 @@ namespace Scripts
         // Returns ALL PCUs, alive, dead, active, and inactive
         public static List<PlayableCharacter> GetAllPCUs()
         {
-            return new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
+            return new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine, kaltoh };
         }
 
         // Returns all PCUs that are alive, regardless of whether they're active or not
         public static List<PlayableCharacter> GetAlivePCUs()
         {
-            var pcu_list = new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
-            pcu_list = pcu_list.Where(x => x.IsAlive()).ToList();
-
-            return pcu_list;
+            return GetAllPCUs().Where(x => x.IsAlive()).ToList();
         }
 
         // Returns all PCUs that are active, regardless of whether they're alive or not
         public static List<PlayableCharacter> GetActivePCUs()
         {
-            var pcu_list = new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
-            pcu_list = pcu_list.Where(x => x.Active).ToList();
-
-            return pcu_list;
+            return GetAllPCUs().Where(x => x.Active).ToList();
         }
 
         // Returns all PCUs that are both alive and active
         public static List<PlayableCharacter> GetAliveActivePCUs()
         {
-            var pcu_list = new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine };
-            pcu_list = pcu_list.Where(x => x.Active && x.IsAlive()).ToList();
-
-            return pcu_list;
+            return GetAllPCUs().Where(x => x.Active && x.IsAlive()).ToList();
         }
+
+        public static Dictionary<CEnums.MonsterGroup, List<Monster>> MonsterGroups = new Dictionary<CEnums.MonsterGroup, List<Monster>>()
+        {
+            {
+                CEnums.MonsterGroup.animal, new List<Monster>()
+                {
+                    new FireAnt(), new FrostBat(), new SparkBat(), new SludgeRat(), new GiantLandSquid(),
+                    new GiantCrab(), new SnowWolf(), new Beetle(), new VineLizard(), new GirthWorm()
+                }
+            },
+
+            {
+                CEnums.MonsterGroup.monster, new List<Monster>()
+                {
+                    new Willothewisp(), new Alicorn(), new WindWraith(), new BogSlime(),
+                    new SandGolem(), new Griffin(), new Harpy(), new SeaSerpent(), new NagaBowwoman()
+                }
+            },
+
+            {
+                CEnums.MonsterGroup.humanoid, new List<Monster>()
+                {
+                    new Troll(), new MossOgre(), new LesserYeti(), new RockGiant(), new GoblinArcher(),
+                    new Oread(), new TenguRanger(), new Naiad(), new Imp(), new Spriggan()
+                }
+            },
+
+            {
+                CEnums.MonsterGroup.undead, new List<Monster>()
+                {
+                    new Zombie(), new UndeadCrossbowman(), new LightningGhost(), new Mummy(), new SkeletonBoneslinger()
+                }
+            },
+
+            {
+                CEnums.MonsterGroup.dungeon, new List<Monster>()
+                {
+                    new Calculator(), new Necromancer(), new CorruptThaumaturge(), new IceSoldier(), new FallenKnight(), new DevoutProtector()
+                }
+            }
+        };
 
         public static Monster GenerateMonster()
         {
-            return new Monster("Whispering Goblin");
+            Type type = CMethods.GetRandomFromIterable(MonsterGroups[CEnums.MonsterGroup.monster]).GetType();
+            return Activator.CreateInstance(type) as Monster;
         }
 
         public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, double spell_power = 0, bool do_criticals = true)
@@ -190,7 +222,7 @@ namespace Scripts
 
         public static void HealAllPCUs(double heal_percentage, bool restore_hp, bool restore_mp, bool restore_ap)
         {
-            foreach(PlayableCharacter pcu in GetAllPCUs())
+            foreach (PlayableCharacter pcu in GetAllPCUs())
             {
                 if (restore_hp)
                 {
@@ -342,7 +374,7 @@ namespace Scripts
             {
                 Statuses = new List<CEnums.Status>() { CEnums.Status.alive };
             }
-             
+
             if (HP == 0 && !IsDead())
             {
                 Statuses = new List<CEnums.Status>() { CEnums.Status.dead };
@@ -387,20 +419,20 @@ namespace Scripts
         {
             /*
             while True:
-                # Ask the player for their name, and remove any non alphanumeric/dash characters from it
-                # Also remove beginning/ending whitespace, and repeated spaces
+                // Ask the player for their name, and remove any non alphanumeric/dash characters from it
+                // Also remove beginning/ending whitespace, and repeated spaces
                 choice1 = main.s_input('What is your name, young adventurer? | Input Name: ')
                 choice2 = ' '.join(re.sub('[^\w\-_ ]', '', choice1).split())
 
-                # If your original choice contained characters, but the filtered version didn't,
-                # this message will pop up.
+                // If your original choice contained characters, but the filtered version didn't,
+                // this message will pop up.
                 if choice1 and not choice2:
                     print("I'm sorry, I didn't quite catch that.")
                     main.s_input('\nPress enter/return ')
                     print('-'*save_load.divider_size)
                     continue
 
-                # You can't name yourself nothing. Sorry but that's the rules.
+                // You can't name yourself nothing. Sorry but that's the rules.
                 if not(choice1 or choice2) :
                     continue
 
@@ -437,7 +469,7 @@ namespace Scripts
 
                     return */
         }
-        
+
         public void PlayerChooseClass()
         {
             /*
@@ -542,14 +574,14 @@ namespace Scripts
                         print()
                         break */
         }
-        
+
         public void PlayerLevelUp()
         {
             /*
             if self.exp >= self.req_xp:
             sounds.play_music('../Music/Adventures in Pixels.ogg')
 
-            rem_points = 0  # Remaining Skill Points
+            rem_points = 0  // Remaining Skill Points
             while self.exp >= self.req_xp:
                 print('-'*save_load.divider_size)
                 self.lvl += 1
@@ -639,7 +671,7 @@ namespace Scripts
 
                 fix_stats()
 
-            # The player restores all their health and mana when they level up
+            // The player restores all their health and mana when they level up
             self.hp = copy.copy(self.max_hp)
             self.mp = copy.copy(self.max_mp)
             self.status_ail = ['alive']
@@ -652,7 +684,7 @@ namespace Scripts
 
             return */
         }
-        
+
         public void PlayerAllocateSkillPoints()
         {
             /*
@@ -798,7 +830,7 @@ Increasing DIFFICULTY will provide:
                         print('-'*save_load.divider_size)
                         print(f"{self.name}'s {vis_skill} has increased!")
 
-                    # Decrement remaining points
+                    // Decrement remaining points
     rem_points -= 1
 
                     print('-'*save_load.divider_size) if rem_points else ''
@@ -924,7 +956,7 @@ Increasing DIFFICULTY will provide:
                         return;
                     }
                 }
-                 
+
                 // Use Items
                 else if (CurrentMove == '4')
                 {
@@ -1145,7 +1177,7 @@ Increasing DIFFICULTY will provide:
             }
 
             // The full list of valid targets, including both monsters and allies if applicable
-            List<dynamic> valid_targets = new List<dynamic>(); 
+            List<dynamic> valid_targets = new List<dynamic>();
 
             // Do this if both allies and enemies are valid targets (e.g. some abilities and spells)
             if (target_allies && target_enemies)
@@ -1327,18 +1359,15 @@ Increasing DIFFICULTY will provide:
     public class Monster : Unit
     {
         public CEnums.MonsterClass MClass { get; set; }
-        public CEnums.Status StatusOnAttack { get; set; }
-        public bool IsDefending { get; set; }
-
+        public string AttackMessage { get; set; }
+        public string AsciiArt { get; set; }
+        public Dictionary<string, double> ClassMultipliers { get; set; }
+        public Dictionary<string, double> SpeciesMultipliers { get; set; }
         public List<string> DropList { get; set; }
+
         public string DroppedItem { get; set; }
         public int DroppedGold { get; set; }
         public int DroppedXP { get; set; }
-
-        public string AttackMessage { get; set; }
-        public string AsciiArt { get; set; }
-
-        public Unit CurrentTarget { get; set; }
 
         public Dictionary<string, dynamic> MonsterAbilityFlags = new Dictionary<string, dynamic>()
         {
@@ -1351,6 +1380,9 @@ Increasing DIFFICULTY will provide:
             {"drained", false},
             {"disarmed", false}
         };
+
+        public bool IsDefending { get; set; }
+        public Unit CurrentTarget { get; set; }
 
         /* =========================== *
          *        MONSTER METHODS      *
@@ -1388,11 +1420,11 @@ Increasing DIFFICULTY will provide:
 
             MP -= (int)(MaxMP * 0.1);
         }
-    
+
         public bool GetDrops()
         {
             Random rng = new Random();
-            
+
             if (rng.Next(0, 4) == 0)
             {
                 DroppedItem = CMethods.GetRandomFromIterable(DropList);
@@ -1434,7 +1466,21 @@ Increasing DIFFICULTY will provide:
             MAttack += (int)(MAttack * 0.0005 * PartyInfo.Difficulty);
             PAttack += (int)(PAttack * 0.0005 * PartyInfo.Difficulty);
         }
-        
+
+        public void MonsterApplyMultipliers()
+        {
+            HP = (int)(HP * ClassMultipliers["hp"] * SpeciesMultipliers["hp"]);
+            MP = (int)(MP * ClassMultipliers["mp"] * SpeciesMultipliers["mp"]);
+            Attack = (int)(Attack * ClassMultipliers["attack"] * SpeciesMultipliers["attack"]);
+            Defense = (int)(Defense * ClassMultipliers["defense"] * SpeciesMultipliers["defense"]);
+            PAttack = (int)(PAttack * ClassMultipliers["p_attack"] * SpeciesMultipliers["p_attack"]);
+            PDefense = (int)(PDefense * ClassMultipliers["p_defense"] * SpeciesMultipliers["p_defense"]);
+            MAttack = (int)(MAttack * ClassMultipliers["m_attack"] * SpeciesMultipliers["m_attack"]);
+            MDefense = (int)(MDefense * ClassMultipliers["m_defense"] * SpeciesMultipliers["m_defense"]);
+            Speed = (int)(Speed * ClassMultipliers["speed"] * SpeciesMultipliers["speed"]);
+            Evasion = (int)(Evasion * ClassMultipliers["evasion"] * SpeciesMultipliers["evasion"]);
+        }
+
         public void MonsterExecuteMove()
         {
             // Base Turn
@@ -1477,7 +1523,7 @@ Increasing DIFFICULTY will provide:
 
             CurrentTarget = CMethods.GetRandomFromIterable(UnitManager.GetAliveActivePCUs());
 
-            if (MonsterAbilityFlags["taunted_turn"] == BattleManager.turn_counter)
+            if (MonsterAbilityFlags["taunted_turn"] == BattleManager.GetTurnCounter())
             {
                 CurrentTarget = MonsterAbilityFlags["taunted_user"];
             }
@@ -1501,7 +1547,7 @@ Increasing DIFFICULTY will provide:
                     Statuses.Remove(CEnums.Status.sleep);
                     Console.WriteLine($"The {Name} woke up!");
                 }
-                
+
                 else
                 {
                     int chance = 10;
@@ -1526,7 +1572,7 @@ Increasing DIFFICULTY will provide:
             }
 
             // Judgment day instantly kills the unit if the wait timer expires
-            if (MonsterAbilityFlags["judgment_day"] == BattleManager.turn_counter)
+            if (MonsterAbilityFlags["judgment_day"] == BattleManager.GetTurnCounter())
             {
                 CMethods.SmartSleep(500);
                 Console.WriteLine($"{Name}'s judgment day has arrived. The darkness devours it...");
@@ -1541,7 +1587,7 @@ Increasing DIFFICULTY will provide:
             Random rng = new Random();
 
             // Melee monsters have a 1 in 6 (16.667%) chance to defend
-            if (rng.Next(0, 5) == 0 && !IsDefending && !(MonsterAbilityFlags["taunted_turn"] == BattleManager.turn_counter))
+            if (rng.Next(0, 5) == 0 && !IsDefending && !(MonsterAbilityFlags["taunted_turn"] == BattleManager.GetTurnCounter()))
             {
                 IsDefending = true;
                 Console.WriteLine($"The {Name} is preparing itself for enemy attacks...");
@@ -1614,9 +1660,9 @@ Increasing DIFFICULTY will provide:
             Random rng = new Random();
 
             // If the monster is neither taunted nor silenced, it will use a spell
-            if (!(MonsterAbilityFlags["taunted_turn"] == BattleManager.turn_counter) || HasStatus(CEnums.Status.silence))
+            if (!(MonsterAbilityFlags["taunted_turn"] == BattleManager.GetTurnCounter()) || HasStatus(CEnums.Status.silence))
             {
-                if (rng.Next(0, 7) == 0 && MP > MaxMP*0.1)
+                if (rng.Next(0, 7) == 0 && MP > MaxMP * 0.1)
                 {
                     GiveStatus();
                 }
@@ -1695,9 +1741,8 @@ Increasing DIFFICULTY will provide:
         /* =========================== *
          *          CONSTRUCTOR        *
          * =========================== */
-        public Monster(string name) : base()
+        public Monster() : base()
         {
-            Name = name;
             HP = 20;
             MaxHP = 20;
             MP = 5;
@@ -1715,14 +1760,1124 @@ Increasing DIFFICULTY will provide:
             Level = 1;
 
             UnitID = Guid.NewGuid().ToString();
-            MClass = CEnums.MonsterClass.melee;
-            StatusOnAttack = CEnums.Status.paralyzation;
             IsDefending = false;
-            AttackMessage = "attacks";
-            AsciiArt = "";
-            DroppedGold = 0;
-            DroppedXP = 0;
-            DroppedItem = null;
+        }
+    }
+
+    // =========================== //
+    //       MAGIC MONSTERS        //
+    // =========================== //
+
+    public class MagicMonster : Monster
+    {
+        public MagicMonster() : base()
+        {
+            MClass = CEnums.MonsterClass.magic;
+
+            ClassMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },            // HP
+                { "mp", 1.5 },          // MP
+                { "attack", 0.5 },      // Physical Attack
+                { "defense", 0.65 },    // Physical Defense
+                { "p_attack", 0.5 },    // Pierce Attack
+                { "p_defense", 0.65 },  // Pierce Defense
+                { "m_attack", 1.5 },    // Magical Attack
+                { "m_defense", 1.5 },   // Magical Defense
+                { "speed", 1 },         // Speed
+                { "evasion", 1 }        // Evasion
+            };
+        }
+    }
+
+    public class Oread : MagicMonster
+    {
+        public Oread() : base()
+        {
+            Name = "Oread";
+            OffensiveElement = CEnums.Element.earth;
+            DefensiveElement = CEnums.Element.earth;
+            AttackMessage = "casts a basic earth spell on";
+            DropList = new List<string>() { "fairy_dust", "eye_balls" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Willothewisp : MagicMonster
+    {
+        public Willothewisp() : base()
+        {
+            Name = "Will-o'-the-wisp";
+            OffensiveElement = CEnums.Element.fire;
+            DefensiveElement = CEnums.Element.fire;
+            AttackMessage = "casts a basic fire spell on";
+            DropList = new List<string>() { "fairy_dust", "burnt_ash" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Naiad : MagicMonster
+    {
+        public Naiad() : base()
+        {
+            Name = "Naiad";
+            OffensiveElement = CEnums.Element.water;
+            DefensiveElement = CEnums.Element.water;
+            AttackMessage = "casts a basic water spell on";
+            DropList = new List<string>() { "fairy_dust", "water_vial" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Necromancer : MagicMonster
+    {
+        public Necromancer() : base()
+        {
+            Name = "Necromancer";
+            OffensiveElement = CEnums.Element.dark;
+            DefensiveElement = CEnums.Element.dark;
+            AttackMessage = "casts a basic dark spell on";
+            DropList = new List<string>() { "ripped_cloth", "demonic_essence" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class CorruptThaumaturge : MagicMonster
+    {
+        public CorruptThaumaturge() : base()
+        {
+            Name = "Corrupt Thaumaturge";
+            OffensiveElement = CEnums.Element.ice;
+            DefensiveElement = CEnums.Element.ice;
+            AttackMessage = "casts a basic ice spell on";
+            DropList = new List<string>() { "ripped_cloth", "mysterious_runes" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Imp : MagicMonster
+    {
+        public Imp() : base()
+        {
+            Name = "Imp";
+            OffensiveElement = CEnums.Element.fire;
+            DefensiveElement = CEnums.Element.neutral;
+            AttackMessage = "casts a basic fire spell on";
+            DropList = new List<string>() { "wing_piece", "fairy_dust" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Spriggan : MagicMonster
+    {
+        public Spriggan() : base()
+        {
+            Name = "Spriggan";
+            OffensiveElement = CEnums.Element.grass;
+            DefensiveElement = CEnums.Element.grass;
+            AttackMessage = "casts a basic grass spell on";
+            DropList = new List<string>() { "fairy_dust", "fairy_dust" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Alicorn : MagicMonster
+    {
+        public Alicorn() : base()
+        {
+            Name = "Alicorn";
+            OffensiveElement = CEnums.Element.light;
+            DefensiveElement = CEnums.Element.light;
+            AttackMessage = "casts a basic light spell on";
+            DropList = new List<string>() { "unicorn_horn", "angelic_essence" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class WindWraith : MagicMonster
+    {
+        public WindWraith() : base()
+        {
+            Name = "Wind Wraith";
+            OffensiveElement = CEnums.Element.wind;
+            DefensiveElement = CEnums.Element.wind;
+            AttackMessage = "casts a basic wind spell on";
+            DropList = new List<string>() { "ectoplasm", "demonic_essence" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class LightningGhost : MagicMonster
+    {
+        public LightningGhost() : base()
+        {
+            Name = "Lightning Ghost";
+            OffensiveElement = CEnums.Element.electric;
+            DefensiveElement = CEnums.Element.electric;
+            AttackMessage = "casts a basic electric spell on";
+            DropList = new List<string>() { "ectoplasm", "demonic_essence" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    // =========================== #
+    //       RANGED MONSTERS       #
+    // =========================== #
+
+    public class RangedMonster : Monster
+    {
+        public RangedMonster() : base()
+        {
+            MClass = CEnums.MonsterClass.ranged;
+
+            ClassMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 0.9 },            // HP
+                { "mp", 1 },          // MP
+                { "attack", 0.8 },      // Physical Attack
+                { "defense", 0.8 },    // Physical Defense
+                { "p_attack", 1.5 },    // Pierce Attack
+                { "p_defense", 1.2 },  // Pierce Defense
+                { "m_attack", 0.8 },    // Magical Attack
+                { "m_defense", 1 },   // Magical Defense
+                { "speed", 1.5 },         // Speed
+                { "evasion", 1.5 }        // Evasion
+            };
+        }
+    }
+
+    public class FireAnt : RangedMonster
+    {
+        public FireAnt() : base()
+        {
+            Name = "Fire Ant";
+            OffensiveElement = CEnums.Element.fire;
+            DefensiveElement = CEnums.Element.fire;
+            AttackMessage = "spits a firey glob of acid at";
+            DropList = new List<string>() { "antennae", "burnt_ash" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class NagaBowwoman : RangedMonster
+    {
+        public NagaBowwoman() : base()
+        {
+            Name = "Naga Bow-woman";
+            OffensiveElement = CEnums.Element.neutral;
+            DefensiveElement = CEnums.Element.water;
+            AttackMessage = "fires a volley of arrows at";
+            DropList = new List<string>() { "serpent_scale", "serpent_tongue" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class IceSoldier : RangedMonster
+    {
+        public IceSoldier() : base()
+        {
+            Name = "Ice Soldier";
+            OffensiveElement = CEnums.Element.ice;
+            DefensiveElement = CEnums.Element.ice;
+            AttackMessage = "fires a single hyper-cooled arrow at";
+            DropList = new List<string>() { "chain_link", "blood_vial" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class FrostBat : RangedMonster
+    {
+        public FrostBat() : base()
+        {
+            Name = "Frost Bat";
+            OffensiveElement = CEnums.Element.ice;
+            DefensiveElement = CEnums.Element.ice;
+            AttackMessage = "spits a frozen glob of acid at";
+            DropList = new List<string>() { "monster_fang", "wing_piece" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class SparkBat : RangedMonster
+    {
+        public SparkBat() : base()
+        {
+            Name = "Spark Bat";
+            OffensiveElement = CEnums.Element.electric;
+            DefensiveElement = CEnums.Element.electric;
+            AttackMessage = "spits an electrified glob of acid at";
+            DropList = new List<string>() { "monster_fang", "wing_piece" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class SkeletonBoneslinger : RangedMonster
+    {
+        public SkeletonBoneslinger() : base()
+        {
+            Name = "Skeleton Boneslinger";
+            OffensiveElement = CEnums.Element.dark;
+            DefensiveElement = CEnums.Element.dark;
+            AttackMessage = "grabs a nearby bone and slings it at";
+            DropList = new List<string>() { "bone_bag", "demonic_essence" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class UndeadCrossbowman : RangedMonster
+    {
+        public UndeadCrossbowman() : base()
+        {
+            Name = "Undead Crossbowman";
+            OffensiveElement = CEnums.Element.dark;
+            DefensiveElement = CEnums.Element.dark;
+            AttackMessage = "fires a bone-tipped crossbow bolt at";
+            DropList = new List<string>() { "chain_link", "bone_bag" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class RockGiant : RangedMonster
+    {
+        public RockGiant() : base()
+        {
+            Name = "Rock Giant";
+            OffensiveElement = CEnums.Element.earth;
+            DefensiveElement = CEnums.Element.earth;
+            AttackMessage = "hurls a giant boulder at";
+            DropList = new List<string>() { "golem_rock", "broken_crystal" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class GoblinArcher : RangedMonster
+    {
+        public GoblinArcher() : base()
+        {
+            Name = "Goblin Archer";
+            OffensiveElement = CEnums.Element.neutral;
+            DefensiveElement = CEnums.Element.neutral;
+            AttackMessage = "fires an arrow at";
+            DropList = new List<string>() { "ripped_cloth", "eye_balls" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class GiantLandSquid : RangedMonster
+    {
+        public GiantLandSquid() : base()
+        {
+            Name = "Giant Land-Squid";
+            OffensiveElement = CEnums.Element.water;
+            DefensiveElement = CEnums.Element.water;
+            AttackMessage = "shoots a black, inky substance at";
+            DropList = new List<string>() { "ink_sack", "slime_vial" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class VineLizard : RangedMonster
+    {
+        public VineLizard() : base()
+        {
+            Name = "Vine Lizard";
+            OffensiveElement = CEnums.Element.grass;
+            DefensiveElement = CEnums.Element.grass;
+            AttackMessage = "spits an acidic string of vines at";
+            DropList = new List<string>() { "serpent_scale", "living_bark" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class TenguRanger : RangedMonster
+    {
+        public TenguRanger() : base()
+        {
+            Name = "Tengu Ranger";
+            OffensiveElement = CEnums.Element.earth;
+            DefensiveElement = CEnums.Element.earth;
+            AttackMessage = "catapults a stone javelin towards";
+            DropList = new List<string>() { "wing_piece", "feathers" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    // =========================== #
+    //       MELEE MONSTERS        #
+    // =========================== #
+
+    public class MeleeMonster : Monster {
+        public MeleeMonster() : base()
+        {
+            MClass = CEnums.MonsterClass.melee;
+
+            ClassMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1.2 },            // HP
+                { "mp", 1 },          // MP
+                { "attack", 1.5 },      // Physical Attack
+                { "defense", 1.5 },    // Physical Defense
+                { "p_attack", 0.5 },    // Pierce Attack
+                { "p_defense", 1.5 },  // Pierce Defense
+                { "m_attack", 0.5 },    // Magical Attack
+                { "m_defense", 0.5 },   // Magical Defense
+                { "speed", -0.65 },         // Speed
+                { "evasion", 1 }        // Evasion
+            };
+        }
+    }
+
+    public class GiantCrab : MeleeMonster
+    {
+        public GiantCrab() : base()
+        {
+            Name = "Giant Crab";
+            OffensiveElement = CEnums.Element.water;
+            DefensiveElement = CEnums.Element.water;
+            AttackMessage = "snaps its massive claws at";
+            DropList = new List<string>() { "crab_claw", "shell_fragment" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class BogSlime : MeleeMonster
+    {
+        public BogSlime() : base()
+        {
+            Name = "Bog Slime";
+            OffensiveElement = CEnums.Element.grass;
+            DefensiveElement = CEnums.Element.grass;
+            AttackMessage = "jiggles menacingly at";
+            DropList = new List<string>() { "slime_vial", "water_vial" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Mummy : MeleeMonster
+    {
+        public Mummy() : base()
+        {
+            Name = "Mummy";
+            OffensiveElement = CEnums.Element.fire;
+            DefensiveElement = CEnums.Element.dark;
+            AttackMessage = "meanders over and grabs";
+            DropList = new List<string>() { "burnt_ash", "ripped_cloth" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class SandGolem : MeleeMonster
+    {
+        public SandGolem() : base()
+        {
+            Name = "Sand Golem";
+            OffensiveElement = CEnums.Element.earth;
+            DefensiveElement = CEnums.Element.earth;
+            AttackMessage = "begins to pile sand on";
+            DropList = new List<string>() { "golem_rock", "broken_crystal" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    class MossOgre : MeleeMonster
+    {
+        public MossOgre() : base()
+        {
+            Name = "Moss Ogre";
+            OffensiveElement = CEnums.Element.grass;
+            DefensiveElement = CEnums.Element.grass;
+            AttackMessage = "swings a tree trunk like a club at";
+            DropList = new List<string>() { "bone_bag", "monster_skull" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Troll : MeleeMonster
+    {
+        public Troll() : base()
+        {
+            Name = "Troll";
+            OffensiveElement = CEnums.Element.neutral;
+            DefensiveElement = CEnums.Element.neutral;
+            AttackMessage = "swings its mighty battleaxe at";
+            DropList = new List<string>() { "monster_skull", "eye_balls" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Griffin : MeleeMonster
+    {
+        public Griffin() : base()
+        {
+            Name = "Griffin";
+            OffensiveElement = CEnums.Element.wind;
+            DefensiveElement = CEnums.Element.wind;
+            AttackMessage = "swipes with its ferocious claws at";
+            DropList = new List<string>() { "animal_fur", "wing_piece" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class GirthWorm : MeleeMonster
+    {
+        public GirthWorm() : base()
+        {
+            Name = "Girth Worm";
+            OffensiveElement = CEnums.Element.earth;
+            DefensiveElement = CEnums.Element.earth;
+            AttackMessage = "burrows into the ground and starts charging towards";
+            DropList = new List<string>() { "monster_fang", "slime_vial" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Zombie : MeleeMonster
+    {
+        public Zombie() : base()
+        {
+            Name = "Giant Crab";
+            OffensiveElement = CEnums.Element.dark;
+            DefensiveElement = CEnums.Element.dark;
+            AttackMessage = "charges and tries to bite";
+            DropList = new List<string>() { "monster_skull", "blood_vial" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class SnowWolf : MeleeMonster
+    {
+        public SnowWolf() : base()
+        {
+            Name = "Snow Wolf";
+            OffensiveElement = CEnums.Element.ice;
+            DefensiveElement = CEnums.Element.ice;
+            AttackMessage = "claws and bites at";
+            DropList = new List<string>() { "animal_fur", "monster_fang" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class LesserYeti : MeleeMonster
+    {
+        public LesserYeti() : base()
+        {
+            Name = "Lesser Yeti";
+            OffensiveElement = CEnums.Element.ice;
+            DefensiveElement = CEnums.Element.ice;
+            AttackMessage = "begins to maul";
+            DropList = new List<string>() { "animal_fur", "monster_fang" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class SludgeRat : MeleeMonster
+    {
+        public SludgeRat() : base()
+        {
+            Name = "Sludge Rat";
+            OffensiveElement = CEnums.Element.neutral;
+            DefensiveElement = CEnums.Element.neutral;
+            AttackMessage = "ferociously chomps at";
+            DropList = new List<string>() { "monster_skull", "rodent_tail" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class SeaSerpent : MeleeMonster
+    {
+        public SeaSerpent() : base()
+        {
+            Name = "Sea Serpent";
+            OffensiveElement = CEnums.Element.water;
+            DefensiveElement = CEnums.Element.water;
+            AttackMessage = "charges head-first into";
+            DropList = new List<string>() { "serpent_scale", "serpent_tongue" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Beetle : MeleeMonster
+    {
+        public Beetle() : base()
+        {
+            Name = "Beetle";
+            OffensiveElement = CEnums.Element.earth;
+            DefensiveElement = CEnums.Element.grass;
+            AttackMessage = "charges horn-first into";
+            DropList = new List<string>() { "beetle_shell", "antennae" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Harpy : MeleeMonster
+    {
+        public Harpy() : base()
+        {
+            Name = "Harpy";
+            OffensiveElement = CEnums.Element.wind;
+            DefensiveElement = CEnums.Element.wind;
+            AttackMessage = "dives claws-first towards";
+            DropList = new List<string>() { "wing_piece", "feathers" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class FallenKnight : MeleeMonster
+    {
+        public FallenKnight() : base()
+        {
+            Name = "Fallen Knight";
+            OffensiveElement = CEnums.Element.light;
+            DefensiveElement = CEnums.Element.dark;
+            AttackMessage = "thrusts its heavenly spear towards";
+            DropList = new List<string>() { "chain_link", "blood_vial" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class DevoutProtector : MeleeMonster
+    {
+        public DevoutProtector() : base()
+        {
+            Name = "Devout Protector";
+            OffensiveElement = CEnums.Element.light;
+            DefensiveElement = CEnums.Element.light;
+            AttackMessage = "swings its holy hammer towards";
+            DropList = new List<string>() { "angelic_essence", "mysterious_runes" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
+        }
+    }
+
+    public class Calculator : MeleeMonster
+    {
+        public Calculator() : base()
+        {
+            Name = "Calculator";
+            OffensiveElement = CEnums.Element.neutral;
+            DefensiveElement = CEnums.Element.water;
+            AttackMessage = "casts its mathemagical spell on";
+            DropList = new List<string>() { "calculus_homework", "graph_paper", "protractor", "ruler", "textbook" };
+
+            SpeciesMultipliers = new Dictionary<string, double>()
+            {
+                { "hp", 1 },         // HP
+                { "mp", 1 },         // MP
+                { "attack", 1 },     // Physical Attack
+                { "defense", 1 },    // Physical Defense
+                { "p_attack", 1 },   // Pierce Attack
+                { "p_defense", 1 },  // Pierce Defense
+                { "m_attack", 1 },   // Magical Attack
+                { "m_defense", 1 },  // Magical Defense
+                { "speed", 1 },      // Speed
+                { "evasion", 1 }     // Evasion
+            };
         }
     }
 }

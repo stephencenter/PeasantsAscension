@@ -11,6 +11,7 @@ namespace Scripts
         // character instead of requesting user input. Also reduces the
         // duration of all SmartSleep() methods to 0.1 seconds. 
         public static readonly bool debugging = false;
+        public static Random rng = new Random();
 
         public static string Input(string prompt = "", bool local_do_blips = true)
         {
@@ -122,7 +123,6 @@ namespace Scripts
 
         public static T GetRandomFromIterable<T>(IEnumerable<T> iterable)
         {
-            Random rng = new Random();
             return iterable.ToList()[rng.Next(iterable.Count())];
         }
 
@@ -160,6 +160,7 @@ namespace Scripts
         public enum MusicboxMode { AtoZ, ZtoA, shuffle }
         public enum SpellCategory { buff, attack, healing }
         public enum InventoryCategory { }
+        public enum MonsterGroup { animal, monster, humanoid, undead, dungeon }
 
         // element_matchup[key][0] is the element that key is weak to
         // element_matchup[key][1] is the element that key is resistant to

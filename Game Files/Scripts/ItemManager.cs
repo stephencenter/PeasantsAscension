@@ -7,7 +7,6 @@ namespace Scripts
     {
         private static readonly List<dynamic> item_list = new List<dynamic>()
         {
-
             /* =========================== *
              *           WEAPONS           *
              * =========================== */

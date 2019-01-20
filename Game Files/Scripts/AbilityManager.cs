@@ -253,13 +253,6 @@ nothing if no songs have been played yet.", 3)
 
         public abstract void BeforeAbility(Unit user);
         public abstract void UseAbility(Unit user);
-
-        public Ability(string name, string desc, int ap_cost)
-        {
-            AbilityName = name;
-            AbilityDesc = desc;
-            APCost = ap_cost;
-        }
     }
 
     /* =========================== *
@@ -294,9 +287,11 @@ nothing if no songs have been played yet.", 3)
             print(f"{user.name} gains {phys}/{other}/{other} physical/magical/pierce defense!") */
         }
 
-        public TauntAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public TauntAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -323,9 +318,11 @@ nothing if no songs have been played yet.", 3)
             sounds.buff_spell.play() */
         }
 
-        public RollCallAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public RollCallAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -342,9 +339,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public GreatCleaveAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public GreatCleaveAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -379,9 +378,11 @@ nothing if no songs have been played yet.", 3)
             user.ability_vars['berserk'] = True */
         }
 
-        public BerserkersRageAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public BerserkersRageAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -419,9 +420,11 @@ nothing if no songs have been played yet.", 3)
             return True */
         }
 
-        public ChakraSmashAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public ChakraSmashAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -437,9 +440,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public SharedExperienceAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public SharedExperienceAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -491,9 +496,11 @@ nothing if no songs have been played yet.", 3)
                 print(f"{user.name}'s evasion increased by {evad}!") */
         }
 
-        public AuraSwapAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public AuraSwapAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -525,9 +532,11 @@ nothing if no songs have been played yet.", 3)
                 print(f"{user.target.name} lifesteals for {lifesteal} HP!") */
         }
 
-        public BreakingVowsAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public BreakingVowsAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -559,9 +568,11 @@ nothing if no songs have been played yet.", 3)
             sounds.poison_damage.play() */
         }
 
-        public InjectPoisonAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public InjectPoisonAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -589,9 +600,11 @@ nothing if no songs have been played yet.", 3)
             sounds.poison_damage.play() */
         }
 
-        public KnockoutGasAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public KnockoutGasAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -639,9 +652,11 @@ nothing if no songs have been played yet.", 3)
                 main.party_info['gp'] += max(user.target.lvl, 5) */
         }
 
-        public DisarmingBlowAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public DisarmingBlowAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost; 
         }
     }
 
@@ -682,9 +697,11 @@ nothing if no songs have been played yet.", 3)
             print(f"{user.name}'s Backstab deals {base_damage} to the {user.target.name}!") */
         }
 
-        public BackstabAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public BackstabAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -736,9 +753,11 @@ nothing if no songs have been played yet.", 3)
                     print(f"{user.target.name} stats decreased by {total}!") */
         }
 
-        public SkillSyphonAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public SkillSyphonAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -754,9 +773,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public PolymorphAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public PolymorphAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -772,9 +793,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public SpellShieldAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public SpellShieldAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -805,9 +828,11 @@ nothing if no songs have been played yet.", 3)
             print(f"{user.name} gained {drain} MP!") */
         }
 
-        public ManaDrainAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public ManaDrainAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -826,9 +851,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public RollAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public RollAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -844,9 +871,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public ScoutAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public ScoutAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -862,9 +891,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public PowershotAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public PowershotAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -895,9 +926,11 @@ nothing if no songs have been played yet.", 3)
             } */
         }
 
-        public NaturesCallAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public NaturesCallAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -952,9 +985,11 @@ nothing if no songs have been played yet.", 3)
                 sounds.enemy_hit.play() */
         }
 
-        public TipTheScalesAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public TipTheScalesAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1003,9 +1038,11 @@ nothing if no songs have been played yet.", 3)
                 print(f"The {user.target.name} had their defensive element set to Darkness!") */
         }
 
-        public UnholyBindsAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public UnholyBindsAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1046,9 +1083,11 @@ nothing if no songs have been played yet.", 3)
                 sounds.poison_damage.play() */
         }
 
-        public JudgmentAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public JudgmentAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1064,9 +1103,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public CanonizeAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public CanonizeAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1085,9 +1126,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public WaywardFellowAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public WaywardFellowAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1103,9 +1146,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public FallenComradeAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public FallenComradeAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1121,9 +1166,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public StubbornBoarAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public StubbornBoarAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1139,9 +1186,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public UnlikelyHeroAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public UnlikelyHeroAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1157,9 +1206,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public TournamentAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public TournamentAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 
@@ -1175,9 +1226,11 @@ nothing if no songs have been played yet.", 3)
 
         }
 
-        public GrandFinaleAbility(string name, string desc, int ap_cost) : base(name, desc, ap_cost)
+        public GrandFinaleAbility(string name, string desc, int ap_cost) : base()
         {
-
+            AbilityName = name;
+            AbilityDesc = desc;
+            APCost = ap_cost;
         }
     }
 

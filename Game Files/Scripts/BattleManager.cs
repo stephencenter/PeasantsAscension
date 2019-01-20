@@ -7,7 +7,7 @@ namespace Scripts
 {
     public static class BattleManager
     {
-        public static int turn_counter;
+        private static int turn_counter;
 
         public static void BattleSystem(bool is_bossfight)
         {
@@ -385,7 +385,7 @@ namespace Scripts
                 string status_list = "";
                 foreach (CEnums.Status status in unit.Statuses)
                 {
-                    if (status_list == "")
+                    if (string.IsNullOrEmpty(status_list))
                     {
                         status_list = CEnums.EnumToString(status);
                     }
@@ -421,6 +421,11 @@ namespace Scripts
             DisplayTeamStats(monster_list.Select(x => (Unit)x).ToList());
 
             CMethods.PrintDivider();
+        }
+
+        public static int GetTurnCounter()
+        {
+            return turn_counter;
         }
     }
 }
