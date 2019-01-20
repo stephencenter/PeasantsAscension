@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Scripts
 {
@@ -12,6 +11,7 @@ namespace Scripts
         public static void BattleSystem(bool is_bossfight)
         {
             Random rng = new Random();
+            TileManager.GetCellList();
 
             List<Monster> monster_list = new List<Monster>() { UnitManager.GenerateMonster() };
             List<PlayableCharacter> active_pcus = UnitManager.GetActivePCUs();

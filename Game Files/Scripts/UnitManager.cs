@@ -251,8 +251,8 @@ namespace Scripts
         public static List<string> DefeatedBosses = new List<string>();
         public static List<Town> VisitedTowns = new List<Town>();
         public static Town CurrentTown = new Town();
-        public static Tile CurrentTile = new Tile();
-        public static Tile RespawnTile = new Tile();
+        public static Tile CurrentTile = TileManager.FindTileWithID("hello_world");
+        public static Tile RespawnTile = TileManager.FindTileWithID("hello_world");
         public static int GP = 20;
         public static int StepsWithoutBattle = 0;
         public static int Difficulty = 0;
@@ -577,6 +577,10 @@ namespace Scripts
 
         public void PlayerLevelUp()
         {
+            if (CurrentXP >= RequiredXP)
+            {
+
+            }
             /*
             if self.exp >= self.req_xp:
             sounds.play_music('../Music/Adventures in Pixels.ogg')
