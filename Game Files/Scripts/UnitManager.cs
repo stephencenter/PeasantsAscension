@@ -6,6 +6,8 @@ namespace Scripts
 {
     public static class UnitManager
     {
+        // Unit manager is responsible for storing PCUs and generating monsters, as well as 
+        // performing basic methods with units such as calculating damage
         public static PlayableCharacter player = new PlayableCharacter("John", CEnums.CharacterClass.warrior, "_player", true);
         public static PlayableCharacter solou = new PlayableCharacter("Solou", CEnums.CharacterClass.mage, "_solou", true);
         public static PlayableCharacter chili = new PlayableCharacter("Chili", CEnums.CharacterClass.ranger, "_chili", true);
@@ -14,30 +16,6 @@ namespace Scripts
         public static PlayableCharacter parsto = new PlayableCharacter("Parsto", CEnums.CharacterClass.paladin, "_parsto", false);
         public static PlayableCharacter adorine = new PlayableCharacter("Adorine", CEnums.CharacterClass.warrior, "_adorine", false);
         public static PlayableCharacter kaltoh = new PlayableCharacter("Kaltoh", CEnums.CharacterClass.bard, "_kaltoh", false);
-
-        // Returns ALL PCUs, alive, dead, active, and inactive
-        public static List<PlayableCharacter> GetAllPCUs()
-        {
-            return new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine, kaltoh };
-        }
-
-        // Returns all PCUs that are alive, regardless of whether they're active or not
-        public static List<PlayableCharacter> GetAlivePCUs()
-        {
-            return GetAllPCUs().Where(x => x.IsAlive()).ToList();
-        }
-
-        // Returns all PCUs that are active, regardless of whether they're alive or not
-        public static List<PlayableCharacter> GetActivePCUs()
-        {
-            return GetAllPCUs().Where(x => x.Active).ToList();
-        }
-
-        // Returns all PCUs that are both alive and active
-        public static List<PlayableCharacter> GetAliveActivePCUs()
-        {
-            return GetAllPCUs().Where(x => x.Active && x.IsAlive()).ToList();
-        }
 
         public static Dictionary<CEnums.MonsterGroup, List<Monster>> MonsterGroups = new Dictionary<CEnums.MonsterGroup, List<Monster>>()
         {
@@ -80,12 +58,52 @@ namespace Scripts
             }
         };
 
+        // Returns ALL PCUs, alive, dead, active, and inactive
+        public static List<PlayableCharacter> GetAllPCUs()
+        {
+            return new List<PlayableCharacter>() { player, solou, chili, chyme, storm, parsto, adorine, kaltoh };
+        }
+
+        // Returns all PCUs that are alive, regardless of whether they're active or not
+        public static List<PlayableCharacter> GetAlivePCUs()
+        {
+            return GetAllPCUs().Where(x => x.IsAlive()).ToList();
+        }
+
+        // Returns all PCUs that are active, regardless of whether they're alive or not
+        public static List<PlayableCharacter> GetActivePCUs()
+        {
+            return GetAllPCUs().Where(x => x.Active).ToList();
+        }
+
+        // Returns all PCUs that are both alive and active
+        public static List<PlayableCharacter> GetAliveActivePCUs()
+        {
+            return GetAllPCUs().Where(x => x.Active && x.IsAlive()).ToList();
+        }
+
         public static Monster GenerateMonster()
         {
-            // MonsterGroups holds instances of every single Monster type. To create a monster, we
-            // get the type of one of these monsters, then use Activator.CreateInstance() to create the monster.
-            Type type = CMethods.GetRandomFromIterable(MonsterGroups[CEnums.MonsterGroup.monster]).GetType();
-            return Activator.CreateInstance(type) as Monster;
+            // Get a list of all the monster groups that this cell has in its MonsterGroups property
+            List<CEnums.MonsterGroup> cell_groups = TileManager.FindCellWithTileID(PartyInfo.CurrentTile.TileID).MonsterGroups;
+
+            // Create a new empty list of monsters
+            List<Monster> monsters = new List<Monster>() { };
+
+            // Add all the monsters from the cell_groups to the monster list
+            cell_groups.ForEach(x => monsters = monsters.Concat(MonsterGroups[x]).ToList());
+
+            // Choose a random monster type from the list and create a new monster out of it
+            Type type = CMethods.GetRandomFromIterable(monsters).GetType();
+            Monster new_monster = Activator.CreateInstance(type) as Monster;
+
+            // Level-up the monster to increase its stats to the level of the cell that the player is in
+            new_monster.MonsterLevelUp();
+
+            // Apply multipliers to the monster based on its species, class, and party difficulty
+            new_monster.MonsterApplyMultipliers();
+
+            return new_monster;
         }
 
         public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, double spell_power = 0, bool do_criticals = true)
