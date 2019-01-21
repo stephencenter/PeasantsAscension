@@ -74,7 +74,7 @@ namespace Scripts
             return sentences;
         }
 
-        public static int Clamp(int value, int min, int max)
+        public static double Clamp(double value, double min, double max)
         {
             // If value < min, returns min, if value > max, returns max. Otherwise, returns value
             // Used to impose both an upper and lower bound on Stats - for example, Evasion must be between 1 and 256.
@@ -158,7 +158,7 @@ namespace Scripts
         public enum DamageType { physical, piercing, magical }
         public enum GameState { overworld, battle, town }
         public enum MusicboxMode { AtoZ, ZtoA, shuffle }
-        public enum SpellCategory { buff, attack, healing }
+        public enum SpellCategory { buff, attack, healing, all }
         public enum InventoryCategory { }
         public enum MonsterGroup { animal, monster, humanoid, undead, dungeon }
 

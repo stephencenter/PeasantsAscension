@@ -7,7 +7,7 @@ namespace Main
         public void Run()
         {
             BattleManager.BattleSystem(false);
-
+            CMethods.PressEnterReturn();
             /* Python Code
             def game_loop():
                 party_info['music'] = tiles.find_cell_with_tile_id(party_info['current_tile'].tile_id).music

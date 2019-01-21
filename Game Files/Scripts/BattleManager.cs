@@ -17,13 +17,15 @@ namespace Scripts
             List<PlayableCharacter> active_pcus = UnitManager.GetActivePCUs();
             turn_counter = 0;
 
-            // 33% chance to add a second monster
-            if (rng.Next(0, 100) > 0)
+            UnitManager.player.CurrentXP += 1000;
+
+            // 67% chance to add a second monster
+            if (rng.Next(0, 100) > 33)
             {
                 monster_list.Add(UnitManager.GenerateMonster());
 
-                // 33% chance to add a third monster if a second monster was already added
-                if (rng.Next(0, 100) > 100)
+                // 34% chance to add a third monster if a second monster was already added
+                if (rng.Next(0, 100) > 66)
                 {
                     monster_list.Add(UnitManager.GenerateMonster());
                 }
@@ -129,8 +131,7 @@ namespace Scripts
                     {
                         if (other_unit is PlayableCharacter && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
-                            other_unit.HP =  0;
-                            other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
+                            other_unit.FixAllStats();
                             CMethods.SmartSleep(250);
                             SoundManager.ally_death.Play();
 
@@ -139,8 +140,7 @@ namespace Scripts
 
                         else if (other_unit is Monster && other_unit.HP <= 0 && other_unit.IsAlive())
                         {
-                            other_unit.HP = 0;
-                            other_unit.Statuses = new List<CEnums.Status> { CEnums.Status.dead };
+                            other_unit.FixAllStats();
                             CMethods.SmartSleep(250);
                             SoundManager.enemy_death.Play();
                             
@@ -203,7 +203,7 @@ namespace Scripts
                         }
                     }
 
-                    PartyInfo.GP += gold_drops;
+                    // PartyInfo.GP += gold_drops;
                     CMethods.Input($"Your party got {gold_drops} GP!");
 
                     foreach (PlayableCharacter pcu in active_pcus)

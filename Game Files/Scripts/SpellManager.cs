@@ -118,24 +118,24 @@ namespace Scripts
         {
             new HealingSpell("Novice Healing", @"\
 Restore a small amount of an ally's HP using holy magic. Heals 10 HP or 5% of
-the target's max HP, whichever is greater [5% Healing Power].",
+the target's max HP, whichever is greater.",
                 2, 1, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 10, 0.05, "healing_1"),
             
             new HealingSpell("Adept Healing", @"\
 Restore a moderate amount of an ally's HP using holy magic. Heals 25 HP or 20%
-of the target's max HP, whichever is greater [20% Healing Power].",
-                5, 3, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 25, 0.2, "healing_2"),
+of the target's max HP, whichever is greater.",
+                5, 8, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 25, 0.2, "healing_2"),
 
             new HealingSpell("Advanced Healing", @"\
 Restore a large amount of an ally's HP using holy magic. Heals 70 HP or 50%
-of the target's max HP, whichever is greater [50% Healing Power].",
-                10, 15, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 70, 0.5, "healing_3"),
+of the target's max HP, whichever is greater.",
+                10, 20, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 70, 0.5, "healing_3"),
                 
             // This tier can only be learned by Paladins and Mages
             new HealingSpell("Divine Healing", @"\
 Restore a very large amount of an ally's HP using holy magic. Heals 125 HP or
-75% of the target's max HP, whichever is greater [75% Healing Power].", 
-                25, 28, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.paladin, CEnums.CharacterClass.mage }, 125, 0.75, "healing_4")
+75% of the target's max HP, whichever is greater.", 
+                25, 35, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.paladin, CEnums.CharacterClass.mage }, 125, 0.75, "healing_4")
         };
 
         private static readonly List<BuffSpell> buff_spellbook = new List<BuffSpell>()
@@ -235,9 +235,18 @@ of battle.",
                 return healing_spellbook.Select(x => x as Spell).ToList();
             }
 
-            else
+            else if (spell_category == CEnums.SpellCategory.buff)
             {
                 return buff_spellbook.Select(x => x as Spell).ToList();
+            }
+
+            else
+            {
+                IEnumerable<Spell> attk_spls = attack_spellbook.Select(x => x as Spell);
+                IEnumerable<Spell> heal_spls = healing_spellbook.Select(x => x as Spell);
+                IEnumerable<Spell> buff_spls = buff_spellbook.Select(x => x as Spell);
+
+                return attk_spls.Concat(heal_spls).Concat(buff_spls).ToList();
             }
         }
 
