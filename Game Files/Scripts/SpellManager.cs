@@ -160,7 +160,7 @@ Raise an ally's evasion by 30%. Stacks with multiple uses. Lasts until the end
 of battle.Note: Evasion has a cap of 256(50 % chance to dodge).", 
                 6, 10, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "evad", "evad_2"),
 
-// Defense Buffs
+            // Defense Buffs
             new BuffSpell("Minor Defend", @"\
 Raise an ally's Physical Defense by 15%. Stacks with multiple uses. Lasts until the end
 of battle.", 

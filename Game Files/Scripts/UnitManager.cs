@@ -30,7 +30,7 @@ namespace Scripts
             {
                 CEnums.MonsterGroup.monster, new List<Monster>()
                 {
-                    new Willothewisp(), new Alicorn(), new WindWraith(), new BogSlime(),
+                    new Willothewisp(), new Alicorn(), new BogSlime(),
                     new SandGolem(), new Griffin(), new Harpy(), new SeaSerpent(), new NagaBowwoman()
                 }
             },
@@ -46,14 +46,14 @@ namespace Scripts
             {
                 CEnums.MonsterGroup.undead, new List<Monster>()
                 {
-                    new Zombie(), new UndeadCrossbowman(), new LightningGhost(), new Mummy(), new SkeletonBoneslinger()
+                    new Zombie(), new UndeadCrossbowman(), new LightningGhost(), new Mummy(), new SkeletonBoneslinger(), new WindWraith()
                 }
             },
 
             {
                 CEnums.MonsterGroup.dungeon, new List<Monster>()
                 {
-                    new Calculator(), new Necromancer(), new CorruptThaumaturge(), new IceSoldier(), new FallenKnight(), new DevoutProtector()
+                    new Necromancer(), new CorruptThaumaturge(), new IceSoldier(), new FallenKnight(), new DevoutProtector()
                 }
             }
         };
@@ -103,6 +103,7 @@ namespace Scripts
             // Apply multipliers to the monster based on its species, class, and party difficulty
             new_monster.MonsterApplyMultipliers();
 
+            // The new monster has been generated - we now return it
             return new_monster;
         }
 
@@ -1627,7 +1628,7 @@ Increasing DIFFICULTY will provide:
         /* =========================== *
          *          CONSTRUCTOR        *
          * =========================== */
-        public Monster() : base()
+        protected Monster() : base()
         {
             HP = 10;
             MaxHP = 10;
@@ -1654,7 +1655,7 @@ Increasing DIFFICULTY will provide:
     //       MELEE MONSTERS        #
     // =========================== #
     #region
-    public abstract class MeleeMonster : Monster
+    internal abstract class MeleeMonster : Monster
     {
         public override void MonsterBattleAI()
         {
@@ -1705,7 +1706,7 @@ Increasing DIFFICULTY will provide:
             }
         }
 
-        public MeleeMonster() : base()
+        protected MeleeMonster() : base()
         {
             MClass = CEnums.MonsterClass.melee;
 
@@ -1725,7 +1726,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class GiantCrab : MeleeMonster
+    internal class GiantCrab : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1756,7 +1757,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class BogSlime : MeleeMonster
+    internal class BogSlime : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1787,7 +1788,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Mummy : MeleeMonster
+    internal class Mummy : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1818,7 +1819,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class SandGolem : MeleeMonster
+    internal class SandGolem : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1849,7 +1850,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    class MossOgre : MeleeMonster
+    internal class MossOgre : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1880,7 +1881,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Troll : MeleeMonster
+    internal class Troll : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1911,7 +1912,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Griffin : MeleeMonster
+    internal class Griffin : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1942,7 +1943,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class GirthWorm : MeleeMonster
+    internal class GirthWorm : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -1973,7 +1974,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Zombie : MeleeMonster
+    internal class Zombie : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2004,7 +2005,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class SnowWolf : MeleeMonster
+    internal class SnowWolf : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2035,7 +2036,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class LesserYeti : MeleeMonster
+    internal class LesserYeti : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2066,7 +2067,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class SludgeRat : MeleeMonster
+    internal class SludgeRat : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2097,7 +2098,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class SeaSerpent : MeleeMonster
+    internal class SeaSerpent : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2128,7 +2129,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Beetle : MeleeMonster
+    internal class Beetle : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2159,7 +2160,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Harpy : MeleeMonster
+    internal class Harpy : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2190,7 +2191,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class FallenKnight : MeleeMonster
+    internal class FallenKnight : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2221,7 +2222,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class DevoutProtector : MeleeMonster
+    internal class DevoutProtector : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2252,7 +2253,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Calculator : MeleeMonster
+    internal class Calculator : MeleeMonster
     {
         public override void UponDefeating()
         {
@@ -2288,7 +2289,7 @@ Increasing DIFFICULTY will provide:
     //       RANGED MONSTERS       #
     // =========================== #
     #region
-    public abstract class RangedMonster : Monster
+    internal abstract class RangedMonster : Monster
     {
         public override void MonsterBattleAI()
         {
@@ -2314,7 +2315,7 @@ Increasing DIFFICULTY will provide:
             }
         }
 
-        public RangedMonster() : base()
+        protected RangedMonster() : base()
         {
             MClass = CEnums.MonsterClass.ranged;
 
@@ -2334,7 +2335,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class FireAnt : RangedMonster
+    internal class FireAnt : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2365,7 +2366,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class NagaBowwoman : RangedMonster
+    internal class NagaBowwoman : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2396,7 +2397,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class IceSoldier : RangedMonster
+    internal class IceSoldier : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2427,7 +2428,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class FrostBat : RangedMonster
+    internal class FrostBat : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2458,7 +2459,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class SparkBat : RangedMonster
+    internal class SparkBat : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2489,7 +2490,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class SkeletonBoneslinger : RangedMonster
+    internal class SkeletonBoneslinger : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2520,7 +2521,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class UndeadCrossbowman : RangedMonster
+    internal class UndeadCrossbowman : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2551,7 +2552,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class RockGiant : RangedMonster
+    internal class RockGiant : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2582,7 +2583,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class GoblinArcher : RangedMonster
+    internal class GoblinArcher : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2613,7 +2614,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class GiantLandSquid : RangedMonster
+    internal class GiantLandSquid : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2644,7 +2645,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class VineLizard : RangedMonster
+    internal class VineLizard : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2675,7 +2676,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class TenguRanger : RangedMonster
+    internal class TenguRanger : RangedMonster
     {
         public override void UponDefeating()
         {
@@ -2711,7 +2712,7 @@ Increasing DIFFICULTY will provide:
     //       MAGIC MONSTERS        //
     // =========================== //
     #region
-    public abstract class MagicMonster : Monster
+    internal abstract class MagicMonster : Monster
     {
         public override void MonsterBattleAI()
         {
@@ -2801,7 +2802,7 @@ Increasing DIFFICULTY will provide:
             }
         }
 
-        public MagicMonster() : base()
+        protected MagicMonster() : base()
         {
             MClass = CEnums.MonsterClass.magic;
 
@@ -2821,7 +2822,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Oread : MagicMonster
+    internal class Oread : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -2852,7 +2853,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Willothewisp : MagicMonster
+    internal class Willothewisp : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -2883,7 +2884,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Naiad : MagicMonster
+    internal class Naiad : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -2914,7 +2915,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Necromancer : MagicMonster
+    internal class Necromancer : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -2945,7 +2946,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class CorruptThaumaturge : MagicMonster
+    internal class CorruptThaumaturge : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -2976,7 +2977,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Imp : MagicMonster
+    internal class Imp : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -3007,7 +3008,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Spriggan : MagicMonster
+    internal class Spriggan : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -3038,7 +3039,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class Alicorn : MagicMonster
+    internal class Alicorn : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -3069,7 +3070,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class WindWraith : MagicMonster
+    internal class WindWraith : MagicMonster
     {
         public override void UponDefeating()
         {
@@ -3100,7 +3101,7 @@ Increasing DIFFICULTY will provide:
         }
     }
 
-    public class LightningGhost : MagicMonster
+    internal class LightningGhost : MagicMonster
     {
         public override void UponDefeating()
         {

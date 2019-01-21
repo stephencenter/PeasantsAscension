@@ -1,12 +1,10 @@
-﻿
-namespace Main
+﻿namespace Main
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            ProgramUI the_game = new ProgramUI();
-            the_game.Run();
+            ProgramUI.Run();
         }
     }
 }

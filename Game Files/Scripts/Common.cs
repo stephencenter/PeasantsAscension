@@ -7,17 +7,13 @@ namespace Scripts
 {
     public static class CMethods
     {
-        // When this is set to true, all Inputs() will auto-return a random 
-        // character instead of requesting user input. Also reduces the
-        // duration of all SmartSleep() methods to 0.1 seconds. 
-        public static readonly bool debugging = false;
         public static Random rng = new Random();
 
         public static string Input(string prompt = "", bool local_do_blips = true)
         {
             Console.Write(prompt);
 
-            if (debugging)
+            if (SavefileManager.debugging)
             {
                 string chosen = GetRandomFromIterable("abcdefghijklmnopqrstuvwxyz1234567890").ToString();
                 Console.WriteLine(chosen);
@@ -129,7 +125,7 @@ namespace Scripts
         public static void SmartSleep(int milliseconds)
         {
             // Reduce the duration of the sleep to 0.1 seconds if debugging is set to true
-            if (debugging)
+            if (SavefileManager.debugging)
             {
                 Thread.Sleep(100);
             }
