@@ -1394,11 +1394,6 @@ Increasing DIFFICULTY will provide:
 
     public abstract class Monster : Unit
     {
-        // Monster is an abstract type - To create a new type of monster,
-        // create a new subclass of MeleeMonster, RangedMonster, or MagicMonster
-        // and add it to one of the Enemy Groups in the UnitManager class.
-        // Creating a custom class for each type of monster allows us to define
-        // custom behavior for each monster, including effects upon death, AI, etc.
         public CEnums.MonsterClass MClass { get; set; }
         public string AttackMessage { get; set; }
         public string AsciiArt { get; set; }
@@ -1531,20 +1526,7 @@ Increasing DIFFICULTY will provide:
             {
                 Console.WriteLine($"The {Name} is making a move!\n");
 
-                if (MClass == CEnums.MonsterClass.melee)
-                {
-                    MonsterMeleeAI();
-                }
-
-                else if (MClass == CEnums.MonsterClass.ranged)
-                {
-                    MonsterRangedAI();
-                }
-
-                else if (MClass == CEnums.MonsterClass.magic)
-                {
-                    MonsterMagicAI();
-                }
+                MonsterBattleAI();
             }
 
             else
@@ -1620,7 +1602,43 @@ Increasing DIFFICULTY will provide:
 
         }
 
-        public void MonsterMeleeAI()
+        public abstract void UponDefeating();
+
+        public abstract void MonsterBattleAI();
+
+        /* =========================== *
+         *          CONSTRUCTOR        *
+         * =========================== */
+        public Monster() : base()
+        {
+            HP = 10;
+            MaxHP = 10;
+            MP = 5;
+            MaxMP = 5;
+            AP = 10;
+            MaxAP = 10;
+            Attack = 8;
+            Defense = 5;
+            PAttack = 8;
+            PDefense = 5;
+            MAttack = 8;
+            MDefense = 5;
+            Speed = 6;
+            Evasion = 3;
+            Level = 1;
+
+            UnitID = Guid.NewGuid().ToString();
+            IsDefending = false;
+        }
+    }
+
+    // =========================== #
+    //       MELEE MONSTERS        #
+    // =========================== #
+    #region
+    public abstract class MeleeMonster : Monster
+    {
+        public override void MonsterBattleAI()
         {
             Random rng = new Random();
 
@@ -1669,152 +1687,6 @@ Increasing DIFFICULTY will provide:
             }
         }
 
-        public void MonsterRangedAI()
-        {
-            Random rng = new Random();
-            Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
-            SoundManager.aim_weapon.Play();
-
-            CMethods.SmartSleep(750);
-
-            int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
-
-            if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
-            {
-                SoundManager.enemy_hit.Play();
-                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
-                CurrentTarget.HP -= attack_damage;
-            }
-
-            else
-            {
-                SoundManager.attack_miss.Play();
-                Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
-            }
-        }
-
-        public void MonsterMagicAI()
-        {
-            Random rng = new Random();
-            int status_mp_cost = MaxMP / 10;
-            int heal_mp_cost = MaxMP / 5;
-            int attack_mp_cost = MaxHP / 7;
-
-            // If the monster is neither taunted nor silenced, it will use a spell
-            if (!(MonsterAbilityFlags["taunted_turn"] == BattleManager.GetTurnCounter()) || HasStatus(CEnums.Status.silence))
-            {
-                if (rng.Next(0, 7) == 0 && MP >= status_mp_cost)
-                {
-                    GiveStatus(status_mp_cost);
-
-                    return;
-                }
-
-                // Magic heal
-                else if (HP <= MaxHP / 5 && MP >= heal_mp_cost)
-                {
-                    Console.WriteLine($"The {Name} is casting a healing spell on itself...");
-                    CMethods.SmartSleep(750);
-
-                    int total_heal = Math.Max(HP / 5, 5);
-                    HP += total_heal;
-                    MP -= heal_mp_cost;
-
-                    Console.WriteLine($"The {Name} heals itself for {total_heal} HP!");
-                    SoundManager.magic_healing.Play();
-
-                    return;
-                }
-
-                // Magical Attack
-                else if (MP >= attack_mp_cost)
-                {
-                    SoundManager.magic_attack.Play();
-
-                    Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
-                    CMethods.SmartSleep(750);
-
-                    // Spell Power is equal to Level/105 + 0.05, with a maximum value of 1
-                    // This formula means that spell power increases linearly from 0.06 at level 1, to 1 at level 100
-                    // All monsters from level 100 onwards have exactly 1 spell power
-                    double m_spell_power = Math.Min((double)Level / 105 + 0.05, 1);
-                    int spell_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.magical, spell_power: m_spell_power);
-
-                    if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
-                    {
-                        SoundManager.enemy_hit.Play();
-                        Console.WriteLine($"The {Name}'s spell deals {spell_damage} damage to {CurrentTarget.Name}!");
-
-                        CurrentTarget.HP -= spell_damage;
-                    }
-
-                    else
-                    {
-                        SoundManager.attack_miss.Play();
-                        Console.WriteLine($"The {Name}'s spell narrowly misses {CurrentTarget.Name}!");
-                    };
-
-                    MP -= attack_mp_cost;
-
-                    return;
-                }
-            }
-
-            // Non-magical Attack (Pierce Damage). Only happens if taunted, silenced, or if out of mana.           
-            Console.WriteLine($"The {Name} attacks {CurrentTarget.Name}...");
-            SoundManager.aim_weapon.Play();
-
-            CMethods.SmartSleep(750);
-            int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
-
-            if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
-            {
-                SoundManager.enemy_hit.Play();
-                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
-                CurrentTarget.HP -= attack_damage;
-            }
-
-            else
-            {
-                SoundManager.attack_miss.Play();
-                Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
-            }
-        }
-
-        public abstract void UponDefeating();
-
-        /* =========================== *
-         *          CONSTRUCTOR        *
-         * =========================== */
-        public Monster() : base()
-        {
-            HP = 10;
-            MaxHP = 10;
-            MP = 5;
-            MaxMP = 5;
-            AP = 10;
-            MaxAP = 10;
-            Attack = 8;
-            Defense = 5;
-            PAttack = 8;
-            PDefense = 5;
-            MAttack = 8;
-            MDefense = 5;
-            Speed = 6;
-            Evasion = 3;
-            Level = 1;
-
-            UnitID = Guid.NewGuid().ToString();
-            IsDefending = false;
-        }
-    }
-
-    // =========================== #
-    //       MELEE MONSTERS        #
-    // =========================== #
-    #region
-    public abstract class MeleeMonster : Monster
-    {
         public MeleeMonster() : base()
         {
             MClass = CEnums.MonsterClass.melee;
@@ -2400,6 +2272,30 @@ Increasing DIFFICULTY will provide:
     #region
     public abstract class RangedMonster : Monster
     {
+        public override void MonsterBattleAI()
+        {
+            Random rng = new Random();
+            Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
+            SoundManager.aim_weapon.Play();
+
+            CMethods.SmartSleep(750);
+
+            int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
+
+            if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
+            {
+                SoundManager.enemy_hit.Play();
+                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
+                CurrentTarget.HP -= attack_damage;
+            }
+
+            else
+            {
+                SoundManager.attack_miss.Play();
+                Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
+            }
+        }
+
         public RangedMonster() : base()
         {
             MClass = CEnums.MonsterClass.ranged;
@@ -2799,6 +2695,94 @@ Increasing DIFFICULTY will provide:
     #region
     public abstract class MagicMonster : Monster
     {
+        public override void MonsterBattleAI()
+        {
+            Random rng = new Random();
+            int status_mp_cost = MaxMP / 10;
+            int heal_mp_cost = MaxMP / 5;
+            int attack_mp_cost = MaxHP / 7;
+
+            // If the monster is neither taunted nor silenced, it will use a spell
+            if (!(MonsterAbilityFlags["taunted_turn"] == BattleManager.GetTurnCounter()) || HasStatus(CEnums.Status.silence))
+            {
+                if (rng.Next(0, 7) == 0 && MP >= status_mp_cost)
+                {
+                    GiveStatus(status_mp_cost);
+
+                    return;
+                }
+
+                // Magic heal
+                else if (HP <= MaxHP / 5 && MP >= heal_mp_cost)
+                {
+                    Console.WriteLine($"The {Name} is casting a healing spell on itself...");
+                    CMethods.SmartSleep(750);
+
+                    int total_heal = Math.Max(HP / 5, 5);
+                    HP += total_heal;
+                    MP -= heal_mp_cost;
+
+                    Console.WriteLine($"The {Name} heals itself for {total_heal} HP!");
+                    SoundManager.magic_healing.Play();
+
+                    return;
+                }
+
+                // Magical Attack
+                else if (MP >= attack_mp_cost)
+                {
+                    SoundManager.magic_attack.Play();
+
+                    Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
+                    CMethods.SmartSleep(750);
+
+                    // Spell Power is equal to Level/105 + 0.05, with a maximum value of 1
+                    // This formula means that spell power increases linearly from 0.06 at level 1, to 1 at level 100
+                    // All monsters from level 100 onwards have exactly 1 spell power
+                    double m_spell_power = Math.Min((double)Level / 105 + 0.05, 1);
+                    int spell_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.magical, spell_power: m_spell_power);
+
+                    if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
+                    {
+                        SoundManager.enemy_hit.Play();
+                        Console.WriteLine($"The {Name}'s spell deals {spell_damage} damage to {CurrentTarget.Name}!");
+
+                        CurrentTarget.HP -= spell_damage;
+                    }
+
+                    else
+                    {
+                        SoundManager.attack_miss.Play();
+                        Console.WriteLine($"The {Name}'s spell narrowly misses {CurrentTarget.Name}!");
+                    };
+
+                    MP -= attack_mp_cost;
+
+                    return;
+                }
+            }
+
+            // Non-magical Attack (Pierce Damage). Only happens if taunted, silenced, or if out of mana.           
+            Console.WriteLine($"The {Name} attacks {CurrentTarget.Name}...");
+            SoundManager.aim_weapon.Play();
+
+            CMethods.SmartSleep(750);
+            int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
+
+            if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
+            {
+                SoundManager.enemy_hit.Play();
+                Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
+                CurrentTarget.HP -= attack_damage;
+            }
+
+            else
+            {
+                SoundManager.attack_miss.Play();
+                Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
+            }
+        }
+
         public MagicMonster() : base()
         {
             MClass = CEnums.MonsterClass.magic;
