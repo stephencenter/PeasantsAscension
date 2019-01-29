@@ -6,22 +6,69 @@ namespace Scripts
 {
     public static class TileManager
     {
+        private const string nearton_desc = @"\
+Nearton is surrounded by a large, natural moat. Past that, trees as far as the
+eyes can see.";
+
         /* =========================== *
          *            LISTS            *
          * =========================== */
         private static readonly List<Tile> tile_list = new List<Tile>()
         {
+            new Tile("Town of Nearton", "nearton_tile", nearton_desc + @"\n
+The town of Nearton is mere minutes away from this point!Stopping by
+there might be a smart idea.",
+                town_list: new List<string>() { },
+                north: "nearton_n",
+                south: "nearton_s",
+                east: "nearton_e",
+                west: "nearton_w"),
 
+            new Tile("Nearton Outskirts", "nearton_sw", nearton_desc,
+                north: "nearton_w",                
+                east: "nearton_s"),
+
+            new Tile("Nearton Outskirts", "nearton_s", nearton_desc,
+                north: "nearton_tile",
+                east: "nearton_se",
+                west: "nearton_sw"),
+
+            new Tile("Nearton Outskirts", "nearton_se", nearton_desc,
+                north: "nearton_e",
+                west: "nearton_s"),
+
+            new Tile("Nearton Outskirts", "nearton_w", nearton_desc,
+                north: "nearton_nw",
+                south: "nearton_sw",
+                east: "nearton_tile"),
+
+            new Tile("Nearton Outskirts", "nearton_e", nearton_desc,
+                north: "nearton_ne",
+                south: "nearton_se",
+                west: "nearton_tile"),
+
+            new Tile("Nearton Outskirts", "nearton_nw", nearton_desc,
+                south: "nearton_w",
+                east: "nearton_n"),
+
+            new Tile("Nearton Outskirts", "nearton_n", nearton_desc,
+                south: "nearton_tile",
+                east: "nearton_ne",
+                west: "nearton_nw"),
+
+            new Tile("Nearton Outskirts", "nearton_ne", nearton_desc,
+                south: "nearton_e",
+                west: "nearton_n"),
         };
 
         private static readonly List<Cell> cell_list = new List<Cell>()
         {
-
+            new NeartonCell()
         };
 
         private static readonly List<Province> province_list = new List<Province>()
         {
-
+            new Province("Overshire", new List<string>() { "nearton_cell" }, "overshire_prov")
         };
 
         /* =========================== *
@@ -128,7 +175,8 @@ namespace Scripts
             // Takes in a TileID, returns the province that matches the ID
             try
             {
-                return GetProvinceList().Single(x => x.CellList.Contains(tile_id));
+                string cell_id = GetCellList().Single(x => x.TileList.Contains(tile_id)).CellID;
+                return GetProvinceList().Single(x => x.CellList.Contains(cell_id));
             }
 
             catch (Exception ex)
@@ -153,8 +201,196 @@ namespace Scripts
         public string ToWest { get; set; }
         public string ToEast { get; set; }
         public string TileID { get; set; }
+        public List<string> TownList { get; set; }
 
-        public Tile(string name, string desc, string north, string south, string west, string east, string tile_id)
+        public string GenerateAsciiArt()
+        {
+            int num_adj_tiles = 0;
+
+            foreach (string str in new List<string>() { ToWest, ToSouth, ToNorth, ToEast })
+            {
+                if (str != null)
+                {
+                    num_adj_tiles++;
+                }
+            }
+
+            // Calculate which tile ascii art to display
+            if (num_adj_tiles == 1)
+            {
+                if (ToNorth != null)
+                {
+                    return @"
+                | N |
+                |   |
+                | X |
+                |___| X = Player Party";
+                }
+
+                else if (ToSouth != null)
+                {
+                    return @" 
+                 ___
+                |   |
+                | X |
+                |   |
+                | S | X = Player Party";
+                }
+
+                else if (ToWest != null)
+                {
+                    return @"
+            ________
+            W     X |
+            ________| X = Player Party";
+                }
+
+                else if (ToEast != null)
+                {
+                    return @"
+                 ________
+                | X     E
+                |________ X = Player Party";
+                }
+
+                else
+                {
+                    throw new Exception($"Failed to generate ascii art for tile {TileID}");
+                }
+            }
+
+            else if (num_adj_tiles == 2)
+            {
+                if ((ToNorth != null) && (ToWest != null))
+                {
+                    return @"
+                | N |
+            ____|   |
+            W     X |
+            ________| X = Player Party";
+                }
+
+                else if ((ToNorth != null) && (ToEast != null))
+                {
+                    return @"
+                | N |
+                |   |____
+                | X    E
+                |________ X = Player Party";
+                }
+
+                else if ((ToNorth != null) && (ToSouth != null))
+                {
+                    return @"
+                | N |
+                |   |
+                | X |
+                |   |
+                | S | X = Player Party";
+                }
+
+                else if ((ToWest != null) && (ToEast != null))
+                {
+                    return @"
+            _____________
+            W     X     E
+            _____________ X = Player Party";
+                }
+
+                else if ((ToWest != null) && (ToSouth != null))
+                {
+                    return @"
+            ________
+            W     X |
+            ____    |
+                |   |
+                | S | X = Player Party";
+                }
+
+                else if ((ToEast != null) && (ToSouth != null))
+                {
+                    return @"
+                 ________
+                | X     E
+                |    ____
+                |   |
+                | S | X = Player Party";
+                }
+
+                else
+                {
+                    throw new Exception($"Failed to generate ascii art for tile {TileID}");
+                }
+            }
+
+            else if (num_adj_tiles == 3)
+            {
+                if ((ToNorth != null) && (ToWest != null) && (ToEast != null))
+                {
+                    return @"
+                | N |
+            ____|   |____
+            W     X     E
+            _____________ X = Player Party";
+                }
+
+
+                else if ((ToNorth != null) && (ToWest != null) &&  (ToSouth != null))
+                {
+                    return @"
+                | N |
+            ____|   |
+            W     X |
+            ____    |
+                |   |
+                | S | X = Player Party";
+                }
+
+                else if ((ToNorth != null) && (ToEast != null) && (ToSouth != null))
+                {
+                    return @"
+                | N |
+                |   |____
+                | X     E
+                |    ____
+                |   |
+                | S | X = Player Party";
+                }
+
+                else if ((ToSouth != null) && (ToEast != null) && (ToSouth != null))
+                {
+                    return @"
+            _____________
+            W     X     E
+            ____     ____
+                |   |
+                | S | X = Player Party";
+                }
+
+                else
+                {
+                    throw new Exception($"Failed to generate ascii art for tile {TileID}");
+                }
+            }
+
+            else if (num_adj_tiles == 4)
+            {
+                return @"
+                | N |
+            ____|   |____
+            W     X     E
+            ____     ____
+                |   |
+                | S | X = Player Party";
+            }
+
+            else 
+            {
+                throw new Exception($"Failed to generate ascii art for tile {TileID}");
+            }
+        }
+
+        public Tile(string name, string tile_id, string desc, List<string> town_list = null, string north = null, string south = null, string west = null, string east = null)
         {
             Name = name;
             Description = desc;
@@ -162,15 +398,18 @@ namespace Scripts
             ToSouth = south;
             ToWest = west;
             ToEast = east;
+            TownList = town_list ?? new List<string>();
             TileID = tile_id;
         }
     }
 
-    public class Cell
+    public abstract class Cell
     {
         // Cells are containers for tiles
         // They store information related to monster spawning, music, and store item quality
         // which are all cell-specific and not tile-specific
+        // The Cell class is abstract. Using a constructor to create a Cell would get
+        // messy so all the information is preloaded into custom Cell subclasses
         public string CellName { get; set; }
         public List<string> TileList { get; set; }
         public string PrimaryTile { get; set; }
@@ -181,26 +420,9 @@ namespace Scripts
         public int StoreLevel { get; set; }
         public string CellID { get; set; }
 
-        public void VerifyAllTilesExist()
+        protected Cell()
         {
-            // This method verifies that all of the TileIDs in the TileList correspond to real tiles
-            // This will throw an error if any fake TileIDs are found
-            TileList.ForEach(x => TileManager.FindTileWithID(x));
-            TileManager.FindTileWithID(PrimaryTile);
-        }
 
-        public Cell(string name, List<string> tile_list, string music, List<CEnums.MonsterGroup> m_groups, int min_lvl, int max_lvl, int store_level, string cell_id)
-        {
-            CellName = name;
-            TileList = tile_list;
-            Music = music;
-            MonsterGroups = m_groups;
-            MinMonsterLevel = min_lvl;
-            MaxMonsterLevel = max_lvl;
-            StoreLevel = store_level;
-            CellID = cell_id;
-
-            VerifyAllTilesExist();
         }
     }
 
@@ -210,20 +432,28 @@ namespace Scripts
         public List<string> CellList { get; set; }
         public string ProvID { get; set; }
 
-        public void VerifyAllCellsExist()
-        {
-            // This method verifies that all of the CellIDs in the CellList correspond to real cells
-            // This will throw an error if any fake CellIDs are found
-            CellList.ForEach(x => TileManager.FindCellWithID(x));
-        }
-
         public Province(string name, List<string> cells, string prov_id)
         {
             ProvinceName = name;
             CellList = cells;
             ProvID = prov_id;
+        }
+    }
 
-            VerifyAllCellsExist();
+    // Custom Cells
+    internal class NeartonCell : Cell
+    {
+        public NeartonCell() : base() 
+        {
+            CellName = "Nearton"; 
+            TileList = new List<string>() { "nearton_tile", "nearton_w", "nearton_ne", "nearton_e", "nearton_s", "nearton_n", "nearton_se", "nearton_nw", "nearton_sw" };
+            PrimaryTile = "nearton_tile";
+            MonsterGroups = new List<CEnums.MonsterGroup>() { CEnums.MonsterGroup.animal, CEnums.MonsterGroup.monster };
+            Music = "Music/Through the Forest.ogg";
+            MinMonsterLevel = 1;
+            MaxMonsterLevel = 3;
+            StoreLevel = 1;
+            CellID = "nearton_cell";
         }
     }
 }

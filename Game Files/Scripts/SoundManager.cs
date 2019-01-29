@@ -47,7 +47,7 @@ namespace Scripts
         // Critical Hit -- Played when someone lands a critical hit
         public static readonly SoundPlayer critical_hit = new SoundPlayer("Sound FX/critical_hit.wav");
 
-        // Lockpick Break -- Played when failing to pick a lock (Stolen from Oblivion)
+        // Lockpick Break -- Played when failing to pick a lock
         public static readonly SoundPlayer lockpick_break = new SoundPlayer("Sound FX/lockpick_break.wav");
 
         // Lockpicking -- Played when attempting to pick a lock

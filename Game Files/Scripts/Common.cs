@@ -5,6 +5,8 @@ using System.Threading;
 
 namespace Scripts
 {
+    // Here we store classes that contain useful methods, enums, and data 
+    // that would not fit in any other class
     public static class CMethods
     {
         public static Random rng = new Random();
@@ -251,5 +253,32 @@ namespace Scripts
 
             return damage_type_map[p_class];
         }
+    }
+
+    public static class CInfo
+    {
+        public static CEnums.GameState Gamestate = CEnums.GameState.overworld;
+        public static CEnums.MusicboxMode MusicboxMode = CEnums.MusicboxMode.AtoZ;
+        public static List<string> DefeatedBosses = new List<string>();
+        public static int GP = 20;
+        public static int StepsWithoutBattle = 0;
+        public static int Difficulty = 0;
+        public static int AtlasStrength = 1;
+        public static string Music = "Music/Through the Forest.ogg";
+        public static string MusicboxFolder = "";
+        public static string CurrentTile = "nearton_s";
+        public static string RespawnTile = "nearton_tile";
+        public static bool MusicboxIsPlaying = false;
+        public static bool DoSpawns = true;
+
+        public static List<string> FriendNames = new List<string>()
+        {
+            "apollo kalar", "apollokalar", "apollo_kalar",
+            "flygon jones", "flygonjones", "flygon_jones",
+            "starkiller106024", "starkiller", "star killer",
+            "atomic vexal", "vexal", "wave vex",
+            "therichpig", "therichpig64", "spaghettipig64", "spaghettipig", "pastahog", "pastahog64",
+            "theaethersplash", "the aether splash", "aethersplash", "aether splash"
+        };
     }
 }

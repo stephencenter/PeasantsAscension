@@ -1,4 +1,7 @@
 ﻿using Scripts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Main
 {
@@ -14,80 +17,172 @@ namespace Main
 
         private static void MainGameLoop()
         {
-            /*
-            party_info['music'] = tiles.find_cell_with_tile_id(party_info['current_tile'].tile_id).music
-            sounds.play_music(party_info['music'])
+            CInfo.Music = TileManager.FindCellWithTileID(CInfo.CurrentTile).Music;
+            // sounds.play_music(party_info['music'])
 
-            while True:
-                if not towns.search_towns():
-                    print('-' * save_load.divider_size)
+            while (true)
+            {
+                if (!TownManager.SearchForTowns())
+                {
+                    CMethods.PrintDivider();
+                }
 
-                available_dirs = game_ui()
+                DisplayGameUI();
+                List<Tuple<char, string>> available_dirs = GetAvailableDirections();
 
-                while True:
-                    party_info['gamestate'] = 'overworld'
-                    command = s_input('Input Command (type "help" to view command list): ').lower()
+                while (true)
+                {
+                    CInfo.Gamestate = CEnums.GameState.overworld;
+                    string command = CMethods.Input("Input Command (type 'help' to view command list): ").ToLower();
 
-                    if command == "debug-menu":
-                        debug_command()
+                    if (command == "debug-menu")
+                    {
+                        // CommandManager.DebugCommand();
+                    }
 
-                    elif any(map(command.startswith, [x[0] for x in available_dirs])):
-                        move_command(available_dirs, command[0])
+                    else if (available_dirs.Any(x => command.StartsWith(x.Item1.ToString())))
+                    {
+                        CommandManager.MoveCommand(available_dirs, command[0]);
+                        break;
+                    }
 
-                        break
+                    else if (command.StartsWith("p"))
+                    {
+                        // stats_command()
+                    }
 
-                    elif command.startswith('p'):
-                        stats_command()
+                    else if (command.StartsWith("m"))
+                    {
+                        // magic_command()
+                    }
 
-                    elif command.startswith('m'):
-                        magic_command()
+                    else if (command.StartsWith("i"))
+                    {
+                        // inv_command()
+                    }
 
-                    elif command.startswith('i'):
-                        inv_command()
+                    else if (command.StartsWith("t"))
+                    {
+                        // tools_command()
+                    }
 
-                    elif command.startswith('t'):
-                        tools_command()
+                    else if (command.StartsWith("l"))
+                    {
+                        // look_command()
+                    }
 
-                    elif command.startswith('l'):
-                        look_command()
+                    else if (command.StartsWith("r"))
+                    {
+                        // recheck_command()
+                    }
 
-                    elif command.startswith('r'):
-                        recheck_command()
+                    else if (command.StartsWith("c"))
+                    {
+                        // title_screen.edit_settings()
+                    }
 
-                    elif command.startswith('c'):
-                        title_screen.edit_settings()
+                    else if (command.StartsWith("h"))
+                    {
+                        // help_command()
+                    }
 
-                    elif command.startswith('h'):
-                        help_command()
+                    else
+                    {
+                        continue;
+                    }
 
-                    else:
-                        continue
+                    DisplayGameUI();
 
-                    available_dirs = game_ui() */
+                    available_dirs = GetAvailableDirections();
+                }
+            }
         }
 
         private static void DisplayGameUI()
         {
+            Tile tile = TileManager.FindTileWithID(CInfo.CurrentTile);
+            List<Tuple<char, string>> available_dirs = GetAvailableDirections();
 
+            Console.WriteLine("-CURRENT LOCATION-");
+            Console.WriteLine($"{tile.GenerateAsciiArt()}\n");
+            Console.WriteLine($"Region [{tile.Name}] | Province: [{TileManager.FindProvinceWithTileID(tile.TileID).ProvinceName}]");
+
+            foreach (Tuple<char, string> direction in available_dirs)
+            {
+                if (direction.Item1 == 'n')
+                {
+                    Console.Write("    To the [N]orth");
+                }
+
+                else if (direction.Item1 == 's')
+                {
+                    Console.Write("    To the [S]outh");
+                }
+
+                else if (direction.Item1 == 'e')
+                {
+                    Console.Write("    To the [E]ast");
+                }
+
+                else if (direction.Item1 == 'w')
+                {
+                    Console.Write("    To the [W]est");
+                }
+
+                string adj_tile = TileManager.FindTileWithID(direction.Item2).Name;
+                Console.WriteLine($" lies the {adj_tile}");
+            }
+        }
+
+        private static List<Tuple<char, string>> GetAvailableDirections()
+        {
+            List<Tuple<char, string>> available_dirs = new List<Tuple<char, string>>() { };
+            Tile tile = TileManager.FindTileWithID(CInfo.CurrentTile);
+
+            // Tells the player which directions are available to go in
+            foreach (string location in new List<string>() { tile.ToNorth, tile.ToSouth, tile.ToEast, tile.ToWest })
+            {
+                if ((location == tile.ToNorth) && (location != null))
+                {
+                    available_dirs.Add(new Tuple<char, string>('n', location));
+                }
+
+                else if ((location == tile.ToSouth) && (location != null))
+                {
+                    available_dirs.Add(new Tuple<char, string>('s', location));
+                }
+
+                else if ((location == tile.ToEast) && (location != null))
+                {
+                    available_dirs.Add(new Tuple<char, string>('e', location));
+                }
+
+                else if ((location == tile.ToWest) && (location != null))
+                {
+                    available_dirs.Add(new Tuple<char, string>('w', location));
+                }
+            }
+
+            return available_dirs;
         }
 
         private static void DisplayTitlescreen()
         {
             /*
             title_logo = @"\
-  ____                            _       _
- |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
- | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
- |  __/  __/ (_| \__ \ (_| | | | | |_\__ \\
- |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
-         _                           _
+    ____                            _       _
+    |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
+    | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
+    |  __/  __/ (_| \__ \ (_| | | | | |_\__ \\
+    |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
+            _                           _
         / \   ___  ___ ___ _ __  ___(_) ___  _ __
-       / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
-      / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
-     /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-             Peasants' Ascension {game_version} -- A Text-RPG by Stephen Center
-Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
-Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]"
+        / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
+        / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
+        /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
+                Peasants' Ascension {game_version} -- A Text-RPG by Stephen Center
+    Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
+    Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]"
     { '-' * save_load.divider_size}
 
     sounds.play_music('../Music/Title Screen.flac')
@@ -150,7 +245,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]"
                 print('There was a problem opening "credits.txt".')
                 main.s_input("\nPress enter/return ") */
         }
-    
+
         private static void EditSettings()
         {
             /*
@@ -162,10 +257,10 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]"
             while True:
                 print(f"""\
                 Config Menu:
-              [1] Music Volume--->Currently set to "{int(save_load.music_vol*100)}%"
-              [2] Sound Volume--->Currently set to "{int(save_load.sound_vol*100)}%"
-              [3] Divider Size--->Currently set to "{save_load.divider_size}"
-              [4] Enable Blips--->Currently set to "{bool(save_load.do_blip)}\"""")
+                [1] Music Volume--->Currently set to "{int(save_load.music_vol*100)}%"
+                [2] Sound Volume--->Currently set to "{int(save_load.sound_vol*100)}%"
+                [3] Divider Size--->Currently set to "{save_load.divider_size}"
+                [4] Enable Blips--->Currently set to "{bool(save_load.do_blip)}\"""")
 
                 while True:
                     setting = main.s_input('Input [#] (or type "back"): ').lower()
@@ -202,7 +297,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]"
                         print('-'*save_load.divider_size)
                         return */
         }
-    
+
         public static void SetVolume()
         {
             /*
@@ -303,7 +398,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]"
                 elif y_n.startswith("n"):
                     return */
         }
-    
+
         private static void SetDividerSize()
         {
             /*

@@ -73,39 +73,36 @@ class Tile:
                                         self.to_e] if t is not None])
 
         # Calculate which tile ascii art to display
-        if no_adj_tiles == 1:
+        if (no_adj_tiles == 1) 
+        {
             if self.to_n:
                 return """
-            | N |
-            |   |
-            | X |
-            |___| X = Player Party\n"""
+                | N |
+                |   |
+                | X |
+                |___| X = Player Party\n"""
 
             elif self.to_s:
                 return """
-             ___
-            |   |
-            | X |
-            |   |
-            | S | X = Player Party\n"""
+                 ___
+                |   |
+                | X |
+                |   |
+                | S | X = Player Party\n"""
 
             elif self.to_w:
                 return """
-        ________
-        W     X |
-        ________| X = Player Party\n"""
+            ________
+            W     X |
+            ________| X = Player Party\n"""
 
             elif self.to_e:
-                return """
-             ________
-            | X     E
-            |________ X = Player Party\n"""
-
-            elif self.to_dn or self.to_up:
-                return """
-             ___
-            | X |
-            |___| X = Player Party\n"""
+                return @"
+                 ________
+                | X     E
+                |________ X = Player Party\n"
+        }
+            
 
         elif no_adj_tiles == 2:
             if self.to_n and self.to_w:

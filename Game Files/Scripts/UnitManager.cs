@@ -85,7 +85,7 @@ namespace Scripts
         public static Monster GenerateMonster()
         {
             // Get a list of all the monster groups that this cell has in its MonsterGroups property
-            List<CEnums.MonsterGroup> cell_groups = TileManager.FindCellWithTileID(PartyInfo.CurrentTile.TileID).MonsterGroups;
+            List<CEnums.MonsterGroup> cell_groups = TileManager.FindCellWithTileID(CInfo.CurrentTile).MonsterGroups;
 
             // Create a new empty list of monsters
             List<Monster> monsters = new List<Monster>() { };
@@ -263,36 +263,6 @@ namespace Scripts
                 pcu.FixAllStats();
             }
         }
-    }
-
-    public static class PartyInfo
-    {
-        public static CEnums.GameState Gamestate = CEnums.GameState.overworld;
-        public static CEnums.MusicboxMode MusicboxMode = CEnums.MusicboxMode.AtoZ;
-        public static List<string> DefeatedBosses = new List<string>();
-        public static List<Town> VisitedTowns = new List<Town>();
-        public static Town CurrentTown = new Town();
-        public static Tile CurrentTile = TileManager.FindTileWithID("hello_world");
-        public static Tile RespawnTile = TileManager.FindTileWithID("hello_world");
-        public static int GP = 20;
-        public static int StepsWithoutBattle = 0;
-        public static int Difficulty = 0;
-        public static int AtlasStrength = 1;
-        public static string Music = "../../../Music/Through the Forest.ogg";
-        public static string CurrentProvince = "Overshire";
-        public static string MusicboxFolder = "";
-        public static bool MusicboxIsPlaying = false;
-        public static bool DoSpawns = true;
-
-        public static List<string> FriendNames = new List<string>()
-        {
-            "apollo kalar", "apollokalar", "apollo_kalar",
-            "flygon jones", "flygonjones", "flygon_jones",
-            "starkiller106024", "starkiller", "star killer",
-            "atomic vexal", "vexal", "wave vex",
-            "therichpig", "therichpig64", "spaghettipig64", "spaghettipig", "pastahog", "pastahog64",
-            "theaethersplash", "the aether splash", "aethersplash", "aether splash"
-        };
     }
 
     public abstract class Unit
@@ -1492,8 +1462,8 @@ Increasing DIFFICULTY will provide:
         public void MonsterLevelUp()
         {
             Random rng = new Random();
-            int minlvl = TileManager.FindCellWithTileID(PartyInfo.CurrentTile.TileID).MinMonsterLevel;
-            int maxlvl = TileManager.FindCellWithTileID(PartyInfo.CurrentTile.TileID).MaxMonsterLevel;
+            int minlvl = TileManager.FindCellWithTileID(CInfo.CurrentTile).MinMonsterLevel;
+            int maxlvl = TileManager.FindCellWithTileID(CInfo.CurrentTile).MaxMonsterLevel;
 
             Level = rng.Next(minlvl, maxlvl);
 
@@ -1528,9 +1498,9 @@ Increasing DIFFICULTY will provide:
             Speed = (int)(Speed * ClassMultipliers["speed"] * SpeciesMultipliers["speed"]);
             Evasion = (int)(Evasion * ClassMultipliers["evasion"] * SpeciesMultipliers["evasion"]);
 
-            Attack += (int)(Attack * 0.0005 * PartyInfo.Difficulty);
-            MAttack += (int)(MAttack * 0.0005 * PartyInfo.Difficulty);
-            PAttack += (int)(PAttack * 0.0005 * PartyInfo.Difficulty);
+            Attack += (int)(Attack * 0.0005 * CInfo.Difficulty);
+            MAttack += (int)(MAttack * 0.0005 * CInfo.Difficulty);
+            PAttack += (int)(PAttack * 0.0005 * CInfo.Difficulty);
         }
 
         public void MonsterExecuteMove()
