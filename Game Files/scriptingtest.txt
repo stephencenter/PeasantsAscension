@@ -31,3 +31,8 @@ battle
 file
     save
     load
+    
+Item drop formula
+    Each item has a droprate in the form of a tuple with Item1 as item_id and Item2 as droprate.
+    When a monster is killed, it rolls a 1d100. If the roll is above the droprate, the item is
+    removed from the pool. Then the game will choose a random element from the remaining items.

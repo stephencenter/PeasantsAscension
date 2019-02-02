@@ -143,21 +143,19 @@ namespace Scripts
     }
 
     public class MediaWrapper : MediaPlayer
-    {         
+    {
+        public string URI { get; set; }
+
         public void SmartPlay()
         {
-            if (Position > TimeSpan.Zero)
-            {
-                Position = TimeSpan.Zero;
-            }
-
+            Open(new Uri(URI, UriKind.Relative));
             Play();
         }
 
         // Using this class, I can assign the MediaPlayer a URI inside the constructor
         public MediaWrapper(string uri) : base()
         {
-            Open(new Uri(uri, UriKind.Relative));
+            URI = uri;
         }
     }
 }
