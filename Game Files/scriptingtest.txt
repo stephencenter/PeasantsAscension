@@ -1,0 +1,36 @@
+inventory
+    add
+        [item_id]
+            [quantity]
+    remove
+        [item_id]
+            [quantity]
+            
+spawns
+    true
+    false
+    
+gold
+    add 
+        [quantity]
+    remove
+        [quantity]
+    
+teleport
+    [tile_id]
+    
+player
+    [pcu_id]
+        active
+            [bool]
+        xp
+            [quantity]
+        heal
+        kill
+
+battle
+    fight
+    
+file
+    save
+    load

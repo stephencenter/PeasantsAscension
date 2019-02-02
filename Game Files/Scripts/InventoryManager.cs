@@ -119,13 +119,13 @@ namespace Scripts
 
         public static void AddItemToInventory(string item_id)
         {
-            var new_item = ItemManager.FindItemWithID(item_id);
+            Item new_item = ItemManager.FindItemWithID(item_id);
             GetInventory()[new_item.Category].Add(new_item);
         }
 
         public static void RemoveItemFromInventory(string item_id)
         {
-            var deleted_item = GetInventory()[ItemManager.FindItemWithID(item_id).Category].First(x => x.ItemID == item_id);
+            Item deleted_item = GetInventory()[ItemManager.FindItemWithID(item_id).Category].First(x => x.ItemID == item_id);
             GetInventory()[ItemManager.FindItemWithID(item_id).Category].Remove(deleted_item);
         }
     }

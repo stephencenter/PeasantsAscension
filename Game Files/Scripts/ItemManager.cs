@@ -96,7 +96,7 @@ namespace Scripts
             print(f'{user.name} consumes the {self.name}...')
 
             main.smart_sleep(0.75)
-            sounds.magic_healing.play()
+            sounds.magic_healing.SmartPlay()
 
             if self.heal > 0:
                 user.hp += self.heal
@@ -122,12 +122,12 @@ namespace Scripts
 
         def use_item(self, user) :
             if self.status in user.status_ail:
-                sounds.buff_spell.play()
+                sounds.buff_spell.SmartPlay()
                 user.status_ail = [x for x in user.status_ail if x != self.status]
 
                 print(f'{user.name} consumes the {self.name}...')
                 main.smart_sleep(0.75)
-                sounds.magic_healing.play()
+                sounds.magic_healing.SmartPlay()
 
                 print(f"{user.name} is no longer {self.status}!")
 
@@ -313,15 +313,15 @@ namespace Scripts
                 return
 
             print("Digging...")
-            sounds.foot_steps.play()
+            sounds.foot_steps.SmartPlay()
             main.smart_sleep(1)
 
             print("Digging...")
-            sounds.foot_steps.play()
+            sounds.foot_steps.SmartPlay()
             main.smart_sleep(1)
 
             print("Still digging...")
-            sounds.foot_steps.play()
+            sounds.foot_steps.SmartPlay()
             main.smart_sleep(1)
 
             try:
@@ -331,7 +331,7 @@ namespace Scripts
                 c_gem = None
 
             if c_gem:
-                sounds.unlock_chest.play()
+                sounds.unlock_chest.SmartPlay()
                 print(f"Aha, your party found a {c_gem.name}! Might be a good idea to sell it.")
                 main.s_input("\nPress enter/return ")
 
@@ -433,7 +433,7 @@ namespace Scripts
                                 main.smart_sleep(1)
                                 print("...")
                                 main.smart_sleep(1)
-                                sounds.enemy_hit.play()
+                                sounds.enemy_hit.SmartPlay()
                                 print("CRASH! Your senses re-emerge you've landed on your back... Oh, you're exactly where")
                                 print("you teleported to!")
                                 main.s_input("\nPress enter/return ")
@@ -444,7 +444,7 @@ namespace Scripts
 
                             if main.party_info['music'] != chosen.music:
                                 main.party_info['music'] = chosen.music
-                                sounds.play_music(main.party_info['music'])
+                                SoundManager.PlayCellMusic();
 
                             towns.search_towns()
                             return
@@ -607,16 +607,16 @@ namespace Scripts
             chosen_potion = flavor_map[chosen_flavor][chosen_power - 1]
 
             print("Brewing...")
-            sounds.potion_brew.play()
+            sounds.potion_brew.SmartPlay()
             main.smart_sleep(1)
             print("Brewing...")
-            sounds.potion_brew.play()
+            sounds.potion_brew.SmartPlay()
             main.smart_sleep(1)
             print("Brewing...")
-            sounds.potion_brew.play()
+            sounds.potion_brew.SmartPlay()
             main.smart_sleep(1)
 
-            sounds.unlock_chest.play()
+            sounds.unlock_chest.SmartPlay()
             add_item(chosen_potion.item_id)
             print(f"Success! You brewed a {chosen_potion.name}!")
             main.s_input("\nPress enter/return ")
@@ -880,7 +880,7 @@ namespace Scripts
             for song in song_list:
                 try:
                     pygame.mixer.music.load(f"{folder}/{song}")
-                    pygame.mixer.music.play()
+                    pygame.mixer.music.SmartPlay()
 
                     while pygame.mixer.music.get_busy():
                         pass

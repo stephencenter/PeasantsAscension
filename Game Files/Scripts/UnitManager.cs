@@ -199,7 +199,7 @@ namespace Scripts
             if (rng.Next(0, 100) < 15 && do_criticals)
             {
                 final_damage = (int)(final_damage * 1.5);
-                SoundManager.critical_hit.Play();
+                SoundManager.critical_hit.SmartPlay();
                 Console.WriteLine("It's a critical hit! 1.5x damage!");
 
                 CMethods.SmartSleep(500);
@@ -570,7 +570,7 @@ namespace Scripts
         {
             if (CurrentXP >= RequiredXP)
             {
-                // sounds.play_music('../Music/Adventures in Pixels.ogg')
+                SoundManager.levelup_music.PlayLooping();
                 int remaining_skillpoints = 0;
 
                 while (CurrentXP >= RequiredXP)
@@ -592,7 +592,7 @@ namespace Scripts
                     // Prompt the player of their new spells.
                     foreach (Spell spell in new_spells)
                     {
-                        SoundManager.item_pickup.Play();
+                        SoundManager.item_pickup.SmartPlay();
                         CMethods.Input($"{Name} has learned a new spell: {spell.SpellName}!");
                     }
 
@@ -955,7 +955,7 @@ Increasing DIFFICULTY will provide:
                     // Silence is a status ailment that prevents using spells
                     if (HasStatus(CEnums.Status.silence))
                     {
-                        SoundManager.debuff.Play();
+                        SoundManager.debuff.SmartPlay();
                         Console.WriteLine($"{Name} can't use spells when silenced!");
                         CMethods.PressEnterReturn();
                         PrintBattleOptions();
@@ -989,7 +989,7 @@ Increasing DIFFICULTY will provide:
                     var x = new List<int>();
                     if (!InventoryManager.GetInventory()["consumables"].Any())
                     {
-                        SoundManager.debuff.Play();
+                        SoundManager.debuff.SmartPlay();
                         Console.WriteLine("Your party has no consumables!");
 
                         CMethods.PressEnterReturn();
@@ -1001,7 +1001,7 @@ Increasing DIFFICULTY will provide:
 
                     if (HasStatus(CEnums.Status.muted))
                     {
-                        SoundManager.debuff.Play();
+                        SoundManager.debuff.SmartPlay();
                         Console.WriteLine($"{Name} can't use items when muted!");
 
                         CMethods.PressEnterReturn();
@@ -1057,7 +1057,7 @@ Increasing DIFFICULTY will provide:
             {
                 CMethods.SmartSleep(750);
 
-                SoundManager.poison_damage.Play();
+                SoundManager.poison_damage.SmartPlay();
 
                 int poison_damage = HP / 5;
                 HP -= poison_damage;
@@ -1076,7 +1076,7 @@ Increasing DIFFICULTY will provide:
                 // Only one status can be cleared per turn
                 if (status != CEnums.Status.alive && rng.Next(0, 8) == 0)
                 {
-                    SoundManager.buff_spell.Play();
+                    SoundManager.buff_spell.SmartPlay();
                     Statuses.Remove(status);
                     Console.WriteLine($"{Name} is no longer {CEnums.EnumToString(status)}!");
                     CMethods.SmartSleep(500);
@@ -1093,19 +1093,19 @@ Increasing DIFFICULTY will provide:
 
                 if (player_weapon.WeaponType == CEnums.WeaponType.melee)
                 {
-                    SoundManager.sword_slash.Play();
+                    SoundManager.sword_slash.SmartPlay();
                     Console.WriteLine($"{Name} fiercely attacks the {CurrentTarget.Name} using their {player_weapon.Name}...");
                 }
 
                 else if (player_weapon.WeaponType == CEnums.WeaponType.instrument)
                 {
-                    SoundManager.bard_sounds[player_weapon.ItemID].Play();
+                    SoundManager.bard_sounds[player_weapon.ItemID].SmartPlay();
                     Console.WriteLine($"{Name} starts playing their {player_weapon.Name} at the {CurrentTarget.Name}...");
                 }
 
                 else
                 {
-                    SoundManager.aim_weapon.Play();
+                    SoundManager.aim_weapon.SmartPlay();
                     Console.WriteLine($"{Name} aims carefully at the {CurrentTarget.Name} using their {player_weapon.Name}...");
                 }
 
@@ -1130,14 +1130,14 @@ Increasing DIFFICULTY will provide:
                 if (CurrentTarget.Evasion < rng.Next(0, 512))
                 {
                     Console.WriteLine($"{Name}'s attack connects with the {CurrentTarget.Name}, dealing {attack_damage} damage!");
-                    SoundManager.enemy_hit.Play();
+                    SoundManager.enemy_hit.SmartPlay();
                     CurrentTarget.HP -= attack_damage;
                 }
 
                 else
                 {
                     Console.WriteLine($"The {CurrentTarget.Name} narrowly avoids {Name}'s attack!");
-                    SoundManager.attack_miss.Play();
+                    SoundManager.attack_miss.SmartPlay();
                 }
             }
 
@@ -1158,7 +1158,7 @@ Increasing DIFFICULTY will provide:
             // Run away
             else if (CurrentMove == '5' && BattleManager.RunAway(this, monster_list))
             {
-                // sounds.play_music(main.party_info['music'])
+                SoundManager.PlayCellMusic();
                 return "ran";
             }
 
@@ -1425,21 +1425,21 @@ Increasing DIFFICULTY will provide:
             {
                 if (CurrentTarget.HasStatus(chosen_status))
                 {
-                    SoundManager.debuff.Play();
+                    SoundManager.debuff.SmartPlay();
                     Console.WriteLine($"...But {CurrentTarget.Name} is already {CEnums.EnumToString(chosen_status)}!");
                 }
 
                 else
                 {
                     CurrentTarget.Statuses.Add(chosen_status);
-                    SoundManager.buff_spell.Play();
+                    SoundManager.buff_spell.SmartPlay();
                     Console.WriteLine($"{CurrentTarget.Name} is now {CEnums.EnumToString(chosen_status)}!");
                 }
             }
 
             else
             {
-                SoundManager.debuff.Play();
+                SoundManager.debuff.SmartPlay();
                 Console.WriteLine($"...But {Name}'s attempt failed!");
             }
 
@@ -1552,7 +1552,7 @@ Increasing DIFFICULTY will provide:
                 if (MonsterAbilityFlags["knockout_turns"] == 0)
                 {
                     CMethods.SmartSleep(500);
-                    SoundManager.buff_spell.Play();
+                    SoundManager.buff_spell.SmartPlay();
                     Statuses.Remove(CEnums.Status.sleep);
                     Console.WriteLine($"The {Name} woke up!");
                 }
@@ -1564,7 +1564,7 @@ Increasing DIFFICULTY will provide:
                     if (rng.Next(0, 100) < chance)
                     {
                         CMethods.SmartSleep(500);
-                        SoundManager.buff_spell.Play();
+                        SoundManager.buff_spell.SmartPlay();
                         Statuses.Remove(CEnums.Status.sleep);
                         Console.WriteLine($"The {Name} woke up early!");
                     }
@@ -1576,7 +1576,7 @@ Increasing DIFFICULTY will provide:
             {
                 int poison_damage = MonsterAbilityFlags["poison_pow"] * MaxHP + MonsterAbilityFlags["poison_dex"];
                 HP -= poison_damage;
-                SoundManager.poison_damage.Play();
+                SoundManager.poison_damage.SmartPlay();
                 Console.WriteLine($"The {Name} took {poison_damage} from poison!");
             }
 
@@ -1643,7 +1643,7 @@ Increasing DIFFICULTY will provide:
                 PDefense *= 2;
 
                 Console.WriteLine($"The {Name}'s defense stats increased by 2x for one turn!");
-                SoundManager.buff_spell.Play();
+                SoundManager.buff_spell.SmartPlay();
                 return;
             }
 
@@ -1656,7 +1656,7 @@ Increasing DIFFICULTY will provide:
                 PDefense /= 2;
             }
 
-            SoundManager.sword_slash.Play();
+            SoundManager.sword_slash.SmartPlay();
             Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
             CMethods.SmartSleep(750);
 
@@ -1664,14 +1664,14 @@ Increasing DIFFICULTY will provide:
 
             if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
             {
-                SoundManager.enemy_hit.Play();
+                SoundManager.enemy_hit.SmartPlay();
                 Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
                 CurrentTarget.HP -= attack_damage;
             }
 
             else
             {
-                SoundManager.attack_miss.Play();
+                SoundManager.attack_miss.SmartPlay();
                 Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
             }
         }
@@ -1984,7 +1984,7 @@ Increasing DIFFICULTY will provide:
 
         public SnowWolf() : base()
         {
-            Name = "Snow Wol$";
+            Name = "Snow Wolf";
             OffensiveElement = CEnums.Element.ice;
             DefensiveElement = CEnums.Element.ice;
             AttackMessage = "claws and bites at";
@@ -2265,7 +2265,7 @@ Increasing DIFFICULTY will provide:
         {
             Random rng = new Random();
             Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
-            SoundManager.aim_weapon.Play();
+            SoundManager.aim_weapon.SmartPlay();
 
             CMethods.SmartSleep(750);
 
@@ -2273,14 +2273,14 @@ Increasing DIFFICULTY will provide:
 
             if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
             {
-                SoundManager.enemy_hit.Play();
+                SoundManager.enemy_hit.SmartPlay();
                 Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
                 CurrentTarget.HP -= attack_damage;
             }
 
             else
             {
-                SoundManager.attack_miss.Play();
+                SoundManager.attack_miss.SmartPlay();
                 Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
             }
         }
@@ -2291,16 +2291,16 @@ Increasing DIFFICULTY will provide:
 
             ClassMultipliers = new Dictionary<string, double>()
             {
-                { "hp", 0.9 },            // HP
+                { "hp", 0.9 },        // HP
                 { "mp", 1 },          // MP
-                { "attack", 0.8 },      // Physical Attack
-                { "defense", 0.8 },    // Physical Defense
-                { "p_attack", 1.5 },    // Pierce Attack
-                { "p_defense", 1.2 },  // Pierce Defense
-                { "m_attack", 0.8 },    // Magical Attack
+                { "attack", 0.8 },    // Physical Attack
+                { "defense", 0.8 },   // Physical Defense
+                { "p_attack", 1.5 },  // Pierce Attack
+                { "p_defense", 1.2 }, // Pierce Defense
+                { "m_attack", 0.8 },  // Magical Attack
                 { "m_defense", 1 },   // Magical Defense
-                { "speed", 1.5 },         // Speed
-                { "evasion", 1.5 }        // Evasion
+                { "speed", 1.5 },     // Speed
+                { "evasion", 1.5 }    // Evasion
             };
         }
     }
@@ -2712,7 +2712,7 @@ Increasing DIFFICULTY will provide:
                     MP -= heal_mp_cost;
 
                     Console.WriteLine($"The {Name} heals itself for {total_heal} HP!");
-                    SoundManager.magic_healing.Play();
+                    SoundManager.magic_healing.SmartPlay();
 
                     return;
                 }
@@ -2720,7 +2720,7 @@ Increasing DIFFICULTY will provide:
                 // Magical Attack
                 else if (MP >= attack_mp_cost)
                 {
-                    SoundManager.magic_attack.Play();
+                    SoundManager.magic_attack.SmartPlay();
 
                     Console.WriteLine($"The {Name} {AttackMessage} {CurrentTarget.Name}...");
                     CMethods.SmartSleep(750);
@@ -2733,7 +2733,7 @@ Increasing DIFFICULTY will provide:
 
                     if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
                     {
-                        SoundManager.enemy_hit.Play();
+                        SoundManager.enemy_hit.SmartPlay();
                         Console.WriteLine($"The {Name}'s spell deals {spell_damage} damage to {CurrentTarget.Name}!");
 
                         CurrentTarget.HP -= spell_damage;
@@ -2741,7 +2741,7 @@ Increasing DIFFICULTY will provide:
 
                     else
                     {
-                        SoundManager.attack_miss.Play();
+                        SoundManager.attack_miss.SmartPlay();
                         Console.WriteLine($"The {Name}'s spell narrowly misses {CurrentTarget.Name}!");
                     };
 
@@ -2753,21 +2753,21 @@ Increasing DIFFICULTY will provide:
 
             // Non-magical Attack (Pierce Damage). Only happens if taunted, silenced, or if out of mana.           
             Console.WriteLine($"The {Name} attacks {CurrentTarget.Name}...");
-            SoundManager.aim_weapon.Play();
+            SoundManager.aim_weapon.SmartPlay();
 
             CMethods.SmartSleep(750);
             int attack_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.piercing);
 
             if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
             {
-                SoundManager.enemy_hit.Play();
+                SoundManager.enemy_hit.SmartPlay();
                 Console.WriteLine($"The {Name}'s attack deals {attack_damage} damage to {CurrentTarget.Name}!");
                 CurrentTarget.HP -= attack_damage;
             }
 
             else
             {
-                SoundManager.attack_miss.Play();
+                SoundManager.attack_miss.SmartPlay();
                 Console.WriteLine($"The {Name}'s attack narrowly misses {CurrentTarget.Name}!");
             }
         }

@@ -9,8 +9,7 @@ namespace Scripts
         public static void MoveCommand(List<Tuple<char, string>> available_dirs, char direction)
         {
             Random rng = new Random();
-            SoundManager.item_pickup.Stop();
-            SoundManager.foot_steps.Play();
+            SoundManager.foot_steps.SmartPlay();
 
             CInfo.CurrentTile = available_dirs.Single(x => x.Item1 == direction).Item2;
 
@@ -72,5 +71,18 @@ namespace Scripts
                 }
             }            
         }
+
+        public static void CheatCommand()
+        {
+            while (true)
+            {
+                string command = CMethods.Input()
+            }
+        }
+    }
+
+    public static class CheatEngine
+    {
+
     }
 }

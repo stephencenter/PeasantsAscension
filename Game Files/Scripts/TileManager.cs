@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 
 namespace Scripts
 {
     public static class TileManager
     {
+        #region
+        // Tile descriptions
         private const string nearton_desc = @"\
 Nearton is surrounded by a large, natural moat. Past that, trees as far as the
 eyes can see.";
+        #endregion
 
         /* =========================== *
          *            LISTS            *
@@ -414,7 +418,7 @@ there might be a smart idea.",
         public List<string> TileList { get; set; }
         public string PrimaryTile { get; set; }
         public List<CEnums.MonsterGroup> MonsterGroups { get; set; }
-        public string Music { get; set; }
+        public SoundPlayer Music { get; set; }
         public int MinMonsterLevel { get; set; }
         public int MaxMonsterLevel { get; set; }
         public int StoreLevel { get; set; }
@@ -449,7 +453,7 @@ there might be a smart idea.",
             TileList = new List<string>() { "nearton_tile", "nearton_w", "nearton_ne", "nearton_e", "nearton_s", "nearton_n", "nearton_se", "nearton_nw", "nearton_sw" };
             PrimaryTile = "nearton_tile";
             MonsterGroups = new List<CEnums.MonsterGroup>() { CEnums.MonsterGroup.animal, CEnums.MonsterGroup.monster };
-            Music = "Music/Through the Forest.ogg";
+            Music = SoundManager.forest_music;
             MinMonsterLevel = 1;
             MaxMonsterLevel = 3;
             StoreLevel = 1;

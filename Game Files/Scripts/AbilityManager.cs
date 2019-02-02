@@ -273,7 +273,7 @@ nothing if no songs have been played yet.", 3)
                 x.status_ail.append("Taunted")
 
             print(f"{user.name} is preparing to cast Taunt...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             phys = 10 + user.attributes['str']
@@ -305,7 +305,7 @@ nothing if no songs have been played yet.", 3)
         public override void UseAbility(Unit user)
         {
             /*
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             print(f"{user.name} begins to motivate their allies with a Roll Call...")
             main.smart_sleep(0.75)
 
@@ -315,7 +315,7 @@ nothing if no songs have been played yet.", 3)
                 battle.temp_stats[pcu.name]['dfns'] += increase
 
             print(f"All allies physical defense increased by {increase}!")
-            sounds.buff_spell.play() */
+            sounds.buff_spell.SmartPlay() */
         }
 
         public RollCallAbility(string name, string desc, int ap_cost) : base()
@@ -364,7 +364,7 @@ nothing if no songs have been played yet.", 3)
                 values = 0.15 + user.attributes['str']/100
 
             print(f"{user.name} is preparing to cast Berserker's Rage...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             print(f"Speed and Physical Attack increased by {math.ceil(values*100)}%!")
@@ -402,7 +402,7 @@ nothing if no songs have been played yet.", 3)
             /*
             # A 2x crit that lowers the target's armor
             print(f"{user.name} is preparing a Chakra Smash...")
-            sounds.sword_slash.play()
+            sounds.sword_slash.SmartPlay()
             main.smart_sleep(0.75)
 
             dam_dealt = math.ceil(units.deal_damage(user, user.target, "physical")*2)
@@ -415,7 +415,7 @@ nothing if no songs have been played yet.", 3)
 
             print(f'The attack deals {dam_dealt} damage to the {user.target.name}!')
             print(f"All of {user.target.name}'s defense stats reduced by {armor_lower}!")
-            sounds.enemy_hit.play()
+            sounds.enemy_hit.SmartPlay()
 
             return True */
         }
@@ -461,16 +461,16 @@ nothing if no songs have been played yet.", 3)
             c_enemy = max(battle.m_list, key= lambda x: x.hp)
             c_ally = min([x for x in battle.enabled_pcus if 'dead' not in x.status_ail], key= lambda x: x.hp)
 
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             print(f"{user.name} is beginning to cast Aura Swap...")
             main.smart_sleep(0.75)
 
             if c_enemy.hp <= c_ally.hp:
                 print("...But it failed!")
-                sounds.debuff.play()
+                sounds.debuff.SmartPlay()
 
             else:
-                sounds.buff_spell.play()
+                sounds.buff_spell.SmartPlay()
                 beginning = [c_enemy.hp, c_ally.hp]
 
                 if isinstance(c_enemy, units.Boss) :
@@ -520,7 +520,7 @@ nothing if no songs have been played yet.", 3)
             lifesteal = 0 if hp_missing <= 75 else max((0.1 + user.attributes['con']/100)* damage, 1)
 
             print(f"{user.name} is preparing to cast Breaking Vows...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             user.target.hp -= damage
@@ -561,11 +561,11 @@ nothing if no songs have been played yet.", 3)
             poison_power = math.ceil(100 * user.target.ability_vars['poison_pow'] + user.target.ability_vars['poison_dex'])
 
             print(f"{user.name} is preparing a poison with power {poison_power}...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             print(f"{user.name} injects the poison into the {user.target.name}!")
-            sounds.poison_damage.play() */
+            sounds.poison_damage.SmartPlay() */
         }
 
         public InjectPoisonAbility(string name, string desc, int ap_cost) : base()
@@ -588,7 +588,7 @@ nothing if no songs have been played yet.", 3)
         {
             /*
             print(f"{user.name} is preparing some Knockout Gas for {user.target.name}...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             k_dur = math.ceil(battle.temp_stats[user.name]['attributes']['dex']/25)
@@ -597,7 +597,7 @@ nothing if no songs have been played yet.", 3)
             user.target.status_ail.append("asleep")
 
             print(f"{user.target.name} was put to sleep for {k_dur} turns!")
-            sounds.poison_damage.play() */
+            sounds.poison_damage.SmartPlay() */
         }
 
         public KnockoutGasAbility(string name, string desc, int ap_cost) : base()
@@ -619,17 +619,17 @@ nothing if no songs have been played yet.", 3)
         public override void UseAbility(Unit user)
         {
             /*
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             print(f"{user.name} is preparing to disarm the {user.target.name}")
             main.smart_sleep(0.75)
 
             if user.target.ability_vars['disarmed']:
-                sounds.debuff.play()
+                sounds.debuff.SmartPlay()
                 print(f"But the {user.target.name} is already disarmed!")
                 return
 
             print(f"The {user.target.name} drops their weapon, lowering their attack!")
-            sounds.buff_spell.play()
+            sounds.buff_spell.SmartPlay()
 
             user.target.ability_vars['disarmed'] = True
             user.target.status_ail.append('disarmed')
@@ -647,7 +647,7 @@ nothing if no songs have been played yet.", 3)
 
             if random.randint(0, 3) == 3:
                 main.smart_sleep(0.75)
-                sounds.unlock_chest.play()
+                sounds.unlock_chest.SmartPlay()
                 print(f"{user.name} stealthily retrieves the weapon and pawns it off for {max(user.target.lvl, 5)} GP!")
                 main.party_info['gp'] += max(user.target.lvl, 5) */
         }
@@ -672,7 +672,7 @@ nothing if no songs have been played yet.", 3)
         {
             /*
             print(f"{user.name} is preparing to Backstab {user.target.name}...")
-            sounds.sword_slash.play()
+            sounds.sword_slash.SmartPlay()
             main.smart_sleep(0.75)
 
             damage_multiplier = (125 + battle.temp_stats[user.name]['attributes']['dex'])/100
@@ -692,7 +692,7 @@ nothing if no songs have been played yet.", 3)
                 user.target.dfns = math.ceil(user.target.dfns*0.9)
                 print(f"Disarming Blow lowers {user.target.name}'s defense by {math.floor(user.target.dfns*0.1)}!")
 
-            sounds.enemy_hit.play()
+            sounds.enemy_hit.SmartPlay()
             user.target.hp -= base_damage
             print(f"{user.name}'s Backstab deals {base_damage} to the {user.target.name}!") */
         }
@@ -720,15 +720,15 @@ nothing if no songs have been played yet.", 3)
         {
             /*
             print(f"{user.name} is preparing to cast Skill Syphon...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             if user.target.ability_vars['drained']:
                 print(f"...But the {user.target.name} has already been drained!")
-                sounds.debuff.play()
+                sounds.debuff.SmartPlay()
 
             else:
-                sounds.buff_spell.play()
+                sounds.buff_spell.SmartPlay()
                 user.target.ability_vars['drained'] = True
                 user.target.status_ail.append('Drained')
 
@@ -813,7 +813,7 @@ nothing if no songs have been played yet.", 3)
         {
             /*
             print(f"{user.name} is preparing to cast Mana Drain...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             drain = max(((5 + battle.temp_stats[user.name]['attributes']['int'])/100)* user.target.max_mp, 5)
@@ -823,7 +823,7 @@ nothing if no songs have been played yet.", 3)
 
             units.fix_stats()
 
-            sounds.buff_spell.play()
+            sounds.buff_spell.SmartPlay()
             print(f"The {user.target.name} lost {drain} MP!")
             print(f"{user.name} gained {drain} MP!") */
         }
@@ -949,7 +949,7 @@ nothing if no songs have been played yet.", 3)
         {
             /*
             print(f"{user.name} is preparing to cast Tip the Scales...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             power_value = math.ceil(user.max_hp*0.05 + user.attributes['wis'])
@@ -962,13 +962,13 @@ nothing if no songs have been played yet.", 3)
                     enemy.hp -= damage
                     print(f"Tip the Scales deals {damage} damage to the {enemy.name}!")
 
-                sounds.enemy_hit.play()
+                sounds.enemy_hit.SmartPlay()
                 main.smart_sleep(0.5)
                 sounds.enemy_hit.stop()
 
                 user.target.hp += total
                 print(f"Tip the scales heals {user.target.name} by {total} HP!")
-                sounds.magic_healing.play()
+                sounds.magic_healing.SmartPlay()
 
             else:
                 for ally in [x for x in battle.enabled_pcus if x.hp > 0]:
@@ -976,13 +976,13 @@ nothing if no songs have been played yet.", 3)
                     ally.hp += power_value
                     print(f"Tip the Scales heals {user.name} by {power_value} HP! ")
 
-                sounds.magic_healing.play()
+                sounds.magic_healing.SmartPlay()
                 main.smart_sleep(0.5)
                 sounds.magic_healing.stop()
 
                 user.target.hp -= total
                 print(f"Tip the Scales deals {total} damage to the {user.target.name}!")
-                sounds.enemy_hit.play() */
+                sounds.enemy_hit.SmartPlay() */
         }
 
         public TipTheScalesAbility(string name, string desc, int ap_cost) : base()
@@ -1010,7 +1010,7 @@ nothing if no songs have been played yet.", 3)
             else:
                 print(f"{user.name} is preparing to cast Unholy Binds on the {user.target.name}...")
 
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             chance = min(10 + battle.temp_stats[user.name]['attributes']['wis'], 50)/10
@@ -1022,7 +1022,7 @@ nothing if no songs have been played yet.", 3)
                 user.target.status_ail = ['dead']
                 user.target.hp = 0
 
-                sounds.enemy_death.play()
+                sounds.enemy_death.SmartPlay()
 
                 print(f"The {user.target.name} succumed to the darkness!")
 
@@ -1030,7 +1030,7 @@ nothing if no songs have been played yet.", 3)
 
             user.target.def_element = 'dark'
 
-            sounds.poison_damage.play()
+            sounds.poison_damage.SmartPlay()
             if isinstance(user.target, units.PlayableCharacter) :
                 print(f"{user.target.name} had their defensive element set to Darkness!")
 
@@ -1069,18 +1069,18 @@ nothing if no songs have been played yet.", 3)
             judgment_day = battle.turn_counter + rem_turns
 
             print(f"{user.name} is preparing to cast Judgment...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             if user.target.ability_vars['judgment_day'] and user.target.ability_vars['judgment_day'] <= judgment_day:
                 print(f"...But {user.target.name}'s jugdement day is already on its way!")
-                sounds.debuff.play()
+                sounds.debuff.SmartPlay()
 
             else:
                 print(f"{user.target.name} is doomed. They will die in {rem_turns} turns.")
                 user.target.ability_vars['judgment_day'] = judgment_day
                 user.target.status_ail.append("Doomed")
-                sounds.poison_damage.play() */
+                sounds.poison_damage.SmartPlay() */
         }
 
         public JudgmentAbility(string name, string desc, int ap_cost) : base()
@@ -1249,7 +1249,7 @@ nothing if no songs have been played yet.", 3)
 
         def use_ability(self, user) :
             print(f"{user.name} is casting Ascend...")
-            sounds.ability_cast.play()
+            sounds.ability_cast.SmartPlay()
             main.smart_sleep(0.75)
 
             primary_attr = {"ranger": ["per", "Perception"],
@@ -1265,7 +1265,7 @@ nothing if no songs have been played yet.", 3)
                     increase = math.ceil(increase)
                     battle.temp_stats[user.name]['attributes'][primary_attr[0]] += increase
 
-                    sounds.buff_spell.play()
+                    sounds.buff_spell.SmartPlay()
                     user.ability_vars['ascend_used'] = True
                     print(f"{user.name}'s {primary_attr[1]} increased by {increase}!")
 

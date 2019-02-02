@@ -17,8 +17,6 @@ namespace Scripts
             List<PlayableCharacter> active_pcus = UnitManager.GetActivePCUs();
             turn_counter = 0;
 
-            UnitManager.player.CurrentXP += 1000;
-
             // 67% chance to add a second monster
             if (rng.Next(0, 100) > 33)
             {
@@ -34,7 +32,7 @@ namespace Scripts
             if (is_bossfight)
             {
                 Console.WriteLine($"The legendary {monster_list[0].Name} has awoken!");
-                // sounds.play_music("../../../Music/Terrible Tarantuloid.ogg")
+                SoundManager.battle_music.PlayLooping();
             }
 
             else
@@ -54,7 +52,7 @@ namespace Scripts
                     Console.WriteLine($"A {monster_list[0].Name} and {monster_list.Count - 1} other monsters suddenly appeared out of nowhere!"); ;
                 }
 
-                // sounds.play_music('../Music/Ruari 8-bit Battle.ogg')
+                SoundManager.battle_music.PlayLooping();
             }
 
             CMethods.SmartSleep(1000);
@@ -82,7 +80,7 @@ namespace Scripts
                     if (0 < character.HP && character.HP <= character.MaxHP * 0.20)
                     {
                         Console.WriteLine($"Warning: {character.Name}'s HP is low, heal as soon as possible!");
-                        SoundManager.health_low.Play();
+                        SoundManager.health_low.SmartPlay();
                         CMethods.SmartSleep(1333);
                     }
 
@@ -133,7 +131,7 @@ namespace Scripts
                         {
                             other_unit.FixAllStats();
                             CMethods.SmartSleep(250);
-                            SoundManager.ally_death.Play();
+                            SoundManager.ally_death.SmartPlay();
 
                             Console.WriteLine($"\n{other_unit.Name} has fallen to the monsters!");
                         }
@@ -142,8 +140,8 @@ namespace Scripts
                         {
                             other_unit.FixAllStats();
                             CMethods.SmartSleep(250);
-                            SoundManager.enemy_death.Play();
-                            
+                            SoundManager.enemy_death.SmartPlay();
+
                             Console.WriteLine($"\nThe {other_unit.Name} was defeated by your party!");
                         }
                     }
@@ -175,7 +173,7 @@ namespace Scripts
 
             if (active_pcus.Any(x => x.IsAlive()))
             {
-                // sounds.play_music("../../../Music/Python_RM.ogg")
+                SoundManager.victory_music.PlayLooping();
                 if (is_bossfight)
                 {
                     Console.WriteLine($"The mighty {monster_list[0].Name} has been slain!");
@@ -209,7 +207,7 @@ namespace Scripts
                     }
                 }
 
-                // PartyInfo.GP += gold_drops;
+                CInfo.GP += gold_drops;
                 CMethods.Input($"Your party got {gold_drops} GP!");
 
                 foreach (PlayableCharacter pcu in active_pcus)
@@ -229,12 +227,12 @@ namespace Scripts
                     pcu.PlayerLevelUp();
                 }
 
-                // sounds.play_music(main.party_info['music'])
+                SoundManager.PlayCellMusic();
             }
 
             else
             {
-                // sounds.play_music("../../../Music/Power-Up.ogg")
+                SoundManager.gameover_music.PlayLooping();
                 Console.WriteLine($"Despite your best efforts, the {monster_list[0].Name} has killed your party.");
                 CMethods.PrintDivider();
 
@@ -257,7 +255,7 @@ namespace Scripts
                     {
                         CInfo.CurrentTile = CInfo.RespawnTile;
                         UnitManager.HealAllPCUs(1, true, true, true);
-                        //sounds.play_music(main.party_info['music'])
+                        SoundManager.PlayCellMusic();
 
                         return;
                     }
@@ -276,7 +274,7 @@ namespace Scripts
 
                             else if (CMethods.IsNoString(y_n2))
                             {
-                                System.Environment.Exit(0);
+                                Environment.Exit(0);
                             }
                         }
                     }
@@ -324,7 +322,7 @@ namespace Scripts
 
             if (rng.Next(0, 100) < chance)
             {
-                SoundManager.buff_spell.Play();
+                SoundManager.buff_spell.SmartPlay();
                 Console.WriteLine("Your party managed to escape!");
                 CMethods.PressEnterReturn();
 
@@ -333,7 +331,7 @@ namespace Scripts
 
             else
             {
-                SoundManager.debuff.Play();
+                SoundManager.debuff.SmartPlay();
                 Console.WriteLine("Your party's escape attempt failed!");
                 return false;
             }

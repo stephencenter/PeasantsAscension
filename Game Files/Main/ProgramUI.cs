@@ -17,8 +17,7 @@ namespace Main
 
         private static void MainGameLoop()
         {
-            CInfo.Music = TileManager.FindCellWithTileID(CInfo.CurrentTile).Music;
-            // sounds.play_music(party_info['music'])
+            SoundManager.PlayCellMusic();
 
             while (true)
             {
@@ -35,9 +34,9 @@ namespace Main
                     CInfo.Gamestate = CEnums.GameState.overworld;
                     string command = CMethods.Input("Input Command (type 'help' to view command list): ").ToLower();
 
-                    if (command == "debug-menu")
+                    if (command == "letmecheat")
                     {
-                        // CommandManager.DebugCommand();
+                        // CommandManager.CheatCommand();
                     }
 
                     else if (available_dirs.Any(x => command.StartsWith(x.Item1.ToString())))
@@ -168,9 +167,8 @@ namespace Main
 
         private static void DisplayTitlescreen()
         {
-            /*
-            title_logo = @"\
-    ____                            _       _
+            string title_card = $@"\
+     ____                            _       _
     |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
     | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
     |  __/  __/ (_| \__ \ (_| | | | | |_\__ \\
@@ -180,37 +178,40 @@ namespace Main
         / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
         / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
         /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-                Peasants' Ascension {game_version} -- A Text-RPG by Stephen Center
+                Peasants' Ascension {CInfo.GameVersion} -- A Text-RPG by Stephen Center
     Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
-    Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]"
-    { '-' * save_load.divider_size}
+    Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
+            SoundManager.title_music.PlayLooping();
+            Console.WriteLine(title_card);
+            CMethods.PrintDivider();
 
-    sounds.play_music('../Music/Title Screen.flac')
-    print(title_logo)
+            while (true)
+            {
+                // Give the user a choice of keys to press to do specific actions
+                string choice = CMethods.Input("[P]lay Game | [S]ettings | [C]redits | [E]xit | Input Letter: ").ToLower();
 
-    while True:
-        # Give the user a choice of keys to press to do specific actions
-        choice = main.s_input('[P]lay Game | [S]ettings | [C]redits | [L]ore | [E]xit | Input Letter: ').lower()
+                if (choice.StartsWith("p"))
+                {
+                    return;
+                }
 
-        if choice.startswith('p'):
-            return
+                if (choice.StartsWith("s") && !CInfo.Debugging)
+                {
+                    EditSettings();
+                    Console.WriteLine(title_card);
+                }
 
-        if choice.startswith("s") and not main.do_debug:
-            edit_settings()
-            print(title_logo)
+                if (choice.StartsWith("c") && !CInfo.Debugging)
+                {
+                    ShowCredits();
+                    Console.WriteLine(title_card);
+                }
 
-        if choice.startswith('c') and not main.do_debug:
-            show_credits()
-            print(title_logo)
-
-        if choice.startswith('l') and not main.do_debug:
-            show_history()
-            print(title_logo)
-
-        if choice.startswith('e') and not main.do_debug:
-            # Exit the game
-            pygame.quit()
-            sys.exit() */
+                if (choice.StartsWith("e") && !CInfo.Debugging)
+                {
+                    Environment.Exit(1);
+                }
+            }
         }
 
         private static void ShowCredits()
@@ -219,7 +220,7 @@ namespace Main
             print('-'*save_load.divider_size)
 
             try:
-                sounds.play_music('../Music/Credits Music for an 8-bit RPG.ogg')
+                SoundManager.credits_music.PlayLooping();
 
                 # Display the credits one line at a time with specific lengths
                 # of time in between each line. Syncs up with the music!
@@ -230,7 +231,7 @@ namespace Main
 
                     main.smart_sleep(3)
 
-                    sounds.play_music('../Music/Title Screen.flac')
+                    SoundManager.title_music.PlayLooping();
 
             except FileNotFoundError:
                 # Display this is the Credits.txt file couldn't be found
@@ -373,7 +374,7 @@ namespace Main
                         sounds.item_pickup.stop()
 
                     else:
-                        sounds.item_pickup.play()
+                        sounds.item_pickup.SmartPlay()
 
                     save_load.do_blip = not save_load.do_blip
 

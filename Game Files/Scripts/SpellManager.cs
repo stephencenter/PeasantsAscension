@@ -469,11 +469,11 @@ of battle.",
                 Console.WriteLine($"{user.Name} is making a move!\n");
                 Console.WriteLine($"{user.Name} is preparing to cast {SpellName}...");
 
-                SoundManager.ability_cast.Play();
+                SoundManager.ability_cast.SmartPlay();
                 CMethods.SmartSleep(750);
 
                 Console.WriteLine($"Using {SpellName}, {target.Name} is healed by {total_heal} HP!");
-                SoundManager.magic_healing.Play();
+                SoundManager.magic_healing.SmartPlay();
             }
 
             else
@@ -481,7 +481,7 @@ of battle.",
                 CMethods.PrintDivider();
 
                 Console.WriteLine($"Using {SpellName}, {target.Name} is healed by {total_heal} HP!");
-                SoundManager.magic_healing.Play();
+                SoundManager.magic_healing.SmartPlay();
                 CMethods.PressEnterReturn();
 
                 CMethods.PrintDivider();
@@ -519,21 +519,21 @@ of battle.",
             Console.WriteLine($"{user.Name} is making a move!\n");
             Console.WriteLine($"{user.Name} attempts to summon a powerful spell...");
 
-            SoundManager.magic_attack.Play();
+            SoundManager.magic_attack.SmartPlay();
             CMethods.SmartSleep(750);
 
             int attack_damage = UnitManager.CalculateDamage(user, target, CEnums.DamageType.magical, spell_power: SpellPower);
 
             if (target.Evasion < rng.Next(0, 512))
             {
-                SoundManager.enemy_hit.Play();
+                SoundManager.enemy_hit.SmartPlay();
                 target.HP -= attack_damage;
                 Console.WriteLine($"{user.Name}'s attack connects with the {target.Name}, dealing {attack_damage} damage!");
             }
 
             else
             {
-                SoundManager.attack_miss.Play();
+                SoundManager.attack_miss.SmartPlay();
                 Console.WriteLine($"The {target.Name} narrowly dodges {user.Name}'s spell!");
             }
         }
@@ -566,7 +566,7 @@ of battle.",
 
             Console.WriteLine($"{user.Name} is making a move!\n");
             Console.WriteLine($"{user.Name} is preparing to cast {SpellName}...");
-            SoundManager.ability_cast.Play();
+            SoundManager.ability_cast.SmartPlay();
             CMethods.SmartSleep(750);
 
             if (target == user)
@@ -579,7 +579,7 @@ of battle.",
                 Console.WriteLine($"{user.Name} raises {target.Name}'s stats using the power of {SpellName}!");
             }
 
-            SoundManager.buff_spell.Play();
+            SoundManager.buff_spell.SmartPlay();
 
             // We write to TempStats instead of the player's actual stats so that the changes will
             // not persist after battle

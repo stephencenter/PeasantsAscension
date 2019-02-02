@@ -39,9 +39,8 @@ namespace Scripts
 
                     if (CMethods.IsYesString(yes_no))
                     {
-                        //sounds.play_music(town.town_music)
                         CInfo.RespawnTile = CInfo.CurrentTile;
-                        town.TownChoice();
+                        town.EnterTown();
                         return true;
                     }
 
@@ -62,7 +61,7 @@ namespace Scripts
         public string TownName { get; set; }
         public string TownID { get; set; }
 
-        public void TownChoice()
+        public void EnterTown()
         {
 
         }
