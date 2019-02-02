@@ -334,7 +334,7 @@ of battle.",
                 int counter = 1;
                 foreach (Spell spell in chosen_spellbook)
                 {
-                    Console.WriteLine($"      [{counter}] {spell.SpellName} --{new string('-', padding - spell.SpellName.Length)}> MP");
+                    Console.WriteLine($"      [{counter}] {spell.SpellName} {new string('-', padding - spell.SpellName.Length)}-> {spell.ManaCost} MP");
                 }
 
                 while (true)

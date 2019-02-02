@@ -1299,7 +1299,7 @@ Increasing DIFFICULTY will provide:
                 foreach (Ability ability in a_list)
                 {
                     int true_pad = padding - ability.AbilityName.Length;
-                    Console.WriteLine($"      [{counter + 1}] {ability.AbilityName} {new string('-', true_pad)}--> {ability.APCost} AP");
+                    Console.WriteLine($"      [{counter + 1}] {ability.AbilityName} {new string('-', true_pad)}-> {ability.APCost} AP");
                     counter++;
                 }
 

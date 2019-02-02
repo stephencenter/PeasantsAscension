@@ -146,7 +146,7 @@ namespace Scripts
     {         
         public void SmartPlay()
         {
-            if (Position == NaturalDuration)
+            if (Position > TimeSpan.Zero)
             {
                 Position = TimeSpan.Zero;
             }
