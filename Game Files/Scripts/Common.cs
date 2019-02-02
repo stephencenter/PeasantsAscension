@@ -24,7 +24,14 @@ namespace Scripts
 
             else
             {
-                return Console.ReadLine();
+                string x = Console.ReadLine();
+
+                if (SavefileManager.do_blips)
+                {
+                    SoundManager.item_pickup.SmartPlay();
+                }
+
+                return x;
             }
         }
 

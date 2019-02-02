@@ -74,6 +74,7 @@ namespace Scripts
 
         public static void CheatCommand()
         {
+            SoundManager.sneaking_music.PlayLooping();
             CMethods.PrintDivider();
             Console.WriteLine("Welcome to the top-secret cheat menu!");
             Console.WriteLine("Type 'help' to view a list of cheats");
@@ -84,61 +85,64 @@ namespace Scripts
                 string command = CMethods.Input("Enter a cheat: ").ToLower();
                 List<string> keywords = command.Split().ToList();
                 
-                if (keywords.Count == 4 && keywords[0] == "inventory")
+                if (CMethods.IsExitString(command))
                 {
-                    if (keywords[1] == "add")
+                    CMethods.PrintDivider();
+                    SoundManager.PlayCellMusic();
+                    return;
+                }
+
+                else if (command.StartsWith("h"))
+                {
+                    CMethods.PrintDivider();
+                    CheatEngine.Help();
+                    CMethods.PrintDivider();
+                }
+
+                else if (keywords.Count == 4 && keywords[0] == "inventory" && keywords[1] == "add")
+                {
+                    CheatEngine.Flag flag = CheatEngine.InventoryAddCheat(keywords[2], keywords[3]);
+
+                    if (flag == CheatEngine.Flag.InvalidItemID)
                     {
-                        CheatEngine.Flag flag = CheatEngine.InventoryAddCheat(keywords[2], keywords[3]);
+                        CMethods.PrintDivider();
+                        Console.WriteLine($"'item id => {keywords[2]}' is invalid for 'inventory add [item id] [quantity]'");
+                    }
 
-                        if (flag == CheatEngine.Flag.InvalidItemID)
-                        {
-                            CMethods.PrintDivider();
-                            Console.WriteLine("Invalid 'item id' for 'inventory add [item id] [quantity]'");
-                        }
-
-                        if (flag == CheatEngine.Flag.InvalidItemQuantity)
-                        {
-                            CMethods.PrintDivider();
-                            Console.WriteLine("Invalid 'quantity' for 'inventory add [item_id] [quantity]'");
-                        }
+                    if (flag == CheatEngine.Flag.InvalidItemQuantity)
+                    {
+                        CMethods.PrintDivider();
+                        Console.WriteLine($"'quantity => {keywords[3]}' is invalid for 'inventory add [item_id] [quantity]'");
                     }
                 }
 
-                else if (keywords.Count == 2 && keywords[0] == "spawns")
+                else if (keywords.Count == 3 && keywords[0] == "spawns" && keywords[1] == "toggle")
                 {
-                    CheatEngine.Flag flag = CheatEngine.SpawnToggleCheat(keywords[1]);
+                    CheatEngine.Flag flag = CheatEngine.SpawnToggleCheat(keywords[2]);
 
                     if (flag == CheatEngine.Flag.InvalidSpawnSetting)
                     {
                         CMethods.PrintDivider();
-                        Console.WriteLine("Invalid 'true or false' for 'spawns [true or false]'");
+                        Console.WriteLine($"'true or false => {keywords[2]}' if invalid for 'spawns toggle [true or false]'");
                     }
                 }
 
+                else if (keywords.Count == 3 && keywords[0] == "gold" && keywords[1] == "add")
+                {
+                    CheatEngine.Flag flag = CheatEngine.GoldAddCheat(keywords[2]);
+
+                    if (flag == CheatEngine.Flag.InvalidGoldQuantity)
+                    {
+                        CMethods.PrintDivider();
+                        Console.WriteLine($"'quantity => {keywords[2]}' is invalid for 'gold add [quantity]'");
+                    }
+                }
                 else
                 {
                     CMethods.PrintDivider();
                     Console.WriteLine($"Invalid command '{command}'");
                 }
-                    /*
-                inventory
-                    add
-                        [item_id]
-                            [quantity]
-                    remove
-                        [item_id]
-                            [quantity]
-            
-                spawns
-                    true
-                    false
-    
-                gold
-                    add 
-                        [quantity]
-                    remove
-                        [quantity]
-    
+                    /*    
                 teleport
                     [tile_id]
     
@@ -163,7 +167,7 @@ namespace Scripts
 
     public static class CheatEngine
     {
-        public enum Flag { Success, InvalidItemID, InvalidItemQuantity, InvalidSpawnSetting }
+        public enum Flag { Success, InvalidItemID, InvalidItemQuantity, InvalidSpawnSetting, InvalidGoldQuantity }
 
         public static Flag InventoryAddCheat(string item_id, string quantity)
         {
@@ -204,7 +208,6 @@ namespace Scripts
                 throw ex;
             }
 
-
             for (int i = 0; i < true_quantity;  i++)
             {
                 InventoryManager.AddItemToInventory(item_id);
@@ -235,11 +238,58 @@ namespace Scripts
                 throw ex;
             }
 
-            CMethods.PrintDivider();
             CInfo.DoSpawns = bool_setting;
+            CMethods.PrintDivider();
             Console.WriteLine($"Monster spawns are now {(bool_setting ? "enabled" : "disabled")}");
 
             return Flag.Success;
+        }
+
+        public static Flag GoldAddCheat(string quantity)
+        {
+            int true_quantity;
+
+            try
+            {
+                true_quantity = int.Parse(quantity);
+
+                if (true_quantity < 1)
+                {
+                    throw new FormatException();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                if (ex is FormatException)
+                {
+                    return Flag.InvalidGoldQuantity;
+                }
+
+                throw ex;
+            }
+
+            CInfo.GP += true_quantity;
+            CMethods.PrintDivider();
+            Console.WriteLine($"Gave player {true_quantity} gold");
+
+            return Flag.Success;
+        }
+
+        public static void Help()
+        {
+            Console.WriteLine(@"Available cheats:
+ 'inventory add [item id] [quantity]' => Adds quantity of item id to inventory
+ 'spawns toggle [true or false]' => Enables or disable monster spawns
+ 'gold add [quantity]' => Gives the player quantity GP
+ 'teleport [tile id] => Teleports the player to the tile with tile id
+ 'player [pcu id] xp [quantity]' => Gives the PCU quantity XP
+ 'player [pcu id] heal' => Fully heals the PCU
+ 'player [pcu id] kill' => Kills the PCU
+ 'battle fight' => Initiates a random encounter on the current tile
+ 'file save' => Saves the game
+ 'file load' => Loads the most recent save file");
+            CMethods.PressEnterReturn();
         }
     }
 }
