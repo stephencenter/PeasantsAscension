@@ -36,7 +36,7 @@ namespace Main
 
                     if (command == "letmecheat")
                     {
-                        // CommandManager.CheatCommand();
+                        CommandManager.CheatCommand();
                     }
 
                     else if (available_dirs.Any(x => command.StartsWith(x.Item1.ToString())))
@@ -167,20 +167,20 @@ namespace Main
 
         private static void DisplayTitlescreen()
         {
-            string title_card = $@"\
-     ____                            _       _
-    |  _ \ ___  __ _ ___  __ _ _ __ | |_ ___( )
-    | |_) / _ \/ _` / __|/ _` | '_ \| __/ __|/
-    |  __/  __/ (_| \__ \ (_| | | | | |_\__ \\
-    |_|   \___|\__,_|___/\__,_|_| |_|\__|___/
-            _                           _
-        / \   ___  ___ ___ _ __  ___(_) ___  _ __
-        / _ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \\
-        / ___ \\\__ \ (_|  __/ | | \__ \ | (_) | | | |
-        /_/   \_\___/\___\___|_| |_|___/_|\___/|_| |_|
-                Peasants' Ascension {CInfo.GameVersion} -- A Text-RPG by Stephen Center
-    Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
-    Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
+            string title_card = $@"  _____                           _             
+ |  __ \                         | |            
+ | |__) |__  __ _ ___  __ _ _ __ | |_ ___       
+ |  ___/ _ \/ _` / __|/ _` | '_ \| __/ __|      
+ | |  |  __/ (_| \__ \ (_| | | | | |_\__ \      
+ |_|   \___|\__,_|___/\__,_|_| |_|\__|___/      
+     /\                                      
+    /  \   ___  ___ ___ _ __  ___ _  ___  _ __  
+   / /\ \ / __|/ __/ _ \ '_ \/ __| |/ _ \| '_ \ 
+  / ____ \\__ \ (_|  __/ | | \__ \ | (_) | | | |
+ /_/    \_\___/\___\___|_| |_|___/_|\___/|_| |_|                                                
+Peasant's Ascension {CInfo.GameVersion} -- A Text-RPG by Stephen Center
+Licensed under the GNU GPLv3: [https://www.gnu.org/copyleft/gpl.html]
+Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
             SoundManager.title_music.PlayLooping();
             Console.WriteLine(title_card);
             CMethods.PrintDivider();

@@ -74,15 +74,172 @@ namespace Scripts
 
         public static void CheatCommand()
         {
+            CMethods.PrintDivider();
+            Console.WriteLine("Welcome to the top-secret cheat menu!");
+            Console.WriteLine("Type 'help' to view a list of cheats");
+            Console.WriteLine("Type 'exit' exit the cheat menu\n");
+
             while (true)
             {
-                string command = CMethods.Input()
+                string command = CMethods.Input("Enter a cheat: ").ToLower();
+                List<string> keywords = command.Split().ToList();
+                
+                if (keywords.Count == 4 && keywords[0] == "inventory")
+                {
+                    if (keywords[1] == "add")
+                    {
+                        CheatEngine.Flag flag = CheatEngine.InventoryAddCheat(keywords[2], keywords[3]);
+
+                        if (flag == CheatEngine.Flag.InvalidItemID)
+                        {
+                            CMethods.PrintDivider();
+                            Console.WriteLine("Invalid 'item id' for 'inventory add [item id] [quantity]'");
+                        }
+
+                        if (flag == CheatEngine.Flag.InvalidItemQuantity)
+                        {
+                            CMethods.PrintDivider();
+                            Console.WriteLine("Invalid 'quantity' for 'inventory add [item_id] [quantity]'");
+                        }
+                    }
+                }
+
+                else if (keywords.Count == 2 && keywords[0] == "spawns")
+                {
+                    CheatEngine.Flag flag = CheatEngine.SpawnToggleCheat(keywords[1]);
+
+                    if (flag == CheatEngine.Flag.InvalidSpawnSetting)
+                    {
+                        CMethods.PrintDivider();
+                        Console.WriteLine("Invalid 'true or false' for 'spawns [true or false]'");
+                    }
+                }
+
+                else
+                {
+                    CMethods.PrintDivider();
+                    Console.WriteLine($"Invalid command '{command}'");
+                }
+                    /*
+                inventory
+                    add
+                        [item_id]
+                            [quantity]
+                    remove
+                        [item_id]
+                            [quantity]
+            
+                spawns
+                    true
+                    false
+    
+                gold
+                    add 
+                        [quantity]
+                    remove
+                        [quantity]
+    
+                teleport
+                    [tile_id]
+    
+                player
+                    [pcu_id]
+                        active
+                            [bool]
+                        xp
+                            [quantity]
+                        heal
+                        kill
+
+                battle
+                    fight
+    
+                file
+                    save
+                    load */
             }
         }
     }
 
     public static class CheatEngine
     {
+        public enum Flag { Success, InvalidItemID, InvalidItemQuantity, InvalidSpawnSetting }
 
+        public static Flag InventoryAddCheat(string item_id, string quantity)
+        {
+            int true_quantity;
+
+            try
+            {
+                ItemManager.FindItemWithID(item_id);
+            }
+
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException)
+                {
+                    return Flag.InvalidItemID;
+                }
+
+                throw ex;
+            }
+
+            try
+            {
+                true_quantity = int.Parse(quantity);
+
+                if (true_quantity < 1)
+                {
+                    throw new FormatException();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                if (ex is FormatException)
+                {
+                    return Flag.InvalidItemQuantity;
+                }
+
+                throw ex;
+            }
+
+
+            for (int i = 0; i < true_quantity;  i++)
+            {
+                InventoryManager.AddItemToInventory(item_id);
+            }
+
+            CMethods.PrintDivider();
+            Console.WriteLine($"Added {item_id} x{quantity} to inventory");
+
+            return Flag.Success;
+        }
+
+        public static Flag SpawnToggleCheat(string new_setting)
+        {
+            bool bool_setting;
+
+            try
+            {
+                bool_setting = bool.Parse(new_setting);
+            }
+
+            catch (Exception ex)
+            {
+                if (ex is FormatException)
+                {
+                    return Flag.InvalidSpawnSetting;
+                }
+
+                throw ex;
+            }
+
+            CMethods.PrintDivider();
+            CInfo.DoSpawns = bool_setting;
+            Console.WriteLine($"Monster spawns are now {(bool_setting ? "enabled" : "disabled")}");
+
+            return Flag.Success;
+        }
     }
 }

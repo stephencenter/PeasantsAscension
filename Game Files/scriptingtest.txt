@@ -2,9 +2,6 @@ inventory
     add
         [item_id]
             [quantity]
-    remove
-        [item_id]
-            [quantity]
             
 spawns
     true
