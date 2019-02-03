@@ -205,6 +205,11 @@ namespace Scripts
                         break;
                     }
 
+                    /*
+                    file
+                        save
+                        load */
+
                     else
                     {
                         CMethods.PrintDivider();
@@ -212,17 +217,6 @@ namespace Scripts
                     }
 
                     break;
-                    /*   
-                    player
-                        [pcu_id]
-                            kill
-
-                    battle
-                        fight
-    
-                    file
-                        save
-                        load */
                 }
             }
         }

@@ -10,20 +10,14 @@ namespace Scripts
             /* =========================== *
              *           WEAPONS           *
              * =========================== */
-            new Weapon("Fists", "The oldest weapon known to man [+0 % Damage].",
+            new Weapon("Fists", "The oldest weapon known to man [+0% Damage].",
                 0, 0, CEnums.WeaponType.melee, CEnums.CharacterClass.any, CEnums.Element.neutral, "fists", "weapon_fists"),
             
             /* =========================== *
              *            ARMOR            *
              * =========================== */
-            new Armor("None", "You should probably get some head armor [+0% Damage Resistance].",
-                0, 0, CEnums.EquipmentType.head, new List<CEnums.CharacterClass>() {CEnums.CharacterClass.any}, CEnums.Element.neutral, "misc", "no_head"),
-
-            new Armor("None", "You should probably get some body armor [+0% Damage Resistance].",
-                0, 0, CEnums.EquipmentType.body, new List<CEnums.CharacterClass>() {CEnums.CharacterClass.any}, CEnums.Element.neutral, "misc", "no_body"),
-
-            new Armor("None", "You should probably get some leg armor [+0% Damage Resistance].",
-                0, 0, CEnums.EquipmentType.legs, new List<CEnums.CharacterClass>() {CEnums.CharacterClass.any}, CEnums.Element.neutral, "misc", "no_legs"),
+            new Armor("None", "You should probably get some armor.",
+                0, 0, 0, new List<CEnums.CharacterClass>() {}, new List<CEnums.CharacterClass>() {}, "misc", "no_head"),
             
             /* =========================== *
              *         ACCESSORIES         *
@@ -50,30 +44,17 @@ namespace Scripts
         public string Description { get; set; }
         public int Value { get; set; }
         public bool IsImportant { get; set; }
-        public string AsciiArt { get; set; }
         public string Category { get; set; }
         public string ItemID { get; set; }
 
-        /*
-        try:
-            assert self.ascart in ascii_art.item_sprites
+        public abstract void UseItem(PlayableCharacter user);
 
-        except AssertionError:
-            raise Exception(f"{self.item_id} has invalid ascii art!")
-
-        def use_item(self, user):
-            print("You can't use this right now.")
-
-            if main.party_info['gamestate'] != 'battle':
-                main.s_input("\nPress enter/return ") */
-
-        protected Item(string name, string desc, int value, bool imp, string ascart, string cat, string item_id)
+        protected Item(string name, string desc, int value, bool imp, string cat, string item_id)
         {
             Name = name;
             Description = desc;
             Value = value;
             IsImportant = imp;
-            AsciiArt = ascart;
             Category = cat;
             ItemID = item_id;
         }
@@ -86,7 +67,7 @@ namespace Scripts
         public int Mana { get; set; }
 
         public HealthManaPotion(string name, string desc, int value, int heal, int mana, string item_id) :
-            base(name, desc, value, false, "Potion", "consumables", item_id)
+            base(name, desc, value, false, "consumables", item_id)
         {
             Health = heal;
             Mana = mana;
@@ -115,8 +96,9 @@ namespace Scripts
             remove_item(self.item_id) */
     }
 
-    /*
-    class StatusPotion : Item {
+    public class StatusPotion : Item
+    {
+        /*
         def __init__(self, name, desc, value, status, item_id, ascart= 'Status', cat= 'consumables'):
             super().__init__(name, desc, value, item_id, ascart, cat)
             self.status = status
@@ -139,55 +121,75 @@ namespace Scripts
 
             else:
                 print(f"Drinking this {self.name} probably wouldn't do anything.")
-                main.s_input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ") */
+    }
 
-
-    class AttractPotion : Item {
+    public class AttractPotion : Item
+    {
+        /*
         def __init__(self, name, desc, value, num_steps, m_count, item_id, ascart= "Alchemy", cat= "consumables"):
             super().__init__(name, desc, value, item_id, ascart, cat)
             self.num_steps = num_steps
-            self.m_count = m_count
+            self.m_count = m_count */
+    }
 
-
-    class RepelPotion : Item {
+    public class RepelPotion : Item
+    {
+        /*
         def __init__(self, name, desc, value, num_steps, item_id, ascart= "Alchemy", cat= "consumables"):
             super().__init__(name, desc, value, item_id, ascart, cat)
-            self.num_steps = num_steps
+            self.num_steps = num_steps */
+    }
 
-
-    class BombPotion : Item {
+    public class BombPotion : Item
+    {
+        /*
         def __init__(self, name, desc, value, multitarget, damage, item_id, ascart= "Alchemy", cat= "consumables"):
             super().__init__(name, desc, value, item_id, ascart, cat)
             self.multitarget = multitarget
-            self.damage = damage
+            self.damage = damage */
+    }
 
-
-    class XPGoldPotion : Item {
+    public class XPGoldPotion : Item
+    {
+        /*
         def __init__(self, name, desc, value, gold_change, xp_change, item_id, ascart= "Alchemy", cat= "consumables"):
             super().__init__(name, desc, value, item_id, ascart, cat)
             self.gold_change = gold_change
-            self.xp_change = xp_change
+            self.xp_change = xp_change */
+    }
 
-
-    class GameCrashPotion : Item {
+    public class GameCrashPotion : Item
+    {
+        /*
         def __init__(self, name, desc, value, item_id, ascart= "Alchemy", cat= "consumables"):
             super().__init__(name, desc, value, item_id, ascart, cat)
 
         def use_item(self, user):
             raise Exception("I told you this would crash the game.") */
+    }
 
-    public class Weapon : Item
+    public class Equipment : Item
+    {
+        public CEnums.EquipmentType EquipType { get; set; }
+
+        protected Equipment(string name, string desc, int value, bool imp, string cat, string item_id) :
+            base(name, desc, value, false, "weapons", item_id)
+        {
+
+        }
+    }
+
+    public class Weapon : Equipment
     {
         // Items that increase your damage by a percentage.
         public double Power { get; set; }
         public CEnums.WeaponType WeaponType { get; set; }
         public CEnums.CharacterClass PClass { get; set; }
         public CEnums.Element Element { get; set; }
-        public CEnums.EquipmentType EquipType { get; set; }
 
-        public Weapon(string name, string desc, int value, double power, CEnums.WeaponType w_type, 
-                      CEnums.CharacterClass p_class, CEnums.Element element, string ascart, string item_id) :
-                          base(name, desc, value, false, ascart, "weapons", item_id)
+        public Weapon(string name, string desc, int value, double power, CEnums.WeaponType w_type, CEnums.CharacterClass p_class, 
+            CEnums.Element element, string ascart, string item_id) : base(name, desc, value, false, "weapons", item_id)
         {
             Power = power;
             WeaponType = w_type;
@@ -227,36 +229,27 @@ namespace Scripts
                 main.s_input("\nPress enter/return ") */
     }
 
-    public class Armor : Item {
-        // Items that give the player a percent increase in defense when hit.
+    public class Armor : Equipment
+    {
+        // Items that give the player a percent resistance to all damage,
+        // but reduce player speed and evasion to compensate
         public double Resist { get; set; }
-        public CEnums.WeaponType WeaponType { get; set; }
-        public List<CEnums.CharacterClass> ValidClasses { get; set; }
-        public CEnums.Element Element { get; set; }
-        public CEnums.EquipmentType EquipType { get; set; }
+        public double Penalty { get; set; }
 
-        public Armor(string name, string desc, int value, double resist, CEnums.EquipmentType equip_type,
-                     List<CEnums.CharacterClass> v_classes, CEnums.Element element, string ascart, string item_id) :
-                         base(name, desc, value, false, ascart, "weapons", item_id)
+        // Proficient classes get a 1.5x increase in resist, and a 1.5x decrease in penalty
+        // Non-proficient classes get a 1.5x decrease in resist, and a 1.5x increase in penalty
+        public List<CEnums.CharacterClass> ProficientClasses { get; set; }
+        public List<CEnums.CharacterClass> NonProficientClasses { get; set; }
+
+        public Armor(string name, string desc, int value, double resist, double penatly,
+                     List<CEnums.CharacterClass> prof_classes, List<CEnums.CharacterClass> nonprof_classes,
+                     string ascart, string item_id) : base(name, desc, value, false, "weapons", item_id)
         {
             Resist = resist;
-            ValidClasses = v_classes;
-            Element = element;
-            EquipType = equip_type;
-
-            string class_requirement;
-
-            if (ValidClasses.Contains(CEnums.CharacterClass.any))
-            {
-                class_requirement = "\nEquippable by any class.";
-            }
-
-            else {
-                string classes = string.Join(" and ", ValidClasses.Select(x => CEnums.EnumToString(x)));
-                class_requirement = $"\nOnly equippable by {classes}.";
-            }
-
-            desc = $"{desc} {class_requirement}";
+            Penalty = penatly;
+            ProficientClasses = prof_classes;
+            NonProficientClasses = nonprof_classes;
+            EquipType = CEnums.EquipmentType.armor;
         }
 
         /*
@@ -272,18 +265,9 @@ namespace Scripts
                 main.s_input("\nPress enter/return ") */
     }
 
-    public class Accessory : Item
+    public class ElementAccessory : Equipment
     {
-        public CEnums.EquipmentType EquipType { get; set; }
-
-        public Accessory(string name, string desc, int value, string ascart, string item_id) : base(name, desc, value, false, ascart, "accessories", item_id)
-        {
-            EquipType = CEnums.EquipmentType.accessory;
-        }
-    }
-
-    /*
-    class ElementAccessory : Accessory {
+        /*
         // Gives the player an element used when taking damage
         def __init__(self, name, desc, value, def_element, item_id, ascart= 'Amulet', cat= 'access'):
             super().__init__(name, desc, value, item_id, ascart, cat)
@@ -294,17 +278,21 @@ namespace Scripts
             user.def_element = self.def_element
 
             print(f'{user.name} equips the {self.name}. Their element is now set to {self.def_element}.')
-            main.s_input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ") */
+    }
 
-
-    class ActionAccessory : Item {
+    public class ActionAccessory : Equipment
+    {
+        /*
         def __init__(self, name, desc, value, class_, ap_gain, item_id, ascart= 'Amulet', cat= 'access'):
             super().__init__(name, desc, value, item_id, ascart, cat)
             self.class_ = class_
-            self.ap_gain = ap_gain
+            self.ap_gain = ap_gain */
+    }
 
-
-    class Shovel : Item {
+    public class Shovel : Item
+    {
+        /*
         def __init__(self, name, desc, value, item_id, cat= 'tools', imp= True, ascart= 'Shovel'):
             super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
@@ -342,10 +330,12 @@ namespace Scripts
 
             else:
                 print("No luck, your party didn't find anything.")
-                main.s_input("\nPress enter/return ")
+                main.s_input("\nPress enter/return ") */
+    }
 
-
-    class FastTravelAtlas : Item {
+    public class FastTravelAtlas : Item
+    {
+        /*
         def __init__(self, name, desc, value, item_id, cat= 'tools', imp= True, ascart= 'Map'):
             super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
@@ -455,49 +445,49 @@ namespace Scripts
                             print('-'*save_load.divider_size)
                             do_loop = False
 
-                            break
+                            break */
+    }
 
-
-    class LockpickKit : Item {
+    public class LockpickKit : Item
+    {
+        /*
         def __init__(self, name, desc, value, power, item_id, imp= False, ascart= 'Lockpick', cat= 'tools'):
-            super().__init__(name, desc, value, item_id, imp, ascart, cat)
-            self.power = power
+        super().__init__(name, desc, value, item_id, imp, ascart, cat)
+            self.power = power */
+    }
 
-
-    class MonsterEncyclopedia : Item {
+    public class MonsterEncyclopedia : Item
+    {
+        /*
         def __init__(self, name, desc, value, item_id, cat= 'tools', imp= False, ascart= 'Book'):
             super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
         def use_item(self, user):
-            if main.party_info['gamestate'] == 'battle':
-                m_w = {'fire': 'water',
-                       'water': 'electric',
-                       'electric': 'earth',
-                       'earth': 'wind',
-                       'wind': 'grass',
-                       'grass': 'ice',
-                       'ice': 'fire',
-                       'neutral': 'neutral',
-                       'light': 'dark',
-                       'dark': 'light'}
-    [user.target.def_element]
+            m_w = {'fire': 'water',
+                    'water': 'electric',
+                    'electric': 'earth',
+                    'earth': 'wind',
+                    'wind': 'grass',
+                    'grass': 'ice',
+                    'ice': 'fire',
+                    'neutral': 'neutral',
+                    'light': 'dark',
+                    'dark': 'light'}[user.target.def_element]
 
-    print(f"""{user.target.name.upper()}'s STATS:
-    Physical: { user.target.attk}
-    Attack / {user.target.dfns} Defense
-    Magical: {user.target.m_attk} Attack / {user.target.m_dfns} Defense
-    Piercing: {user.target.p_attk} Attack / {user.target.p_dfns} Defense
-    Speed: {user.target.spd}
-    Evasion: {user.target.evad}
-    Elements: Attacks are { user.target.def_element.title()} / Defense is {user.target.off_element.title()} / \
-    Weak to { m_w.title()}""")
+            print(f"""{user.target.name.upper()}'s STATS:
+            Physical: { user.target.attk}
+            Attack / {user.target.dfns} Defense
+            Magical: {user.target.m_attk} Attack / {user.target.m_dfns} Defense
+            Piercing: {user.target.p_attk} Attack / {user.target.p_dfns} Defense
+            Speed: {user.target.spd}
+            Evasion: {user.target.evad}
+            Elements: Attacks are { user.target.def_element.title()} / Defense is {user.target.off_element.title()} / \
+            Weak to { m_w.title()}""") */
+    }
 
-            else:
-                print("This feature doesn't work yet, sorry :(")
-                main.s_input("\nPress enter/return ")
-
-
-    class PocketAlchemyLab : Item {
+    public class PocketAlchemyLab : Item
+    {
+        /*
         def __init__(self, name, desc, value, item_id, cat= 'tools', imp= False, ascart= 'alchemy_kit'):
             super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
@@ -621,10 +611,12 @@ namespace Scripts
             sounds.unlock_chest.SmartPlay()
             add_item(chosen_potion.item_id)
             print(f"Success! You brewed a {chosen_potion.name}!")
-            main.s_input("\nPress enter/return ")
+            main.s_input("\nPress enter/return ") */
+    }
 
-
-    class MusicBox : Item {
+    public class MusicBox : Item
+    {
+        /*
         def __init__(self, name, desc, value, item_id, cat= 'tools', imp= False, ascart= 'Book'):
             super().__init__(name, desc, value, item_id, imp, ascart, cat)
 
@@ -888,12 +880,14 @@ namespace Scripts
                         pass
 
                 except pygame.error:
-                    pass
+                    pass */
+    }
 
-
-    class Ingredient : Item {
+    public class Ingredient : Item 
+    {
+        /*
         def __init__(self, name, desc, value, flavor, item_id, ascart= 'misc', cat= 'misc', imp= False):
             super().__init__(name, desc, value, item_id, imp, ascart, cat)
-            self.flavor = flavor
-    } */
+            self.flavor = flavor*/
+    }
 }

@@ -152,7 +152,7 @@ namespace Scripts
             Play();
         }
 
-        // Using this class, I can assign the MediaPlayer a URI inside the constructor
+        // Using this class, we can assign the MediaPlayer a URI inside the constructor
         public MediaWrapper(string uri) : base()
         {
             URI = uri;

@@ -22,9 +22,7 @@ namespace Scripts
                 "_player", new Dictionary<CEnums.EquipmentType, string>()
                  {
                      { CEnums.EquipmentType.weapon, "weapon_fists" },
-                     { CEnums.EquipmentType.head, "no_head" },
-                     { CEnums.EquipmentType.body, "no_body" },
-                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
                      { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
@@ -33,9 +31,7 @@ namespace Scripts
                 "_solou", new Dictionary<CEnums.EquipmentType, string>()
                  {
                      { CEnums.EquipmentType.weapon, "weapon_fists" },
-                     { CEnums.EquipmentType.head, "no_head" },
-                     { CEnums.EquipmentType.body, "no_body" },
-                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
                      { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
@@ -44,9 +40,7 @@ namespace Scripts
                 "_chili", new Dictionary<CEnums.EquipmentType, string>()
                  {
                      { CEnums.EquipmentType.weapon, "weapon_fists" },
-                     { CEnums.EquipmentType.head, "no_head" },
-                     { CEnums.EquipmentType.body, "no_body" },
-                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
                      { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
@@ -55,9 +49,7 @@ namespace Scripts
                 "_chyme", new Dictionary<CEnums.EquipmentType, string>()
                  {
                      { CEnums.EquipmentType.weapon, "weapon_fists" },
-                     { CEnums.EquipmentType.head, "no_head" },
-                     { CEnums.EquipmentType.body, "no_body" },
-                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
                      { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
@@ -66,9 +58,7 @@ namespace Scripts
                 "_storm", new Dictionary<CEnums.EquipmentType, string>()
                  {
                      { CEnums.EquipmentType.weapon, "weapon_fists" },
-                     { CEnums.EquipmentType.head, "no_head" },
-                     { CEnums.EquipmentType.body, "no_body" },
-                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
                      { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
@@ -77,9 +67,7 @@ namespace Scripts
                 "_parsto", new Dictionary<CEnums.EquipmentType, string>()
                  {
                      { CEnums.EquipmentType.weapon, "weapon_fists" },
-                     { CEnums.EquipmentType.head, "no_head" },
-                     { CEnums.EquipmentType.body, "no_body" },
-                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
                      { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
@@ -88,9 +76,16 @@ namespace Scripts
                 "_adorine", new Dictionary<CEnums.EquipmentType, string>()
                  {
                      { CEnums.EquipmentType.weapon, "weapon_fists" },
-                     { CEnums.EquipmentType.head, "no_head" },
-                     { CEnums.EquipmentType.body, "no_body" },
-                     { CEnums.EquipmentType.legs, "no_legs" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
+                     { CEnums.EquipmentType.accessory, "no_access" }
+                 }
+             },
+
+             {
+                "_kaltoh", new Dictionary<CEnums.EquipmentType, string>()
+                 {
+                     { CEnums.EquipmentType.weapon, "weapon_fists" },
+                     { CEnums.EquipmentType.armor, "no_armor" },
                      { CEnums.EquipmentType.accessory, "no_access" }
                  }
              },
@@ -108,9 +103,7 @@ namespace Scripts
             Dictionary<CEnums.EquipmentType, dynamic> real_equipped = new Dictionary<CEnums.EquipmentType, dynamic>()
             {
                 { CEnums.EquipmentType.weapon, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.weapon]) },
-                { CEnums.EquipmentType.head, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.head]) },
-                { CEnums.EquipmentType.body, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.body]) },
-                { CEnums.EquipmentType.legs, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.legs]) },
+                { CEnums.EquipmentType.armor, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.armor]) },
                 { CEnums.EquipmentType.accessory, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.accessory]) }
             };
 

@@ -147,10 +147,7 @@ namespace Scripts
 
             if (target is PlayableCharacter)
             {
-                double a = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.head].Resist;
-                double b = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.body].Resist;
-                double c = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.legs].Resist;
-                armor_resist = a + b + c;
+                armor_resist = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.armor].Resist ;
 
                 defense = target.TempStats["defense"];
                 p_defense = target.TempStats["p_defense"];

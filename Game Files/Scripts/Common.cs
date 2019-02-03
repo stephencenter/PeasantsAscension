@@ -158,7 +158,7 @@ namespace Scripts
         public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, neutral }
         public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard, any }
         public enum MonsterClass { melee, ranged, magic }
-        public enum EquipmentType { head, body, legs, weapon, accessory }
+        public enum EquipmentType { armor, weapon, accessory }
         public enum WeaponType { melee, ranged, instrument }
         public enum DamageType { physical, piercing, magical }
         public enum GameState { overworld, battle, town }
@@ -219,9 +219,7 @@ namespace Scripts
                 { MonsterClass.ranged, "Ranged" },
                 { MonsterClass.magic, "Magic" },
 
-                { EquipmentType.head, "Head" },
-                { EquipmentType.body, "Body" },
-                { EquipmentType.legs, "Legs" },
+                { EquipmentType.armor, "Armor" },
                 { EquipmentType.weapon, "Weapon" },
                 { EquipmentType.accessory, "Accessory" },
 
