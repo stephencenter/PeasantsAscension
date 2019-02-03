@@ -106,7 +106,7 @@ there might be a smart idea.",
                 // InvalidOperationException means that .Single() found either 0 provinces matching prov_id, or more than 1
                 if (ex is InvalidOperationException)
                 {
-                    throw new Exception($"Tile with id {tile_id} either doesn't exist or is duplicated");
+                    throw new InvalidOperationException($"Tile with id {tile_id} either doesn't exist or is duplicated");
                 }
 
                 throw ex;

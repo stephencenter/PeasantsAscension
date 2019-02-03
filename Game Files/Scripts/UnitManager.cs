@@ -241,27 +241,30 @@ namespace Scripts
             return damage;
         }
 
-        public static void HealAllPCUs(double heal_percentage, bool restore_hp, bool restore_mp, bool restore_ap)
+        public static void HealOnePCU(string pcu_id, bool restore_hp, bool restore_mp, bool restore_ap)
         {
-            foreach (PlayableCharacter pcu in GetAllPCUs())
+            PlayableCharacter pcu = GetAllPCUs().Single(x => x.UnitID == pcu_id);
+            if (restore_hp)
             {
-                if (restore_hp)
-                {
-                    pcu.HP = (int)(pcu.MaxHP * heal_percentage);
-                }
-
-                if (restore_mp)
-                {
-                    pcu.MP = (int)(pcu.MaxMP * heal_percentage);
-                }
-
-                if (restore_ap)
-                {
-                    pcu.AP = (int)(pcu.MaxAP * heal_percentage);
-                }
-
-                pcu.FixAllStats();
+                pcu.HP = pcu.MaxHP;
             }
+
+            if (restore_mp)
+            {
+                pcu.MP = pcu.MaxHP;
+            }
+
+            if (restore_ap)
+            {
+                pcu.AP = pcu.MaxHP;
+            }
+
+            pcu.FixAllStats();
+        }
+
+        public static void HealAllPCUs(bool restore_hp, bool restore_mp, bool restore_ap)
+        {
+            GetAllPCUs().ForEach(x => HealOnePCU(x.UnitID, restore_hp, restore_mp, restore_ap));
         }
     }
 

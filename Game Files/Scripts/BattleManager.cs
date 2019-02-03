@@ -254,7 +254,7 @@ namespace Scripts
                     if (CMethods.IsYesString(y_n))
                     {
                         CInfo.CurrentTile = CInfo.RespawnTile;
-                        UnitManager.HealAllPCUs(1, true, true, true);
+                        UnitManager.HealAllPCUs(true, true, true);
                         SoundManager.PlayCellMusic();
 
                         return;

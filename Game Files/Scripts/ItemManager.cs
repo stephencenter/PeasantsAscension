@@ -67,7 +67,7 @@ namespace Scripts
             if main.party_info['gamestate'] != 'battle':
                 main.s_input("\nPress enter/return ") */
 
-        public Item(string name, string desc, int value, bool imp, string ascart, string cat, string item_id)
+        protected Item(string name, string desc, int value, bool imp, string ascart, string cat, string item_id)
         {
             Name = name;
             Description = desc;
@@ -79,7 +79,8 @@ namespace Scripts
         }
     }
 
-    public class HealthManaPotion : Item {
+    public class HealthManaPotion : Item
+    {
         // Items that restore your HP, MP, or both
         public int Health { get; set; }
         public int Mana { get; set; }
@@ -175,7 +176,8 @@ namespace Scripts
         def use_item(self, user):
             raise Exception("I told you this would crash the game.") */
 
-    public class Weapon : Item {
+    public class Weapon : Item
+    {
         // Items that increase your damage by a percentage.
         public double Power { get; set; }
         public CEnums.WeaponType WeaponType { get; set; }
