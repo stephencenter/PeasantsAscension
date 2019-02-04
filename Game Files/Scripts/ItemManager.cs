@@ -13,7 +13,198 @@ namespace Scripts
              * =========================== */
             new Weapon("Fists", "The oldest weapon known to man.",
                 0, 0, CEnums.WeaponType.melee, CEnums.CharacterClass.any, CEnums.Element.neutral, "weapon_fists"),
-            
+
+            // Weapons -- Warrior
+            new Weapon("Iron Hoe",  
+@"Not much of a weapon, unless you really hate dirt.
+5% Damage Increase
+Only usable by Warriors", 10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "iron_hoe"),
+
+            new Weapon("Bronze Sword",
+@"A light yet sturdy sword smelted from bronze.
+10% Damage Increase
+Only usable by Warriors", 150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "bnz_swd"),
+
+            new Weapon("Enhanced Bronze Sword",
+@"Even better than your typical Bronze Sword.
+30% Damage Increase
+Only usable by Warriors", 300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "en_bnz_swd"),
+
+            new Weapon("Steel Spear",
+@"A fair-sized spear crafted from well made steel.
+50% Damage Increase
+Only usable by Warriors", 600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "stl_spr"),
+
+            new Weapon("Enhanced Steel Spear",
+@"Even better than your typical Steel Spear.
+70% Damage Increase
+Only usable by Warriors", 900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "en_stl_spr"),
+
+            new Weapon("Titanium Battleaxe",
+@"A heavy and powerful axe made of high quality Titanium.
+90% Damage Increase
+Only usable by Warriors", 1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "titan_axe"),
+
+            // Weapons -- Assassin
+            new Weapon("Stone Dagger", 
+@"A stone knife that you made yourself! Used to shear sheep and cut meat.
+5% Damage Increase
+Only usable by Assassins", 10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "stn_dag"),
+
+            new Weapon("Serrated Knife", 
+@"A durable knife made of iron, with one side made jagged.
+10% Damage Increase
+Only usable by Assassins", 150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "ser_knf"),
+
+            new Weapon("Enhanced Serrated Knife", 
+@"Even better than your typical Serrated Knife.
+30% Damage Increase
+Only usable by Assassins", 300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "en_ser_knf"),
+
+            new Weapon("Stiletto", 
+@"A long, cross-shaped knife perfect for 'removing' your enemies.
+50% Damage Increase
+Only usable by Assassins", 600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "stiletto"),
+
+            new Weapon("Enhanced Stiletto",
+@"Even better than your typical Stiletto.
+70% Damage Increase
+Only usable by Assassins", 900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "en_stiletto"),
+
+            new Weapon("Mythril Shortblade", 
+@"A knife made of a rare and powerful material.
+90% Damage Increase
+Only usable by Assassins", 1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "myth_sb"),
+
+            // Weapons -- Ranger
+            new Weapon("Sling Shot", 
+@"A weapon that could scare even the mightiest of tin-cans.
+5% Damage Increase
+Only usable by Rangers", 10, 0.05, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "slg_sht"),
+
+            new Weapon("Short Bow",
+@"A bow of great craftsmanship. It's kinda small, though.
+10% Damage Increase
+Only usable by Rangers", 150, 0.1, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "sht_bow"),
+
+            new Weapon("Enhanced Short Bow",
+@"Even better than your typical Short Bow.
+30% Damage Increase
+Only usable by Rangers", 300, 0.3, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "en_sht_bow"),
+
+            new Weapon("Long Bow",
+@"A much more impressive bow capable of accuracy at long distances.
+50% Damage Increase
+Only usable by Rangers", 600, 0.5, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "lng_bow"),
+
+            new Weapon("Enhanced Long Bow",
+@"Even better than your typical Long Bow [+70% Damage].",
+                                900, 0.7, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "en_lng_bow"),
+
+            new Weapon("Ashen Crossbow",
+@"A beautifully-crafted crossbow made from the wood of an ash tree. [+90% Damage].",
+                              1200, 0.9, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "ash_cbow"),
+
+            // Weapons -- Mage
+            new Weapon("Magical Twig", @"
+            Not actually magical but it makes you feel cooler when you use it [+5% Damage].",
+                             10, 0.05, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "mag_twg"),
+
+            new Weapon("Oak Staff",
+                             "A wooden staff imbued with weak magical abilities [+10% Damage].",
+                             150, 0.1, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "oak_stf"),
+
+            new Weapon("Enhanced Oak Staff",
+                                "Even better than your typical Oak Staff [+30% Damage].",
+                                300, 0.3, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "en_oak_stf"),
+
+            new Weapon("Arcane Spellbook",
+                             "An intermediate spellbook for combat purposes [+50% Damage].",
+                             600, 0.5, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "arc_spb"),
+
+            new Weapon("Enhanced Arcane Spellbook",
+                                "Even better than your typical Arcane Spellbook [+70% Damage].",
+                                900, 0.7, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "en_arc_spb"),
+
+            new Weapon("Runic Staff",
+                             "A powerful staff enchanted with ancient magic [+90% Damage].",
+                             1200, 0.9, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "rnc_stf"),
+
+            // Weapons -- Paladin
+            new Weapon("Rubber Mallet", @"
+            This can barely hammer nails, what do you expect to kill with it? [+5% Damage].",
+                             10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "rbr_mlt"),
+
+            new Weapon("Holy Mace",
+                               "An well-made iron mace imbued with the power of the heavens [+10% Damage].",
+                               150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "holy_mace"),
+
+            new Weapon("Enhanced Holy Mace",
+                                  "Even better than your typical Holy Mace [+30% Damage].",
+                                  300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "en_holy_mace"),
+
+            new Weapon("Hammer of Might",
+                                "A hammer often used by holy warriors to smash their foes [+50% Damage].",
+                                600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "hmr_of_mgt"),
+
+            new Weapon("Enhanced Hammer of Might",
+                                   "Even better than your typical Hammer of Might [+70% Damage].",
+                                   900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "en_hmr_of_mgt"),
+
+            new Weapon("Night's Bane",
+                              "A forbidden hammer used throughout history to crush unholy creatures [+90% Damage].",
+                              1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "ngt_bane"),
+
+            // Weapons -- Monk
+            new Weapon("Gardening Gloves", @"
+            Used to prevent getting cut on thorns or the teeth of your enemies [+5% Damage].",
+                                   10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "gardening_gloves"),
+
+            new Weapon("Brass Knuckles",
+                                 "A brass adornment for your knuckles providing extra punching power [+10% Damage].",
+                                 150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "brass_kncls"),
+
+            new Weapon("Enhanced Brass Knuckles",
+                                    "Even better than your typical Brass Knuckles [+30% Damage].",
+                                    300, 0.30, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "en_brass_kncls"),
+
+            new Weapon("Bladed Gloves",
+                                   "Leather gloves with sturdy steel blades protruding from them [+50% Damage].",
+                                   600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "bladed_gloves"),
+
+            new Weapon("Enhanced Bladed Gloves",
+                                      "Even better than your typical Bladed Gloves [+70% Damage].",
+                                      900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "en_bladed_gloves"),
+
+            new Weapon("Lead-Weighted Mitts",
+                             "Weighted with 5 pounds of lead and tipped with steel blades [+90% Damage].",
+                             1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "lead_bg"),
+
+            // Weapons -- Bard
+            new Weapon("Kazoo", @"
+            A wooden kazoo that does more to annoy your enemies than damage them [+5% Damage].",
+                           10, 0.05, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "kazoo"),
+
+            new Weapon("Flute", @"
+            A good-quality flute made out of wood and silver [+10% Damage].",
+                           150, 0.1, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "flute"),
+
+            new Weapon("Snare Drum", @"
+            A marching drum used to inspire courage in the hearts of your allies [+30% Damage].",
+                                300, 0.3, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "snare_drum"),
+
+            new Weapon("Trumpet", @"
+            A mighty brass trumpet that can be heard blaring from miles away [+50% Damage].",
+                             600, 0.5, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "trumpet"),
+
+            new Weapon("Violin", @"
+            A beautiful violin that could make even the most stone-cold weep [+70% Damage].",
+                            1200, 0.7, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "violin"),
+
+            new Weapon("Bagpipes", @"
+            A ridiculously loud and extravagent bagpipe made from plaid fabric. Your
+            allies will probably hate you if you use this [+90% Damage].",
+                              2400, 0.9, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "bagpipes"),
             /* =========================== *
              *            ARMOR            *
              * =========================== */
@@ -33,20 +224,20 @@ Bad for Mage and Monk (0.67x Resist, 1.5x Penalty)", 100, 0.1, 0.1,
             // Medium Armor
             new Armor("Medium Armor",
 @"Cloth clothes with chainmail underneath for a balance of speed and defense.
-Resistance: 15%
-Movement Penalty: 20%
+Resistance: 20%
+Movement Penalty: 15%
 Good for Warrior and Agriculturalist (1.5x Resist, 0.67x Penalty)
-Bad for Mage, Monk, and Bard (0.67x Resist, 1.5x Penalty)", 200, 0.15, 0.2,
+Bad for Mage, Monk, and Bard (0.67x Resist, 1.5x Penalty)", 200, 0.2, 0.15,
                       new List<CEnums.CharacterClass>() { CEnums.CharacterClass.warrior, CEnums.CharacterClass.agriculturalist },
                       new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk, CEnums.CharacterClass.bard }, "medium_armor"),
 
             // Heavy Armor
             new Armor("Heavy Armor",
 @"Armor made from thick plates, perfect for those in the thick of battle.
-Resistance: 20%
-Movement Penalty: 30%
+Resistance: 30%
+Movement Penalty: 20%
 Good for Warrior and Paladin (1.5x Resist, 0.67x Penalty)
-Bad for all other classes (0.67x Resist, 1.5x Penalty)", 400, 0.2, 0.3,
+Bad for all other classes (0.67x Resist, 1.5x Penalty)", 400, 0.3, 0.2,
                       new List<CEnums.CharacterClass>() { CEnums.CharacterClass.warrior, CEnums.CharacterClass.paladin },
                       new List<CEnums.CharacterClass>()
                       {
@@ -93,170 +284,6 @@ Bad for Warrior and Paladin (0.67x Resist, 1.5x Penalty)", 50, 0.05, 0.02,
              * =========================== */
             new ElementAccessory("None", "You should probably get an accessory.", 0, CEnums.Element.neutral, "no_access"),
 
-            // Weapons -- Warrior
-            new Weapon("Iron Hoe", @"
-            Not much of a weapon, unless you really hate dirt [+5% Damage].",
-                              10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "wdn_sht"),
-
-            new Weapon("Bronze Sword",
-                             "A light yet sturdy sword smelted from bronze [+10% Damage].",
-                             150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "bnz_swd"),
-            new Weapon("Enhanced Bronze Sword",
-                                "Even better than your typical Bronze Sword [+30% Damage].",
-                                300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "en_bnz_swd"),
-
-            new Weapon("Steel Spear",
-                             "A fair-sized spear crafted from well made steel [+50% Damage].",
-                             600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "stl_spr"),
-            new Weapon("Enhanced Steel Spear",
-                                "Even better than your typical Steel Spear [+70% Damage].",
-                                900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "en_stl_spr"),
-
-            new Weapon("Titanium Battleaxe",
-                               "A heavy and powerful axe made of high quality Titanium [+90% Damage].",
-                               1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "titan_axe"),
-
-            // Weapons -- Assassin
-            new Weapon("Stone Dagger", @"
-            A stone knife that you made yourself! Used to shear sheep and cut meat [+5% Damage].",
-                             10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "stn_dag"),
-
-            new Weapon("Serrated Knife", @"
-            A durable knife made of iron, with one side made jagged [+10% Damage].",
-                             150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "ser_knf"),
-            new Weapon("Enhanced Serrated Knife", @"
-            Even better than your typical Serrated Knife [+30% Damage].",
-                                300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "en_ser_knf"),
-
-            new Weapon("Stiletto", @"
-            A long, cross-shaped knife perfect for 'removing' your enemies [+50% Damage].",
-                              600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "stiletto"),
-            new Weapon("Enhanced Stiletto", @"
-            Even better than your typical Stiletto [+70% Damage].",
-                                 900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "en_stiletto"),
-
-            new Weapon("Mythril Shortblade", @"
-            A knife made of a rare and powerful material [+90% Damage].",
-                             1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "myth_sb"),
-
-            // Weapons -- Ranger
-            new Weapon("Sling Shot", @"
-            A weapon that could scare even the mightiest of tin-cans [+5% Damage].",
-                             10, 0.05, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "slg_sht"),
-
-            new Weapon("Short Bow",
-                             "A bow of great craftsmanship. It's kinda small, though [+10% Damage].",
-                             150, 0.1, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "sht_bow"),
-            new Weapon("Enhanced Short Bow",
-                                "Even better than your typical Short Bow [+30% Damage].",
-                                300, 0.3, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "en_sht_bow"),
-
-            new Weapon("Long Bow",
-                             "A much more impressive bow capable of accuracy at long distances [+50% Damage].",
-                             600, 0.5, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "lng_bow"),
-            new Weapon("Enhanced Long Bow",
-                                "Even better than your typical Long Bow [+70% Damage].",
-                                900, 0.7, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "en_lng_bow"),
-
-            new Weapon("Ashen Crossbow",
-                              "A beautifully-crafted crossbow made from the wood of an ash tree. [+90% Damage].",
-                              1200, 0.9, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "ash_cbow"),
-
-            // Weapons -- Mage
-            new Weapon("Magical Twig", @"
-            Not actually magical but it makes you feel cooler when you use it [+5% Damage].",
-                             10, 0.05, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "mag_twg"),
-
-            new Weapon("Oak Staff",
-                             "A wooden staff imbued with weak magical abilities [+10% Damage].",
-                             150, 0.1, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "oak_stf"),
-            new Weapon("Enhanced Oak Staff",
-                                "Even better than your typical Oak Staff [+30% Damage].",
-                                300, 0.3, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "en_oak_stf"),
-
-            new Weapon("Arcane Spellbook",
-                             "An intermediate spellbook for combat purposes [+50% Damage].",
-                             600, 0.5, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "arc_spb"),
-            new Weapon("Enhanced Arcane Spellbook",
-                                "Even better than your typical Arcane Spellbook [+70% Damage].",
-                                900, 0.7, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "en_arc_spb"),
-
-            new Weapon("Runic Staff",
-                             "A powerful staff enchanted with ancient magic [+90% Damage].",
-                             1200, 0.9, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "rnc_stf"),
-
-            // Weapons -- Paladin
-            new Weapon("Rubber Mallet", @"
-            This can barely hammer nails, what do you expect to kill with it? [+5% Damage].",
-                             10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "rbr_mlt"),
-
-            new Weapon("Holy Mace",
-                               "An well-made iron mace imbued with the power of the heavens [+10% Damage].",
-                               150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "holy_mace"),
-            new Weapon("Enhanced Holy Mace",
-                                  "Even better than your typical Holy Mace [+30% Damage].",
-                                  300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "en_holy_mace"),
-
-            new Weapon("Hammer of Might",
-                                "A hammer often used by holy warriors to smash their foes [+50% Damage].",
-                                600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "hmr_of_mgt"),
-            new Weapon("Enhanced Hammer of Might",
-                                   "Even better than your typical Hammer of Might [+70% Damage].",
-                                   900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "en_hmr_of_mgt"),
-
-            new Weapon("Night's Bane",
-                              "A forbidden hammer used throughout history to crush unholy creatures [+90% Damage].",
-                              1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "ngt_bane"),
-
-            // Weapons -- Monk
-            new Weapon("Gardening Gloves", @"
-            Used to prevent getting cut on thorns or the teeth of your enemies [+5% Damage].",
-                                   10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "gardening_gloves"),
-
-            new Weapon("Brass Knuckles",
-                                 "A brass adornment for your knuckles providing extra punching power [+10% Damage].",
-                                 150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "brass_kncls"),
-            new Weapon("Enhanced Brass Knuckles",
-                                    "Even better than your typical Brass Knuckles [+30% Damage].",
-                                    300, 0.30, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "en_brass_kncls"),
-
-            new Weapon("Bladed Gloves",
-                                   "Leather gloves with sturdy steel blades protruding from them [+50% Damage].",
-                                   600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "bladed_gloves"),
-            new Weapon("Enhanced Bladed Gloves",
-                                      "Even better than your typical Bladed Gloves [+70% Damage].",
-                                      900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "en_bladed_gloves"),
-
-            new Weapon("Lead-Weighted Mitts",
-                             "Weighted with 5 pounds of lead and tipped with steel blades [+90% Damage].",
-                             1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "lead_bg"),
-
-            // Weapons -- Bard
-            new Weapon("Kazoo", @"
-            A wooden kazoo that does more to annoy your enemies than damage them [+5% Damage].",
-                           10, 0.05, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "kazoo"),
-
-            new Weapon("Flute", @"
-            A good-quality flute made out of wood and silver [+10% Damage].",
-                           150, 0.1, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "flute"),
-
-            new Weapon("Snare Drum", @"
-            A marching drum used to inspire courage in the hearts of your allies [+30% Damage].",
-                                300, 0.3, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "snare_drum"),
-
-            new Weapon("Trumpet", @"
-            A mighty brass trumpet that can be heard blaring from miles away [+50% Damage].",
-                             600, 0.5, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "trumpet"),
-
-            new Weapon("Violin", @"
-            A beautiful violin that could make even the most stone-cold weep [+70% Damage].",
-                            1200, 0.7, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "violin"),
-
-            new Weapon("Bagpipes", @"
-            A ridiculously loud and extravagent bagpipe made from plaid fabric. Your
-            allies will probably hate you if you use this [+90% Damage].",
-                              2400, 0.9, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "bagpipes"),
-
             // Accessories
             // -- Elemental Accessories
             new ElementAccessory("Aquatic Amulet", "An amulet that imbues its wearer with the power of WATER.",
@@ -277,8 +304,62 @@ Bad for Warrior and Paladin (0.67x Resist, 1.5x Penalty)", 50, 0.05, 0.02,
                                  375, CEnums.Element.light, "light_amulet"),
             new ElementAccessory("Umbral Amulet", "An amulet that imbues its wearer with the power of DARKNESS.",
                                  375, CEnums.Element.dark, "dark_amulet"),
+            
+            /* =========================== *
+             *            TOOLS            *
+             * =========================== */
+            new Shovel("Expert Mining Tool", @"
+            A tool used to excavate for hidden gems and minerals. Comines the functions
+            of a pickaxe, shovel, and hammer all into one device! Use while on the
+            overworld to dig for gems. Gems have pre-determined locations and do not
+            respawn - there is no luck involved with this tool.", 150, "shovel"),
 
-            // Quest items
+            new FastTravelAtlas("Fast Travel Atlas", @"
+            A convenient tome that allows teleportation between towns. These aren't
+            being made anymore, after having been banned by the King due to its use in
+            many recent abductions and murders. Most of the pages appear to be missing.", 0, "fast_map"),
+
+            new MonsterEncyclopedia("Monster Encyclopedia", @"
+            A book containing information on monsters. When used in battle, this will
+            identify the stats and weaknesses of an enemy. Has no use outside of battle.", 200, "monster_book"),
+
+            new PocketAlchemyLab("Pocket Alchemy Lab", @"
+            A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to
+            convert everyday ingredients into useful potions can fit in your pocket.
+            There are six flavors of ingredients, and each flavor corresponds to a specific
+            potion. Combine three ingredients to make a potion. The ratio of flavors used
+            determines the probability of getting each flavor potion. The quantity of the
+            prevailing ingredient determines the potion strength.", 200, "pocket_lab"),
+
+            new MusicBox("Portable Musicbox", @"
+            Somehow this small device has the ability to play music without need for a
+            bard or instruments. Select a folder full of music on your computer and this
+            device will replace the in-game music with your tunes!", 250, "musicbox"),
+
+            // Lockpicks
+            new LockpickKit("Wooden Lockpick Kit", @"
+            A wooden lockpick kit with a 30% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 30, 30, "wood_lckpck"),
+
+            new LockpickKit("Copper Lockpick Kit", @"
+            A copper lockpick kit with a 45% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 200, 45, "copper_lckpck"),
+
+            new LockpickKit("Iron Lockpick Kit", @"
+            An iron lockpick kit with a 60% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 300, 60, "iron_lckpck"),
+
+            new LockpickKit("Steel Lockpick Kit", @"
+            A steel lockpick kit with a 75% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 500, 75, "steel_lckpck"),
+
+            new LockpickKit("Mythril Lockpick Kit", @"
+            A mythril lockpick kit with a 90% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 700, 90, "mythril_lckpck"),
+
+            /* =========================== *
+             *         OTHER STUFF         *
+             * =========================== */
             new QuestItem("Message from Joseph", "A neatly written message addressed to Philliard.", 0, "message_joseph"),
 
             new QuestItem("Message from Philliard", "A neatly written message addressed to Joseph.", 0, "message_philliard"),
@@ -315,57 +396,6 @@ Bad for Warrior and Paladin (0.67x Resist, 1.5x Penalty)", 50, 0.05, 0.02,
             new Valuable("Agate", "A valuable agate. This could probably be sold for quite a bit.", 875, "agate_gem"),
 
             new Valuable("Aquamarine", "A valuable aquamarine. This could probably be sold for quite a bit.", 875, "aquamarine_gem"),
-
-            // Tools
-            new Shovel("Expert Mining Tool", @"
-            A tool used to excavate for hidden gems and minerals. Comines the functions
-            of a pickaxe, shovel, and hammer all into one device! Use while on the
-            overworld to dig for gems. Gems have pre-determined locations and do not
-            respawn - there is no luck involved with this tool.", 150, "shovel"),
-
-            new FastTravelAtlas("Fast Travel Atlas", @"
-            A convenient tome that allows teleportation between towns. These aren't
-            being made anymore, after having been banned by the King due to its use in
-            many recent abductions and murders. Most of the pages appear to be missing.", 0, "fast_map"),
-
-            new MonsterEncyclopedia("Monster Encyclopedia", @"
-            A book containing information on monsters. When used in battle, this will
-            identify the stats and weaknesses of an enemy. Has no use outside of battle.", 200, "monster_book"),
-
-            new PocketAlchemyLab("Pocket Alchemy Lab", @"
-            A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to
-            convert everyday ingredients into useful potions can fit in your pocket.
-            There are six flavors of ingredients, and each flavor corresponds to a specific
-            potion. Combine three ingredients to make a potion. The ratio of flavors used
-            determines the probability of getting each flavor potion. The quantity of the
-            prevailing ingredient determines the potion strength.", 200, "pocket_lab"),
-
-            new MusicBox("Portable Musicbox", @"
-            Somehow this small device has the ability to play music without need for a
-            bard or instruments. Select a folder full of music on your computer and this
-            device will replace the in-game music with your tunes!", 250, "musicbox"),
-
-
-            // Tools -- Lockpicks
-            new LockpickKit("Wooden Lockpick Kit", @"
-            A wooden lockpick kit with a 30% chance to open chests. Chests can be found
-            by sneaking into houses in towns.", 30, 30, "wood_lckpck"),
-
-            new LockpickKit("Copper Lockpick Kit", @"
-            A copper lockpick kit with a 45% chance to open chests. Chests can be found
-            by sneaking into houses in towns.", 200, 45, "copper_lckpck"),
-
-            new LockpickKit("Iron Lockpick Kit", @"
-            An iron lockpick kit with a 60% chance to open chests. Chests can be found
-            by sneaking into houses in towns.", 300, 60, "iron_lckpck"),
-
-            new LockpickKit("Steel Lockpick Kit", @"
-            A steel lockpick kit with a 75% chance to open chests. Chests can be found
-            by sneaking into houses in towns.", 500, 75, "steel_lckpck"),
-
-            new LockpickKit("Mythril Lockpick Kit", @"
-            A mythril lockpick kit with a 90% chance to open chests. Chests can be found
-            by sneaking into houses in towns.", 700, 90, "mythril_lckpck"),
 
             // ALCHEMY INGREDIENTS - Dropped by monsters, used to make potions
             // Strange
@@ -543,12 +573,7 @@ Bad for Warrior and Paladin (0.67x Resist, 1.5x Penalty)", 50, 0.05, 0.02,
             new Ingredient("Protractor and Compass", @"
             Instruments used to make shapes and angles. Could have useful alchemical
             applications. Has a 'Mathematical' alchemical flavor. Combine with two other
-            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "protractor"),
-
-            new Ingredient("AtW Textbook", @"
-            More like Algebra that sucks amiright? Could have useful alchemical
-            applications. Has a 'Mathematical' alchemical flavor. Combine with two other
-            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "textbook")
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "protractor")
         };
 
         public static List<dynamic> GetItemList()
