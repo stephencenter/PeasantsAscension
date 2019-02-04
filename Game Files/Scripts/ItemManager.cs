@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Scripts
@@ -10,19 +11,19 @@ namespace Scripts
             /* =========================== *
              *           WEAPONS           *
              * =========================== */
-            new Weapon("Fists", "The oldest weapon known to man [+0% Damage].",
-                0, 0, CEnums.WeaponType.melee, CEnums.CharacterClass.any, CEnums.Element.neutral, "fists", "weapon_fists"),
+            new Weapon("Fists", "The oldest weapon known to man.",
+                0, 0, CEnums.WeaponType.melee, CEnums.CharacterClass.any, CEnums.Element.neutral, "weapon_fists"),
             
             /* =========================== *
              *            ARMOR            *
              * =========================== */
             new Armor("None", "You should probably get some armor.",
-                0, 0, 0, new List<CEnums.CharacterClass>() {}, new List<CEnums.CharacterClass>() {}, "misc", "no_head"),
+                0, 0, 0, new List<CEnums.CharacterClass>() {}, new List<CEnums.CharacterClass>() {}, "no_armor"),
             
             /* =========================== *
              *         ACCESSORIES         *
              * =========================== */
-            new Accessory("None", "You should probably get an accessory [No Effects].", 0, "misc", "no_access")
+            new ElementAccessory("None", "You should probably get an accessory.", 0, CEnums.Element.neutral, "no_access")
         };
 
         public static List<dynamic> GetItemList()
@@ -44,12 +45,13 @@ namespace Scripts
         public string Description { get; set; }
         public int Value { get; set; }
         public bool IsImportant { get; set; }
-        public string Category { get; set; }
+        public CEnums.InvCategory Category { get; set; }
         public string ItemID { get; set; }
 
         public abstract void UseItem(PlayableCharacter user);
 
-        protected Item(string name, string desc, int value, bool imp, string cat, string item_id)
+        // Constructor
+        protected Item(string name, string desc, int value, bool imp, CEnums.InvCategory cat, string item_id)
         {
             Name = name;
             Description = desc;
@@ -60,21 +62,184 @@ namespace Scripts
         }
     }
 
+    public class Ingredient : Item
+    {
+        public string Flavor { get; set; }
+
+        public override void UseItem(PlayableCharacter user)
+        {
+            Console.WriteLine("It's called an ingredient, but you probably shouldn't eat it.");
+            CMethods.PressEnterReturn();
+        }
+
+        public Ingredient(string name, string desc, int value, string flavor, string item_id) : base(name, desc, value, false, CEnums.InvCategory.misc, item_id)
+        {
+
+        }
+    }
+
+    /* =========================== *
+     *          EQUIPMENT          *
+     * =========================== */
+    public abstract class Equipment : Item
+    {
+        public CEnums.EquipmentType EquipType { get; set; }
+
+        public abstract void Unequip(PlayableCharacter unequipper);
+
+        // Constructor
+        protected Equipment(string name, string desc, int value, CEnums.InvCategory cat, string item_id) : base(name, desc, value, false, cat, item_id)
+        {
+
+        }        
+    }
+
+    public class Weapon : Equipment
+    {
+        // Items that increase your damage by a percentage.
+        public double Power { get; set; }
+        public CEnums.WeaponType WeaponType { get; set; }
+        public CEnums.CharacterClass PClass { get; set; }
+        public CEnums.Element Element { get; set; }
+
+        public override void UseItem(PlayableCharacter equipper)
+        {
+            throw new NotImplementedException();
+            /*
+            if user.class_ in self.class_ or not self.class_:
+                equip_item(self.item_id, user)
+
+                print(f'{user.name} equips the {self.name}.')
+                main.s_input("\nPress enter/return ")
+
+            else:
+                print(f"This {self.name} is f{self.class_req[3:]}.")
+
+                main.s_input("\nPress enter/return ") */
+        }
+
+        public override void Unequip(PlayableCharacter unequipper)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public Weapon(string name, string desc, int value, double power, CEnums.WeaponType w_type, CEnums.CharacterClass p_class, CEnums.Element element, string item_id) : base(name, desc, value, CEnums.InvCategory.weapons, item_id)
+        {
+            Power = power;
+            WeaponType = w_type;
+            PClass = p_class;
+            Element = element;
+            EquipType = CEnums.EquipmentType.weapon;
+        }
+    }
+
+    public class Armor : Equipment
+    {
+        // Items that give the player a percent resistance to all damage,
+        // but reduce player speed and evasion to compensate
+        public double Resist { get; set; }
+        public double Penalty { get; set; }
+
+        // Proficient classes get a 1.5x increase in resist, and a 1.5x decrease in penalty
+        // Non-proficient classes get a 1.5x decrease in resist, and a 1.5x increase in penalty
+        public List<CEnums.CharacterClass> ProficientClasses { get; set; }
+        public List<CEnums.CharacterClass> NonProficientClasses { get; set; }
+
+        public override void UseItem(PlayableCharacter equipper)
+        {
+            throw new NotImplementedException();
+            /*
+            if user.class_ in self.class_ or not self.class_:
+                equip_item(self.item_id, user)
+                print(f'{user.name} equips the {self.name}.')
+                main.s_input("\nPress enter/return ")
+
+            else:
+                print(f"This {self.name} is f{self.class_req[3:]}.")
+
+                main.s_input("\nPress enter/return ") */
+        }
+
+        public override void Unequip(PlayableCharacter unequipper)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public Armor(string name, string desc, int value, double resist, double penatly, List<CEnums.CharacterClass> prof_classes, List<CEnums.CharacterClass> nonprof_classes, string item_id) :  base(name, desc, value, CEnums.InvCategory.weapons, item_id)
+        {
+            Resist = resist;
+            Penalty = penatly;
+            ProficientClasses = prof_classes;
+            NonProficientClasses = nonprof_classes;
+            EquipType = CEnums.EquipmentType.armor;
+        }
+    }
+
+    public class ElementAccessory : Equipment
+    {
+        // Gives the player an element used when taking damage
+        public CEnums.Element Element { get; set; }
+
+        public override void UseItem(PlayableCharacter equipper)
+        {
+            throw new NotImplementedException();
+            /*
+            def use_item(self, user) :
+                equip_item(self.item_id, user)
+                user.def_element = self.def_element
+
+                print(f'{user.name} equips the {self.name}. Their element is now set to {self.def_element}.')
+                main.s_input("\nPress enter/return ") */
+        }
+
+        public override void Unequip(PlayableCharacter unequipper)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public ElementAccessory(string name, string desc, int value, CEnums.Element element, string item_id) : base(name, desc, value, CEnums.InvCategory.accessories, item_id)
+        {
+            Element = element;
+        }
+    }
+
+    public class ActionAccessory : Equipment
+    {
+        public int BonusAP { get; set; }
+
+        public override void UseItem(PlayableCharacter equipper)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Unequip(PlayableCharacter unequipper)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        protected ActionAccessory(string name, string desc, int value, int bonus_ap, string item_id) : base(name, desc, value, CEnums.InvCategory.accessories, item_id)
+        {
+            BonusAP = bonus_ap;
+        }
+    }
+
+    /* =========================== *
+     *           POTIONS           *
+     * =========================== */
     public class HealthManaPotion : Item
     {
         // Items that restore your HP, MP, or both
         public int Health { get; set; }
         public int Mana { get; set; }
 
-        public HealthManaPotion(string name, string desc, int value, int heal, int mana, string item_id) :
-            base(name, desc, value, false, "consumables", item_id)
+        public override void UseItem(PlayableCharacter user)
         {
-            Health = heal;
-            Mana = mana;
-        }
-
-        /*
-        def use_item(self, user):
+            throw new NotImplementedException();
+            /*
             print(f'{user.name} consumes the {self.name}...')
 
             main.smart_sleep(0.75)
@@ -94,16 +259,24 @@ namespace Scripts
                 main.s_input("\nPress enter/return ")
 
             remove_item(self.item_id) */
+        }
+
+        // Constructor
+        public HealthManaPotion(string name, string desc, int value, int heal, int mana, string item_id) : base(name, desc, value, false, CEnums.InvCategory.consumables, item_id)
+        {
+            Health = heal;
+            Mana = mana;
+        }
     }
 
     public class StatusPotion : Item
     {
-        /*
-        def __init__(self, name, desc, value, status, item_id, ascart= 'Status', cat= 'consumables'):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.status = status
+        public CEnums.Status Status { get; set; }
 
-        def use_item(self, user) :
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+            /*
             if self.status in user.status_ail:
                 sounds.buff_spell.SmartPlay()
                 user.status_ail = [x for x in user.status_ail if x != self.status]
@@ -122,181 +295,108 @@ namespace Scripts
             else:
                 print(f"Drinking this {self.name} probably wouldn't do anything.")
                 main.s_input("\nPress enter/return ") */
+        }
+
+        // Constructor
+        public StatusPotion(string name, string desc, int value, CEnums.Status status, string item_id) : base(name, desc, value, false, CEnums.InvCategory.consumables, item_id)
+        {
+            Status = status;
+        }
     }
 
     public class AttractPotion : Item
     {
-        /*
-        def __init__(self, name, desc, value, num_steps, m_count, item_id, ascart= "Alchemy", cat= "consumables"):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.num_steps = num_steps
-            self.m_count = m_count */
+        public int NumberOfSteps { get; set; }
+        public int MonsterCount { get; set; }
+
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public AttractPotion(string name, string desc, int value, int numsteps, int moncount, string item_id) : base(name, desc, value, false, CEnums.InvCategory.consumables, item_id)
+        {
+            NumberOfSteps = numsteps;
+            MonsterCount = moncount;
+        }
     }
 
     public class RepelPotion : Item
     {
-        /*
-        def __init__(self, name, desc, value, num_steps, item_id, ascart= "Alchemy", cat= "consumables"):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.num_steps = num_steps */
+        public int NumberOfSteps { get; set; }
+
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public RepelPotion(string name, string desc, int value, int numsteps, string item_id) : base(name, desc, value, false, CEnums.InvCategory.consumables, item_id)
+        {
+            NumberOfSteps = numsteps;
+        }
     }
 
     public class BombPotion : Item
     {
-        /*
-        def __init__(self, name, desc, value, multitarget, damage, item_id, ascart= "Alchemy", cat= "consumables"):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.multitarget = multitarget
-            self.damage = damage */
+        public bool MultiTargeted { get; set; }
+        public int Damage { get; set; }
+
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public BombPotion(string name, string desc, int value, bool multitarget, int damage, string item_id) : base(name, desc, value, false, CEnums.InvCategory.consumables, item_id)
+        {
+            MultiTargeted = multitarget;
+            Damage = damage;
+        }
     }
 
     public class XPGoldPotion : Item
     {
-        /*
-        def __init__(self, name, desc, value, gold_change, xp_change, item_id, ascart= "Alchemy", cat= "consumables"):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.gold_change = gold_change
-            self.xp_change = xp_change */
+        public int GoldChange { get; set; }
+        public int XPChange { get; set; }
+
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public XPGoldPotion(string name, string desc, int value, int gold_change, int xp_change, string item_id) : base(name, desc, value, false, CEnums.InvCategory.consumables, item_id)
+        {
+            GoldChange = gold_change;
+            XPChange = xp_change;
+        }
     }
 
     public class GameCrashPotion : Item
     {
-        /*
-        def __init__(self, name, desc, value, item_id, ascart= "Alchemy", cat= "consumables"):
-            super().__init__(name, desc, value, item_id, ascart, cat)
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new Exception("You asked for this.");
+        }
 
-        def use_item(self, user):
-            raise Exception("I told you this would crash the game.") */
-    }
-
-    public class Equipment : Item
-    {
-        public CEnums.EquipmentType EquipType { get; set; }
-
-        protected Equipment(string name, string desc, int value, bool imp, string cat, string item_id) :
-            base(name, desc, value, false, "weapons", item_id)
+        // Constructor
+        public GameCrashPotion(string name, string desc, int value, string item_id) : base(name, desc, value, false, CEnums.InvCategory.consumables, item_id)
         {
 
         }
     }
 
-    public class Weapon : Equipment
-    {
-        // Items that increase your damage by a percentage.
-        public double Power { get; set; }
-        public CEnums.WeaponType WeaponType { get; set; }
-        public CEnums.CharacterClass PClass { get; set; }
-        public CEnums.Element Element { get; set; }
-
-        public Weapon(string name, string desc, int value, double power, CEnums.WeaponType w_type, CEnums.CharacterClass p_class, 
-            CEnums.Element element, string ascart, string item_id) : base(name, desc, value, false, "weapons", item_id)
-        {
-            Power = power;
-            WeaponType = w_type;
-            PClass = p_class;
-            Element = element;
-            EquipType = CEnums.EquipmentType.weapon;
-        }
-
-        /*
-        def __init__(self, name, desc, value, power, type_, class_, ascart, item_id, element= 'neutral', cat= 'weapons'):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.power = power
-            self.type_ = type_
-            self.class_ = class_
-            self.element = element
-            self.part = 'weapon'
-
-            if self.class_:
-                classes = ' and '.join([f"{x.title()}s" for x in self.class_])
-                self.class_req = f"\nOnly equippable by {classes}."
-
-            else:
-                self.class_req = "\nEquippable by any class."
-
-            self.desc = f"{desc} {self.class_req}"
-
-        def use_item(self, user):
-            if user.class_ in self.class_ or not self.class_:
-                equip_item(self.item_id, user)
-
-                print(f'{user.name} equips the {self.name}.')
-                main.s_input("\nPress enter/return ")
-
-            else:
-                print(f"This {self.name} is f{self.class_req[3:]}.")
-
-                main.s_input("\nPress enter/return ") */
-    }
-
-    public class Armor : Equipment
-    {
-        // Items that give the player a percent resistance to all damage,
-        // but reduce player speed and evasion to compensate
-        public double Resist { get; set; }
-        public double Penalty { get; set; }
-
-        // Proficient classes get a 1.5x increase in resist, and a 1.5x decrease in penalty
-        // Non-proficient classes get a 1.5x decrease in resist, and a 1.5x increase in penalty
-        public List<CEnums.CharacterClass> ProficientClasses { get; set; }
-        public List<CEnums.CharacterClass> NonProficientClasses { get; set; }
-
-        public Armor(string name, string desc, int value, double resist, double penatly,
-                     List<CEnums.CharacterClass> prof_classes, List<CEnums.CharacterClass> nonprof_classes,
-                     string ascart, string item_id) : base(name, desc, value, false, "weapons", item_id)
-        {
-            Resist = resist;
-            Penalty = penatly;
-            ProficientClasses = prof_classes;
-            NonProficientClasses = nonprof_classes;
-            EquipType = CEnums.EquipmentType.armor;
-        }
-
-        /*
-        def use_item(self, user):
-            if user.class_ in self.class_ or not self.class_:
-                equip_item(self.item_id, user)
-                print(f'{user.name} equips the {self.name}.')
-                main.s_input("\nPress enter/return ")
-
-            else:
-                print(f"This {self.name} is f{self.class_req[3:]}.")
-
-                main.s_input("\nPress enter/return ") */
-    }
-
-    public class ElementAccessory : Equipment
-    {
-        /*
-        // Gives the player an element used when taking damage
-        def __init__(self, name, desc, value, def_element, item_id, ascart= 'Amulet', cat= 'access'):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.def_element = def_element
-
-        def use_item(self, user) :
-            equip_item(self.item_id, user)
-            user.def_element = self.def_element
-
-            print(f'{user.name} equips the {self.name}. Their element is now set to {self.def_element}.')
-            main.s_input("\nPress enter/return ") */
-    }
-
-    public class ActionAccessory : Equipment
-    {
-        /*
-        def __init__(self, name, desc, value, class_, ap_gain, item_id, ascart= 'Amulet', cat= 'access'):
-            super().__init__(name, desc, value, item_id, ascart, cat)
-            self.class_ = class_
-            self.ap_gain = ap_gain */
-    }
-
+    /* =========================== *
+     *            TOOLS            *
+     * =========================== */
     public class Shovel : Item
     {
-        /*
-        def __init__(self, name, desc, value, item_id, cat= 'tools', imp= True, ascart= 'Shovel'):
-            super().__init__(name, desc, value, item_id, imp, ascart, cat)
-
-        def use_item(self, user):
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+            /*
             if main.party_info['gamestate'] == 'town':
                 print("What, here? You can't just start digging up a town!")
                 main.s_input("\nPress enter/return")
@@ -317,8 +417,8 @@ namespace Scripts
             try:
                 c_gem = [x for x in main.party_info['current_tile'].gem_list if x.item_id not in acquired_gems][0]
 
-        except IndexError:
-                c_gem = None
+            except IndexError:
+                 c_gem = None
 
             if c_gem:
                 sounds.unlock_chest.SmartPlay()
@@ -331,23 +431,32 @@ namespace Scripts
             else:
                 print("No luck, your party didn't find anything.")
                 main.s_input("\nPress enter/return ") */
+        }
+
+        // Constructor
+        public Shovel(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
+        {
+
+        }
     }
 
     public class FastTravelAtlas : Item
     {
-        /*
-        def __init__(self, name, desc, value, item_id, cat= 'tools', imp= True, ascart= 'Map'):
-            super().__init__(name, desc, value, item_id, imp, ascart, cat)
-
-        def use_item(self, user):
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+            /*
             if main.party_info['gamestate'] == 'town':
                 print("Fast Travel Atlases can't be used in towns.")
                 main.s_input("\nPress enter/return")
                 return
 
-            self.choose_prov()
+            self.choose_prov() */
+        }
 
-        def choose_prov(self) :
+        private static void ChooseProvince()
+        {
+            /*
             avail_provs = tiles.all_provinces[:main.party_info['map_pow']]
 
             if len(avail_provs) == 1:
@@ -376,10 +485,12 @@ namespace Scripts
                     print('-' * save_load.divider_size)
                     self.choose_cell(chosen)
 
-                    return
+                    return */
+        }
 
-        @staticmethod
-        def choose_cell(prov) :
+        private static void ChooseCell(Province prov)
+        {
+            /*
             while True:
                 print(f"{prov.name} Province Locations: ")
                 for num, x in enumerate(prov.cells) :
@@ -446,23 +557,36 @@ namespace Scripts
                             do_loop = False
 
                             break */
+        }
+
+        // Constructor
+        public FastTravelAtlas(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
+        {
+
+        }
     }
 
     public class LockpickKit : Item
     {
-        /*
-        def __init__(self, name, desc, value, power, item_id, imp= False, ascart= 'Lockpick', cat= 'tools'):
-        super().__init__(name, desc, value, item_id, imp, ascart, cat)
-            self.power = power */
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Constructor
+        public LockpickKit(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
+        {
+
+        }
     }
 
     public class MonsterEncyclopedia : Item
     {
-        /*
-        def __init__(self, name, desc, value, item_id, cat= 'tools', imp= False, ascart= 'Book'):
-            super().__init__(name, desc, value, item_id, imp, ascart, cat)
-
-        def use_item(self, user):
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+            /*
+            
             m_w = {'fire': 'water',
                     'water': 'electric',
                     'electric': 'earth',
@@ -483,15 +607,20 @@ namespace Scripts
             Evasion: {user.target.evad}
             Elements: Attacks are { user.target.def_element.title()} / Defense is {user.target.off_element.title()} / \
             Weak to { m_w.title()}""") */
+        }
+
+        public MonsterEncyclopedia(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
+        {
+
+        }
     }
 
     public class PocketAlchemyLab : Item
     {
-        /*
-        def __init__(self, name, desc, value, item_id, cat= 'tools', imp= False, ascart= 'alchemy_kit'):
-            super().__init__(name, desc, value, item_id, imp, ascart, cat)
-
-        def use_item(self, user):
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+            /*
             chosen_ingredients = []
     available_flavors = {}
 
@@ -558,10 +687,12 @@ namespace Scripts
 
                     break
 
-            self.make_potion(chosen_ingredients)
+            self.make_potion(chosen_ingredients) */
+        }
 
-        @staticmethod
-        def choose_ingredients(ingredients):
+        private static void ChooseIngredients(List<Ingredient> ingredients)
+        {
+            /*
             print('-'*save_load.divider_size)
             print(f"'{ingredients[0].flavor.title()}' Ingredients: ")
 
@@ -579,10 +710,12 @@ namespace Scripts
 
                 remove_item(chosen.item_id)
 
-                return chosen
-
-        @staticmethod
-        def make_potion(ingredients):
+                return chosen */
+        }
+        
+        private static void BrewPotion(List<Ingredient> ingredients)
+        {
+            /*
             flavor_map = {
                 "strange": [attract_potion_1, attract_potion_2, attract_potion_3],
                 "mystic": [repel_potion_1, repel_potion_2, repel_potion_3],
@@ -594,8 +727,8 @@ namespace Scripts
             }
 
             added_flavors = [ing.flavor for ing in ingredients]
-    chosen_flavor = random.choice(added_flavors)
-    chosen_power = added_flavors.count(chosen_flavor)
+            chosen_flavor = random.choice(added_flavors)
+            chosen_power = added_flavors.count(chosen_flavor)
             chosen_potion = flavor_map[chosen_flavor][chosen_power - 1]
 
             print("Brewing...")
@@ -612,15 +745,20 @@ namespace Scripts
             add_item(chosen_potion.item_id)
             print(f"Success! You brewed a {chosen_potion.name}!")
             main.s_input("\nPress enter/return ") */
+        }
+
+        public PocketAlchemyLab(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
+        {
+
+        }
     }
 
     public class MusicBox : Item
     {
-        /*
-        def __init__(self, name, desc, value, item_id, cat= 'tools', imp= False, ascart= 'Book'):
-            super().__init__(name, desc, value, item_id, imp, ascart, cat)
-
-        def use_item(self, user):
+        public override void UseItem(PlayableCharacter user)
+        {
+            throw new NotImplementedException();
+            /*
             print(f"Musicbox is currently {'on' if main.party_info['musicbox_isplaying'] else 'off'}")
             print(f"Musicbox is set to {main.party_info['musicbox_mode']}")
 
@@ -630,71 +768,84 @@ namespace Scripts
             else:
                 print("Musicbox does not have a directory set")
 
-            self.choose_option()
+            self.choose_option() */
+        }
 
-        def choose_option(self) :
-            print("-"*save_load.divider_size)
-            while True:
-                print("What should you do with the Musicbox?")
-                print(f"      [1] Turn {'off' if main.party_info['musicbox_isplaying'] else 'on'}")
-                print("      [2] Change play order")
-                print("      [3] Set music directory")
-
+        private static void ChooseOption()
+        {
+            /*
+            def choose_option(self) :
+                print("-"*save_load.divider_size)
                 while True:
-                    chosen = main.s_input('Input [#] (or type "exit"): ')
+                    print("What should you do with the Musicbox?")
+                    print(f"      [1] Turn {'off' if main.party_info['musicbox_isplaying'] else 'on'}")
+                    print("      [2] Change play order")
+                    print("      [3] Set music directory")
 
-                    if chosen == '1':
-                        if main.party_info['musicbox_folder']:
-                            main.party_info['musicbox_isplaying'] = not main.party_info['musicbox_isplaying']
+                    while True:
+                        chosen = main.s_input('Input [#] (or type "exit"): ')
 
-                            if main.party_info['musicbox_isplaying']:
-                                pygame.mixer.music.stop()
-                                self.create_process()
-                                main.party_info['musicbox_process'].start()
+                        if chosen == '1':
+                            if main.party_info['musicbox_folder']:
+                                main.party_info['musicbox_isplaying'] = not main.party_info['musicbox_isplaying']
+
+                                if main.party_info['musicbox_isplaying']:
+                                    pygame.mixer.music.stop()
+                                    self.create_process()
+                                    main.party_info['musicbox_process'].start()
+
+                                else:
+                                    main.party_info['musicbox_process'].terminate()
+                                    pygame.mixer.music.play(-1)
+
+                                print("-"*save_load.divider_size)
+                                print(f"You turn {'on' if main.party_info['musicbox_isplaying'] else 'off'} the musicbox")
+                                main.s_input("\nPress enter/return ")
+                                print("-"*save_load.divider_size)
+
+                                break
 
                             else:
-                                main.party_info['musicbox_process'].terminate()
-                                pygame.mixer.music.play(-1)
+                                print("-"*save_load.divider_size)
+                                print("You need to set a music directory first!")
+                                main.s_input("\nPress enter/return ")
+                                print("-"*save_load.divider_size)
 
-                            print("-"*save_load.divider_size)
-                            print(f"You turn {'on' if main.party_info['musicbox_isplaying'] else 'off'} the musicbox")
-                            main.s_input("\nPress enter/return ")
-                            print("-"*save_load.divider_size)
+                                break
 
-                            break
-
-                        else:
+                        elif chosen == '2':
                             print("-"*save_load.divider_size)
-                            print("You need to set a music directory first!")
-                            main.s_input("\nPress enter/return ")
+                            self.play_order()
                             print("-"*save_load.divider_size)
 
                             break
 
-                    elif chosen == '2':
-                        print("-"*save_load.divider_size)
-                        self.play_order()
-                        print("-"*save_load.divider_size)
+                        elif chosen == '3':
+                            print("-"*save_load.divider_size)
+                            self.choose_directory()
+                            print("-"*save_load.divider_size)
 
-                        break
+                            break
 
-                    elif chosen == '3':
-                        print("-"*save_load.divider_size)
-                        self.choose_directory()
-                        print("-"*save_load.divider_size)
+                        elif chosen in ['e', 'x', 'exit', 'b', 'back']:
+                            return */
+        }
 
-                        break
+        private static void CreateMusicProcess()
+        {
+            /*
+            main.party_info['musicbox_process'] = multiprocessing.Process(
+                target = self.playlist,
+                args = (
+                    main.party_info['musicbox_folder'],
+                    main.party_info['musicbox_mode']
+                )
+            ) */
+        }
 
-                    elif chosen in ['e', 'x', 'exit', 'b', 'back']:
-                        return
-
-        def create_process(self):
-            main.party_info['musicbox_process'] = multiprocessing.Process(target=self.playlist,
-                                                                          args=(main.party_info['musicbox_folder'],
-                                                                                main.party_info['musicbox_mode']))
-
-        @staticmethod
-        def play_order() :
+        private static void ChoosePlayOrder()
+        {
+            /*
             print("Which setting do you want for the musicbox?")
             print("      [1] A->Z")
             print("      [2] Z->A")
@@ -729,9 +880,12 @@ namespace Scripts
 
                 main.s_input("\nPress enter/return ")
 
-                return
+                return */
+        }
 
-        def choose_directory(self):
+        private static void ChooseMusicDirectory()
+        {
+            /*
             while True:
                 folder = main.s_input("Type the directory path, type 'explore', or type 'back': ")
 
@@ -778,9 +932,12 @@ namespace Scripts
                             break
 
                         elif y_n.startswith("n"):
-                            return
-
-        def select_root(self):
+                            return */
+        }
+        
+        private static void SelectRoot()
+        {
+            /*
             drive_list = []
             for drive in range(ord('A'), ord('N')):
                 if os.path.exists(chr(drive) + ':'):
@@ -809,17 +966,19 @@ namespace Scripts
                         return self.file_explorer(f"{chosen}:")
 
             else:
-                return self.file_explorer(f"{drive_list[0]}:")
-
-        @staticmethod
-        def file_explorer(root) :
+                return self.file_explorer(f"{drive_list[0]}:") */
+        }
+        
+        private static void FileExplorer(string root)
+        {
+            /*
             current_path = [root]
 
             while True:
                 print("-"*save_load.divider_size)
                 available_dirs = []
 
-    print(f"Current Path: {'/'.join(current_path)}/")
+                print(f"Current Path: {'/'.join(current_path)}/")
                 for file in os.listdir(f"{'/'.join(current_path)}/"):
                     if os.path.isdir('/'.join([x for x in current_path] + [file])):
                         available_dirs.append(file)
@@ -837,7 +996,7 @@ namespace Scripts
 
                         break
 
-                    except(IndexError, ValueError) :
+                    except (IndexError, ValueError):
                         if chosen == "choose":
                             return '/'.join(current_path)
 
@@ -847,10 +1006,12 @@ namespace Scripts
                                 break
 
                             else:
-                                return False
-
-        @staticmethod
-        def playlist(folder, mode):
+                                return False */
+        }
+        
+        private static void RunPlaylist(string folder)
+        {
+            /*
             import pygame
 
             pygame.mixer.pre_init()
@@ -881,13 +1042,11 @@ namespace Scripts
 
                 except pygame.error:
                     pass */
-    }
+        }
 
-    public class Ingredient : Item 
-    {
-        /*
-        def __init__(self, name, desc, value, flavor, item_id, ascart= 'misc', cat= 'misc', imp= False):
-            super().__init__(name, desc, value, item_id, imp, ascart, cat)
-            self.flavor = flavor*/
+        public MusicBox(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
+        {
+
+        }
     }
 }

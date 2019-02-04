@@ -5,15 +5,15 @@ namespace Scripts
 {
     public static class InventoryManager
     {
-        private static Dictionary<string, List<dynamic>> inventory = new Dictionary<string, List<dynamic>>()
+        private static Dictionary<CEnums.InvCategory, List<dynamic>> inventory = new Dictionary<CEnums.InvCategory, List<dynamic>>()
         {
-            { "q_items", new List<dynamic>() { } },
-            { "consumables",  new List<dynamic>() { } },
-            { "weapons",  new List<dynamic>() { } },
-            { "armor",  new List<dynamic>() { } },
-            { "tools",  new List<dynamic>() { } },
-            { "access",  new List<dynamic>() { } },
-            { "misc",  new List<dynamic>() { } }
+            { CEnums.InvCategory.quest, new List<dynamic>() { } },
+            { CEnums.InvCategory.consumables, new List<dynamic>() { } },
+            { CEnums.InvCategory.weapons, new List<dynamic>() { } },
+            { CEnums.InvCategory.armor, new List<dynamic>() { } },
+            { CEnums.InvCategory.tools, new List<dynamic>() { } },
+            { CEnums.InvCategory.accessories, new List<dynamic>() { } },
+            { CEnums.InvCategory.misc, new List<dynamic>() { } }
         };
 
         private static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
@@ -91,7 +91,7 @@ namespace Scripts
              },
         };
 
-        public static Dictionary<string, List<dynamic>> GetInventory()
+        public static Dictionary<CEnums.InvCategory, List<dynamic>> GetInventory()
         {
             return inventory;
         }

@@ -164,8 +164,9 @@ namespace Scripts
         public enum GameState { overworld, battle, town }
         public enum MusicboxMode { AtoZ, ZtoA, shuffle }
         public enum SpellCategory { buff, attack, healing, all }
-        public enum InventoryCategory { }
-        public enum MonsterGroup { animal, monster, humanoid, undead, dungeon }
+        public enum InvCategory{ quest, consumables, weapons, armor, tools, accessories, misc}
+
+    public enum MonsterGroup { animal, monster, humanoid, undead, dungeon }
 
         // element_matchup[key][0] is the element that key is weak to
         // element_matchup[key][1] is the element that key is resistant to

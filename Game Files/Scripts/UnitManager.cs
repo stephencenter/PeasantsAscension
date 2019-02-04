@@ -987,7 +987,7 @@ Increasing DIFFICULTY will provide:
                     CMethods.PrintDivider();
 
                     var x = new List<int>();
-                    if (!InventoryManager.GetInventory()["consumables"].Any())
+                    if (!InventoryManager.GetInventory()[CEnums.InvCategory.consumables].Any())
                     {
                         SoundManager.debuff.SmartPlay();
                         Console.WriteLine("Your party has no consumables!");
