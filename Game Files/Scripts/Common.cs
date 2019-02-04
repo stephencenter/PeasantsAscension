@@ -156,7 +156,7 @@ namespace Scripts
     {
         public enum Status { silence, poison, weakness, blindness, paralyzation, sleep, muted, alive, dead }
         public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, neutral }
-        public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard, any }
+        public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard, agriculturalist, any }
         public enum MonsterClass { melee, ranged, magic }
         public enum EquipmentType { armor, weapon, accessory }
         public enum WeaponType { melee, ranged, instrument }

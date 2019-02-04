@@ -339,39 +339,39 @@ namespace Scripts
 
         public static bool BattleInventory(Unit user)
         {
-            return true;
-            //def battle_inventory(user):
-            //    # The player can use items from the Consumables category of their inventory during battles.
-            //    while True:
-            //        print('Battle Inventory: ')
+            throw new NotImplementedException();
+            /*
+            // The player can use items from the Consumables category of their inventory during battles.
+            while True:
+                print('Battle Inventory: ')
 
-            //        for x, y in enumerate(items.inventory['consumables']) :
-            //            print(f'      [{x + 1}] {y.name}')
+                for x, y in enumerate(items.inventory['consumables']) :
+                    print(f'      [{x + 1}] {y.name}')
 
-            //        while True:
-            //            item = main.s_input('Input [#] (or type "exit"): ').lower()
+                while True:
+                    item = main.s_input('Input [#] (or type "exit"): ').lower()
 
-            //            try:
-            //                item = items.inventory['consumables'][int(item) - 1]
+                    try:
+                        item = items.inventory['consumables'][int(item) - 1]
 
-            //            except(IndexError, ValueError):
-            //                if item in ['e', 'x', 'exit', 'b', 'back']:
-            //                    print('-'*save_load.divider_size)
-            //                    return False
+                    except(IndexError, ValueError):
+                        if item in ['e', 'x', 'exit', 'b', 'back']:
+                            print('-'*save_load.divider_size)
+                            return False
 
-            //                continue
+                        continue
 
-            //            if isinstance(item, items.StatusPotion) :
-            //                if item.status != user.status_ail:
-            //                    print('-'*save_load.divider_size)
-            //                    print(f'{user.name} is not {item.status}, they have no reason to drink that.')
-            //                    main.s_input("\nPress enter/return ")
-            //                    print('-'*save_load.divider_size)
-            //                    break
+                    if isinstance(item, items.StatusPotion) :
+                        if item.status != user.status_ail:
+                            print('-'*save_load.divider_size)
+                            print(f'{user.name} is not {item.status}, they have no reason to drink that.')
+                            main.s_input("\nPress enter/return ")
+                            print('-'*save_load.divider_size)
+                            break
 
-            //            print('-' * save_load.divider_size)
-            //            item.use_item(user)
-            //            return True
+                    print('-' * save_load.divider_size)
+                    item.use_item(user)
+                    return True */
         }
 
         public static void DisplayTeamStats(List<Unit> unit_list)

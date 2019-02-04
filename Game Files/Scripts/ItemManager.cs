@@ -19,11 +19,536 @@ namespace Scripts
              * =========================== */
             new Armor("None", "You should probably get some armor.",
                 0, 0, 0, new List<CEnums.CharacterClass>() {}, new List<CEnums.CharacterClass>() {}, "no_armor"),
-            
+
+            // Light Armor
+            new Armor("Light Armor",
+@"Armor made from leather, perfect for those who need to move quickly.
+Resistance: 10%
+Movement Penalty: 10%
+Good for Assassin and Ranger (1.5x Resist, 0.67x Penalty)
+Bad for Mage and Monk (0.67x Resist, 1.5x Penalty)", 100, 0.1, 0.1,
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.assassin, CEnums.CharacterClass.ranger },
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, "light_armor"),
+
+            // Medium Armor
+            new Armor("Medium Armor",
+@"Cloth clothes with chainmail underneath for a balance of speed and defense.
+Resistance: 15%
+Movement Penalty: 20%
+Good for Warrior and Agriculturalist (1.5x Resist, 0.67x Penalty)
+Bad for Mage, Monk, and Bard (0.67x Resist, 1.5x Penalty)", 200, 0.15, 0.2,
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.warrior, CEnums.CharacterClass.agriculturalist },
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk, CEnums.CharacterClass.bard }, "medium_armor"),
+
+            // Heavy Armor
+            new Armor("Heavy Armor",
+@"Armor made from thick plates, perfect for those in the thick of battle.
+Resistance: 20%
+Movement Penalty: 30%
+Good for Warrior and Paladin (1.5x Resist, 0.67x Penalty)
+Bad for all other classes (0.67x Resist, 1.5x Penalty)", 400, 0.2, 0.3,
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.warrior, CEnums.CharacterClass.paladin },
+                      new List<CEnums.CharacterClass>()
+                      {
+                          CEnums.CharacterClass.mage,
+                          CEnums.CharacterClass.monk,
+                          CEnums.CharacterClass.assassin,
+                          CEnums.CharacterClass.ranger,
+                          CEnums.CharacterClass.bard,
+                          CEnums.CharacterClass.agriculturalist
+                      }, "heavy_armor"),
+
+            // Fancy Robes
+            new Armor("Fancy Robes",
+@"Armor made from leather, perfect for those who need to move quickly.
+Resistance: 5%
+Movement Penalty: 5%
+Good for Mage and Monk (1.5x Resist, 0.67x Penalty)
+Bad for Warrior and Paladin (0.67x Resist, 1.5x Penalty)", 75, 0.05, 0.05,
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk },
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.warrior, CEnums.CharacterClass.paladin }, "fancy_robes"),
+
+            // Dragonhide Armor
+            new Armor("Dragonhide Armor",
+@"Armor made from leather, perfect for those who need to move quickly.
+Resistance: 15%
+Movement Penalty: 15%
+Good for Assassin, Ranger and Agriculturalist (1.5x Resist, 0.67x Penalty)
+Bad for Mage and Monk (0.67x Resist, 1.5x Penalty)", 250, 0.15, 0.15,
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.assassin, CEnums.CharacterClass.ranger, CEnums.CharacterClass.agriculturalist },
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, "dragon_armor"),
+
+            // Festive Clothes
+            new Armor("Festive Clothes",
+@"Armor made from leather, perfect for those who need to move quickly.
+Resistance: 5%
+Movement Penalty: 2%
+Good for Bard (1.5x Resist, 0.67x Penalty)
+Bad for Warrior and Paladin (0.67x Resist, 1.5x Penalty)", 50, 0.05, 0.02,
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.monk },
+                      new List<CEnums.CharacterClass>() { CEnums.CharacterClass.warrior, CEnums.CharacterClass.paladin }, "festive_clothes"),
+
             /* =========================== *
              *         ACCESSORIES         *
              * =========================== */
-            new ElementAccessory("None", "You should probably get an accessory.", 0, CEnums.Element.neutral, "no_access")
+            new ElementAccessory("None", "You should probably get an accessory.", 0, CEnums.Element.neutral, "no_access"),
+
+            // Weapons -- Warrior
+            new Weapon("Iron Hoe", @"
+            Not much of a weapon, unless you really hate dirt [+5% Damage].",
+                              10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "wdn_sht"),
+
+            new Weapon("Bronze Sword",
+                             "A light yet sturdy sword smelted from bronze [+10% Damage].",
+                             150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "bnz_swd"),
+            new Weapon("Enhanced Bronze Sword",
+                                "Even better than your typical Bronze Sword [+30% Damage].",
+                                300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "en_bnz_swd"),
+
+            new Weapon("Steel Spear",
+                             "A fair-sized spear crafted from well made steel [+50% Damage].",
+                             600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "stl_spr"),
+            new Weapon("Enhanced Steel Spear",
+                                "Even better than your typical Steel Spear [+70% Damage].",
+                                900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "en_stl_spr"),
+
+            new Weapon("Titanium Battleaxe",
+                               "A heavy and powerful axe made of high quality Titanium [+90% Damage].",
+                               1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "titan_axe"),
+
+            // Weapons -- Assassin
+            new Weapon("Stone Dagger", @"
+            A stone knife that you made yourself! Used to shear sheep and cut meat [+5% Damage].",
+                             10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "stn_dag"),
+
+            new Weapon("Serrated Knife", @"
+            A durable knife made of iron, with one side made jagged [+10% Damage].",
+                             150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "ser_knf"),
+            new Weapon("Enhanced Serrated Knife", @"
+            Even better than your typical Serrated Knife [+30% Damage].",
+                                300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "en_ser_knf"),
+
+            new Weapon("Stiletto", @"
+            A long, cross-shaped knife perfect for 'removing' your enemies [+50% Damage].",
+                              600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "stiletto"),
+            new Weapon("Enhanced Stiletto", @"
+            Even better than your typical Stiletto [+70% Damage].",
+                                 900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "en_stiletto"),
+
+            new Weapon("Mythril Shortblade", @"
+            A knife made of a rare and powerful material [+90% Damage].",
+                             1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "myth_sb"),
+
+            // Weapons -- Ranger
+            new Weapon("Sling Shot", @"
+            A weapon that could scare even the mightiest of tin-cans [+5% Damage].",
+                             10, 0.05, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "slg_sht"),
+
+            new Weapon("Short Bow",
+                             "A bow of great craftsmanship. It's kinda small, though [+10% Damage].",
+                             150, 0.1, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "sht_bow"),
+            new Weapon("Enhanced Short Bow",
+                                "Even better than your typical Short Bow [+30% Damage].",
+                                300, 0.3, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "en_sht_bow"),
+
+            new Weapon("Long Bow",
+                             "A much more impressive bow capable of accuracy at long distances [+50% Damage].",
+                             600, 0.5, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "lng_bow"),
+            new Weapon("Enhanced Long Bow",
+                                "Even better than your typical Long Bow [+70% Damage].",
+                                900, 0.7, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "en_lng_bow"),
+
+            new Weapon("Ashen Crossbow",
+                              "A beautifully-crafted crossbow made from the wood of an ash tree. [+90% Damage].",
+                              1200, 0.9, CEnums.WeaponType.ranged, CEnums.CharacterClass.ranger, CEnums.Element.neutral, "ash_cbow"),
+
+            // Weapons -- Mage
+            new Weapon("Magical Twig", @"
+            Not actually magical but it makes you feel cooler when you use it [+5% Damage].",
+                             10, 0.05, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "mag_twg"),
+
+            new Weapon("Oak Staff",
+                             "A wooden staff imbued with weak magical abilities [+10% Damage].",
+                             150, 0.1, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "oak_stf"),
+            new Weapon("Enhanced Oak Staff",
+                                "Even better than your typical Oak Staff [+30% Damage].",
+                                300, 0.3, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "en_oak_stf"),
+
+            new Weapon("Arcane Spellbook",
+                             "An intermediate spellbook for combat purposes [+50% Damage].",
+                             600, 0.5, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "arc_spb"),
+            new Weapon("Enhanced Arcane Spellbook",
+                                "Even better than your typical Arcane Spellbook [+70% Damage].",
+                                900, 0.7, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "en_arc_spb"),
+
+            new Weapon("Runic Staff",
+                             "A powerful staff enchanted with ancient magic [+90% Damage].",
+                             1200, 0.9, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "rnc_stf"),
+
+            // Weapons -- Paladin
+            new Weapon("Rubber Mallet", @"
+            This can barely hammer nails, what do you expect to kill with it? [+5% Damage].",
+                             10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "rbr_mlt"),
+
+            new Weapon("Holy Mace",
+                               "An well-made iron mace imbued with the power of the heavens [+10% Damage].",
+                               150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "holy_mace"),
+            new Weapon("Enhanced Holy Mace",
+                                  "Even better than your typical Holy Mace [+30% Damage].",
+                                  300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "en_holy_mace"),
+
+            new Weapon("Hammer of Might",
+                                "A hammer often used by holy warriors to smash their foes [+50% Damage].",
+                                600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "hmr_of_mgt"),
+            new Weapon("Enhanced Hammer of Might",
+                                   "Even better than your typical Hammer of Might [+70% Damage].",
+                                   900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "en_hmr_of_mgt"),
+
+            new Weapon("Night's Bane",
+                              "A forbidden hammer used throughout history to crush unholy creatures [+90% Damage].",
+                              1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.paladin, CEnums.Element.neutral, "ngt_bane"),
+
+            // Weapons -- Monk
+            new Weapon("Gardening Gloves", @"
+            Used to prevent getting cut on thorns or the teeth of your enemies [+5% Damage].",
+                                   10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "gardening_gloves"),
+
+            new Weapon("Brass Knuckles",
+                                 "A brass adornment for your knuckles providing extra punching power [+10% Damage].",
+                                 150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "brass_kncls"),
+            new Weapon("Enhanced Brass Knuckles",
+                                    "Even better than your typical Brass Knuckles [+30% Damage].",
+                                    300, 0.30, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "en_brass_kncls"),
+
+            new Weapon("Bladed Gloves",
+                                   "Leather gloves with sturdy steel blades protruding from them [+50% Damage].",
+                                   600, 0.5, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "bladed_gloves"),
+            new Weapon("Enhanced Bladed Gloves",
+                                      "Even better than your typical Bladed Gloves [+70% Damage].",
+                                      900, 0.7, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "en_bladed_gloves"),
+
+            new Weapon("Lead-Weighted Mitts",
+                             "Weighted with 5 pounds of lead and tipped with steel blades [+90% Damage].",
+                             1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.monk, CEnums.Element.neutral, "lead_bg"),
+
+            // Weapons -- Bard
+            new Weapon("Kazoo", @"
+            A wooden kazoo that does more to annoy your enemies than damage them [+5% Damage].",
+                           10, 0.05, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "kazoo"),
+
+            new Weapon("Flute", @"
+            A good-quality flute made out of wood and silver [+10% Damage].",
+                           150, 0.1, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "flute"),
+
+            new Weapon("Snare Drum", @"
+            A marching drum used to inspire courage in the hearts of your allies [+30% Damage].",
+                                300, 0.3, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "snare_drum"),
+
+            new Weapon("Trumpet", @"
+            A mighty brass trumpet that can be heard blaring from miles away [+50% Damage].",
+                             600, 0.5, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "trumpet"),
+
+            new Weapon("Violin", @"
+            A beautiful violin that could make even the most stone-cold weep [+70% Damage].",
+                            1200, 0.7, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "violin"),
+
+            new Weapon("Bagpipes", @"
+            A ridiculously loud and extravagent bagpipe made from plaid fabric. Your
+            allies will probably hate you if you use this [+90% Damage].",
+                              2400, 0.9, CEnums.WeaponType.instrument, CEnums.CharacterClass.bard, CEnums.Element.neutral, "bagpipes"),
+
+            // Accessories
+            // -- Elemental Accessories
+            new ElementAccessory("Aquatic Amulet", "An amulet that imbues its wearer with the power of WATER.",
+                                 375, CEnums.Element.water, "aquatic_amulet"),
+            new ElementAccessory("Infernal Amulet", "An amulet that imbues its wearer with the power of FIRE.",
+                                 375, CEnums.Element.fire, "fire_amulet"),
+            new ElementAccessory("Ground Amulet", "An amulet that imbues its wearer with the power of EARTH.",
+                                 375, CEnums.Element.earth, "earth_amulet"),
+            new ElementAccessory("Galvanic Amulet", "An amulet that imbues its wearer with the power of ELECTRICITY.",
+                                 375, CEnums.Element.electric, "electric_amulet"),
+            new ElementAccessory("Tempestuous Amulet", "An amulet that imbues its wearer with the power of WIND.",
+                                 375, CEnums.Element.wind, "wind_amulet"),
+            new ElementAccessory("Verdant Amulet", "An amulet that imbues its wearer with the power of GRASS.",
+                                 375, CEnums.Element.grass, "grass_amulet"),
+            new ElementAccessory("Glacial Amulet", "An amulet that imbues its wearer with the power of ICE.",
+                                 375, CEnums.Element.ice, "ice_amulet"),
+            new ElementAccessory("Divine Amulet", "An amulet that imbues its wearer with the power of LIGHT.",
+                                 375, CEnums.Element.light, "light_amulet"),
+            new ElementAccessory("Umbral Amulet", "An amulet that imbues its wearer with the power of DARKNESS.",
+                                 375, CEnums.Element.dark, "dark_amulet"),
+
+            // Quest items
+            new QuestItem("Message from Joseph", "A neatly written message addressed to Philliard.", 0, "message_joseph"),
+
+            new QuestItem("Message from Philliard", "A neatly written message addressed to Joseph.", 0, "message_philliard"),
+
+            // Gems & Valuables
+            new Valuable("Pearl", "A valuable pearl. This could probably be sold for quite a bit.", 875, "pearl_gem"),
+
+            new Valuable("Ruby", "A valuable ruby. This could be sold for quite a bit.", 875, "ruby_gem"),
+
+            new Valuable("Sapphire", "A valuable sapphire. This could probably be sold for quite a bit.", 875, "sapphire_gem"),
+
+            new Valuable("Emerald", "A valuable emerald. This could probably be sold for quite a bit.", 875, "emerald_gem"),
+
+            new Valuable("Citrine", "A valuable citrine. This could probably be sold for quite a bit.", 875, "citrine_gem"),
+
+            new Valuable("Jade", "A valuable jade. This could probably be sold for quite a bit.", 875, "jade_gem"),
+
+            new Valuable("Opal", "A valuable opal. This could probably be sold for quite a bit.", 875, "opal_gem"),
+
+            new Valuable("Onyx", "A valuable onyx. This could probably be sold for quite a bit.", 875, "onyx_gem"),
+
+            new Valuable("Diamond", "A valuable diamond. This could probably be sold for quite a bit.", 875, "diamond_gem"),
+
+            new Valuable("Amethyst", "A valuable amethyst. This could probably be sold for quite a bit.", 875, "amethyst_gem"),
+
+            new Valuable("Topaz", "A valuable topaz. This could probably be sold for quite a bit.", 875, "topaz_gem"),
+
+            new Valuable("Garnet", "A valuable garnet. This could probably be sold for quite a bit.", 875, "garnet_gem"),
+
+            new Valuable("Quartz", "A valuable quartz. This could probably be sold for quite a bit.", 875, "quartz_gem"),
+
+            new Valuable("Zircon", "A valuable zircon. This could probably be sold for quite a bit.", 875, "zircon_gem"),
+
+            new Valuable("Agate", "A valuable agate. This could probably be sold for quite a bit.", 875, "agate_gem"),
+
+            new Valuable("Aquamarine", "A valuable aquamarine. This could probably be sold for quite a bit.", 875, "aquamarine_gem"),
+
+            // Tools
+            new Shovel("Expert Mining Tool", @"
+            A tool used to excavate for hidden gems and minerals. Comines the functions
+            of a pickaxe, shovel, and hammer all into one device! Use while on the
+            overworld to dig for gems. Gems have pre-determined locations and do not
+            respawn - there is no luck involved with this tool.", 150, "shovel"),
+
+            new FastTravelAtlas("Fast Travel Atlas", @"
+            A convenient tome that allows teleportation between towns. These aren't
+            being made anymore, after having been banned by the King due to its use in
+            many recent abductions and murders. Most of the pages appear to be missing.", 0, "fast_map"),
+
+            new MonsterEncyclopedia("Monster Encyclopedia", @"
+            A book containing information on monsters. When used in battle, this will
+            identify the stats and weaknesses of an enemy. Has no use outside of battle.", 200, "monster_book"),
+
+            new PocketAlchemyLab("Pocket Alchemy Lab", @"
+            A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to
+            convert everyday ingredients into useful potions can fit in your pocket.
+            There are six flavors of ingredients, and each flavor corresponds to a specific
+            potion. Combine three ingredients to make a potion. The ratio of flavors used
+            determines the probability of getting each flavor potion. The quantity of the
+            prevailing ingredient determines the potion strength.", 200, "pocket_lab"),
+
+            new MusicBox("Portable Musicbox", @"
+            Somehow this small device has the ability to play music without need for a
+            bard or instruments. Select a folder full of music on your computer and this
+            device will replace the in-game music with your tunes!", 250, "musicbox"),
+
+
+            // Tools -- Lockpicks
+            new LockpickKit("Wooden Lockpick Kit", @"
+            A wooden lockpick kit with a 30% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 30, 30, "wood_lckpck"),
+
+            new LockpickKit("Copper Lockpick Kit", @"
+            A copper lockpick kit with a 45% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 200, 45, "copper_lckpck"),
+
+            new LockpickKit("Iron Lockpick Kit", @"
+            An iron lockpick kit with a 60% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 300, 60, "iron_lckpck"),
+
+            new LockpickKit("Steel Lockpick Kit", @"
+            A steel lockpick kit with a 75% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 500, 75, "steel_lckpck"),
+
+            new LockpickKit("Mythril Lockpick Kit", @"
+            A mythril lockpick kit with a 90% chance to open chests. Chests can be found
+            by sneaking into houses in towns.", 700, 90, "mythril_lckpck"),
+
+            // ALCHEMY INGREDIENTS - Dropped by monsters, used to make potions
+            // Strange
+            new Ingredient("Broken Crystal", @"
+            A chunk of crystal too powdery to be of any value. Could have useful alchemical
+            applications. Has a 'Strange' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "b_crystal"),
+
+            new Ingredient("Chain links", @"
+            A couple joined links of chain made from steel. Could have useful alchemical
+            applications. Has a 'Strange' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "chain_link"),
+
+            new Ingredient("Bag of Bones", @"
+            A bag full of various bones from a now deceased creature. Could have useful
+            alchemical applications. Has a 'Strange' alchemical flavor. Combine with two
+            other ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "bone_bag"),
+
+            new Ingredient("Ripped Cloth", @"
+            A thick, torn cloth made out of an unknown fabric. Could have useful alchemical
+            applications. Has a 'Strange' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "ripped_cloth"),
+
+            new Ingredient("Living Bark", @"
+            This bark has a fleshy texture to it. Could have useful alchemical
+            applications. Has a 'Strange' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "living_bark"),
+
+            // Mystic
+            new Ingredient("Demonic Essence", @"
+            A strange orb that exudes a terrifying aura. Could have useful alchemical
+            applications. Has a 'Mystic' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "d_essence"),
+
+            new Ingredient("Angelic Essence", @"
+            A strange orb that radiates an incredible aura. Could have useful alchemical
+            applications. Has a 'Mystic' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "a_essence"),
+
+            new Ingredient("Strange Runestone", @"
+            Strange stones with even stranger symbols on it. Could have useful alchemical
+            applications. Has a 'Mystic' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "runestone"),
+
+            new Ingredient("Unicorn Horn", @"
+            A tough and shiny horn from a mythical creature. Could have useful alchemical
+            applications. Has a 'Mystic' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "unicorn_horn"),
+
+            new Ingredient("Fairy Dust", @"
+            Dust from a fairy. It has strange, magical properties. Could have useful
+            alchemical applications. Has a 'Mystic' alchemical flavor. Combine with two
+            other ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "fairy_dust"),
+
+            // Rigid
+            new Ingredient("Crab Claw", @"
+            A reddish claw from a giant crab. Could have useful alchemical applications.
+            Has a 'Rigid' alchemical flavor. Combine with two other ingredients in a
+            Pocket Alchemy Lab to make a potion.", 25, "rigid", "crab_claw"),
+
+            new Ingredient("Shell Fragment", @"
+            A broken fragment of a once-beautiful shell. Could have useful alchemical
+            applications. Has a 'Rigid' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "shell_fragment"),
+
+            new Ingredient("Golem Rock", @"
+            A small rock that seems to glow slightly. Could have useful alchemical
+            applications. Has a 'Rigid' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "golem_rcok"),
+
+            new Ingredient("Beetle Shell", @"
+            A bluish shell from a large beetle. Could have useful alchemical applications.
+            Has a 'Rigid' alchemical flavor. Combine with two other ingredients in a
+            Pocket Alchemy Lab to make a potion.", 25, "rigid", "beetle_shell"),
+
+            new Ingredient("Monster Skull", @"
+            A broken skull from a strange creature. Could have useful alchemical
+            applications. Has a 'Rigid' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "m_skull"),
+
+            // Flowing
+            new Ingredient("Vial of Slime", @"
+            A small glass vial filled with gooey slime. Could have useful alchemical
+            applications. Has a 'Flowing' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "s_vial"),
+
+            new Ingredient("Vial of Blood", @"
+            A small glass vial filled with the blood of some creature. Could have useful
+            alchemical applications. Has a 'Flowing' alchemical flavor. Combine with two
+            other ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "b_vial"),
+
+            new Ingredient("Vial of Water", @"
+            A small glass vial filled with enchanted water. Could have useful alchemical
+            applications. Has a 'Flowing' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "w_vial"),
+
+            new Ingredient("Ink Sack", @"
+            A small pouch full of an inky substance. Could have useful alchemical
+            applications. Has a 'Flowing' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "ink_sack"),
+
+            new Ingredient("Ectoplasm", @"
+            The gooey remains from a terrifying apparition. Could have useful alchemical
+            applications. Has a  'Flowing' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "ectoplasm"),
+
+            // Dark
+            new Ingredient("Burnt Ash", @"
+            The ashy remains of a once-living creature. Could have useful alchemical
+            applications. Has a 'Dark' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "burnt_ash"),
+
+            new Ingredient("Monster Fang", @"
+            The sharp fang of a frightening creature. Could have useful alchemical
+            applications. Has a 'Dark' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "monster_fang"),
+
+            new Ingredient("Gooey Antennae", @"
+            A pair of antennae from a massive, slimy insect. Could have useful alchemical
+            applications. Has a 'Dark' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "antennae"),
+
+            new Ingredient("Eyeballs", @"
+            The visual receptors of some disgusting creature. Could have useful alchemical
+            applications. Has a 'Dark' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "eyeballs"),
+
+            new Ingredient("Serpent Scale", @"
+            A rough scale from an unknown reptile. Could have useful alchemical
+            applications. Has a 'Dark' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "s_scale"),
+
+            // Natural
+            new Ingredient("Wing Piece", @"
+            A piece of wing from a flying creature. Could have useful alchemical
+            applications. Has a 'Natural' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "wing_piece"),
+
+            new Ingredient("Animal Fur", @"
+            A wet clump of fur from a strange animal. Could have useful alchemical
+            applications. Has a 'Natural' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "animal_fur"),
+
+            new Ingredient("Rodent Tail", @"
+            The detached tail of a hideous rodent. Could have useful alchemical
+            applications. Has a 'Natural' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "rodent_tail"),
+
+            new Ingredient("Serpent Tongue", @"
+            A dried-up tongue from a slithery serpent. Could have useful alchemical
+            applications. Has a 'Natural' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "s_tongue"),
+
+            new Ingredient("Feathers", @"
+            A veiny feather from an unknown avian creature. Could have useful alchemical
+            applications. Has a 'Natural' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "feathers"),
+
+            // Mathematical
+            new Ingredient("Calculus Homework", @"
+            A load of random symbols and gibberish. Could have useful alchemical
+            applications. Has a 'Mathematical' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "c_homework"),
+
+            new Ingredient("Graph Paper", @"
+            Useful paper for graphing points and lines. Could have useful alchemical
+            applications. Has a 'Mathematical' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "g_paper"),
+
+            new Ingredient("Ruler", @"
+            A piece of wood with lines on it. Neat! Could have useful alchemical
+            applications. Has a 'Mathematical' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "ruler"),
+
+            new Ingredient("Protractor and Compass", @"
+            Instruments used to make shapes and angles. Could have useful alchemical
+            applications. Has a 'Mathematical' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "protractor"),
+
+            new Ingredient("AtW Textbook", @"
+            More like Algebra that sucks amiright? Could have useful alchemical
+            applications. Has a 'Mathematical' alchemical flavor. Combine with two other
+            ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "textbook")
         };
 
         public static List<dynamic> GetItemList()
@@ -59,6 +584,37 @@ namespace Scripts
             IsImportant = imp;
             Category = cat;
             ItemID = item_id;
+        }
+    }
+
+    /* =========================== *
+     *        MISCELLANEOUS        *
+     * =========================== */
+    public class QuestItem : Item
+    {
+        public override void UseItem(PlayableCharacter user)
+        {
+            Console.WriteLine("This looks important, you should definitely hold on to it.");
+            CMethods.PressEnterReturn();
+        }
+
+        public QuestItem(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.quest, item_id)
+        {
+
+        }
+    }
+
+    public class Valuable : Item
+    {       
+        public override void UseItem(PlayableCharacter user)
+        {
+            Console.WriteLine("You could probably make a lot of gold selling this.");
+            CMethods.PressEnterReturn();
+        }
+
+        public Valuable(string name, string desc, int value, string item_id) : base(name, desc, value, false, CEnums.InvCategory.misc, item_id)
+        {     
+
         }
     }
 
@@ -110,12 +666,12 @@ namespace Scripts
                 equip_item(self.item_id, user)
 
                 print(f'{user.name} equips the {self.name}.')
-                main.s_input("\nPress enter/return ")
+                main.s_input(@"nPress enter/return ")
 
             else:
                 print(f"This {self.name} is f{self.class_req[3:]}.")
 
-                main.s_input("\nPress enter/return ") */
+                main.s_input(@"nPress enter/return ") */
         }
 
         public override void Unequip(PlayableCharacter unequipper)
@@ -153,12 +709,12 @@ namespace Scripts
             if user.class_ in self.class_ or not self.class_:
                 equip_item(self.item_id, user)
                 print(f'{user.name} equips the {self.name}.')
-                main.s_input("\nPress enter/return ")
+                main.s_input(@"nPress enter/return ")
 
             else:
                 print(f"This {self.name} is f{self.class_req[3:]}.")
 
-                main.s_input("\nPress enter/return ") */
+                main.s_input(@"nPress enter/return ") */
         }
 
         public override void Unequip(PlayableCharacter unequipper)
@@ -191,7 +747,7 @@ namespace Scripts
                 user.def_element = self.def_element
 
                 print(f'{user.name} equips the {self.name}. Their element is now set to {self.def_element}.')
-                main.s_input("\nPress enter/return ") */
+                main.s_input(@"nPress enter/return ") */
         }
 
         public override void Unequip(PlayableCharacter unequipper)
@@ -256,7 +812,7 @@ namespace Scripts
             units.fix_stats()
 
             if main.party_info['gamestate'] != 'battle':
-                main.s_input("\nPress enter/return ")
+                main.s_input(@"nPress enter/return ")
 
             remove_item(self.item_id) */
         }
@@ -288,13 +844,13 @@ namespace Scripts
                 print(f"{user.name} is no longer {self.status}!")
 
                 if main.party_info['gamestate'] != 'battle':
-                    main.s_input("\nPress enter/return ")
+                    main.s_input(@"nPress enter/return ")
 
                 remove_item(self.item_id)
 
             else:
                 print(f"Drinking this {self.name} probably wouldn't do anything.")
-                main.s_input("\nPress enter/return ") */
+                main.s_input(@"nPress enter/return ") */
         }
 
         // Constructor
@@ -399,7 +955,7 @@ namespace Scripts
             /*
             if main.party_info['gamestate'] == 'town':
                 print("What, here? You can't just start digging up a town!")
-                main.s_input("\nPress enter/return")
+                main.s_input(@"nPress enter/return")
                 return
 
             print("Digging...")
@@ -423,14 +979,14 @@ namespace Scripts
             if c_gem:
                 sounds.unlock_chest.SmartPlay()
                 print(f"Aha, your party found a {c_gem.name}! Might be a good idea to sell it.")
-                main.s_input("\nPress enter/return ")
+                main.s_input(@"nPress enter/return ")
 
                 acquired_gems.append(c_gem.item_id)
                 add_item(c_gem.item_id)
 
             else:
                 print("No luck, your party didn't find anything.")
-                main.s_input("\nPress enter/return ") */
+                main.s_input(@"nPress enter/return ") */
         }
 
         // Constructor
@@ -448,7 +1004,7 @@ namespace Scripts
             /*
             if main.party_info['gamestate'] == 'town':
                 print("Fast Travel Atlases can't be used in towns.")
-                main.s_input("\nPress enter/return")
+                main.s_input(@"nPress enter/return")
                 return
 
             self.choose_prov() */
@@ -522,14 +1078,14 @@ namespace Scripts
                                 print("-"*save_load.divider_size)
                                 print("Your party peers into the Fast Travel Atlas and begins to phase out of reality.")
                                 print("Upon waking you're exactly where you wanted to be.")
-                                main.s_input("\nPress enter/return ")
+                                main.s_input(@"nPress enter/return ")
 
                             else:
                                 print("-"*save_load.divider_size)
                                 print("You begin to feel strange - your body feels light and all you hear is silence.")
                                 print("Your vision starts going blank... All of your senses quickly turning off until")
                                 print("you're left with nothing but your thoughts...")
-                                main.s_input("\nPress enter/return ")
+                                main.s_input(@"nPress enter/return ")
                                 print("...")
                                 main.smart_sleep(1)
                                 print("...")
@@ -539,7 +1095,7 @@ namespace Scripts
                                 sounds.enemy_hit.SmartPlay()
                                 print("CRASH! Your senses re-emerge you've landed on your back... Oh, you're exactly where")
                                 print("you teleported to!")
-                                main.s_input("\nPress enter/return ")
+                                main.s_input(@"nPress enter/return ")
 
                             main.party_info['has_teleported'] = True
                             main.party_info['prov'] = prov.name
@@ -568,15 +1124,17 @@ namespace Scripts
 
     public class LockpickKit : Item
     {
+        public int LockpickPower { get; set; }
+
         public override void UseItem(PlayableCharacter user)
         {
             throw new NotImplementedException();
         }
 
         // Constructor
-        public LockpickKit(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
+        public LockpickKit(string name, string desc, int value, int power, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
         {
-
+            LockpickPower = power;
         }
     }
 
@@ -598,7 +1156,7 @@ namespace Scripts
                     'light': 'dark',
                     'dark': 'light'}[user.target.def_element]
 
-            print(f"""{user.target.name.upper()}'s STATS:
+            print(f"{user.target.name.upper()}'s STATS:
             Physical: { user.target.attk}
             Attack / {user.target.dfns} Defense
             Magical: {user.target.m_attk} Attack / {user.target.m_dfns} Defense
@@ -606,7 +1164,7 @@ namespace Scripts
             Speed: {user.target.spd}
             Evasion: {user.target.evad}
             Elements: Attacks are { user.target.def_element.title()} / Defense is {user.target.off_element.title()} / \
-            Weak to { m_w.title()}""") */
+            Weak to { m_w.title()}") */
         }
 
         public MonsterEncyclopedia(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
@@ -634,7 +1192,7 @@ namespace Scripts
 
             if not(available_flavors and len([val for lst in available_flavors.values() for val in lst]) >= 3) :
                 print("You need at least three flavors to make a potion!")
-                main.s_input("\nPress enter/return ")
+                main.s_input(@"nPress enter/return ")
 
                 return
 
@@ -677,12 +1235,12 @@ namespace Scripts
                     if len(chosen_ingredients) != 3:
                         print(f"{3 - len(chosen_ingredients)} ingredients remaining!")
 
-                        main.s_input("\nPress enter/return ")
+                        main.s_input(@"nPress enter/return ")
                         print('-'*save_load.divider_size)
 
                     else:
                         print("All ingredients added! Time to start brewing!")
-                        main.s_input("\nPress enter/return ")
+                        main.s_input(@"nPress enter/return ")
                         print('-'*save_load.divider_size)
 
                     break
@@ -744,7 +1302,7 @@ namespace Scripts
             sounds.unlock_chest.SmartPlay()
             add_item(chosen_potion.item_id)
             print(f"Success! You brewed a {chosen_potion.name}!")
-            main.s_input("\nPress enter/return ") */
+            main.s_input(@"nPress enter/return ") */
         }
 
         public PocketAlchemyLab(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.tools, item_id)
@@ -800,7 +1358,7 @@ namespace Scripts
 
                                 print("-"*save_load.divider_size)
                                 print(f"You turn {'on' if main.party_info['musicbox_isplaying'] else 'off'} the musicbox")
-                                main.s_input("\nPress enter/return ")
+                                main.s_input(@"nPress enter/return ")
                                 print("-"*save_load.divider_size)
 
                                 break
@@ -808,7 +1366,7 @@ namespace Scripts
                             else:
                                 print("-"*save_load.divider_size)
                                 print("You need to set a music directory first!")
-                                main.s_input("\nPress enter/return ")
+                                main.s_input(@"nPress enter/return ")
                                 print("-"*save_load.divider_size)
 
                                 break
@@ -878,7 +1436,7 @@ namespace Scripts
                 if main.party_info['musicbox_isplaying']:
                     print("You'll need to restart your musicbox to apply this change.")
 
-                main.s_input("\nPress enter/return ")
+                main.s_input(@"nPress enter/return ")
 
                 return */
         }
@@ -904,7 +1462,7 @@ namespace Scripts
                     if not os.path.isdir(folder):
                         print("-" * save_load.divider_size)
                         print(f"{folder} is not a valid directory")
-                        main.s_input("\nPress enter/return ")
+                        main.s_input(@"nPress enter/return ")
                         print("-" * save_load.divider_size)
                         continue
 
@@ -918,7 +1476,7 @@ namespace Scripts
                         if main.party_info['musicbox_isplaying']:
                             print("You'll need to restart your musicbox to apply this change.")
 
-                        main.s_input("\nPress enter/return ")
+                        main.s_input(@"nPress enter/return ")
 
                         return
 
