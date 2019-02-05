@@ -129,7 +129,7 @@ namespace Scripts
 
             if (attacker is PlayableCharacter)
             {
-                weapon_power = InventoryManager.GetEquipment(attacker.UnitID)[CEnums.EquipmentType.weapon].Power;
+                weapon_power = (InventoryManager.GetEquipment(attacker.UnitID)[CEnums.EquipmentType.weapon] as Weapon).Power;
 
                 attack = attacker.TempStats["attack"];
                 p_attack = attacker.TempStats["p_attack"];
@@ -147,7 +147,7 @@ namespace Scripts
 
             if (target is PlayableCharacter)
             {
-                armor_resist = InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.armor].Resist ;
+                armor_resist = (InventoryManager.GetEquipment(target.UnitID)[CEnums.EquipmentType.armor] as Armor).Resist ;
 
                 defense = target.TempStats["defense"];
                 p_defense = target.TempStats["p_defense"];
@@ -1043,7 +1043,7 @@ Increasing DIFFICULTY will provide:
                 CurrentTarget = CMethods.GetRandomFromIterable(monster_list.Where(x => x.IsAlive()));
             }
 
-            Weapon player_weapon = InventoryManager.GetEquipment(UnitID)[CEnums.EquipmentType.weapon];
+            Weapon player_weapon = InventoryManager.GetEquipment(UnitID)[CEnums.EquipmentType.weapon] as Weapon;
 
             Console.WriteLine($"-{Name}'s Turn-");
 
@@ -1201,7 +1201,7 @@ Increasing DIFFICULTY will provide:
             }
 
             // The full list of valid targets, including both monsters and allies if applicable
-            List<dynamic> valid_targets = new List<dynamic>();
+            List<Unit> valid_targets = new List<Unit>();
 
             // Do this if both allies and enemies are valid targets (e.g. some abilities and spells)
             if (target_allies && target_enemies)
@@ -1290,7 +1290,7 @@ Increasing DIFFICULTY will provide:
                 Console.WriteLine($"{Name}'s Abilities | {AP}/{MaxAP} AP remaining");
 
                 // List of all abilities usable by the PCU's class
-                List<dynamic> a_list = AbilityManager.GetAbilityList()[PClass];
+                List<Ability> a_list = AbilityManager.GetAbilityList()[PClass];
 
                 // This is used to make sure that the AP costs of each ability line up. Purely asthetic.
                 int padding = a_list.Select(x => x.AbilityName.Length).Max();
@@ -1463,21 +1463,22 @@ Increasing DIFFICULTY will provide:
         {
             Random rng = new Random();
             int minlvl = TileManager.FindCellWithTileID(CInfo.CurrentTile).MinMonsterLevel;
-            int maxlvl = TileManager.FindCellWithTileID(CInfo.CurrentTile).MaxMonsterLevel;
+            int maxlvl = TileManager.FindCellWithTileID(CInfo.CurrentTile).MaxMonsterLevel; 
 
-            Level = rng.Next(minlvl, maxlvl);
+            // We add 1 to maxlvl because rng.Next's upper bound is not inclusive
+            Level = rng.Next(minlvl, maxlvl + 1);
 
             for (int i = 0; i < Level; i++)
             {
-                HP += 5;
-                MP += 3;
-                Attack += 3;
-                Defense += 3;
-                PAttack += 3;
-                PDefense += 3;
-                MAttack += 3;
-                MDefense += 3;
-                Speed += 3;
+                HP += 3;
+                MP += 2;
+                Attack += 2;
+                Defense += 2;
+                PAttack += 2;
+                PDefense += 2;
+                MAttack += 2;
+                MDefense += 2;
+                Speed += 2;
                 Evasion += 2;
             }
 
@@ -1488,7 +1489,9 @@ Increasing DIFFICULTY will provide:
         public void MonsterApplyMultipliers()
         {
             HP = (int)(HP * ClassMultipliers["hp"] * SpeciesMultipliers["hp"]);
+            MaxHP = HP;
             MP = (int)(MP * ClassMultipliers["mp"] * SpeciesMultipliers["mp"]);
+            MaxMP = MP;
             Attack = (int)(Attack * ClassMultipliers["attack"] * SpeciesMultipliers["attack"]);
             Defense = (int)(Defense * ClassMultipliers["defense"] * SpeciesMultipliers["defense"]);
             PAttack = (int)(PAttack * ClassMultipliers["p_attack"] * SpeciesMultipliers["p_attack"]);
@@ -1600,24 +1603,22 @@ Increasing DIFFICULTY will provide:
          * =========================== */
         protected Monster() : base()
         {
-            HP = 10;
-            MaxHP = 10;
-            MP = 5;
-            MaxMP = 5;
-            AP = 10;
-            MaxAP = 10;
-            Attack = 8;
-            Defense = 5;
-            PAttack = 8;
-            PDefense = 5;
-            MAttack = 8;
-            MDefense = 5;
-            Speed = 6;
-            Evasion = 3;
+            HP = 8;
+            MP = 3;
+            Attack = 5;
+            Defense = 3;
+            PAttack = 5;
+            PDefense = 3;
+            MAttack = 5;
+            MDefense = 3;
+            Speed = 4;
+            Evasion = 2;
             Level = 1;
 
             UnitID = Guid.NewGuid().ToString();
             IsDefending = false;
+            MaxHP = MP;
+            MaxMP = MP;
         }
     }
 
@@ -2205,7 +2206,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.light;
             DefensiveElement = CEnums.Element.light;
             AttackMessage = "swings its holy hammer towards";
-            DropList = new List<string>() { "angelic_essence", "mysterious_runes" };
+            DropList = new List<string>() { "angelic_essence", "runestone" };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2929,7 +2930,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.ice;
             DefensiveElement = CEnums.Element.ice;
             AttackMessage = "casts a basic ice spell on";
-            DropList = new List<string>() { "ripped_cloth", "mysterious_runes" };
+            DropList = new List<string>() { "ripped_cloth", "runestone" };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {

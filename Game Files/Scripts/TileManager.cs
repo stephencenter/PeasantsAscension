@@ -194,6 +194,11 @@ there might be a smart idea.",
                 throw ex;
             }
         }
+
+        public static bool VerifyTileExists(string tile_id)
+        {
+            return GetTileList().Select(x => x.TileID   ).Contains(tile_id);
+        }
     }
 
     public class Tile
@@ -455,7 +460,7 @@ there might be a smart idea.",
             MonsterGroups = new List<CEnums.MonsterGroup>() { CEnums.MonsterGroup.animal, CEnums.MonsterGroup.monster };
             Music = SoundManager.forest_music;
             MinMonsterLevel = 1;
-            MaxMonsterLevel = 3;
+            MaxMonsterLevel = 2 ;
             StoreLevel = 1;
             CellID = "nearton_cell";
         }

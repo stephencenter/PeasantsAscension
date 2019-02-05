@@ -9,6 +9,7 @@ namespace Main
     {
         internal static void Run()
         {
+            RunChecks();
             SavefileManager.ApplySettings();  // Set the volume and save file settings...
             DisplayTitlescreen();             // ...display the titlescreen...
             SavefileManager.LoadTheGame();    // ...check for save files...
@@ -222,8 +223,8 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
             try:
                 SoundManager.credits_music.PlayLooping();
 
-                # Display the credits one line at a time with specific lengths
-                # of time in between each line. Syncs up with the music!
+                // Display the credits one line at a time with specific lengths
+                // of time in between each line. Syncs up with the music!
                 with open('../Credits.txt') as f:
                     for number, line in enumerate(f) :
                         print(''.join(line.split("\n")))
@@ -234,14 +235,14 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
                     SoundManager.title_music.PlayLooping();
 
             except FileNotFoundError:
-                # Display this is the Credits.txt file couldn't be found
+                // Display this is the Credits.txt file couldn't be found
                 logging.exception(f'Error finding credits.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
                 print('The "credits.txt" file could not be found.')
                 main.s_input("\nPress enter/return ")
 
             except OSError:
-                # If there is a problem opening the Credits.txt file, but it does exist,
-                # display this message and log the error
+                // If there is a problem opening the Credits.txt file, but it does exist,
+                // display this message and log the error
                 logging.exception(f'Error loading credits.txt on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
                 print('There was a problem opening "credits.txt".')
                 main.s_input("\nPress enter/return ") */
@@ -315,7 +316,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
                     if new_vol in ['e', 'x', 'exit', 'b', 'back']:
                         return
                     try:
-                        # Convert the player's input into an integer between 0 and 100
+                        // Convert the player's input into an integer between 0 and 100
                         new_vol = max(0, min(100, int(new_vol)))
 
                     except ValueError:
@@ -410,13 +411,13 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
 
                 do_thing = True
                 while do_thing:
-                    div_size = main.s_input('Input # (or type "back"): ').lower()
+                    div_size = main.s_input('Input // (or type "back"): ').lower()
 
                     if div_size in ['e', 'x', 'exit', 'b', 'back']:
                         return
 
                     try:
-                        # Convert the player's input into an integer between 5 and 80
+                        // Convert the player's input into an integer between 5 and 80
                         div_size = max(5, min(80, int(div_size)))
 
                     except ValueError:
@@ -449,6 +450,98 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
                         elif y_n.startswith("n"):
                             do_thing = False
                             break */
+        }
+
+        // These are important checks that prevent you from making easy mistakes
+        // by alerting you when you run the game
+        private static void RunChecks()
+        {
+            // Check that all monsters have real items assigned to them
+            foreach (KeyValuePair<CEnums.MonsterGroup, List<Monster>> monster_group in UnitManager.MonsterGroups)
+            {
+                foreach (Monster monster in monster_group.Value)
+                {
+                    foreach (string item_id in monster.DropList)
+                    {
+                        if (!ItemManager.VerifyItemExists(item_id))
+                        {
+                            Console.WriteLine($"{monster.Name} has invalid item_id '{item_id}' listed as a droppable item");
+                        }
+                    }
+                }
+            }
+
+            // Check to make sure all directions for all tiles correspond to real tiles
+            foreach (Tile tile in TileManager.GetTileList())
+            {
+                foreach (string tile_id in new List<string> { tile.ToNorth, tile.ToSouth, tile.ToEast, tile.ToWest })
+                {
+                    if (tile_id != null && !TileManager.VerifyTileExists(tile_id))
+                    {
+                        Console.WriteLine($"{tile.TileID} has an invalid direction ({tile_id})!");
+                    }
+                }
+            }
+
+            // Check to make sure all TileIDs in use are unique
+            foreach (string tile_id in TileManager.GetTileList().Select(x => x.TileID))
+            {
+                if (TileManager.GetTileList().Where(x => x.TileID == tile_id).Count() > 1)
+                {
+                    Console.WriteLine($"{tile_id} is being used as a Tile ID for multiple tiles!");
+                }
+            }
+
+            /*
+            // This loop checks to make sure all tile_id's are unique
+            for item3 in all_tiles:
+                if item3 != find_tile_with_id(item3.tile_id):
+                    print(f"{item3.tile_id} is being used as a Tile ID for multiple tiles!")
+
+            // This optional loop checks to make sure no tiles are "adjacent to themselves"
+            // e.g. North on tile_a leads to tile_a
+            for item4 in all_tiles:
+                for check_direction in [item4.to_s, item4.to_n, item4.to_e, item4.to_w]:
+                    if check_direction == item4.tile_id and not item4.allow_recursion:
+                        print(f"{item4.tile_id} leads to itself - is this intended?")
+
+            // This optional loop checks to make sure tiles are two-way passages
+            // e.g. North on tile_a leads to tile_b, South on tile_b does nothing
+            for item5 in all_tiles:
+                if any([item5.to_s and not find_tile_with_id(item5.to_s).to_n,
+                        item5.to_n and not find_tile_with_id(item5.to_n).to_s,
+                        item5.to_w and not find_tile_with_id(item5.to_w).to_e,
+                        item5.to_e and not find_tile_with_id(item5.to_e).to_w]) and not item5.allow_oneway:
+                    print(f"{item5.tile_id} has one-way passages - is this intended?")
+
+            // This optional loop checks to make sure all tiles are two-way passages that specifically correspond to eachother
+            // e.g. North on tile_a leads to tile_b, South on tile_b leads to tile_c
+            for item6 in all_tiles:
+                is_error = False
+
+                if item6.to_s and find_tile_with_id(item6.to_s).to_n and not item6.allow_noneuclidean:
+                        if item6.tile_id != find_tile_with_id(item6.to_s).to_n and not item6.allow_noneuclidean:
+                        is_error = True
+
+                if item6.to_n and find_tile_with_id(item6.to_n).to_s and not item6.allow_noneuclidean:
+                        if item6.tile_id != find_tile_with_id(item6.to_n).to_s and not item6.allow_noneuclidean:
+                        is_error = True
+
+                if item6.to_w and find_tile_with_id(item6.to_w).to_e and not item6.allow_noneuclidean:
+                        if item6.tile_id != find_tile_with_id(item6.to_w).to_e and not item6.allow_noneuclidean:
+                        is_error = True
+
+                if item6.to_e and find_tile_with_id(item6.to_e).to_w and not item6.allow_noneuclidean:
+                        if item6.tile_id != find_tile_with_id(item6.to_e).to_w and not item6.allow_noneuclidean:
+                        is_error = True
+
+                if is_error:
+                    print(f"{item6.tile_id} has non-euclidean passages - is this intended?")
+
+
+            for item7 in all_provinces:
+                if item7.name not in valid_provinces:
+                        print(f"{item7} has an invalid province!") */
         }
     }
 }

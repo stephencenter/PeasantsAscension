@@ -96,11 +96,11 @@ namespace Scripts
             return inventory;
         }
 
-        public static Dictionary<CEnums.EquipmentType, dynamic> GetEquipment(string pcu_id)
+        public static Dictionary<CEnums.EquipmentType, Item> GetEquipment(string pcu_id)
         {
             // The equipment dictionary only stores ItemIDs, not actual items. So we have to convert
             // them into real items before we return the dictionary
-            Dictionary<CEnums.EquipmentType, dynamic> real_equipped = new Dictionary<CEnums.EquipmentType, dynamic>()
+            Dictionary<CEnums.EquipmentType, Item> real_equipped = new Dictionary<CEnums.EquipmentType, Item>()
             {
                 { CEnums.EquipmentType.weapon, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.weapon]) },
                 { CEnums.EquipmentType.armor, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.armor]) },

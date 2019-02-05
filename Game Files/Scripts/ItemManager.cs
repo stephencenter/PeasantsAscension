@@ -438,7 +438,7 @@ by sneaking into houses in towns.", 700, 90, "mythril_lckpck"),
             new Ingredient("Broken Crystal",
 @"A chunk of crystal too powdery to be of any value. Could have useful alchemical
 applications. Has a 'Strange' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "b_crystal"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "broken_crystal"),
 
             new Ingredient("Chain links",
 @"A couple joined links of chain made from steel. Could have useful alchemical
@@ -464,12 +464,12 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "strange", "living_b
             new Ingredient("Demonic Essence",
 @"A strange orb that exudes a terrifying aura. Could have useful alchemical
 applications. Has a 'Mystic' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "d_essence"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "demonic_essence"),
 
             new Ingredient("Angelic Essence",
 @"A strange orb that radiates an incredible aura. Could have useful alchemical
 applications. Has a 'Mystic' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "a_essence"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mystic", "angelic_essence"),
 
             new Ingredient("Strange Runestone",
 @"Strange stones with even stranger symbols on it. Could have useful alchemical
@@ -500,7 +500,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "shell_frag
             new Ingredient("Golem Rock",
 @"A small rock that seems to glow slightly. Could have useful alchemical
 applications. Has a 'Rigid' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "golem_rcok"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "golem_rock"),
 
             new Ingredient("Beetle Shell",
 @"A bluish shell from a large beetle. Could have useful alchemical applications.
@@ -510,23 +510,23 @@ Pocket Alchemy Lab to make a potion.", 25, "rigid", "beetle_shell"),
             new Ingredient("Monster Skull",
 @"A broken skull from a strange creature. Could have useful alchemical
 applications. Has a 'Rigid' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "m_skull"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "rigid", "monster_skull"),
 
             // Flowing
             new Ingredient("Vial of Slime",
 @"A small glass vial filled with gooey slime. Could have useful alchemical
 applications. Has a 'Flowing' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "s_vial"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "slime_vial"),
 
             new Ingredient("Vial of Blood",
 @"A small glass vial filled with the blood of some creature. Could have useful
 alchemical applications. Has a 'Flowing' alchemical flavor. Combine with two
-other ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "b_vial"),
+other ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "blood_vial"),
 
             new Ingredient("Vial of Water",
 @"A small glass vial filled with enchanted water. Could have useful alchemical
 applications. Has a 'Flowing' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "w_vial"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "flowing", "water_vial"),
 
             new Ingredient("Ink Sack",
 @"A small pouch full of an inky substance. Could have useful alchemical
@@ -557,12 +557,12 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "antennae"),
             new Ingredient("Eyeballs",
 @"The visual receptors of some disgusting creature. Could have useful alchemical
 applications. Has a 'Dark' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "eyeballs"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "eye_balls"),
 
             new Ingredient("Serpent Scale",
 @"A rough scale from an unknown reptile. Could have useful alchemical
 applications. Has a 'Dark' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "s_scale"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "dark", "serpent_scale"),
 
             // Natural
             new Ingredient("Wing Piece",
@@ -583,7 +583,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "rodent_t
             new Ingredient("Serpent Tongue",
 @"A dried-up tongue from a slithery serpent. Could have useful alchemical
 applications. Has a 'Natural' alchemical flavor. Combine with two other
-ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "s_tongue"),
+ingredients in a Pocket Alchemy Lab to make a potion.", 25, "natural", "serpent_tongue"),
 
             new Ingredient("Feathers",
 @"A veiny feather from an unknown avian creature. Could have useful alchemical
@@ -621,6 +621,11 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         public static Item FindItemWithID(string item_id)
         {
             return GetItemList().Single(x => x.ItemID == item_id);
+        }
+
+        public static bool VerifyItemExists(string item_id)
+        {
+            return GetItemList().Select(x => x.ItemID).Contains(item_id);
         }
     }
 

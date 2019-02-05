@@ -67,7 +67,7 @@ namespace Scripts
             {
                 turn_counter++;
 
-                List<dynamic> speed_list = new List<dynamic>();
+                List<Unit> speed_list = new List<Unit>();
                 active_pcus.ForEach(x => speed_list.Add(x));
                 monster_list.ForEach(x => speed_list.Add(x));
 
@@ -93,16 +93,11 @@ namespace Scripts
                 }
 
                 // Iterate through each unit in the battle from fastest to slowest
-                foreach (dynamic unit in speed_list)
+                foreach (Unit unit in speed_list)
                 {
                     if (unit.IsAlive())
                     {
-                        if (monster_list.All(x => x.HP <= 0))
-                        {
-                            break;
-                        }
-
-                        if (active_pcus.All(x => x.HP <= 0))
+                        if (monster_list.All(x => x.HP <= 0) || active_pcus.All(x => x.HP <= 0))
                         {
                             break;
                         }
@@ -112,7 +107,8 @@ namespace Scripts
                         // Leave the battle if the player runs away
                         if (unit is PlayableCharacter)
                         {
-                            if (unit.PlayerExecuteMove(monster_list) == "ran")
+                            PlayableCharacter pcu = unit as PlayableCharacter;
+                            if (pcu.PlayerExecuteMove(monster_list) == "ran")
                             {
                                 return;
                             }
@@ -120,12 +116,13 @@ namespace Scripts
 
                         else if (unit is Monster)
                         {
-                            unit.MonsterExecuteMove();
+                            Monster monster = unit as Monster;
+                            monster.MonsterExecuteMove();
                         }
                     }
 
                     // If any unit died on this turn, set their health to 0 and set their status as 'dead'
-                    foreach (dynamic other_unit in speed_list)
+                    foreach (Unit other_unit in speed_list)
                     {
                         if (other_unit is PlayableCharacter && other_unit.HP <= 0 && other_unit.IsAlive())
                         {

@@ -4,10 +4,10 @@ namespace Scripts
 {
     public static class AbilityManager
     {
-        private readonly static Dictionary<CEnums.CharacterClass, List<dynamic>> ability_list = new Dictionary<CEnums.CharacterClass, List<dynamic>>()
+        private readonly static Dictionary<CEnums.CharacterClass, List<Ability>> ability_list = new Dictionary<CEnums.CharacterClass, List<Ability>>()
         {
             { // 1 2 4 finished
-                CEnums.CharacterClass.warrior, new List<dynamic>()
+                CEnums.CharacterClass.warrior, new List<Ability>()
                 {
                     // Warrior abilities - Text should not pass this line --> |
                     new TauntAbility("Taunt", @"\
@@ -36,7 +36,7 @@ Repeat casts only affect these stats by 10/5% each, with no attribute bonus.", 2
             },
 
             { // 1 2 3 4 finished
-                CEnums.CharacterClass.monk, new List<dynamic>()
+                CEnums.CharacterClass.monk, new List<Ability>()
                 {
                     // Monk abilities - Text should not pass this line -----> |
                     new ChakraSmashAbility("Chakra Smash", @"\
@@ -69,7 +69,7 @@ dealt.", 5)
             },
 
             { // 1 2 3 4 finished
-                CEnums.CharacterClass.assassin, new List<dynamic>()
+                CEnums.CharacterClass.assassin, new List<Ability>()
                 {
                     // Assassin abilities - Text should not pass this line -> |
                     new InjectPoisonAbility("Inject Poison", @"\
@@ -102,7 +102,7 @@ All three effects can happen with a single Backstab.", 2)
             },
 
             { // 1 2 finished
-                CEnums.CharacterClass.mage, new List<dynamic>()
+                CEnums.CharacterClass.mage, new List<Ability>()
                 {
                     // Mage abilities - Text should not pass this line -----> |
                     new SkillSyphonAbility("Skill Syphon", @"\
@@ -133,7 +133,7 @@ minimum of 5 MP.", 2)
             },
 
             { // None finished
-                CEnums.CharacterClass.ranger, new List<dynamic>()
+                CEnums.CharacterClass.ranger, new List<Ability>()
                 {
                     // Ranger abilities - Text should not pass this line ---> |
                     new RollAbility("Roll", @"\
@@ -160,7 +160,7 @@ allies. Deals a base damage dependent on what animal arrives, plus
             },
 
             { // 1 2 3 finished
-                CEnums.CharacterClass.paladin, new List<dynamic>()
+                CEnums.CharacterClass.paladin, new List<Ability>()
                 {
                     // Paladin abilities - Text should not pass this line --> |
                     new TipTheScalesAbility("Tip the Scales", @"\
@@ -194,7 +194,7 @@ uses only refresh the buff duration.", 3)
             },
 
             { // None finished
-                CEnums.CharacterClass.bard, new List<dynamic>()
+                CEnums.CharacterClass.bard, new List<Ability>()
                 {
                     // Bard abilities - Text should not pass this line -----> |
                     new WaywardFellowAbility("The Wayward Fellow", @"\
@@ -236,7 +236,7 @@ nothing if no songs have been played yet.", 3)
             }
         };
 
-        public static Dictionary<CEnums.CharacterClass, List<dynamic>> GetAbilityList()
+        public static Dictionary<CEnums.CharacterClass, List<Ability>> GetAbilityList()
         {
             return ability_list;
         }
@@ -400,7 +400,7 @@ nothing if no songs have been played yet.", 3)
         public override void UseAbility(Unit user)
         {
             /*
-            # A 2x crit that lowers the target's armor
+            // A 2x crit that lowers the target's armor
             print(f"{user.name} is preparing a Chakra Smash...")
             sounds.sword_slash.SmartPlay()
             main.smart_sleep(0.75)
@@ -734,7 +734,7 @@ nothing if no songs have been played yet.", 3)
 
                 total = 0
 
-                # I don't know of any better way to do this than like this so here we go
+                // I don't know of any better way to do this than like this so here we go
                 for x in ['attk', 'm_attk', 'p_attk', 'dfns', 'dfns', 'dfns', 'spd', 'evad']:
                     value = eval(f"max(1, min(math.ceil(0.2*user.target.{x}), 1 + user.attributes['int']))")
                     total += value
@@ -1296,11 +1296,11 @@ nothing if no songs have been played yet.", 3)
         def __init__(self, name, desc, ap_cost):
             super().__init__(name, desc, ap_cost)
 
-            # Normal    -> 1.00x Charisma
-            # Good      -> 1.25x Charisma
-            # Great     -> 1.50x Charisma
-            # Excellent -> 1.75x Charisma
-            # Perfect   -> 2.00x Charisma
+            // Normal    -> 1.00x Charisma
+            // Good      -> 1.25x Charisma
+            // Great     -> 1.50x Charisma
+            // Excellent -> 1.75x Charisma
+            // Perfect   -> 2.00x Charisma
 
     def before_ability(self, user):
             pass
