@@ -5,15 +5,15 @@ namespace Scripts
 {
     public static class InventoryManager
     {
-        private static Dictionary<CEnums.InvCategory, List<dynamic>> inventory = new Dictionary<CEnums.InvCategory, List<dynamic>>()
+        private static Dictionary<CEnums.InvCategory, List<Item>> inventory = new Dictionary<CEnums.InvCategory, List<Item>>()
         {
-            { CEnums.InvCategory.quest, new List<dynamic>() { } },
-            { CEnums.InvCategory.consumables, new List<dynamic>() { } },
-            { CEnums.InvCategory.weapons, new List<dynamic>() { } },
-            { CEnums.InvCategory.armor, new List<dynamic>() { } },
-            { CEnums.InvCategory.tools, new List<dynamic>() { } },
-            { CEnums.InvCategory.accessories, new List<dynamic>() { } },
-            { CEnums.InvCategory.misc, new List<dynamic>() { } }
+            { CEnums.InvCategory.quest, new List<Item>() { } },
+            { CEnums.InvCategory.consumables, new List<Item>() { } },
+            { CEnums.InvCategory.weapons, new List<Item>() { } },
+            { CEnums.InvCategory.armor, new List<Item>() { } },
+            { CEnums.InvCategory.tools, new List<Item>() { } },
+            { CEnums.InvCategory.accessories, new List<Item>() { } },
+            { CEnums.InvCategory.misc, new List<Item>() { } }
         };
 
         private static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
@@ -91,7 +91,7 @@ namespace Scripts
              },
         };
 
-        public static Dictionary<CEnums.InvCategory, List<dynamic>> GetInventory()
+        public static Dictionary<CEnums.InvCategory, List<Item >> GetInventory()
         {
             return inventory;
         }
