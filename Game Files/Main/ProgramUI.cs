@@ -9,6 +9,7 @@ namespace Main
     {
         internal static void Run()
         {
+            InventoryManager.GetInventory();
             RunChecks();
             SavefileManager.ApplySettings();  // Set the volume and save file settings...
             DisplayTitlescreen();             // ...display the titlescreen...
@@ -493,11 +494,6 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
             }
 
             /*
-            // This loop checks to make sure all tile_id's are unique
-            for item3 in all_tiles:
-                if item3 != find_tile_with_id(item3.tile_id):
-                    print(f"{item3.tile_id} is being used as a Tile ID for multiple tiles!")
-
             // This optional loop checks to make sure no tiles are "adjacent to themselves"
             // e.g. North on tile_a leads to tile_a
             for item4 in all_tiles:

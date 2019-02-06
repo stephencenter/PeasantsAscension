@@ -164,9 +164,8 @@ namespace Scripts
         public enum GameState { overworld, battle, town }
         public enum MusicboxMode { AtoZ, ZtoA, shuffle }
         public enum SpellCategory { buff, attack, healing, all }
-        public enum InvCategory{ quest, consumables, weapons, armor, tools, accessories, misc}
-
-    public enum MonsterGroup { animal, monster, humanoid, undead, dungeon }
+        public enum InvCategory{ quest, consumables, weapons, armor, tools, accessories, misc }
+        public enum MonsterGroup { animal, monster, humanoid, undead, dungeon }
 
         // element_matchup[key][0] is the element that key is weak to
         // element_matchup[key][1] is the element that key is resistant to
@@ -232,13 +231,31 @@ namespace Scripts
                 { DamageType.magical, "Magical" },
                 { DamageType.piercing, "Piercing" },
 
+                { GameState.overworld, "Overworld" },
+                { GameState.battle, "Battle" },
+                { GameState.town, "Town" },
+
                 { MusicboxMode.AtoZ, "A-to-Z" },
                 { MusicboxMode.ZtoA, "Z-to-A" },
                 { MusicboxMode.shuffle, "Shuffle" },
 
                 { SpellCategory.buff, "Buff" },
                 { SpellCategory.attack, "Attack" },
-                { SpellCategory.healing, "Healing" }
+                { SpellCategory.healing, "Healing" },
+
+                { InvCategory.quest, "Quest"},
+                { InvCategory.consumables, "Consumable" },
+                { InvCategory.weapons, "Weapons"},
+                { InvCategory.armor, "Armor"},
+                { InvCategory.tools, "Tools" },
+                { InvCategory.accessories, "Accessories" },
+                { InvCategory.misc, "Miscellaneous" },
+
+                { MonsterGroup.animal, "Animal" },
+                { MonsterGroup.monster, "Monster" },
+                { MonsterGroup.humanoid, "Humanoid" },
+                { MonsterGroup.undead, "Undead" },
+                { MonsterGroup.dungeon, "Accursed" }
             };
 
             return StatusNameMap[the_enum];
