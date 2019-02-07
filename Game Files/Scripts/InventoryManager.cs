@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Scripts
@@ -13,7 +14,7 @@ namespace Scripts
             { CEnums.InvCategory.armor, new List<string>() { } },
             { CEnums.InvCategory.tools, new List<string>() { } },
             { CEnums.InvCategory.accessories, new List<string>() { } },
-            { CEnums.InvCategory.misc, new List<string>() { } }
+            { CEnums.InvCategory.misc, new List<string>() { "topaz_gem", "topaz_gem", "topaz_gem", "topaz_gem", "bone_bag", "bone_bag", "fairy_dust" } }
         };
 
         private static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
@@ -91,6 +92,16 @@ namespace Scripts
              },
         };
 
+        private readonly static Dictionary<CEnums.EquipmentType, string> default_equip_map = new Dictionary<CEnums.EquipmentType, string>()
+        {
+            { CEnums.EquipmentType.accessory, "no_access" },
+            { CEnums.EquipmentType.armor, "no_armor" },
+            { CEnums.EquipmentType.weapon, "weapon_fists" }
+        };
+
+        /* =========================== *
+         *    COLLECTION RETRIEVERS    *
+         * =========================== */
         public static Dictionary<CEnums.InvCategory, List<Item>> GetInventory()
         {
             // We have to convert the inventory from a list of ItemIDs into a list of Items.
@@ -103,20 +114,28 @@ namespace Scripts
                 new_inventory[kvp.Key] = kvp.Value.Select(x => ItemManager.FindItemWithID(x)).ToList();
             }
 
+            // It's important to note that this does NOT return the inventory! 
+            // It returns a completely new object - modifying this value will
+            // NOT modify the actual inventory! 
+            // To modify the real inventory, use AddItemToInventory() and RemoveItemFromInventory().
             return new_inventory;
         }
 
-        public static Dictionary<CEnums.EquipmentType, Item> GetEquipment(string pcu_id)
+        public static Dictionary<CEnums.EquipmentType, Equipment> GetEquipment(string pcu_id)
         {
             // The equipment dictionary only stores ItemIDs, not actual items. So we have to convert
             // them into real items before we return the dictionary
-            Dictionary<CEnums.EquipmentType, Item> real_equipped = new Dictionary<CEnums.EquipmentType, Item>()
+            Dictionary<CEnums.EquipmentType, Equipment> real_equipped = new Dictionary<CEnums.EquipmentType, Equipment>()
             {
-                { CEnums.EquipmentType.weapon, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.weapon]) },
-                { CEnums.EquipmentType.armor, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.armor]) },
-                { CEnums.EquipmentType.accessory, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.accessory]) }
+                { CEnums.EquipmentType.weapon, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.weapon]) as Equipment },
+                { CEnums.EquipmentType.armor, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.armor]) as Equipment },
+                { CEnums.EquipmentType.accessory, ItemManager.FindItemWithID(equipment[pcu_id][CEnums.EquipmentType.accessory]) as Equipment }
             };
 
+            // It's important to note that this does NOT return the equipment! 
+            // It returns a completely new object - modifying this value will
+            // NOT modify the actual equipment! 
+            // To modify the real equipment, use EquipItem() and UnequipItem().
             return real_equipped;
         }
 
@@ -125,306 +144,376 @@ namespace Scripts
          * =========================== */
         public static void AddItemToInventory(string item_id)
         {
-            Item new_item = ItemManager.FindItemWithID(item_id);
-            GetInventory()[new_item.Category].Add(new_item);\
+            // Adds the item_id to the inventory
+            CEnums.InvCategory item_cat = ItemManager.FindItemWithID(item_id).Category;
+            inventory[item_cat].Add(item_id);
         }
 
         public static void RemoveItemFromInventory(string item_id)
         {
-            Item deleted_item = GetInventory()[ItemManager.FindItemWithID(item_id).Category].First(x => x.ItemID == item_id);
-            GetInventory()[ItemManager.FindItemWithID(item_id).Category].Remove(deleted_item);
+            // Removes the item_id from the inventory
+            CEnums.InvCategory item_cat = ItemManager.FindItemWithID(item_id).Category;
+            inventory[item_cat].Remove(item_id);
+        }
+
+        public static void EquipItem(PlayableCharacter equipper, string item_id)
+        {
+            // Equips the item_id to equipper
+            CEnums.EquipmentType equip_type = (ItemManager.FindItemWithID(item_id) as Equipment).EquipType;
+            equipment[equipper.UnitID][equip_type] = item_id;
+            RemoveItemFromInventory(item_id);
+        }
+
+        public static void UnequipItem(PlayableCharacter unequipper, string item_id)
+        {
+            // Unequips the item_id from the unequipper
+            CEnums.EquipmentType equip_type = (ItemManager.FindItemWithID(item_id) as Equipment).EquipType;
+            equipment[unequipper.UnitID][equip_type] = default_equip_map[equip_type];
+            AddItemToInventory(item_id);
         }
 
         public static void PickInventoryCategory()
         {
-            /*
-            global inventory
-            while True:
-                print("""Inventory Categories:
-              [1] Armor
-              [2] Weapons
-              [3] Accessories
-              [4] Consumables
-              [5] Tools
-              [6] Quest Items
-              [7] Misc. Items
-              [8] Equipped Items
-              [9] Quests""")
-                while True:
-                    cat = main.s_input('Input [#] (or type "exit"): ').lower()
+            while (true)
+            {
+                Console.WriteLine("Your Inventory: ");
+                Console.WriteLine("      [1] Armor");
+                Console.WriteLine("      [2] Weapons");
+                Console.WriteLine("      [3] Accessories");
+                Console.WriteLine("      [4] Consumables");
+                Console.WriteLine("      [5] Tools");
+                Console.WriteLine("      [6] Quest Items");
+                Console.WriteLine("      [7] Miscellaneous");
+                Console.WriteLine("      [8] View Equipment");
+                Console.WriteLine("      [9] View Quests");
 
-                    if cat in ['e', 'x', 'exit', 'b', 'back']:
-                        return
+                while (true)
+                {
+                    string chosen = CMethods.Input("Input [#] (or type 'exit'): ").ToLower();
+                    CEnums.InvCategory category;
 
-                    elif cat == '1':
-                        cat = 'armor'
-                        vis_cat = 'Armor'
-                    elif cat == '2':
-                        cat = 'weapons'
-                        vis_cat = 'Weapons'
-                    elif cat == '3':
-                        cat = 'access'
-                        vis_cat = 'Accessories'
-                    elif cat == '4':
-                        cat = 'consumables'
-                        vis_cat = 'Consumables'
-                    elif cat == '5':
-                        cat = 'tools'
-                        vis_cat = 'Tools'
-                    elif cat == '6':
-                        cat = 'q_items'
-                        vis_cat = 'Quest Items'
-                    elif cat == '7':
-                        cat = 'misc'
-                        vis_cat = 'Misc. Items'
-                    elif cat == '8':
-                        cat = 'equipped_items'
-                        vis_cat = 'Equipped Items'
-                    elif cat == '9':
-                        cat = 'quests'
-                        vis_cat = 'Quests'
+                    if (CMethods.IsExitString(chosen))
+                    {
+                        return;
+                    }
 
-                    else:
-                        continue
+                    else if (chosen == "1")
+                    {
+                        category = CEnums.InvCategory.armor;
+                    }
 
-                    if cat in inventory:
-                        if inventory[cat]:
-                            if cat not in ['weapons', 'armor', 'access']:
-                                pick_item(cat, vis_cat)
-                                print('-'*save_load.divider_size)
+                    else if (chosen == "2")
+                    {
+                        category = CEnums.InvCategory.weapons;
+                    }
 
-                            else:
-                                if [x for x in inventory[cat]]:
-                                    pick_item(cat, vis_cat)
-                                    print('-'*save_load.divider_size)
+                    else if (chosen == "3")
+                    {
+                        category = CEnums.InvCategory.accessories;
+                    }
 
-                                else:
-                                    print('-'*save_load.divider_size)
-                                    print(f'Your party has no {vis_cat}.')
-                                    main.s_input("\nPress enter/return ")
-                                    print('-'*save_load.divider_size)
+                    else if (chosen == "4")
+                    {
+                        category = CEnums.InvCategory.consumables;
+                    }
 
-                            break
+                    else if (chosen == "5")
+                    {
+                        category = CEnums.InvCategory.tools;
+                    }
 
-                        else:
-                            print('-'*save_load.divider_size)
-                            print(f'Your party has no {vis_cat}.')
-                            main.s_input("\nPress enter/return ")
-                            print('-'*save_load.divider_size)
-                            break
+                    else if (chosen == "6")
+                    {
+                        category = CEnums.InvCategory.quest;
+                    }
 
-                    elif cat == 'equipped_items':
-                        pick_item(cat, vis_cat)
-                        break
+                    else if (chosen == "7")
+                    {
+                        category = CEnums.InvCategory.misc;
+                    }
 
-                    if cat == 'quests' and[x for x in dialogue.all_dialogue if isinstance(x, dialogue.Quest) and x.started]:
-                        pick_item(cat, vis_cat)
-                        break
+                    else if (chosen == "8")
+                    {
+                        // Equipped items aren't actually stored in the inventory, so they need their own function to handle them
+                        PickEquipmentItem();
+                        break;
+                    }
 
-                    else:
-                        print('-'*save_load.divider_size)
-                        print("Your party has no active or completed quests.")
-                        main.s_input("\nPress enter/return ")
-                        print('-'*save_load.divider_size)
-                        break */
+                    else if (chosen == "9")
+                    {
+                        // Quests have their own function, because they aren't actually instances of the Item class
+                        ViewQuests();
+                        break;
+                    }
+
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (GetInventory()[category].Any())
+                    {
+                        PickInventoryItem(category, false);
+                        break;
+                    }
+
+                    else
+                    {
+                        CMethods.PrintDivider();
+                        Console.WriteLine($"Your part has no {CEnums.EnumToString(category)}.");
+                        CMethods.PressEnterReturn();
+                        CMethods.PrintDivider();
+                        break;
+                    }
+                }
+            }
         }
-            
-        public static void PickInventoryItem(CEnums.InvCategory category, bool selling = false)
+
+        public static void PickInventoryItem(CEnums.InvCategory category, bool selling)
         {
-            /*
             // Select an object to interact with in your inventory
             // If "selling == True" that means that items are being sold, and not used.
-            def pick_item(cat, vis_cat, selling= False):
-                while True:
-                    // Quests have their own function, because they aren't actually instances of the Item class
-                    if cat == 'quests':
-                        view_quests()
-                        return
 
-                    // Equipped items aren't actually stored in the inventory, so they need their own function to handle them
-                    if cat == 'equipped_items':
-                        manage_equipped()
-                        return
+            while (true)
+            {
+                CMethods.PrintDivider();
+                List<string> item_ids = DisplayInventory(category, selling);
 
-                    // The code that prints the inventory is kind of complicated so it's located in another function
-                    print('-'*save_load.divider_size)
-                    item_ids = print_inventory(cat, vis_cat, selling)
+                while (true)
+                {
+                    string chosen = CMethods.Input("Input [#] (or type 'exit'): ").ToLower();
 
-                    while True:
-                        chosen = main.s_input('Input [#] (or type "back"): ').lower()
-                        try:
-                            item_id = item_ids[int(chosen) - 1]
+                    try
+                    {
+                        chosen = item_ids[int.Parse(chosen) - 1];
+                    }
 
-                        except(IndexError, ValueError):
-                            if chosen in ['e', 'x', 'exit', 'b', 'back']:
-                                return
+                    catch (Exception ex)
+                    {
+                        if (ex is FormatException || ex is ArgumentOutOfRangeException)
+                        {
+                            if (CMethods.IsExitString(chosen))
+                            {
+                                CMethods.PrintDivider();
+                                return;
+                            }
 
-                            continue
+                            continue;
+                        }
 
-                        // If you're selling items at a general store, you have to call a different function
-                        if selling:
-                            sell_item(item_id)
+                        throw;
+                    }
 
-                            if not any([not i.imp for i in inventory[cat]]):
-                                return
+                    // If you're selling items at a general store, you have to call a different function
+                    if (selling)
+                    {
+                        SellItem(chosen);
 
-                        else:
-                            pick_action(item_id)
+                        if (!GetInventory()[category].Any(x => x.IsImportant))
+                        {
+                            return;
+                        }
+                    }
 
-                            if not inventory[cat]:
-                                return
+                    else
+                    {
+                        PickInventoryAction(chosen);
 
-                        break */
+                        if (!GetInventory()[category].Any())
+                        {
+                            return;
+                        }
+                    }
+
+                    break;
+                }
+            }
         }
 
-        public static void DisplayInventory(CEnums.InvCategory category, bool selling)
+        public static List<string> DisplayInventory(CEnums.InvCategory category, bool selling)
         {
-            /*
-            // Count the number of each item in the player's inventory, and display it alongside one copy of each item
-            def print_inventory(cat, vis_cat, selling):
-                    quantity_inv = []
+            List<string> id_inventory = GetInventory()[category].Select(x => x.ItemID).ToList();
+            List<Tuple<string, string, int>> quantity_inv = new List<Tuple<string, string, int>>();
 
-                        temp_inv = []
-                    for item_x in inventory[cat]:
-                        if item_x.item_id not in temp_inv:
-                            temp_inv.append(item_x.item_id)
+            // This creates a tuple of every item in the inventory and its quantity, and adds it to quantity_inv
+            id_inventory.Distinct().ToList().ForEach(x => quantity_inv.Add(new Tuple<string, string, int>(ItemManager.FindItemWithID(x).Name, x, id_inventory.Count(y => y == x))));
+            
+            if (selling)
+            {
+                /*
+                List<Tuple<string, int>> sellable_inv = quantity_inv.Where(x => !ItemManager.FindItemWithID(x.Item1).IsImportant).ToList();
 
-                    for item_y in temp_inv:
-                        quantity_inv.append((find_item_with_id(item_y).name,
-                                             item_y,
-                                             sum(i.item_id == item_y for i in inventory[cat])))
+                int padding;
 
-                    if not selling:
-                        print(f"{vis_cat}: ")
-                        for x, y in enumerate(quantity_inv) :
-                            print(f'      [{x + 1}] {y[0]} x {y[2]}')
+                try
+                {
+                    padding = sellable_inv.Select(x => $"{x.Item1} x {x.Item2}".Length).Max();
+                } 
 
-                        return [x[1] for x in quantity_inv]
+                catch (Exception ex)
+                {
+                    if (ex is ArgumentException)
+                    {
+                        padding = 1;
+                    }
 
-                    else:
-                        sellable_inv = [it for it in quantity_inv if not find_item_with_id(it[1]).imp]
+                    throw;
+                }
 
-                        try:
-                            padding = len(max([it2[0] + f" x {it2[2]}" for it2 in sellable_inv], key= len))
+                int extra_pad = sellable_inv.Select(x => x.Item1);
+                /*
+                sellable_inv = [it for it in quantity_inv if not find_item_with_id(it[1]).imp]
 
-                        except ValueError:
-                            padding = 1
+                try:
+                    padding = len(max([it2[0] + f" x {it2[2]}" for it2 in sellable_inv], key= len))
 
-                        extra_pad = len(str(len([it3[0] for it3 in sellable_inv]) + 1))
+                except ValueError:
+                    padding = 1
 
-                        print(f'{vis_cat}:')
+                extra_pad = len(str(len([it3[0] for it3 in sellable_inv]) + 1))
 
-                        highest_charisma = max([pcu.attributes['cha'] for pcu in [units.player,
-                                                                                  units.solou,
-                                                                                  units.chili,
-                                                                                  units.chyme,
-                                                                                  units.adorine,
-                                                                                  units.parsto]]) - 1
+                print(f'{vis_cat}:')
 
-                        for num, b in enumerate(sellable_inv) :
-                            sell_value = find_item_with_id(b[1]).value//5
-                            modified_value = math.ceil(max([sell_value * (1 + 0.01 * highest_charisma), sell_value * 2]))
+                highest_charisma = max([pcu.attributes['cha'] for pcu in [units.player,
+                                                                            units.solou,
+                                                                            units.chili,
+                                                                            units.chyme,
+                                                                            units.adorine,
+                                                                            units.parsto]]) - 1
 
-                            fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
-                            print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {modified_value} GP each")
+                for num, b in enumerate(sellable_inv) :
+                    sell_value = find_item_with_id(b[1]).value//5
+                    modified_value = math.ceil(max([sell_value * (1 + 0.01 * highest_charisma), sell_value * 2]))
 
-                        return [x[1] for x in sellable_inv] */
+                    fp = '-'*(padding - (len(b[0]) + len(f" x {b[2]}")) + (extra_pad - len(str(num + 1))))
+                    print(f"      [{num + 1}] {b[0]} x {b[2]} {fp}--> {modified_value} GP each")
+
+                return [x[1] for x in sellable_inv] */
+
+                return id_inventory;
+            }
+
+            else
+            {
+                Console.WriteLine($"{CEnums.EnumToString(category)}: ");
+
+                int counter = 0;
+                foreach (Tuple<string, string, int> item in quantity_inv)
+                {
+                    Console.WriteLine($"      [{counter + 1}] {item.Item1} x {item.Item3}");
+                    counter++;
+                }
+
+                return quantity_inv.Select(x => x.Item2).ToList();
+            }
         }
 
         public static void PickInventoryAction(string item_id)
         {
-            /*
-            global inventory
-
-            item = find_item_with_id(item_id)
+            Item this_item = ItemManager.FindItemWithID(item_id);
 
             // Loop while the item is in the inventory
-            while True:
-                if any([isinstance(item, class_) for class_ in [Weapon, Armor, Accessory]]):
+            while (true)
+            {
+                string action;
+                if (this_item is Equipment)
+                {
                     // You equip weapons/armor/accessories
-                    use_equip = 'Equip'
+                    action = "Equip";
+                }
 
-                else:
+                else
+                {
                     // You use other items
-                    use_equip = 'Use'
+                    action = "Use";
+                }
 
-                print('-'*save_load.divider_size)
-                action = main.s_input(f"""What should your party do with the {item.name}?
-     [1] {use_equip}
-     [2] Read Description
-     [3] Drop
-Input[#] (or type "back"): """)
-
-                if action == '1':
-                    // Items of these classes require a target to be used, so we have to acquire a target first
-                    if any([isinstance(item, class_) for class_ in [Accessory, Armor, HealthManaPotion, Weapon, StatusPotion]]):
-                        units.player.choose_target(f"Who should {use_equip} the {item.name}?", ally = True, enemy = False)
-
-
-                      print('-' * save_load.divider_size)
-
-                      item.use_item(units.player.target)
-
-                        return
-
-                    // Other items can just be used normally
-                    else:
-                        print('-' * save_load.divider_size)
-
-                      item.use_item(units.player)
-
-                        return
-
-                elif action == '2':
-                    // Display the item description
-                    print('-' * save_load.divider_size)
-
-                  print(f'-{str(item.name).upper()}-')
-
-                    if hasattr(item, "ascart"):
-                        print(ascii_art.item_sprites[item.ascart])
-
-                    for x in main.chop_by_79(item.desc):
-                        print(x)
+                CMethods.PrintDivider();
+                Console.WriteLine($"What should your party do with the {this_item.Name}? ");
+                Console.WriteLine($"      [1] {action}");
+                Console.WriteLine("      [2] Read Description");
+                Console.WriteLine("      [3] Drop");
+                
+                while (true)
+                {
+                    string chosen = CMethods.Input("Input [#] (or type 'exit'): ").ToLower();
 
 
-                  main.s_input("\nPress enter/return ")
+                    if (CMethods.IsExitString(chosen))
+                    {
+                        return;
+                    }
 
+                    else if (chosen == "1")
+                    {
+                        // Items of these classes require a target to be used, so we have to acquire a target first
+                        if (this_item is Equipment || this_item is HealthManaPotion || this_item is StatusPotion)
+                        {
+                            UnitManager.player.PlayerGetTarget(new List<Monster>(), $"Who should {action} the {this_item.Name}?", true, false, true, false);
+                            CMethods.PrintDivider();
+                            this_item.UseItem(UnitManager.player.CurrentTarget as PlayableCharacter);
+                        }
 
-              elif action == '3':
-                    print('-' * save_load.divider_size)
+                        // Other items can just be used normally
+                        else
+                        {
+                            CMethods.PrintDivider();
+                            this_item.UseItem(UnitManager.player);
+                        }
 
-                    // You can't throw away important/essential items, such as one-of-a-kind tools and quest items.
-                    // This is to prevent the game from becoming unwinnable.
-                    if item.imp:
-                        print('Essential Items cannot be thrown away.')
+                        return;
+                    }
 
-                      main.s_input("\nPress enter/return ")
+                    else if (chosen == "2")
+                    {
+                        // Display the item description
+                        CMethods.PrintDivider();
+                        Console.WriteLine($"Description for '{this_item.Name}': \n");
+                        Console.WriteLine(this_item.Description);
+                        CMethods.PressEnterReturn();
 
-                    else:
-                        while True:
-                            y_n = main.s_input(f'Should you really get rid of the {item.name}? | Y/N: ').lower()
+                        break;
+                    }
 
-                            if y_n.startswith('y'):
-                                remove_item(item.item_id)
+                    else if (chosen == "3")
+                    {
+                        CMethods.PrintDivider();
 
+                        // You can't throw away important/essential items, such as tools and quest items.
+                        // This is to prevent the game from becoming unwinnable.
+                        if (this_item.IsImportant)
+                        {
+                            Console.WriteLine("Essential Items cannot be thrown away.");
+                            CMethods.PressEnterReturn();
+                        }
 
-                              print(f'You toss the {item.name} aside and continues on your journey.')
+                        else
+                        {
+                            while (true)
+                            {
+                                string yes_or_no = CMethods.Input($"Throw away the {this_item.Name}? | Yes or No: ").ToLower();
 
-                              main.s_input("\nPress enter/return ")
+                                if (CMethods.IsYesString(yes_or_no))
+                                {
+                                    RemoveItemFromInventory(this_item.ItemID);
+                                    Console.WriteLine($"You toss the {this_item.Name} aside and continue on your journey.");
+                                    CMethods.PressEnterReturn();
 
-                                return
+                                    return;
+                                }
 
-                            elif y_n.startswith('n'):
-                                print(f'Your party decides to keep the {item.name} with them.')
+                                else if (CMethods.IsNoString(yes_or_no))
+                                {
+                                    Console.WriteLine($"You decide to keep the {this_item.Name}.");
+                                    CMethods.PressEnterReturn();
 
-                              main.s_input("\nPress enter/return ")
-
-                                break
-
-                elif action in ['e', 'x', 'exit', 'b', 'back']:
-                    return */
-
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static void SellItem(string item_id)
@@ -467,7 +556,7 @@ Input[#] (or type "back"): """)
                     return */
         }
 
-        public static void ManageEquipment()
+        public static void PickEquipmentItem()
         {
             /*
             units.player.choose_target("Choose party member to view equipment for:", ally = True, enemy = False)
@@ -524,10 +613,12 @@ Input[#] (or type "back"): """)
                     manage_equipped_2(selected)
                     print('-'*save_load.divider_size)
 
-                    break
+                    break */
+        }
 
-
-        def manage_equipped_2(selected):
+        public static void PickEquipmentAction(Equipment item)
+        {
+            /*
             global equipped
 
             while True:
@@ -568,10 +659,12 @@ Input[#] (or type "back"): """)
                         break
 
                     elif action in ['e', 'x', 'exit', 'b', 'back']:
-                        return
+                        return */
+        }
 
-
-        def view_quests():
+        public static void ViewQuests()
+        {
+            /*
             print('-'*save_load.divider_size)
             while True:
                 fizz = True
@@ -581,57 +674,57 @@ Input[#] (or type "back"): """)
                 if choice.startswith('f'):  // Finished Quests
                     dia_ = [x for x in dialogue.all_dialogue if isinstance(x, dialogue.Quest) and x.finished]
 
-        elif choice.startswith('a'):
-                    dia_ = [x for x in dialogue.all_dialogue if isinstance(x, dialogue.Quest) and not x.finished and x.started]
+                elif choice.startswith('a'):
+                            dia_ = [x for x in dialogue.all_dialogue if isinstance(x, dialogue.Quest) and not x.finished and x.started]
 
-        elif choice in ['e', 'x', 'exit', 'b', 'back']:
-                    return
-
-                else:
-                    continue
-
-                if dia_:
-                    while fizz:
-                        if choice.startswith("f"):
-                            print("Finished:")
+                elif choice in ['e', 'x', 'exit', 'b', 'back']:
+                            return
 
                         else:
-                            print("Active:")
+                            continue
 
-                        for num, x in enumerate(dia_) :
-                            print(f'      [{num + 1}] {x.name}')
+                        if dia_:
+                            while fizz:
+                                if choice.startswith("f"):
+                                    print("Finished:")
 
-                        while True:
-                            quest = main.s_input('Input [#] (or type "back"): ').lower()
+                                else:
+                                    print("Active:")
 
-                            try:
-                                quest = dia_[int(quest) - 1]
+                                for num, x in enumerate(dia_) :
+                                    print(f'      [{num + 1}] {x.name}')
 
-                            except(IndexError, ValueError):
-                                if quest in ['e', 'x', 'exit', 'b', 'back']:
-                                    fizz = False  // Break the loop twice
+                                while True:
+                                    quest = main.s_input('Input [#] (or type "back"): ').lower()
+
+                                    try:
+                                        quest = dia_[int(quest) - 1]
+
+                                    except(IndexError, ValueError):
+                                        if quest in ['e', 'x', 'exit', 'b', 'back']:
+                                            fizz = False  // Break the loop twice
+                                            break
+
+                                        continue
+
+                                    print('-'*save_load.divider_size)
+                                    print(f"QUEST NAME: {quest.name}")
+                                    print(f"GIVEN BY: {quest.q_giver}")
+
+                                    for x in main.chop_by_79(quest.dialogue):
+                                        print(x)
+
+                                    main.s_input("\nPress enter/return ")
+                                    print('-'*save_load.divider_size)
+
                                     break
 
-                                continue
-
-                            print('-'*save_load.divider_size)
-                            print(f"QUEST NAME: {quest.name}")
-                            print(f"GIVEN BY: {quest.q_giver}")
-
-                            for x in main.chop_by_79(quest.dialogue):
-                                print(x)
-
-                            main.s_input("\nPress enter/return ")
                             print('-'*save_load.divider_size)
 
-                            break
-
-                    print('-'*save_load.divider_size)
-
-                else:
-                    print(f'Your party has no {"active" if choice.startswith("a") else "finished"} quests!')
-                    main.s_input('\nPress enter/return ')
-                    print('-'*save_load.divider_size) */
+                        else:
+                            print(f'Your party has no {"active" if choice.startswith("a") else "finished"} quests!')
+                            main.s_input('\nPress enter/return ')
+                            print('-'*save_load.divider_size) */
         }
     }
 }

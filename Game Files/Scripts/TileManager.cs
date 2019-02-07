@@ -109,7 +109,7 @@ there might be a smart idea.",
                     throw new InvalidOperationException($"Tile with id {tile_id} either doesn't exist or is duplicated");
                 }
 
-                throw ex;
+                throw;
             }
         }
 
@@ -129,7 +129,7 @@ there might be a smart idea.",
                     throw new Exception($"Tile with id {cell_id} either doesn't exist or is duplicated");
                 }
 
-                throw ex;
+                throw;
             }
         }
 
@@ -150,7 +150,7 @@ there might be a smart idea.",
                     throw new Exception($"Province with id {prov_id} either doesn't exist or is duplicated");
                 }
 
-                throw ex;
+                throw;
             }
         }
 
@@ -170,7 +170,7 @@ there might be a smart idea.",
                     throw new Exception($"Cell containing tile with id {tile_id} either doesn't exist or is duplicated");
                 }
 
-                throw ex;
+                throw;
             }
         }
 
@@ -191,7 +191,7 @@ there might be a smart idea.",
                     throw new Exception($"Province containing tile with id {tile_id} either doesn't exist or is duplicated");
                 }
 
-                throw ex;
+                throw;
             }
         }
 

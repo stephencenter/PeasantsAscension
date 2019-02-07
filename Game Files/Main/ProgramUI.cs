@@ -9,9 +9,8 @@ namespace Main
     {
         internal static void Run()
         {
-            InventoryManager.GetInventory();
-            RunChecks();
-            SavefileManager.ApplySettings();  // Set the volume and save file settings...
+            RunChecks();                      // Verify the game is working as intended...
+            SavefileManager.ApplySettings();  // ...set the volume and save file settings...
             DisplayTitlescreen();             // ...display the titlescreen...
             SavefileManager.LoadTheGame();    // ...check for save files...
             MainGameLoop();                   // ...and then start the game!
@@ -59,7 +58,9 @@ namespace Main
 
                     else if (command.StartsWith("i"))
                     {
-                        // inv_command()
+                        CMethods.PrintDivider();
+                        InventoryManager.PickInventoryCategory();
+                        CMethods.PrintDivider();
                     }
 
                     else if (command.StartsWith("t"))

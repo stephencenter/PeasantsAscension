@@ -164,63 +164,63 @@ of battle.Note: Evasion has a cap of 256(50 % chance to dodge).",
             new BuffSpell("Minor Defend", @"\
 Raise an ally's Physical Defense by 15%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-                3, 3, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "dfns", "defend_1"),
+                3, 3, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "defense", "defend_1"),
 
             new BuffSpell("Minor Shield", @"\
 Raise an ally's Magical Defense by 15%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-                3, 5, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "m_dfns", "shield_1"),
+                3, 5, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "m_defense", "shield_1"),
 
             new BuffSpell("Minor Block", @"\
 Raise an ally's Pierce Defense by 15%. Stacks with multiple uses. Lasts until
 the end of battle.", 
-    3, 7, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "p_dfns", "block_1"),
+    3, 7, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "p_defense", "block_1"),
 
             new BuffSpell("Adept Defend", @"\
 Raise an ally's Physical Defense by 30%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    6, 14, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "dfns", "defend_2"),
+    6, 14, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "defense", "defend_2"),
 
             new BuffSpell("Adept Shield", @"\
 Raise an ally's Magical Defense by 30%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    6, 16, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "m_dfns", "shield_2"),
+    6, 16, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "m_defense", "shield_2"),
 
             new BuffSpell("Adept Block", @"\
 Raise an ally's Pierce Defense by 30%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    6, 18, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "p_dfns", "block_2"),
+    6, 18, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "p_defense", "block_2"),
 
 // Attack Buffs
             new BuffSpell("Minor Strengthen", @"\
 Raise an ally's Physical Attack by 15%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    3, 2, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "attk", "strength_1"),
+    3, 2, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "attack", "strength_1"),
 
             new BuffSpell("Minor Empower", @"\
 Raise an ally's Magical Attack by 15%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    3, 4, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "m_attk", "power_1"),
+    3, 4, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "m_attack", "power_1"),
 
             new BuffSpell("Minor Aim", @"\
 Raise an ally's Pierce Attack by 15%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    3, 6, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "p_attk", "aim_1"),
+    3, 6, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.any }, 0.15, "p_attack", "aim_1"),
 
             new BuffSpell("Adept Strengthen", @"\
 Raise an ally's Physical Attack by 30%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    6, 13, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "attk", "strength_2"),
+    6, 13, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "attack", "strength_2"),
 
             new BuffSpell("Adept Empower", @"\
 Raise an ally's Magical Attack by 30%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    6, 15, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "m_attk", "power_2"),
+    6, 15, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "m_attack", "power_2"),
 
             new BuffSpell("Adept Aim", @"\
 Raise an ally's Pierce Attack by 30%. Stacks with multiple uses. Lasts until the end
 of battle.", 
-    6, 17, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "p_attk", "aim_2"),
+    6, 17, new List<CEnums.CharacterClass>() { CEnums.CharacterClass.mage, CEnums.CharacterClass.monk }, 0.3, "p_attack", "aim_2"),
         };
 
         public static List<Spell> GetSpellbook(CEnums.SpellCategory spell_category)
@@ -266,7 +266,7 @@ of battle.",
 
                 while (true)
                 {
-                    string category = CMethods.Input("Input [#] (or type 'back'): ");
+                    string category = CMethods.Input("Input [#] (or type 'exit'): ");
                     CEnums.SpellCategory true_category;
 
                     if (CMethods.IsExitString(category))
@@ -339,7 +339,7 @@ of battle.",
 
                 while (true)
                 {
-                    string chosen_spell = CMethods.Input("Input [#] (or type 'back'): ");
+                    string chosen_spell = CMethods.Input("Input [#] (or type 'exit'): ");
 
                     try
                     {
@@ -360,10 +360,7 @@ of battle.",
                             continue;
                         }
 
-                        else
-                        {
-                            throw ex;
-                        }
+                        throw;
                     }
 
                     // Of course, you can't cast spells without the required amount of MP

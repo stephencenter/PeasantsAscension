@@ -1252,7 +1252,7 @@ Increasing DIFFICULTY will provide:
 
             while (true)
             {
-                string chosen = CMethods.Input("Input [#] (or type 'back'): ");
+                string chosen = CMethods.Input("Input [#] (or type 'exit'): ");
 
                 try
                 {
@@ -1274,7 +1274,7 @@ Increasing DIFFICULTY will provide:
 
                     else
                     {
-                        throw ex;
+                        throw;
                     }
                 }
 
@@ -1305,7 +1305,7 @@ Increasing DIFFICULTY will provide:
 
                 while (true)
                 {
-                    string chosen_ability = CMethods.Input("Input [#] or type 'back'): ");
+                    string chosen_ability = CMethods.Input("Input [#] or type 'exit'): ");
 
                     try
                     {
@@ -1329,7 +1329,7 @@ Increasing DIFFICULTY will provide:
 
                         else
                         {
-                            throw ex;
+                            throw;
                         }
                     }
 

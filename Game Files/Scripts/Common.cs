@@ -243,8 +243,8 @@ namespace Scripts
                 { SpellCategory.attack, "Attack" },
                 { SpellCategory.healing, "Healing" },
 
-                { InvCategory.quest, "Quest"},
-                { InvCategory.consumables, "Consumable" },
+                { InvCategory.quest, "Quest Items"},
+                { InvCategory.consumables, "Consumables" },
                 { InvCategory.weapons, "Weapons"},
                 { InvCategory.armor, "Armor"},
                 { InvCategory.tools, "Tools" },
