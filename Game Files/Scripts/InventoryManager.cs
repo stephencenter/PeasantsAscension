@@ -14,7 +14,7 @@ namespace Scripts
             { CEnums.InvCategory.armor, new List<string>() { } },
             { CEnums.InvCategory.tools, new List<string>() { } },
             { CEnums.InvCategory.accessories, new List<string>() { } },
-            { CEnums.InvCategory.misc, new List<string>() { "topaz_gem", "topaz_gem", "topaz_gem", "topaz_gem", "bone_bag", "bone_bag", "fairy_dust" } }
+            { CEnums.InvCategory.misc, new List<string>() {} }
         };
 
         private static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
@@ -160,6 +160,12 @@ namespace Scripts
         {
             // Equips the item_id to equipper
             CEnums.EquipmentType equip_type = (ItemManager.FindItemWithID(item_id) as Equipment).EquipType;
+
+            if (GetEquipment(equipper.UnitID)[equip_type].ItemID != default_equip_map[equip_type])
+            {
+                AddItemToInventory(GetEquipment(equipper.UnitID)[equip_type].ItemID);
+            }
+
             equipment[equipper.UnitID][equip_type] = item_id;
             RemoveItemFromInventory(item_id);
         }
