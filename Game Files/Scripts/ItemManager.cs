@@ -633,7 +633,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
     {
         // The basic item class. Items are stored in the "inventory" dictionary. All
         // item-subclasses inherit from this class.
-        public string Name { get; set; }
+        public string ItemName { get; set; }
         public string Description { get; set; }
         public int Value { get; set; }
         public bool IsImportant { get; set; }
@@ -645,7 +645,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         // Constructor
         protected Item(string name, string desc, int value, bool imp, CEnums.InvCategory cat, string item_id)
         {
-            Name = name;
+            ItemName = name;
             Description = desc;
             Value = value;
             IsImportant = imp;
@@ -727,18 +727,18 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
 
         public override void UseItem(PlayableCharacter equipper)
         {
-            throw new NotImplementedException();
-            /*
-            if user.class_ in self.class_ or not self.class_:
-                equip_item(self.item_id, user)
+            if (equipper.PClass == PClass)
+            {
+                InventoryManager.EquipItem(equipper, ItemID);
+                Console.WriteLine($"{equipper.Name} equips the {ItemName}.");
+                CMethods.PressEnterReturn();
+            }
 
-                print(f'{user.name} equips the {self.name}.')
-                main.s_input(@"nPress enter/return ")
-
-            else:
-                print(f"This {self.name} is f{self.class_req[3:]}.")
-
-                main.s_input(@"nPress enter/return ") */
+            else
+            {
+                Console.WriteLine($"{equipper.Name} must be a {CEnums.EnumToString(PClass)} to equip this.");
+                CMethods.PressEnterReturn();
+            }
         }
 
         public override void Unequip(PlayableCharacter unequipper)
@@ -771,17 +771,20 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
 
         public override void UseItem(PlayableCharacter equipper)
         {
-            throw new NotImplementedException();
-            /*
-            if user.class_ in self.class_ or not self.class_:
-                equip_item(self.item_id, user)
-                print(f'{user.name} equips the {self.name}.')
-                main.s_input(@"nPress enter/return ")
+            InventoryManager.EquipItem(equipper, ItemID);
+            Console.WriteLine($"{equipper.Name} equips the {ItemName}.");
 
-            else:
-                print(f"This {self.name} is f{self.class_req[3:]}.")
+            if (ProficientClasses.Contains(equipper.PClass))
+            {
+                Console.WriteLine($"It feels light and comfortable.");
+            }
 
-                main.s_input(@"nPress enter/return ") */
+            else if (NonProficientClasses.Contains(equipper.PClass))
+            {
+                Console.WriteLine($"It feels bulky and cumbersome.");
+            }
+
+            CMethods.PressEnterReturn();
         }
 
         public override void Unequip(PlayableCharacter unequipper)
@@ -790,13 +793,12 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         }
 
         // Constructor
-        public Armor(string name, string desc, int value, double resist, double penatly, List<CEnums.CharacterClass> prof_classes, List<CEnums.CharacterClass> nonprof_classes, string item_id) :  base(name, desc, value, CEnums.InvCategory.weapons, item_id)
+        public Armor(string name, string desc, int value, double resist, double penatly, List<CEnums.CharacterClass> prof_classes, List<CEnums.CharacterClass> nonprof_classes, string item_id) :  base(name, desc, value, CEnums.InvCategory.armor, item_id)
         {
             Resist = resist;
             Penalty = penatly;
             ProficientClasses = prof_classes;
             NonProficientClasses = nonprof_classes;
-            EquipType = CEnums.EquipmentType.armor;
         }
     }
 

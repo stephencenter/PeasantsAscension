@@ -215,7 +215,7 @@ namespace Scripts
 
                 foreach (KeyValuePair<string, string> drop in item_drops)
                 {
-                    CMethods.Input($"The {drop.Key} dropped a {ItemManager.FindItemWithID(drop.Value).Name}!");
+                    CMethods.Input($"The {drop.Key} dropped a {ItemManager.FindItemWithID(drop.Value).ItemName}.");
                     InventoryManager.AddItemToInventory(drop.Value);
                 }
 

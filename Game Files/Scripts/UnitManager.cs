@@ -165,7 +165,7 @@ namespace Scripts
 
             if (damage_type == CEnums.DamageType.physical)
             {
-                final_damage = (int)((attack - defense / 2) * (1 + armor_resist) * (1 + weapon_power));
+                final_damage = (int)((attack - defense / 2) * (1 + weapon_power) / (1 + armor_resist));
 
                 // Weakeness reduces physical damage by 1/2
                 if (attacker.HasStatus(CEnums.Status.weakness))
@@ -175,9 +175,9 @@ namespace Scripts
                 }
             }
 
-            else if (damage_type == CEnums.DamageType.physical)
+            else if (damage_type == CEnums.DamageType.piercing)
             {
-                final_damage = (int)((p_attack - p_defense / 2) * (1 + armor_resist) * (1 + weapon_power));
+                final_damage = (int)((p_attack - p_defense / 2) * (1 + weapon_power) / (1 + armor_resist));
 
                 // Blindness reduces piercing damage by 1/2
                 if (attacker.HasStatus(CEnums.Status.blindness))
@@ -190,7 +190,7 @@ namespace Scripts
             else
             {
                 // Spell damage is affected by Spell Power (which is specific to the spell) rather than weapon power
-                final_damage = (int)((m_attack - m_defense / 2) * (1 + armor_resist) * (1 + spell_power));
+                final_damage = (int)((m_attack - m_defense / 2) * (1 + spell_power) / (1 + armor_resist));
             }
 
             if (rng.Next(0, 100) < 15 && do_criticals)
@@ -1094,19 +1094,19 @@ Increasing DIFFICULTY will provide:
                 if (player_weapon.WeaponType == CEnums.WeaponType.melee)
                 {
                     SoundManager.sword_slash.SmartPlay();
-                    Console.WriteLine($"{Name} fiercely attacks the {CurrentTarget.Name} using their {player_weapon.Name}...");
+                    Console.WriteLine($"{Name} fiercely attacks the {CurrentTarget.Name} using their {player_weapon.ItemName}...");
                 }
 
                 else if (player_weapon.WeaponType == CEnums.WeaponType.instrument)
                 {
                     SoundManager.bard_sounds[player_weapon.ItemID].SmartPlay();
-                    Console.WriteLine($"{Name} starts playing their {player_weapon.Name} at the {CurrentTarget.Name}...");
+                    Console.WriteLine($"{Name} starts playing their {player_weapon.ItemName} at the {CurrentTarget.Name}...");
                 }
 
                 else
                 {
                     SoundManager.aim_weapon.SmartPlay();
-                    Console.WriteLine($"{Name} aims carefully at the {CurrentTarget.Name} using their {player_weapon.Name}...");
+                    Console.WriteLine($"{Name} aims carefully at the {CurrentTarget.Name} using their {player_weapon.ItemName}...");
                 }
 
                 CMethods.SmartSleep(750);

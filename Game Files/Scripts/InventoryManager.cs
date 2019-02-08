@@ -10,8 +10,8 @@ namespace Scripts
         {
             { CEnums.InvCategory.quest, new List<string>() { } },
             { CEnums.InvCategory.consumables, new List<string>() { } },
-            { CEnums.InvCategory.weapons, new List<string>() { } },
-            { CEnums.InvCategory.armor, new List<string>() { } },
+            { CEnums.InvCategory.weapons, new List<string>() { "iron_hoe", "bnz_swd", "titan_axe" } },
+            { CEnums.InvCategory.armor, new List<string>() { "light_armor", "medium_armor", "heavy_armor", "fancy_robes", "dragon_armor", "festive_clothes" } },
             { CEnums.InvCategory.tools, new List<string>() { } },
             { CEnums.InvCategory.accessories, new List<string>() { } },
             { CEnums.InvCategory.misc, new List<string>() {} }
@@ -342,7 +342,7 @@ namespace Scripts
             List<Tuple<string, string, int>> quantity_inv = new List<Tuple<string, string, int>>();
 
             // This creates a tuple of every item in the inventory and its quantity, and adds it to quantity_inv
-            id_inventory.Distinct().ToList().ForEach(x => quantity_inv.Add(new Tuple<string, string, int>(ItemManager.FindItemWithID(x).Name, x, id_inventory.Count(y => y == x))));
+            id_inventory.Distinct().ToList().ForEach(x => quantity_inv.Add(new Tuple<string, string, int>(ItemManager.FindItemWithID(x).ItemName, x, id_inventory.Count(y => y == x))));
             
             if (selling)
             {
@@ -435,7 +435,7 @@ namespace Scripts
                 }
 
                 CMethods.PrintDivider();
-                Console.WriteLine($"What should your party do with the {this_item.Name}? ");
+                Console.WriteLine($"What should your party do with the {this_item.ItemName}? ");
                 Console.WriteLine($"      [1] {action}");
                 Console.WriteLine("      [2] Read Description");
                 Console.WriteLine("      [3] Drop");
@@ -455,7 +455,7 @@ namespace Scripts
                         // Items of these classes require a target to be used, so we have to acquire a target first
                         if (this_item is Equipment || this_item is HealthManaPotion || this_item is StatusPotion)
                         {
-                            UnitManager.player.PlayerGetTarget(new List<Monster>(), $"Who should {action} the {this_item.Name}?", true, false, true, false);
+                            UnitManager.player.PlayerGetTarget(new List<Monster>(), $"Who should {action} the {this_item.ItemName}?", true, false, true, false);
                             CMethods.PrintDivider();
                             this_item.UseItem(UnitManager.player.CurrentTarget as PlayableCharacter);
                         }
@@ -474,7 +474,7 @@ namespace Scripts
                     {
                         // Display the item description
                         CMethods.PrintDivider();
-                        Console.WriteLine($"Description for '{this_item.Name}': \n");
+                        Console.WriteLine($"Description for '{this_item.ItemName}': \n");
                         Console.WriteLine(this_item.Description);
                         CMethods.PressEnterReturn();
 
@@ -497,12 +497,12 @@ namespace Scripts
                         {
                             while (true)
                             {
-                                string yes_or_no = CMethods.Input($"Throw away the {this_item.Name}? | Yes or No: ").ToLower();
+                                string yes_or_no = CMethods.Input($"Throw away the {this_item.ItemName}? | Yes or No: ").ToLower();
 
                                 if (CMethods.IsYesString(yes_or_no))
                                 {
                                     RemoveItemFromInventory(this_item.ItemID);
-                                    Console.WriteLine($"You toss the {this_item.Name} aside and continue on your journey.");
+                                    Console.WriteLine($"You toss the {this_item.ItemName} aside and continue on your journey.");
                                     CMethods.PressEnterReturn();
 
                                     return;
@@ -510,7 +510,7 @@ namespace Scripts
 
                                 else if (CMethods.IsNoString(yes_or_no))
                                 {
-                                    Console.WriteLine($"You decide to keep the {this_item.Name}.");
+                                    Console.WriteLine($"You decide to keep the {this_item.ItemName}.");
                                     CMethods.PressEnterReturn();
 
                                     return;
