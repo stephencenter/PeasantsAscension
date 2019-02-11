@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Scripts
+namespace Data
 {
     // Here we store classes that contain useful methods, enums, and data 
     // that would not fit in any other class

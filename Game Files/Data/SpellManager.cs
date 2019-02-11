@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Scripts
+namespace Data
 {
     public static class SpellManager
     {
@@ -346,21 +346,16 @@ of battle.",
                         user.CurrentSpell = chosen_spellbook[int.Parse(chosen_spell) - 1];
                     }
 
-                    catch (Exception ex)
+                    catch (Exception ex) when (ex is FormatException || ex is ArgumentOutOfRangeException)
                     {
-                        if (ex is FormatException || ex is ArgumentOutOfRangeException)
+                        if (CMethods.IsExitString(chosen_spell))
                         {
-                            if (CMethods.IsExitString(chosen_spell))
-                            {
-                                CMethods.PrintDivider();
+                            CMethods.PrintDivider();
 
-                                return false;
-                            }
-
-                            continue;
+                            return false;
                         }
 
-                        throw;
+                        continue;
                     }
 
                     // Of course, you can't cast spells without the required amount of MP

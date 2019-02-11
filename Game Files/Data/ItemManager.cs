@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Scripts
+namespace Data
 {
     public static class ItemManager
     {
@@ -1003,7 +1003,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
     {
         public override void UseItem(PlayableCharacter user)
         {
-            throw new Exception("You asked for this.");
+            throw new DivideByZeroException("You asked for this.");
         }
 
         // Constructor

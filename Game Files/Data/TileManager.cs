@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Media;
 
-namespace Scripts
+namespace Data
 {
     public static class TileManager
     {
@@ -101,15 +101,10 @@ there might be a smart idea.",
                 return GetTileList().Single(x => x.TileID == tile_id);
             }
 
-            catch (Exception ex)
+            catch (InvalidOperationException)
             {
                 // InvalidOperationException means that .Single() found either 0 provinces matching prov_id, or more than 1
-                if (ex is InvalidOperationException)
-                {
-                    throw new InvalidOperationException($"Tile with id {tile_id} either doesn't exist or is duplicated");
-                }
-
-                throw;
+                throw new InvalidOperationException($"Tile with id {tile_id} either doesn't exist or is duplicated");
             }
         }
 
@@ -121,15 +116,10 @@ there might be a smart idea.",
                 return GetCellList().Single(x => x.CellID == cell_id);
             }
 
-            catch (Exception ex)
+            catch (InvalidOperationException)
             {
                 // InvalidOperationException means that .Single() found either 0 cells matching cell_id, or more than 1
-                if (ex is InvalidOperationException)
-                {
-                    throw new Exception($"Tile with id {cell_id} either doesn't exist or is duplicated");
-                }
-
-                throw;
+                throw new InvalidOperationException($"Tile with id {cell_id} either doesn't exist or is duplicated");
             }
         }
 
@@ -141,16 +131,10 @@ there might be a smart idea.",
                 return GetProvinceList().Single(x => x.ProvID == prov_id);
             }
 
-            catch (Exception ex)
+            catch (InvalidOperationException)
             {
-
                 // InvalidOperationException means that .Single() found either 0 provinces matching prov_id, or more than 1
-                if (ex is InvalidOperationException)
-                {
-                    throw new Exception($"Province with id {prov_id} either doesn't exist or is duplicated");
-                }
-
-                throw;
+                throw new InvalidOperationException($"Province with id {prov_id} either doesn't exist or is duplicated");
             }
         }
 
@@ -162,15 +146,10 @@ there might be a smart idea.",
                 return GetCellList().Single(x => x.TileList.Contains(tile_id));
             }
 
-            catch (Exception ex)
+            catch (InvalidOperationException)
             {
                 // InvalidOperationException means that .Single() found either 0 cells matching tile_id, or more than 1
-                if (ex is InvalidOperationException)
-                {
-                    throw new Exception($"Cell containing tile with id {tile_id} either doesn't exist or is duplicated");
-                }
-
-                throw;
+                throw new InvalidOperationException($"Cell containing tile with id {tile_id} either doesn't exist or is duplicated");
             }
         }
 
@@ -183,15 +162,10 @@ there might be a smart idea.",
                 return GetProvinceList().Single(x => x.CellList.Contains(cell_id));
             }
 
-            catch (Exception ex)
+            catch (InvalidOperationException)
             {
                 // InvalidOperationException means that .Single() found either 0 provinces matching tile_id, or more than 1
-                if (ex is InvalidOperationException)
-                {
-                    throw new Exception($"Province containing tile with id {tile_id} either doesn't exist or is duplicated");
-                }
-
-                throw;
+                throw new InvalidOperationException($"Province containing tile with id {tile_id} either doesn't exist or is duplicated");
             }
         }
 
@@ -264,7 +238,7 @@ there might be a smart idea.",
 
                 else
                 {
-                    throw new Exception($"Failed to generate ascii art for tile {TileID}");
+                    throw new InvalidOperationException($"Failed to generate ascii art for tile {TileID}");
                 }
             }
 
@@ -328,7 +302,7 @@ there might be a smart idea.",
 
                 else
                 {
-                    throw new Exception($"Failed to generate ascii art for tile {TileID}");
+                    throw new InvalidOperationException($"Failed to generate ascii art for tile {TileID}");
                 }
             }
 
@@ -378,7 +352,7 @@ there might be a smart idea.",
 
                 else
                 {
-                    throw new Exception($"Failed to generate ascii art for tile {TileID}");
+                    throw new InvalidOperationException($"Failed to generate ascii art for tile {TileID}");
                 }
             }
 
@@ -395,7 +369,7 @@ there might be a smart idea.",
 
             else 
             {
-                throw new Exception($"Failed to generate ascii art for tile {TileID}");
+                throw new InvalidOperationException($"Failed to generate ascii art for tile {TileID}");
             }
         }
 

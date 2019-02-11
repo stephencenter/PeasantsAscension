@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Scripts
+namespace Data
 {
     public static class UnitManager
     {
@@ -1237,7 +1237,7 @@ Increasing DIFFICULTY will provide:
 
             else
             {
-                throw new Exception("Exception in 'choose_target': at least one of 'target_allies' or 'target_enemies' must be true");
+                throw new InvalidOperationException("Exception in 'choose_target': at least one of 'target_allies' or 'target_enemies' must be true");
             }
 
             CMethods.PrintDivider();
@@ -1259,23 +1259,15 @@ Increasing DIFFICULTY will provide:
                     CurrentTarget = valid_targets[int.Parse(chosen) - 1];
                 }
 
-                catch (Exception ex)
+                catch (Exception ex) when (ex is FormatException || ex is ArgumentOutOfRangeException)
                 {
-                    if (ex is FormatException || ex is ArgumentOutOfRangeException)
+                    if (CMethods.IsExitString(chosen))
                     {
-                        if (CMethods.IsExitString(chosen))
-                        {
-                            CMethods.PrintDivider();
-                            return false;
-                        }
-
-                        continue;
+                        CMethods.PrintDivider();
+                        return false;
                     }
 
-                    else
-                    {
-                        throw;
-                    }
+                    continue;
                 }
 
                 return true;
@@ -1312,25 +1304,17 @@ Increasing DIFFICULTY will provide:
                         CurrentAbility = a_list[int.Parse(chosen_ability) - 1];
                     }
 
-                    catch (Exception ex)
+                    catch (Exception ex) when (ex is FormatException || ex is ArgumentOutOfRangeException)
                     {
-                        if (ex is FormatException || ex is ArgumentOutOfRangeException)
+                        if (CMethods.IsExitString(chosen_ability))
                         {
-                            if (CMethods.IsExitString(chosen_ability))
-                            {
-                                CMethods.PrintDivider();
-                                PrintBattleOptions();
+                            CMethods.PrintDivider();
+                            PrintBattleOptions();
 
-                                return false;
-                            }
-
-                            continue;
+                            return false;
                         }
 
-                        else
-                        {
-                            throw;
-                        }
+                        continue;
                     }
 
                     // Abilities cost AP to cast, just like spells cost MP.

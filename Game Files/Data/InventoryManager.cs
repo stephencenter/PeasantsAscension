@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Scripts
+namespace Data
 {
     public static class InventoryManager
     {
-        private static Dictionary<CEnums.InvCategory, List<string>> inventory = new Dictionary<CEnums.InvCategory, List<string>>()
+        private readonly static Dictionary<CEnums.InvCategory, List<string>> inventory = new Dictionary<CEnums.InvCategory, List<string>>()
         {
             { CEnums.InvCategory.quest, new List<string>() { } },
             { CEnums.InvCategory.consumables, new List<string>() { } },
@@ -17,7 +17,7 @@ namespace Scripts
             { CEnums.InvCategory.misc, new List<string>() {} }
         };
 
-        private static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
+        private readonly static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
         {
              {
                 "_player", new Dictionary<CEnums.EquipmentType, string>()
@@ -294,20 +294,15 @@ namespace Scripts
                         chosen = item_ids[int.Parse(chosen) - 1];
                     }
 
-                    catch (Exception ex)
+                    catch (Exception ex) when (ex is FormatException || ex is ArgumentOutOfRangeException)
                     {
-                        if (ex is FormatException || ex is ArgumentOutOfRangeException)
+                        if (CMethods.IsExitString(chosen))
                         {
-                            if (CMethods.IsExitString(chosen))
-                            {
-                                CMethods.PrintDivider();
-                                return;
-                            }
-
-                            continue;
+                            CMethods.PrintDivider();
+                            return;
                         }
 
-                        throw;
+                        continue;
                     }
 
                     // If you're selling items at a general store, you have to call a different function
@@ -356,14 +351,9 @@ namespace Scripts
                     padding = sellable_inv.Select(x => $"{x.Item1} x {x.Item2}".Length).Max();
                 } 
 
-                catch (Exception ex)
+                catch (ArgumentException ex)
                 {
-                    if (ex is ArgumentException)
-                    {
-                        padding = 1;
-                    }
-
-                    throw;
+                    padding = 1;
                 }
 
                 int extra_pad = sellable_inv.Select(x => x.Item1);

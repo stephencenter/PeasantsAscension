@@ -1,4 +1,4 @@
-﻿namespace Scripts
+﻿namespace Data
 {
     public static class NPCManager
     {

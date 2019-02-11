@@ -2,7 +2,7 @@
 using System.Linq;
 using System;
 
-namespace Scripts
+namespace Data
 {
     public static class TownManager
     {

@@ -53,11 +53,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Scripts\Scripts.csproj">
-      <Project>{7e2e1cae-97ac-4bad-aa2e-953853b0adca}</Project>
-      <Name>Scripts</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

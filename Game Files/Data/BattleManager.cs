@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Scripts
+namespace Data
 {
     public static class BattleManager
     {

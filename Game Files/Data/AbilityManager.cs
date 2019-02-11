@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Scripts
+namespace Data
 {
     public static class AbilityManager
     {
