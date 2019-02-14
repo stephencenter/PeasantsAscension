@@ -11,30 +11,108 @@ namespace Data
     {
         public static Random rng = new Random();
 
-        public static string Input(string prompt = "", bool local_do_blips = true)
+        // Input Methods
+        public static string SingleCharInput(string prompt, bool local_do_blips = true)
         {
+            // Immediately returns the next key the user presses without them
+            // needing to press enter
+            // Used when you KNOW the player will only have 9 or less options
+            // to choose from
             Console.Write(prompt);
 
             if (CInfo.Debugging)
             {
-                string chosen = GetRandomFromIterable("abcdefghijklmnopqrstuvwxyz1234567890").ToString();
-                Console.WriteLine(chosen);
-                return chosen;
+                return DebugInput();
             }
 
-            else
+            string x = Console.ReadKey().KeyChar.ToString();
+            Console.WriteLine();
+
+            if (SavefileManager.do_blips)
             {
-                string x = Console.ReadLine();
-
-                if (SavefileManager.do_blips)
-                {
-                    SoundManager.item_pickup.SmartPlay();
-                }
-
-                return x;
+                SoundManager.item_pickup.SmartPlay();
             }
+
+            return x;
         }
 
+        public static string MultiCharInput(string prompt, bool local_do_blips = true)
+        {
+            // Requires you to press enter before your string is accepted
+            // Used when typing in a name or selecting from a list of 
+            // more than 9 items
+            Console.Write(prompt);
+
+            if (CInfo.Debugging)
+            {
+                return DebugInput();
+            }
+
+            string x = Console.ReadLine();
+
+            if (SavefileManager.do_blips)
+            {
+                SoundManager.item_pickup.SmartPlay();
+            }
+
+            return x;
+        }
+
+        public static string DebugInput()
+        {
+            string chosen = GetRandomFromIterable("abcdefghijklmnopqrstuvwxyz1234567890").ToString();
+            Console.WriteLine(chosen);
+            return chosen;
+        }
+
+        public static string FlexibleInput(string prompt, int option_count, bool local_do_blips = true)
+        {
+            // FlexibleInput allows you to use SCI when the option list is small, and MCI
+            // when it is big
+            // Used when you don't know how many options there will be, such as when selecting
+            // inventory items or spells
+            if (option_count < 10)
+            {
+                return SingleCharInput(prompt, local_do_blips);
+            }
+
+            return MultiCharInput(prompt, local_do_blips);
+        }
+
+        public static void PressAnyKeyToContinue(string prompt = "\nPress any key to continue ")
+        {
+            // Use this when you don't care what key the user hits, you just need
+            // them to hit one
+            Console.Write(prompt);
+
+            if (!CInfo.Debugging)
+            {
+                Console.ReadKey(true);
+            }
+
+            Console.WriteLine();
+        }
+
+        // String parsers
+        public static bool IsExitString(string the_string)
+        {
+            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel" };
+            return ValidExitStrings.Contains(the_string.ToLower());
+        }
+
+        public static bool IsYesString(string the_string)
+        {
+            List<string> ValidYesStrings = new List<string>() { "y", "ye", "yes", "yup", "yeah", "ya", "yeh", "yah", "yea", "yeehaw" };
+            return ValidYesStrings.Contains(the_string.ToLower());
+        }
+
+        public static bool IsNoString(string the_string)
+        {
+            List<string> ValidNoStrings = new List<string>() { "n", "no", "nope", "nah", "nuh uh", "nay", "negative" };
+            return ValidNoStrings.Contains(the_string.ToLower());
+        }
+
+        // Other Methods
         public static void PrintDivider(int length = 0)
         {
             if (length != 0)
@@ -46,11 +124,6 @@ namespace Data
             {
                 Console.WriteLine(new string('-', SavefileManager.divider_size));
             }
-        }
-
-        public static void PressEnterReturn()
-        {
-            Input("\nPress enter/return ");
         }
 
         public static List<string> SplitBy79(string the_string, int num = 79)
@@ -102,28 +175,16 @@ namespace Data
             }
         }
 
-        public static string TextScrollInput(string the_string, int spacing = 25)
+        public static string TextScrollInput(string the_string, bool multi_char = true, int spacing = 25)
         {
             TextScrollWrite(the_string, spacing);
-            return Input(the_string[the_string.Length - 1].ToString());
-        }
 
-        public static bool IsExitString(string the_string)
-        {
-            List<string> ValidExitStrings = new List<string>() { "e", "x", "exit", "b", "back", "cancel" };
-            return ValidExitStrings.Contains(the_string.ToLower());
-        }
+            if (multi_char)
+            {
+                return MultiCharInput(the_string[the_string.Length - 1].ToString());
+            }
 
-        public static bool IsYesString(string the_string)
-        {
-            List<string> ValidYesStrings = new List<string>() { "y", "ye", "yes", "yup", "yeah", "ya", "yeh", "yah", "yea" };
-            return ValidYesStrings.Contains(the_string.ToLower());
-        }
-
-        public static bool IsNoString(string the_string)
-        {
-            List<string> ValidNoStrings = new List<string>() { "n", "no", "nope", "nah", "nuh uh", "nay", "negative" };
-            return ValidNoStrings.Contains(the_string.ToLower());
+            return SingleCharInput(the_string[the_string.Length - 1].ToString());
         }
 
         public static T GetRandomFromIterable<T>(IEnumerable<T> iterable)

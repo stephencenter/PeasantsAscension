@@ -35,7 +35,7 @@ namespace Data
 
                 while (true)
                 {
-                    string yes_no = CMethods.Input($"The town of {town.TownName} is nearby. Enter? Yes or No: ");
+                    string yes_no = CMethods.SingleCharInput($"The town of {town.TownName} is nearby. Enter? Yes or No: ");
 
                     if (CMethods.IsYesString(yes_no))
                     {

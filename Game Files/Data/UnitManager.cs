@@ -593,7 +593,7 @@ namespace Data
                     foreach (Spell spell in new_spells)
                     {
                         SoundManager.item_pickup.SmartPlay();
-                        CMethods.Input($"{Name} has learned a new spell: {spell.SpellName}!");
+                        CMethods.SingleCharInput($"{Name} has learned a new spell: {spell.SpellName}!");
                     }
 
                     if (PClass == CEnums.CharacterClass.warrior)
@@ -923,7 +923,7 @@ Increasing DIFFICULTY will provide:
 
             while (true)
             {
-                string c_move = CMethods.Input("Input [#]: ");
+                string c_move = CMethods.SingleCharInput("Input [#]: ");
 
                 try
                 {
@@ -957,7 +957,7 @@ Increasing DIFFICULTY will provide:
                     {
                         SoundManager.debuff.SmartPlay();
                         Console.WriteLine($"{Name} can't use spells when silenced!");
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
                         PrintBattleOptions();
 
                         continue;
@@ -992,7 +992,7 @@ Increasing DIFFICULTY will provide:
                         SoundManager.debuff.SmartPlay();
                         Console.WriteLine("Your party has no consumables!");
 
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
                         CMethods.PrintDivider();
                         PrintBattleOptions();
 
@@ -1004,7 +1004,7 @@ Increasing DIFFICULTY will provide:
                         SoundManager.debuff.SmartPlay();
                         Console.WriteLine($"{Name} can't use items when muted!");
 
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
                         CMethods.PrintDivider();
                         PrintBattleOptions();
 
@@ -1018,7 +1018,7 @@ Increasing DIFFICULTY will provide:
                         continue;
                     }
 
-                    CMethods.PressEnterReturn();
+                    CMethods.PressAnyKeyToContinue();
                     return;
                 }
 
@@ -1252,7 +1252,7 @@ Increasing DIFFICULTY will provide:
 
             while (true)
             {
-                string chosen = CMethods.Input("Input [#] (or type 'exit'): ");
+                string chosen = CMethods.FlexibleInput("Input [#] (or type 'exit'): ", valid_targets.Count);
 
                 try
                 {
@@ -1297,7 +1297,7 @@ Increasing DIFFICULTY will provide:
 
                 while (true)
                 {
-                    string chosen_ability = CMethods.Input("Input [#] or type 'exit'): ");
+                    string chosen_ability = CMethods.FlexibleInput("Input [#] or type 'exit'): ", a_list.Count);
 
                     try
                     {
@@ -1322,7 +1322,7 @@ Increasing DIFFICULTY will provide:
                     {
                         CMethods.PrintDivider();
                         Console.WriteLine($"{Name} doesn't have enough AP to cast {CurrentAbility.AbilityName}!");
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
 
                         break;
                     }

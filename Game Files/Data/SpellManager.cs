@@ -266,7 +266,7 @@ of battle.",
 
                 while (true)
                 {
-                    string category = CMethods.Input("Input [#] (or type 'exit'): ");
+                    string category = CMethods.SingleCharInput("Input [#] (or type 'exit'): ");
                     CEnums.SpellCategory true_category;
 
                     if (CMethods.IsExitString(category))
@@ -339,7 +339,7 @@ of battle.",
 
                 while (true)
                 {
-                    string chosen_spell = CMethods.Input("Input [#] (or type 'exit'): ");
+                    string chosen_spell = CMethods.FlexibleInput("Input [#] (or type 'exit'): ", chosen_spellbook.Count);
 
                     try
                     {
@@ -363,7 +363,7 @@ of battle.",
                     {
                         CMethods.PrintDivider();
                         Console.WriteLine($"{user.Name} doesn't have enough MP to cast {user.CurrentSpell.SpellName}!");
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
 
                         break;
                     }
@@ -474,7 +474,7 @@ of battle.",
 
                 Console.WriteLine($"Using {SpellName}, {target.Name} is healed by {total_heal} HP!");
                 SoundManager.magic_healing.SmartPlay();
-                CMethods.PressEnterReturn();
+                CMethods.PressAnyKeyToContinue();
 
                 CMethods.PrintDivider();
             }

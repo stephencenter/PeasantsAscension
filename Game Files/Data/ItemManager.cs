@@ -662,7 +662,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         public override void UseItem(PlayableCharacter user)
         {
             Console.WriteLine("This looks important, you should definitely hold on to it.");
-            CMethods.PressEnterReturn();
+            CMethods.PressAnyKeyToContinue();
         }
 
         public QuestItem(string name, string desc, int value, string item_id) : base(name, desc, value, true, CEnums.InvCategory.quest, item_id)
@@ -676,7 +676,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         public override void UseItem(PlayableCharacter user)
         {
             Console.WriteLine("You could probably make a lot of gold selling this.");
-            CMethods.PressEnterReturn();
+            CMethods.PressAnyKeyToContinue();
         }
 
         public Valuable(string name, string desc, int value, string item_id) : base(name, desc, value, false, CEnums.InvCategory.misc, item_id)
@@ -692,7 +692,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         public override void UseItem(PlayableCharacter user)
         {
             Console.WriteLine("It's called an ingredient, but you probably shouldn't eat it.");
-            CMethods.PressEnterReturn();
+            CMethods.PressAnyKeyToContinue();
         }
 
         public Ingredient(string name, string desc, int value, string flavor, string item_id) : base(name, desc, value, false, CEnums.InvCategory.misc, item_id)
@@ -731,13 +731,13 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
             {
                 InventoryManager.EquipItem(equipper, ItemID);
                 Console.WriteLine($"{equipper.Name} equips the {ItemName}.");
-                CMethods.PressEnterReturn();
+                CMethods.PressAnyKeyToContinue();
             }
 
             else
             {
                 Console.WriteLine($"{equipper.Name} must be a {CEnums.EnumToString(PClass)} to equip this.");
-                CMethods.PressEnterReturn();
+                CMethods.PressAnyKeyToContinue();
             }
         }
 
@@ -784,7 +784,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
                 Console.WriteLine($"It feels bulky and cumbersome.");
             }
 
-            CMethods.PressEnterReturn();
+            CMethods.PressAnyKeyToContinue();
         }
 
         public override void Unequip(PlayableCharacter unequipper)

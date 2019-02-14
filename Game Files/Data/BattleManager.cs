@@ -145,7 +145,7 @@ namespace Data
 
                     if (monster_list.Any(x => x.HP > 0) && unit.HP > 0)
                     {
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
                     }
                 }
             }
@@ -205,17 +205,17 @@ namespace Data
                 }
 
                 CInfo.GP += gold_drops;
-                CMethods.Input($"Your party got {gold_drops} GP!");
+                CMethods.PressAnyKeyToContinue(prompt: $"Your party got {gold_drops} GP");
 
                 foreach (PlayableCharacter pcu in active_pcus)
                 {
                     pcu.CurrentXP += expr_drops;
-                    CMethods.Input($"{pcu.Name} gained {expr_drops} XP!");
+                    CMethods.PressAnyKeyToContinue(prompt: $"{pcu.Name} gained {expr_drops} XP");
                 }
 
                 foreach (KeyValuePair<string, string> drop in item_drops)
                 {
-                    CMethods.Input($"The {drop.Key} dropped a {ItemManager.FindItemWithID(drop.Value).ItemName}.");
+                    CMethods.PressAnyKeyToContinue(prompt: $"The {drop.Key} dropped a {ItemManager.FindItemWithID(drop.Value).ItemName}");
                     InventoryManager.AddItemToInventory(drop.Value);
                 }
 
@@ -245,7 +245,7 @@ namespace Data
 
                     else
                     {
-                        y_n = CMethods.Input("Do you wish to continue playing? | Yes or No: ");
+                        y_n = CMethods.SingleCharInput("Do you wish to continue playing? | Yes or No: ");
                     }
 
                     if (CMethods.IsYesString(y_n))
@@ -261,7 +261,7 @@ namespace Data
                     {
                         while (true)
                         {
-                            string y_n2 = CMethods.Input("Are you sure you want to quit and lose unsaved progress? |  Y/N: ");
+                            string y_n2 = CMethods.SingleCharInput("Are you sure you want to quit? | Yes or No: ");
 
                             if (CMethods.IsYesString(y_n2))
                             {
@@ -321,7 +321,7 @@ namespace Data
             {
                 SoundManager.buff_spell.SmartPlay();
                 Console.WriteLine("Your party managed to escape!");
-                CMethods.PressEnterReturn();
+                CMethods.PressAnyKeyToContinue();
 
                 return true;
             }

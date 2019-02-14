@@ -1,4 +1,6 @@
-﻿namespace Data
+﻿using System.IO;
+
+namespace Data
 {
     public static class SavefileManager
     {
@@ -21,15 +23,21 @@
 
         // PCU Save Files
         public const string sav_play = "/play_stats.json";        // Player Stats
-        public const string sav_solou = "/solou_stats.json";      // Solou"s Stats
-        public const string sav_chili = "/chili_stats.json";      // Chili"s Stats
-        public const string sav_chyme = "/chyme_stats.json";      // Chyme"s Stats
-        public const string sav_parsto = "/parsto_stats.json";    // Parsto"s Stats
-        public const string sav_adorine = "/adorine_stats.json";  // Adorine"s Stats
-        public const string sav_ran_af = "/storm_stats.json";     // Storm"s Stats
+        public const string sav_solou = "/solou_stats.json";      // Solou's Stats
+        public const string sav_chili = "/chili_stats.json";      // Chili's Stats
+        public const string sav_chyme = "/chyme_stats.json";      // Chyme's Stats
+        public const string sav_parsto = "/parsto_stats.json";    // Parsto's Stats
+        public const string sav_adorine = "/adorine_stats.json";  // Adorine's Stats
+        public const string sav_storm = "/storm_stats.json";      // Storm's Stats
+        public const string sav_kaltoh = "/kaltoh_stats.json";    // Kaltoh's Stats
 
         public const string base_dir = "../Save Files";
         public const string temp_dir = "temp";
+
+        public static void ApplySettings()
+        {
+
+        }
 
         public static void SaveTheGame()
         {
@@ -38,6 +46,8 @@
 
         public static void LoadTheGame()
         {
+            // File.Exists(path);
+
             /*
             global adventure_name
 
@@ -128,7 +138,12 @@
                 return */
         }
 
-        public static void ApplySettings()
+        private static void SerializeEverything()
+        {
+
+        }
+
+        private static void DeserializeEverything()
         {
 
         }

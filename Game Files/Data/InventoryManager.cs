@@ -195,7 +195,7 @@ namespace Data
 
                 while (true)
                 {
-                    string chosen = CMethods.Input("Input [#] (or type 'exit'): ").ToLower();
+                    string chosen = CMethods.SingleCharInput("Input [#] (or type 'exit'): ").ToLower();
                     CEnums.InvCategory category;
 
                     if (CMethods.IsExitString(chosen))
@@ -267,7 +267,7 @@ namespace Data
                     {
                         CMethods.PrintDivider();
                         Console.WriteLine($"Your part has no {CEnums.EnumToString(category)}.");
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
                         CMethods.PrintDivider();
                         break;
                     }
@@ -287,7 +287,7 @@ namespace Data
 
                 while (true)
                 {
-                    string chosen = CMethods.Input("Input [#] (or type 'exit'): ").ToLower();
+                    string chosen = CMethods.FlexibleInput("Input [#] (or type 'exit'): ", item_ids.Count).ToLower();
 
                     try
                     {
@@ -407,6 +407,7 @@ namespace Data
         public static void PickInventoryAction(string item_id)
         {
             Item this_item = ItemManager.FindItemWithID(item_id);
+            CMethods.PrintDivider();
 
             // Loop while the item is in the inventory
             while (true)
@@ -424,7 +425,6 @@ namespace Data
                     action = "Use";
                 }
 
-                CMethods.PrintDivider();
                 Console.WriteLine($"What should your party do with the {this_item.ItemName}? ");
                 Console.WriteLine($"      [1] {action}");
                 Console.WriteLine("      [2] Read Description");
@@ -432,7 +432,7 @@ namespace Data
                 
                 while (true)
                 {
-                    string chosen = CMethods.Input("Input [#] (or type 'exit'): ").ToLower();
+                    string chosen = CMethods.SingleCharInput("Input [#] (or type 'exit'): ").ToLower();
 
 
                     if (CMethods.IsExitString(chosen))
@@ -445,9 +445,14 @@ namespace Data
                         // Items of these classes require a target to be used, so we have to acquire a target first
                         if (this_item is Equipment || this_item is HealthManaPotion || this_item is StatusPotion)
                         {
-                            UnitManager.player.PlayerGetTarget(new List<Monster>(), $"Who should {action} the {this_item.ItemName}?", true, false, true, false);
-                            CMethods.PrintDivider();
-                            this_item.UseItem(UnitManager.player.CurrentTarget as PlayableCharacter);
+                            if (UnitManager.player.PlayerGetTarget(new List<Monster>(), $"Who should {action} the {this_item.ItemName}?", true, false, true, false))
+                            {
+                                CMethods.PrintDivider();
+                                this_item.UseItem(UnitManager.player.CurrentTarget as PlayableCharacter);
+                                return;
+                            }
+
+                            break;
                         }
 
                         // Other items can just be used normally
@@ -466,7 +471,8 @@ namespace Data
                         CMethods.PrintDivider();
                         Console.WriteLine($"Description for '{this_item.ItemName}': \n");
                         Console.WriteLine(this_item.Description);
-                        CMethods.PressEnterReturn();
+                        CMethods.PressAnyKeyToContinue();
+                        CMethods.PrintDivider();
 
                         break;
                     }
@@ -480,20 +486,20 @@ namespace Data
                         if (this_item.IsImportant)
                         {
                             Console.WriteLine("Essential Items cannot be thrown away.");
-                            CMethods.PressEnterReturn();
+                            CMethods.PressAnyKeyToContinue();
                         }
 
                         else
                         {
                             while (true)
                             {
-                                string yes_or_no = CMethods.Input($"Throw away the {this_item.ItemName}? | Yes or No: ").ToLower();
+                                string yes_or_no = CMethods.SingleCharInput($"Throw away the {this_item.ItemName}? | Yes or No: ").ToLower();
 
                                 if (CMethods.IsYesString(yes_or_no))
                                 {
                                     RemoveItemFromInventory(this_item.ItemID);
                                     Console.WriteLine($"You toss the {this_item.ItemName} aside and continue on your journey.");
-                                    CMethods.PressEnterReturn();
+                                    CMethods.PressAnyKeyToContinue();
 
                                     return;
                                 }
@@ -501,7 +507,7 @@ namespace Data
                                 else if (CMethods.IsNoString(yes_or_no))
                                 {
                                     Console.WriteLine($"You decide to keep the {this_item.ItemName}.");
-                                    CMethods.PressEnterReturn();
+                                    CMethods.PressAnyKeyToContinue();
 
                                     return;
                                 }

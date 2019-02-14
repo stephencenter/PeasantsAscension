@@ -44,7 +44,7 @@ namespace Data
 
                         while (true)
                         {
-                            string yes_no = CMethods.Input("Fight it?");
+                            string yes_no = CMethods.SingleCharInput("Fight it?");
 
                             if (CMethods.IsYesString(yes_no)) 
                             {
@@ -85,7 +85,7 @@ namespace Data
 
                 while (true)
                 {
-                    string command = CMethods.Input("Enter a cheat: ").ToLower();
+                    string command = CMethods.MultiCharInput("Enter a cheat: ").ToLower();
                     List<string> keywords = command.Split().ToList();
 
                     if (CMethods.IsExitString(command))
@@ -368,7 +368,7 @@ namespace Data
  'battle fight' => Initiates a random encounter on the current tile
  'file save' => Saves the game
  'file load' => Loads the most recent save file");
-            CMethods.PressEnterReturn();
+            CMethods.PressAnyKeyToContinue();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Main
                 while (true)
                 {
                     CInfo.Gamestate = CEnums.GameState.overworld;
-                    string command = CMethods.Input("Input Command (type 'help' to view command list): ").ToLower();
+                    string command = CMethods.SingleCharInput("Input Command (type 'help' to view command list): ").ToLower();
 
                     if (command == "letmecheat")
                     {
@@ -191,7 +191,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
             while (true)
             {
                 // Give the user a choice of keys to press to do specific actions
-                string choice = CMethods.Input("[P]lay Game | [S]ettings | [C]redits | [E]xit | Input Letter: ").ToLower();
+                string choice = CMethods.SingleCharInput("[P]lay Game | [S]ettings | [C]redits | [E]xit | Input Letter: ").ToLower();
 
                 if (choice.StartsWith("p"))
                 {
