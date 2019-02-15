@@ -463,7 +463,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
             {
                 foreach (Monster monster in monster_group.Value)
                 {
-                    foreach (string item_id in monster.DropList)
+                    foreach (string item_id in monster.DropList.Select(x => x.Item1))
                     {
                         if (!ItemManager.VerifyItemExists(item_id))
                         {

@@ -472,7 +472,7 @@ namespace Data
                         Console.WriteLine($"Description for '{this_item.ItemName}': \n");
                         Console.WriteLine(this_item.Description);
                         CMethods.PressAnyKeyToContinue();
-                        CMethods.PrintDivider();
+                        CMethods.PrintDivider(); 
 
                         break;
                     }

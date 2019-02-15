@@ -198,7 +198,7 @@ namespace Data
                 Dictionary<string, string> item_drops = new Dictionary<string, string>();
                 foreach (Monster monster in monster_list)
                 {
-                    if (monster.DroppedItem != null || monster.GetDrops())
+                    if (monster.DroppedItem != null || monster.SetDroppedItems())
                     {
                         item_drops.Add(monster.Name, monster.DroppedItem);
                     }

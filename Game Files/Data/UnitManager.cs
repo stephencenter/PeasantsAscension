@@ -1372,7 +1372,12 @@ Increasing DIFFICULTY will provide:
         public string AsciiArt { get; set; }
         public Dictionary<string, double> ClassMultipliers { get; set; }
         public Dictionary<string, double> SpeciesMultipliers { get; set; }
-        public List<string> DropList { get; set; }
+
+        // A list of droppable items
+        // Tuple.Item1 is the Item ID, Tuple.Item2 is droprate out of 100 
+        // Ex: 75 => 75% chance of being added to the item pool
+        // If multiple items get added to the item pool, a random one is chosen
+        public List<Tuple<string, int>> DropList { get; set; }
 
         public string DroppedItem { get; set; }
         public int DroppedGold { get; set; }
@@ -1430,13 +1435,22 @@ Increasing DIFFICULTY will provide:
             MP -= status_mp_cost;
         }
 
-        public bool GetDrops()
+        public bool SetDroppedItems()
         {
             Random rng = new Random();
 
-            if (rng.Next(0, 4) == 0)
+            List<string> item_pool = new List<string>() { };
+            foreach (Tuple<string, int> item in DropList)
             {
-                DroppedItem = CMethods.GetRandomFromIterable(DropList);
+                if (rng.Next(0, 101) < item.Item2)
+                {
+                    item_pool.Add(item.Item1);
+                }
+            }
+
+            if (item_pool.Any())
+            {
+                DroppedItem = CMethods.GetRandomFromIterable(item_pool);
                 return true;
             }
 
@@ -1694,7 +1708,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.water;
             DefensiveElement = CEnums.Element.water;
             AttackMessage = "snaps its massive claws at";
-            DropList = new List<string>() { "crab_claw", "shell_fragment" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("crab_claw", 25), new Tuple<string, int>("shell_fragment", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1725,7 +1739,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.grass;
             DefensiveElement = CEnums.Element.grass;
             AttackMessage = "jiggles menacingly at";
-            DropList = new List<string>() { "slime_vial", "water_vial" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("slime_vial", 25), new Tuple<string, int>("water_vial", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1756,7 +1770,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.fire;
             DefensiveElement = CEnums.Element.dark;
             AttackMessage = "meanders over and grabs";
-            DropList = new List<string>() { "burnt_ash", "ripped_cloth" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("burnt_ash", 25), new Tuple<string, int>("ripped_cloth", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1787,7 +1801,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.earth;
             DefensiveElement = CEnums.Element.earth;
             AttackMessage = "begins to pile sand on";
-            DropList = new List<string>() { "golem_rock", "broken_crystal" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("golem_rock", 25), new Tuple<string, int>("broken_crystal", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1818,7 +1832,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.grass;
             DefensiveElement = CEnums.Element.grass;
             AttackMessage = "swings a tree trunk like a club at";
-            DropList = new List<string>() { "bone_bag", "monster_skull" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("bone_bag", 25), new Tuple<string, int>("monster_skull", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1849,7 +1863,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.neutral;
             DefensiveElement = CEnums.Element.neutral;
             AttackMessage = "swings its mighty battleaxe at";
-            DropList = new List<string>() { "monster_skull", "eye_balls" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("monster_skull", 25), new Tuple<string, int>("eye_balls", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1880,7 +1894,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.wind;
             DefensiveElement = CEnums.Element.wind;
             AttackMessage = "swipes with its ferocious claws at";
-            DropList = new List<string>() { "animal_fur", "wing_piece" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("animal_fur", 25), new Tuple<string, int>("wing_piece", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1911,7 +1925,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.earth;
             DefensiveElement = CEnums.Element.earth;
             AttackMessage = "burrows into the ground and starts charging towards";
-            DropList = new List<string>() { "monster_fang", "slime_vial" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("monster_fang", 25), new Tuple<string, int>("slime_vial", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1942,7 +1956,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.dark;
             DefensiveElement = CEnums.Element.dark;
             AttackMessage = "charges and tries to bite";
-            DropList = new List<string>() { "monster_skull", "blood_vial" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("monster_skull", 25), new Tuple<string, int>("blood_vial", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -1973,7 +1987,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.ice;
             DefensiveElement = CEnums.Element.ice;
             AttackMessage = "claws and bites at";
-            DropList = new List<string>() { "animal_fur", "monster_fang" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("animal_fur", 25), new Tuple<string, int>("monster_fang", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2004,7 +2018,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.ice;
             DefensiveElement = CEnums.Element.ice;
             AttackMessage = "begins to maul";
-            DropList = new List<string>() { "animal_fur", "monster_fang" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("animal_fur", 25), new Tuple<string, int>("monster_fang", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2035,7 +2049,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.neutral;
             DefensiveElement = CEnums.Element.neutral;
             AttackMessage = "ferociously chomps at";
-            DropList = new List<string>() { "monster_skull", "rodent_tail" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("monster_skull", 25), new Tuple<string, int>("rodent_tail", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2066,7 +2080,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.water;
             DefensiveElement = CEnums.Element.water;
             AttackMessage = "charges head-first into";
-            DropList = new List<string>() { "serpent_scale", "serpent_tongue" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("serpent_scale", 25), new Tuple<string, int>("serpent_tongue", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2097,7 +2111,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.earth;
             DefensiveElement = CEnums.Element.grass;
             AttackMessage = "charges horn-first into";
-            DropList = new List<string>() { "beetle_shell", "antennae" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("beetle_shell", 25), new Tuple<string, int>("antennae", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2128,7 +2142,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.wind;
             DefensiveElement = CEnums.Element.wind;
             AttackMessage = "dives claws-first towards";
-            DropList = new List<string>() { "wing_piece", "feathers" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("wing_piece", 25), new Tuple<string, int>("feathers", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2159,7 +2173,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.light;
             DefensiveElement = CEnums.Element.dark;
             AttackMessage = "thrusts its heavenly spear towards";
-            DropList = new List<string>() { "chain_link", "blood_vial" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("chain_link", 25), new Tuple<string, int>("blood_vial", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2190,7 +2204,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.light;
             DefensiveElement = CEnums.Element.light;
             AttackMessage = "swings its holy hammer towards";
-            DropList = new List<string>() { "angelic_essence", "runestone" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("angelic_essence", 25), new Tuple<string, int>("runestone", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2221,7 +2235,13 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.neutral;
             DefensiveElement = CEnums.Element.water;
             AttackMessage = "casts its mathemagical spell on";
-            DropList = new List<string>() { "calculus_homework", "graph_paper", "protractor", "ruler", "textbook" };
+            DropList = new List<Tuple<string, int>>() {
+                new Tuple<string, int>("calculus_homework", 25),
+                new Tuple<string, int>("graph_paper", 25),
+                new Tuple<string, int>("protractor", 25),
+                new Tuple<string, int>("ruler", 25),
+                new Tuple<string, int>("textbook", 25)
+            };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2303,7 +2323,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.fire;
             DefensiveElement = CEnums.Element.fire;
             AttackMessage = "spits a firey glob of acid at";
-            DropList = new List<string>() { "antennae", "burnt_ash" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("antennae", 25), new Tuple<string, int>("burnt_ash", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2334,7 +2354,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.neutral;
             DefensiveElement = CEnums.Element.water;
             AttackMessage = "fires a volley of arrows at";
-            DropList = new List<string>() { "serpent_scale", "serpent_tongue" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("serpent_scale", 25), new Tuple<string, int>("serpent_tongue", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2365,7 +2385,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.ice;
             DefensiveElement = CEnums.Element.ice;
             AttackMessage = "fires a single hyper-cooled arrow at";
-            DropList = new List<string>() { "chain_link", "blood_vial" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("chain_link", 25), new Tuple<string, int>("blood_vial", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2396,7 +2416,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.ice;
             DefensiveElement = CEnums.Element.ice;
             AttackMessage = "spits a frozen glob of acid at";
-            DropList = new List<string>() { "monster_fang", "wing_piece" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("monster_fang", 25), new Tuple<string, int>("wing_piece", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2427,7 +2447,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.electric;
             DefensiveElement = CEnums.Element.electric;
             AttackMessage = "spits an electrified glob of acid at";
-            DropList = new List<string>() { "monster_fang", "wing_piece" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("monster_fang", 25), new Tuple<string, int>("wing_piece", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2458,7 +2478,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.dark;
             DefensiveElement = CEnums.Element.dark;
             AttackMessage = "grabs a nearby bone and slings it at";
-            DropList = new List<string>() { "bone_bag", "demonic_essence" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("bone_bag", 25), new Tuple<string, int>("demonic_essence", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2489,7 +2509,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.dark;
             DefensiveElement = CEnums.Element.dark;
             AttackMessage = "fires a bone-tipped crossbow bolt at";
-            DropList = new List<string>() { "chain_link", "bone_bag" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("chain_link", 25), new Tuple<string, int>("bone_bag", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2520,7 +2540,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.earth;
             DefensiveElement = CEnums.Element.earth;
             AttackMessage = "hurls a giant boulder at";
-            DropList = new List<string>() { "golem_rock", "broken_crystal" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("golem_rock", 25), new Tuple<string, int>("broken_crystal", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2551,7 +2571,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.neutral;
             DefensiveElement = CEnums.Element.neutral;
             AttackMessage = "fires an arrow at";
-            DropList = new List<string>() { "ripped_cloth", "eye_balls" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("ripped_cloth", 25), new Tuple<string, int>("eye_balls", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2582,7 +2602,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.water;
             DefensiveElement = CEnums.Element.water;
             AttackMessage = "shoots a black, inky substance at";
-            DropList = new List<string>() { "ink_sack", "slime_vial" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("ink_sack", 25), new Tuple<string, int>("slime_vial", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2613,7 +2633,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.grass;
             DefensiveElement = CEnums.Element.grass;
             AttackMessage = "spits an acidic string of vines at";
-            DropList = new List<string>() { "serpent_scale", "living_bark" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("serpent_scale", 25), new Tuple<string, int>("living_bark", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2644,7 +2664,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.earth;
             DefensiveElement = CEnums.Element.earth;
             AttackMessage = "catapults a stone javelin towards";
-            DropList = new List<string>() { "wing_piece", "feathers" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("wing_piece", 25), new Tuple<string, int>("feathers", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2790,7 +2810,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.earth;
             DefensiveElement = CEnums.Element.earth;
             AttackMessage = "casts a basic earth spell on";
-            DropList = new List<string>() { "fairy_dust", "eye_balls" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("fairy_dust", 25), new Tuple<string, int>("eye_balls", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2821,7 +2841,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.fire;
             DefensiveElement = CEnums.Element.fire;
             AttackMessage = "casts a basic fire spell on";
-            DropList = new List<string>() { "fairy_dust", "burnt_ash" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("fairy_dust", 25), new Tuple<string, int>("burnt_ash", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2852,7 +2872,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.water;
             DefensiveElement = CEnums.Element.water;
             AttackMessage = "casts a basic water spell on";
-            DropList = new List<string>() { "fairy_dust", "water_vial" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("fairy_dust", 25), new Tuple<string, int>("water_vial", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2883,7 +2903,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.dark;
             DefensiveElement = CEnums.Element.dark;
             AttackMessage = "casts a basic dark spell on";
-            DropList = new List<string>() { "ripped_cloth", "demonic_essence" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("ripped_cloth", 25), new Tuple<string, int>("demonic_essence", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2914,7 +2934,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.ice;
             DefensiveElement = CEnums.Element.ice;
             AttackMessage = "casts a basic ice spell on";
-            DropList = new List<string>() { "ripped_cloth", "runestone" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("ripped_cloth", 25), new Tuple<string, int>("runestone", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2945,7 +2965,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.fire;
             DefensiveElement = CEnums.Element.neutral;
             AttackMessage = "casts a basic fire spell on";
-            DropList = new List<string>() { "wing_piece", "fairy_dust" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("wing_piece", 25), new Tuple<string, int>("fairy_dust", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -2976,7 +2996,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.grass;
             DefensiveElement = CEnums.Element.grass;
             AttackMessage = "casts a basic grass spell on";
-            DropList = new List<string>() { "fairy_dust", "fairy_dust" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("fairy_dust", 25), new Tuple<string, int>("fairy_dust", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -3007,7 +3027,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.light;
             DefensiveElement = CEnums.Element.light;
             AttackMessage = "casts a basic light spell on";
-            DropList = new List<string>() { "unicorn_horn", "angelic_essence" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("unicorn_horn", 25), new Tuple<string, int>("angelic_essence", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -3038,7 +3058,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.wind;
             DefensiveElement = CEnums.Element.wind;
             AttackMessage = "casts a basic wind spell on";
-            DropList = new List<string>() { "ectoplasm", "demonic_essence" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("ectoplasm", 25), new Tuple<string, int>("demonic_essence", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {
@@ -3069,7 +3089,7 @@ Increasing DIFFICULTY will provide:
             OffensiveElement = CEnums.Element.electric;
             DefensiveElement = CEnums.Element.electric;
             AttackMessage = "casts a basic electric spell on";
-            DropList = new List<string>() { "ectoplasm", "demonic_essence" };
+            DropList = new List<Tuple<string, int>>() { new Tuple<string, int>("ectoplasm", 25), new Tuple<string, int>("demonic_essence", 25) };
 
             SpeciesMultipliers = new Dictionary<string, double>()
             {

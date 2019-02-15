@@ -58,13 +58,6 @@ namespace Data
             return x;
         }
 
-        public static string DebugInput()
-        {
-            string chosen = GetRandomFromIterable("abcdefghijklmnopqrstuvwxyz1234567890").ToString();
-            Console.WriteLine(chosen);
-            return chosen;
-        }
-
         public static string FlexibleInput(string prompt, int option_count, bool local_do_blips = true)
         {
             // FlexibleInput allows you to use SCI when the option list is small, and MCI
@@ -113,6 +106,31 @@ namespace Data
         }
 
         // Other Methods
+        public static void SmartSleep(int milliseconds)
+        {
+            // Reduce the duration of the sleep to 0.1 seconds if debugging is set to true
+            if (CInfo.Debugging)
+            {
+                Thread.Sleep(100);
+            }
+
+            else
+            {
+                Thread.Sleep(milliseconds);
+            }
+
+            // Clear the Key Buffer so that all inputs made during the Thread.Sleep() will be ignored\
+            while (Console.KeyAvailable)
+            {
+                Console.ReadKey(true);
+            }
+        }
+
+        public static T GetRandomFromIterable<T>(IEnumerable<T> iterable)
+        {
+            return iterable.ToList()[rng.Next(iterable.Count())];
+        }
+
         public static void PrintDivider(int length = 0)
         {
             if (length != 0)
@@ -187,29 +205,11 @@ namespace Data
             return SingleCharInput(the_string[the_string.Length - 1].ToString());
         }
 
-        public static T GetRandomFromIterable<T>(IEnumerable<T> iterable)
+        public static string DebugInput()
         {
-            return iterable.ToList()[rng.Next(iterable.Count())];
-        }
-
-        public static void SmartSleep(int milliseconds)
-        {
-            // Reduce the duration of the sleep to 0.1 seconds if debugging is set to true
-            if (CInfo.Debugging)
-            {
-                Thread.Sleep(100);
-            }
-
-            else
-            {
-                Thread.Sleep(milliseconds);
-            }
-
-            // Clear the Key Buffer so that all inputs made during the Thread.Sleep() will be ignored\
-            while (Console.KeyAvailable)
-            {
-                Console.ReadKey(true);
-            }
+            string chosen = GetRandomFromIterable("abcdefghijklmnopqrstuvwxyz1234567890").ToString();
+            Console.WriteLine(chosen);
+            return chosen;
         }
     }
 
