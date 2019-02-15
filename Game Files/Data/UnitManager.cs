@@ -1486,10 +1486,8 @@ Increasing DIFFICULTY will provide:
 
         public void MonsterApplyMultipliers()
         {
-            HP = (int)(HP * ClassMultipliers["hp"] * SpeciesMultipliers["hp"]);
-            MaxHP = HP;
-            MP = (int)(MP * ClassMultipliers["mp"] * SpeciesMultipliers["mp"]);
-            MaxMP = MP;
+            MaxHP = HP = (int)(HP * ClassMultipliers["hp"] * SpeciesMultipliers["hp"]);
+            MaxMP = MP = (int)(MP * ClassMultipliers["mp"] * SpeciesMultipliers["mp"]);
             Attack = (int)(Attack * ClassMultipliers["attack"] * SpeciesMultipliers["attack"]);
             Defense = (int)(Defense * ClassMultipliers["defense"] * SpeciesMultipliers["defense"]);
             PAttack = (int)(PAttack * ClassMultipliers["p_attack"] * SpeciesMultipliers["p_attack"]);
@@ -1499,9 +1497,9 @@ Increasing DIFFICULTY will provide:
             Speed = (int)(Speed * ClassMultipliers["speed"] * SpeciesMultipliers["speed"]);
             Evasion = (int)(Evasion * ClassMultipliers["evasion"] * SpeciesMultipliers["evasion"]);
 
-            Attack += (int)(Attack * 0.0005 * CInfo.Difficulty);
-            MAttack += (int)(MAttack * 0.0005 * CInfo.Difficulty);
-            PAttack += (int)(PAttack * 0.0005 * CInfo.Difficulty);
+            Attack += (int)(Attack * 0.005 * CInfo.Difficulty);
+            MAttack += (int)(MAttack * 0.005 * CInfo.Difficulty);
+            PAttack += (int)(PAttack * 0.005 * CInfo.Difficulty);
         }
 
         public void MonsterExecuteMove()
