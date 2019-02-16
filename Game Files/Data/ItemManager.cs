@@ -110,7 +110,7 @@ namespace Data
 
             // Weapons -- Mage
             new Weapon("Magical Twig", 
-@"Not actually magical but it makes you feel cooler when you use it.
+@"Not actually magical but it makes you feel powerful when you use it.
 -5% Damage Increase
 -Only usable by Mages", 10, 0.05, CEnums.WeaponType.ranged, CEnums.CharacterClass.mage, CEnums.Element.neutral, "mag_twg"),
 

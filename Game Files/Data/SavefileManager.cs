@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Data
 {
@@ -39,7 +40,7 @@ namespace Data
 
         }
 
-        public static void SaveTheGame()
+        public static void SaveTheGame(bool silent = false)
         {
 
         }
@@ -136,6 +137,11 @@ namespace Data
                 main.party_info['musicbox_isplaying'] = False
 
                 return */
+        }
+
+        internal static void ChooseAdventureName()
+        {
+            throw new NotImplementedException();
         }
 
         private static void SerializeEverything()

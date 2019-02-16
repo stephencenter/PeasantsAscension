@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Data
 {
@@ -105,6 +106,100 @@ namespace Data
 
             // The new monster has been generated - we now return it
             return new_monster;
+        }
+
+        public static void CreatePlayer()
+        {
+            player.PlayerChooseName();
+            player.PlayerChooseClass();
+            SavefileManager.ChooseAdventureName();
+
+            if (player.PClass == CEnums.CharacterClass.warrior)
+            {
+                player.MaxHP += 5;
+                player.MaxMP -= 1;
+                player.Defense += 3;
+                player.PDefense += 2;
+                player.Attack += 3;
+                player.Speed -= 1;
+                player.Evasion -= 1;
+                InventoryManager.EquipItem(player, "iron_hoe");
+            }
+
+            else if (player.PClass == CEnums.CharacterClass.assassin)
+            {
+                player.MaxHP += 2;
+                player.MaxMP += 1;
+                player.Attack += 3;
+                player.Defense += 2;
+                player.Speed += 4;
+                player.Evasion += 2;
+                InventoryManager.EquipItem(player, "stn_dag");
+            }
+
+            else if (player.PClass == CEnums.CharacterClass.ranger)
+            {
+                player.MaxMP += 2;
+                player.PAttack += 4;
+                player.MDefense += 2;
+                player.Evasion += 3;
+                player.Speed += 3;
+                InventoryManager.EquipItem(player, "slg_sht");
+            }
+
+            else if (player.PClass == CEnums.CharacterClass.mage)
+            {
+                player.MaxHP += 1;
+                player.MaxMP += 6;
+                player.MAttack += 4;
+                player.MDefense += 3;
+                player.PAttack += 1;
+                InventoryManager.EquipItem(player, "mag_twg");
+            }
+
+            else if (player.PClass == CEnums.CharacterClass.monk)
+            {
+                player.MaxHP += 2;
+                player.MaxMP += 2;
+                player.Attack += 3;
+                player.MDefense += 2;
+                player.Evasion += 3;
+                player.Speed += 3;
+                player.Defense -= 1;
+                InventoryManager.EquipItem(player, "leather_gloves");
+            }
+
+            else if (player.PClass == CEnums.CharacterClass.paladin)
+            {
+                player.MaxHP += 3;
+                player.MaxMP += 4;
+                player.MDefense += 3;
+                player.MAttack += 3;
+                player.Defense += 3;
+                player.PDefense += 3;
+                player.Attack += 3;
+                player.Speed -= 1;
+                player.Evasion -= 1;
+                InventoryManager.EquipItem(player, "rbr_mlt");
+            }
+
+            else if (player.PClass == CEnums.CharacterClass.bard)
+            {
+                player.MaxHP -= 1;
+                player.MaxMP += 3;
+                player.MDefense += 1;
+                player.MAttack += 3;
+                player.Defense -= 1;
+                player.PDefense -= 1;
+                InventoryManager.EquipItem(player, "kazoo");
+                InventoryManager.AddItemToInventory("musicbox");
+            }
+
+            player.HP = player.MaxHP;
+            player.MP = player.MaxMP;
+
+            SavefileManager.SaveTheGame(silent: true);
+
         }
 
         public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, double spell_power = 0, bool do_criticals = true)
@@ -408,57 +503,84 @@ namespace Data
          * =========================== */
         public void PlayerChooseName()
         {
-            /*
-            while True:
-                // Ask the player for their name, and remove any non alphanumeric/dash characters from it
-                // Also remove beginning/ending whitespace, and repeated spaces
-                choice1 = main.s_input('What is your name, young adventurer? | Input Name: ')
-                choice2 = ' '.join(re.sub('[^\w\-_ ]', '', choice1).split())
+            const int max_chars = 20;
 
-                // If your original choice contained characters, but the filtered version didn't,
-                // this message will pop up.
-                if choice1 and not choice2:
-                    Console.WriteLine("I'm sorry, I didn't quite catch that.")
-                    main.s_input('\nPress enter/return ')
-                    Console.WriteLine('-'*save_load.divider_size)
-                    continue
+            Console.WriteLine("Rules for naming your character: ");
+            Console.WriteLine("-No symbols, except for spaces dashes and underscores");
+            Console.WriteLine($"-Name has a max length of {max_chars} characters");
+            Console.WriteLine("-Name cannot have leading or trailing spaces");
+            Console.WriteLine("This is the only character you get to name - choose wisely!");
+            CMethods.PrintDivider();
 
-                // You can't name yourself nothing. Sorry but that's the rules.
-                if not(choice1 or choice2) :
-                    continue
+            while (true)
+            {
+                string chosen_name = CMethods.MultiCharInput("What is your name, young adventurer? ");
 
-                self.name = choice2
+                // This line removes all characters that are not alphanumeric, spaces, dashes, or underscores
+                // We also remove repeated spaces like "Hello    world" => "Hello world"
+                // Finally we .Trim() to remove leading or ending whitespace like "    Hello world    " => "Hello world"
+                chosen_name = Regex.Replace(Regex.Replace(chosen_name, @"[^\w\s\-]*", ""), @"\s+", " ").Trim();
 
-                while True:
-                    if self.name.lower() == 'y':
-                        Console.WriteLine("""Your name's "y", eh? Must be in a hurry.""")
-                        main.s_input('\nPress enter/return ')
-                        Console.WriteLine('-' * save_load.divider_size)
+                if (chosen_name.Length == 0 || chosen_name.Length > max_chars)
+                {
+                    CMethods.PrintDivider();
+                    Console.Write("I'm sorry, I didn't quite catch that ");
 
-                    elif self.name.lower() in main.friend_names:
-                        Console.WriteLine($"Ah, {self.name}! My dear friend, it is great to see you again!")
-                        main.s_input('\nPress enter/return ')
-                        Console.WriteLine('-' * save_load.divider_size)
+                    if (chosen_name.Length == 0)
+                    {
+                        Console.WriteLine("(you need to enter a name!)");
+                    }
 
-                    elif self.name.lower() == "frisk":
-                        Console.WriteLine("Frisk? Sorry, no hard mode for you in this game.")
-                        main.s_input('\nPress enter/return ')
-                        Console.WriteLine('-' * save_load.divider_size)
+                    else if (chosen_name.Length > max_chars)
+                    {
+                        Console.WriteLine($"(max name length is {max_chars}!)");
+                    }
 
-                    else:
-                        y_n = main.s_input($"So, your name is "{self.name}?" | Y/N: ').lower()
+                    CMethods.PressAnyKeyToContinue();
+                    CMethods.PrintDivider();
+                    continue;
+                }
 
-                        if y_n.startswith('n'):
-                            Console.WriteLine('-'*save_load.divider_size)
-                            self.name = ''
-                            break
+                if (chosen_name.ToLower() == "y")
+                {
+                    Console.WriteLine("Your name's y, eh? Must be in a hurry.");
+                    CMethods.PressAnyKeyToContinue();
+                    CMethods.PrintDivider();
+                }
 
-                        elif not y_n.startswith('y'):
-                            continue
+                else if (CInfo.FriendNames.Contains(chosen_name.ToLower()))
+                {
+                    Console.WriteLine($"Ah, {chosen_name}! My dear friend, it is great to see you again!");
+                    CMethods.PressAnyKeyToContinue();
+                    CMethods.PrintDivider();
+                }
 
-                        Console.WriteLine('-'*save_load.divider_size)
+                else if (chosen_name.ToLower() == "frisk")
+                {
+                    Console.WriteLine("Frisk? Sorry, no hard mode for you in this game.");
+                    CMethods.PressAnyKeyToContinue();
+                    CMethods.PrintDivider();
+                }
 
-                    return */
+                while (true)
+                {
+                    string yes_no = CMethods.SingleCharInput($"So, your name is '{chosen_name}?' | Yes or No: ").ToLower();
+
+                    if (CMethods.IsYesString(yes_no))
+                    {
+                        Name = chosen_name;
+                        CMethods.PrintDivider();
+                        return;
+                    }
+
+                    else if (CMethods.IsNoString(yes_no))
+                    {
+
+                        CMethods.PrintDivider();
+                        break;
+                    }
+                }
+            }
         }
 
         public void PlayerChooseClass()
@@ -561,7 +683,7 @@ namespace Data
 
                         return
 
-                    elif y_n.startswith('n'):
+                    else if y_n.startswith('n'):
                         Console.WriteLine()
                         break */
         }
@@ -739,7 +861,7 @@ Increasing INTELLIGENCE will provide:
     +1 MP
     +Mage Ability Power"""
 
-                elif skill[0] == '2':
+                else if skill[0] == '2':
                     act_skill = 'wis'
                     vis_skill = 'WISDOM'
                     message = """\
@@ -748,7 +870,7 @@ Increasing WISDOM will provide:
     +2 MP
     +Paladin Ability Power"""
 
-                elif skill[0] == '3':
+                else if skill[0] == '3':
                     act_skill = 'str'
                     vis_skill = 'STRENGTH'
                     message = """\
@@ -758,7 +880,7 @@ Increasing STRENGTH will provide:
     +1 Pierce Defense
     +Warrior Ability Power"""
 
-                elif skill[0] == '4':
+                else if skill[0] == '4':
                     act_skill = 'con'
                     vis_skill = 'CONSTITUTION'
                     message = """\
@@ -769,7 +891,7 @@ Increasing CONSTITUTION will provide:
     +1 Magical Defense
     +Monk Ability Power"""
 
-                elif skill[0] == '5':
+                else if skill[0] == '5':
                     act_skill = 'dex'
                     vis_skill = 'DEXTERITY'
                     message = """\
@@ -779,7 +901,7 @@ Increasing DEXTERITY will provide:
     +1 Evasion
     +Assassin Ability Power"""
 
-                elif skill[0] == '6':
+                else if skill[0] == '6':
                     act_skill = 'per'
                     vis_skill = 'PERCEPTION'
                     message = """\
@@ -789,7 +911,7 @@ Increasing PERCEPTION will provide:
     +1 Evasion
     +Ranger Ability Power"""
 
-                elif skill[0] == '7':
+                else if skill[0] == '7':
                     act_skill = 'cha'
                     vis_skill = 'CHARISMA'
                     message = """\
@@ -799,7 +921,7 @@ Increasing CHARISMA will provide:
     +Only the highest CHARISMA in party contributes to these
     +Bard Ability Power"""
 
-                elif skill[0] == '8':
+                else if skill[0] == '8':
                     act_skill = 'fte'
                     vis_skill = 'FATE'
                     message = """\
@@ -808,7 +930,7 @@ Increasing FATE will provide:
     +1 to a second random attribute (won't choose DIFFICULTY or FATE)
     +Knowledge that your destiny is predetermined and nothing matters"""
 
-                elif skill[0] == '9':
+                else if skill[0] == '9':
                     act_skill = "dif"
                     vis_skill = "DIFFICULTY"
                     message = """\
@@ -839,7 +961,7 @@ Increasing DIFFICULTY will provide:
                         Console.WriteLine('-'*save_load.divider_size)
                         break
 
-                    elif y_n.startswith('y'):
+                    else if y_n.startswith('y'):
                         self.increase_attribute(act_skill)
 
                     else:
@@ -1435,7 +1557,7 @@ Increasing DIFFICULTY will provide:
             MP -= status_mp_cost;
         }
 
-        public bool SetDroppedItems()
+        public bool SetDroppedItem()
         {
             Random rng = new Random();
 

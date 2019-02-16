@@ -83,6 +83,11 @@ namespace Data
                 Console.ReadKey(true);
             }
 
+            if (SavefileManager.do_blips)
+            {
+                SoundManager.item_pickup.SmartPlay();
+            }
+
             Console.WriteLine();
         }
 
