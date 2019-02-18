@@ -101,7 +101,7 @@ namespace Data
             // Level-up the monster to increase its stats to the level of the cell that the player is in
             new_monster.MonsterLevelUp();
 
-            // Apply multipliers to the monster based on its species, class, and party difficulty
+            // Apply multipliers to the monster based on its species, class, and par56ty difficulty
             new_monster.MonsterApplyMultipliers();
 
             // The new monster has been generated - we now return it
@@ -585,107 +585,140 @@ namespace Data
 
         public void PlayerChooseClass()
         {
-            /*
-            while True:
-                class_ = main.s_input($"""{self.name}, which class would you like to train as?
-          [1] Mage: Master of the arcane arts
-          [2] Assassin: Proficient in both stealth and murder
-          [3] Ranger: Fast and evasive, good with a bow
-          [4] Paladin: Holy knight whose healing prowess is unmatched
-          [5] Monk: Fighter whose fists are a worthy oppenent to any blade
-          [6] Warrior: Excellent soldier, good balance of offense and defense
-          [7] Bard: True team-player and master musician
-    Input[#]: """)
+            while (true)
+            {
+                Console.WriteLine($@"{Name}, which class would you like to train as?
+     [1] Mage: Master of the arcane arts
+     [2] Assassin: Proficient in both stealth and murder
+     [3] Ranger: Fast and evasive, good with a bow
+     [4] Paladin: Holy knight whose healing prowess is unmatched
+     [5] Monk: Fighter whose fists are a worthy oppenent to any blade
+     [6] Warrior: Excellent soldier, good balance of offense and defense
+     [7] Bard: True team-player and master musician");
 
-                try:
-                    class_ = {'1': "mage",
-                              '2': "assassin",
-                              '3': "ranger",
-                              '4': "paladin",
-                              '5': "monk",
-                              '6': "warrior",
-                              '7': "bard"}
-        [class_]
+                string chosen_number = CMethods.SingleCharInput("Input[#]: ");
+                string class_desc;
+                CEnums.CharacterClass chosen_class;
 
-        class_desc = {'mage': """\
-        -Can use abilities that scale off Intelligence
-        -Capable of learning every spell
-        -Deals Pierce Damage with Standard Attacks
-        -Deals 50% damage with Standard Attacks
-        -High Magical Attack/Defense and MP
-        -Average HP, Speed, and Evasion
-        -Low Pierce Attack and Pierce/Physical Defense""",
+                try
+                {
+                    chosen_class = new Dictionary<string, CEnums.CharacterClass>()
+                    {
+                        {"1", CEnums.CharacterClass.mage},
+                        {"2", CEnums.CharacterClass.assassin},
+                        {"3", CEnums.CharacterClass.ranger},
+                        {"4", CEnums.CharacterClass.paladin},
+                        {"5", CEnums.CharacterClass.monk},
+                        {"6", CEnums.CharacterClass.warrior},
+                        {"7", CEnums.CharacterClass.bard}
+                    }[chosen_number];
 
-                                  'assassin': """\
-        -Can use abilities that scale off Dexterity
-        -Deals Physical Damage with Standard Attacks
-        -Deals 75% damage with Magical Spells
-        -High Speed, Physical Attack, and Evasion
-        -Average HP, Pierce Defense, and Physical Defense
-        -Low Magical Attack/Defense and MP""",
+                    class_desc = new Dictionary<CEnums.CharacterClass, string>()
+                    {
+                        {
+                            CEnums.CharacterClass.mage,
+@"-Can use abilities that scale off Intelligence
+-Capable of learning every spell
+-Deals Pierce Damage with Standard Attacks
+-Deals 50% damage with Standard Attacks
+-High Magical Attack/Defense and MP
+-Average HP, Speed, and Evasion
+-Low Pierce Attack and Pierce/Physical Defense"
+                        },
 
-                                  'ranger': """\
-        -Can use abilities that scale off Perception
-        -Deals Pierce Damage with Standard Attacks
-        -Deals 75% damage with Magical Spells
-        -High Pierce Attack, Speed, and Evasion
-        -Average MP, HP, and Pierce Defense
-        -Low HP, Pierce/Physcial Defense, and Magical Attack""",
+                        {
+                            CEnums.CharacterClass.assassin,
+@"-Can use abilities that scale off Dexterity
+-Deals Physical Damage with Standard Attacks
+-Deals 75% damage with Magical Spells
+-High Speed, Physical Attack, and Evasion
+-Average HP, Pierce Defense, and Physical Defense
+-Low Magical Attack/Defense and MP"
+                        },
 
-                                  'paladin': """\
-        -Can use abilities that scale off Wisdom
-        -Can learn all Healing spells and offensive Light spells
-        -Deals Physical Damage with Standard Attacks
-        -High Magical/Physical Defense
-        -Average MP, HP, and Pierce Defense
-        -Low Physical/Magical Attack, Speed, and Evasion""",
+                        {
+                            CEnums.CharacterClass.ranger,
+@"-Can use abilities that scale off Perception
+-Deals Pierce Damage with Standard Attacks
+-Deals 75% damage with Magical Spells
+-High Pierce Attack, Speed, and Evasion
+-Average MP, HP, and Pierce Defense
+-Low HP, Pierce/Physcial Defense, and Magical Attack"
+                        },
 
-                                  'monk': """\
-        -Can use abilities that scale off Constitution
-        -Capable of learning all Buff spells
-        -Deals Physical damage with Standard Attacks
-        -Deals 75% damage with Magical Spells
-        -High Physical Attack, Speed, and Evasion
-        -Average MP and Magical Attack
-        -Low Pierce/Physical Defense and HP""",
+                        {
+                            CEnums.CharacterClass.paladin,
+@"-Can use abilities that scale off Wisdom
+-Can learn all Healing spells and offensive Light spells
+-Deals Physical Damage with Standard Attacks
+-High Magical/Physical Defense
+-Average MP, HP, and Pierce Defense
+-Low Physical/Magical Attack, Speed, and Evasion"
+                        },
 
-                                  'warrior': """\
-        -Can use abilities that scale off Strength
-        -Deals Physical Damage with Standard Attacks
-        -Deals 75% damage with Magical Spells
-        -High Pierce/Physical Defense and Physical Attack
-        -Average HP
-        -Low Magical Attack/Defense, Speed, Evasion, and MP""",
+                        {
+                            CEnums.CharacterClass.monk,
+@"-Can use abilities that scale off Constitution
+-Capable of learning all Buff spells
+-Deals Physical damage with Standard Attacks
+-Deals 75% damage with Magical Spells
+-High Physical Attack, Speed, and Evasion
+-Average MP and Magical Attack
+-Low Pierce/Physical Defense and HP"
+                        },
 
-                                  'bard': """\
-        -Can use abilities that scale of Charisma
-        -Deals Magical Damage with Standard Attacks
-        -Deals 75% damage with Magical Spells
-        -Has 6 Abilities instead of 4
-        -High Evasion
-        -Average MP, Speed, and Magical Defense
-        -Low HP, Magical Attack, and Physical/Pierce Defense"""}[class_]
+                        {
+                            CEnums.CharacterClass.warrior,
+@"-Can use abilities that scale off Strength
+-Deals Physical Damage with Standard Attacks
+-Deals 75% damage with Magical Spells
+-High Pierce/Physical Defense and Physical Attack
+-Average HP
+-Low Magical Attack/Defense, Speed, Evasion, and MP"
+                        },
 
-                except KeyError:
-                    continue
+                        {
+                            CEnums.CharacterClass.bard,
+@"-Can use abilities that scale of Charisma
+-Deals Magical Damage with Standard Attacks
+-Deals 75% damage with Magical Spells
+-Has 6 Abilities instead of 4
+-High Evasion
+-Average MP, Speed, and Magical Defense
+-Low HP, Magical Attack, and Physical/Pierce Defense"
+                        }
+                    }[chosen_class];
+                }
 
-                Console.WriteLine('-'*save_load.divider_size)
-                Console.WriteLine($"Information about {class_.title()}s: ")
-                Console.WriteLine(class_desc)
-                Console.WriteLine('-'*save_load.divider_size)
+                catch (KeyNotFoundException)
+                {
+                    CMethods.PrintDivider();
+                    continue;
+                }
 
-                while True:
-                    y_n = main.s_input($"You wish to be of the {class_.title()} class? | Y/N: ').lower()
+                CMethods.PrintDivider();
+                Console.WriteLine($"Information about {CEnums.EnumToString(chosen_class)}s: ");
+                Console.WriteLine(class_desc);
+                CMethods.PrintDivider();
 
-                    if y_n.startswith('y'):
-                        Console.WriteLine('-'*save_load.divider_size)
-                        self.class_ = class_
+                while (true)
+                {
+                    string yes_no = CMethods.SingleCharInput($"You wish to be a {CEnums.EnumToString(chosen_class)}? | Yes or No: ").ToLower();
 
-                        return
+                    if (CMethods.IsYesString(yes_no))
+                    {
+                        CMethods.PrintDivider();
+                        PClass = chosen_class;
+                        return;
+                    }
 
-                    else if y_n.startswith('n'):
-                        Console.WriteLine()
-                        break */
+                    else if (CMethods.IsNoString(yes_no))
+                    {
+                        CMethods.PrintDivider();
+                        break;
+                    }
+                }
+            }
         }
 
         public void PlayerLevelUp()
