@@ -112,7 +112,7 @@ namespace Data
         {
             player.PlayerChooseName();
             player.PlayerChooseClass();
-            SavefileManager.ChooseAdventureName();
+            SavefileManager.SetAdventureName();
 
             if (player.PClass == CEnums.CharacterClass.warrior)
             {
@@ -199,7 +199,6 @@ namespace Data
             player.MP = player.MaxMP;
 
             SavefileManager.SaveTheGame(silent: true);
-
         }
 
         public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, double spell_power = 0, bool do_criticals = true)

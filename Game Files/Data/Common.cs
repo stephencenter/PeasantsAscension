@@ -14,10 +14,8 @@ namespace Data
         // Input Methods
         public static string SingleCharInput(string prompt, bool local_do_blips = true)
         {
-            // Immediately returns the next key the user presses without them
-            // needing to press enter
-            // Used when you KNOW the player will only have 9 or less options
-            // to choose from
+            // Immediately returns the next key the user presses without them needing to press enter
+            // Used when you KNOW the player will only have 9 or less options to choose from
             Console.Write(prompt);
 
             if (CInfo.Debugging)

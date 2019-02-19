@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Data
 {
@@ -139,9 +140,69 @@ namespace Data
                 return */
         }
 
-        internal static void ChooseAdventureName()
+        public static void SetAdventureName()
         {
-            throw new NotImplementedException();
+            // This function asks the player for an "adventure name". This is the
+            // name of the directory in which his/her save files will be stored.
+
+            while (true)
+            {
+                // Certain OSes don't allow certain characters, so this removes those characters
+                // and replaces them with whitespace. The player is then asked if this is okay.
+                string adventure = CMethods.MultiCharInput("Finally, what do you want to name this adventure? ");
+
+                // This line removes all characters that are not alphanumeric, spaces, dashes, or underscores
+                // We also remove repeated spaces like "Hello    world" => "Hello world"
+                // Finally we .Trim() to remove leading or ending whitespace like "    Hello world    " => "Hello world"
+                adventure = Regex.Replace(Regex.Replace(adventure, @"[^\w\s\-]*", ""), @"\s+", " ").Trim();
+
+                // Make sure the adventure name isn't blank
+                if (string.IsNullOrEmpty(adventure))
+                {
+                    continue;
+                }
+
+                // You also can't use "temp", because this is reserved for other features
+                else if (adventure.ToLower() == "temp")
+                { 
+                    Console.WriteLine("Please choose a different name, that one definitely won't do!");
+                    CMethods.PressAnyKeyToContinue();
+                    continue;
+                }
+
+                // Make sure that the folder doesn't already exist
+                else if (Directory.Exists(adventure))
+                {
+                    Console.WriteLine("I've already read about adventures with that name; be original!");
+                    CMethods.PressAnyKeyToContinue();
+                    continue;
+                }
+
+                // Max adventure name length is 35
+                else if (adventure.Length > 35)
+                {
+                    Console.WriteLine("That adventure name is far too long, it would never catch on!");
+                    CMethods.PressAnyKeyToContinue();
+                    continue;
+                }
+
+                while (true)
+                {
+                    string yes_no = CMethods.SingleCharInput($"You want your adventure to be remembered as '{adventure}'? | Yes or No: ").ToLower();
+
+                    if (CMethods.IsYesString(yes_no))
+                    {
+                        adventure_name = adventure;
+                        return;
+                    }
+
+                    else if (CMethods.IsNoString(yes_no))
+                    {
+                        CMethods.PrintDivider();
+                        break;
+                    }
+                }
+            }
         }
 
         private static void SerializeEverything()
