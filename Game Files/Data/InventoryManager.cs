@@ -121,6 +121,11 @@ namespace Data
             return new_inventory;
         }
 
+        public static Dictionary<CEnums.InvCategory, List<string>> GetRawInventory()
+        {
+            return inventory;
+        }
+
         public static Dictionary<CEnums.EquipmentType, Equipment> GetEquipment(string pcu_id)
         {
             // The equipment dictionary only stores ItemIDs, not actual items. So we have to convert
@@ -137,6 +142,11 @@ namespace Data
             // NOT modify the actual equipment! 
             // To modify the real equipment, use EquipItem() and UnequipItem().
             return real_equipped;
+        }
+
+        public static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> GetRawEquipment()
+        {
+            return equipment;
         }
 
         /* =========================== *

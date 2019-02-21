@@ -473,7 +473,7 @@ namespace Data
         public bool Active { get; set; }
         public int CurrentXP { get; set; }
         public int RequiredXP { get; set; }
-        public char CurrentMove { get; set; }
+        public string CurrentMove { get; set; }
         public Unit CurrentTarget { get; set; }
         public Ability CurrentAbility { get; set; }
         public Spell CurrentSpell { get; set; }
@@ -603,20 +603,29 @@ namespace Data
                 {
                     chosen_class = new Dictionary<string, CEnums.CharacterClass>()
                     {
-                        {"1", CEnums.CharacterClass.mage},
-                        {"2", CEnums.CharacterClass.assassin},
-                        {"3", CEnums.CharacterClass.ranger},
-                        {"4", CEnums.CharacterClass.paladin},
+                        {"1", CEnums.CharacterClass.warrior},
+                        {"2", CEnums.CharacterClass.mage},
+                        {"3", CEnums.CharacterClass.assassin},
+                        {"4", CEnums.CharacterClass.ranger},
                         {"5", CEnums.CharacterClass.monk},
-                        {"6", CEnums.CharacterClass.warrior},
+                        {"6", CEnums.CharacterClass.paladin},
                         {"7", CEnums.CharacterClass.bard}
                     }[chosen_number];
 
                     class_desc = new Dictionary<CEnums.CharacterClass, string>()
                     {
                         {
+                            CEnums.CharacterClass.warrior,
+@"-Can use abilities that scale with STR and CON
+-Deals Physical Damage with Standard Attacks
+-High Pierce/Physical Defense and Physical Attack
+-Average HP
+-Low Magical Attack/Defense, Speed, Evasion, and MP"
+                        },
+
+                        {
                             CEnums.CharacterClass.mage,
-@"-Can use abilities that scale off Intelligence
+@"-Can use abilities that scale with INT and WIS
 -Capable of learning every spell
 -Deals Pierce Damage with Standard Attacks
 -Deals 50% damage with Standard Attacks
@@ -627,9 +636,8 @@ namespace Data
 
                         {
                             CEnums.CharacterClass.assassin,
-@"-Can use abilities that scale off Dexterity
+@"-Can use abilities that scale with DEX and PER
 -Deals Physical Damage with Standard Attacks
--Deals 75% damage with Magical Spells
 -High Speed, Physical Attack, and Evasion
 -Average HP, Pierce Defense, and Physical Defense
 -Low Magical Attack/Defense and MP"
@@ -637,17 +645,26 @@ namespace Data
 
                         {
                             CEnums.CharacterClass.ranger,
-@"-Can use abilities that scale off Perception
+@"-Can use abilities that scale with PER and WIS
 -Deals Pierce Damage with Standard Attacks
--Deals 75% damage with Magical Spells
 -High Pierce Attack, Speed, and Evasion
 -Average MP, HP, and Pierce Defense
 -Low HP, Pierce/Physcial Defense, and Magical Attack"
                         },
 
                         {
+                            CEnums.CharacterClass.monk,
+@"-Can use abilities that scale with CON and DEX
+-Capable of learning all Buff spells
+-Deals Physical damage with Standard Attacks
+-High Physical Attack, Speed, and Evasion
+-Average MP and Magical Attack
+-Low Pierce/Physical Defense and HP"
+                        },
+
+                        {
                             CEnums.CharacterClass.paladin,
-@"-Can use abilities that scale off Wisdom
+@"-Can use abilities that scale with WIS and STR
 -Can learn all Healing spells and offensive Light spells
 -Deals Physical Damage with Standard Attacks
 -High Magical/Physical Defense
@@ -656,31 +673,9 @@ namespace Data
                         },
 
                         {
-                            CEnums.CharacterClass.monk,
-@"-Can use abilities that scale off Constitution
--Capable of learning all Buff spells
--Deals Physical damage with Standard Attacks
--Deals 75% damage with Magical Spells
--High Physical Attack, Speed, and Evasion
--Average MP and Magical Attack
--Low Pierce/Physical Defense and HP"
-                        },
-
-                        {
-                            CEnums.CharacterClass.warrior,
-@"-Can use abilities that scale off Strength
--Deals Physical Damage with Standard Attacks
--Deals 75% damage with Magical Spells
--High Pierce/Physical Defense and Physical Attack
--Average HP
--Low Magical Attack/Defense, Speed, Evasion, and MP"
-                        },
-
-                        {
                             CEnums.CharacterClass.bard,
-@"-Can use abilities that scale of Charisma
--Deals Magical Damage with Standard Attacks
--Deals 75% damage with Magical Spells
+@"-Can use abilities that scale with PER and CHA
+-Deals Piercing Damage with Standard Attacks
 -Has 6 Abilities instead of 4
 -High Evasion
 -Average MP, Speed, and Magical Defense
@@ -1081,7 +1076,7 @@ Increasing DIFFICULTY will provide:
 
                 try
                 {
-                    CurrentMove = c_move[0];
+                    CurrentMove = c_move[0].ToString();
                 }
 
                 catch (IndexOutOfRangeException)
@@ -1090,7 +1085,7 @@ Increasing DIFFICULTY will provide:
                 }
 
                 // Attack
-                if (CurrentMove == '1')
+                if (CurrentMove == "1")
                 {
                     if (!PlayerGetTarget(monster_list, $"Who should {Name} attack?", false, true, false, false))
                     {
@@ -1102,7 +1097,7 @@ Increasing DIFFICULTY will provide:
                 }
 
                 // Magic
-                else if (CurrentMove == '2')
+                else if (CurrentMove == "2")
                 {
                     CMethods.PrintDivider();
 
@@ -1127,7 +1122,7 @@ Increasing DIFFICULTY will provide:
                 }
 
                 // Ability
-                else if (CurrentMove == '3')
+                else if (CurrentMove == "3")
                 {
                     if (PlayerChooseAbility())
                     {
@@ -1136,7 +1131,7 @@ Increasing DIFFICULTY will provide:
                 }
 
                 // Use Items
-                else if (CurrentMove == '4')
+                else if (CurrentMove == "4")
                 {
                     CMethods.PrintDivider();
 
@@ -1177,7 +1172,7 @@ Increasing DIFFICULTY will provide:
                 }
 
                 // Run
-                else if (CurrentMove == '5')
+                else if (CurrentMove == "5")
                 {
                     return;
                 }
@@ -1202,7 +1197,7 @@ Increasing DIFFICULTY will provide:
             Console.WriteLine($"-{Name}'s Turn-");
 
             // PCUs regenerate 1 Action Point per turn, unless they used an ability that turn
-            if (CurrentMove != '3')
+            if (CurrentMove != "3")
             {
                 AP++;
             }
@@ -1240,7 +1235,7 @@ Increasing DIFFICULTY will provide:
             }
 
             // Basic Attack
-            if (CurrentMove == '1')
+            if (CurrentMove == "1")
             {
                 // TO-DO: Ascii art
                 Console.WriteLine($"{Name} is making a move!\n");
@@ -1296,13 +1291,13 @@ Increasing DIFFICULTY will provide:
             }
 
             // Use Magic
-            else if (CurrentMove == '2')
+            else if (CurrentMove == "2")
             {
                 CurrentSpell.UseMagic(this, true);
             }
 
             // Use Ability
-            else if (CurrentMove == '3')
+            else if (CurrentMove == "3")
             {
                 // TO-DO: Ascii art
                 Console.WriteLine($"{Name} is making a move!\n");
@@ -1310,7 +1305,7 @@ Increasing DIFFICULTY will provide:
             }
 
             // Run away
-            else if (CurrentMove == '5' && BattleManager.RunAway(this, monster_list))
+            else if (CurrentMove == "5" && BattleManager.RunAway(this, monster_list))
             {
                 SoundManager.PlayCellMusic();
                 return "ran";
@@ -1521,7 +1516,6 @@ Increasing DIFFICULTY will provide:
 
     public abstract class Monster : Unit
     {
-        public CEnums.MonsterClass MClass { get; set; }
         public string AttackMessage { get; set; }
         public string AsciiArt { get; set; }
         public Dictionary<string, double> ClassMultipliers { get; set; }
@@ -1829,8 +1823,6 @@ Increasing DIFFICULTY will provide:
 
         protected MeleeMonster() : base()
         {
-            MClass = CEnums.MonsterClass.melee;
-
             ClassMultipliers = new Dictionary<string, double>()
             {
                 { "hp", 1.2 },            // HP
@@ -2444,8 +2436,6 @@ Increasing DIFFICULTY will provide:
 
         protected RangedMonster() : base()
         {
-            MClass = CEnums.MonsterClass.ranged;
-
             ClassMultipliers = new Dictionary<string, double>()
             {
                 { "hp", 0.9 },        // HP
@@ -2931,8 +2921,6 @@ Increasing DIFFICULTY will provide:
 
         protected MagicMonster() : base()
         {
-            MClass = CEnums.MonsterClass.magic;
-
             ClassMultipliers = new Dictionary<string, double>()
             {
                 { "hp", 1 },            // HP

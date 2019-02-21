@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace Data
@@ -218,18 +220,128 @@ namespace Data
 
     public static class CEnums
     {
-        public enum Status { silence, poison, weakness, blindness, paralyzation, sleep, muted, alive, dead }
-        public enum Element { fire, water, electric, earth, wind, grass, ice, light, dark, neutral }
-        public enum CharacterClass { warrior, ranger, mage, assassin, paladin, monk, bard, agriculturalist, any }
-        public enum MonsterClass { melee, ranged, magic }
-        public enum EquipmentType { armor, weapon, accessory }
-        public enum WeaponType { melee, ranged, instrument }
-        public enum DamageType { physical, piercing, magical }
-        public enum GameState { overworld, battle, town }
-        public enum MusicboxMode { AtoZ, ZtoA, shuffle }
-        public enum SpellCategory { buff, attack, healing, all }
-        public enum InvCategory{ quest, consumables, weapons, armor, tools, accessories, misc }
-        public enum MonsterGroup { animal, monster, humanoid, undead, dungeon }
+        public enum Status
+        {
+            [Description("Silenced")] silence = 0,
+            [Description("Poisoned")] poison,
+            [Description("Weakened")] weakness,
+            [Description("Blinded")] blindness,
+            [Description("Paralyzed")] paralyzation,
+            [Description("Asleep")] sleep,
+            [Description("Muted")] muted,
+            [Description("Alive")] alive,
+            [Description("Dead")] dead
+        }
+
+        public enum Element
+        {
+            [Description("Fire")] fire = 0,
+            [Description("Water")] water,
+            [Description("Electric")] electric,
+            [Description("Earth")] earth,
+            [Description("Wind")] wind,
+            [Description("Grass")] grass,
+            [Description("Ice")] ice,
+            [Description("Light")] light,
+            [Description("Dark")] dark,
+            [Description("Neutral")] neutral
+        }
+
+        public enum CharacterClass
+        {
+            [Description("Warrior")] warrior = 0,
+            [Description("Mage")] mage,
+            [Description("Assassin")] assassin,
+            [Description("Ranger")] ranger,
+            [Description("Monk")] monk,
+            [Description("Paladin")] paladin,
+            [Description("Bard")] bard,
+            [Description("Agriculturalist")] agriculturalist,
+            [Description("Any")] any
+        }
+
+        public enum EquipmentType
+        {
+            [Description("Armor")] armor = 0,
+            [Description("Weapon")] weapon,
+            [Description("Accessory")] accessory
+        }
+
+        public enum WeaponType
+        {
+            [Description("Melee")] melee = 0,
+            [Description("Ranged")] ranged,
+            [Description("Instrument")] instrument
+        }
+
+        public enum DamageType
+        {
+            [Description("Physical")] physical = 0,
+            [Description("Piercing")] piercing,
+            [Description("Magical")] magical
+        }
+
+        public enum GameState
+        {
+            [Description("Overworld")] overworld = 0,
+            [Description("Battle")] battle,
+            [Description("Town")] town
+        }
+
+        public enum MusicboxMode
+        {
+            [Description("A to Z")] AtoZ = 0,
+            [Description("Z to A")] ZtoA,
+            [Description("Shuffle")] shuffle
+        }
+
+        public enum SpellCategory
+        {
+            [Description("Buff")] buff = 0,
+            [Description("Attack")] attack,
+            [Description("Healing")] healing,
+            [Description("All")] all
+        }
+
+        public enum InvCategory
+        {
+            [Description("Quest")] quest = 0,
+            [Description("Consumables")] consumables,
+            [Description("Weapons")] weapons,
+            [Description("Armor")] armor,
+            [Description("Tools")] tools,
+            [Description("Accessories")] accessories,
+            [Description("Misc")] misc
+        }
+
+        public enum MonsterGroup
+        {
+            [Description("Animal")] animal = 0,
+            [Description("Monster")] monster,
+            [Description("Humanoid")] humanoid,
+            [Description("Undead")] undead,
+            [Description("Dungeon")] dungeon
+        }
+
+        public static string EnumToString(this Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(value.GetType(), value);
+
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr)
+                    {
+                        return attr.Description;
+                    }
+                }
+            }
+
+            return null;
+        }
 
         // element_matchup[key][0] is the element that key is weak to
         // element_matchup[key][1] is the element that key is resistant to
@@ -245,85 +357,6 @@ namespace Data
             { Element.light, new List<Element> { Element.dark, Element.light } },
             { Element.dark, new List<Element> { Element.light, Element.dark } }
         };
-
-        public static string EnumToString(Enum the_enum)
-        {
-            Dictionary<Enum, string> StatusNameMap = new Dictionary<Enum, string>()
-            {
-                { Status.silence, "Silenced" },
-                { Status.poison, "Poisoned" },
-                { Status.weakness, "Weakened" },
-                { Status.blindness, "Blindned" },
-                { Status.paralyzation, "Paralyzed" },
-                { Status.muted, "Muted" },
-                { Status.sleep, "Asleep" },
-                { Status.alive, "Alive" },
-                { Status.dead, "Dead" },
-
-                { Element.fire, "Fire" },
-                { Element.water, "Water" },
-                { Element.electric, "Electric" },
-                { Element.earth, "Earth" },
-                { Element.wind, "Wind" },
-                { Element.grass, "Grass" },
-                { Element.ice, "Ice" },
-                { Element.light, "Light" },
-                { Element.dark, "Dark" },
-                { Element.neutral, "Neutral" },
-
-                { CharacterClass.warrior, "Warrior" },
-                { CharacterClass.ranger, "Ranger" },
-                { CharacterClass.mage, "Mage" },
-                { CharacterClass.assassin, "Assassin" },
-                { CharacterClass.paladin, "Paladin" },
-                { CharacterClass.monk, "Monk" },
-                { CharacterClass.bard, "Bard" },
-
-                { MonsterClass.melee, "Melee" },
-                { MonsterClass.ranged, "Ranged" },
-                { MonsterClass.magic, "Magic" },
-
-                { EquipmentType.armor, "Armor" },
-                { EquipmentType.weapon, "Weapon" },
-                { EquipmentType.accessory, "Accessory" },
-
-                { WeaponType.melee, "Melee" },
-                { WeaponType.ranged, "Ranged" },
-                { WeaponType.instrument, "Instrument" },
-
-                { DamageType.physical, "Physical" },
-                { DamageType.magical, "Magical" },
-                { DamageType.piercing, "Piercing" },
-
-                { GameState.overworld, "Overworld" },
-                { GameState.battle, "Battle" },
-                { GameState.town, "Town" },
-
-                { MusicboxMode.AtoZ, "A-to-Z" },
-                { MusicboxMode.ZtoA, "Z-to-A" },
-                { MusicboxMode.shuffle, "Shuffle" },
-
-                { SpellCategory.buff, "Buff" },
-                { SpellCategory.attack, "Attack" },
-                { SpellCategory.healing, "Healing" },
-
-                { InvCategory.quest, "Quest Items"},
-                { InvCategory.consumables, "Consumables" },
-                { InvCategory.weapons, "Weapons"},
-                { InvCategory.armor, "Armor"},
-                { InvCategory.tools, "Tools" },
-                { InvCategory.accessories, "Accessories" },
-                { InvCategory.misc, "Miscellaneous" },
-
-                { MonsterGroup.animal, "Animal" },
-                { MonsterGroup.monster, "Monster" },
-                { MonsterGroup.humanoid, "Humanoid" },
-                { MonsterGroup.undead, "Undead" },
-                { MonsterGroup.dungeon, "Accursed" }
-            };
-
-            return StatusNameMap[the_enum];
-        }
 
         public static DamageType CharacterClassToDamageType(CharacterClass p_class)
         {
