@@ -329,12 +329,13 @@ of battle.",
             while (true)
             {
                 padding = chosen_spellbook.Max(x => x.SpellName.Length);
-                Console.WriteLine($"{user.Name}'s {CEnums.EnumToString(category)} Spells | {user.MP}/{user.MaxMP} MP remaining");
+                Console.WriteLine($"{user.Name}'s {category.EnumToString()} Spells | {user.MP}/{user.MaxMP} MP remaining");
 
-                int counter = 1;
+                int counter = 0;
                 foreach (Spell spell in chosen_spellbook)
                 {
-                    Console.WriteLine($"      [{counter}] {spell.SpellName} {new string('-', padding - spell.SpellName.Length)}-> {spell.ManaCost} MP");
+                    Console.WriteLine($"      [{counter + 1}] {spell.SpellName} {new string('-', padding - spell.SpellName.Length)}-> {spell.ManaCost} MP");
+                    counter++;
                 }
 
                 while (true)
@@ -445,12 +446,12 @@ of battle.",
 
             if (HealthIncreaseFlat < target.MaxHP * HealthIncreasePercent)
             {
-                total_heal = (int)(target.MaxHP * HealthIncreasePercent + user.Attributes["wis"]);
+                total_heal = (int)((target.MaxHP * HealthIncreasePercent) + user.Attributes[CEnums.PlayerAttribute.wisdom]);
             }
 
             else
             {
-                total_heal = HealthIncreaseFlat + user.Attributes["wis"];
+                total_heal = HealthIncreaseFlat + user.Attributes[CEnums.PlayerAttribute.wisdom];
             }
 
             target.HP += total_heal;

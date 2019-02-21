@@ -89,7 +89,7 @@ namespace Data
             List<CEnums.MonsterGroup> cell_groups = TileManager.FindCellWithTileID(CInfo.CurrentTile).MonsterGroups;
 
             // Create a new empty list of monsters
-            List<Monster> monsters = new List<Monster>() { };
+            List<Monster> monsters = new List<Monster>();
 
             // Add all the monsters from the cell_groups to the monster list
             cell_groups.ForEach(x => monsters = monsters.Concat(MonsterGroups[x]).ToList());
@@ -198,7 +198,7 @@ namespace Data
             player.HP = player.MaxHP;
             player.MP = player.MaxMP;
 
-            SavefileManager.SaveTheGame(silent: true);
+            SavefileManager.SaveTheGame();
         }
 
         public static int CalculateDamage(Unit attacker, Unit target, CEnums.DamageType damage_type, double spell_power = 0, bool do_criticals = true)
@@ -259,7 +259,7 @@ namespace Data
 
             if (damage_type == CEnums.DamageType.physical)
             {
-                final_damage = (int)((attack - defense / 2) * (1 + weapon_power) / (1 + armor_resist));
+                final_damage = (int)((attack - (defense / 2)) * (1 + weapon_power) / (1 + armor_resist));
 
                 // Weakeness reduces physical damage by 1/2
                 if (attacker.HasStatus(CEnums.Status.weakness))
@@ -271,7 +271,7 @@ namespace Data
 
             else if (damage_type == CEnums.DamageType.piercing)
             {
-                final_damage = (int)((p_attack - p_defense / 2) * (1 + weapon_power) / (1 + armor_resist));
+                final_damage = (int)((p_attack - (p_defense / 2)) * (1 + weapon_power) / (1 + armor_resist));
 
                 // Blindness reduces piercing damage by 1/2
                 if (attacker.HasStatus(CEnums.Status.blindness))
@@ -284,7 +284,7 @@ namespace Data
             else
             {
                 // Spell damage is affected by Spell Power (which is specific to the spell) rather than weapon power
-                final_damage = (int)((m_attack - m_defense / 2) * (1 + spell_power) / (1 + armor_resist));
+                final_damage = (int)((m_attack - (m_defense / 2)) * (1 + spell_power) / (1 + armor_resist));
             }
 
             if (rng.Next(0, 100) < 15 && do_criticals)
@@ -297,9 +297,7 @@ namespace Data
             }
 
             final_damage = ApplyElementalChart(attacker, target, final_damage);
-            final_damage = (int)CMethods.Clamp(final_damage, 1, 999);
-
-            return final_damage;
+            return (int)CMethods.Clamp(final_damage, 1, 999);
         }
 
         public static int ApplyElementalChart(Unit attacker, Unit target, int damage)
@@ -478,16 +476,16 @@ namespace Data
         public Ability CurrentAbility { get; set; }
         public Spell CurrentSpell { get; set; }
 
-        public Dictionary<string, int> Attributes = new Dictionary<string, int>()
+        public Dictionary<CEnums.PlayerAttribute, int> Attributes = new Dictionary<CEnums.PlayerAttribute, int>()
         {
-            { "int", 1 },
-            { "wis", 1 },
-            { "str", 1 },
-            { "con", 1 },
-            { "dex", 1 },
-            { "per", 1 },
-            { "cha", 1 },
-            { "fte", 1 }
+            { CEnums.PlayerAttribute.strength, 1 },
+            { CEnums.PlayerAttribute.intelligence, 1 },
+            { CEnums.PlayerAttribute.dexterity, 1 },
+            { CEnums.PlayerAttribute.perception, 1 },
+            { CEnums.PlayerAttribute.constitution, 1 },
+            { CEnums.PlayerAttribute.wisdom, 1 },
+            { CEnums.PlayerAttribute.charisma, 1 },
+            { CEnums.PlayerAttribute.fate, 1 }
         };
 
         public Dictionary<string, dynamic> PlayerAbilityFlags = new Dictionary<string, dynamic>()
@@ -691,13 +689,13 @@ namespace Data
                 }
 
                 CMethods.PrintDivider();
-                Console.WriteLine($"Information about {CEnums.EnumToString(chosen_class)}s: ");
+                Console.WriteLine($"Information about {chosen_class.EnumToString()}s: ");
                 Console.WriteLine(class_desc);
                 CMethods.PrintDivider();
 
                 while (true)
                 {
-                    string yes_no = CMethods.SingleCharInput($"You wish to be a {CEnums.EnumToString(chosen_class)}? | [Y]es or [N]o: ").ToLower();
+                    string yes_no = CMethods.SingleCharInput($"You wish to be a {chosen_class.EnumToString()}? | [Y]es or [N]o: ").ToLower();
 
                     if (CMethods.IsYesString(yes_no))
                     {
@@ -735,8 +733,8 @@ namespace Data
 
                     // Filter this list to only include the spells that the player was not previously able to use, and 
                     // that are usable by the player's class
-                    new_spells = new_spells.Where(x => x.RequiredLevel == Level && 
-                        (x.AllowedClasses.Contains(PClass) || x.AllowedClasses.Contains(CEnums.CharacterClass.any))).ToList();
+                    new_spells = new_spells.Where(x => x.RequiredLevel == Level
+                        && (x.AllowedClasses.Contains(PClass) || x.AllowedClasses.Contains(CEnums.CharacterClass.any))).ToList();
                     
                     // Prompt the player of their new spells.
                     foreach (Spell spell in new_spells)
@@ -847,15 +845,16 @@ namespace Data
                     RequiredXP = (int)(Math.Pow(Level * 2, 2) - Level);
                     FixAllStats();
                 }
-            // The player restores all their health and mana when they level up
-            HP = MaxHP;
-            MP = MaxMP;
-            Statuses = new List<CEnums.Status>() { CEnums.Status.alive };
 
-            CMethods.PrintDivider();
-            PlayerAllocateSkillPoints();
-            CMethods.PrintDivider();
-            SavefileManager.SaveTheGame();
+                // The player restores all their health and mana when they level up
+                HP = MaxHP;
+                MP = MaxMP;
+                Statuses = new List<CEnums.Status>() { CEnums.Status.alive };
+
+                CMethods.PrintDivider();
+                PlayerAllocateSkillPoints();
+                CMethods.PrintDivider();
+                SavefileManager.SaveTheGame();
             }
         }
 
@@ -866,12 +865,12 @@ namespace Data
             Console.WriteLine($"{self.name} has {rem_points} skill point{'s' if rem_points > 1 else ''} left to spend.")
 
             skill = main.s_input("""Choose a skill to increase:
-        [1] INTELLIGENCE, The attribute of MAGES
-        [2] WIDSOM, the attribute of PALADINS
-        [3] STRENGTH, The attribute of WARRIORS
-        [4] CONSTITUTION, the attribute of MONKS
-        [5] DEXTERITY, the attribute of ASSASSINS
-        [6] PERCEPTION, the attribute of RANGERS
+        [1] STRENGTH, The attribute of WARRIORS
+        [2] INTELLIGENCE, The attribute of MAGES
+        [3] DEXTERITY, the attribute of ASSASSINS
+        [4] PERCEPTION, the attribute of RANGERS
+        [5] CONSTITUTION, the attribute of MONKS
+        [6] WIDSOM, the attribute of PALADINS
         [7] CHARISMA, the attribute of BARDS
         [8] FATE, the forgotten attribute
         [9] DIFFICULTY, the forbidden attribute
@@ -1136,7 +1135,7 @@ Increasing DIFFICULTY will provide:
                     CMethods.PrintDivider();
 
                     var x = new List<int>();
-                    if (!InventoryManager.GetInventory()[CEnums.InvCategory.consumables].Any())
+                    if (InventoryManager.GetInventory()[CEnums.InvCategory.consumables].Count == 0)
                     {
                         SoundManager.debuff.SmartPlay();
                         Console.WriteLine("Your party has no consumables!");
@@ -1227,7 +1226,7 @@ Increasing DIFFICULTY will provide:
                 {
                     SoundManager.buff_spell.SmartPlay();
                     Statuses.Remove(status);
-                    Console.WriteLine($"{Name} is no longer {CEnums.EnumToString(status)}!");
+                    Console.WriteLine($"{Name} is no longer {status.EnumToString()}!");
                     CMethods.SmartSleep(500);
 
                     break;
@@ -1375,7 +1374,7 @@ Increasing DIFFICULTY will provide:
             // Do this if the player is allowed to target enemies but not allies (e.g. attacks, some spells/abilities)
             else if (!target_allies && target_enemies)
             {
-                if (monster_list.Where(x => x.IsAlive()).Count() == 1)
+                if (monster_list.Count(x => x.IsAlive()) == 1)
                 {
                     CurrentTarget = monster_list.Where(x => x.IsAlive()).ToList()[0];
                     return true;
@@ -1555,7 +1554,7 @@ Increasing DIFFICULTY will provide:
             Array StatusArray = Enum.GetValues(typeof(CEnums.Status));
             CEnums.Status chosen_status = (CEnums.Status)StatusArray.GetValue(rng.Next(StatusArray.Length));
 
-            Console.WriteLine($"The {Name} is attempting to make {CurrentTarget.Name} {CEnums.EnumToString(chosen_status)}!");
+            Console.WriteLine($"The {Name} is attempting to make {CurrentTarget.Name} {chosen_status.EnumToString()}!");
             CMethods.SmartSleep(750);
 
             if (rng.Next(0, 2) == 0)
@@ -1563,14 +1562,14 @@ Increasing DIFFICULTY will provide:
                 if (CurrentTarget.HasStatus(chosen_status))
                 {
                     SoundManager.debuff.SmartPlay();
-                    Console.WriteLine($"...But {CurrentTarget.Name} is already {CEnums.EnumToString(chosen_status)}!");
+                    Console.WriteLine($"...But {CurrentTarget.Name} is already {chosen_status.EnumToString()}!");
                 }
 
                 else
                 {
                     CurrentTarget.Statuses.Add(chosen_status);
                     SoundManager.buff_spell.SmartPlay();
-                    Console.WriteLine($"{CurrentTarget.Name} is now {CEnums.EnumToString(chosen_status)}!");
+                    Console.WriteLine($"{CurrentTarget.Name} is now {chosen_status.EnumToString()}!");
                 }
             }
 
@@ -1587,7 +1586,7 @@ Increasing DIFFICULTY will provide:
         {
             Random rng = new Random();
 
-            List<string> item_pool = new List<string>() { };
+            List<string> item_pool = new List<string>();
             foreach (Tuple<string, int> item in DropList)
             {
                 if (rng.Next(0, 101) < item.Item2)
@@ -1596,7 +1595,7 @@ Increasing DIFFICULTY will provide:
                 }
             }
 
-            if (item_pool.Any())
+            if (item_pool.Count > 0)
             {
                 DroppedItem = CMethods.GetRandomFromIterable(item_pool);
                 return true;
@@ -1704,24 +1703,19 @@ Increasing DIFFICULTY will provide:
                     Console.WriteLine($"The {Name} woke up!");
                 }
 
-                else
+                else if (rng.Next(0, 100) < 10)
                 {
-                    int chance = 10;
-
-                    if (rng.Next(0, 100) < chance)
-                    {
-                        CMethods.SmartSleep(500);
-                        SoundManager.buff_spell.SmartPlay();
-                        Statuses.Remove(CEnums.Status.sleep);
-                        Console.WriteLine($"The {Name} woke up early!");
-                    }
+                    CMethods.SmartSleep(500);
+                    SoundManager.buff_spell.SmartPlay();
+                    Statuses.Remove(CEnums.Status.sleep);
+                    Console.WriteLine($"The {Name} woke up early!");
                 }
             }
 
             // Poison deals damage per turn
             if (HasStatus(CEnums.Status.poison))
             {
-                int poison_damage = MonsterAbilityFlags["poison_pow"] * MaxHP + MonsterAbilityFlags["poison_dex"];
+                int poison_damage = (MonsterAbilityFlags["poison_pow"] * MaxHP) + MonsterAbilityFlags["poison_dex"];
                 HP -= poison_damage;
                 SoundManager.poison_damage.SmartPlay();
                 Console.WriteLine($"The {Name} took {poison_damage} from poison!");
@@ -1777,7 +1771,7 @@ Increasing DIFFICULTY will provide:
             Random rng = new Random();
 
             // Melee monsters have a 1 in 6 (16.667%) chance to defend
-            if (rng.Next(0, 5) == 0 && !IsDefending && !(MonsterAbilityFlags["taunted_turn"] == BattleManager.GetTurnCounter()))
+            if (rng.Next(0, 5) == 0 && !IsDefending && (MonsterAbilityFlags["taunted_turn"] != BattleManager.GetTurnCounter()))
             {
                 IsDefending = true;
                 Console.WriteLine($"The {Name} is preparing itself for enemy attacks...");
@@ -2839,7 +2833,7 @@ Increasing DIFFICULTY will provide:
             int attack_mp_cost = MaxHP / 7;
 
             // If the monster is neither taunted nor silenced, it will use a spell
-            if (!(MonsterAbilityFlags["taunted_turn"] == BattleManager.GetTurnCounter()) || HasStatus(CEnums.Status.silence))
+            if ((MonsterAbilityFlags["taunted_turn"] != BattleManager.GetTurnCounter()) || HasStatus(CEnums.Status.silence))
             {
                 if (rng.Next(0, 7) == 0 && MP >= status_mp_cost)
                 {
@@ -2875,7 +2869,7 @@ Increasing DIFFICULTY will provide:
                     // Spell Power is equal to Level/105 + 0.05, with a maximum value of 1
                     // This formula means that spell power increases linearly from 0.06 at level 1, to 1 at level 100
                     // All monsters from level 100 onwards have exactly 1 spell power
-                    double m_spell_power = Math.Min((double)Level / 105 + 0.05, 1);
+                    double m_spell_power = Math.Min(((double)Level / 105) + 0.05, 1);
                     int spell_damage = UnitManager.CalculateDamage(this, CurrentTarget, CEnums.DamageType.magical, spell_power: m_spell_power);
 
                     if (CurrentTarget.TempStats["evasion"] < rng.Next(0, 512))
@@ -2890,7 +2884,7 @@ Increasing DIFFICULTY will provide:
                     {
                         SoundManager.attack_miss.SmartPlay();
                         Console.WriteLine($"The {Name}'s spell narrowly misses {CurrentTarget.Name}!");
-                    };
+                    }
 
                     MP -= attack_mp_cost;
 

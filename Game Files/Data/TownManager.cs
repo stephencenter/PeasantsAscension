@@ -6,10 +6,7 @@ namespace Data
 {
     public static class TownManager
     {
-        private static readonly List<Town> town_list = new List<Town>()
-        {
-
-        };
+        private static readonly List<Town> town_list = new List<Town>();
 
         public static List<Town> GetTownList()
         {

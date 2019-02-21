@@ -47,7 +47,7 @@ namespace Data
 -Only usable by Warriors", 1200, 0.9, CEnums.WeaponType.melee, CEnums.CharacterClass.warrior, CEnums.Element.neutral, "titan_axe"),
 
             // Weapons -- Assassin
-            new Weapon("Stone Dagger", 
+            new Weapon("Stone Dagger",
 @"A stone knife that you made yourself! Used to shear sheep and cut meat.
 -5% Damage Increase
 -Only usable by Assassins", 10, 0.05, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "stn_dag"),
@@ -57,7 +57,7 @@ namespace Data
 -10% Damage Increase
 -Only usable by Assassins", 150, 0.1, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "ser_knf"),
 
-            new Weapon("Enhanced Serrated Knife", 
+            new Weapon("Enhanced Serrated Knife",
 @"Even better than your typical Serrated Knife.
 -30% Damage Increase
 -Only usable by Assassins", 300, 0.3, CEnums.WeaponType.melee, CEnums.CharacterClass.assassin, CEnums.Element.neutral, "en_ser_knf"),
@@ -239,7 +239,7 @@ allies will probably hate you if you use this.
              * =========================== */
             #region
             new Armor("None", "You should probably get some armor.",
-                0, 0, 0, new List<CEnums.CharacterClass>() {}, new List<CEnums.CharacterClass>() {}, "no_armor"),
+                0, 0, 0, new List<CEnums.CharacterClass>(), new List<CEnums.CharacterClass>(), "no_armor"),
 
             // Light Armor
             new Armor("Light Armor",
@@ -342,22 +342,22 @@ allies will probably hate you if you use this.
              *            TOOLS            *
              * =========================== */
             #region
-            new Shovel("Expert Mining Tool", 
+            new Shovel("Expert Mining Tool",
 @"A tool used to excavate for hidden gems and minerals. Comines the functions
 of a pickaxe, shovel, and hammer all into one device! Use while on the
 overworld to dig for gems. Gems have pre-determined locations and do not
 respawn - there is no luck involved with this tool.", 150, "shovel"),
 
-            new FastTravelAtlas("Fast Travel Atlas", 
+            new FastTravelAtlas("Fast Travel Atlas",
 @"A convenient tome that allows teleportation between towns. These aren't
 being made anymore, after having been banned by the King due to its use in
 many recent abductions and murders. Most of the pages appear to be missing.", 0, "fast_map"),
 
-            new MonsterEncyclopedia("Monster Encyclopedia", 
+            new MonsterEncyclopedia("Monster Encyclopedia",
 @"A book containing information on monsters. When used in battle, this will
 identify the stats and weaknesses of an enemy. Has no use outside of battle.", 200, "monster_book"),
 
-            new PocketAlchemyLab("Pocket Alchemy Lab", 
+            new PocketAlchemyLab("Pocket Alchemy Lab",
 @"A nifty little Pocket Alchemy Lab! Somehow all of the necessary tools to
 convert everyday ingredients into useful potions can fit in your pocket.
 There are six flavors of ingredients, and each flavor corresponds to a specific
@@ -365,13 +365,13 @@ potion. Combine three ingredients to make a potion. The ratio of flavors used
 determines the probability of getting each flavor potion. The quantity of the
 prevailing ingredient determines the potion strength.", 200, "pocket_lab"),
 
-            new MusicBox("Portable Musicbox", 
+            new MusicBox("Portable Musicbox",
 @"Somehow this small device has the ability to play music without need for a
 bard or instruments. Select a folder full of music on your computer and this
 device will replace the in-game music with your tunes!", 250, "musicbox"),
 
             // Lockpicks
-            new LockpickKit("Wooden Lockpick Kit", 
+            new LockpickKit("Wooden Lockpick Kit",
 @"A wooden lockpick kit with a 30% chance to open chests. Chests can be found
 by sneaking into houses in towns.", 30, 30, "wood_lckpck"),
 
@@ -708,8 +708,6 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
     {
         public CEnums.EquipmentType EquipType { get; set; }
 
-        public abstract void Unequip(PlayableCharacter unequipper);
-
         // Constructor
         protected Equipment(string name, string desc, int value, CEnums.InvCategory cat, string item_id) : base(name, desc, value, false, cat, item_id)
         {
@@ -725,25 +723,20 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         public CEnums.CharacterClass PClass { get; set; }
         public CEnums.Element Element { get; set; }
 
-        public override void UseItem(PlayableCharacter equipper)
+        public override void UseItem(PlayableCharacter user)
         {
-            if (equipper.PClass == PClass)
+            if (user.PClass == PClass)
             {
-                InventoryManager.EquipItem(equipper, ItemID);
-                Console.WriteLine($"{equipper.Name} equips the {ItemName}.");
+                InventoryManager.EquipItem(user, ItemID);
+                Console.WriteLine($"{user.Name} equips the {ItemName}.");
                 CMethods.PressAnyKeyToContinue();
             }
 
             else
             {
-                Console.WriteLine($"{equipper.Name} must be a {CEnums.EnumToString(PClass)} to equip this.");
+                Console.WriteLine($"{user.Name} must be a {PClass.EnumToString()} to equip this.");
                 CMethods.PressAnyKeyToContinue();
             }
-        }
-
-        public override void Unequip(PlayableCharacter unequipper)
-        {
-            throw new NotImplementedException();
         }
 
         // Constructor
@@ -769,27 +762,22 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         public List<CEnums.CharacterClass> ProficientClasses { get; set; }
         public List<CEnums.CharacterClass> NonProficientClasses { get; set; }
 
-        public override void UseItem(PlayableCharacter equipper)
+        public override void UseItem(PlayableCharacter user)
         {
-            InventoryManager.EquipItem(equipper, ItemID);
-            Console.WriteLine($"{equipper.Name} equips the {ItemName}.");
+            InventoryManager.EquipItem(user, ItemID);
+            Console.WriteLine($"{user.Name} equips the {ItemName}.");
 
-            if (ProficientClasses.Contains(equipper.PClass))
+            if (ProficientClasses.Contains(user.PClass))
             {
                 Console.WriteLine($"It feels light and comfortable.");
             }
 
-            else if (NonProficientClasses.Contains(equipper.PClass))
+            else if (NonProficientClasses.Contains(user.PClass))
             {
                 Console.WriteLine($"It feels bulky and cumbersome.");
             }
 
             CMethods.PressAnyKeyToContinue();
-        }
-
-        public override void Unequip(PlayableCharacter unequipper)
-        {
-            throw new NotImplementedException();
         }
 
         // Constructor
@@ -807,7 +795,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         // Gives the player an element used when taking damage
         public CEnums.Element Element { get; set; }
 
-        public override void UseItem(PlayableCharacter equipper)
+        public override void UseItem(PlayableCharacter user)
         {
             throw new NotImplementedException();
             /*
@@ -817,11 +805,6 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
 
                 print(f'{user.name} equips the {self.name}. Their element is now set to {self.def_element}.')
                 main.s_input(@"nPress enter/return ") */
-        }
-
-        public override void Unequip(PlayableCharacter unequipper)
-        {
-            throw new NotImplementedException();
         }
 
         // Constructor
@@ -835,12 +818,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
     {
         public int BonusAP { get; set; }
 
-        public override void UseItem(PlayableCharacter equipper)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Unequip(PlayableCharacter unequipper)
+        public override void UseItem(PlayableCharacter user)
         {
             throw new NotImplementedException();
         }
@@ -1514,7 +1492,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
         {
             /*
             while True:
-                folder = main.s_input("Type the directory path, type 'explore', or type 'back': ")
+                folder = main.s_input("Type the directory path, type 'explore', or type 'exit': ")
 
                 if folder.lower() == "explore":
                     print("-" * save_load.divider_size)

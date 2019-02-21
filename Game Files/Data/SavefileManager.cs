@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Data
 {
@@ -16,8 +16,7 @@ namespace Data
         public static string adventure_name;
 
         // Save Files
-        public const string sav_acquired_gems = "acquired_gems.json";    // Acquired Gems
-        public const string sav_def_bosses = "def_bosses.json";          // Defeated Bosses
+        public const string sav_gems = "gems.json";                      // Acquired Gems
         public const string sav_equipment = "equipment.json";            // Equipment
         public const string sav_inventory = "inventory.json";            // Inventory
         public const string sav_boss_flags = "boss_flags.json";          // Misc Boss Info
@@ -66,7 +65,7 @@ namespace Data
                 }
 
                 // You also can't use "temp", because this is reserved for other features
-                else if (adventure.ToLower() == "temp")
+                else if (adventure == "temp")
                 {
                     Console.WriteLine("Please choose a different name, that one definitely won't do!");
                     CMethods.PressAnyKeyToContinue();
@@ -108,67 +107,19 @@ namespace Data
             }
         }
 
-        public static void SaveTheGame(bool silent = false)
+        public static void WouldYouLikeToSave()
         {
-            // Save important game data to .json files
-            // The silent parameter determines whether or not text is displayed
-            // showing the saving happening. When true, this can be used as a
-            // secret autosave.
             while (true)
             {
-                string yes_no = silent ? "y" : CMethods.SingleCharInput("Do you wish to save your progress? | [Y]es or [N]o: ").ToLower();
+                string yes_no = CMethods.SingleCharInput("Do you wish to save your progress? | [Y]es or [N]o: ").ToLower();
 
                 if (CMethods.IsYesString(yes_no))
                 {
-                    if (!silent)
-                    {
-                        Console.WriteLine("Saving...");
-                        CMethods.SmartSleep(100);
-                    }
-
-                    // Make sure there isn't already a temp directory
-                    if (Directory.Exists($"{base_dir}/{temp_dir}"))
-                    {
-                        Directory.Delete($"{base_dir}/{temp_dir}");
-                    }
-
-                    // Crete a temp directory to store the save data in, so that if the saving fails data isn't corrupted
-                    Directory.CreateDirectory($"{base_dir}/{temp_dir}");
-
-                    // Save everything as JSON objects inside .json files, and store them in the temp directory
-                    JSONSerializer.SerializeEverything();
-
-                    // Delete the existing save file
-                    if (Directory.Exists($"{base_dir}/{adventure_name}"))
-                    {
-                        Directory.Delete($"{base_dir}/{adventure_name}");
-                    }
-
-                    // Create the save file folder
-                    Directory.CreateDirectory($"{base_dir}/{adventure_name}");
-
-                    // Move all the files from the temp directory to the save file folder
-                    DirectoryInfo temp_directory = new DirectoryInfo($"{base_dir}/{temp_dir}");
-                    foreach (FileInfo file in temp_directory.GetFiles("*.json"))
-                    {
-                        File.Move($"{base_dir}/{temp_dir}/{file.Name}", $"{base_dir}/{adventure_name}/{file.Name}");
-                    }
-
-                    Directory.Delete($"{base_dir}/{temp_dir}");
-
-                    // Create a file with a disclaimer that warns against manually editing save files
-                    string disclaimer = @"-IMPORTANT NOTE-
-Editing these .json files is a VERY easy way to corrupt your save file.
-Unless you are familiar with the inner-workings of the game and know
-how to read/edit .json files, it's highly recommended that you turn away.";
-    
-                    File.WriteAllText($"{base_dir}/README.txt", disclaimer);
-
-                    if (!silent)
-                    {
-                        Console.WriteLine("Game has been saved!");
-                        CMethods.PressAnyKeyToContinue();
-                    }
+                    Console.WriteLine("Saving...");
+                    CMethods.SmartSleep(100);
+                    SaveTheGame();
+                    Console.WriteLine("Game has been saved!");
+                    CMethods.PressAnyKeyToContinue();
 
                     return;
                 }
@@ -180,95 +131,142 @@ how to read/edit .json files, it's highly recommended that you turn away.";
             }
         }
 
+        public static void SaveTheGame()
+        {
+            // Make sure there isn't already a temp directory
+            if (Directory.Exists($"{base_dir}/{temp_dir}"))
+            {
+                Directory.Delete($"{base_dir}/{temp_dir}", true);
+            }
+
+            // Crete a temp directory to store the save data in, so that if the saving fails data isn't corrupted
+            Directory.CreateDirectory($"{base_dir}/{temp_dir}");
+
+            // Save everything as JSON objects inside .json files, and store them in the temp directory
+            JSONSerializer.SerializeEverything();
+
+            // Delete the existing save file
+            if (Directory.Exists($"{base_dir}/{adventure_name}"))
+            {
+                Directory.Delete($"{base_dir}/{adventure_name}", true);
+            }
+
+            // Create the save file folder
+            Directory.CreateDirectory($"{base_dir}/{adventure_name}");
+
+            // Move all the files from the temp directory to the save file folder
+            DirectoryInfo temp_directory = new DirectoryInfo($"{base_dir}/{temp_dir}");
+            foreach (FileInfo file in temp_directory.GetFiles("*.json"))
+            {
+                File.Move($"{base_dir}/{temp_dir}/{file.Name}", $"{base_dir}/{adventure_name}/{file.Name}");
+            }
+
+            Directory.Delete($"{base_dir}/{temp_dir}", true);
+
+            // Create a file with a disclaimer that warns against manually editing save files
+            File.WriteAllText($"{base_dir}/README.txt", @"-IMPORTANT NOTE-
+Editing these .json files is a VERY easy way to corrupt your save file.
+Unless you are familiar with the inner-workings of the game and know
+how to read/edit .json files, it's highly recommended that you turn away.");
+        }
+
         public static void LoadTheGame()
         {
             // File.Exists(path);
+            Console.WriteLine("Searching for existing save files...");
+            CMethods.SmartSleep(100);
 
-            /*
-            print('-'*divider_size)
+            if (!Directory.Exists(base_dir))
+            {
+                NoSaveFilesFound();
+                return;
+            }
 
-            // Check each part of the save file
-            print('Searching for valid save files...')
-            main.smart_sleep(0.1)
+            Dictionary<string, List<string>> save_files = new Dictionary<string, List<string>>();
+            List<string> save_file_components = new List<string>()
+            {
+                sav_gems,
+                sav_equipment,
+                sav_inventory,
+                sav_boss_flags,
+                sav_game_info,
+                sav_dialogue_flags,
+                sav_chests,
+                sav_player,
+                sav_solou,
+                sav_chili,
+                sav_chyme,
+                sav_parsto,
+                sav_adorine,
+                sav_storm,
+                sav_kaltoh
+            };
 
-            if not os.path.isdir(base_dir):
-
-                print('No save files found. Starting new game...')
-                main.smart_sleep(0.1)
-
-                print('-'*divider_size)
-                units.create_player()
-
-                return
-
-            save_files = {}
-            menu_info = {}
-
-            save_file_list = [
-                sav_acquired_gems, sav_def_bosses, sav_equip_items, sav_inventory, sav_misc_boss_info, sav_party_info,
-                sav_quests_dia, sav_spellbook, sav_play, sav_solou, sav_chili, sav_ran_af, sav_adorine, sav_parsto, sav_chyme,
-                sav_chests
-            ]
-
-            for folder in [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d))]:
-                // If all save-file components exist...
-                if all(map(os.path.isfile, ['/'.join([base_dir, x.format(ADVENTURE_NAME=folder)]) for x in save_file_list])):
+            foreach (string path in Directory.GetDirectories(base_dir))
+            {
+                if (save_file_components.All(x => File.Exists($"{path}/{x}")))
+                {
                     // ...then set the dictionary key equal to the newly-formatted save file names
-                    save_files[folder] = [x.format(ADVENTURE_NAME=folder) for x in save_file_list]
+                    string folder_name = path.Split('\\').Last();
+                    save_files[folder_name] = save_file_components.Select(x => $"{base_dir}/{folder_name}/{x}").ToList();
+                }
+            }
 
-                    try:
-                        with open('/'.join([base_dir, folder, "menu_info.txt"]), encoding='utf-8') as f:
-                            menu_info[folder] = f.read()
+            if (save_files.Count == 0)
+            {
+                NoSaveFilesFound();
+                return;
+            }
 
-                    except FileNotFoundError:
-                        menu_info[folder] = "Unable to load preview info"
-            main.smart_sleep(0.1)
+            CMethods.PrintDivider();
+            Console.WriteLine($"Found {save_files.Count} existing save files: ");
 
-            if not save_files:
-                // If there are no found save files, then have the player make a new character
-                print('No save files found. Starting new game...')
-                print('-'*divider_size)
-                main.smart_sleep(0.1)
-                units.create_player()
+            // Print the list of save files
+            int counter = 0;
+            foreach (string folder in save_files.Keys)
+            {
+                Console.WriteLine($"      [{counter + 1}] {folder}");
+                counter++;
+            }
 
-                return
+            while (true)
+            {
+                string chosen = CMethods.FlexibleInput("Input [#] (or type [c]reate new): ", save_files.Count);
 
-            print('-'*divider_size)
-            print(f'Found {len(save_files)} valid save file(s): ')
+                try
+                {
+                    adventure_name = save_files.Keys.ToList()[int.Parse(chosen) - 1];
+                }
 
-            // padding is a number that the game uses to determine how much whitespace is needed
-            // to make certain visual elements line up on the screen.
-            padding = len(max([index for index in save_files], key=len))
-
-            // Print information about each save file and allow the player to choose which
-            // file to open
-            for num, fol in enumerate([key for key in sorted(save_files)]):
-                print(f"      [{num + 1}] {fol}{' '*(padding - len(fol))} | {menu_info[fol]}")
-
-            while True:
-                chosen = main.s_input('Input [#] (or type "create new"): ').lower()
-
-                try:
-                    // Account for the fact that list indices start at 0
-                    adventure_name = sorted(save_files)[int(chosen) - 1]
-
-                except (IndexError, ValueError):
+                catch (Exception ex) when (ex is FormatException || ex is ArgumentOutOfRangeException)
+                {
                     // Let the player create a new save file
-                    if chosen.startswith("c"):
-                        print('-'*divider_size)
-                        units.create_player()
-                        return
+                    if (chosen.StartsWith("c"))
+                    {
+                        CMethods.PrintDivider();
+                        UnitManager.CreatePlayer();
+                        return;
+                    }
 
-                    continue
+                    continue;
+                }
 
-                print('-'*divider_size)
-                print(f'Loading Save File: "{sorted(save_files)[int(chosen) - 1]}"...')
-                main.smart_sleep(0.1)
+                CMethods.PrintDivider();
+                Console.WriteLine($"Loading Save File: '{adventure_name}'...");
+                CMethods.SmartSleep(100);
+                JSONDeserializer.DeserializeEverything();
+                Console.WriteLine("Game loaded!");
 
-                format_save_names()
-                deserialize_all()
+                return;
+            }
+        }
 
-                return */
+        public static void NoSaveFilesFound()
+        {
+            Console.WriteLine("No save files found. Starting new game...");
+            CMethods.SmartSleep(100);
+            CMethods.PrintDivider();
+            UnitManager.CreatePlayer();
         }
     }
 
@@ -358,28 +356,91 @@ how to read/edit .json files, it's highly recommended that you turn away.";
 
         private static void SerializeDialogueFlags()
         {
-
+            string dialogue_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_dialogue_flags}";
+            File.WriteAllText(dialogue_string, "to-do!!");
         }
 
         private static void SerializeBossFlags()
         {
-
+            string boss_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_boss_flags}";
+            File.WriteAllText(boss_string, "to-do!!");
         }
 
         private static void SerializeChestFlags()
         {
-
+            string chest_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_chests}";
+            File.WriteAllText(chest_string, "to-do!!");
         }
 
         private static void SerializeGems()
         {
-
+            string gem_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_gems}";
+            File.WriteAllText(gem_string, "to-do!!");
         }
     }
 
     public static class JSONDeserializer
     {
         public static void DeserializeEverything()
+        {
+
+            try
+            {
+                DeserializeGems();
+                DeserializeEquipment();
+                DeserializeInventory();
+                DeserializeDialogueFlags();
+                DeserializeBossFlags();
+                DeserializeChestFlags();
+                DeserializePartyMemebers();
+                DeserializeGameInfo();
+            }
+
+            catch (Exception)
+            {
+                throw;
+                // logging.exception(f'Error saving game on {time.strftime("%m/%d/%Y at %H:%M:%S")}:')
+                // print('There was an error saving. Error message can be found in error_log.out') if verbose else ''
+                // main.s_input("\nPress enter/return ") if verbose else ''
+            }
+        }
+
+        private static void DeserializeGameInfo()
+        {
+
+        }
+
+        private static void DeserializePartyMemebers()
+        {
+
+        }
+
+        private static void DeserializeInventory()
+        {
+
+        }
+
+        private static void DeserializeEquipment()
+        {
+
+        }
+
+        private static void DeserializeDialogueFlags()
+        {
+
+        }
+
+        private static void DeserializeBossFlags()
+        {
+
+        }
+
+        private static void DeserializeChestFlags()
+        {
+
+        }
+
+        private static void DeserializeGems()
         {
 
         }

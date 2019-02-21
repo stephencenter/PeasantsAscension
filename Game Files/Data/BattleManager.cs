@@ -49,7 +49,7 @@ namespace Data
 
                 else if (monster_list.Count > 2)
                 {
-                    Console.WriteLine($"A {monster_list[0].Name} and {monster_list.Count - 1} other monsters suddenly appeared out of nowhere!"); ;
+                    Console.WriteLine($"A {monster_list[0].Name} and {monster_list.Count - 1} other monsters suddenly appeared out of nowhere!");
                 }
 
                 SoundManager.battle_music.PlayLooping();
@@ -89,7 +89,7 @@ namespace Data
                     if (character != UnitManager.GetAliveActivePCUs().Last())
                     {
                         CMethods.PrintDivider();
-                    } 
+                    }
                 }
 
                 // Iterate through each unit in the battle from fastest to slowest
@@ -187,7 +187,7 @@ namespace Data
                 foreach (Monster monster in monster_list)
                 {
                     gold_drops += Math.Max(Math.Max(1, monster.DroppedGold), (int)(2 * monster.Level));
-                };
+                }
 
                 int expr_drops = 0;
                 foreach (Monster monster in monster_list)
@@ -379,21 +379,21 @@ namespace Data
 
             foreach (Unit unit in unit_list)
             {
-                string pad1 = new string(' ', (player_pad1 - unit.Name.Length));
-                string pad2 = new string(' ', (player_pad2 - $"{unit.HP}/{unit.MaxHP} HP".Length));
-                string pad3 = new string(' ', (player_pad3 - $"{unit.MP}/{unit.MaxMP} MP".Length));
+                string pad1 = new string(' ', player_pad1 - unit.Name.Length);
+                string pad2 = new string(' ', player_pad2 - $"{unit.HP}/{unit.MaxHP} HP".Length);
+                string pad3 = new string(' ', player_pad3 - $"{unit.MP}/{unit.MaxMP} MP".Length);
 
                 string status_list = "";
                 foreach (CEnums.Status status in unit.Statuses)
                 {
                     if (string.IsNullOrEmpty(status_list))
                     {
-                        status_list = CEnums.EnumToString(status);
+                        status_list = status.EnumToString();
                     }
 
                     else
                     {
-                        status_list = string.Join(", ", new List<string>() { status_list, CEnums.EnumToString(status) });
+                        status_list = string.Join(", ", new List<string>() { status_list, status.EnumToString() });
                     }
                 }
 
@@ -416,10 +416,10 @@ namespace Data
             CMethods.PrintDivider();
 
             Console.WriteLine("Your party: ");
-            DisplayTeamStats(active_pcus.Select(x => (Unit)x).ToList());
+            DisplayTeamStats(active_pcus.Cast<Unit>().ToList());
 
             Console.WriteLine("Enemy team: ");
-            DisplayTeamStats(monster_list.Select(x => (Unit)x).ToList());
+            DisplayTeamStats(monster_list.Cast<Unit>().ToList());
 
             CMethods.PrintDivider();
         }

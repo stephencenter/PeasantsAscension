@@ -14,7 +14,7 @@ namespace Data
             CInfo.CurrentTile = available_dirs.Single(x => x.Item1 == direction).Item2;
 
             // If none of these fucntions return True, then a battle can occur.
-            if (new List<bool>() { /* UnitManager.CheckForBosses(),*/ TownManager.SearchForTowns(enter: false) }.All(x => x == false))
+            if (new List<bool>() { /* UnitManager.CheckForBosses(),*/ TownManager.SearchForTowns(enter: false) }.All(x => !x))
             {
                 // There is a 1 in 4 chance for a battle to occur (25%)
                 // However, a battle cannot occur if the number of steps since the last battle is less than three,
@@ -36,7 +36,7 @@ namespace Data
                 {
                     CMethods.PrintDivider();
                     CInfo.StepsWithoutBattle = 0;
-                    int highest_perception = UnitManager.GetAllPCUs().Select(x => x.Attributes["per"]).Max();
+                    int highest_perception = UnitManager.GetAllPCUs().Select(x => x.Attributes[CEnums.PlayerAttribute.perception]).Max();
 
                     if (highest_perception > rng.Next(0, 100))
                     {
@@ -46,7 +46,7 @@ namespace Data
                         {
                             string yes_no = CMethods.SingleCharInput("Fight it?");
 
-                            if (CMethods.IsYesString(yes_no)) 
+                            if (CMethods.IsYesString(yes_no))
                             {
                                 CMethods.PrintDivider();
                                 BattleManager.BattleSystem(false);
@@ -69,11 +69,34 @@ namespace Data
                 {
                     CInfo.StepsWithoutBattle++;
                 }
-            }            
+            }
         }
 
         public static void CheatCommand()
         {
+            const string password = "swordfish";
+            CMethods.PrintDivider();
+
+            while (true)
+            {
+                string guess = CMethods.MultiCharInput("Please enter the password (or type 'exit'): ");
+
+                if (CMethods.IsExitString(guess))
+                {
+                    return;
+                }
+
+                else if (guess != password)
+                {
+                    Console.WriteLine("Incorrect!\n");
+                }
+
+                else
+                {
+                    break;
+                }
+            }
+
             SoundManager.sneaking_music.PlayLooping();
 
             CMethods.PrintDivider();
@@ -128,7 +151,7 @@ namespace Data
                         if (flag == CheatEngine.Flag.InvalidSpawnSetting)
                         {
                             CMethods.PrintDivider();
-                            Console.WriteLine($"'true or false => {keywords[2]}' if invalid for 'spawns toggle [true or false]'");
+                            Console.WriteLine($"'true or false => {keywords[2]}' is invalid for 'spawns toggle [true or false]'");
                         }
                     }
 
@@ -205,10 +228,17 @@ namespace Data
                         break;
                     }
 
-                    /*
-                    file
-                        save
-                        load */
+                    else if (keywords.Count == 2 && keywords[0] == "file" && keywords[1] == "save")
+                    {
+                        CMethods.PrintDivider();
+                        CheatEngine.FileSaveCheat();
+                    }
+
+                    else if (keywords.Count == 2 && keywords[0] == "file" && keywords[1] == "load")
+                    {
+                        CMethods.PrintDivider();
+                        CheatEngine.FileLoadCheat();
+                    }
 
                     else
                     {
@@ -353,6 +383,18 @@ namespace Data
         public static void BattleFightCheat()
         {
             BattleManager.BattleSystem(false);
+        }
+
+        public static void FileSaveCheat()
+        {
+            SavefileManager.SaveTheGame();
+            Console.WriteLine("The game has been saved.");
+        }
+
+        public static void FileLoadCheat()
+        {
+            JSONDeserializer.DeserializeEverything();
+            Console.WriteLine("The most recent save has been loaded.");
         }
 
         public static void Help()

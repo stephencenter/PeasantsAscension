@@ -14,7 +14,7 @@ namespace Data
         public static Random rng = new Random();
 
         // Input Methods
-        public static string SingleCharInput(string prompt, bool local_do_blips = true)
+        public static string SingleCharInput(string prompt)
         {
             // Immediately returns the next key the user presses without them needing to press enter
             // Used when you KNOW the player will only have 9 or less options to choose from
@@ -36,7 +36,7 @@ namespace Data
             return x;
         }
 
-        public static string MultiCharInput(string prompt, bool local_do_blips = true)
+        public static string MultiCharInput(string prompt)
         {
             // Requires you to press enter before your string is accepted
             // Used when typing in a name or selecting from a list of 
@@ -58,7 +58,7 @@ namespace Data
             return x;
         }
 
-        public static string FlexibleInput(string prompt, int option_count, bool local_do_blips = true)
+        public static string FlexibleInput(string prompt, int option_count)
         {
             // FlexibleInput allows you to use SCI when the option list is small, and MCI
             // when it is big
@@ -66,10 +66,10 @@ namespace Data
             // inventory items or spells
             if (option_count < 10)
             {
-                return SingleCharInput(prompt, local_do_blips);
+                return SingleCharInput(prompt);
             }
 
-            return MultiCharInput(prompt, local_do_blips);
+            return MultiCharInput(prompt);
         }
 
         public static void PressAnyKeyToContinue(string prompt = "\nPress any key to continue ")
@@ -156,7 +156,7 @@ namespace Data
 
             foreach (string word in the_string.Split())
             {
-                if ((current_sentence + word).Count() > num)
+                if ((current_sentence + word).Length > num)
                 {
                     sentences.Add(current_sentence);
                     current_sentence = "";
@@ -164,7 +164,7 @@ namespace Data
 
                 current_sentence += $"{word} ";
 
-                current_sentence = string.Join("", new List<string>() { current_sentence, word, " " });
+                current_sentence = string.Concat(new List<string>() { current_sentence, word, " " });
             }
 
             if (string.IsNullOrEmpty(current_sentence))
@@ -180,34 +180,6 @@ namespace Data
             // If value < min, returns min, if value > max, returns max. Otherwise, returns value
             // Used to impose both an upper and lower bound on Stats - for example, Evasion must be between 1 and 256.
             return Math.Max(min, Math.Min(max, value));
-        }
-
-        public static void TextScrollWrite(string the_string, int spacing = 25)
-        {
-            the_string = string.Join("", new List<string>() { the_string, "\n" });
-
-            int counter = 0;
-            foreach (char character in the_string)
-            {
-                Console.Write(character);
-
-                if (character != ' ' && counter + 1 != the_string.Count())
-                {
-                    SmartSleep(spacing);
-                }
-            }
-        }
-
-        public static string TextScrollInput(string the_string, bool multi_char = true, int spacing = 25)
-        {
-            TextScrollWrite(the_string, spacing);
-
-            if (multi_char)
-            {
-                return MultiCharInput(the_string[the_string.Length - 1].ToString());
-            }
-
-            return SingleCharInput(the_string[the_string.Length - 1].ToString());
         }
 
         public static string DebugInput()
@@ -323,6 +295,18 @@ namespace Data
             [Description("Dungeon")] dungeon
         }
 
+        public enum PlayerAttribute
+        {
+            [Description("Strength")] strength = 0,
+            [Description("Intelligence")] intelligence,
+            [Description("Dexterity")] dexterity,
+            [Description("Perception")] perception,
+            [Description("Constitution")] constitution,
+            [Description("Wisdom")] wisdom,
+            [Description("Charisma")] charisma,
+            [Description("Fate")] fate
+        }
+
         public static string EnumToString(this Enum value)
         {
             Type type = value.GetType();
@@ -383,6 +367,7 @@ namespace Data
         public static CEnums.GameState Gamestate = CEnums.GameState.overworld;
         public static readonly string GameVersion = "v1.0.0";
         public static readonly bool Debugging = false;
+
         public static readonly List<string> FriendNames = new List<string>()
         {
             "apollo kalar", "apollokalar", "apollo_kalar",
@@ -403,6 +388,6 @@ namespace Data
         public static string CurrentTile = "nearton_s";
         public static string RespawnTile = "nearton_tile";
         public static bool DoSpawns = true;
-        public static bool HasCheated = false;        
+        public static bool HasCheated = false;
     }
 }

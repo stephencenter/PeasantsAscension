@@ -258,7 +258,7 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *      WARRIOR ABILITIES      *
      * =========================== */
-    class TauntAbility : Ability
+    internal class TauntAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -295,7 +295,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class RollCallAbility : Ability
+    internal class RollCallAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -326,7 +326,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class GreatCleaveAbility : Ability
+    internal class GreatCleaveAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -347,7 +347,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class BerserkersRageAbility : Ability
+    internal class BerserkersRageAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -389,7 +389,7 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *        MONK ABILITIES       *
      * =========================== */
-    class ChakraSmashAbility : Ability
+    internal class ChakraSmashAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -428,7 +428,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class SharedExperienceAbility : Ability
+    internal class SharedExperienceAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -448,7 +448,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class AuraSwapAbility : Ability
+    internal class AuraSwapAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -504,7 +504,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class BreakingVowsAbility : Ability
+    internal class BreakingVowsAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -543,7 +543,7 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *      ASSASSIN ABILITIES     *
      * =========================== */
-    class InjectPoisonAbility : Ability
+    internal class InjectPoisonAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -576,7 +576,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class KnockoutGasAbility : Ability
+    internal class KnockoutGasAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -608,7 +608,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class DisarmingBlowAbility : Ability
+    internal class DisarmingBlowAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -656,11 +656,11 @@ nothing if no songs have been played yet.", 3)
         {
             AbilityName = name;
             AbilityDesc = desc;
-            APCost = ap_cost; 
+            APCost = ap_cost;
         }
     }
 
-    class BackstabAbility : Ability
+    internal class BackstabAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -708,7 +708,7 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *        MAGE ABILITIES       *
      * =========================== */
-    class SkillSyphonAbility : Ability
+    internal class SkillSyphonAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -761,7 +761,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class PolymorphAbility : Ability
+    internal class PolymorphAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -781,7 +781,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class SpellShieldAbility : Ability
+    internal class SpellShieldAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -801,7 +801,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class ManaDrainAbility : Ability
+    internal class ManaDrainAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -839,7 +839,7 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *       RANGER ABILITIES      *
      * =========================== */
-    class RollAbility : Ability
+    internal class RollAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -859,7 +859,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class ScoutAbility : Ability
+    internal class ScoutAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -879,7 +879,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class PowershotAbility : Ability
+    internal class PowershotAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -899,7 +899,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class NaturesCallAbility : Ability
+    internal class NaturesCallAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -937,7 +937,7 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *      PALADIN ABILITIES      *
      * =========================== */
-    class TipTheScalesAbility : Ability
+    internal class TipTheScalesAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -993,7 +993,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class UnholyBindsAbility : Ability
+    internal class UnholyBindsAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1046,7 +1046,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class JudgmentAbility : Ability
+    internal class JudgmentAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1091,7 +1091,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class CanonizeAbility : Ability
+    internal class CanonizeAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1114,7 +1114,7 @@ nothing if no songs have been played yet.", 3)
     /* =========================== *
      *        BARD ABILITIES       *
      * =========================== */
-    class WaywardFellowAbility : Ability
+    internal class WaywardFellowAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1134,7 +1134,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class FallenComradeAbility : Ability
+    internal class FallenComradeAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1154,7 +1154,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class StubbornBoarAbility : Ability
+    internal class StubbornBoarAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1174,7 +1174,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class UnlikelyHeroAbility : Ability
+    internal class UnlikelyHeroAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1194,7 +1194,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class TournamentAbility : Ability
+    internal class TournamentAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {
@@ -1214,7 +1214,7 @@ nothing if no songs have been played yet.", 3)
         }
     }
 
-    class GrandFinaleAbility : Ability
+    internal class GrandFinaleAbility : Ability
     {
         public override void BeforeAbility(Unit user)
         {

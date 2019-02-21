@@ -8,13 +8,13 @@ namespace Data
     {
         private readonly static Dictionary<CEnums.InvCategory, List<string>> inventory = new Dictionary<CEnums.InvCategory, List<string>>()
         {
-            { CEnums.InvCategory.quest, new List<string>() { } },
-            { CEnums.InvCategory.consumables, new List<string>() { } },
+            { CEnums.InvCategory.quest, new List<string>() },
+            { CEnums.InvCategory.consumables, new List<string>() },
             { CEnums.InvCategory.weapons, new List<string>() { "iron_hoe", "bnz_swd", "titan_axe" } },
             { CEnums.InvCategory.armor, new List<string>() { "light_armor", "medium_armor", "heavy_armor", "fancy_robes", "dragon_armor", "festive_clothes" } },
-            { CEnums.InvCategory.tools, new List<string>() { } },
-            { CEnums.InvCategory.accessories, new List<string>() { } },
-            { CEnums.InvCategory.misc, new List<string>() {} }
+            { CEnums.InvCategory.tools, new List<string>() },
+            { CEnums.InvCategory.accessories, new List<string>() },
+            { CEnums.InvCategory.misc, new List<string>() }
         };
 
         private readonly static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
@@ -168,6 +168,11 @@ namespace Data
 
         public static void EquipItem(PlayableCharacter equipper, string item_id)
         {
+            if (!(ItemManager.FindItemWithID(item_id) is Equipment))
+            {
+                throw new InvalidOperationException($"Tried to equip {item_id}, which is not an equipment");
+            } 
+
             // Equips the item_id to equipper
             CEnums.EquipmentType equip_type = (ItemManager.FindItemWithID(item_id) as Equipment).EquipType;
 
@@ -182,6 +187,11 @@ namespace Data
 
         public static void UnequipItem(PlayableCharacter unequipper, string item_id)
         {
+            if (!(ItemManager.FindItemWithID(item_id) is Equipment))
+            {
+                throw new InvalidOperationException($"Tried to unequip {item_id}, which is not an equipment");
+            }
+
             // Unequips the item_id from the unequipper
             CEnums.EquipmentType equip_type = (ItemManager.FindItemWithID(item_id) as Equipment).EquipType;
             equipment[unequipper.UnitID][equip_type] = default_equip_map[equip_type];
@@ -267,7 +277,7 @@ namespace Data
                         continue;
                     }
 
-                    if (GetInventory()[category].Any())
+                    if (GetInventory()[category].Count > 0)
                     {
                         PickInventoryItem(category, false);
                         break;
@@ -276,7 +286,7 @@ namespace Data
                     else
                     {
                         CMethods.PrintDivider();
-                        Console.WriteLine($"Your part has no {CEnums.EnumToString(category)}.");
+                        Console.WriteLine($"Your part has no {category.EnumToString()}.");
                         CMethods.PressAnyKeyToContinue();
                         CMethods.PrintDivider();
                         break;
@@ -330,7 +340,7 @@ namespace Data
                     {
                         PickInventoryAction(chosen);
 
-                        if (!GetInventory()[category].Any())
+                        if (GetInventory()[category].Count == 0)
                         {
                             return;
                         }
@@ -401,7 +411,7 @@ namespace Data
 
             else
             {
-                Console.WriteLine($"{CEnums.EnumToString(category)}: ");
+                Console.WriteLine($"{category.EnumToString()}: ");
 
                 int counter = 0;
                 foreach (Tuple<string, string, int> item in quantity_inv)
@@ -439,7 +449,7 @@ namespace Data
                 Console.WriteLine($"      [1] {action}");
                 Console.WriteLine("      [2] Read Description");
                 Console.WriteLine("      [3] Drop");
-                
+
                 while (true)
                 {
                     string chosen = CMethods.SingleCharInput("Input [#] (or type 'exit'): ").ToLower();
@@ -482,7 +492,7 @@ namespace Data
                         Console.WriteLine($"Description for '{this_item.ItemName}': \n");
                         Console.WriteLine(this_item.Description);
                         CMethods.PressAnyKeyToContinue();
-                        CMethods.PrintDivider(); 
+                        CMethods.PrintDivider();
 
                         break;
                     }

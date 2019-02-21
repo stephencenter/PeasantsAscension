@@ -12,7 +12,6 @@ namespace Main
             RunChecks();                      // Verify the game is working as intended...
             SavefileManager.ApplySettings();  // ...set the volume and save file settings...
             DisplayTitlescreen();             // ...display the titlescreen...
-            UnitManager.CreatePlayer();       // ...create the player character...
             SavefileManager.LoadTheGame();    // ...check for save files...
             MainGameLoop();                   // ...and then start the game!
         }
@@ -36,7 +35,7 @@ namespace Main
                     CInfo.Gamestate = CEnums.GameState.overworld;
                     string command = CMethods.SingleCharInput("Input Command (type 'help' to view command list): ").ToLower();
 
-                    if (command == "letmecheat")
+                    if (command == "~")
                     {
                         CommandManager.CheatCommand();
                     }
@@ -139,7 +138,7 @@ namespace Main
 
         private static List<Tuple<char, string>> GetAvailableDirections()
         {
-            List<Tuple<char, string>> available_dirs = new List<Tuple<char, string>>() { };
+            List<Tuple<char, string>> available_dirs = new List<Tuple<char, string>>();
             Tile tile = TileManager.FindTileWithID(CInfo.CurrentTile);
 
             // Tells the player which directions are available to go in
@@ -490,7 +489,7 @@ Check here often for updates: [http://www.reddit.com/r/PeasantsAscension/]";
             // Check to make sure all TileIDs in use are unique
             foreach (string tile_id in TileManager.GetTileList().Select(x => x.TileID))
             {
-                if (TileManager.GetTileList().Where(x => x.TileID == tile_id).Count() > 1)
+                if (TileManager.GetTileList().Count(x => x.TileID == tile_id) > 1)
                 {
                     Console.WriteLine($"{tile_id} is being used as a Tile ID for multiple tiles!");
                 }
