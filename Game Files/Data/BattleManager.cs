@@ -245,7 +245,7 @@ namespace Data
 
                     else
                     {
-                        y_n = CMethods.SingleCharInput("Do you wish to continue playing? | Yes or No: ");
+                        y_n = CMethods.SingleCharInput("Do you wish to continue playing? | [Y]es or [N]o: ");
                     }
 
                     if (CMethods.IsYesString(y_n))
@@ -261,7 +261,7 @@ namespace Data
                     {
                         while (true)
                         {
-                            string y_n2 = CMethods.SingleCharInput("Are you sure you want to quit? | Yes or No: ");
+                            string y_n2 = CMethods.SingleCharInput("Are you sure you want to quit? | [Y]es or [N]o: ");
 
                             if (CMethods.IsYesString(y_n2))
                             {

@@ -563,7 +563,7 @@ namespace Data
 
                 while (true)
                 {
-                    string yes_no = CMethods.SingleCharInput($"So, your name is '{chosen_name}?' | Yes or No: ").ToLower();
+                    string yes_no = CMethods.SingleCharInput($"So, your name is '{chosen_name}?' | [Y]es or [N]o: ").ToLower();
 
                     if (CMethods.IsYesString(yes_no))
                     {
@@ -697,7 +697,7 @@ namespace Data
 
                 while (true)
                 {
-                    string yes_no = CMethods.SingleCharInput($"You wish to be a {CEnums.EnumToString(chosen_class)}? | Yes or No: ").ToLower();
+                    string yes_no = CMethods.SingleCharInput($"You wish to be a {CEnums.EnumToString(chosen_class)}? | [Y]es or [N]o: ").ToLower();
 
                     if (CMethods.IsYesString(yes_no))
                     {

@@ -503,7 +503,7 @@ namespace Data
                         {
                             while (true)
                             {
-                                string yes_or_no = CMethods.SingleCharInput($"Throw away the {this_item.ItemName}? | Yes or No: ").ToLower();
+                                string yes_or_no = CMethods.SingleCharInput($"Throw away the {this_item.ItemName}? | [Y]es or [N]o: ").ToLower();
 
                                 if (CMethods.IsYesString(yes_or_no))
                                 {

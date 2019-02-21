@@ -377,7 +377,10 @@ namespace Data
 
     public static class CInfo
     {
-        // Constant things
+        // Unsaved Things
+        public static bool MusicboxIsPlaying = false;
+        public static int StepsWithoutBattle = 0;
+        public static CEnums.GameState Gamestate = CEnums.GameState.overworld;
         public static readonly string GameVersion = "v1.0.0";
         public static readonly bool Debugging = false;
         public static readonly List<string> FriendNames = new List<string>()
@@ -390,18 +393,15 @@ namespace Data
             "theaethersplash", "the aether splash", "aethersplash", "aether splash"
         };
 
-        // Non-constant Things
-        public static CEnums.GameState Gamestate = CEnums.GameState.overworld;
+        // Saved Things
         public static CEnums.MusicboxMode MusicboxMode = CEnums.MusicboxMode.AtoZ;
         public static List<string> DefeatedBosses = new List<string>();
         public static int GP = 20;
-        public static int StepsWithoutBattle = 0;
         public static int Difficulty = 0;
         public static int AtlasStrength = 1;
         public static string MusicboxFolder = "";
         public static string CurrentTile = "nearton_s";
         public static string RespawnTile = "nearton_tile";
-        public static bool MusicboxIsPlaying = false;
         public static bool DoSpawns = true;
         public static bool HasCheated = false;        
     }

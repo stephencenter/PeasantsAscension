@@ -1137,7 +1137,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
 
                     print("-"*save_load.divider_size)
                     while True:
-                        y_n = main.s_input(f"Warp to {chosen.name}? | Yes or No: ").lower()
+                        y_n = main.s_input(f"Warp to {chosen.name}? | [Y]es or [N]o: ").lower()
 
                         if y_n.startswith('y'):
                             if 'has_teleported' not in main.party_info:
@@ -1552,7 +1552,7 @@ ingredients in a Pocket Alchemy Lab to make a potion.", 25, "mathematical", "pro
                 else:
                     print("Couldn't find any .ogg, .flac, .mp3, or .wav files in that directory.")
                     while True:
-                        y_n = main.s_input("Select a different directory? | Yes or No: ")
+                        y_n = main.s_input("Select a different directory? | [Y]es or [N]o: ")
 
                         if y_n.startswith("y"):
                             print("-" * save_load.divider_size)

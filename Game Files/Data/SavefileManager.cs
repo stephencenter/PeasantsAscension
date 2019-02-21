@@ -91,7 +91,7 @@ namespace Data
 
                 while (true)
                 {
-                    string yes_no = CMethods.SingleCharInput($"You want your adventure to be remembered as '{adventure}'? | Yes or No: ").ToLower();
+                    string yes_no = CMethods.SingleCharInput($"You want your adventure to be remembered as '{adventure}'? | [Y]es or [N]o: ").ToLower();
 
                     if (CMethods.IsYesString(yes_no))
                     {
@@ -156,6 +156,20 @@ namespace Data
 
                     Directory.Delete($"{base_dir}/{temp_dir}");
 
+                    // Create a file with a disclaimer that warns against manually editing save files
+                    string disclaimer = @"-IMPORTANT NOTE-
+Editing these .json files is a VERY easy way to corrupt your save file.
+Unless you are familiar with the inner-workings of the game and know
+how to read/edit .json files, it's highly recommended that you turn away.";
+    
+                    File.WriteAllText($"{base_dir}/README.txt", disclaimer);
+
+                    if (!silent)
+                    {
+                        Console.WriteLine("Game has been saved!");
+                        CMethods.PressAnyKeyToContinue();
+                    }
+
                     return;
                 }
 
@@ -171,8 +185,6 @@ namespace Data
             // File.Exists(path);
 
             /*
-            global adventure_name
-
             print('-'*divider_size)
 
             // Check each part of the save file
@@ -255,7 +267,6 @@ namespace Data
 
                 format_save_names()
                 deserialize_all()
-                main.party_info['musicbox_isplaying'] = False
 
                 return */
         }
@@ -288,7 +299,22 @@ namespace Data
 
         private static void SerializeGameInfo()
         {
+            Dictionary<string, dynamic> game_info = new Dictionary<string, dynamic>()
+            {
+                { "musicbox_mode", CInfo.MusicboxMode },
+                { "defeated_bosses", CInfo.DefeatedBosses },
+                { "gp", CInfo.GP },
+                { "difficulty", CInfo.Difficulty },
+                { "atlas_strength", CInfo.AtlasStrength },
+                { "musicbox_folder", CInfo.MusicboxFolder },
+                { "current_tile", CInfo.CurrentTile },
+                { "respawn_tile", CInfo.RespawnTile },
+                { "do_spawns", CInfo.DoSpawns },
+                { "has_cheated", CInfo.HasCheated }
+            };
 
+            string gameinfo_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_game_info}";
+            File.WriteAllText(gameinfo_string, JsonConvert.SerializeObject(game_info, Formatting.Indented));
         }
 
         private static void SerializePartyMemebers()
@@ -320,14 +346,14 @@ namespace Data
 
         private static void SerializeInventory()
         {
-            // Save the player's inventory to a file
             string inventory_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_inventory}";
             File.WriteAllText(inventory_string, JsonConvert.SerializeObject(InventoryManager.GetRawInventory(), Formatting.Indented));
         }
 
         private static void SerializeEquipment()
         {
-
+            string equipment_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_equipment}";
+            File.WriteAllText(equipment_string, JsonConvert.SerializeObject(InventoryManager.GetRawEquipment(), Formatting.Indented));
         }
 
         private static void SerializeDialogueFlags()
