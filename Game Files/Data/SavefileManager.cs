@@ -345,13 +345,13 @@ how to read/edit .json files, it's highly recommended that you turn away.");
         private static void SerializeInventory()
         {
             string inventory_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_inventory}";
-            File.WriteAllText(inventory_string, JsonConvert.SerializeObject(InventoryManager.GetRawInventory(), Formatting.Indented));
+            File.WriteAllText(inventory_string, JsonConvert.SerializeObject(InventoryManager.inventory, Formatting.Indented));
         }
 
         private static void SerializeEquipment()
         {
             string equipment_string = $"{SavefileManager.base_dir}/{SavefileManager.temp_dir}/{SavefileManager.sav_equipment}";
-            File.WriteAllText(equipment_string, JsonConvert.SerializeObject(InventoryManager.GetRawEquipment(), Formatting.Indented));
+            File.WriteAllText(equipment_string, JsonConvert.SerializeObject(InventoryManager.equipment, Formatting.Indented));
         }
 
         private static void SerializeDialogueFlags()
@@ -417,7 +417,8 @@ how to read/edit .json files, it's highly recommended that you turn away.");
 
         private static void DeserializeInventory()
         {
-
+            string inventory_string = $"{SavefileManager.base_dir}/{SavefileManager.adventure_name}/{SavefileManager.sav_inventory}";
+            InventoryManager.inventory = JsonConvert.DeserializeObject<Dictionary<CEnums.InvCategory, List<string>>>(File.ReadAllText(inventory_string));
         }
 
         private static void DeserializeEquipment()

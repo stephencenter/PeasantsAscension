@@ -6,7 +6,7 @@ namespace Data
 {
     public static class InventoryManager
     {
-        private readonly static Dictionary<CEnums.InvCategory, List<string>> inventory = new Dictionary<CEnums.InvCategory, List<string>>()
+        public static Dictionary<CEnums.InvCategory, List<string>> inventory = new Dictionary<CEnums.InvCategory, List<string>>()
         {
             { CEnums.InvCategory.quest, new List<string>() },
             { CEnums.InvCategory.consumables, new List<string>() },
@@ -17,7 +17,7 @@ namespace Data
             { CEnums.InvCategory.misc, new List<string>() }
         };
 
-        private readonly static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
+        public static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> equipment = new Dictionary<string, Dictionary<CEnums.EquipmentType, string>>()
         {
              {
                 "_player", new Dictionary<CEnums.EquipmentType, string>()
@@ -121,11 +121,6 @@ namespace Data
             return new_inventory;
         }
 
-        public static Dictionary<CEnums.InvCategory, List<string>> GetRawInventory()
-        {
-            return inventory;
-        }
-
         public static Dictionary<CEnums.EquipmentType, Equipment> GetEquipment(string pcu_id)
         {
             // The equipment dictionary only stores ItemIDs, not actual items. So we have to convert
@@ -142,11 +137,6 @@ namespace Data
             // NOT modify the actual equipment! 
             // To modify the real equipment, use EquipItem() and UnequipItem().
             return real_equipped;
-        }
-
-        public static Dictionary<string, Dictionary<CEnums.EquipmentType, string>> GetRawEquipment()
-        {
-            return equipment;
         }
 
         /* =========================== *

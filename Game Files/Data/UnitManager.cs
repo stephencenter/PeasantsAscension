@@ -585,12 +585,12 @@ namespace Data
             while (true)
             {
                 Console.WriteLine($@"{Name}, which class would you like to train as?
-     [1] Mage: Master of the arcane arts
-     [2] Assassin: Proficient in both stealth and murder
-     [3] Ranger: Fast and evasive, good with a bow
-     [4] Paladin: Holy knight whose healing prowess is unmatched
+     [1] Warrior: Excellent soldier, good balance of offense and defense
+     [2] Mage: Master of the arcane arts
+     [3] Assassin: Proficient in both stealth and murder
+     [4] Ranger: Fast and evasive, good with a bow
      [5] Monk: Fighter whose fists are a worthy oppenent to any blade
-     [6] Warrior: Excellent soldier, good balance of offense and defense
+     [6] Paladin: Holy knight whose healing prowess is unmatched
      [7] Bard: True team-player and master musician");
 
                 string chosen_number = CMethods.SingleCharInput("Input[#]: ");
